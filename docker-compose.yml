@@ -1,0 +1,72 @@
+# Compose file used for development
+# Relies on base.yml, but specifies links, ports, and overrides
+version: "2"
+services:
+  server:
+    extends:
+      file: base.yml
+      service: server
+    links:
+      - db
+    environment:
+      - DEBUG=true
+      - TEST_MODE=${TEST_MODE}
+    volumes:
+      # Mount source code so changes can be auto reloaded
+      - ./server:/usr/src/app
+      # Preserve bash history
+      - ./server/bash/.bashrc:/root/.bashrc
+      - ./server/bash:/root/bash
+    # Pass reload flag so service restarts on code changes
+    command: ["/usr/src/app/launch_server.sh", "--reload"]
+
+  # Container for serving React app
+  jsdev:
+    restart: always
+    build:
+      context: ./ui
+      dockerfile: Dockerfile.dev
+    networks:
+      main:
+        aliases:
+          - jsdev
+    expose:
+      - "3000"
+    volumes:
+      # Mount source code so changes can be auto reloaded
+      - ./ui/js/public:/js_app/public
+      - ./ui/js/src:/js_app/src
+      # Preserve bash history
+      - ./ui/bash/.bashrc:/root/.bashrc
+      - ./ui/bash:/root/bash
+    command: ["yarn", "start"]
+
+  ui:
+    extends:
+      file: base.yml
+      service: ui
+    volumes:
+      # Mount development nginx conf for js dev server
+      - ./ui/conf.d/app.dev.conf:/etc/nginx/conf-includes/app.conf
+    volumes_from:
+      - server
+    links:
+      - jsdev
+
+  db:
+    extends:
+      file: base.yml
+      service: db
+    volumes:
+      - ./db/starter_db:/docker-entrypoint-initdb.d
+    ports:
+      # Expose DB when running in development mode
+      - "5432:5432"
+
+volumes:
+  media:
+  pgdata:
+  static:
+
+networks:
+  main:

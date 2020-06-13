@@ -1,0 +1,9 @@
+[MASTER]
+ignore=migrations,tests
+good-names=logger,urlpatterns,router
+
+[FORMAT]
+max-line-length=80
+
+[MISCELLANEOUS]
+notes=
