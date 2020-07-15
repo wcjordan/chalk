@@ -52,3 +52,7 @@ node_modules/
 
 # bash history mounted in Docker container
 .bash_history
+
+# Helm
+tilt_modules/
+.helm

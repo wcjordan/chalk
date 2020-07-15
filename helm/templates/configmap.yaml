@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "..fullname" . }}-configmap
+  labels:
+    {{- include "..labels" . | nindent 4 }}
+data:
+  django.conf: |
+    server {
+      listen {{ .Values.nginx.listenPort }};
+      client_max_body_size 4G;
+      keepalive_timeout 300;
+      charset utf-8;
+
+      # Static assets for Django backend
+      # Shared mount between "server" and "app" containers
+      location /admin_static/ {
+          alias /var/www/html/;
+      }
+
+      # Django backend
+      # Provided by "server" container
+      location /api/ {
+          proxy_pass http://127.0.0.1:8000;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600;
+          proxy_intercept_errors on;
+      }
+
+      # TODO (jordan)
+      # set the correct host(s) for your site
+      # server_name {{ join " " .Values.nginx.hosts }};
+
+      # access_log /var/log/nginx/access.log combined;
+      # error_log  /var/log/nginx/error.log warn;
+
+      # error_page 500 502 503 504 /500.html;
+      # location = /500.html {
+      #   root /var/www/html/;
+      # }
+    }

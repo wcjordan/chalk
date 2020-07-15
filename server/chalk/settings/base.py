@@ -39,12 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'raven.contrib.django.raven_compat',
 ]
 
 MIDDLEWARE = [
-    'raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware',  # pylint: disable=C0301
-    'raven.contrib.django.raven_compat.middleware.Sentry404CatchMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -120,7 +117,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/admin_static/'
-STATIC_ROOT = '/www/server/static/'
+STATIC_ROOT = '/var/www/html/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/www/media/'
 
@@ -136,10 +133,6 @@ logging.config.dictConfig({
         },
     },
     'handlers': {
-        'sentry': {
-            'level': 'WARNING',
-            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -150,42 +143,26 @@ logging.config.dictConfig({
         # root logger
         '': {
             'level': 'INFO',
-            'handlers': ['console', 'sentry'],
-        },
-        # celery internal logger
-        'celery': {
-            'level': 'ERROR',
-            'handlers': ['console', 'sentry'],
-            'propagate': False,
+            'handlers': ['console'],
         },
         'django': {
             'level': 'INFO',
-            'handlers': ['console', 'sentry'],
+            'handlers': ['console'],
         },
         'django.server': {
             'level': 'INFO',
-            'handlers': ['console', 'sentry'],
+            'handlers': ['console'],
             'propagate': False,
         },
         'django.request': {
             'level': 'ERROR',
-            'handlers': ['console', 'sentry'],
+            'handlers': ['console'],
             'propagate': True,
         },
         'django.security': {
             'level': 'ERROR',
-            'handlers': ['console', 'sentry'],
+            'handlers': ['console'],
             'propagate': True,
         },
     },
 })
-
-# Raven config for sentry.io
-RAVEN_CONFIG = {
-    'dsn': 'https://035847a5a18d44beb9d50941e48bfb90:a56719de93ab441d95b7e64e6925581a@sentry.io/1218449',  # noqa: E501 pylint: disable=line-too-long
-    'release': 'development',
-
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
-    # 'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
-}
