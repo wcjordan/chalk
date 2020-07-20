@@ -12,6 +12,8 @@ helm_remote('postgresql',
             set=['postgresqlPassword=cG9zdGdyZXM=%', 'postgresqlDatabase=chalk'])
 
 docker_build('chalk-server-image', 'server')
-helm = helm('helm', set=env_arr)
+docker_build('chalk-ui-image', 'ui')
+helm = helm('helm', name='chart-chalk', set=env_arr)
 k8s_yaml(helm)
-k8s_resource('chart-chalk', port_forwards=8283)
+# k8s_resource('chart-chalk-server', port_forwards=8283)
+k8s_resource('chart-chalk-ui', port_forwards='8080')

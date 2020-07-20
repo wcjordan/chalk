@@ -32,6 +32,38 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+UI labels
+*/}}
+{{- define "..uiLabels" -}}
+{{- include "..labels" . }}
+app.kubernetes.io/component: ui
+{{- end }}
+
+{{/*
+UI selector labels
+*/}}
+{{- define "..uiSelectorLabels" -}}
+{{- include "..selectorLabels" . }}
+app.kubernetes.io/component: ui
+{{- end }}
+
+{{/*
+Server labels
+*/}}
+{{- define "..serverLabels" -}}
+{{- include "..labels" . }}
+app.kubernetes.io/component: server
+{{- end }}
+
+{{/*
+Server selector labels
+*/}}
+{{- define "..serverSelectorLabels" -}}
+{{- include "..selectorLabels" . }}
+app.kubernetes.io/component: server
+{{- end }}
+
+{{/*
 Common labels
 */}}
 {{- define "..labels" -}}

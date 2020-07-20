@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "..fullname" . }}-configmap
+  name: {{ include "..fullname" . }}-server
   labels:
     {{- include "..labels" . | nindent 4 }}
 data:
   django.conf: |
     server {
-      listen {{ .Values.nginx.listenPort }};
+      listen {{ .Values.server.nginxPort }};
       client_max_body_size 4G;
       keepalive_timeout 300;
       charset utf-8;
@@ -30,9 +30,9 @@ data:
           proxy_intercept_errors on;
       }
 
-      # TODO (jordan)
+      # TODO (jordan) FILL_IN_HOST_NAMES
       # set the correct host(s) for your site
-      # server_name {{ join " " .Values.nginx.hosts }};
+      # server_name FILL_IN_HOST_NAMES;
 
       # access_log /var/log/nginx/access.log combined;
       # error_log  /var/log/nginx/error.log warn;
