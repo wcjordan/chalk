@@ -1,0 +1,28 @@
+.todo-item {
+  background-color: #3d5a80;
+  color: #e0fbfc;
+  display: flex;
+  font-family: monospace;
+  padding: 8px;
+  line-height: 1.2;
+  font-size: 20px;
+  width: 100%;
+  border-top: 1px solid #e0fbfc;
+}
+
+.todo-checkbox {
+  width: 22px;
+  height: 22px;
+  border: 1px solid #e0fbfc;
+  border-radius: 50%;
+}
+
+.todo-checkbox.todo-active:before {
+  content: '✓';
+  margin-left: 4px;
+}
+
+.todo-input {
+  margin-left: 9px;
+  flex-grow: 1;
+}

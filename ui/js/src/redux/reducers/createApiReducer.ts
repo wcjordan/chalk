@@ -10,6 +10,7 @@ export default function createApiReducer<T>(
   apiName: string,
   apiUri: string,
   getSlice: SliceGetter<T>,
+  otherExtraReducers: object,
 ) {
   const initialState: ApiState<T> = {
     entries: [],
@@ -40,6 +41,7 @@ export default function createApiReducer<T>(
     initialState,
     reducers: {},
     extraReducers: {
+      ...otherExtraReducers,
       [fetchThunk.pending.type]: state => {
         state.loading = true;
       },
@@ -54,6 +56,7 @@ export default function createApiReducer<T>(
   });
 
   return {
+    actions: apiSlice.actions,
     fetchThunk,
     reducer: apiSlice.reducer,
   };

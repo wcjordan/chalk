@@ -1,4 +1,3 @@
-{{- if .Values.ingress.enabled -}}
 {{- $fullName := include "..fullname" . -}}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -22,15 +21,20 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
-      http:
+    - http:
         paths:
-          {{- range .paths }}
-          - path: {{ . }}
-            backend:
-              serviceName: {{ $fullName }}-server
-              servicePort: 80
-          {{- end }}
-    {{- end }}
-  {{- end }}
+        - path: /api
+          pathType: Prefix
+          backend:
+            serviceName: {{ $fullName }}-server
+            servicePort: http
+        - path: /admin_static
+          pathType: Prefix
+          backend:
+            serviceName: {{ $fullName }}-server
+            servicePort: http
+        - path: /
+          pathType: Prefix
+          backend:
+            serviceName: {{ $fullName }}-ui
+            servicePort: http

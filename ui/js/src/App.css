@@ -1,6 +1,9 @@
 .App {
   height: 100%;
-  width: 100%;
+  width: 66%;
+  margin: 0 auto;
+  position: relative;
+  top: 80px;
 }
 
 /* Color palette

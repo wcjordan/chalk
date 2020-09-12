@@ -1,7 +1,7 @@
 export interface Todo {
-  id: number;
+  id: number | null;
+  created_at: number;
   description: string;
-  created_at: string;
 }
 
 export interface ApiState<T> {

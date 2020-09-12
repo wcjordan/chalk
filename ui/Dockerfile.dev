@@ -17,4 +17,8 @@ COPY js/jest.config.js .
 COPY js/tsconfig.json .
 COPY js/.storybook ./.storybook
 
+# Copy source files
+COPY js/public ./public
+COPY js/src ./src
+
 CMD ["yarn", "start"]

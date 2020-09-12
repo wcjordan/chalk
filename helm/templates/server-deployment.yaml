@@ -56,12 +56,12 @@ spec:
               value: {{ $val | quote }}
             {{- end }}
       containers:
-        - name: nginx
+        - name: {{ .Chart.Name }}-server-nginx
           image: nginx:stable
           imagePullPolicy: IfNotPresent
           ports:
-            - name: http
-              containerPort: {{ .Values.server.nginxPort }}
+            - name: nginx-http
+              containerPort: 8002
               protocol: TCP
           volumeMounts:
             - name: nginx-conf
@@ -71,11 +71,11 @@ spec:
           readinessProbe:
             httpGet:
               path: /admin_static/rest_framework/css/default.css
-              port: http
+              port: nginx-http
           livenessProbe:
             httpGet:
               path: /admin_static/rest_framework/css/default.css
-              port: http
+              port: nginx-http
           resources:
             requests:
               cpu: 10m
@@ -91,7 +91,7 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: 8000
+              containerPort: 8003
               protocol: TCP
           livenessProbe:
             httpGet:

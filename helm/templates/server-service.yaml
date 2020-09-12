@@ -3,12 +3,12 @@ kind: Service
 metadata:
   name: {{ include "..fullname" . }}-server
   labels:
-    {{- include "..labels" . | nindent 4 }}
+    {{- include "..serverLabels" . | nindent 4 }}
 spec:
   type: ClusterIP
   ports:
-    - port: 80
-      targetPort: {{ .Values.server.nginxPort }}
+    - port: 8001
+      targetPort: nginx-http
       protocol: TCP
       name: http
   selector:
