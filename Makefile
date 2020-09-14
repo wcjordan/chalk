@@ -3,33 +3,24 @@
 # Build containers
 .PHONY: build
 build:
-	COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build
+	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.dev -t chalk-ui-image:latest ui
+	DOCKER_BUILDKIT=1 docker build -t chalk-server-image:latest server
 
 # Test & lint
 .PHONY: test
-test:
-	$(MAKE) -C ui test
-	$(MAKE) -C server test
+test: build
+	docker run --rm chalk-ui-image:latest make test
+	DB_HOSTNAME=localhost docker run --env-file .env --env DB_HOSTNAME --rm chalk-server-image:latest make test
 
-# Start containers for development
-.PHONY: dev-up
-dev-up:
-	docker-compose up
+# Start environment for development
+.PHONY: start
+start:
+	env $$(grep -v '^#' .env | xargs) tilt up
 
-# Start containers for production
-.PHONY: prod-up
-prod-up:
-	docker-compose -f production.yml up -d
-
-# Stop containers
+# Stop environment
 .PHONY: stop
 stop:
-	docker-compose stop
-
-# Teardown containers
-.PHONY: down
-down:
-	docker-compose down -v
+	env $$(grep -v '^#' .env | xargs) tilt down
 
 # Format code
 .PHONY: format

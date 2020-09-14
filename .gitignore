@@ -56,3 +56,5 @@ node_modules/
 # Helm
 tilt_modules/
 .helm
+
+.tmp-cid.txt

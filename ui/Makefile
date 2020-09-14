@@ -1,13 +1,12 @@
 #!make
-include ../.env
 
 # Test w/ Jest
 .PHONY: test
 test:
 	# Lint & typecheck by building
-	cd ../; docker-compose run --rm jsdev yarn run build
+	yarn run build
 	# Unit & snapshot tests for UI
-	cd ../; docker-compose run --rm jsdev yarn jest
+	yarn jest
 
 # ESLint & Prettier JS formatting
 .PHONY: format
@@ -16,17 +15,12 @@ format:
 
 .PHONY: storybook
 storybook:
-	cd ../; docker-compose run --rm -p $(NGINX_PORT):9009 jsdev npm run storybook
-
-# Open a shell inside container
-.PHONY: shell
-shell:
-	cd ..; docker-compose exec jsdev /bin/bash
+	docker run --rm -p 127.0.0.1:9009:9009 --rm chalk-ui-image:latest npm run storybook
 
 # Update snapshot tests
 .PHONY: update-snapshots
 update-snapshots:
-	cd ../; docker-compose run --rm jsdev yarn jest -u
+	docker run --rm -v $(PWD)/js/src:/js_app/src chalk-ui-image:latest yarn jest -u
 
 # Fix import ordering
 .PHONY: fix-imports

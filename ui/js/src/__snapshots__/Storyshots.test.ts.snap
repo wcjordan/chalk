@@ -1,7 +1,65 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storyshots Add Todo Default Add Todo 1`] = `
+<div
+  className="add-todo"
+>
+  <div
+    className="add-todo-icon"
+  />
+  <input
+    className="add-todo-input"
+    onKeyPress={[Function]}
+    placeholder="Add a new todo..."
+  />
+</div>
+`;
+
 exports[`Storyshots App Default Layout 1`] = `
 <div
   className="App"
-/>
+>
+  <div
+    className="add-todo"
+  >
+    <div
+      className="add-todo-icon"
+    />
+    <input
+      className="add-todo-input"
+      onKeyPress={[Function]}
+      placeholder="Add a new todo..."
+    />
+  </div>
+</div>
+`;
+
+exports[`Storyshots Todo Item Checked Todo 1`] = `
+<div
+  className="todo-item"
+>
+  <div
+    className="todo-checkbox"
+  />
+  <span
+    className="todo-input"
+  >
+    Checked Todo
+  </span>
+</div>
+`;
+
+exports[`Storyshots Todo Item Default Todo 1`] = `
+<div
+  className="todo-item"
+>
+  <div
+    className="todo-checkbox"
+  />
+  <span
+    className="todo-input"
+  >
+    Default Todo
+  </span>
+</div>
 `;

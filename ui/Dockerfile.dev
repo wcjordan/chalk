@@ -4,7 +4,7 @@ FROM node:13-alpine
 WORKDIR /js_app
 
 # Install system packages for dev tooling
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash make
 
 # Install React dependencies
 COPY js/yarn.lock .
@@ -18,6 +18,7 @@ COPY js/tsconfig.json .
 COPY js/.storybook ./.storybook
 
 # Copy source files
+COPY Makefile .
 COPY js/public ./public
 COPY js/src ./src
 

@@ -1,0 +1,12 @@
+-r requirements.txt
+
+# These are used for development or linting
+argh==0.26.2  # used by watchdog
+flake8==3.7.9
+flake8-per-file-ignores==0.8.1
+pylint==2.4.4
+pylint-django==2.0.14
+pytest==5.4.1
+pyyaml==5.3.1  # used by watchdog
+watchdog==0.10.2
+yapf==0.29.0
