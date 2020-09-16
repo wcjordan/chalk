@@ -42,19 +42,13 @@ spec:
             - name: staticfiles
               mountPath: /var/www/html/
           env:
-            {{- range $key, $val := .Values.env }}
-            - name: {{ $key }}
-              value: {{ $val | quote }}
-            {{- end }}
+            {{- include "..serverEnv" . | nindent 12 }}
         - name: migrate
           image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
           command: ["python", "manage.py", "migrate"]
           env:
-            {{- range $key, $val := .Values.env }}
-            - name: {{ $key }}
-              value: {{ $val | quote }}
-            {{- end }}
+            {{- include "..serverEnv" . | nindent 12 }}
       containers:
         - name: {{ .Chart.Name }}-server-nginx
           image: nginx:stable
@@ -85,10 +79,7 @@ spec:
           image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
           env:
-            {{- range $key, $val := .Values.env }}
-            - name: {{ $key }}
-              value: {{ $val | quote }}
-            {{- end }}
+            {{- include "..serverEnv" . | nindent 12 }}
           ports:
             - name: http
               containerPort: 8003

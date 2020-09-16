@@ -93,3 +93,13 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Server Env
+*/}}
+{{- define "..serverEnv" -}}
+- name: SECRET_KEY
+  value: {{ .Values.server.secretKey }}
+- name: POSTGRES_PASSWORD
+  value: {{ .Values.server.db.password }}
+{{- end }}

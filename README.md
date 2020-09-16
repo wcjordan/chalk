@@ -4,7 +4,7 @@ Todo app
 Setup
 -----
 Copy .env_default to .env
-Set SECRET_KEY & DB_PASS in .env
+Set SECRET_KEY & POSTGRES_PASSWORD in .env
   These should be random secure strings
   e.g. head -c 32 /dev/urandom | base64
 

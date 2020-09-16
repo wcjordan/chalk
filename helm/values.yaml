@@ -43,6 +43,9 @@ server:
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
     # runAsUser: 1000
+  db:
+    password: postgres
+  secretKey:
 
 ui:
   replicaCount: 1
@@ -93,20 +96,3 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-
-env:
-  # Django config
-  SECRET_KEY: ""
-  GUNICORN_WORKERS: 2
-
-  # DB config
-  POSTGRES_DB: chalk
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  DB_HOSTNAME: db
-  DB_PORT: 5432
-
-  # Set to 1/4 of total memory
-  PG_SHARED_BUFFERS: 1024MB
-  # Set to 1/2 of total memory
-  PG_EFFECTIVE_CACHE_SIZE: 2048MB
