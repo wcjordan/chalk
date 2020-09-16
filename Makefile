@@ -9,7 +9,7 @@ build:
 # Test & lint
 .PHONY: test
 test: build
-	docker run --rm chalk-ui-image:latest make test
+	docker run --rm -w / chalk-ui-image:latest make test
 	DB_HOSTNAME=localhost docker run --env-file .env --env DB_HOSTNAME --rm chalk-server-image:latest make test
 
 # Start environment for development

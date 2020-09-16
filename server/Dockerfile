@@ -13,7 +13,7 @@ RUN wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | apt-key ad
     rm -rf /var/lib/apt/lists/*
 
 # Install Django app by copying files to container
-COPY requirements.txt dev-requirements.txt /usr
+COPY requirements.txt dev-requirements.txt /usr/
 RUN pip install --no-cache-dir -r /usr/dev-requirements.txt
 
 # Install Django app by copying files to container

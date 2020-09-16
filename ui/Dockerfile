@@ -1,6 +1,6 @@
 # Multistage build for JS artifacts
-FROM node:13-alpine as js_app
-WORKDIR /js_app
+FROM gcr.io/flipperkid-default/chalk-ui-base:latest as js_app
+WORKDIR /js
 
 # Install React dependencies
 COPY js/yarn.lock .
@@ -27,6 +27,6 @@ COPY conf.d/app.conf /etc/nginx/conf-includes/app.conf
 COPY conf.d/server.conf /etc/nginx/conf-includes/server.conf
 
 # Copy over built JS files from React app
-COPY --from=js_app /js_app/build/* /www/client/
+COPY --from=js_app /js/build/* /www/client/
 
 CMD ["nginx", "-g", "daemon off;"]

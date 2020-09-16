@@ -28,8 +28,8 @@ helm_remote('postgresql',
 docker_build('chalk-server-image', 'server')
 docker_build('chalk-ui-image', 'ui', dockerfile='ui/Dockerfile.dev', live_update=[
     fall_back_on(['ui/js/package.json', 'ui/js/yarn.lock']),
-    sync('ui/js/public', '/js_app/public'),
-    sync('ui/js/src', '/js_app/src'),
+    sync('ui/js/public', '/js/public'),
+    sync('ui/js/src', '/js/src'),
 ])
 
 helm = helm('helm', name='chart-chalk', set=env_arr)
