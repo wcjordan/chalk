@@ -10,6 +10,11 @@
   border-top: 1px solid #e0fbfc;
 }
 
+.todo-item.todo-edit {
+  background-color: #98c1d9;
+  color: #e0fbfc;
+}
+
 .todo-checkbox {
   width: 22px;
   height: 22px;
@@ -22,7 +27,27 @@
   margin-left: 4px;
 }
 
-.todo-input {
+.todo-description {
   margin-left: 9px;
   flex-grow: 1;
+}
+
+.edit-todo-input {
+  background-color: inherit;
+  border: none;
+  color: inherit;
+  flex-grow: 1;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin-left: 9px;
+  padding: 0;
+}
+
+.edit-todo-input:focus {
+  outline-width: 0;
+}
+
+.edit-todo-input::selection {
+  background: #3d5a80;
 }

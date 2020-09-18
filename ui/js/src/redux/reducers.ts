@@ -1,5 +1,5 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ApiState, ReduxState, Todo } from './types';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { ApiState, ReduxState, Todo, WorkspaceState } from './types';
 import createApiReducer from './reducers/createApiReducer';
 import getRequestOpts from './getRequestOptions';
 
@@ -15,7 +15,6 @@ export const createTodo = createAsyncThunk<
 >(`${API_NAME}/create`, async (todoTitle: string) => {
   // TODO persist todo - see createApiReducer for example
   const newTodo = {
-    id: null,
     created_at: Date.now(),
     description: todoTitle,
   };
@@ -39,11 +38,34 @@ const otherExtraReducers = {
   },
 };
 
-const { fetchThunk: fetchTodos, reducer: todosReducer } = createApiReducer<
-  Todo
->(API_NAME, TODOS_API, state => state.todosApi, otherExtraReducers);
+const {
+  fetchThunk: fetchTodos,
+  updateThunk: updateTodo,
+  reducer: todosReducer,
+} = createApiReducer<Todo>(
+  API_NAME,
+  TODOS_API,
+  state => state.todosApi,
+  otherExtraReducers,
+);
 
-export { fetchTodos };
+const initialWorkspace: WorkspaceState = {
+  editId: null,
+};
+const workspaceSlice = createSlice({
+  name: 'workspace',
+  initialState: initialWorkspace,
+  reducers: {
+    editTodo: (state, action) => {
+      state.editId = action.payload;
+      return state;
+    },
+  },
+});
+
+const editTodo = workspaceSlice.actions.editTodo;
+export { fetchTodos, editTodo, updateTodo };
 export default {
   todosApi: todosReducer,
+  workspace: workspaceSlice.reducer,
 };

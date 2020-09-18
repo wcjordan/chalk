@@ -37,12 +37,13 @@ exports[`Storyshots App Default Layout 1`] = `
 exports[`Storyshots Todo Item Checked Todo 1`] = `
 <div
   className="todo-item"
+  onClick={[Function]}
 >
   <div
     className="todo-checkbox"
   />
   <span
-    className="todo-input"
+    className="todo-description"
   >
     Checked Todo
   </span>
@@ -52,12 +53,13 @@ exports[`Storyshots Todo Item Checked Todo 1`] = `
 exports[`Storyshots Todo Item Default Todo 1`] = `
 <div
   className="todo-item"
+  onClick={[Function]}
 >
   <div
     className="todo-checkbox"
   />
   <span
-    className="todo-input"
+    className="todo-description"
   >
     Default Todo
   </span>
