@@ -7,7 +7,7 @@ export default {
 };
 
 const defaultProps = {
-  addTodo: () => null,
+  createTodo: () => null,
 };
 
 export const DefaultAddTodo = () => <AddTodo {...defaultProps} />;

@@ -1,30 +1,33 @@
-import React, { Component, KeyboardEvent } from 'react';
+import React, { KeyboardEvent, useCallback } from 'react';
 import './AddTodo.css';
 
-type Props = {
-  addTodo: Function;
-};
+function AddTodo(props: Props) {
+  const { createTodo } = props;
+  const addTodo = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
 
-class AddTodo extends Component<Props> {
-  render() {
-    return (
-      <div className="add-todo">
-        <div className="add-todo-icon" />
-        <input
-          className="add-todo-input"
-          placeholder="Add a new todo..."
-          onKeyPress={this.addTodo}
-        />
-      </div>
-    );
-  }
+        createTodo(event.currentTarget.value);
+      }
+    },
+    [createTodo],
+  );
 
-  addTodo = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      this.props.addTodo(event.currentTarget.value);
-    }
-  };
+  return (
+    <div className="add-todo">
+      <div className="add-todo-icon" />
+      <input
+        className="add-todo-input"
+        placeholder="Add a new todo..."
+        onKeyPress={addTodo}
+      />
+    </div>
+  );
 }
+
+type Props = {
+  createTodo: (description: string) => void;
+};
 
 export default AddTodo;

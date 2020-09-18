@@ -4,24 +4,24 @@ import React from 'react';
 import AddTodo from './components/AddTodo';
 import { ReduxState } from './redux/types';
 import TodoItem from './components/TodoItem';
-import { createTodo, editTodo, updateTodo } from './redux/reducers';
+import { createTodo, updateTodo, setTodoEditId } from './redux/reducers';
 import './App.css';
 
 export function App(props: ConnectedProps<typeof connector>) {
-  const { createTodo, editId, editTodo, todos, updateTodo } = props;
+  const { createTodo, editId, setTodoEditId, todos, updateTodo } = props;
   const todoViews = _.map(todos, todo => (
     <TodoItem
       key={todo.id || ''}
       editing={todo.id === editId}
       todo={todo}
       updateTodo={updateTodo}
-      editTodo={editTodo}
+      setTodoEditId={setTodoEditId}
     />
   ));
 
   return (
     <div className="App">
-      <AddTodo addTodo={createTodo} />
+      <AddTodo createTodo={createTodo} />
       {todoViews}
     </div>
   );
@@ -33,6 +33,6 @@ const mapStateToProps = (state: ReduxState) => {
     editId: state.workspace.editId,
   };
 };
-const mapDispatchToProps = { createTodo, editTodo, updateTodo };
+const mapDispatchToProps = { createTodo, setTodoEditId, updateTodo };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export default connector(App);

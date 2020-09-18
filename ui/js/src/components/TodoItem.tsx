@@ -5,7 +5,7 @@ import { Todo } from '../redux/types';
 import './TodoItem.css';
 
 function TodoItem(props: Props) {
-  const { editing, todo, editTodo, updateTodo } = props;
+  const { editing, todo, setTodoEditId, updateTodo } = props;
   const editInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -25,21 +25,21 @@ function TodoItem(props: Props) {
     [updateTodo, todo.id],
   );
 
-  const editTodoCb = useCallback(() => {
+  const beginEdit = useCallback(() => {
     if (editing) {
       return;
     }
 
-    editTodo(todo.id);
-  }, [editTodo, todo.id, editing]);
+    setTodoEditId(todo.id);
+  }, [setTodoEditId, todo.id, editing]);
 
   const cancelEdit = useCallback(() => {
     if (!editing) {
       return;
     }
 
-    editTodo(null);
-  }, [editTodo, editing]);
+    setTodoEditId(null);
+  }, [setTodoEditId, editing]);
 
   let checkboxClasses = 'todo-checkbox';
   // if (todo.completed) {
@@ -70,7 +70,7 @@ function TodoItem(props: Props) {
   }
 
   return (
-    <div className={itemClasses} onClick={editTodoCb}>
+    <div className={itemClasses} onClick={beginEdit}>
       <div className={checkboxClasses} />
       {content}
     </div>
@@ -81,7 +81,7 @@ type Props = {
   editing: boolean;
   todo: Todo;
   updateTodo: (id: number, description: string) => void;
-  editTodo: (id: number | null) => void;
+  setTodoEditId: (id: number | null) => void;
 };
 
 export default TodoItem;
