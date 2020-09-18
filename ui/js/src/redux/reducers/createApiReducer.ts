@@ -7,7 +7,10 @@ interface SliceGetter<T> {
   (state: ReduxState): ApiState<T>;
 }
 
-export default function createApiReducer<T extends { id: number }>(
+export default function createApiReducer<
+  T extends { id: number },
+  U extends { id: number }
+>(
   apiName: string,
   apiUri: string,
   getSlice: SliceGetter<T>,
@@ -37,22 +40,21 @@ export default function createApiReducer<T extends { id: number }>(
     },
   );
 
-  const updateThunk = createAsyncThunk<
-    T,
-    { id: number },
-    { state: ReduxState }
-  >(`${apiName}/update`, async (entryPatch, thunkAPI) => {
-    const requestOpts = getRequestOpts('PATCH');
-    requestOpts.body = JSON.stringify(entryPatch);
-    const response = await fetch(`${apiUri}${entryPatch.id}/`, requestOpts);
+  const updateThunk = createAsyncThunk<T, U, { state: ReduxState }>(
+    `${apiName}/update`,
+    async (entryPatch, thunkAPI) => {
+      const requestOpts = getRequestOpts('PATCH');
+      requestOpts.body = JSON.stringify(entryPatch);
+      const response = await fetch(`${apiUri}${entryPatch.id}/`, requestOpts);
 
-    if (!response.ok) {
-      return thunkAPI.rejectWithValue(
-        `${response.status} ${response.statusText}`,
-      );
-    }
-    return await response.json();
-  });
+      if (!response.ok) {
+        return thunkAPI.rejectWithValue(
+          `${response.status} ${response.statusText}`,
+        );
+      }
+      return await response.json();
+    },
+  );
 
   const apiSlice = createSlice({
     name: apiName,

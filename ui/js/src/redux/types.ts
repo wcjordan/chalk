@@ -1,3 +1,6 @@
+import { ThunkAction } from 'redux-thunk';
+import { Action } from '@reduxjs/toolkit';
+
 export interface Todo {
   id: number;
   created_at: number;
@@ -23,3 +26,5 @@ export interface ReduxState {
 export interface WorkspaceState {
   editId: number | null;
 }
+
+export type AppThunk = ThunkAction<void, ReduxState, unknown, Action<string>>;

@@ -1,5 +1,7 @@
 import React, { KeyboardEvent, useCallback, useEffect, useRef } from 'react';
-import { Todo, TodoPatch } from '../redux/types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBan } from '@fortawesome/free-solid-svg-icons';
+import { Todo } from '../redux/types';
 import './TodoItem.css';
 
 function TodoItem(props: Props) {
@@ -17,10 +19,7 @@ function TodoItem(props: Props) {
       if (event.key === 'Enter') {
         event.preventDefault();
 
-        updateTodo({
-          id: todo.id,
-          description: event.currentTarget.value,
-        });
+        updateTodo(todo.id, event.currentTarget.value);
       }
     },
     [updateTodo, todo.id],
@@ -34,6 +33,14 @@ function TodoItem(props: Props) {
     editTodo(todo.id);
   }, [editTodo, todo.id, editing]);
 
+  const cancelEdit = useCallback(() => {
+    if (!editing) {
+      return;
+    }
+
+    editTodo(null);
+  }, [editTodo, editing]);
+
   let checkboxClasses = 'todo-checkbox';
   // if (todo.completed) {
   //   checkboxClasses += ' todo-active';
@@ -43,14 +50,21 @@ function TodoItem(props: Props) {
   let itemClasses = 'todo-item';
   if (editing) {
     itemClasses += ' todo-edit';
-    content = (
+    content = [
       <input
+        key="input"
         ref={editInput}
         className="edit-todo-input"
         onKeyPress={updateTodoCb}
         defaultValue={todo.description}
-      />
-    );
+      />,
+      <FontAwesomeIcon
+        key="cancel"
+        icon={faBan}
+        size="lg"
+        onClick={cancelEdit}
+      />,
+    ];
   } else {
     content = <span className="todo-description">{todo.description}</span>;
   }
@@ -66,8 +80,8 @@ function TodoItem(props: Props) {
 type Props = {
   editing: boolean;
   todo: Todo;
-  updateTodo: (patch: TodoPatch) => void;
-  editTodo: (id: number) => void;
+  updateTodo: (id: number, description: string) => void;
+  editTodo: (id: number | null) => void;
 };
 
 export default TodoItem;

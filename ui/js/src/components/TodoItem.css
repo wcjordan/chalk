@@ -8,6 +8,7 @@
   font-size: 20px;
   width: 100%;
   border-top: 1px solid #e0fbfc;
+  cursor: pointer;
 }
 
 .todo-item.todo-edit {
@@ -50,4 +51,9 @@
 
 .edit-todo-input::selection {
   background: #3d5a80;
+}
+
+.todo-item.todo-edit .fa-ban {
+  color: #3d5a80;
+  font-size: 22px;
 }
