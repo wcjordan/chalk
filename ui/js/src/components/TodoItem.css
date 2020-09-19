@@ -55,5 +55,11 @@
 
 .todo-item.todo-edit .fa-ban {
   color: #3d5a80;
-  font-size: 22px;
+  margin: auto 0;
+}
+
+.todo-item .fa-exclamation-triangle {
+  color: #ee6c4d;
+  filter: brightness(1.5);
+  margin: auto 0;
 }

@@ -8,14 +8,16 @@ import { createTodo, updateTodo, setTodoEditId } from './redux/reducers';
 import './App.css';
 
 export function App(props: ConnectedProps<typeof connector>) {
-  const { createTodo, editId, setTodoEditId, todos, updateTodo } = props;
+  const { createTodo, setTodoEditId, todos, updateTodo, workspace } = props;
+  const { editId, uncommittedEdits } = workspace;
   const todoViews = _.map(todos, todo => (
     <TodoItem
-      key={todo.id || ''}
       editing={todo.id === editId}
-      todo={todo}
-      updateTodo={updateTodo}
+      key={todo.id || ''}
       setTodoEditId={setTodoEditId}
+      todo={todo}
+      uncommittedEdit={uncommittedEdits[todo.id]}
+      updateTodo={updateTodo}
     />
   ));
 
@@ -30,7 +32,7 @@ export function App(props: ConnectedProps<typeof connector>) {
 const mapStateToProps = (state: ReduxState) => {
   return {
     todos: state.todosApi.entries,
-    editId: state.workspace.editId,
+    workspace: state.workspace,
   };
 };
 const mapDispatchToProps = { createTodo, setTodoEditId, updateTodo };

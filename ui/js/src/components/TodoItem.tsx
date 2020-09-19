@@ -1,11 +1,14 @@
 import React, { KeyboardEvent, useCallback, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBan,
+  faExclamationTriangle,
+} from '@fortawesome/free-solid-svg-icons';
 import { Todo } from '../redux/types';
 import './TodoItem.css';
 
 function TodoItem(props: Props) {
-  const { editing, todo, setTodoEditId, updateTodo } = props;
+  const { editing, todo, setTodoEditId, uncommittedEdit, updateTodo } = props;
   const editInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -16,10 +19,16 @@ function TodoItem(props: Props) {
 
   const updateTodoCb = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
+      updateTodo(todo.id, event.currentTarget.value, false);
+    },
+    [updateTodo, todo.id],
+  );
+
+  const commitTodo = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') {
         event.preventDefault();
-
-        updateTodo(todo.id, event.currentTarget.value);
+        updateTodo(todo.id, event.currentTarget.value, true);
       }
     },
     [updateTodo, todo.id],
@@ -52,21 +61,31 @@ function TodoItem(props: Props) {
     itemClasses += ' todo-edit';
     content = [
       <input
-        key="input"
-        ref={editInput}
         className="edit-todo-input"
-        onKeyPress={updateTodoCb}
-        defaultValue={todo.description}
+        defaultValue={uncommittedEdit || todo.description}
+        key="input"
+        onInput={updateTodoCb}
+        onKeyPress={commitTodo}
+        ref={editInput}
       />,
       <FontAwesomeIcon
-        key="cancel"
         icon={faBan}
-        size="lg"
+        key="cancel"
         onClick={cancelEdit}
+        size="sm"
       />,
     ];
   } else {
-    content = <span className="todo-description">{todo.description}</span>;
+    content = [
+      <span key="description" className="todo-description">
+        {todo.description}
+      </span>,
+    ];
+    if (uncommittedEdit) {
+      content.push(
+        <FontAwesomeIcon key="warn" icon={faExclamationTriangle} size="xs" />,
+      );
+    }
   }
 
   return (
@@ -80,8 +99,9 @@ function TodoItem(props: Props) {
 type Props = {
   editing: boolean;
   todo: Todo;
-  updateTodo: (id: number, description: string) => void;
+  updateTodo: (id: number, description: string, commitEdit: boolean) => void;
   setTodoEditId: (id: number | null) => void;
+  uncommittedEdit: string | undefined;
 };
 
 export default TodoItem;

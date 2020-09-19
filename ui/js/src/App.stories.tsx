@@ -7,7 +7,8 @@ export default {
 };
 
 const defaultProps = {
-  todos: [],
   createTodo: () => null,
+  todos: [],
+  workspace: {},
 };
 export const DefaultLayout = () => <App {...defaultProps} />;

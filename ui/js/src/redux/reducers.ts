@@ -8,14 +8,23 @@ import todosApiSlice, {
 
 const initialWorkspace: WorkspaceState = {
   editId: null,
+  uncommittedEdits: {},
 };
 const workspaceSlice = createSlice({
   name: 'workspace',
   initialState: initialWorkspace,
   reducers: {
     setTodoEditId: (state, action) => {
-      state.editId = action.payload;
-      return state;
+      const editId = action.payload;
+      if (editId === null && state.editId !== null) {
+        // If cancelling an edit, clear the uncommitted value.
+        delete state.uncommittedEdits[state.editId];
+      }
+      state.editId = editId;
+    },
+    updateTodoUncommitted: (state, action) => {
+      const { id, description } = action.payload;
+      state.uncommittedEdits[id] = description;
     },
   },
 });
@@ -23,9 +32,16 @@ const workspaceSlice = createSlice({
 export const updateTodo = (
   id: number,
   description: string,
+  commitEdit: boolean,
 ): AppThunk => dispatch => {
+  const todoPatch = { id, description };
+  if (!commitEdit) {
+    dispatch(workspaceSlice.actions.updateTodoUncommitted(todoPatch));
+    return;
+  }
+
   dispatch(workspaceSlice.actions.setTodoEditId(null));
-  dispatch(updateTodoApi({ id, description }));
+  dispatch(updateTodoApi(todoPatch));
 };
 
 export const setTodoEditId = workspaceSlice.actions.setTodoEditId;
