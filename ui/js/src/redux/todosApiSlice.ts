@@ -49,8 +49,15 @@ export const updateTodo = createAsyncThunk<Todo, TodoPatch, {}>(
   async entryPatch => patch(TODOS_API, entryPatch),
 );
 
-function sortTodos(todos: Array<Todo>) {
-  return _.sortBy(todos, ['completed', 'id']);
+/**
+ * Filter out archived todos and sort todos by id.
+ * Also sort completed todos to appear at the bottom.
+ */
+function processTodos(todos: Array<Todo>) {
+  return _.sortBy(
+    _.filter(todos, todo => !todo.archived),
+    ['completed', 'id'],
+  );
 }
 
 export default createSlice({
@@ -60,14 +67,14 @@ export default createSlice({
   extraReducers: {
     [createTodo.fulfilled.type]: (state, action: TodoAction) => {
       state.entries.push(action.payload);
-      state.entries = sortTodos(state.entries);
+      state.entries = processTodos(state.entries);
     },
     [listTodos.pending.type]: state => {
       state.loading = true;
     },
     [listTodos.fulfilled.type]: (state, action: TodoListAction) => {
       state.loading = false;
-      state.entries = sortTodos(action.payload);
+      state.entries = processTodos(action.payload);
     },
     [listTodos.rejected.type]: (state, action: ErrorAction) => {
       state.loading = false;
@@ -80,7 +87,7 @@ export default createSlice({
         entry => entry.id === updatedEntry.id,
       );
       Object.assign(existingEntry, updatedEntry);
-      state.entries = sortTodos(state.entries);
+      state.entries = processTodos(state.entries);
     },
     [updateTodo.rejected.type]: (_unused, action: ErrorAction) => {
       console.warn(`Updating ${API_NAME} failed. ${action.error.message}`);

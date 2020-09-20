@@ -5,9 +5,4 @@ export default {
   title: 'Add Todo',
   component: AddTodo,
 };
-
-const defaultProps = {
-  createTodo: () => null,
-};
-
-export const DefaultAddTodo = () => <AddTodo {...defaultProps} />;
+export const DefaultAddTodo = () => <AddTodo />;

@@ -15,7 +15,8 @@ format:
 
 .PHONY: storybook
 storybook:
-	docker run --rm -p 127.0.0.1:9009:9009 chalk-ui-image:latest npm run storybook
+	docker run --rm -v $(PWD)/js/src:/js/src -p 127.0.0.1:9009:9009 \
+		chalk-ui-image:latest npm run storybook
 
 # Update snapshot tests
 .PHONY: update-snapshots
