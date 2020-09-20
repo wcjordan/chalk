@@ -20,6 +20,18 @@ def _generate_random_string():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
 
 
+def _stub_todo_matcher(description):
+    return {
+        'id': AnyArg(),
+        'description': description,
+        'archived': False,
+        'archived_at': AnyArg(),
+        'completed': False,
+        'completed_at': AnyArg(),
+        'created_at': AnyArg(),
+    }
+
+
 class ServiceTests(TestCase):
     """
     Tests for todo view
@@ -45,15 +57,10 @@ class ServiceTests(TestCase):
 
         # Fetch todos and verify they match expectations
         fetched_data = self._fetch_todos()
-        expected_data = [{
-            'id': AnyArg(),
-            'description': todo_description1,
-            'created_at': AnyArg(),
-        }, {
-            'id': AnyArg(),
-            'description': todo_description2,
-            'created_at': AnyArg(),
-        }]
+        expected_data = [
+            _stub_todo_matcher(todo_description1),
+            _stub_todo_matcher(todo_description2),
+        ]
         self.assertCountEqual(fetched_data, expected_data)
 
         # Update first todo

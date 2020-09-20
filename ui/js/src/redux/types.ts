@@ -3,12 +3,16 @@ import { Action } from '@reduxjs/toolkit';
 
 export interface Todo {
   id: number;
+  archived: boolean;
+  completed: boolean;
   created_at: number;
   description: string;
 }
 
 export interface TodoPatch {
   id: number;
+  archived?: boolean;
+  completed?: boolean;
   created_at?: number;
   description?: string;
 }

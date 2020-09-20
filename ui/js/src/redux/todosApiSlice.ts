@@ -49,6 +49,10 @@ export const updateTodo = createAsyncThunk<Todo, TodoPatch, {}>(
   async entryPatch => patch(TODOS_API, entryPatch),
 );
 
+function sortTodos(todos: Array<Todo>) {
+  return _.sortBy(todos, ['completed', 'id']);
+}
+
 export default createSlice({
   name: API_NAME,
   initialState,
@@ -56,13 +60,14 @@ export default createSlice({
   extraReducers: {
     [createTodo.fulfilled.type]: (state, action: TodoAction) => {
       state.entries.push(action.payload);
+      state.entries = sortTodos(state.entries);
     },
     [listTodos.pending.type]: state => {
       state.loading = true;
     },
     [listTodos.fulfilled.type]: (state, action: TodoListAction) => {
       state.loading = false;
-      state.entries = action.payload;
+      state.entries = sortTodos(action.payload);
     },
     [listTodos.rejected.type]: (state, action: ErrorAction) => {
       state.loading = false;
@@ -75,6 +80,7 @@ export default createSlice({
         entry => entry.id === updatedEntry.id,
       );
       Object.assign(existingEntry, updatedEntry);
+      state.entries = sortTodos(state.entries);
     },
     [updateTodo.rejected.type]: (_unused, action: ErrorAction) => {
       console.warn(`Updating ${API_NAME} failed. ${action.error.message}`);

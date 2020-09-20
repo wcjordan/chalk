@@ -1,10 +1,18 @@
-import React, { KeyboardEvent, useCallback, useEffect, useRef } from 'react';
+import React, {
+  KeyboardEvent,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBan,
   faExclamationTriangle,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { Todo } from '../redux/types';
+import { faCheckCircle, faCircle } from '@fortawesome/free-regular-svg-icons';
+import { Todo, TodoPatch } from '../redux/types';
 import './TodoItem.css';
 
 function TodoItem(props: Props) {
@@ -19,7 +27,13 @@ function TodoItem(props: Props) {
 
   const updateTodoCb = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
-      updateTodo(todo.id, event.currentTarget.value, false);
+      updateTodo(
+        {
+          id: todo.id,
+          description: event.currentTarget.value,
+        },
+        false,
+      );
     },
     [updateTodo, todo.id],
   );
@@ -27,9 +41,33 @@ function TodoItem(props: Props) {
   const commitTodo = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') {
-        event.preventDefault();
-        updateTodo(todo.id, event.currentTarget.value, true);
+        updateTodo({
+          id: todo.id,
+          description: event.currentTarget.value,
+        });
       }
+    },
+    [updateTodo, todo.id],
+  );
+
+  const toggleTodo = useCallback(
+    (event: MouseEvent) => {
+      event.stopPropagation();
+      updateTodo({
+        id: todo.id,
+        completed: !todo.completed,
+      });
+    },
+    [updateTodo, todo.id, todo.completed],
+  );
+
+  const archiveTodo = useCallback(
+    (event: MouseEvent) => {
+      event.stopPropagation();
+      updateTodo({
+        id: todo.id,
+        archived: true,
+      });
     },
     [updateTodo, todo.id],
   );
@@ -49,11 +87,6 @@ function TodoItem(props: Props) {
 
     setTodoEditId(null);
   }, [setTodoEditId, editing]);
-
-  let checkboxClasses = 'todo-checkbox';
-  // if (todo.completed) {
-  //   checkboxClasses += ' todo-active';
-  // }
 
   let content;
   let itemClasses = 'todo-item';
@@ -80,17 +113,34 @@ function TodoItem(props: Props) {
       <span key="description" className="todo-description">
         {todo.description}
       </span>,
+      <FontAwesomeIcon
+        icon={faTrash}
+        key="archive"
+        onClick={archiveTodo}
+        size="sm"
+      />,
     ];
     if (uncommittedEdit) {
       content.push(
-        <FontAwesomeIcon key="warn" icon={faExclamationTriangle} size="xs" />,
+        <FontAwesomeIcon
+          icon={faExclamationTriangle}
+          key="warn"
+          size="xs"
+          title={`Uncommitted edit: ${uncommittedEdit}`}
+        />,
       );
     }
   }
 
+  const checkboxIcon = todo.completed ? faCheckCircle : faCircle;
   return (
     <div className={itemClasses} onClick={beginEdit}>
-      <div className={checkboxClasses} />
+      <FontAwesomeIcon
+        icon={checkboxIcon}
+        key="checkbox"
+        onClick={toggleTodo}
+        size="sm"
+      />
       {content}
     </div>
   );
@@ -99,7 +149,7 @@ function TodoItem(props: Props) {
 type Props = {
   editing: boolean;
   todo: Todo;
-  updateTodo: (id: number, description: string, commitEdit: boolean) => void;
+  updateTodo: (todoPatch: TodoPatch, commitEdit?: boolean) => void;
   setTodoEditId: (id: number | null) => void;
   uncommittedEdit: string | undefined;
 };

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppThunk, WorkspaceState } from './types';
+import { AppThunk, TodoPatch, WorkspaceState } from './types';
 import todosApiSlice, {
   createTodo,
   listTodos,
@@ -30,11 +30,9 @@ const workspaceSlice = createSlice({
 });
 
 export const updateTodo = (
-  id: number,
-  description: string,
-  commitEdit: boolean,
+  todoPatch: TodoPatch,
+  commitEdit: boolean = true,
 ): AppThunk => dispatch => {
-  const todoPatch = { id, description };
   if (!commitEdit) {
     dispatch(workspaceSlice.actions.updateTodoUncommitted(todoPatch));
     return;

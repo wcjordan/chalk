@@ -16,18 +16,6 @@
   color: #e0fbfc;
 }
 
-.todo-checkbox {
-  width: 22px;
-  height: 22px;
-  border: 1px solid #e0fbfc;
-  border-radius: 50%;
-}
-
-.todo-checkbox.todo-active:before {
-  content: '✓';
-  margin-left: 4px;
-}
-
 .todo-description {
   margin-left: 9px;
   flex-grow: 1;
@@ -53,13 +41,26 @@
   background: #3d5a80;
 }
 
+.todo-item .svg-inline--fa {
+  margin: auto 0;
+}
+
 .todo-item.todo-edit .fa-ban {
   color: #3d5a80;
-  margin: auto 0;
 }
 
 .todo-item .fa-exclamation-triangle {
   color: #ee6c4d;
   filter: brightness(1.5);
-  margin: auto 0;
+  padding-left: 5px;
+}
+
+.todo-item .fa-trash {
+  color: red;
+  padding-right: 1px;
+  visibility: hidden;
+}
+
+.todo-item:hover .fa-trash {
+  visibility: visible;
 }

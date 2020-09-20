@@ -10,16 +10,19 @@ import './App.css';
 export function App(props: ConnectedProps<typeof connector>) {
   const { createTodo, setTodoEditId, todos, updateTodo, workspace } = props;
   const { editId, uncommittedEdits } = workspace;
-  const todoViews = _.map(todos, todo => (
-    <TodoItem
-      editing={todo.id === editId}
-      key={todo.id || ''}
-      setTodoEditId={setTodoEditId}
-      todo={todo}
-      uncommittedEdit={uncommittedEdits[todo.id]}
-      updateTodo={updateTodo}
-    />
-  ));
+  const todoViews = _.map(
+    _.filter(todos, todo => !todo.archived),
+    todo => (
+      <TodoItem
+        editing={todo.id === editId}
+        key={todo.id || ''}
+        setTodoEditId={setTodoEditId}
+        todo={todo}
+        uncommittedEdit={uncommittedEdits[todo.id]}
+        updateTodo={updateTodo}
+      />
+    ),
+  );
 
   return (
     <div className="App">
