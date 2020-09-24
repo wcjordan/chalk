@@ -7,7 +7,6 @@ function AddTodo(props: Props) {
     (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') {
         event.preventDefault();
-
         createTodo(event.currentTarget.value);
       }
     },

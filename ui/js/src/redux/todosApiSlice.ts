@@ -35,7 +35,7 @@ export const createTodo = createAsyncThunk<Todo, string, {}>(
 );
 
 export const listTodos = createAsyncThunk<Todo[], void, { state: ReduxState }>(
-  `${API_NAME}/fetch`,
+  `${API_NAME}/list`,
   async () => list(TODOS_API),
   {
     condition: (_unused, { getState }) => {
@@ -69,6 +69,9 @@ export default createSlice({
       state.entries.push(action.payload);
       state.entries = processTodos(state.entries);
     },
+    [createTodo.rejected.type]: (_state, action: ErrorAction) => {
+      console.warn(`Creating Todo failed. ${action.error.message}`);
+    },
     [listTodos.pending.type]: state => {
       state.loading = true;
     },
@@ -78,7 +81,7 @@ export default createSlice({
     },
     [listTodos.rejected.type]: (state, action: ErrorAction) => {
       state.loading = false;
-      console.warn(`Loading ${API_NAME} failed. ${action.error.message}`);
+      console.warn(`Loading Todo failed. ${action.error.message}`);
     },
     [updateTodo.fulfilled.type]: (state, action: TodoAction) => {
       const updatedEntry = action.payload;
@@ -89,8 +92,8 @@ export default createSlice({
       Object.assign(existingEntry, updatedEntry);
       state.entries = processTodos(state.entries);
     },
-    [updateTodo.rejected.type]: (_unused, action: ErrorAction) => {
-      console.warn(`Updating ${API_NAME} failed. ${action.error.message}`);
+    [updateTodo.rejected.type]: (_state, action: ErrorAction) => {
+      console.warn(`Updating Todo failed. ${action.error.message}`);
     },
   },
 });

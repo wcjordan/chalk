@@ -3,10 +3,10 @@
 # Test w/ Jest
 .PHONY: test
 test:
-	# Lint & typecheck by building
-	cd js; yarn run build
 	# Unit & snapshot tests for UI
 	cd js; yarn jest
+	# Lint & typecheck by building
+	cd js; yarn run build
 
 # ESLint & Prettier JS formatting
 .PHONY: format

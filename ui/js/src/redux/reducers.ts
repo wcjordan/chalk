@@ -1,10 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { AppThunk, TodoPatch, WorkspaceState } from './types';
+import { ThunkAction } from 'redux-thunk';
+import { Action, createSlice } from '@reduxjs/toolkit';
+import { ReduxState, TodoPatch, WorkspaceState } from './types';
 import todosApiSlice, {
   createTodo,
   listTodos,
   updateTodo as updateTodoApi,
 } from './todosApiSlice';
+
+type AppThunk = ThunkAction<void, ReduxState, unknown, Action<string>>;
 
 const initialWorkspace: WorkspaceState = {
   editId: null,
@@ -34,12 +37,13 @@ export const updateTodo = (
   commitEdit: boolean = true,
 ): AppThunk => dispatch => {
   if (!commitEdit) {
-    dispatch(workspaceSlice.actions.updateTodoUncommitted(todoPatch));
-    return;
+    return dispatch(workspaceSlice.actions.updateTodoUncommitted(todoPatch));
   }
 
-  dispatch(workspaceSlice.actions.setTodoEditId(null));
-  dispatch(updateTodoApi(todoPatch));
+  return Promise.all([
+    dispatch(workspaceSlice.actions.setTodoEditId(null)),
+    dispatch(updateTodoApi(todoPatch)),
+  ]);
 };
 
 export const setTodoEditId = workspaceSlice.actions.setTodoEditId;
