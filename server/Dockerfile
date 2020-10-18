@@ -19,4 +19,4 @@ RUN pip install --no-cache-dir -r /usr/dev-requirements.txt
 # Install Django app by copying files to container
 COPY . /usr/src/app
 
-CMD ["gunicorn", "chalk.wsgi:application", "-w", "2", "-b", ":8003", "-t", "60"]
+CMD ["/usr/src/app/launch_server.sh"]

@@ -23,18 +23,18 @@ spec:
   rules:
     - http:
         paths:
-        - path: /api
-          pathType: Prefix
+        - path: /api/*
+          # pathType: Prefix
           backend:
             serviceName: {{ $fullName }}-server
             servicePort: http
-        - path: /admin_static
-          pathType: Prefix
+        - path: /admin_static/*
+          # pathType: Prefix
           backend:
             serviceName: {{ $fullName }}-server
             servicePort: http
-        - path: /
-          pathType: Prefix
+        - path: /*
+          # pathType: Prefix
           backend:
             serviceName: {{ $fullName }}-ui
             servicePort: http

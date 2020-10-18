@@ -10,7 +10,7 @@ server:
   replicaCount: 1
   image:
     pullPolicy: IfNotPresent
-    repository: chalk-server-image
+    repository: gcr.io/flipperkid-default/chalk-server-image
     # Overrides the image tag whose default is the chart appVersion.
     tag: latest
   autoscaling:
@@ -44,14 +44,14 @@ server:
     # runAsNonRoot: true
     # runAsUser: 1000
   db:
-    password: postgres
+    password: <PASSWORD>
   secretKey:
 
 ui:
   replicaCount: 1
   image:
     pullPolicy: IfNotPresent
-    repository: chalk-ui-image
+    repository: gcr.io/flipperkid-default/chalk-ui-image
     # Overrides the image tag whose default is the chart appVersion.
     tag: latest
   podAnnotations: {}

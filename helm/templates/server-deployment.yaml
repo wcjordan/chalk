@@ -24,7 +24,8 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "..serviceAccountName" . }}
+      # serviceAccountName: {{ include "..serviceAccountName" . }}
+      serviceAccountName: chalk-sa
       securityContext:
         {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
       volumes:
@@ -43,13 +44,14 @@ spec:
               mountPath: /var/www/html/
           env:
             {{- include "..serverEnv" . | nindent 12 }}
-        - name: migrate
-          image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
-          command: ["python", "manage.py", "migrate"]
-          env:
-            {{- include "..serverEnv" . | nindent 12 }}
       containers:
+        - name: {{ .Chart.Name }}-server-cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:latest
+          command:
+            - "/cloud_sql_proxy"
+            - "-instances=flipperkid-default:us-east4:chalk-prod=tcp:5432"
+          securityContext:
+            runAsNonRoot: true
         - name: {{ .Chart.Name }}-server-nginx
           image: nginx:stable
           imagePullPolicy: IfNotPresent
@@ -77,7 +79,7 @@ spec:
           securityContext:
             {{- toYaml .Values.server.securityContext | nindent 12 }}
           image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          imagePullPolicy: Always
           env:
             {{- include "..serverEnv" . | nindent 12 }}
           ports:
