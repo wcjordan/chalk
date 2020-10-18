@@ -34,8 +34,8 @@ const workspaceSlice = createSlice({
 
 export const updateTodo = (
   todoPatch: TodoPatch,
-  commitEdit: boolean = true,
-): AppThunk => dispatch => {
+  commitEdit = true,
+): AppThunk => (dispatch) => {
   if (!commitEdit) {
     return dispatch(workspaceSlice.actions.updateTodoUncommitted(todoPatch));
   }

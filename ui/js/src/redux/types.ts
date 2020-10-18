@@ -14,6 +14,14 @@ export interface TodoPatch {
   description?: string;
 }
 
+export interface NewTodo {
+  id?: number;
+  archived?: boolean;
+  completed?: boolean;
+  created_at?: number;
+  description?: string;
+}
+
 export interface ApiState<T> {
   entries: T[];
   loading: boolean;

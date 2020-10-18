@@ -1,7 +1,7 @@
 import React, { KeyboardEvent, useCallback } from 'react';
 import './AddTodo.css';
 
-function AddTodo(props: Props) {
+const AddTodo: React.FC<Props> = function (props: Props) {
   const { createTodo } = props;
   const addTodo = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
@@ -23,7 +23,7 @@ function AddTodo(props: Props) {
       />
     </div>
   );
-}
+};
 
 type Props = {
   createTodo: (description: string) => void;

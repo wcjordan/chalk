@@ -5,4 +5,4 @@ export default {
   title: 'Add Todo',
   component: AddTodo,
 };
-export const DefaultAddTodo = () => <AddTodo />;
+export const DefaultAddTodo: React.FC = () => <AddTodo />;

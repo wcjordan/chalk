@@ -15,7 +15,7 @@ import { faCheckCircle, faCircle } from '@fortawesome/free-regular-svg-icons';
 import { Todo, TodoPatch } from '../redux/types';
 import './TodoItem.css';
 
-function TodoItem(props: Props) {
+const TodoItem: React.FC<Props> = function (props: Props) {
   const { editing, todo, setTodoEditId, uncommittedEdit, updateTodo } = props;
   const editInput = useRef<HTMLInputElement>(null);
 
@@ -144,7 +144,7 @@ function TodoItem(props: Props) {
       {content}
     </div>
   );
-}
+};
 
 type Props = {
   editing: boolean;

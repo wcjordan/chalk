@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ApiState, ReduxState, Todo, TodoPatch } from './types';
+import { ApiState, NewTodo, ReduxState, Todo, TodoPatch } from './types';
 import { create, list, patch } from './fetchApi';
 
 const API_NAME = 'todosApi';
@@ -23,20 +23,21 @@ const initialState: ApiState<Todo> = {
   loading: false,
 };
 
-export const createTodo = createAsyncThunk<Todo, string, {}>(
-  `${API_NAME}/create`,
-  async (todoTitle: string) => {
-    const newTodo = {
-      created_at: Date.now(),
-      description: todoTitle,
-    };
-    return create(TODOS_API, newTodo);
-  },
-);
+export const createTodo = createAsyncThunk<
+  Todo,
+  string,
+  Record<string, unknown>
+>(`${API_NAME}/create`, async (todoTitle: string) => {
+  const newTodo = {
+    created_at: Date.now(),
+    description: todoTitle,
+  };
+  return create<Todo, NewTodo>(TODOS_API, newTodo);
+});
 
 export const listTodos = createAsyncThunk<Todo[], void, { state: ReduxState }>(
   `${API_NAME}/list`,
-  async () => list(TODOS_API),
+  async () => list<Todo>(TODOS_API),
   {
     condition: (_unused, { getState }) => {
       return !getState().todosApi.loading;
@@ -44,9 +45,12 @@ export const listTodos = createAsyncThunk<Todo[], void, { state: ReduxState }>(
   },
 );
 
-export const updateTodo = createAsyncThunk<Todo, TodoPatch, {}>(
-  `${API_NAME}/update`,
-  async entryPatch => patch(TODOS_API, entryPatch),
+export const updateTodo = createAsyncThunk<
+  Todo,
+  TodoPatch,
+  Record<string, unknown>
+>(`${API_NAME}/update`, async (entryPatch) =>
+  patch<Todo, TodoPatch>(TODOS_API, entryPatch),
 );
 
 /**
@@ -55,7 +59,7 @@ export const updateTodo = createAsyncThunk<Todo, TodoPatch, {}>(
  */
 function processTodos(todos: Array<Todo>) {
   return _.sortBy(
-    _.filter(todos, todo => !todo.archived),
+    _.filter(todos, (todo) => !todo.archived),
     ['completed', 'id'],
   );
 }
@@ -72,7 +76,7 @@ export default createSlice({
     [createTodo.rejected.type]: (_state, action: ErrorAction) => {
       console.warn(`Creating Todo failed. ${action.error.message}`);
     },
-    [listTodos.pending.type]: state => {
+    [listTodos.pending.type]: (state) => {
       state.loading = true;
     },
     [listTodos.fulfilled.type]: (state, action: TodoListAction) => {
@@ -87,7 +91,7 @@ export default createSlice({
       const updatedEntry = action.payload;
       const existingEntry = _.find(
         state.entries,
-        entry => entry.id === updatedEntry.id,
+        (entry) => entry.id === updatedEntry.id,
       );
       Object.assign(existingEntry, updatedEntry);
       state.entries = processTodos(state.entries);

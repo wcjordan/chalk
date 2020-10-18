@@ -1,11 +1,6 @@
 import React from 'react';
 import TodoItem from './TodoItem';
 
-beforeAll(function() {
-  // Stub Math.random so aria-labelledby is deterministic for font-awesome
-  jest.spyOn(global.Math, 'random').mockImplementation(() => 0.5);
-});
-
 const defaultTodo = {
   archived: false,
   completed: false,
@@ -21,9 +16,9 @@ export default {
   title: 'Todo Item',
   component: TodoItem,
 };
-export const DefaultTodo = () => <TodoItem {...defaultProps} />;
+export const DefaultTodo: React.FC = () => <TodoItem {...defaultProps} />;
 
-export const CheckedTodo = () => (
+export const CheckedTodo: React.FC = () => (
   <TodoItem
     {...defaultProps}
     todo={Object.assign({}, defaultTodo, {
@@ -33,7 +28,7 @@ export const CheckedTodo = () => (
   />
 );
 
-export const EditingTodo = () => (
+export const EditingTodo: React.FC = () => (
   <TodoItem
     {...defaultProps}
     editing={true}
@@ -43,7 +38,7 @@ export const EditingTodo = () => (
   />
 );
 
-export const UncommittedEditTodo = () => (
+export const UncommittedEditTodo: React.FC = () => (
   <TodoItem
     {...defaultProps}
     todo={Object.assign({}, defaultTodo, {
@@ -53,7 +48,7 @@ export const UncommittedEditTodo = () => (
   />
 );
 
-export const EditingUncommittedTodo = () => (
+export const EditingUncommittedTodo: React.FC = () => (
   <TodoItem
     {...defaultProps}
     editing={true}

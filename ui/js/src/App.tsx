@@ -7,10 +7,12 @@ import TodoItem from './components/TodoItem';
 import { createTodo, updateTodo, setTodoEditId } from './redux/reducers';
 import './App.css';
 
-export function App(props: ConnectedProps<typeof connector>) {
+export const App: React.FC<ConnectedProps<typeof connector>> = function (
+  props: ConnectedProps<typeof connector>,
+) {
   const { createTodo, setTodoEditId, todos, updateTodo, workspace } = props;
   const { editId, uncommittedEdits } = workspace;
-  const todoViews = _.map(todos, todo => (
+  const todoViews = _.map(todos, (todo) => (
     <TodoItem
       editing={todo.id === editId}
       key={todo.id || ''}
@@ -27,7 +29,7 @@ export function App(props: ConnectedProps<typeof connector>) {
       {todoViews}
     </div>
   );
-}
+};
 
 const mapStateToProps = (state: ReduxState) => {
   return {

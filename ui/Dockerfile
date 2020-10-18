@@ -9,9 +9,13 @@ RUN yarn install --pure-lockfile
 
 # Install React app
 COPY js/.prettierrc .
-COPY js/public ./public
+COPY js/.eslintrc .
 COPY js/tsconfig.json .
 COPY js/.storybook ./.storybook
+
+COPY js/app.json ./app.json
+COPY js/App.tsx ./App.tsx
+COPY js/assets ./assets
 COPY js/src ./src
 
 # Build React app
@@ -27,6 +31,6 @@ COPY conf.d/app.conf /etc/nginx/conf-includes/app.conf
 COPY conf.d/server.conf /etc/nginx/conf-includes/server.conf
 
 # Copy over built JS files from React app
-COPY --from=js_app /js/build/* /www/client/
+COPY --from=js_app /js/web-build/* /www/client/
 
 CMD ["nginx", "-g", "daemon off;"]

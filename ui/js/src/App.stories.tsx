@@ -25,9 +25,9 @@ export default {
   title: 'App',
   component: App,
 };
-export const DefaultLayout = () => <App {...defaultProps} />;
+export const DefaultLayout: React.FC = () => <App {...defaultProps} />;
 
-export const ListTodosLayout = () => (
+export const ListTodosLayout: React.FC = () => (
   <App
     {...defaultProps}
     todos={[
