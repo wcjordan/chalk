@@ -1,7 +1,7 @@
 # Base container for building UI
 # We run this weekly and use the result to speed up builds
 # Performs yarn install to cache JS dependencies
-FROM node:13-alpine
+FROM node:14-alpine
 WORKDIR /js
 
 # Install system packages for dev tooling
