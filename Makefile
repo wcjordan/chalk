@@ -27,3 +27,22 @@ stop:
 format:
 	$(MAKE) -C ui format
 	$(MAKE) -C server format
+
+.PHONY: deploy
+deploy:
+	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
+		helm upgrade --install --namespace chalk-namespace \
+			--set server.secretKey=$$SECRET_KEY \
+			--set server.db.password=$$POSTGRES_PASSWORD \
+			chalk-staging helm'
+
+# Create Kind for local k8s development
+# requires Tilt's ctlptl
+.PHONY: create-kind
+create-kind:
+	ctlptl create cluster kind --registry=ctlptl-registry
+
+# Delete Kind for local k8s development
+.PHONY: delete-kind
+delete-kind:
+	ctlptl delete cluster kind-kind

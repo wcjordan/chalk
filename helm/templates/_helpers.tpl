@@ -102,4 +102,10 @@ Server Env
   value: {{ .Values.server.secretKey }}
 - name: POSTGRES_PASSWORD
   value: {{ .Values.server.db.password }}
+{{- if .Values.DEV }}
+- name: DB_HOSTNAME
+  value: 'postgresql-headless'
+- name: DEBUG
+  value: 'true'
+{{- end }}
 {{- end }}

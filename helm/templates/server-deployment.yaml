@@ -24,8 +24,11 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      # serviceAccountName: {{ include "..serviceAccountName" . }}
+      {{- if .Values.DEV }}
+      serviceAccountName: {{ include "..serviceAccountName" . }}
+      {{- else }}
       serviceAccountName: chalk-sa
+      {{- end }}
       securityContext:
         {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
       volumes:
@@ -45,6 +48,7 @@ spec:
           env:
             {{- include "..serverEnv" . | nindent 12 }}
       containers:
+        {{- if not .Values.DEV }}
         - name: {{ .Chart.Name }}-server-cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:latest
           command:
@@ -52,6 +56,7 @@ spec:
             - "-instances=flipperkid-default:us-east4:chalk-prod=tcp:5432"
           securityContext:
             runAsNonRoot: true
+        {{- end }}
         - name: {{ .Chart.Name }}-server-nginx
           image: nginx:stable
           imagePullPolicy: IfNotPresent

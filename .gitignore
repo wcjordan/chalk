@@ -57,4 +57,5 @@ node_modules/
 tilt_modules/
 .helm
 
-.tmp-cid.txt
+# Env files for dev & prod config
+*.env

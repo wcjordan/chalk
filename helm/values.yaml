@@ -6,6 +6,8 @@ nameOverride: ""
 fullnameOverride: ""
 imagePullSecrets: []
 
+DEV: false
+
 server:
   replicaCount: 1
   image:
@@ -44,7 +46,7 @@ server:
     # runAsNonRoot: true
     # runAsUser: 1000
   db:
-    password: <PASSWORD>
+    password:
   secretKey:
 
 ui:

@@ -6,6 +6,7 @@ POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
 env_arr = [
     'server.secretKey=%s' % os.environ.get('SECRET_KEY'),
     'server.db.password=%s' % POSTGRES_PASSWORD,
+    'DEV=true',
 ]
 
 k8s_yaml(local('helm template ingress stable/nginx-ingress', quiet=True))
@@ -17,8 +18,8 @@ helm_remote('postgresql',
             set=['postgresqlPassword=%s' % POSTGRES_PASSWORD,
                  'postgresqlDatabase=chalk'])
 
-docker_build('chalk-server-image', 'server')
-docker_build('chalk-ui-image', 'ui', dockerfile='ui/Dockerfile.dev', live_update=[
+docker_build('gcr.io/flipperkid-default/chalk-server-image', 'server')
+docker_build('gcr.io/flipperkid-default/chalk-ui-image', 'ui', dockerfile='ui/Dockerfile.dev', live_update=[
     fall_back_on(['ui/js/package.json', 'ui/js/yarn.lock']),
     sync('ui/js/public', '/js/public'),
     sync('ui/js/src', '/js/src'),
