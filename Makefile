@@ -28,6 +28,8 @@ format:
 	$(MAKE) -C ui format
 	$(MAKE) -C server format
 
+# Deploy to production
+# To delete: helm delete chalk-staging --namespace chalk-namespace
 .PHONY: deploy
 deploy:
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
