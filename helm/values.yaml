@@ -45,8 +45,7 @@ server:
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
     # runAsUser: 1000
-  db:
-    password:
+  dbPassword:
   secretKey:
 
 ui:

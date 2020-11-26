@@ -33,7 +33,7 @@ deploy:
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		helm upgrade --install --namespace chalk-namespace \
 			--set server.secretKey=$$SECRET_KEY \
-			--set server.db.password=$$POSTGRES_PASSWORD \
+			--set server.dbPassword=$$POSTGRES_PASSWORD \
 			chalk-staging helm'
 
 # Create Kind for local k8s development

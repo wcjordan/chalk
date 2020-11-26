@@ -5,7 +5,7 @@ allow_k8s_contexts('kind-kind-jordan')
 POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
 env_arr = [
     'server.secretKey=%s' % os.environ.get('SECRET_KEY'),
-    'server.db.password=%s' % POSTGRES_PASSWORD,
+    'server.dbPassword=%s' % POSTGRES_PASSWORD,
     'DEV=true',
 ]
 
