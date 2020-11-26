@@ -19,7 +19,7 @@ helm_remote('postgresql',
                  'postgresqlDatabase=chalk'])
 
 docker_build('gcr.io/flipperkid-default/chalk-server-image', 'server')
-docker_build('gcr.io/flipperkid-default/chalk-ui-image', 'ui', dockerfile='ui/Dockerfile.dev', live_update=[
+docker_build('gcr.io/flipperkid-default/chalk-ui-image-dev', 'ui', dockerfile='ui/Dockerfile.dev', live_update=[
     fall_back_on(['ui/js/package.json', 'ui/js/yarn.lock']),
     sync('ui/js/public', '/js/public'),
     sync('ui/js/src', '/js/src'),

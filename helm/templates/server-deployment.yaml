@@ -5,32 +5,21 @@ metadata:
   labels:
     {{- include "..serverLabels" . | nindent 4 }}
 spec:
-{{- if not .Values.server.autoscaling.enabled }}
-  replicas: {{ .Values.server.replicaCount }}
-{{- end }}
   selector:
     matchLabels:
       {{- include "..serverSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.server.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+        timestamp: "{{ date "20060102150405" .Release.Time }}"
       labels:
         {{- include "..serverSelectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       {{- if .Values.DEV }}
       serviceAccountName: {{ include "..serviceAccountName" . }}
       {{- else }}
       serviceAccountName: chalk-sa
       {{- end }}
-      securityContext:
-        {{- toYaml .Values.server.podSecurityContext | nindent 8 }}
       volumes:
         - name: nginx-conf
           configMap:
@@ -39,8 +28,8 @@ spec:
           emptyDir: {}
       initContainers:
         - name: collectstatic
-          image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          image: "gcr.io/flipperkid-default/chalk-server-image:latest"
+          imagePullPolicy: Always
           command: ["python", "manage.py", "collectstatic", "--noinput"]
           volumeMounts:
             - name: staticfiles
@@ -59,7 +48,7 @@ spec:
         {{- end }}
         - name: {{ .Chart.Name }}-server-nginx
           image: nginx:stable
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: nginx-http
               containerPort: 8002
@@ -81,9 +70,7 @@ spec:
             requests:
               cpu: 10m
         - name: {{ .Chart.Name }}-server
-          securityContext:
-            {{- toYaml .Values.server.securityContext | nindent 12 }}
-          image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default .Chart.AppVersion }}"
+          image: "gcr.io/flipperkid-default/chalk-server-image:latest"
           imagePullPolicy: Always
           env:
             {{- include "..serverEnv" . | nindent 12 }}
@@ -99,17 +86,3 @@ spec:
             httpGet:
               path: /api/todos/todos/
               port: http
-          resources:
-            {{- toYaml .Values.server.resources | nindent 12 }}
-      {{- with .Values.server.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.server.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.server.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
