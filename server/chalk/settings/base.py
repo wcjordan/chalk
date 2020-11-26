@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'NO').lower() in ('on', 'true', 'y', 'yes')
+DEBUG = os.getenv('DEBUG', 'false') == 'true'
 
 ALLOWED_HOSTS = ['*']
 
@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'chalk',
         'USER': 'postgres',
         'PASSWORD': os.environ['POSTGRES_PASSWORD'],
-        'HOST': os.environ.get('DB_HOSTNAME', 'postgresql-headless'),
+        'HOST': os.environ.get('DB_HOSTNAME', '127.0.0.1'),
         'PORT': 5432
     }
 }

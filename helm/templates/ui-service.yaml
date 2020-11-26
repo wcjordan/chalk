@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "..uiLabels" . | nindent 4 }}
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
     - port: 19006
       targetPort: 19006

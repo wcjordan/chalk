@@ -1,4 +1,6 @@
 #!make
+IMAGE_REPO = gcr.io/flipperkid-default
+UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-image-dev
 
 # Test w/ Jest
 .PHONY: test
@@ -21,12 +23,12 @@ format:
 storybook:
 	docker run --rm -v $(PWD)/js/src:/js/src -p 127.0.0.1:9009:9009 \
 		-a stdin -a stdout -i -t \
-		chalk-ui-image:latest yarn run storybook
+		$(UI_IMAGE_DEV):latest yarn run storybook
 
 # Update snapshot tests
 .PHONY: update-snapshots
 update-snapshots:
-	docker run --rm -v $(PWD)/js/src:/js/src chalk-ui-image:latest yarn jest -u
+	docker run --rm -v $(PWD)/js/src:/js/src $(UI_IMAGE_DEV):latest yarn jest -u
 
 # Fix import ordering
 .PHONY: fix-imports

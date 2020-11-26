@@ -99,7 +99,19 @@ Server Env
 */}}
 {{- define "..serverEnv" -}}
 - name: SECRET_KEY
-  value: {{ .Values.server.secretKey }}
+  valueFrom:
+    secretKeyRef:
+      name: server-secrets
+      key: secret-key
 - name: POSTGRES_PASSWORD
-  value: {{ .Values.server.db.password }}
+  valueFrom:
+    secretKeyRef:
+      name: server-secrets
+      key: db-password
+{{- if .Values.DEV }}
+- name: DB_HOSTNAME
+  value: 'postgresql-headless'
+- name: DEBUG
+  value: 'true'
+{{- end }}
 {{- end }}
