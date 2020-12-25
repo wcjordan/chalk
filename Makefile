@@ -34,16 +34,16 @@ format:
 	$(MAKE) -C server format
 
 # Deploy to production
-# To delete: helm delete chalk-staging --namespace chalk-namespace
+# To delete: helm delete chalk-prod
 .PHONY: deploy
 deploy: build
 	docker push $(SERVER_IMAGE):latest
 	docker push $(UI_IMAGE):latest
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
-		helm upgrade --install --namespace chalk-namespace \
+		helm upgrade --install \
 			--set server.secretKey=$$SECRET_KEY \
 			--set server.dbPassword=$$POSTGRES_PASSWORD \
-			chalk-staging helm'
+			chalk-prod helm'
 
 # Create Kind for local k8s development
 # requires Tilt's ctlptl
