@@ -14,6 +14,11 @@ test:
 	# Build as a sanity check
 	cd js; yarn build
 
+# Start Expo mobile dev
+.PHONY: start-dev
+start-dev:
+	cd js; yarn start
+
 # ESLint & Prettier JS formatting
 .PHONY: format
 format:

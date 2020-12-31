@@ -1,27 +1,51 @@
-import React, { KeyboardEvent, useCallback } from 'react';
-import './AddTodo.css';
+import React, { useCallback } from 'react';
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  NativeSyntheticEvent,
+  TextInputSubmitEditingEventData,
+} from 'react-native';
+
+const styles = StyleSheet.create({
+  addTodo: {
+    backgroundColor: '#98c1d9',
+    border: 'none',
+    display: 'flex',
+    fontFamily: 'monospace',
+    padding: 8,
+    width: '100%',
+  },
+  addTodoInput: {
+    backgroundColor: 'inherit',
+    color: '#293241',
+    fontFamily: 'inherit',
+    fontSize: 20,
+    marginLeft: 4,
+    padding: 4,
+    flexGrow: 1,
+  },
+});
 
 const AddTodo: React.FC<Props> = function (props: Props) {
   const { createTodo } = props;
   const addTodo = useCallback(
-    (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        createTodo(event.currentTarget.value);
-      }
+    (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+      createTodo(event.nativeEvent.text);
     },
     [createTodo],
   );
 
+  // TODO remove input outline on focus
   return (
-    <div className="add-todo">
-      <div className="add-todo-icon" />
-      <input
-        className="add-todo-input"
+    <View style={styles.addTodo}>
+      <TextInput
+        style={styles.addTodoInput}
         placeholder="Add a new todo..."
-        onKeyPress={addTodo}
+        placeholderTextColor="#e0fbfc"
+        onSubmitEditing={addTodo}
       />
-    </div>
+    </View>
   );
 };
 

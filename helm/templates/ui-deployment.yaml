@@ -28,6 +28,11 @@ spec:
             - name: http
               containerPort: 19006
               protocol: TCP
+          {{- if .Values.DEV }}
+            - name: expo
+              containerPort: 19002
+              protocol: TCP
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /
