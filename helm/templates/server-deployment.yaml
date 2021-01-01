@@ -15,11 +15,7 @@ spec:
       labels:
         {{- include "..serverSelectorLabels" . | nindent 8 }}
     spec:
-      {{- if .Values.DEV }}
-      serviceAccountName: {{ include "..serviceAccountName" . }}
-      {{- else }}
       serviceAccountName: chalk-sa
-      {{- end }}
       volumes:
         - name: nginx-conf
           configMap:
@@ -37,15 +33,17 @@ spec:
           env:
             {{- include "..serverEnv" . | nindent 12 }}
       containers:
-        {{- if not .Values.DEV }}
         - name: {{ .Chart.Name }}-server-cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:latest
           command:
             - "/cloud_sql_proxy"
+            {{- if .Values.DEV }}
+            - "-instances=flipperkid-default:us-east4:chalk-dev=tcp:5432"
+            {{- else }}
             - "-instances=flipperkid-default:us-east4:chalk-prod=tcp:5432"
+            {{- end }}
           securityContext:
             runAsNonRoot: true
-        {{- end }}
         - name: {{ .Chart.Name }}-server-nginx
           image: nginx:stable
           imagePullPolicy: Always

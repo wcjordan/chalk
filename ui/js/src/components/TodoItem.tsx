@@ -1,11 +1,15 @@
-import React, {
-  KeyboardEvent,
-  MouseEvent,
-  useCallback,
-  useEffect,
-  useRef,
-} from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { MouseEvent, useCallback } from 'react';
+import {
+  NativeSyntheticEvent,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputSubmitEditingEventData,
+  View,
+  ViewStyle,
+} from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faBan,
   faExclamationTriangle,
@@ -13,24 +17,68 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faCheckCircle, faCircle } from '@fortawesome/free-regular-svg-icons';
 import { Todo, TodoPatch } from '../redux/types';
-import './TodoItem.css';
+
+const styles = StyleSheet.create({
+  todoItem: {
+    backgroundColor: '#3d5a80',
+    color: '#e0fbfc',
+    display: 'flex',
+    fontFamily: 'monospace',
+    padding: 8,
+    fontSize: 20,
+    width: '100%',
+    borderTopWidth: 1,
+    borderTopColor: '#e0fbfc',
+    cursor: 'pointer',
+  },
+  todoEdit: {
+    backgroundColor: '#98c1d9',
+    color: '#e0fbfc',
+  },
+  todoDescription: {
+    marginLeft: 9,
+    flexGrow: 1,
+  },
+  editTodoInput: {
+    backgroundColor: 'inherit',
+    border: 'none',
+    color: 'inherit',
+    flexGrow: 1,
+    fontFamily: 'inherit',
+    fontSize: 'inherit',
+    lineHeight: 'inherit',
+    marginLeft: 9,
+    padding: 0,
+  },
+  iconMargin: {
+    marginVertical: 'auto',
+  },
+  iconCheck: {
+    color: '#e0fbfc',
+  },
+  iconCancel: {
+    color: '#3d5a80',
+  },
+  iconDelete: {
+    color: 'red',
+    paddingRight: 1,
+    // visibility: 'hidden',
+  },
+  iconWarn: {
+    color: '#f7b6a6',
+    paddingLeft: 5,
+  },
+});
 
 const TodoItem: React.FC<Props> = function (props: Props) {
   const { editing, todo, setTodoEditId, uncommittedEdit, updateTodo } = props;
-  const editInput = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (editing && editInput.current) {
-      editInput.current.select();
-    }
-  }, [editing]);
 
   const updateTodoCb = useCallback(
-    (event: KeyboardEvent<HTMLInputElement>) => {
+    (text: string) => {
       updateTodo(
         {
           id: todo.id,
-          description: event.currentTarget.value,
+          description: text,
         },
         false,
       );
@@ -39,13 +87,11 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   );
 
   const commitTodo = useCallback(
-    (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') {
-        updateTodo({
-          id: todo.id,
-          description: event.currentTarget.value,
-        });
-      }
+    (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+      updateTodo({
+        id: todo.id,
+        description: event.nativeEvent.text,
+      });
     },
     [updateTodo, todo.id],
   );
@@ -89,35 +135,39 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   }, [setTodoEditId, editing]);
 
   let content;
-  let itemClasses = 'todo-item';
+  let itemStyle: StyleProp<ViewStyle> = styles.todoItem;
   if (editing) {
-    itemClasses += ' todo-edit';
+    itemStyle = StyleSheet.compose(itemStyle, styles.todoEdit);
     content = [
-      <input
-        className="edit-todo-input"
+      // TODO remove input outline on focus
+      <TextInput
         defaultValue={uncommittedEdit || todo.description}
         key="input"
-        onInput={updateTodoCb}
-        onKeyPress={commitTodo}
-        ref={editInput}
+        style={styles.editTodoInput}
+        selectionColor="#3d5a80"
+        onChangeText={updateTodoCb}
+        onSubmitEditing={commitTodo}
+        selectTextOnFocus={true}
       />,
       <FontAwesomeIcon
         icon={faBan}
         key="cancel"
+        style={StyleSheet.compose(styles.iconMargin, styles.iconCancel)}
         onClick={cancelEdit}
-        size="sm"
+        size={16}
       />,
     ];
   } else {
     content = [
-      <span key="description" className="todo-description">
+      <Text style={styles.todoDescription} key="description">
         {todo.description}
-      </span>,
+      </Text>,
       <FontAwesomeIcon
         icon={faTrash}
         key="archive"
+        style={StyleSheet.compose(styles.iconMargin, styles.iconDelete)}
         onClick={archiveTodo}
-        size="sm"
+        size={16}
       />,
     ];
     if (uncommittedEdit) {
@@ -125,7 +175,8 @@ const TodoItem: React.FC<Props> = function (props: Props) {
         <FontAwesomeIcon
           icon={faExclamationTriangle}
           key="warn"
-          size="xs"
+          style={StyleSheet.compose(styles.iconMargin, styles.iconWarn)}
+          size={16}
           title={`Uncommitted edit: ${uncommittedEdit}`}
         />,
       );
@@ -134,15 +185,16 @@ const TodoItem: React.FC<Props> = function (props: Props) {
 
   const checkboxIcon = todo.completed ? faCheckCircle : faCircle;
   return (
-    <div className={itemClasses} onClick={beginEdit}>
+    <Text style={itemStyle} onPress={beginEdit}>
       <FontAwesomeIcon
         icon={checkboxIcon}
         key="checkbox"
+        style={StyleSheet.compose(styles.iconMargin, styles.iconCheck)}
         onClick={toggleTodo}
-        size="sm"
+        size={16}
       />
       {content}
-    </div>
+    </Text>
   );
 };
 

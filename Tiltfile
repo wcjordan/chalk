@@ -1,6 +1,6 @@
 # -*- mode: Python -*-
 
-allow_k8s_contexts('kind-kind-jordan')
+allow_k8s_contexts(os.environ.get('K8S_CONTEXT'))
 
 POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
 env_arr = [
@@ -9,15 +9,6 @@ env_arr = [
     'DEV=true',
 ]
 
-k8s_yaml(local('helm template ingress stable/nginx-ingress', quiet=True))
-
-load('ext://helm_remote', 'helm_remote')
-helm_remote('postgresql',
-            repo_name='bitnami',
-            repo_url='https://charts.bitnami.com/bitnami',
-            set=['postgresqlPassword=%s' % POSTGRES_PASSWORD,
-                 'postgresqlDatabase=chalk'])
-
 docker_build('gcr.io/flipperkid-default/chalk-server-image', 'server')
 docker_build('gcr.io/flipperkid-default/chalk-ui-image-dev', 'ui', dockerfile='ui/Dockerfile.dev', live_update=[
     fall_back_on(['ui/js/package.json', 'ui/js/yarn.lock']),
@@ -25,6 +16,6 @@ docker_build('gcr.io/flipperkid-default/chalk-ui-image-dev', 'ui', dockerfile='u
     sync('ui/js/src', '/js/src'),
 ])
 
-helm = helm('helm', name='chart-chalk', set=env_arr)
+helm = helm('helm', name='chalk-dev', set=env_arr)
 k8s_yaml(helm)
-k8s_resource('ingress-nginx-ingress-controller', port_forwards='8000')
+k8s_resource('chalk-dev-ui', port_forwards=['19002'], pod_readiness='ignore')

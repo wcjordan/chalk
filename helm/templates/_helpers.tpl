@@ -109,8 +109,6 @@ Server Env
       name: server-secrets
       key: db-password
 {{- if .Values.DEV }}
-- name: DB_HOSTNAME
-  value: 'postgresql-headless'
 - name: DEBUG
   value: 'true'
 {{- end }}

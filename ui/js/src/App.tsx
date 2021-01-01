@@ -1,11 +1,33 @@
 import _ from 'lodash';
 import { connect, ConnectedProps } from 'react-redux';
 import React from 'react';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import AddTodo from './components/AddTodo';
 import { ReduxState } from './redux/types';
 import TodoItem from './components/TodoItem';
 import { createTodo, updateTodo, setTodoEditId } from './redux/reducers';
-import './App.css';
+
+/* Color palette
+https://coolors.co/3d5a80-98c1d9-e0fbfc-ee6c4d-293241
+#e0fbfc - light
+#98c1d9 - medium
+#3d5a80 - dark
+#293241 - near black
+#ee6c4d - stand out
+*/
+
+const styles = StyleSheet.create({
+  root: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#293241',
+  },
+  container: {
+    height: '100%',
+    width: '66%',
+    marginHorizontal: 'auto',
+  },
+});
 
 export const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
@@ -23,11 +45,20 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
     />
   ));
 
+  const paddingTop = Platform.OS === 'android' ? StatusBar.currentHeight : 80;
+  const topStyle = StyleSheet.create({
+    top: {
+      paddingTop: paddingTop,
+    },
+  }).top;
+  const containerStyles = StyleSheet.compose(styles.container, topStyle);
   return (
-    <div className="App">
-      <AddTodo createTodo={createTodo} />
-      {todoViews}
-    </div>
+    <View style={styles.root}>
+      <View style={containerStyles}>
+        <AddTodo createTodo={createTodo} />
+        {todoViews}
+      </View>
+    </View>
   );
 };
 

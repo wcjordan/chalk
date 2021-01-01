@@ -1,10 +1,15 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { Platform } from 'react-native';
 import { ApiState, NewTodo, ReduxState, Todo, TodoPatch } from './types';
 import { create, list, patch } from './fetchApi';
 
 const API_NAME = 'todosApi';
-const TODOS_API = 'api/todos/todos/';
+const WS_ROOT = Platform.select({
+  native: 'http://chalk-dev.flipperkid.com/',
+  default: '',
+});
+const TODOS_API = WS_ROOT + 'api/todos/todos/';
 
 interface ErrorAction {
   error: Error;
