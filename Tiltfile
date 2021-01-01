@@ -1,6 +1,6 @@
 # -*- mode: Python -*-
 
-allow_k8s_contexts('gke_flipperkid-default_us-east4-c_flipperkid-default')
+allow_k8s_contexts(os.environ.get('K8S_CONTEXT'))
 
 POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
 env_arr = [
