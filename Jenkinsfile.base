@@ -13,7 +13,7 @@ pipeline {
                 }
             }
             options {
-                timeout(time: 6, unit: 'MINUTES')
+                timeout(time: 15, unit: 'MINUTES')
             }
             steps {
                 container('dind') {
