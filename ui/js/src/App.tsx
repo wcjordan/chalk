@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { connect, ConnectedProps } from 'react-redux';
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, ViewStyle } from 'react-native';
 import AddTodo from './components/AddTodo';
 import { ReduxState } from './redux/types';
 import TodoItem from './components/TodoItem';
@@ -16,7 +16,15 @@ https://coolors.co/3d5a80-98c1d9-e0fbfc-ee6c4d-293241
 #ee6c4d - stand out
 */
 
-const styles = StyleSheet.create({
+interface Style {
+  root: ViewStyle;
+  container: ViewStyle;
+}
+interface TopStyle {
+  top: ViewStyle;
+}
+
+const styles = StyleSheet.create<Style>({
   root: {
     height: '100%',
     width: '100%',
@@ -46,7 +54,7 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
   ));
 
   const paddingTop = Platform.OS === 'android' ? StatusBar.currentHeight : 80;
-  const topStyle = StyleSheet.create({
+  const topStyle = StyleSheet.create<TopStyle>({
     top: {
       paddingTop: paddingTop,
     },

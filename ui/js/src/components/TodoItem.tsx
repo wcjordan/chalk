@@ -1,15 +1,19 @@
-import React, { MouseEvent, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import {
+  GestureResponderEvent,
   NativeSyntheticEvent,
   StyleProp,
   StyleSheet,
   Text,
   TextInput,
   TextInputSubmitEditingEventData,
-  View,
-  ViewStyle,
+  TextStyle,
+  TouchableHighlight,
 } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {
+  FontAwesomeIcon,
+  FontAwesomeIconStyle,
+} from '@fortawesome/react-native-fontawesome';
 import {
   faBan,
   faExclamationTriangle,
@@ -18,7 +22,19 @@ import {
 import { faCheckCircle, faCircle } from '@fortawesome/free-regular-svg-icons';
 import { Todo, TodoPatch } from '../redux/types';
 
-const styles = StyleSheet.create({
+interface Style {
+  todoItem: TextStyle;
+  todoEdit: TextStyle;
+  todoDescription: TextStyle;
+  editTodoInput: TextStyle;
+  iconMargin: FontAwesomeIconStyle;
+  iconCheck: FontAwesomeIconStyle;
+  iconCancel: FontAwesomeIconStyle;
+  iconDelete: FontAwesomeIconStyle;
+  iconWarn: FontAwesomeIconStyle;
+}
+
+const styles = StyleSheet.create<Style>({
   todoItem: {
     backgroundColor: '#3d5a80',
     color: '#e0fbfc',
@@ -29,7 +45,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderTopWidth: 1,
     borderTopColor: '#e0fbfc',
-    cursor: 'pointer',
+    // cursor: 'pointer',
   },
   todoEdit: {
     backgroundColor: '#98c1d9',
@@ -41,12 +57,12 @@ const styles = StyleSheet.create({
   },
   editTodoInput: {
     backgroundColor: 'inherit',
-    border: 'none',
+    // border: 'none',
     color: 'inherit',
     flexGrow: 1,
     fontFamily: 'inherit',
-    fontSize: 'inherit',
-    lineHeight: 'inherit',
+    // fontSize: 'inherit',
+    // lineHeight: 'inherit',
     marginLeft: 9,
     padding: 0,
   },
@@ -97,7 +113,7 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   );
 
   const toggleTodo = useCallback(
-    (event: MouseEvent) => {
+    (event: GestureResponderEvent) => {
       event.stopPropagation();
       updateTodo({
         id: todo.id,
@@ -108,7 +124,7 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   );
 
   const archiveTodo = useCallback(
-    (event: MouseEvent) => {
+    (event: GestureResponderEvent) => {
       event.stopPropagation();
       updateTodo({
         id: todo.id,
@@ -135,7 +151,7 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   }, [setTodoEditId, editing]);
 
   let content;
-  let itemStyle: StyleProp<ViewStyle> = styles.todoItem;
+  let itemStyle: StyleProp<TextStyle> = styles.todoItem;
   if (editing) {
     itemStyle = StyleSheet.compose(itemStyle, styles.todoEdit);
     content = [
@@ -149,35 +165,35 @@ const TodoItem: React.FC<Props> = function (props: Props) {
         onSubmitEditing={commitTodo}
         selectTextOnFocus={true}
       />,
-      <FontAwesomeIcon
-        icon={faBan}
-        key="cancel"
-        style={StyleSheet.compose(styles.iconMargin, styles.iconCancel)}
-        onClick={cancelEdit}
-        size={16}
-      />,
+      <TouchableHighlight key="cancel" onPress={cancelEdit}>
+        <FontAwesomeIcon
+          icon={faBan}
+          style={[styles.iconMargin, styles.iconCancel]}
+          size={16}
+        />
+      </TouchableHighlight>,
     ];
   } else {
     content = [
       <Text style={styles.todoDescription} key="description">
         {todo.description}
       </Text>,
-      <FontAwesomeIcon
-        icon={faTrash}
-        key="archive"
-        style={StyleSheet.compose(styles.iconMargin, styles.iconDelete)}
-        onClick={archiveTodo}
-        size={16}
-      />,
+      <TouchableHighlight key="archive" onPress={archiveTodo}>
+        <FontAwesomeIcon
+          icon={faTrash}
+          style={[styles.iconMargin, styles.iconDelete]}
+          size={16}
+        />
+      </TouchableHighlight>,
     ];
     if (uncommittedEdit) {
       content.push(
         <FontAwesomeIcon
           icon={faExclamationTriangle}
           key="warn"
-          style={StyleSheet.compose(styles.iconMargin, styles.iconWarn)}
+          style={[styles.iconMargin, styles.iconWarn]}
           size={16}
-          title={`Uncommitted edit: ${uncommittedEdit}`}
+          // title={`Uncommitted edit: ${uncommittedEdit}`}
         />,
       );
     }
@@ -186,13 +202,13 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   const checkboxIcon = todo.completed ? faCheckCircle : faCircle;
   return (
     <Text style={itemStyle} onPress={beginEdit}>
-      <FontAwesomeIcon
-        icon={checkboxIcon}
-        key="checkbox"
-        style={StyleSheet.compose(styles.iconMargin, styles.iconCheck)}
-        onClick={toggleTodo}
-        size={16}
-      />
+      <TouchableHighlight key="checkbox" onPress={toggleTodo}>
+        <FontAwesomeIcon
+          icon={checkboxIcon}
+          style={[styles.iconMargin, styles.iconCheck]}
+          size={16}
+        />
+      </TouchableHighlight>
       {content}
     </Text>
   );
