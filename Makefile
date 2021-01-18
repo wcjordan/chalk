@@ -45,13 +45,6 @@ deploy: build
 			--set server.dbPassword=$$POSTGRES_PASSWORD \
 			chalk-prod helm'
 
-# Create Kind for local k8s development
-# requires Tilt's ctlptl
-.PHONY: create-kind
-create-kind:
-	ctlptl create cluster kind --registry=ctlptl-registry
-
-# Delete Kind for local k8s development
-.PHONY: delete-kind
-delete-kind:
-	ctlptl delete cluster kind-kind
+# NOTE deploy from built on Jenkins rather than building & pushing here
+# Make it so helm to deploy can be used from here and from jenkins for tests
+# Probably use a python script to call Helm to add flexibility
