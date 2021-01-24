@@ -1,3 +1,4 @@
+import json
 import os
 
 from selenium import webdriver
@@ -12,7 +13,6 @@ username = os.getenv("BROWSERSTACK_USERNAME")
 access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
 build_name = os.getenv("BROWSERSTACK_BUILD_NAME", 'Local')
 
-print(build_name)
 desired_cap = {
  'project': 'Chalk',
  'name': 'Todo: Create, Update, Delete',
@@ -102,6 +102,7 @@ except Exception as e:
     ex_msg = str(e)
     ex_msg = ex_msg or 'Unknown error'
     ex_msg = ex_msg.replace('\n', '')
+    ex_msg = json.dumps(ex_msg)
 
     failure_msg = 'browserstack_executor: {{"action": "setSessionStatus", "arguments": {{"status":"failed", "reason": "{}"}}}}'.format(ex_msg)
     print(failure_msg)
