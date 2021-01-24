@@ -103,6 +103,7 @@ pipeline {
                                 }
                             }
                         }
+                        browserStackReportPublisher 'automate'
                     }
                 }
             }
