@@ -99,13 +99,7 @@ try:
     driver.execute_script('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed", "reason": "Todo created!"}}')
 
 except Exception as e:
-    ex_msg = str(e)
-    ex_msg = ex_msg or 'Unknown error'
-    ex_msg = ex_msg.replace('\n', '')
-    ex_msg = json.dumps(ex_msg)
-
-    failure_msg = 'browserstack_executor: {{"action": "setSessionStatus", "arguments": {{"status":"failed", "reason": "{}"}}}}'.format(ex_msg)
-    print(failure_msg)
+    failure_msg = 'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "An exception occurred during the test driving"}}'
     driver.execute_script(failure_msg)
     raise e
 
