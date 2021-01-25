@@ -105,10 +105,10 @@ pipeline {
                         }
                     }
                 }
-                post {
-                    always {
-                        browserStackReportPublisher 'automate'
-                    }
+            }
+            post {
+                always {
+                    browserStackReportPublisher 'automate'
                 }
             }
         }
