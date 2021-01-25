@@ -9,6 +9,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 
+def _has_span_child_matching_text(parent, text):
+    children = parent.find_elements_by_tag_name('span')
+    return any(item.text == text for item in children)
+
+
 username = os.getenv("BROWSERSTACK_USERNAME")
 access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
 build_name = os.getenv("BROWSERSTACK_BUILD_NAME", 'Local')
@@ -50,7 +55,7 @@ try:
     )
     todo_list = driver.find_element_by_id('todo-list')
     todo_items = todo_list.find_elements_by_tag_name('div')
-    found_items = [ item for item in todo_items[1:] if item.find_element_by_tag_name('span').text == todo_text ]
+    found_items = [ item for item in todo_items if _has_span_child_matching_text(item, todo_text) ]
     print('Found {} todos, expecting 1 match'.format(len(found_items)))
     todo_item = found_items[0]
 
@@ -75,9 +80,9 @@ try:
     WebDriverWait(driver, 10).until(text_updated)
     todo_list = driver.find_element_by_id('todo-list')
     todo_items = todo_list.find_elements_by_tag_name('div')
-    found_items = [ item for item in todo_items[1:] if item.find_element_by_tag_name('span').text == todo_text ]
+    found_items = [ item for item in todo_items if _has_span_child_matching_text(item, todo_text) ]
     print('Found {} todos, expecting 0 matches'.format(len(found_items)))
-    found_items = [ item for item in todo_items[1:] if item.find_element_by_tag_name('span').text == updated_todo_text ]
+    found_items = [ item for item in todo_items if _has_span_child_matching_text(item, updated_todo_text) ]
     print('Found {} todos, expecting 1 match'.format(len(found_items)))
     todo_item = found_items[0]
 
