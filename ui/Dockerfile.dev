@@ -1,6 +1,6 @@
 # JS container for running dev server
 # TODO (jordan) Look into DRYing this & Dockerfile out w/ Docker Buildkit
-FROM node:14
+FROM gcr.io/flipperkid-default/chalk-ui-base:latest
 WORKDIR /js
 
 # Install system packages for dev tooling
