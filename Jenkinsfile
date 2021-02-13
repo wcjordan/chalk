@@ -101,7 +101,7 @@ pipeline {
                     container('jenkins-worker-python') {
                         dir('tests') {
                             sh 'pip install "selenium==3.141.0"'
-                            sh 'python sample.py'
+                            sh 'pytest .'
                         }
                     }
                 }
