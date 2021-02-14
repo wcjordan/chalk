@@ -17,6 +17,7 @@ spec:
     resources:
       requests:
         cpu: "500m"
+        memory: "2048Mi"
   volumes:
   - name: dind-storage
     emptyDir: {}
