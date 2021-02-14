@@ -16,7 +16,7 @@ spec:
         mountPath: /var/lib/docker
     resources:
       requests:
-        cpu: "350m"
+        cpu: "500m"
   volumes:
   - name: dind-storage
     emptyDir: {}
