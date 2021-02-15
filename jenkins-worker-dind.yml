@@ -16,7 +16,7 @@ spec:
         mountPath: /var/lib/docker
     resources:
       requests:
-        cpu: "150m"
+        cpu: "300m"
         memory: "1024Mi"
   volumes:
   - name: dind-storage
