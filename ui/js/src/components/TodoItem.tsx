@@ -200,8 +200,9 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   }
 
   const checkboxIcon = todo.completed ? faCheckCircle : faCircle;
+  const testId = `todo-${todo.completed ? 'checked' : 'unchecked'}-${todo.id}`;
   return (
-    <Text style={itemStyle} onPress={beginEdit}>
+    <Text style={itemStyle} onPress={beginEdit} nativeID={testId}>
       <TouchableHighlight key="checkbox" onPress={toggleTodo}>
         <FontAwesomeIcon
           icon={checkboxIcon}

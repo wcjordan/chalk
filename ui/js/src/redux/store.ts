@@ -6,6 +6,6 @@ const store = configureStore({
 });
 
 // TODO dispose
-window.setInterval(() => store.dispatch(listTodos()), 10000);
+window.setInterval(() => store.dispatch(listTodos()), 3000);
 
 export default store;

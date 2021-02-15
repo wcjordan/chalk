@@ -87,5 +87,30 @@ pipeline {
                 }
             }
         }
+        stage('Selenium Tests') {
+            agent {
+                kubernetes {
+                    yamlFile 'jenkins-worker-python.yml'
+                }
+            }
+            options {
+                timeout(time: 10, unit: 'MINUTES')
+            }
+            steps {
+                browserstack(credentialsId: 'f5043d10-054c-41a9-94e5-4e81c0b56f01') {
+                    container('jenkins-worker-python') {
+                        dir('tests') {
+                            sh 'pip install "selenium==3.141.0" "pytest==6.2.2"'
+                            sh 'pytest .'
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    browserStackReportPublisher 'automate'
+                }
+            }
+        }
     }
 }

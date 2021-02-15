@@ -62,7 +62,7 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
   const containerStyles = StyleSheet.compose(styles.container, topStyle);
   return (
     <View style={styles.root}>
-      <View style={containerStyles}>
+      <View nativeID="todo-list" style={containerStyles}>
         <AddTodo createTodo={createTodo} />
         {todoViews}
       </View>

@@ -40,6 +40,7 @@ const AddTodo: React.FC<Props> = function (props: Props) {
   return (
     <View style={styles.addTodo}>
       <TextInput
+        nativeID="add-todo-input"
         style={styles.addTodoInput}
         placeholder="Add a new todo..."
         placeholderTextColor="#e0fbfc"
