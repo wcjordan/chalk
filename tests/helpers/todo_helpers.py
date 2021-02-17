@@ -18,22 +18,29 @@ def add_todo(driver, description):
 
 def complete_todo(todo_item):
     item_svgs = todo_item.find_elements_by_tag_name('svg')
-    assert len(item_svgs) == 2
+    assert len(item_svgs) >= 1
     item_svgs[0].click()
 
 
 def delete_todo(todo_item):
     item_svgs = todo_item.find_elements_by_tag_name('svg')
-    assert len(item_svgs) == 2
+    assert len(item_svgs) >= 2
     item_svgs[1].click()
 
 
-def edit_todo(todo_item, new_description):
+def edit_todo(todo_item, new_description, submit=True):
     todo_item.click()
     todo_input = todo_item.find_element_by_tag_name('input')
     todo_input.click()
     todo_input.send_keys(new_description)
-    todo_input.send_keys(Keys.RETURN)
+    if submit:
+        todo_input.send_keys(Keys.RETURN)
+
+
+def find_todo(driver, description, partial=False):
+    todos = find_todos(driver, description, partial)
+    assert len(todos) == 1
+    return todos[0]
 
 
 def find_todos(driver, description, partial=False):
@@ -54,3 +61,15 @@ def find_todos(driver, description, partial=False):
 def list_todo_descriptions(driver, prefix):
     todo_items = find_todos(driver, prefix, partial=True)
     return [ item.find_element_by_tag_name('span').text for item in todo_items ]
+
+
+def wait_for_todo(driver, description):
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, '//span[text()="{}"]'.format(description)))
+    )
+
+
+def wait_for_todo_to_disappear(driver, description):
+    WebDriverWait(driver, 10).until(
+        EC.invisibility_of_element_located((By.XPATH, '//span[text()="{}"]'.format(description)))
+    )
