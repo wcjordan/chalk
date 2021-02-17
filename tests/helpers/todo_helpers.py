@@ -37,6 +37,12 @@ def edit_todo(todo_item, new_description, submit=True):
         todo_input.send_keys(Keys.RETURN)
 
 
+def find_todo(driver, description, partial=False):
+    todos = find_todos(driver, description, partial)
+    assert len(todos) == 1
+    return todos[0]
+
+
 def find_todos(driver, description, partial=False):
     def _has_span_child_matching_text(parent):
         def _comparator(item):
@@ -55,3 +61,15 @@ def find_todos(driver, description, partial=False):
 def list_todo_descriptions(driver, prefix):
     todo_items = find_todos(driver, prefix, partial=True)
     return [ item.find_element_by_tag_name('span').text for item in todo_items ]
+
+
+def wait_for_todo(driver, description):
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, '//span[text()="{}"]'.format(description)))
+    )
+
+
+def wait_for_todo_to_disappear(driver, description):
+    WebDriverWait(driver, 10).until(
+        EC.invisibility_of_element_located((By.XPATH, '//span[text()="{}"]'.format(description)))
+    )
