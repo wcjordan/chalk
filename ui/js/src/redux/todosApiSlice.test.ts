@@ -6,12 +6,20 @@ import todosApiSlice, { createTodo, listTodos } from './todosApiSlice';
 // NOTE (jordan) updateTodo tested in reducers.test.ts
 const mockStore = configureMockStore([thunk]);
 
-describe('createTodo', function() {
-  afterEach(function() {
+describe('createTodo', function () {
+  beforeAll(function () {
+    jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+      select: (mapping) => {
+        return mapping['default'];
+      },
+    }));
+  });
+
+  afterEach(function () {
     fetchMock.restore();
   });
 
-  it('should make a POST request and dispatch actions', async function() {
+  it('should make a POST request and dispatch actions', async function () {
     const stubDescription = 'test todo';
     const stubTodo = getStubTodo({ description: stubDescription });
     fetchMock.postOnce('/api/todos/todos/', {
@@ -40,12 +48,12 @@ describe('createTodo', function() {
   });
 });
 
-describe('listTodos', function() {
-  afterEach(function() {
+describe('listTodos', function () {
+  afterEach(function () {
     fetchMock.restore();
   });
 
-  it('should make a GET request and dispatch actions', async function() {
+  it('should make a GET request and dispatch actions', async function () {
     const stubTodos = [
       getStubTodo({ id: 1, description: 'todo 1' }),
       getStubTodo({ id: 2, description: 'todo 2' }),
@@ -73,7 +81,7 @@ describe('listTodos', function() {
     expect(fetchMock).toBeDone();
   });
 
-  it('should do nothing if todos are already loading', async function() {
+  it('should do nothing if todos are already loading', async function () {
     fetchMock.mock('*', 200);
     const store = mockStore({ todosApi: { loading: true } });
     await store.dispatch(listTodos());
@@ -86,18 +94,18 @@ describe('listTodos', function() {
   });
 });
 
-describe('todosApiSlice reducer', function() {
+describe('todosApiSlice reducer', function () {
   const initialState = {
     entries: [],
     loading: false,
   };
 
-  it('should return the initial state', function() {
+  it('should return the initial state', function () {
     expect(todosApiSlice.reducer(undefined, {})).toEqual(initialState);
   });
 
-  describe('todosApi/create/fulfilled', function() {
-    it('should add new todo to entries', function() {
+  describe('todosApi/create/fulfilled', function () {
+    it('should add new todo to entries', function () {
       const result = todosApiSlice.reducer(initialState, {
         type: 'todosApi/create/fulfilled',
         payload: getStubTodo(),
@@ -108,7 +116,7 @@ describe('todosApiSlice reducer', function() {
       });
     });
 
-    it('should sort todos by id with completed todos at the end', function() {
+    it('should sort todos by id with completed todos at the end', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [
@@ -132,7 +140,7 @@ describe('todosApiSlice reducer', function() {
       });
     });
 
-    it('should filter out archived todos', function() {
+    it('should filter out archived todos', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
@@ -150,8 +158,8 @@ describe('todosApiSlice reducer', function() {
     });
   });
 
-  describe('todosApi/list/pending', function() {
-    it('should mark loading as in progress', function() {
+  describe('todosApi/list/pending', function () {
+    it('should mark loading as in progress', function () {
       const result = todosApiSlice.reducer(initialState, {
         type: 'todosApi/list/pending',
       });
@@ -162,18 +170,18 @@ describe('todosApiSlice reducer', function() {
     });
   });
 
-  describe('todosApi/list/rejected', function() {
+  describe('todosApi/list/rejected', function () {
     let spy;
 
-    beforeEach(function() {
+    beforeEach(function () {
       spy = jest.spyOn(console, 'warn').mockImplementation();
     });
 
-    afterEach(function() {
+    afterEach(function () {
       spy.mockRestore();
     });
 
-    it('should mark loading as no longer in progress', function() {
+    it('should mark loading as no longer in progress', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
@@ -194,8 +202,8 @@ describe('todosApiSlice reducer', function() {
     });
   });
 
-  describe('todosApi/list/fulfilled', function() {
-    it('should mark loading as no longer in progress', function() {
+  describe('todosApi/list/fulfilled', function () {
+    it('should mark loading as no longer in progress', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
@@ -212,7 +220,7 @@ describe('todosApiSlice reducer', function() {
       });
     });
 
-    it('should replace entries with loaded todos', function() {
+    it('should replace entries with loaded todos', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [getStubTodo({ id: 1, description: 'overwritten' })],
@@ -229,7 +237,7 @@ describe('todosApiSlice reducer', function() {
       });
     });
 
-    it('should sort todos by id with completed todos at the end', function() {
+    it('should sort todos by id with completed todos at the end', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
@@ -254,7 +262,7 @@ describe('todosApiSlice reducer', function() {
       });
     });
 
-    it('should filter out archived todos', function() {
+    it('should filter out archived todos', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
@@ -272,8 +280,8 @@ describe('todosApiSlice reducer', function() {
     });
   });
 
-  describe('todosApi/update/fulfilled', function() {
-    it('update existing todos', function() {
+  describe('todosApi/update/fulfilled', function () {
+    it('update existing todos', function () {
       const updatedTodo = getStubTodo({
         id: 1,
         description: 'new description',
@@ -294,7 +302,7 @@ describe('todosApiSlice reducer', function() {
       });
     });
 
-    it('should sort todos by id with completed todos at the end', function() {
+    it('should sort todos by id with completed todos at the end', function () {
       const completedTodo = getStubTodo({ id: 1, completed: true });
       const result = todosApiSlice.reducer(
         {
@@ -320,7 +328,7 @@ describe('todosApiSlice reducer', function() {
       });
     });
 
-    it('should filter out archived todos', function() {
+    it('should filter out archived todos', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [getStubTodo()],

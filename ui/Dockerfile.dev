@@ -18,6 +18,7 @@ RUN yarn install --pure-lockfile && yarn cache clean
 # Copy configs for tooling
 COPY js/.prettierrc .
 COPY js/.eslintrc .
+COPY js/babel.config.js .
 COPY js/jest.config.js .
 COPY js/tsconfig.json .
 COPY js/.storybook ./.storybook
