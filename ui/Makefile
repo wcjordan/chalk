@@ -10,7 +10,7 @@ test:
 	# Typecheck
 	cd js; yarn tsc
 	# Unit & snapshot tests for UI
-# 	cd js; yarn test
+	cd js; yarn test
 	# Build as a sanity check
 	cd js; yarn build
 

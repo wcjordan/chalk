@@ -1,3 +1,4 @@
+import '../__mocks__/matchMediaMock';
 import configureMockStore from 'redux-mock-store';
 import fetchMock from 'fetch-mock-jest';
 import thunk from 'redux-thunk';
@@ -7,14 +8,6 @@ import todosApiSlice, { createTodo, listTodos } from './todosApiSlice';
 const mockStore = configureMockStore([thunk]);
 
 describe('createTodo', function () {
-  beforeAll(function () {
-    jest.mock('react-native/Libraries/Utilities/Platform', () => ({
-      select: (mapping) => {
-        return mapping['default'];
-      },
-    }));
-  });
-
   afterEach(function () {
     fetchMock.restore();
   });

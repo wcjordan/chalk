@@ -1,3 +1,5 @@
+import './__mocks__/matchMediaMock';
+
 import initStoryshots from '@storybook/addon-storyshots';
 
 beforeAll(function () {

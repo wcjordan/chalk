@@ -1,3 +1,4 @@
+import '../__mocks__/matchMediaMock';
 import configureMockStore from 'redux-mock-store';
 import fetchMock from 'fetch-mock-jest';
 import thunk from 'redux-thunk';
@@ -6,14 +7,6 @@ import reducers, { updateTodo } from './reducers';
 const mockStore = configureMockStore([thunk]);
 
 describe('updateTodo', function () {
-  beforeAll(function () {
-    jest.mock('react-native/Libraries/Utilities/Platform', () => ({
-      select: (mapping) => {
-        return mapping['default'];
-      },
-    }));
-  });
-
   afterEach(function () {
     fetchMock.restore();
   });
