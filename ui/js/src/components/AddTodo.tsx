@@ -10,14 +10,14 @@ import {
 const styles = StyleSheet.create({
   addTodo: {
     backgroundColor: '#98c1d9',
-    border: 'none',
+    borderWidth: 0,
     display: 'flex',
     fontFamily: 'monospace',
     padding: 8,
     width: '100%',
   },
   addTodoInput: {
-    backgroundColor: 'inherit',
+    backgroundColor: 'transparent',
     color: '#293241',
     fontFamily: 'inherit',
     fontSize: 20,

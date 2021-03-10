@@ -5,11 +5,18 @@ import { ApiState, NewTodo, ReduxState, Todo, TodoPatch } from './types';
 import { create, list, patch } from './fetchApi';
 
 const API_NAME = 'todosApi';
-const WS_ROOT = Platform.select({
-  native: 'http://chalk-dev.flipperkid.com/',
-  default: '',
-});
-const TODOS_API = WS_ROOT + 'api/todos/todos/';
+
+function getWsRoot() {
+  const wsroot = Platform.select({
+    native: 'http://chalk-dev.flipperkid.com/',
+    default: '',
+  });
+  return wsroot;
+}
+
+function getTodosApi() {
+  return getWsRoot() + 'api/todos/todos/';
+}
 
 interface ErrorAction {
   error: Error;
@@ -37,12 +44,12 @@ export const createTodo = createAsyncThunk<
     created_at: Date.now(),
     description: todoTitle,
   };
-  return create<Todo, NewTodo>(TODOS_API, newTodo);
+  return create<Todo, NewTodo>(getTodosApi(), newTodo);
 });
 
 export const listTodos = createAsyncThunk<Todo[], void, { state: ReduxState }>(
   `${API_NAME}/list`,
-  async () => list<Todo>(TODOS_API),
+  async () => list<Todo>(getTodosApi()),
   {
     condition: (_unused, { getState }) => {
       return !getState().todosApi.loading;
@@ -55,7 +62,7 @@ export const updateTodo = createAsyncThunk<
   TodoPatch,
   Record<string, unknown>
 >(`${API_NAME}/update`, async (entryPatch) =>
-  patch<Todo, TodoPatch>(TODOS_API, entryPatch),
+  patch<Todo, TodoPatch>(getTodosApi(), entryPatch),
 );
 
 /**

@@ -1,4 +1,6 @@
 #!make
+IMAGE_REPO = gcr.io/flipperkid-default
+SERVER_IMAGE = $(IMAGE_REPO)/chalk-server-image
 
 PARENT_DIR = $(dir $(PWD))
 
@@ -15,14 +17,14 @@ test:
 # Yapf formatting
 .PHONY: format
 format:
-	docker run --rm -v $(PWD)/server:/usr/src/app chalk-server-image:latest yapf -ri .
+	docker run --rm -v $(PWD)/server:/usr/src/app $(SERVER_IMAGE):latest yapf -ri .
 
 # Make migrations for server
 .PHONY: create-migrations
 create-migrations:
 	DJANGO_SETTINGS_MODULE=chalk.settings.testing docker run --rm \
 		--env-file ../.env --env DJANGO_SETTINGS_MODULE \
-		-v $(PWD):/usr/src/app chalk-server-image:latest \
+		-v $(PWD):/usr/src/app $(SERVER_IMAGE):latest \
 		python manage.py makemigrations --verbosity 3
 
 # Add an admin to Django

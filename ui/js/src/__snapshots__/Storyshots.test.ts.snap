@@ -2,413 +2,1352 @@
 
 exports[`Storyshots Add Todo Default Add Todo 1`] = `
 <div
-  className="add-todo"
+  className="css-view-1dbjc4n"
+  style={
+    Object {
+      "backgroundColor": "rgba(152,193,217,1.00)",
+      "borderBottomWidth": "0px",
+      "borderLeftWidth": "0px",
+      "borderRightWidth": "0px",
+      "borderTopWidth": "0px",
+      "display": "flex",
+      "fontFamily": "monospace,monospace",
+      "paddingBottom": "8px",
+      "paddingLeft": "8px",
+      "paddingRight": "8px",
+      "paddingTop": "8px",
+      "width": "100%",
+    }
+  }
 >
-  <div
-    className="add-todo-icon"
-  />
   <input
-    className="add-todo-input"
-    onKeyPress={[Function]}
+    autoCapitalize="sentences"
+    autoComplete="on"
+    autoCorrect="on"
+    className="css-textinput-11aywtz r-placeholderTextColor-1td1i4x"
+    data-focusable={true}
+    dir="auto"
+    id="add-todo-input"
+    onBlur={[Function]}
+    onChange={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onSelect={[Function]}
     placeholder="Add a new todo..."
+    readOnly={false}
+    spellCheck={true}
+    style={
+      Object {
+        "WebkitBoxFlex": 1,
+        "WebkitFlexGrow": 1,
+        "backgroundColor": "rgba(0,0,0,0.00)",
+        "color": "rgba(41,50,65,1.00)",
+        "flexGrow": 1,
+        "fontFamily": "inherit",
+        "fontSize": "20px",
+        "marginLeft": "4px",
+        "msFlexPositive": 1,
+        "paddingBottom": "4px",
+        "paddingLeft": "4px",
+        "paddingRight": "4px",
+        "paddingTop": "4px",
+      }
+    }
+    type="text"
   />
 </div>
 `;
 
 exports[`Storyshots App Default Layout 1`] = `
 <div
-  className="App"
+  className="css-view-1dbjc4n"
+  style={
+    Object {
+      "backgroundColor": "rgba(41,50,65,1.00)",
+      "height": "100%",
+      "width": "100%",
+    }
+  }
 >
   <div
-    className="add-todo"
+    className="css-view-1dbjc4n"
+    id="todo-list"
+    style={
+      Object {
+        "height": "100%",
+        "marginLeft": "auto",
+        "marginRight": "auto",
+        "paddingTop": "80px",
+        "width": "66%",
+      }
+    }
   >
     <div
-      className="add-todo-icon"
-    />
-    <input
-      className="add-todo-input"
-      onKeyPress={[Function]}
-      placeholder="Add a new todo..."
-    />
+      className="css-view-1dbjc4n"
+      style={
+        Object {
+          "backgroundColor": "rgba(152,193,217,1.00)",
+          "borderBottomWidth": "0px",
+          "borderLeftWidth": "0px",
+          "borderRightWidth": "0px",
+          "borderTopWidth": "0px",
+          "display": "flex",
+          "fontFamily": "monospace,monospace",
+          "paddingBottom": "8px",
+          "paddingLeft": "8px",
+          "paddingRight": "8px",
+          "paddingTop": "8px",
+          "width": "100%",
+        }
+      }
+    >
+      <input
+        autoCapitalize="sentences"
+        autoComplete="on"
+        autoCorrect="on"
+        className="css-textinput-11aywtz r-placeholderTextColor-1td1i4x"
+        data-focusable={true}
+        dir="auto"
+        id="add-todo-input"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onSelect={[Function]}
+        placeholder="Add a new todo..."
+        readOnly={false}
+        spellCheck={true}
+        style={
+          Object {
+            "WebkitBoxFlex": 1,
+            "WebkitFlexGrow": 1,
+            "backgroundColor": "rgba(0,0,0,0.00)",
+            "color": "rgba(41,50,65,1.00)",
+            "flexGrow": 1,
+            "fontFamily": "inherit",
+            "fontSize": "20px",
+            "marginLeft": "4px",
+            "msFlexPositive": 1,
+            "paddingBottom": "4px",
+            "paddingLeft": "4px",
+            "paddingRight": "4px",
+            "paddingTop": "4px",
+          }
+        }
+        type="text"
+      />
+    </div>
   </div>
 </div>
 `;
 
 exports[`Storyshots App List Todos Layout 1`] = `
 <div
-  className="App"
+  className="css-view-1dbjc4n"
+  style={
+    Object {
+      "backgroundColor": "rgba(41,50,65,1.00)",
+      "height": "100%",
+      "width": "100%",
+    }
+  }
 >
   <div
-    className="add-todo"
+    className="css-view-1dbjc4n"
+    id="todo-list"
+    style={
+      Object {
+        "height": "100%",
+        "marginLeft": "auto",
+        "marginRight": "auto",
+        "paddingTop": "80px",
+        "width": "66%",
+      }
+    }
   >
     <div
-      className="add-todo-icon"
-    />
-    <input
-      className="add-todo-input"
-      onKeyPress={[Function]}
-      placeholder="Add a new todo..."
-    />
-  </div>
-  <div
-    className="todo-item"
-    onClick={[Function]}
-  >
-    <svg
-      aria-hidden="true"
-      className="svg-inline--fa fa-circle fa-w-16 fa-sm "
-      data-icon="circle"
-      data-prefix="far"
-      focusable="false"
-      onClick={[Function]}
-      role="img"
-      style={Object {}}
-      viewBox="0 0 512 512"
-      xmlns="http://www.w3.org/2000/svg"
+      className="css-view-1dbjc4n"
+      style={
+        Object {
+          "backgroundColor": "rgba(152,193,217,1.00)",
+          "borderBottomWidth": "0px",
+          "borderLeftWidth": "0px",
+          "borderRightWidth": "0px",
+          "borderTopWidth": "0px",
+          "display": "flex",
+          "fontFamily": "monospace,monospace",
+          "paddingBottom": "8px",
+          "paddingLeft": "8px",
+          "paddingRight": "8px",
+          "paddingTop": "8px",
+          "width": "100%",
+        }
+      }
     >
-      <path
-        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-        fill="currentColor"
-        style={Object {}}
+      <input
+        autoCapitalize="sentences"
+        autoComplete="on"
+        autoCorrect="on"
+        className="css-textinput-11aywtz r-placeholderTextColor-1td1i4x"
+        data-focusable={true}
+        dir="auto"
+        id="add-todo-input"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onSelect={[Function]}
+        placeholder="Add a new todo..."
+        readOnly={false}
+        spellCheck={true}
+        style={
+          Object {
+            "WebkitBoxFlex": 1,
+            "WebkitFlexGrow": 1,
+            "backgroundColor": "rgba(0,0,0,0.00)",
+            "color": "rgba(41,50,65,1.00)",
+            "flexGrow": 1,
+            "fontFamily": "inherit",
+            "fontSize": "20px",
+            "marginLeft": "4px",
+            "msFlexPositive": 1,
+            "paddingBottom": "4px",
+            "paddingLeft": "4px",
+            "paddingRight": "4px",
+            "paddingTop": "4px",
+          }
+        }
+        type="text"
       />
-    </svg>
-    <span
-      className="todo-description"
-    >
-      First todo
-    </span>
-    <svg
-      aria-hidden="true"
-      className="svg-inline--fa fa-trash fa-w-14 fa-sm "
-      data-icon="trash"
-      data-prefix="fas"
-      focusable="false"
+    </div>
+    <div
+      className="css-text-901oao"
+      dir="auto"
+      id="todo-unchecked-1"
       onClick={[Function]}
-      role="img"
-      style={Object {}}
-      viewBox="0 0 448 512"
-      xmlns="http://www.w3.org/2000/svg"
+      style={
+        Object {
+          "backgroundColor": "rgba(61,90,128,1.00)",
+          "borderTopColor": "rgba(224,251,252,1.00)",
+          "borderTopWidth": "1px",
+          "color": "rgba(224,251,252,1.00)",
+          "cursor": "pointer",
+          "display": "flex",
+          "fontFamily": "monospace,monospace",
+          "fontSize": "20px",
+          "paddingBottom": "8px",
+          "paddingLeft": "8px",
+          "paddingRight": "8px",
+          "paddingTop": "8px",
+          "width": "100%",
+        }
+      }
     >
-      <path
-        d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-        fill="currentColor"
-        style={Object {}}
-      />
-    </svg>
-  </div>
-  <div
-    className="todo-item"
-    onClick={[Function]}
-  >
-    <svg
-      aria-hidden="true"
-      className="svg-inline--fa fa-circle fa-w-16 fa-sm "
-      data-icon="circle"
-      data-prefix="far"
-      focusable="false"
+      <div
+        className="css-view-1dbjc4n"
+        data-focusable={true}
+        onClick={[Function]}
+        onContextMenu={[Function]}
+        onKeyDown={[Function]}
+        style={
+          Object {
+            "MozUserSelect": "none",
+            "WebkitUserSelect": "none",
+            "cursor": "pointer",
+            "display": "inline-flex",
+            "msTouchAction": "manipulation",
+            "msUserSelect": "none",
+            "touchAction": "manipulation",
+            "userSelect": "none",
+          }
+        }
+        tabIndex="0"
+      >
+        <svg
+          fill="#e0fbfc"
+          focusable={false}
+          height={16}
+          secondaryFill={null}
+          secondaryOpacity={0.4}
+          size={16}
+          style={
+            Object {
+              "marginBottom": "auto",
+              "marginTop": "auto",
+            }
+          }
+          viewBox="0 0 512 512"
+          width={16}
+        >
+          <path
+            d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
+            fill="#e0fbfc"
+            fillOpacity={1}
+            height={16}
+            secondaryFill={null}
+            secondaryOpacity={0.4}
+            size={16}
+            style={
+              Object {
+                "marginBottom": "auto",
+                "marginTop": "auto",
+              }
+            }
+            width={16}
+          />
+        </svg>
+      </div>
+      <span
+        className="css-text-901oao css-textHasAncestor-16my406"
+        onClick={[Function]}
+        style={
+          Object {
+            "WebkitBoxFlex": 1,
+            "WebkitFlexGrow": 1,
+            "flexGrow": 1,
+            "marginLeft": "9px",
+            "msFlexPositive": 1,
+          }
+        }
+      >
+        First todo
+      </span>
+      <div
+        className="css-view-1dbjc4n"
+        data-focusable={true}
+        onClick={[Function]}
+        onContextMenu={[Function]}
+        onKeyDown={[Function]}
+        style={
+          Object {
+            "MozUserSelect": "none",
+            "WebkitUserSelect": "none",
+            "cursor": "pointer",
+            "display": "inline-flex",
+            "msTouchAction": "manipulation",
+            "msUserSelect": "none",
+            "touchAction": "manipulation",
+            "userSelect": "none",
+          }
+        }
+        tabIndex="0"
+      >
+        <svg
+          fill="red"
+          focusable={false}
+          height={16}
+          secondaryFill={null}
+          secondaryOpacity={0.4}
+          size={16}
+          style={
+            Object {
+              "marginBottom": "auto",
+              "marginTop": "auto",
+              "paddingRight": "1px",
+            }
+          }
+          viewBox="0 0 448 512"
+          width={16}
+        >
+          <path
+            d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
+            fill="red"
+            fillOpacity={1}
+            height={16}
+            secondaryFill={null}
+            secondaryOpacity={0.4}
+            size={16}
+            style={
+              Object {
+                "marginBottom": "auto",
+                "marginTop": "auto",
+                "paddingRight": "1px",
+              }
+            }
+            width={16}
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      className="css-text-901oao"
+      dir="auto"
+      id="todo-unchecked-2"
       onClick={[Function]}
-      role="img"
-      style={Object {}}
-      viewBox="0 0 512 512"
-      xmlns="http://www.w3.org/2000/svg"
+      style={
+        Object {
+          "backgroundColor": "rgba(61,90,128,1.00)",
+          "borderTopColor": "rgba(224,251,252,1.00)",
+          "borderTopWidth": "1px",
+          "color": "rgba(224,251,252,1.00)",
+          "cursor": "pointer",
+          "display": "flex",
+          "fontFamily": "monospace,monospace",
+          "fontSize": "20px",
+          "paddingBottom": "8px",
+          "paddingLeft": "8px",
+          "paddingRight": "8px",
+          "paddingTop": "8px",
+          "width": "100%",
+        }
+      }
     >
-      <path
-        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-        fill="currentColor"
-        style={Object {}}
-      />
-    </svg>
-    <span
-      className="todo-description"
-    >
-      2nd todo
-    </span>
-    <svg
-      aria-hidden="true"
-      className="svg-inline--fa fa-trash fa-w-14 fa-sm "
-      data-icon="trash"
-      data-prefix="fas"
-      focusable="false"
-      onClick={[Function]}
-      role="img"
-      style={Object {}}
-      viewBox="0 0 448 512"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-        fill="currentColor"
-        style={Object {}}
-      />
-    </svg>
+      <div
+        className="css-view-1dbjc4n"
+        data-focusable={true}
+        onClick={[Function]}
+        onContextMenu={[Function]}
+        onKeyDown={[Function]}
+        style={
+          Object {
+            "MozUserSelect": "none",
+            "WebkitUserSelect": "none",
+            "cursor": "pointer",
+            "display": "inline-flex",
+            "msTouchAction": "manipulation",
+            "msUserSelect": "none",
+            "touchAction": "manipulation",
+            "userSelect": "none",
+          }
+        }
+        tabIndex="0"
+      >
+        <svg
+          fill="#e0fbfc"
+          focusable={false}
+          height={16}
+          secondaryFill={null}
+          secondaryOpacity={0.4}
+          size={16}
+          style={
+            Object {
+              "marginBottom": "auto",
+              "marginTop": "auto",
+            }
+          }
+          viewBox="0 0 512 512"
+          width={16}
+        >
+          <path
+            d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
+            fill="#e0fbfc"
+            fillOpacity={1}
+            height={16}
+            secondaryFill={null}
+            secondaryOpacity={0.4}
+            size={16}
+            style={
+              Object {
+                "marginBottom": "auto",
+                "marginTop": "auto",
+              }
+            }
+            width={16}
+          />
+        </svg>
+      </div>
+      <span
+        className="css-text-901oao css-textHasAncestor-16my406"
+        onClick={[Function]}
+        style={
+          Object {
+            "WebkitBoxFlex": 1,
+            "WebkitFlexGrow": 1,
+            "flexGrow": 1,
+            "marginLeft": "9px",
+            "msFlexPositive": 1,
+          }
+        }
+      >
+        2nd todo
+      </span>
+      <div
+        className="css-view-1dbjc4n"
+        data-focusable={true}
+        onClick={[Function]}
+        onContextMenu={[Function]}
+        onKeyDown={[Function]}
+        style={
+          Object {
+            "MozUserSelect": "none",
+            "WebkitUserSelect": "none",
+            "cursor": "pointer",
+            "display": "inline-flex",
+            "msTouchAction": "manipulation",
+            "msUserSelect": "none",
+            "touchAction": "manipulation",
+            "userSelect": "none",
+          }
+        }
+        tabIndex="0"
+      >
+        <svg
+          fill="red"
+          focusable={false}
+          height={16}
+          secondaryFill={null}
+          secondaryOpacity={0.4}
+          size={16}
+          style={
+            Object {
+              "marginBottom": "auto",
+              "marginTop": "auto",
+              "paddingRight": "1px",
+            }
+          }
+          viewBox="0 0 448 512"
+          width={16}
+        >
+          <path
+            d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
+            fill="red"
+            fillOpacity={1}
+            height={16}
+            secondaryFill={null}
+            secondaryOpacity={0.4}
+            size={16}
+            style={
+              Object {
+                "marginBottom": "auto",
+                "marginTop": "auto",
+                "paddingRight": "1px",
+              }
+            }
+            width={16}
+          />
+        </svg>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Storyshots Todo Item Checked Todo 1`] = `
 <div
-  className="todo-item"
+  className="css-text-901oao"
+  dir="auto"
+  id="todo-checked-undefined"
   onClick={[Function]}
+  style={
+    Object {
+      "backgroundColor": "rgba(61,90,128,1.00)",
+      "borderTopColor": "rgba(224,251,252,1.00)",
+      "borderTopWidth": "1px",
+      "color": "rgba(224,251,252,1.00)",
+      "cursor": "pointer",
+      "display": "flex",
+      "fontFamily": "monospace,monospace",
+      "fontSize": "20px",
+      "paddingBottom": "8px",
+      "paddingLeft": "8px",
+      "paddingRight": "8px",
+      "paddingTop": "8px",
+      "width": "100%",
+    }
+  }
 >
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-check-circle fa-w-16 fa-sm "
-    data-icon="check-circle"
-    data-prefix="far"
-    focusable="false"
+  <div
+    className="css-view-1dbjc4n"
+    data-focusable={true}
     onClick={[Function]}
-    role="img"
-    style={Object {}}
-    viewBox="0 0 512 512"
-    xmlns="http://www.w3.org/2000/svg"
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    style={
+      Object {
+        "MozUserSelect": "none",
+        "WebkitUserSelect": "none",
+        "cursor": "pointer",
+        "display": "inline-flex",
+        "msTouchAction": "manipulation",
+        "msUserSelect": "none",
+        "touchAction": "manipulation",
+        "userSelect": "none",
+      }
+    }
+    tabIndex="0"
   >
-    <path
-      d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"
-      fill="currentColor"
-      style={Object {}}
-    />
-  </svg>
+    <svg
+      fill="#e0fbfc"
+      focusable={false}
+      height={16}
+      secondaryFill={null}
+      secondaryOpacity={0.4}
+      size={16}
+      style={
+        Object {
+          "marginBottom": "auto",
+          "marginTop": "auto",
+        }
+      }
+      viewBox="0 0 512 512"
+      width={16}
+    >
+      <path
+        d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"
+        fill="#e0fbfc"
+        fillOpacity={1}
+        height={16}
+        secondaryFill={null}
+        secondaryOpacity={0.4}
+        size={16}
+        style={
+          Object {
+            "marginBottom": "auto",
+            "marginTop": "auto",
+          }
+        }
+        width={16}
+      />
+    </svg>
+  </div>
   <span
-    className="todo-description"
+    className="css-text-901oao css-textHasAncestor-16my406"
+    onClick={[Function]}
+    style={
+      Object {
+        "WebkitBoxFlex": 1,
+        "WebkitFlexGrow": 1,
+        "flexGrow": 1,
+        "marginLeft": "9px",
+        "msFlexPositive": 1,
+      }
+    }
   >
     Checked Todo
   </span>
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-trash fa-w-14 fa-sm "
-    data-icon="trash"
-    data-prefix="fas"
-    focusable="false"
+  <div
+    className="css-view-1dbjc4n"
+    data-focusable={true}
     onClick={[Function]}
-    role="img"
-    style={Object {}}
-    viewBox="0 0 448 512"
-    xmlns="http://www.w3.org/2000/svg"
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    style={
+      Object {
+        "MozUserSelect": "none",
+        "WebkitUserSelect": "none",
+        "cursor": "pointer",
+        "display": "inline-flex",
+        "msTouchAction": "manipulation",
+        "msUserSelect": "none",
+        "touchAction": "manipulation",
+        "userSelect": "none",
+      }
+    }
+    tabIndex="0"
   >
-    <path
-      d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-      fill="currentColor"
-      style={Object {}}
-    />
-  </svg>
+    <svg
+      fill="red"
+      focusable={false}
+      height={16}
+      secondaryFill={null}
+      secondaryOpacity={0.4}
+      size={16}
+      style={
+        Object {
+          "marginBottom": "auto",
+          "marginTop": "auto",
+          "paddingRight": "1px",
+        }
+      }
+      viewBox="0 0 448 512"
+      width={16}
+    >
+      <path
+        d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
+        fill="red"
+        fillOpacity={1}
+        height={16}
+        secondaryFill={null}
+        secondaryOpacity={0.4}
+        size={16}
+        style={
+          Object {
+            "marginBottom": "auto",
+            "marginTop": "auto",
+            "paddingRight": "1px",
+          }
+        }
+        width={16}
+      />
+    </svg>
+  </div>
 </div>
 `;
 
 exports[`Storyshots Todo Item Default Todo 1`] = `
 <div
-  className="todo-item"
+  className="css-text-901oao"
+  dir="auto"
+  id="todo-unchecked-undefined"
   onClick={[Function]}
+  style={
+    Object {
+      "backgroundColor": "rgba(61,90,128,1.00)",
+      "borderTopColor": "rgba(224,251,252,1.00)",
+      "borderTopWidth": "1px",
+      "color": "rgba(224,251,252,1.00)",
+      "cursor": "pointer",
+      "display": "flex",
+      "fontFamily": "monospace,monospace",
+      "fontSize": "20px",
+      "paddingBottom": "8px",
+      "paddingLeft": "8px",
+      "paddingRight": "8px",
+      "paddingTop": "8px",
+      "width": "100%",
+    }
+  }
 >
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-circle fa-w-16 fa-sm "
-    data-icon="circle"
-    data-prefix="far"
-    focusable="false"
+  <div
+    className="css-view-1dbjc4n"
+    data-focusable={true}
     onClick={[Function]}
-    role="img"
-    style={Object {}}
-    viewBox="0 0 512 512"
-    xmlns="http://www.w3.org/2000/svg"
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    style={
+      Object {
+        "MozUserSelect": "none",
+        "WebkitUserSelect": "none",
+        "cursor": "pointer",
+        "display": "inline-flex",
+        "msTouchAction": "manipulation",
+        "msUserSelect": "none",
+        "touchAction": "manipulation",
+        "userSelect": "none",
+      }
+    }
+    tabIndex="0"
   >
-    <path
-      d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-      fill="currentColor"
-      style={Object {}}
-    />
-  </svg>
+    <svg
+      fill="#e0fbfc"
+      focusable={false}
+      height={16}
+      secondaryFill={null}
+      secondaryOpacity={0.4}
+      size={16}
+      style={
+        Object {
+          "marginBottom": "auto",
+          "marginTop": "auto",
+        }
+      }
+      viewBox="0 0 512 512"
+      width={16}
+    >
+      <path
+        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
+        fill="#e0fbfc"
+        fillOpacity={1}
+        height={16}
+        secondaryFill={null}
+        secondaryOpacity={0.4}
+        size={16}
+        style={
+          Object {
+            "marginBottom": "auto",
+            "marginTop": "auto",
+          }
+        }
+        width={16}
+      />
+    </svg>
+  </div>
   <span
-    className="todo-description"
+    className="css-text-901oao css-textHasAncestor-16my406"
+    onClick={[Function]}
+    style={
+      Object {
+        "WebkitBoxFlex": 1,
+        "WebkitFlexGrow": 1,
+        "flexGrow": 1,
+        "marginLeft": "9px",
+        "msFlexPositive": 1,
+      }
+    }
   >
     Default Todo
   </span>
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-trash fa-w-14 fa-sm "
-    data-icon="trash"
-    data-prefix="fas"
-    focusable="false"
+  <div
+    className="css-view-1dbjc4n"
+    data-focusable={true}
     onClick={[Function]}
-    role="img"
-    style={Object {}}
-    viewBox="0 0 448 512"
-    xmlns="http://www.w3.org/2000/svg"
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    style={
+      Object {
+        "MozUserSelect": "none",
+        "WebkitUserSelect": "none",
+        "cursor": "pointer",
+        "display": "inline-flex",
+        "msTouchAction": "manipulation",
+        "msUserSelect": "none",
+        "touchAction": "manipulation",
+        "userSelect": "none",
+      }
+    }
+    tabIndex="0"
   >
-    <path
-      d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-      fill="currentColor"
-      style={Object {}}
-    />
-  </svg>
+    <svg
+      fill="red"
+      focusable={false}
+      height={16}
+      secondaryFill={null}
+      secondaryOpacity={0.4}
+      size={16}
+      style={
+        Object {
+          "marginBottom": "auto",
+          "marginTop": "auto",
+          "paddingRight": "1px",
+        }
+      }
+      viewBox="0 0 448 512"
+      width={16}
+    >
+      <path
+        d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
+        fill="red"
+        fillOpacity={1}
+        height={16}
+        secondaryFill={null}
+        secondaryOpacity={0.4}
+        size={16}
+        style={
+          Object {
+            "marginBottom": "auto",
+            "marginTop": "auto",
+            "paddingRight": "1px",
+          }
+        }
+        width={16}
+      />
+    </svg>
+  </div>
 </div>
 `;
 
 exports[`Storyshots Todo Item Editing Todo 1`] = `
 <div
-  className="todo-item todo-edit"
+  className="css-text-901oao"
+  dir="auto"
+  id="todo-unchecked-undefined"
   onClick={[Function]}
+  style={
+    Object {
+      "backgroundColor": "rgba(152,193,217,1.00)",
+      "borderTopColor": "rgba(224,251,252,1.00)",
+      "borderTopWidth": "1px",
+      "color": "rgba(224,251,252,1.00)",
+      "cursor": "pointer",
+      "display": "flex",
+      "fontFamily": "monospace,monospace",
+      "fontSize": "20px",
+      "paddingBottom": "8px",
+      "paddingLeft": "8px",
+      "paddingRight": "8px",
+      "paddingTop": "8px",
+      "width": "100%",
+    }
+  }
 >
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-circle fa-w-16 fa-sm "
-    data-icon="circle"
-    data-prefix="far"
-    focusable="false"
+  <div
+    className="css-view-1dbjc4n"
+    data-focusable={true}
     onClick={[Function]}
-    role="img"
-    style={Object {}}
-    viewBox="0 0 512 512"
-    xmlns="http://www.w3.org/2000/svg"
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    style={
+      Object {
+        "MozUserSelect": "none",
+        "WebkitUserSelect": "none",
+        "cursor": "pointer",
+        "display": "inline-flex",
+        "msTouchAction": "manipulation",
+        "msUserSelect": "none",
+        "touchAction": "manipulation",
+        "userSelect": "none",
+      }
+    }
+    tabIndex="0"
   >
-    <path
-      d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-      fill="currentColor"
-      style={Object {}}
-    />
-  </svg>
+    <svg
+      fill="#e0fbfc"
+      focusable={false}
+      height={16}
+      secondaryFill={null}
+      secondaryOpacity={0.4}
+      size={16}
+      style={
+        Object {
+          "marginBottom": "auto",
+          "marginTop": "auto",
+        }
+      }
+      viewBox="0 0 512 512"
+      width={16}
+    >
+      <path
+        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
+        fill="#e0fbfc"
+        fillOpacity={1}
+        height={16}
+        secondaryFill={null}
+        secondaryOpacity={0.4}
+        size={16}
+        style={
+          Object {
+            "marginBottom": "auto",
+            "marginTop": "auto",
+          }
+        }
+        width={16}
+      />
+    </svg>
+  </div>
   <input
-    className="edit-todo-input"
+    autoCapitalize="sentences"
+    autoComplete="on"
+    autoCorrect="on"
+    className="css-textinput-11aywtz"
+    data-focusable={true}
     defaultValue="Editing Todo"
-    onInput={[Function]}
-    onKeyPress={[Function]}
+    dir="auto"
+    onBlur={[Function]}
+    onChange={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onSelect={[Function]}
+    readOnly={false}
+    spellCheck={true}
+    style={
+      Object {
+        "WebkitBoxFlex": 1,
+        "WebkitFlexGrow": 1,
+        "backgroundColor": "rgba(0,0,0,0.00)",
+        "borderBottomWidth": "0px",
+        "borderLeftWidth": "0px",
+        "borderRightWidth": "0px",
+        "borderTopWidth": "0px",
+        "flexGrow": 1,
+        "marginLeft": "9px",
+        "msFlexPositive": 1,
+        "paddingBottom": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "0px",
+      }
+    }
+    type="text"
   />
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-ban fa-w-16 fa-sm "
-    data-icon="ban"
-    data-prefix="fas"
-    focusable="false"
+  <div
+    className="css-view-1dbjc4n"
+    data-focusable={true}
     onClick={[Function]}
-    role="img"
-    style={Object {}}
-    viewBox="0 0 512 512"
-    xmlns="http://www.w3.org/2000/svg"
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    style={
+      Object {
+        "MozUserSelect": "none",
+        "WebkitUserSelect": "none",
+        "cursor": "pointer",
+        "display": "inline-flex",
+        "msTouchAction": "manipulation",
+        "msUserSelect": "none",
+        "touchAction": "manipulation",
+        "userSelect": "none",
+      }
+    }
+    tabIndex="0"
   >
-    <path
-      d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"
-      fill="currentColor"
-      style={Object {}}
-    />
-  </svg>
+    <svg
+      fill="#3d5a80"
+      focusable={false}
+      height={16}
+      secondaryFill={null}
+      secondaryOpacity={0.4}
+      size={16}
+      style={
+        Object {
+          "marginBottom": "auto",
+          "marginTop": "auto",
+        }
+      }
+      viewBox="0 0 512 512"
+      width={16}
+    >
+      <path
+        d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"
+        fill="#3d5a80"
+        fillOpacity={1}
+        height={16}
+        secondaryFill={null}
+        secondaryOpacity={0.4}
+        size={16}
+        style={
+          Object {
+            "marginBottom": "auto",
+            "marginTop": "auto",
+          }
+        }
+        width={16}
+      />
+    </svg>
+  </div>
 </div>
 `;
 
 exports[`Storyshots Todo Item Editing Uncommitted Todo 1`] = `
 <div
-  className="todo-item todo-edit"
+  className="css-text-901oao"
+  dir="auto"
+  id="todo-unchecked-undefined"
   onClick={[Function]}
+  style={
+    Object {
+      "backgroundColor": "rgba(152,193,217,1.00)",
+      "borderTopColor": "rgba(224,251,252,1.00)",
+      "borderTopWidth": "1px",
+      "color": "rgba(224,251,252,1.00)",
+      "cursor": "pointer",
+      "display": "flex",
+      "fontFamily": "monospace,monospace",
+      "fontSize": "20px",
+      "paddingBottom": "8px",
+      "paddingLeft": "8px",
+      "paddingRight": "8px",
+      "paddingTop": "8px",
+      "width": "100%",
+    }
+  }
 >
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-circle fa-w-16 fa-sm "
-    data-icon="circle"
-    data-prefix="far"
-    focusable="false"
+  <div
+    className="css-view-1dbjc4n"
+    data-focusable={true}
     onClick={[Function]}
-    role="img"
-    style={Object {}}
-    viewBox="0 0 512 512"
-    xmlns="http://www.w3.org/2000/svg"
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    style={
+      Object {
+        "MozUserSelect": "none",
+        "WebkitUserSelect": "none",
+        "cursor": "pointer",
+        "display": "inline-flex",
+        "msTouchAction": "manipulation",
+        "msUserSelect": "none",
+        "touchAction": "manipulation",
+        "userSelect": "none",
+      }
+    }
+    tabIndex="0"
   >
-    <path
-      d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-      fill="currentColor"
-      style={Object {}}
-    />
-  </svg>
+    <svg
+      fill="#e0fbfc"
+      focusable={false}
+      height={16}
+      secondaryFill={null}
+      secondaryOpacity={0.4}
+      size={16}
+      style={
+        Object {
+          "marginBottom": "auto",
+          "marginTop": "auto",
+        }
+      }
+      viewBox="0 0 512 512"
+      width={16}
+    >
+      <path
+        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
+        fill="#e0fbfc"
+        fillOpacity={1}
+        height={16}
+        secondaryFill={null}
+        secondaryOpacity={0.4}
+        size={16}
+        style={
+          Object {
+            "marginBottom": "auto",
+            "marginTop": "auto",
+          }
+        }
+        width={16}
+      />
+    </svg>
+  </div>
   <input
-    className="edit-todo-input"
+    autoCapitalize="sentences"
+    autoComplete="on"
+    autoCorrect="on"
+    className="css-textinput-11aywtz"
+    data-focusable={true}
     defaultValue="Uncommitted edit..."
-    onInput={[Function]}
-    onKeyPress={[Function]}
+    dir="auto"
+    onBlur={[Function]}
+    onChange={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onSelect={[Function]}
+    readOnly={false}
+    spellCheck={true}
+    style={
+      Object {
+        "WebkitBoxFlex": 1,
+        "WebkitFlexGrow": 1,
+        "backgroundColor": "rgba(0,0,0,0.00)",
+        "borderBottomWidth": "0px",
+        "borderLeftWidth": "0px",
+        "borderRightWidth": "0px",
+        "borderTopWidth": "0px",
+        "flexGrow": 1,
+        "marginLeft": "9px",
+        "msFlexPositive": 1,
+        "paddingBottom": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "0px",
+      }
+    }
+    type="text"
   />
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-ban fa-w-16 fa-sm "
-    data-icon="ban"
-    data-prefix="fas"
-    focusable="false"
+  <div
+    className="css-view-1dbjc4n"
+    data-focusable={true}
     onClick={[Function]}
-    role="img"
-    style={Object {}}
-    viewBox="0 0 512 512"
-    xmlns="http://www.w3.org/2000/svg"
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    style={
+      Object {
+        "MozUserSelect": "none",
+        "WebkitUserSelect": "none",
+        "cursor": "pointer",
+        "display": "inline-flex",
+        "msTouchAction": "manipulation",
+        "msUserSelect": "none",
+        "touchAction": "manipulation",
+        "userSelect": "none",
+      }
+    }
+    tabIndex="0"
   >
-    <path
-      d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"
-      fill="currentColor"
-      style={Object {}}
-    />
-  </svg>
+    <svg
+      fill="#3d5a80"
+      focusable={false}
+      height={16}
+      secondaryFill={null}
+      secondaryOpacity={0.4}
+      size={16}
+      style={
+        Object {
+          "marginBottom": "auto",
+          "marginTop": "auto",
+        }
+      }
+      viewBox="0 0 512 512"
+      width={16}
+    >
+      <path
+        d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"
+        fill="#3d5a80"
+        fillOpacity={1}
+        height={16}
+        secondaryFill={null}
+        secondaryOpacity={0.4}
+        size={16}
+        style={
+          Object {
+            "marginBottom": "auto",
+            "marginTop": "auto",
+          }
+        }
+        width={16}
+      />
+    </svg>
+  </div>
 </div>
 `;
 
 exports[`Storyshots Todo Item Uncommitted Edit Todo 1`] = `
 <div
-  className="todo-item"
+  className="css-text-901oao"
+  dir="auto"
+  id="todo-unchecked-undefined"
   onClick={[Function]}
+  style={
+    Object {
+      "backgroundColor": "rgba(61,90,128,1.00)",
+      "borderTopColor": "rgba(224,251,252,1.00)",
+      "borderTopWidth": "1px",
+      "color": "rgba(224,251,252,1.00)",
+      "cursor": "pointer",
+      "display": "flex",
+      "fontFamily": "monospace,monospace",
+      "fontSize": "20px",
+      "paddingBottom": "8px",
+      "paddingLeft": "8px",
+      "paddingRight": "8px",
+      "paddingTop": "8px",
+      "width": "100%",
+    }
+  }
 >
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-circle fa-w-16 fa-sm "
-    data-icon="circle"
-    data-prefix="far"
-    focusable="false"
+  <div
+    className="css-view-1dbjc4n"
+    data-focusable={true}
     onClick={[Function]}
-    role="img"
-    style={Object {}}
-    viewBox="0 0 512 512"
-    xmlns="http://www.w3.org/2000/svg"
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    style={
+      Object {
+        "MozUserSelect": "none",
+        "WebkitUserSelect": "none",
+        "cursor": "pointer",
+        "display": "inline-flex",
+        "msTouchAction": "manipulation",
+        "msUserSelect": "none",
+        "touchAction": "manipulation",
+        "userSelect": "none",
+      }
+    }
+    tabIndex="0"
   >
-    <path
-      d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-      fill="currentColor"
-      style={Object {}}
-    />
-  </svg>
+    <svg
+      fill="#e0fbfc"
+      focusable={false}
+      height={16}
+      secondaryFill={null}
+      secondaryOpacity={0.4}
+      size={16}
+      style={
+        Object {
+          "marginBottom": "auto",
+          "marginTop": "auto",
+        }
+      }
+      viewBox="0 0 512 512"
+      width={16}
+    >
+      <path
+        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
+        fill="#e0fbfc"
+        fillOpacity={1}
+        height={16}
+        secondaryFill={null}
+        secondaryOpacity={0.4}
+        size={16}
+        style={
+          Object {
+            "marginBottom": "auto",
+            "marginTop": "auto",
+          }
+        }
+        width={16}
+      />
+    </svg>
+  </div>
   <span
-    className="todo-description"
+    className="css-text-901oao css-textHasAncestor-16my406"
+    onClick={[Function]}
+    style={
+      Object {
+        "WebkitBoxFlex": 1,
+        "WebkitFlexGrow": 1,
+        "flexGrow": 1,
+        "marginLeft": "9px",
+        "msFlexPositive": 1,
+      }
+    }
   >
     Uncommitted Edit Todo
   </span>
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-trash fa-w-14 fa-sm "
-    data-icon="trash"
-    data-prefix="fas"
-    focusable="false"
+  <div
+    className="css-view-1dbjc4n"
+    data-focusable={true}
     onClick={[Function]}
-    role="img"
-    style={Object {}}
-    viewBox="0 0 448 512"
-    xmlns="http://www.w3.org/2000/svg"
+    onContextMenu={[Function]}
+    onKeyDown={[Function]}
+    style={
+      Object {
+        "MozUserSelect": "none",
+        "WebkitUserSelect": "none",
+        "cursor": "pointer",
+        "display": "inline-flex",
+        "msTouchAction": "manipulation",
+        "msUserSelect": "none",
+        "touchAction": "manipulation",
+        "userSelect": "none",
+      }
+    }
+    tabIndex="0"
   >
-    <path
-      d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-      fill="currentColor"
-      style={Object {}}
-    />
-  </svg>
-  <svg
-    aria-labelledby="svg-inline--fa-title-vvvvvvvvvvvv"
-    className="svg-inline--fa fa-exclamation-triangle fa-w-18 fa-xs "
-    data-icon="exclamation-triangle"
-    data-prefix="fas"
-    role="img"
-    style={Object {}}
-    viewBox="0 0 576 512"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <title
-      id="svg-inline--fa-title-vvvvvvvvvvvv"
-      style={Object {}}
+    <svg
+      fill="red"
+      focusable={false}
+      height={16}
+      secondaryFill={null}
+      secondaryOpacity={0.4}
+      size={16}
+      style={
+        Object {
+          "marginBottom": "auto",
+          "marginTop": "auto",
+          "paddingRight": "1px",
+        }
+      }
+      viewBox="0 0 448 512"
+      width={16}
     >
-      Uncommitted edit: Uncommitted edit...
-    </title>
+      <path
+        d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
+        fill="red"
+        fillOpacity={1}
+        height={16}
+        secondaryFill={null}
+        secondaryOpacity={0.4}
+        size={16}
+        style={
+          Object {
+            "marginBottom": "auto",
+            "marginTop": "auto",
+            "paddingRight": "1px",
+          }
+        }
+        width={16}
+      />
+    </svg>
+  </div>
+  <svg
+    fill="#f7b6a6"
+    focusable={false}
+    height={16}
+    secondaryFill={null}
+    secondaryOpacity={0.4}
+    size={16}
+    style={
+      Object {
+        "marginBottom": "auto",
+        "marginTop": "auto",
+        "paddingLeft": "5px",
+      }
+    }
+    viewBox="0 0 576 512"
+    width={16}
+  >
     <path
       d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
-      fill="currentColor"
-      style={Object {}}
+      fill="#f7b6a6"
+      fillOpacity={1}
+      height={16}
+      secondaryFill={null}
+      secondaryOpacity={0.4}
+      size={16}
+      style={
+        Object {
+          "marginBottom": "auto",
+          "marginTop": "auto",
+          "paddingLeft": "5px",
+        }
+      }
+      width={16}
     />
   </svg>
 </div>

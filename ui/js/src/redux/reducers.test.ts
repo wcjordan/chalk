@@ -1,3 +1,4 @@
+import '../__mocks__/matchMediaMock';
 import configureMockStore from 'redux-mock-store';
 import fetchMock from 'fetch-mock-jest';
 import thunk from 'redux-thunk';
@@ -5,12 +6,12 @@ import reducers, { updateTodo } from './reducers';
 
 const mockStore = configureMockStore([thunk]);
 
-describe('updateTodo', function() {
-  afterEach(function() {
+describe('updateTodo', function () {
+  afterEach(function () {
     fetchMock.restore();
   });
 
-  it('should make a PATCH request and dispatch actions', async function() {
+  it('should make a PATCH request and dispatch actions', async function () {
     const stubTodoPatch = {
       id: 1,
       description: 'test todo',
@@ -53,20 +54,20 @@ describe('updateTodo', function() {
   });
 });
 
-describe('workspace reducer', function() {
+describe('workspace reducer', function () {
   const stubEdit = {
     1: 'uncommitted edit',
   };
 
-  it('should return the initial state', function() {
+  it('should return the initial state', function () {
     expect(reducers.workspace(undefined, {})).toEqual({
       editId: null,
       uncommittedEdits: {},
     });
   });
 
-  describe('workspace/setTodoEditId', function() {
-    it('should update the edit id', function() {
+  describe('workspace/setTodoEditId', function () {
+    it('should update the edit id', function () {
       const result = reducers.workspace(
         {
           editId: 1,
@@ -83,7 +84,7 @@ describe('workspace reducer', function() {
       });
     });
 
-    it('should clear uncommitted edits when cancelling an edit', function() {
+    it('should clear uncommitted edits when cancelling an edit', function () {
       const result = reducers.workspace(
         {
           editId: 1,
@@ -101,8 +102,8 @@ describe('workspace reducer', function() {
     });
   });
 
-  describe('workspace/updateTodoUncommitted', function() {
-    it('should update uncommitted edits', function() {
+  describe('workspace/updateTodoUncommitted', function () {
+    it('should update uncommitted edits', function () {
       const result = reducers.workspace(
         {
           editId: 1,
