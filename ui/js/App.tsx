@@ -3,7 +3,8 @@ import Constants from 'expo-constants';
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
-import { init as sentryInit } from 'sentry-expo';
+import { init as sentryInit, withProfiler } from 'sentry-expo';
+import { Integrations } from "@sentry/tracing";
 
 import App from './src/App';
 import getStore from './src/redux/store';
@@ -13,6 +14,8 @@ sentryInit({
   enableInExpoDevelopment: true,
   environment: Constants.manifest.extra.ENVIRONMENT,
   debug: Constants.manifest.extra.DEBUG == 'true',
+  integrations: [new Integrations.BrowserTracing()],
+  tracesSampleRate: 1.0,
 });
 
 // https://callstack.github.io/react-native-paper/theming.html
@@ -43,4 +46,4 @@ const TopApp: React.FC = function () {
     </ReduxProvider>
   );
 };
-export default TopApp;
+export default withProfiler(TopApp);
