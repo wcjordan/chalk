@@ -9,6 +9,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-native-fontawesome": "^0.2.6",
     "@reduxjs/toolkit": "^1.5.0",
+    "@sentry/tracing": "6.2.5",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
