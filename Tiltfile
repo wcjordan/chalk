@@ -6,6 +6,8 @@ POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
 env_arr = [
     'server.secretKey=%s' % os.environ.get('SECRET_KEY'),
     'server.dbPassword=%s' % POSTGRES_PASSWORD,
+    'ui.sentryDsn=%s' % os.environ.get('SENTRY_DSN'),
+    'ui.sentryToken=%s' % os.environ.get('SENTRY_TOKEN'),
     'DEV=true',
 ]
 

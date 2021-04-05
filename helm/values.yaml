@@ -7,6 +7,10 @@ fullnameOverride: ""
 
 DEV: false
 
+ui:
+  sentryDsn:
+  sentryToken:
+
 server:
   dbPassword:
   secretKey:

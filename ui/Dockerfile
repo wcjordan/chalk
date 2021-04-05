@@ -13,7 +13,7 @@ COPY js/.eslintrc .
 COPY js/tsconfig.json .
 COPY js/.storybook ./.storybook
 
-COPY js/app.json ./app.json
+COPY js/app.config.js ./app.config.js
 COPY js/App.tsx ./App.tsx
 COPY js/assets ./assets
 COPY js/src ./src

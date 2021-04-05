@@ -113,3 +113,26 @@ Server Env
   value: 'true'
 {{- end }}
 {{- end }}
+
+{{/*
+UI Env
+*/}}
+{{- define "..uiEnv" -}}
+- name: SENTRY_DSN
+  valueFrom:
+    secretKeyRef:
+      name: ui-secrets
+      key: sentry-dsn
+- name: SENTRY_TOKEN
+  valueFrom:
+    secretKeyRef:
+      name: ui-secrets
+      key: sentry-token
+{{- if .Values.DEV }}
+- name: DEBUG
+  value: 'true'
+{{- else }}
+- name: DEBUG
+  value: 'false'
+{{- end }}
+{{- end }}

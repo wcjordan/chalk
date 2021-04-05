@@ -25,9 +25,12 @@ COPY js/.storybook ./.storybook
 
 # Copy source files
 COPY Makefile /
-COPY js/app.json ./app.json
+COPY js/app.config.js ./app.config.js
 COPY js/App.tsx ./App.tsx
 COPY js/assets ./assets
 COPY js/src ./src
 
+# Set CI true so we don't add a ton of watchers in Expo
+# TODO revisit this when working on hot reloading / dev setup
+ENV CI=true
 CMD ["yarn", "web"]

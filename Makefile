@@ -43,6 +43,8 @@ deploy: build
 		helm upgrade --install \
 			--set server.secretKey=$$SECRET_KEY \
 			--set server.dbPassword=$$POSTGRES_PASSWORD \
+			--set ui.sentryDsn=$$SENTRY_DSN \
+			--set ui.sentryToken=$$SENTRY_TOKEN \
 			chalk-prod helm'
 
 # NOTE deploy from built on Jenkins rather than building & pushing here

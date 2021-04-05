@@ -24,6 +24,8 @@ spec:
           image: "gcr.io/flipperkid-default/chalk-ui-image-prod:latest"
           {{- end }}
           imagePullPolicy: Always
+          env:
+            {{- include "..uiEnv" . | nindent 12 }}
           ports:
             - name: http
               containerPort: 19006
