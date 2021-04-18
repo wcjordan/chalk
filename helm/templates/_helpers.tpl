@@ -118,6 +118,11 @@ Server Env
 UI Env
 */}}
 {{- define "..uiEnv" -}}
+- name: ENVIRONMENT
+  valueFrom:
+    secretKeyRef:
+      name: ui-secrets
+      key: environment
 - name: SENTRY_DSN
   valueFrom:
     secretKeyRef:

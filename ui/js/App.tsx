@@ -8,7 +8,7 @@ import store from './src/redux/store';
 Sentry.init({
   dsn: Constants.manifest.extra.SENTRY_DSN,
   enableInExpoDevelopment: true,
-  environment: document.location.hostname.split('.')[0],
+  environment: Constants.manifest.extra.ENVIRONMENT,
   debug: Constants.manifest.extra.DEBUG == 'true',
 });
 
