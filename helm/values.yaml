@@ -8,6 +8,7 @@ fullnameOverride: ""
 DEV: false
 
 ui:
+  environment:
   sentryDsn:
   sentryToken:
 
