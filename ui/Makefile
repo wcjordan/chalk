@@ -39,3 +39,8 @@ update-snapshots:
 .PHONY: fix-imports
 fix-imports:
 	cd js; npx eslint --fix "**/*.{ts,tsx,js,jsx}"
+
+# Publish Expo
+.PHONY: publish
+publish:
+	cd js; npx expo login --non-interactive -u $$EXPO_USERNAME && npx expo publish --non-interactive

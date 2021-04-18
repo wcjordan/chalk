@@ -37,6 +37,7 @@ format:
 # To delete: helm delete chalk-prod
 .PHONY: deploy
 deploy: build
+	docker run --env-file .prod.env --rm -t -w / $(UI_IMAGE_DEV):latest make publish
 	docker push $(SERVER_IMAGE):latest
 	docker push $(UI_IMAGE):latest
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
