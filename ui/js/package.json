@@ -4,6 +4,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
   "dependencies": {
+    "@ant-design/icons-react-native": "2.2.1",
+    "@ant-design/react-native": "4.1.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
@@ -14,6 +16,7 @@
     "@testing-library/user-event": "^12.8.3",
     "expo": "^40.0.0",
     "expo-constants": "10.0.1",
+    "expo-font": "~8.4.0",
     "fetch-mock-jest": "^1.5.1",
     "lodash": "^4.17.21",
     "prop-types": "*",

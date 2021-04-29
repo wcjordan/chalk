@@ -101,12 +101,12 @@ Server Env
 - name: SECRET_KEY
   valueFrom:
     secretKeyRef:
-      name: server-secrets
+      name: {{ include "..fullname" . }}-server-secrets
       key: secret-key
 - name: POSTGRES_PASSWORD
   valueFrom:
     secretKeyRef:
-      name: server-secrets
+      name: {{ include "..fullname" . }}-server-secrets
       key: db-password
 {{- if .Values.DEV }}
 - name: DEBUG
@@ -121,17 +121,17 @@ UI Env
 - name: ENVIRONMENT
   valueFrom:
     secretKeyRef:
-      name: ui-secrets
+      name: {{ include "..fullname" . }}-ui-secrets
       key: environment
 - name: SENTRY_DSN
   valueFrom:
     secretKeyRef:
-      name: ui-secrets
+      name: {{ include "..fullname" . }}-ui-secrets
       key: sentry-dsn
 - name: SENTRY_TOKEN
   valueFrom:
     secretKeyRef:
-      name: ui-secrets
+      name: {{ include "..fullname" . }}-ui-secrets
       key: sentry-token
 {{- if .Values.DEV }}
 - name: DEBUG
