@@ -2,8 +2,6 @@ import _ from 'lodash';
 import { connect, ConnectedProps } from 'react-redux';
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View, ViewStyle } from 'react-native';
-import { useFonts } from 'expo-font';
-import Button from '@ant-design/react-native/lib/button';
 import AddTodo from './components/AddTodo';
 import { ReduxState } from './redux/types';
 import TodoItem from './components/TodoItem';
@@ -42,11 +40,6 @@ const styles = StyleSheet.create<Style>({
 export const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
 ) {
-  const [loaded] = useFonts({
-    antoutline: require('@ant-design/icons-react-native/fonts/antoutline.ttf'),
-    antfill: require('@ant-design/icons-react-native/fonts/antfill.ttf'),
-  });
-
   const { createTodo, setTodoEditId, todos, updateTodo, workspace } = props;
   const { editId, uncommittedEdits } = workspace;
   const todoViews = _.map(todos, (todo) => (
@@ -70,7 +63,6 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
   return (
     <View style={styles.root}>
       <View nativeID="todo-list" style={containerStyles}>
-        <Button>Ant Button</Button>
         <AddTodo createTodo={createTodo} />
         {todoViews}
       </View>
