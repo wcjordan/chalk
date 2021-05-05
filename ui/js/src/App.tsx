@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { connect, ConnectedProps } from 'react-redux';
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View, ViewStyle } from 'react-native';
+import { Appbar } from 'react-native-paper';
 import AddTodo from './components/AddTodo';
 import { ReduxState } from './redux/types';
 import TodoItem from './components/TodoItem';
@@ -37,6 +38,15 @@ const styles = StyleSheet.create<Style>({
   },
 });
 
+const bottomStyles = StyleSheet.create({
+  bottom: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+});
+
 export const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
 ) {
@@ -62,6 +72,24 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
   const containerStyles = StyleSheet.compose(styles.container, topStyle);
   return (
     <View style={styles.root}>
+      <Appbar style={bottomStyles.bottom}>
+        <Appbar.Action
+          icon="archive"
+          onPress={() => console.log('Pressed archive')}
+        />
+        <Appbar.Action
+          icon="mail"
+          onPress={() => console.log('Pressed mail')}
+        />
+        <Appbar.Action
+          icon="label"
+          onPress={() => console.log('Pressed label')}
+        />
+        <Appbar.Action
+          icon="delete"
+          onPress={() => console.log('Pressed delete')}
+        />
+      </Appbar>
       <View nativeID="todo-list" style={containerStyles}>
         <AddTodo createTodo={createTodo} />
         {todoViews}

@@ -1,6 +1,8 @@
 import Constants from 'expo-constants';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 import React from 'react';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
 import * as Sentry from 'sentry-expo';
 import App from './src/App';
 import store from './src/redux/store';
@@ -12,11 +14,29 @@ Sentry.init({
   debug: Constants.manifest.extra.DEBUG == 'true',
 });
 
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'green',
+    accent: 'yellow',
+  },
+};
+
+const Icon = (props) => <Ionicons {...props} />;
+
 const TopApp: React.FC = function () {
   return (
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ReduxProvider store={store}>
+      <PaperProvider
+        theme={theme}
+        settings={{
+          icon: Icon,
+        }}
+      >
+        <App />
+      </PaperProvider>
+    </ReduxProvider>
   );
 };
 export default TopApp;
