@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 import { Provider as ReduxProvider } from 'react-redux';
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import * as Sentry from 'sentry-expo';
 import App from './src/App';
 import store from './src/redux/store';
@@ -18,12 +18,12 @@ const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: 'green',
-    accent: 'yellow',
+    // primary: 'green',
+    // accent: 'yellow',
   },
 };
 
-const Icon = (props) => <Ionicons {...props} />;
+const Icon = (props) => <FontAwesome5 {...props} />;
 
 const TopApp: React.FC = function () {
   return (
