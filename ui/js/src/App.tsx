@@ -1,7 +1,14 @@
 import _ from 'lodash';
 import { connect, ConnectedProps } from 'react-redux';
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, ViewStyle } from 'react-native';
+import {
+  Platform,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import AddTodo from './components/AddTodo';
 import { ReduxState } from './redux/types';
 import TodoItem from './components/TodoItem';
@@ -64,7 +71,7 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
     <View style={styles.root}>
       <View testID="todo-list" style={containerStyles}>
         <AddTodo createTodo={createTodo} />
-        {todoViews}
+        <ScrollView>{todoViews}</ScrollView>
       </View>
     </View>
   );
