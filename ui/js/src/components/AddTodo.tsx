@@ -16,6 +16,8 @@ const styles = StyleSheet.create<Style>({
   addTodoInput: {
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
+    paddingBottom: 4,
+    paddingTop: 4,
   },
 });
 
@@ -23,7 +25,10 @@ const AddTodo: React.FC<Props> = function (props: Props) {
   const { createTodo } = props;
   const addTodo = useCallback(
     (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-      createTodo(event.nativeEvent.text);
+      if (event.key !== 'Enter' || event.shiftKey) {
+        return;
+      }
+      createTodo(event.target.value);
     },
     [createTodo],
   );
@@ -31,10 +36,12 @@ const AddTodo: React.FC<Props> = function (props: Props) {
   return (
     <View>
       <TextInput
+        multiline={true}
+        numberOfLines={3}
+        onKeyPress={addTodo}
+        placeholder="Add a new todo..."
         style={styles.addTodoInput}
         testID="add-todo-input"
-        placeholder="Add a new todo..."
-        onSubmitEditing={addTodo}
       />
     </View>
   );

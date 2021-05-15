@@ -15,8 +15,8 @@ test:
 	cd js; yarn build
 
 # Start Expo mobile dev
-.PHONY: start-dev
-start-dev:
+.PHONY: start
+start:
 	cd js; yarn start
 
 # ESLint & Prettier JS formatting

@@ -82,9 +82,12 @@ const TodoItem: React.FC<Props> = function (props: Props) {
 
   const commitTodo = useCallback(
     (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+      if (event.key !== 'Enter' || event.shiftKey) {
+        return;
+      }
       updateTodo({
         id: todo.id,
-        description: event.nativeEvent.text,
+        description: event.target.value,
       });
     },
     [updateTodo, todo.id],
@@ -128,13 +131,13 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   if (editing) {
     content = [
       <TextInput
-        defaultValue={uncommittedEdit || todo.description}
+        value={uncommittedEdit || todo.description}
         dense={true}
         key="input"
         multiline={true}
         numberOfLines={4}
         onChangeText={updateTodoCb}
-        onSubmitEditing={commitTodo}
+        onKeyPress={commitTodo}
         selectTextOnFocus={true}
         style={styles.editTodoInput}
       />,
