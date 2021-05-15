@@ -2,9 +2,22 @@ import React, { useCallback } from 'react';
 import {
   View,
   NativeSyntheticEvent,
+  StyleSheet,
   TextInputSubmitEditingEventData,
+  TextStyle,
 } from 'react-native';
-import { Card, TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
+
+interface Style {
+  addTodoInput: TextStyle;
+}
+
+const styles = StyleSheet.create<Style>({
+  addTodoInput: {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+  },
+});
 
 const AddTodo: React.FC<Props> = function (props: Props) {
   const { createTodo } = props;
@@ -17,15 +30,12 @@ const AddTodo: React.FC<Props> = function (props: Props) {
 
   return (
     <View>
-      <Card>
-        <Card.Content>
-          <TextInput
-            testID="add-todo-input"
-            placeholder="Add a new todo..."
-            onSubmitEditing={addTodo}
-          />
-        </Card.Content>
-      </Card>
+      <TextInput
+        style={styles.addTodoInput}
+        testID="add-todo-input"
+        placeholder="Add a new todo..."
+        onSubmitEditing={addTodo}
+      />
     </View>
   );
 };

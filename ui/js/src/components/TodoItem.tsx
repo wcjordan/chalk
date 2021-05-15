@@ -2,9 +2,12 @@ import React, { useCallback } from 'react';
 import {
   GestureResponderEvent,
   NativeSyntheticEvent,
+  Platform,
   StyleSheet,
   TextInputSubmitEditingEventData,
   TextStyle,
+  View,
+  ViewStyle,
 } from 'react-native';
 import {
   Card,
@@ -17,32 +20,47 @@ import {
 import { Todo, TodoPatch } from '../redux/types';
 
 interface Style {
-  todoItem: TextStyle;
-  todoDescription: TextStyle;
+  checkbox: ViewStyle;
   editTodoInput: TextStyle;
+  spacer: ViewStyle;
+  todoDescription: TextStyle;
+  todoDescriptionText: TextStyle;
+  todoItemCard: ViewStyle & { cursor?: string };
+  todoItemContent: ViewStyle;
+}
+
+const todoItemCardStyle: ViewStyle & { cursor?: string } = {
+  borderRadius: 0,
+};
+if (Platform.OS === 'web') {
+  todoItemCardStyle['cursor'] = 'pointer';
 }
 
 const styles = StyleSheet.create<Style>({
-  todoItem: {
-    display: 'flex',
-    flexDirection: 'row',
-    fontFamily: 'monospace',
-    padding: 8,
-    fontSize: 20,
-    width: '100%',
-    borderTopWidth: 1,
-    borderTopColor: '#e0fbfc',
-    // cursor: 'pointer',
-  },
-  todoDescription: {
-    marginLeft: 9,
-    flexGrow: 1,
+  checkbox: {
+    paddingTop: 4,
   },
   editTodoInput: {
     borderWidth: 0,
     flexGrow: 1,
     marginLeft: 9,
     padding: 0,
+  },
+  spacer: {
+    flexGrow: 1,
+  },
+  todoDescription: {
+    marginLeft: 9,
+    flexGrow: 1,
+    flexBasis: 0,
+  },
+  todoDescriptionText: {
+    fontSize: 16,
+  },
+  todoItemCard: todoItemCardStyle,
+  todoItemContent: {
+    flexDirection: 'row',
+    width: '100%',
   },
 });
 
@@ -111,15 +129,18 @@ const TodoItem: React.FC<Props> = function (props: Props) {
     content = [
       <TextInput
         defaultValue={uncommittedEdit || todo.description}
+        dense={true}
         key="input"
-        style={styles.editTodoInput}
+        multiline={true}
+        numberOfLines={4}
         onChangeText={updateTodoCb}
         onSubmitEditing={commitTodo}
         selectTextOnFocus={true}
+        style={styles.editTodoInput}
       />,
       <IconButton
         key="cancel"
-        icon="ban"
+        icon="cancel"
         color={Colors.grey800}
         size={20}
         onPress={cancelEdit}
@@ -127,12 +148,16 @@ const TodoItem: React.FC<Props> = function (props: Props) {
     ];
   } else {
     content = [
-      <Text style={styles.todoDescription} key="description">
-        {todo.description}
-      </Text>,
+      <View key="description" style={styles.todoDescription}>
+        <View style={styles.spacer} />
+        <Text key="descriptionText" style={styles.todoDescriptionText}>
+          {todo.description}
+        </Text>
+        <View style={styles.spacer} />
+      </View>,
       <IconButton
         key="delete"
-        icon="trash"
+        icon="trash-can-outline"
         color={Colors.red500}
         size={20}
         onPress={archiveTodo}
@@ -142,7 +167,7 @@ const TodoItem: React.FC<Props> = function (props: Props) {
       content.push(
         <IconButton
           key="warn"
-          icon="exclamation-triangle"
+          icon="alert-outline"
           color={Colors.orange300}
           size={20}
         />,
@@ -154,12 +179,14 @@ const TodoItem: React.FC<Props> = function (props: Props) {
 
   const testId = `todo-${todo.completed ? 'checked' : 'unchecked'}-${todo.id}`;
   return (
-    <Card onPress={beginEdit} testID={testId}>
-      <Card.Content style={styles.todoItem}>
-        <Checkbox.Android
-          status={todo.completed ? 'checked' : 'unchecked'}
-          onPress={toggleTodo}
-        />
+    <Card onPress={beginEdit} testID={testId} style={styles.todoItemCard}>
+      <Card.Content style={styles.todoItemContent}>
+        <View style={styles.checkbox}>
+          <Checkbox.Android
+            status={todo.completed ? 'checked' : 'unchecked'}
+            onPress={toggleTodo}
+          />
+        </View>
         {content}
       </Card.Content>
     </Card>

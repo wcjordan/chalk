@@ -1,8 +1,8 @@
 import Constants from 'expo-constants';
-import { Provider as ReduxProvider } from 'react-redux';
 import React from 'react';
+import { Platform } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { Provider as ReduxProvider } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import App from './src/App';
 import store from './src/redux/store';
@@ -23,17 +23,10 @@ const theme = {
   },
 };
 
-const Icon = (props) => <FontAwesome5 {...props} />;
-
 const TopApp: React.FC = function () {
   return (
     <ReduxProvider store={store}>
-      <PaperProvider
-        theme={theme}
-        settings={{
-          icon: Icon,
-        }}
-      >
+      <PaperProvider theme={theme}>
         <App />
       </PaperProvider>
     </ReduxProvider>
