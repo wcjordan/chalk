@@ -34,5 +34,4 @@ export interface ReduxState {
 
 export interface WorkspaceState {
   editId: number | null;
-  uncommittedEdits: Record<number, string>;
 }

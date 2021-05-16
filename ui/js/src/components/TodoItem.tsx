@@ -1,10 +1,8 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   GestureResponderEvent,
-  NativeSyntheticEvent,
   Platform,
   StyleSheet,
-  TextInputSubmitEditingEventData,
   TextStyle,
   View,
   ViewStyle,
@@ -42,9 +40,10 @@ const styles = StyleSheet.create<Style>({
   },
   editTodoInput: {
     borderWidth: 0,
-    flexGrow: 1,
+    flexShrink: 1,
     marginLeft: 9,
     padding: 0,
+    width: '100%',
   },
   spacer: {
     flexGrow: 1,
@@ -65,33 +64,15 @@ const styles = StyleSheet.create<Style>({
 });
 
 const TodoItem: React.FC<Props> = function (props: Props) {
-  const { editing, todo, setTodoEditId, uncommittedEdit, updateTodo } = props;
+  const { editing, todo, setTodoEditId, updateTodo } = props;
+  const [textValue, setTextValue] = useState(todo.description);
 
-  const updateTodoCb = useCallback(
-    (text: string) => {
-      updateTodo(
-        {
-          id: todo.id,
-          description: text,
-        },
-        false,
-      );
-    },
-    [updateTodo, todo.id],
-  );
-
-  const commitTodo = useCallback(
-    (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-      if (event.key !== 'Enter' || event.shiftKey) {
-        return;
-      }
-      updateTodo({
-        id: todo.id,
-        description: event.target.value,
-      });
-    },
-    [updateTodo, todo.id],
-  );
+  const commitTodo = useCallback(() => {
+    updateTodo({
+      id: todo.id,
+      description: textValue,
+    });
+  }, [updateTodo, todo.id, textValue]);
 
   const toggleTodo = useCallback(() => {
     updateTodo({
@@ -124,6 +105,7 @@ const TodoItem: React.FC<Props> = function (props: Props) {
       return;
     }
 
+    setTextValue(todo.description);
     setTodoEditId(null);
   }, [setTodoEditId, editing]);
 
@@ -131,15 +113,16 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   if (editing) {
     content = [
       <TextInput
-        value={uncommittedEdit || todo.description}
+        blurOnSubmit={true}
         dense={true}
         key="input"
         multiline={true}
         numberOfLines={4}
-        onChangeText={updateTodoCb}
-        onKeyPress={commitTodo}
+        onChangeText={setTextValue}
+        onSubmitEditing={commitTodo}
         selectTextOnFocus={true}
         style={styles.editTodoInput}
+        value={textValue}
       />,
       <IconButton
         key="cancel"
@@ -166,7 +149,7 @@ const TodoItem: React.FC<Props> = function (props: Props) {
         onPress={archiveTodo}
       />,
     ];
-    if (uncommittedEdit) {
+    if (textValue !== todo.description) {
       content.push(
         <IconButton
           key="warn"
@@ -174,7 +157,7 @@ const TodoItem: React.FC<Props> = function (props: Props) {
           color={Colors.orange300}
           size={20}
         />,
-        // title={`Uncommitted edit: ${uncommittedEdit}`}
+        // title={`Uncommitted edit: ${textValue}`}
         // TODO w/ onLongPress
       );
     }
@@ -201,7 +184,6 @@ type Props = {
   todo: Todo;
   updateTodo: (todoPatch: TodoPatch, commitEdit?: boolean) => void;
   setTodoEditId: (id: number | null) => void;
-  uncommittedEdit: string | undefined;
 };
 
 export default TodoItem;

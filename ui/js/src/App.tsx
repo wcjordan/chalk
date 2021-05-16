@@ -37,7 +37,11 @@ const styles = StyleSheet.create<Style>({
     width: '100%',
     backgroundColor: '#293241',
   },
-  container: {
+  containerMobile: {
+    height: '100%',
+    width: '100%',
+  },
+  containerWeb: {
     height: '100%',
     width: '66%',
     marginHorizontal: 'auto',
@@ -48,28 +52,29 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
 ) {
   const { createTodo, setTodoEditId, todos, updateTodo, workspace } = props;
-  const { editId, uncommittedEdits } = workspace;
+  const { editId } = workspace;
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
       editing={todo.id === editId}
       key={todo.id || ''}
       setTodoEditId={setTodoEditId}
       todo={todo}
-      uncommittedEdit={uncommittedEdits[todo.id]}
       updateTodo={updateTodo}
     />
   ));
 
+  let containerStyle =
+    Platform.OS === 'web' ? styles.containerWeb : styles.containerMobile;
   const paddingTop = Platform.OS === 'android' ? StatusBar.currentHeight : 80;
   const topStyle = StyleSheet.create<TopStyle>({
     top: {
       paddingTop: paddingTop,
     },
-  }).top;
-  const containerStyles = StyleSheet.compose(styles.container, topStyle);
+  });
+  containerStyle = StyleSheet.compose(containerStyle, topStyle.top);
   return (
     <View style={styles.root}>
-      <View testID="todo-list" style={containerStyles}>
+      <View testID="todo-list" style={containerStyle}>
         <AddTodo createTodo={createTodo} />
         <ScrollView>{todoViews}</ScrollView>
       </View>

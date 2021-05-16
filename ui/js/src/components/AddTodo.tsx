@@ -1,18 +1,17 @@
-import React, { useCallback } from 'react';
-import {
-  View,
-  NativeSyntheticEvent,
-  StyleSheet,
-  TextInputSubmitEditingEventData,
-  TextStyle,
-} from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { TextInput } from 'react-native-paper';
 
 interface Style {
+  addTodoView: ViewStyle;
   addTodoInput: TextStyle;
 }
 
 const styles = StyleSheet.create<Style>({
+  addTodoView: {
+    width: '100%',
+    maxHeight: 104,
+  },
   addTodoInput: {
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
@@ -23,25 +22,25 @@ const styles = StyleSheet.create<Style>({
 
 const AddTodo: React.FC<Props> = function (props: Props) {
   const { createTodo } = props;
-  const addTodo = useCallback(
-    (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-      if (event.key !== 'Enter' || event.shiftKey) {
-        return;
-      }
-      createTodo(event.target.value);
-    },
-    [createTodo],
-  );
+  const [textValue, setTextValue] = useState('');
+
+  const addTodo = useCallback(() => {
+    createTodo(textValue);
+    setTextValue('');
+  }, [createTodo, textValue]);
 
   return (
-    <View>
+    <View style={styles.addTodoView}>
       <TextInput
+        blurOnSubmit={true}
         multiline={true}
         numberOfLines={3}
-        onKeyPress={addTodo}
+        onChangeText={setTextValue}
+        onSubmitEditing={addTodo}
         placeholder="Add a new todo..."
         style={styles.addTodoInput}
         testID="add-todo-input"
+        value={textValue}
       />
     </View>
   );
