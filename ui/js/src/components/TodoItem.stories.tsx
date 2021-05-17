@@ -44,7 +44,6 @@ export const UncommittedEditTodo: React.FC = () => (
     todo={Object.assign({}, defaultTodo, {
       description: 'Uncommitted Edit Todo',
     })}
-    uncommittedEdit="Uncommitted edit..."
   />
 );
 
@@ -55,6 +54,5 @@ export const EditingUncommittedTodo: React.FC = () => (
     todo={Object.assign({}, defaultTodo, {
       description: 'Editing Todo',
     })}
-    uncommittedEdit="Uncommitted edit..."
   />
 );

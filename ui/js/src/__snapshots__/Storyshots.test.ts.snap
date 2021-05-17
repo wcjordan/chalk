@@ -1,1354 +1,2461 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Add Todo Default Add Todo 1`] = `
-<div
-  className="css-view-1dbjc4n"
+<View
   style={
     Object {
-      "backgroundColor": "rgba(152,193,217,1.00)",
-      "borderBottomWidth": "0px",
-      "borderLeftWidth": "0px",
-      "borderRightWidth": "0px",
-      "borderTopWidth": "0px",
-      "display": "flex",
-      "fontFamily": "monospace,monospace",
-      "paddingBottom": "8px",
-      "paddingLeft": "8px",
-      "paddingRight": "8px",
-      "paddingTop": "8px",
+      "maxHeight": 104,
       "width": "100%",
     }
   }
 >
-  <input
-    autoCapitalize="sentences"
-    autoComplete="on"
-    autoCorrect="on"
-    className="css-textinput-11aywtz r-placeholderTextColor-1td1i4x"
-    data-focusable={true}
-    dir="auto"
-    id="add-todo-input"
-    onBlur={[Function]}
-    onChange={[Function]}
-    onFocus={[Function]}
-    onKeyDown={[Function]}
-    onSelect={[Function]}
-    placeholder="Add a new todo..."
-    readOnly={false}
-    spellCheck={true}
+  <View
     style={
-      Object {
-        "WebkitBoxFlex": 1,
-        "WebkitFlexGrow": 1,
-        "backgroundColor": "rgba(0,0,0,0.00)",
-        "color": "rgba(41,50,65,1.00)",
-        "flexGrow": 1,
-        "fontFamily": "inherit",
-        "fontSize": "20px",
-        "marginLeft": "4px",
-        "msFlexPositive": 1,
-        "paddingBottom": "4px",
-        "paddingLeft": "4px",
-        "paddingRight": "4px",
-        "paddingTop": "4px",
-      }
+      Array [
+        Object {
+          "backgroundColor": "rgb(231, 231, 231)",
+          "borderTopLeftRadius": 4,
+          "borderTopRightRadius": 4,
+        },
+        Object {
+          "borderTopLeftRadius": 0,
+          "borderTopRightRadius": 0,
+          "paddingBottom": 4,
+          "paddingTop": 4,
+        },
+      ]
     }
-    type="text"
-  />
-</div>
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "rgba(0, 0, 0, 0.26)",
+          "bottom": 0,
+          "height": 2,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "transform": Array [
+            Object {
+              "scaleY": 0.5,
+            },
+          ],
+        }
+      }
+    />
+    <View
+      style={
+        Array [
+          Object {
+            "paddingBottom": 0,
+            "paddingTop": 0,
+          },
+          Object {
+            "minHeight": 64,
+          },
+        ]
+      }
+    >
+      <TextInput
+        allowFontScaling={true}
+        blurOnSubmit={true}
+        editable={true}
+        multiline={true}
+        numberOfLines={3}
+        onBlur={[Function]}
+        onChangeText={[Function]}
+        onFocus={[Function]}
+        onSubmitEditing={[Function]}
+        placeholder="Add a new todo..."
+        placeholderTextColor="rgba(0, 0, 0, 0.54)"
+        rejectResponderTermination={true}
+        selectionColor="#6200ee"
+        style={
+          Array [
+            Object {
+              "flexGrow": 1,
+              "margin": 0,
+              "zIndex": 1,
+            },
+            Object {
+              "paddingLeft": 12,
+              "paddingRight": 12,
+            },
+            Object {},
+            Object {
+              "paddingBottom": 21,
+              "paddingTop": 21,
+            },
+            Object {
+              "color": "#000000",
+              "fontFamily": "System",
+              "fontSize": 16,
+              "fontWeight": undefined,
+              "textAlign": "left",
+              "textAlignVertical": "top",
+            },
+            false,
+            Array [
+              Object {},
+            ],
+          ]
+        }
+        testID="add-todo-input"
+        underlineColorAndroid="transparent"
+        value=""
+      />
+    </View>
+  </View>
+</View>
 `;
 
 exports[`Storyshots App Default Layout 1`] = `
-<div
-  className="css-view-1dbjc4n"
+<View
   style={
     Object {
-      "backgroundColor": "rgba(41,50,65,1.00)",
+      "backgroundColor": "#293241",
       "height": "100%",
       "width": "100%",
     }
   }
 >
-  <div
-    className="css-view-1dbjc4n"
-    id="todo-list"
+  <View
     style={
-      Object {
-        "height": "100%",
-        "marginLeft": "auto",
-        "marginRight": "auto",
-        "paddingTop": "80px",
-        "width": "66%",
-      }
+      Array [
+        Object {
+          "height": "100%",
+          "width": "100%",
+        },
+        Object {
+          "paddingTop": 80,
+        },
+      ]
     }
+    testID="todo-list"
   >
-    <div
-      className="css-view-1dbjc4n"
+    <View
       style={
         Object {
-          "backgroundColor": "rgba(152,193,217,1.00)",
-          "borderBottomWidth": "0px",
-          "borderLeftWidth": "0px",
-          "borderRightWidth": "0px",
-          "borderTopWidth": "0px",
-          "display": "flex",
-          "fontFamily": "monospace,monospace",
-          "paddingBottom": "8px",
-          "paddingLeft": "8px",
-          "paddingRight": "8px",
-          "paddingTop": "8px",
+          "maxHeight": 104,
           "width": "100%",
         }
       }
     >
-      <input
-        autoCapitalize="sentences"
-        autoComplete="on"
-        autoCorrect="on"
-        className="css-textinput-11aywtz r-placeholderTextColor-1td1i4x"
-        data-focusable={true}
-        dir="auto"
-        id="add-todo-input"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onFocus={[Function]}
-        onKeyDown={[Function]}
-        onSelect={[Function]}
-        placeholder="Add a new todo..."
-        readOnly={false}
-        spellCheck={true}
+      <View
         style={
-          Object {
-            "WebkitBoxFlex": 1,
-            "WebkitFlexGrow": 1,
-            "backgroundColor": "rgba(0,0,0,0.00)",
-            "color": "rgba(41,50,65,1.00)",
-            "flexGrow": 1,
-            "fontFamily": "inherit",
-            "fontSize": "20px",
-            "marginLeft": "4px",
-            "msFlexPositive": 1,
-            "paddingBottom": "4px",
-            "paddingLeft": "4px",
-            "paddingRight": "4px",
-            "paddingTop": "4px",
-          }
+          Array [
+            Object {
+              "backgroundColor": "rgb(231, 231, 231)",
+              "borderTopLeftRadius": 4,
+              "borderTopRightRadius": 4,
+            },
+            Object {
+              "borderTopLeftRadius": 0,
+              "borderTopRightRadius": 0,
+              "paddingBottom": 4,
+              "paddingTop": 4,
+            },
+          ]
         }
-        type="text"
-      />
-    </div>
-  </div>
-</div>
+      >
+        <View
+          style={
+            Object {
+              "backgroundColor": "rgba(0, 0, 0, 0.26)",
+              "bottom": 0,
+              "height": 2,
+              "left": 0,
+              "position": "absolute",
+              "right": 0,
+              "transform": Array [
+                Object {
+                  "scaleY": 0.5,
+                },
+              ],
+            }
+          }
+        />
+        <View
+          style={
+            Array [
+              Object {
+                "paddingBottom": 0,
+                "paddingTop": 0,
+              },
+              Object {
+                "minHeight": 64,
+              },
+            ]
+          }
+        >
+          <TextInput
+            allowFontScaling={true}
+            blurOnSubmit={true}
+            editable={true}
+            multiline={true}
+            numberOfLines={3}
+            onBlur={[Function]}
+            onChangeText={[Function]}
+            onFocus={[Function]}
+            onSubmitEditing={[Function]}
+            placeholder="Add a new todo..."
+            placeholderTextColor="rgba(0, 0, 0, 0.54)"
+            rejectResponderTermination={true}
+            selectionColor="#6200ee"
+            style={
+              Array [
+                Object {
+                  "flexGrow": 1,
+                  "margin": 0,
+                  "zIndex": 1,
+                },
+                Object {
+                  "paddingLeft": 12,
+                  "paddingRight": 12,
+                },
+                Object {},
+                Object {
+                  "paddingBottom": 21,
+                  "paddingTop": 21,
+                },
+                Object {
+                  "color": "#000000",
+                  "fontFamily": "System",
+                  "fontSize": 16,
+                  "fontWeight": undefined,
+                  "textAlign": "left",
+                  "textAlignVertical": "top",
+                },
+                false,
+                Array [
+                  Object {},
+                ],
+              ]
+            }
+            testID="add-todo-input"
+            underlineColorAndroid="transparent"
+            value=""
+          />
+        </View>
+      </View>
+    </View>
+    <RCTScrollView>
+      <View />
+    </RCTScrollView>
+  </View>
+</View>
 `;
 
 exports[`Storyshots App List Todos Layout 1`] = `
-<div
-  className="css-view-1dbjc4n"
+<View
   style={
     Object {
-      "backgroundColor": "rgba(41,50,65,1.00)",
+      "backgroundColor": "#293241",
       "height": "100%",
       "width": "100%",
     }
   }
 >
-  <div
-    className="css-view-1dbjc4n"
-    id="todo-list"
+  <View
     style={
-      Object {
-        "height": "100%",
-        "marginLeft": "auto",
-        "marginRight": "auto",
-        "paddingTop": "80px",
-        "width": "66%",
-      }
+      Array [
+        Object {
+          "height": "100%",
+          "width": "100%",
+        },
+        Object {
+          "paddingTop": 80,
+        },
+      ]
     }
+    testID="todo-list"
   >
-    <div
-      className="css-view-1dbjc4n"
+    <View
       style={
         Object {
-          "backgroundColor": "rgba(152,193,217,1.00)",
-          "borderBottomWidth": "0px",
-          "borderLeftWidth": "0px",
-          "borderRightWidth": "0px",
-          "borderTopWidth": "0px",
-          "display": "flex",
-          "fontFamily": "monospace,monospace",
-          "paddingBottom": "8px",
-          "paddingLeft": "8px",
-          "paddingRight": "8px",
-          "paddingTop": "8px",
+          "maxHeight": 104,
           "width": "100%",
         }
       }
     >
-      <input
-        autoCapitalize="sentences"
-        autoComplete="on"
-        autoCorrect="on"
-        className="css-textinput-11aywtz r-placeholderTextColor-1td1i4x"
-        data-focusable={true}
-        dir="auto"
-        id="add-todo-input"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onFocus={[Function]}
-        onKeyDown={[Function]}
-        onSelect={[Function]}
-        placeholder="Add a new todo..."
-        readOnly={false}
-        spellCheck={true}
+      <View
         style={
-          Object {
-            "WebkitBoxFlex": 1,
-            "WebkitFlexGrow": 1,
-            "backgroundColor": "rgba(0,0,0,0.00)",
-            "color": "rgba(41,50,65,1.00)",
-            "flexGrow": 1,
-            "fontFamily": "inherit",
-            "fontSize": "20px",
-            "marginLeft": "4px",
-            "msFlexPositive": 1,
-            "paddingBottom": "4px",
-            "paddingLeft": "4px",
-            "paddingRight": "4px",
-            "paddingTop": "4px",
-          }
+          Array [
+            Object {
+              "backgroundColor": "rgb(231, 231, 231)",
+              "borderTopLeftRadius": 4,
+              "borderTopRightRadius": 4,
+            },
+            Object {
+              "borderTopLeftRadius": 0,
+              "borderTopRightRadius": 0,
+              "paddingBottom": 4,
+              "paddingTop": 4,
+            },
+          ]
         }
-        type="text"
-      />
-    </div>
-    <div
-      className="css-text-901oao"
-      dir="auto"
-      id="todo-unchecked-1"
-      onClick={[Function]}
-      style={
-        Object {
-          "backgroundColor": "rgba(61,90,128,1.00)",
-          "borderTopColor": "rgba(224,251,252,1.00)",
-          "borderTopWidth": "1px",
-          "color": "rgba(224,251,252,1.00)",
-          "cursor": "pointer",
-          "display": "flex",
-          "fontFamily": "monospace,monospace",
-          "fontSize": "20px",
-          "paddingBottom": "8px",
-          "paddingLeft": "8px",
-          "paddingRight": "8px",
-          "paddingTop": "8px",
-          "width": "100%",
-        }
-      }
-    >
-      <div
-        className="css-view-1dbjc4n"
-        data-focusable={true}
-        onClick={[Function]}
-        onContextMenu={[Function]}
-        onKeyDown={[Function]}
-        style={
-          Object {
-            "MozUserSelect": "none",
-            "WebkitUserSelect": "none",
-            "cursor": "pointer",
-            "display": "inline-flex",
-            "msTouchAction": "manipulation",
-            "msUserSelect": "none",
-            "touchAction": "manipulation",
-            "userSelect": "none",
-          }
-        }
-        tabIndex="0"
       >
-        <svg
-          fill="#e0fbfc"
-          focusable={false}
-          height={16}
-          secondaryFill={null}
-          secondaryOpacity={0.4}
-          size={16}
+        <View
           style={
             Object {
-              "marginBottom": "auto",
-              "marginTop": "auto",
+              "backgroundColor": "rgba(0, 0, 0, 0.26)",
+              "bottom": 0,
+              "height": 2,
+              "left": 0,
+              "position": "absolute",
+              "right": 0,
+              "transform": Array [
+                Object {
+                  "scaleY": 0.5,
+                },
+              ],
             }
           }
-          viewBox="0 0 512 512"
-          width={16}
-        >
-          <path
-            d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-            fill="#e0fbfc"
-            fillOpacity={1}
-            height={16}
-            secondaryFill={null}
-            secondaryOpacity={0.4}
-            size={16}
-            style={
+        />
+        <View
+          style={
+            Array [
               Object {
-                "marginBottom": "auto",
-                "marginTop": "auto",
-              }
+                "paddingBottom": 0,
+                "paddingTop": 0,
+              },
+              Object {
+                "minHeight": 64,
+              },
+            ]
+          }
+        >
+          <TextInput
+            allowFontScaling={true}
+            blurOnSubmit={true}
+            editable={true}
+            multiline={true}
+            numberOfLines={3}
+            onBlur={[Function]}
+            onChangeText={[Function]}
+            onFocus={[Function]}
+            onSubmitEditing={[Function]}
+            placeholder="Add a new todo..."
+            placeholderTextColor="rgba(0, 0, 0, 0.54)"
+            rejectResponderTermination={true}
+            selectionColor="#6200ee"
+            style={
+              Array [
+                Object {
+                  "flexGrow": 1,
+                  "margin": 0,
+                  "zIndex": 1,
+                },
+                Object {
+                  "paddingLeft": 12,
+                  "paddingRight": 12,
+                },
+                Object {},
+                Object {
+                  "paddingBottom": 21,
+                  "paddingTop": 21,
+                },
+                Object {
+                  "color": "#000000",
+                  "fontFamily": "System",
+                  "fontSize": 16,
+                  "fontWeight": undefined,
+                  "textAlign": "left",
+                  "textAlignVertical": "top",
+                },
+                false,
+                Array [
+                  Object {},
+                ],
+              ]
             }
-            width={16}
+            testID="add-todo-input"
+            underlineColorAndroid="transparent"
+            value=""
           />
-        </svg>
-      </div>
-      <span
-        className="css-text-901oao css-textHasAncestor-16my406"
-        onClick={[Function]}
-        style={
-          Object {
-            "WebkitBoxFlex": 1,
-            "WebkitFlexGrow": 1,
-            "flexGrow": 1,
-            "marginLeft": "9px",
-            "msFlexPositive": 1,
-          }
-        }
-      >
-        First todo
-      </span>
-      <div
-        className="css-view-1dbjc4n"
-        data-focusable={true}
-        onClick={[Function]}
-        onContextMenu={[Function]}
-        onKeyDown={[Function]}
-        style={
-          Object {
-            "MozUserSelect": "none",
-            "WebkitUserSelect": "none",
-            "cursor": "pointer",
-            "display": "inline-flex",
-            "msTouchAction": "manipulation",
-            "msUserSelect": "none",
-            "touchAction": "manipulation",
-            "userSelect": "none",
-          }
-        }
-        tabIndex="0"
-      >
-        <svg
-          fill="red"
-          focusable={false}
-          height={16}
-          secondaryFill={null}
-          secondaryOpacity={0.4}
-          size={16}
+        </View>
+      </View>
+    </View>
+    <RCTScrollView>
+      <View>
+        <View
           style={
             Object {
-              "marginBottom": "auto",
-              "marginTop": "auto",
-              "paddingRight": "1px",
+              "backgroundColor": "#ffffff",
+              "borderRadius": 0,
+              "elevation": 1,
+              "shadowColor": "#000000",
+              "shadowOffset": Object {
+                "height": 0.5,
+                "width": 0,
+              },
+              "shadowOpacity": 0.24,
+              "shadowRadius": 0.75,
             }
           }
-          viewBox="0 0 448 512"
-          width={16}
         >
-          <path
-            d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-            fill="red"
-            fillOpacity={1}
-            height={16}
-            secondaryFill={null}
-            secondaryOpacity={0.4}
-            size={16}
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
             style={
               Object {
-                "marginBottom": "auto",
-                "marginTop": "auto",
-                "paddingRight": "1px",
+                "flexGrow": 1,
+                "flexShrink": 1,
               }
             }
-            width={16}
-          />
-        </svg>
-      </div>
-    </div>
-    <div
-      className="css-text-901oao"
-      dir="auto"
-      id="todo-unchecked-2"
-      onClick={[Function]}
-      style={
-        Object {
-          "backgroundColor": "rgba(61,90,128,1.00)",
-          "borderTopColor": "rgba(224,251,252,1.00)",
-          "borderTopWidth": "1px",
-          "color": "rgba(224,251,252,1.00)",
-          "cursor": "pointer",
-          "display": "flex",
-          "fontFamily": "monospace,monospace",
-          "fontSize": "20px",
-          "paddingBottom": "8px",
-          "paddingLeft": "8px",
-          "paddingRight": "8px",
-          "paddingTop": "8px",
-          "width": "100%",
-        }
-      }
-    >
-      <div
-        className="css-view-1dbjc4n"
-        data-focusable={true}
-        onClick={[Function]}
-        onContextMenu={[Function]}
-        onKeyDown={[Function]}
-        style={
-          Object {
-            "MozUserSelect": "none",
-            "WebkitUserSelect": "none",
-            "cursor": "pointer",
-            "display": "inline-flex",
-            "msTouchAction": "manipulation",
-            "msUserSelect": "none",
-            "touchAction": "manipulation",
-            "userSelect": "none",
-          }
-        }
-        tabIndex="0"
-      >
-        <svg
-          fill="#e0fbfc"
-          focusable={false}
-          height={16}
-          secondaryFill={null}
-          secondaryOpacity={0.4}
-          size={16}
+            testID="todo-unchecked-1"
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "paddingHorizontal": 16,
+                  },
+                  Object {
+                    "paddingVertical": 16,
+                  },
+                  Object {
+                    "flexDirection": "row",
+                    "width": "100%",
+                  },
+                ]
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "paddingTop": 4,
+                  }
+                }
+              >
+                <View
+                  accessibilityLiveRegion="polite"
+                  accessibilityRole="checkbox"
+                  accessibilityState={
+                    Object {
+                      "checked": false,
+                      "disabled": undefined,
+                    }
+                  }
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Array [
+                      Object {
+                        "overflow": "hidden",
+                      },
+                      Object {
+                        "borderRadius": 18,
+                        "height": 36,
+                        "padding": 6,
+                        "width": 36,
+                      },
+                    ]
+                  }
+                >
+                  <View
+                    style={
+                      Object {
+                        "transform": Array [
+                          Object {
+                            "scale": 1,
+                          },
+                        ],
+                      }
+                    }
+                  >
+                    <Text />
+                    <View
+                      style={
+                        Array [
+                          Object {
+                            "bottom": 0,
+                            "left": 0,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
+                          },
+                          Object {
+                            "alignItems": "center",
+                            "justifyContent": "center",
+                          },
+                        ]
+                      }
+                    >
+                      <View
+                        style={
+                          Object {
+                            "borderColor": "rgba(0, 0, 0, 0.54)",
+                            "borderWidth": 0,
+                            "height": 14,
+                            "width": 14,
+                          }
+                        }
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={
+                  Object {
+                    "flexBasis": 0,
+                    "flexGrow": 1,
+                    "marginLeft": 9,
+                  }
+                }
+              >
+                <View
+                  style={
+                    Object {
+                      "flexGrow": 1,
+                    }
+                  }
+                />
+                <Text
+                  style={
+                    Array [
+                      Object {
+                        "color": "#000000",
+                        "fontFamily": "System",
+                        "fontWeight": "400",
+                      },
+                      Object {
+                        "textAlign": "left",
+                      },
+                      Object {
+                        "fontSize": 16,
+                      },
+                    ]
+                  }
+                >
+                  First todo
+                </Text>
+                <View
+                  style={
+                    Object {
+                      "flexGrow": 1,
+                    }
+                  }
+                />
+              </View>
+              <View
+                accessibilityRole="button"
+                accessibilityState={
+                  Object {
+                    "disabled": undefined,
+                  }
+                }
+                accessible={true}
+                focusable={true}
+                hitSlop={
+                  Object {
+                    "bottom": 6,
+                    "left": 6,
+                    "right": 6,
+                    "top": 6,
+                  }
+                }
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Array [
+                    Object {
+                      "overflow": "hidden",
+                    },
+                    Array [
+                      Object {
+                        "alignItems": "center",
+                        "justifyContent": "center",
+                        "margin": 6,
+                        "overflow": "hidden",
+                      },
+                      Object {
+                        "borderRadius": 15,
+                        "height": 30,
+                        "width": 30,
+                      },
+                      undefined,
+                      undefined,
+                    ],
+                  ]
+                }
+              >
+                <View>
+                  <Text />
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View
           style={
             Object {
-              "marginBottom": "auto",
-              "marginTop": "auto",
+              "backgroundColor": "#ffffff",
+              "borderRadius": 0,
+              "elevation": 1,
+              "shadowColor": "#000000",
+              "shadowOffset": Object {
+                "height": 0.5,
+                "width": 0,
+              },
+              "shadowOpacity": 0.24,
+              "shadowRadius": 0.75,
             }
           }
-          viewBox="0 0 512 512"
-          width={16}
         >
-          <path
-            d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-            fill="#e0fbfc"
-            fillOpacity={1}
-            height={16}
-            secondaryFill={null}
-            secondaryOpacity={0.4}
-            size={16}
+          <View
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
             style={
               Object {
-                "marginBottom": "auto",
-                "marginTop": "auto",
+                "flexGrow": 1,
+                "flexShrink": 1,
               }
             }
-            width={16}
-          />
-        </svg>
-      </div>
-      <span
-        className="css-text-901oao css-textHasAncestor-16my406"
-        onClick={[Function]}
-        style={
-          Object {
-            "WebkitBoxFlex": 1,
-            "WebkitFlexGrow": 1,
-            "flexGrow": 1,
-            "marginLeft": "9px",
-            "msFlexPositive": 1,
-          }
-        }
-      >
-        2nd todo
-      </span>
-      <div
-        className="css-view-1dbjc4n"
-        data-focusable={true}
-        onClick={[Function]}
-        onContextMenu={[Function]}
-        onKeyDown={[Function]}
-        style={
-          Object {
-            "MozUserSelect": "none",
-            "WebkitUserSelect": "none",
-            "cursor": "pointer",
-            "display": "inline-flex",
-            "msTouchAction": "manipulation",
-            "msUserSelect": "none",
-            "touchAction": "manipulation",
-            "userSelect": "none",
-          }
-        }
-        tabIndex="0"
-      >
-        <svg
-          fill="red"
-          focusable={false}
-          height={16}
-          secondaryFill={null}
-          secondaryOpacity={0.4}
-          size={16}
-          style={
-            Object {
-              "marginBottom": "auto",
-              "marginTop": "auto",
-              "paddingRight": "1px",
-            }
-          }
-          viewBox="0 0 448 512"
-          width={16}
-        >
-          <path
-            d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-            fill="red"
-            fillOpacity={1}
-            height={16}
-            secondaryFill={null}
-            secondaryOpacity={0.4}
-            size={16}
-            style={
-              Object {
-                "marginBottom": "auto",
-                "marginTop": "auto",
-                "paddingRight": "1px",
+            testID="todo-unchecked-2"
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "paddingHorizontal": 16,
+                  },
+                  Object {
+                    "paddingVertical": 16,
+                  },
+                  Object {
+                    "flexDirection": "row",
+                    "width": "100%",
+                  },
+                ]
               }
-            }
-            width={16}
-          />
-        </svg>
-      </div>
-    </div>
-  </div>
-</div>
+            >
+              <View
+                style={
+                  Object {
+                    "paddingTop": 4,
+                  }
+                }
+              >
+                <View
+                  accessibilityLiveRegion="polite"
+                  accessibilityRole="checkbox"
+                  accessibilityState={
+                    Object {
+                      "checked": false,
+                      "disabled": undefined,
+                    }
+                  }
+                  accessible={true}
+                  focusable={true}
+                  onClick={[Function]}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
+                    Array [
+                      Object {
+                        "overflow": "hidden",
+                      },
+                      Object {
+                        "borderRadius": 18,
+                        "height": 36,
+                        "padding": 6,
+                        "width": 36,
+                      },
+                    ]
+                  }
+                >
+                  <View
+                    style={
+                      Object {
+                        "transform": Array [
+                          Object {
+                            "scale": 1,
+                          },
+                        ],
+                      }
+                    }
+                  >
+                    <Text />
+                    <View
+                      style={
+                        Array [
+                          Object {
+                            "bottom": 0,
+                            "left": 0,
+                            "position": "absolute",
+                            "right": 0,
+                            "top": 0,
+                          },
+                          Object {
+                            "alignItems": "center",
+                            "justifyContent": "center",
+                          },
+                        ]
+                      }
+                    >
+                      <View
+                        style={
+                          Object {
+                            "borderColor": "rgba(0, 0, 0, 0.54)",
+                            "borderWidth": 0,
+                            "height": 14,
+                            "width": 14,
+                          }
+                        }
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={
+                  Object {
+                    "flexBasis": 0,
+                    "flexGrow": 1,
+                    "marginLeft": 9,
+                  }
+                }
+              >
+                <View
+                  style={
+                    Object {
+                      "flexGrow": 1,
+                    }
+                  }
+                />
+                <Text
+                  style={
+                    Array [
+                      Object {
+                        "color": "#000000",
+                        "fontFamily": "System",
+                        "fontWeight": "400",
+                      },
+                      Object {
+                        "textAlign": "left",
+                      },
+                      Object {
+                        "fontSize": 16,
+                      },
+                    ]
+                  }
+                >
+                  2nd todo
+                </Text>
+                <View
+                  style={
+                    Object {
+                      "flexGrow": 1,
+                    }
+                  }
+                />
+              </View>
+              <View
+                accessibilityRole="button"
+                accessibilityState={
+                  Object {
+                    "disabled": undefined,
+                  }
+                }
+                accessible={true}
+                focusable={true}
+                hitSlop={
+                  Object {
+                    "bottom": 6,
+                    "left": 6,
+                    "right": 6,
+                    "top": 6,
+                  }
+                }
+                onClick={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderRelease={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                style={
+                  Array [
+                    Object {
+                      "overflow": "hidden",
+                    },
+                    Array [
+                      Object {
+                        "alignItems": "center",
+                        "justifyContent": "center",
+                        "margin": 6,
+                        "overflow": "hidden",
+                      },
+                      Object {
+                        "borderRadius": 15,
+                        "height": 30,
+                        "width": 30,
+                      },
+                      undefined,
+                      undefined,
+                    ],
+                  ]
+                }
+              >
+                <View>
+                  <Text />
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </RCTScrollView>
+  </View>
+</View>
 `;
 
 exports[`Storyshots Todo Item Checked Todo 1`] = `
-<div
-  className="css-text-901oao"
-  dir="auto"
-  id="todo-checked-undefined"
-  onClick={[Function]}
+<View
   style={
     Object {
-      "backgroundColor": "rgba(61,90,128,1.00)",
-      "borderTopColor": "rgba(224,251,252,1.00)",
-      "borderTopWidth": "1px",
-      "color": "rgba(224,251,252,1.00)",
-      "cursor": "pointer",
-      "display": "flex",
-      "fontFamily": "monospace,monospace",
-      "fontSize": "20px",
-      "paddingBottom": "8px",
-      "paddingLeft": "8px",
-      "paddingRight": "8px",
-      "paddingTop": "8px",
-      "width": "100%",
+      "backgroundColor": "#ffffff",
+      "borderRadius": 0,
+      "elevation": 1,
+      "shadowColor": "#000000",
+      "shadowOffset": Object {
+        "height": 0.5,
+        "width": 0,
+      },
+      "shadowOpacity": 0.24,
+      "shadowRadius": 0.75,
     }
   }
 >
-  <div
-    className="css-view-1dbjc4n"
-    data-focusable={true}
+  <View
+    accessible={true}
+    focusable={true}
     onClick={[Function]}
-    onContextMenu={[Function]}
-    onKeyDown={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
     style={
       Object {
-        "MozUserSelect": "none",
-        "WebkitUserSelect": "none",
-        "cursor": "pointer",
-        "display": "inline-flex",
-        "msTouchAction": "manipulation",
-        "msUserSelect": "none",
-        "touchAction": "manipulation",
-        "userSelect": "none",
-      }
-    }
-    tabIndex="0"
-  >
-    <svg
-      fill="#e0fbfc"
-      focusable={false}
-      height={16}
-      secondaryFill={null}
-      secondaryOpacity={0.4}
-      size={16}
-      style={
-        Object {
-          "marginBottom": "auto",
-          "marginTop": "auto",
-        }
-      }
-      viewBox="0 0 512 512"
-      width={16}
-    >
-      <path
-        d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"
-        fill="#e0fbfc"
-        fillOpacity={1}
-        height={16}
-        secondaryFill={null}
-        secondaryOpacity={0.4}
-        size={16}
-        style={
-          Object {
-            "marginBottom": "auto",
-            "marginTop": "auto",
-          }
-        }
-        width={16}
-      />
-    </svg>
-  </div>
-  <span
-    className="css-text-901oao css-textHasAncestor-16my406"
-    onClick={[Function]}
-    style={
-      Object {
-        "WebkitBoxFlex": 1,
-        "WebkitFlexGrow": 1,
         "flexGrow": 1,
-        "marginLeft": "9px",
-        "msFlexPositive": 1,
+        "flexShrink": 1,
       }
     }
+    testID="todo-checked-undefined"
   >
-    Checked Todo
-  </span>
-  <div
-    className="css-view-1dbjc4n"
-    data-focusable={true}
-    onClick={[Function]}
-    onContextMenu={[Function]}
-    onKeyDown={[Function]}
-    style={
-      Object {
-        "MozUserSelect": "none",
-        "WebkitUserSelect": "none",
-        "cursor": "pointer",
-        "display": "inline-flex",
-        "msTouchAction": "manipulation",
-        "msUserSelect": "none",
-        "touchAction": "manipulation",
-        "userSelect": "none",
-      }
-    }
-    tabIndex="0"
-  >
-    <svg
-      fill="red"
-      focusable={false}
-      height={16}
-      secondaryFill={null}
-      secondaryOpacity={0.4}
-      size={16}
+    <View
       style={
-        Object {
-          "marginBottom": "auto",
-          "marginTop": "auto",
-          "paddingRight": "1px",
-        }
+        Array [
+          Object {
+            "paddingHorizontal": 16,
+          },
+          Object {
+            "paddingVertical": 16,
+          },
+          Object {
+            "flexDirection": "row",
+            "width": "100%",
+          },
+        ]
       }
-      viewBox="0 0 448 512"
-      width={16}
     >
-      <path
-        d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-        fill="red"
-        fillOpacity={1}
-        height={16}
-        secondaryFill={null}
-        secondaryOpacity={0.4}
-        size={16}
+      <View
         style={
           Object {
-            "marginBottom": "auto",
-            "marginTop": "auto",
-            "paddingRight": "1px",
+            "paddingTop": 4,
           }
         }
-        width={16}
-      />
-    </svg>
-  </div>
-</div>
+      >
+        <View
+          accessibilityLiveRegion="polite"
+          accessibilityRole="checkbox"
+          accessibilityState={
+            Object {
+              "checked": true,
+              "disabled": undefined,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              Object {
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 18,
+                "height": 36,
+                "padding": 6,
+                "width": 36,
+              },
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "transform": Array [
+                  Object {
+                    "scale": 1,
+                  },
+                ],
+              }
+            }
+          >
+            <Text
+              accessibilityElementsHidden={true}
+              allowFontScaling={false}
+              importantForAccessibility="no-hide-descendants"
+              pointerEvents="none"
+              selectable={false}
+              style={
+                Array [
+                  Object {
+                    "color": "#03dac4",
+                    "fontSize": 24,
+                  },
+                  Array [
+                    Object {
+                      "lineHeight": 24,
+                      "transform": Array [
+                        Object {
+                          "scaleX": 1,
+                        },
+                      ],
+                    },
+                    Object {
+                      "backgroundColor": "transparent",
+                    },
+                  ],
+                  Object {
+                    "fontFamily": "material-community",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              󰄲
+            </Text>
+            <View
+              style={
+                Array [
+                  Object {
+                    "bottom": 0,
+                    "left": 0,
+                    "position": "absolute",
+                    "right": 0,
+                    "top": 0,
+                  },
+                  Object {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                  },
+                ]
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "borderColor": "#03dac4",
+                    "borderWidth": 0,
+                    "height": 14,
+                    "width": 14,
+                  }
+                }
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "flexBasis": 0,
+            "flexGrow": 1,
+            "marginLeft": 9,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "flexGrow": 1,
+            }
+          }
+        />
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#000000",
+                "fontFamily": "System",
+                "fontWeight": "400",
+              },
+              Object {
+                "textAlign": "left",
+              },
+              Object {
+                "fontSize": 16,
+              },
+            ]
+          }
+        >
+          Checked Todo
+        </Text>
+        <View
+          style={
+            Object {
+              "flexGrow": 1,
+            }
+          }
+        />
+      </View>
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          Object {
+            "disabled": undefined,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        hitSlop={
+          Object {
+            "bottom": 6,
+            "left": 6,
+            "right": 6,
+            "top": 6,
+          }
+        }
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Array [
+              Object {
+                "alignItems": "center",
+                "justifyContent": "center",
+                "margin": 6,
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 15,
+                "height": 30,
+                "width": 30,
+              },
+              undefined,
+              undefined,
+            ],
+          ]
+        }
+      >
+        <View>
+          <Text
+            accessibilityElementsHidden={true}
+            allowFontScaling={false}
+            importantForAccessibility="no-hide-descendants"
+            pointerEvents="none"
+            selectable={false}
+            style={
+              Array [
+                Object {
+                  "color": "#f44336",
+                  "fontSize": 20,
+                },
+                Array [
+                  Object {
+                    "lineHeight": 20,
+                    "transform": Array [
+                      Object {
+                        "scaleX": 1,
+                      },
+                    ],
+                  },
+                  Object {
+                    "backgroundColor": "transparent",
+                  },
+                ],
+                Object {
+                  "fontFamily": "material-community",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                Object {},
+              ]
+            }
+          >
+            󰩺
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
 `;
 
 exports[`Storyshots Todo Item Default Todo 1`] = `
-<div
-  className="css-text-901oao"
-  dir="auto"
-  id="todo-unchecked-undefined"
-  onClick={[Function]}
+<View
   style={
     Object {
-      "backgroundColor": "rgba(61,90,128,1.00)",
-      "borderTopColor": "rgba(224,251,252,1.00)",
-      "borderTopWidth": "1px",
-      "color": "rgba(224,251,252,1.00)",
-      "cursor": "pointer",
-      "display": "flex",
-      "fontFamily": "monospace,monospace",
-      "fontSize": "20px",
-      "paddingBottom": "8px",
-      "paddingLeft": "8px",
-      "paddingRight": "8px",
-      "paddingTop": "8px",
-      "width": "100%",
+      "backgroundColor": "#ffffff",
+      "borderRadius": 0,
+      "elevation": 1,
+      "shadowColor": "#000000",
+      "shadowOffset": Object {
+        "height": 0.5,
+        "width": 0,
+      },
+      "shadowOpacity": 0.24,
+      "shadowRadius": 0.75,
     }
   }
 >
-  <div
-    className="css-view-1dbjc4n"
-    data-focusable={true}
+  <View
+    accessible={true}
+    focusable={true}
     onClick={[Function]}
-    onContextMenu={[Function]}
-    onKeyDown={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
     style={
       Object {
-        "MozUserSelect": "none",
-        "WebkitUserSelect": "none",
-        "cursor": "pointer",
-        "display": "inline-flex",
-        "msTouchAction": "manipulation",
-        "msUserSelect": "none",
-        "touchAction": "manipulation",
-        "userSelect": "none",
-      }
-    }
-    tabIndex="0"
-  >
-    <svg
-      fill="#e0fbfc"
-      focusable={false}
-      height={16}
-      secondaryFill={null}
-      secondaryOpacity={0.4}
-      size={16}
-      style={
-        Object {
-          "marginBottom": "auto",
-          "marginTop": "auto",
-        }
-      }
-      viewBox="0 0 512 512"
-      width={16}
-    >
-      <path
-        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-        fill="#e0fbfc"
-        fillOpacity={1}
-        height={16}
-        secondaryFill={null}
-        secondaryOpacity={0.4}
-        size={16}
-        style={
-          Object {
-            "marginBottom": "auto",
-            "marginTop": "auto",
-          }
-        }
-        width={16}
-      />
-    </svg>
-  </div>
-  <span
-    className="css-text-901oao css-textHasAncestor-16my406"
-    onClick={[Function]}
-    style={
-      Object {
-        "WebkitBoxFlex": 1,
-        "WebkitFlexGrow": 1,
         "flexGrow": 1,
-        "marginLeft": "9px",
-        "msFlexPositive": 1,
+        "flexShrink": 1,
       }
     }
+    testID="todo-unchecked-undefined"
   >
-    Default Todo
-  </span>
-  <div
-    className="css-view-1dbjc4n"
-    data-focusable={true}
-    onClick={[Function]}
-    onContextMenu={[Function]}
-    onKeyDown={[Function]}
-    style={
-      Object {
-        "MozUserSelect": "none",
-        "WebkitUserSelect": "none",
-        "cursor": "pointer",
-        "display": "inline-flex",
-        "msTouchAction": "manipulation",
-        "msUserSelect": "none",
-        "touchAction": "manipulation",
-        "userSelect": "none",
-      }
-    }
-    tabIndex="0"
-  >
-    <svg
-      fill="red"
-      focusable={false}
-      height={16}
-      secondaryFill={null}
-      secondaryOpacity={0.4}
-      size={16}
+    <View
       style={
-        Object {
-          "marginBottom": "auto",
-          "marginTop": "auto",
-          "paddingRight": "1px",
-        }
+        Array [
+          Object {
+            "paddingHorizontal": 16,
+          },
+          Object {
+            "paddingVertical": 16,
+          },
+          Object {
+            "flexDirection": "row",
+            "width": "100%",
+          },
+        ]
       }
-      viewBox="0 0 448 512"
-      width={16}
     >
-      <path
-        d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-        fill="red"
-        fillOpacity={1}
-        height={16}
-        secondaryFill={null}
-        secondaryOpacity={0.4}
-        size={16}
+      <View
         style={
           Object {
-            "marginBottom": "auto",
-            "marginTop": "auto",
-            "paddingRight": "1px",
+            "paddingTop": 4,
           }
         }
-        width={16}
-      />
-    </svg>
-  </div>
-</div>
+      >
+        <View
+          accessibilityLiveRegion="polite"
+          accessibilityRole="checkbox"
+          accessibilityState={
+            Object {
+              "checked": false,
+              "disabled": undefined,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              Object {
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 18,
+                "height": 36,
+                "padding": 6,
+                "width": 36,
+              },
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "transform": Array [
+                  Object {
+                    "scale": 1,
+                  },
+                ],
+              }
+            }
+          >
+            <Text
+              accessibilityElementsHidden={true}
+              allowFontScaling={false}
+              importantForAccessibility="no-hide-descendants"
+              pointerEvents="none"
+              selectable={false}
+              style={
+                Array [
+                  Object {
+                    "color": "rgba(0, 0, 0, 0.54)",
+                    "fontSize": 24,
+                  },
+                  Array [
+                    Object {
+                      "lineHeight": 24,
+                      "transform": Array [
+                        Object {
+                          "scaleX": 1,
+                        },
+                      ],
+                    },
+                    Object {
+                      "backgroundColor": "transparent",
+                    },
+                  ],
+                  Object {
+                    "fontFamily": "material-community",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              󰄱
+            </Text>
+            <View
+              style={
+                Array [
+                  Object {
+                    "bottom": 0,
+                    "left": 0,
+                    "position": "absolute",
+                    "right": 0,
+                    "top": 0,
+                  },
+                  Object {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                  },
+                ]
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "borderColor": "rgba(0, 0, 0, 0.54)",
+                    "borderWidth": 0,
+                    "height": 14,
+                    "width": 14,
+                  }
+                }
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "flexBasis": 0,
+            "flexGrow": 1,
+            "marginLeft": 9,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "flexGrow": 1,
+            }
+          }
+        />
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#000000",
+                "fontFamily": "System",
+                "fontWeight": "400",
+              },
+              Object {
+                "textAlign": "left",
+              },
+              Object {
+                "fontSize": 16,
+              },
+            ]
+          }
+        >
+          Default Todo
+        </Text>
+        <View
+          style={
+            Object {
+              "flexGrow": 1,
+            }
+          }
+        />
+      </View>
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          Object {
+            "disabled": undefined,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        hitSlop={
+          Object {
+            "bottom": 6,
+            "left": 6,
+            "right": 6,
+            "top": 6,
+          }
+        }
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Array [
+              Object {
+                "alignItems": "center",
+                "justifyContent": "center",
+                "margin": 6,
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 15,
+                "height": 30,
+                "width": 30,
+              },
+              undefined,
+              undefined,
+            ],
+          ]
+        }
+      >
+        <View>
+          <Text
+            accessibilityElementsHidden={true}
+            allowFontScaling={false}
+            importantForAccessibility="no-hide-descendants"
+            pointerEvents="none"
+            selectable={false}
+            style={
+              Array [
+                Object {
+                  "color": "#f44336",
+                  "fontSize": 20,
+                },
+                Array [
+                  Object {
+                    "lineHeight": 20,
+                    "transform": Array [
+                      Object {
+                        "scaleX": 1,
+                      },
+                    ],
+                  },
+                  Object {
+                    "backgroundColor": "transparent",
+                  },
+                ],
+                Object {
+                  "fontFamily": "material-community",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                Object {},
+              ]
+            }
+          >
+            󰩺
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
 `;
 
 exports[`Storyshots Todo Item Editing Todo 1`] = `
-<div
-  className="css-text-901oao"
-  dir="auto"
-  id="todo-unchecked-undefined"
-  onClick={[Function]}
+<View
   style={
     Object {
-      "backgroundColor": "rgba(152,193,217,1.00)",
-      "borderTopColor": "rgba(224,251,252,1.00)",
-      "borderTopWidth": "1px",
-      "color": "rgba(224,251,252,1.00)",
-      "cursor": "pointer",
-      "display": "flex",
-      "fontFamily": "monospace,monospace",
-      "fontSize": "20px",
-      "paddingBottom": "8px",
-      "paddingLeft": "8px",
-      "paddingRight": "8px",
-      "paddingTop": "8px",
-      "width": "100%",
+      "backgroundColor": "#ffffff",
+      "borderRadius": 0,
+      "elevation": 1,
+      "shadowColor": "#000000",
+      "shadowOffset": Object {
+        "height": 0.5,
+        "width": 0,
+      },
+      "shadowOpacity": 0.24,
+      "shadowRadius": 0.75,
     }
   }
 >
-  <div
-    className="css-view-1dbjc4n"
-    data-focusable={true}
+  <View
+    accessible={true}
+    focusable={true}
     onClick={[Function]}
-    onContextMenu={[Function]}
-    onKeyDown={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
     style={
       Object {
-        "MozUserSelect": "none",
-        "WebkitUserSelect": "none",
-        "cursor": "pointer",
-        "display": "inline-flex",
-        "msTouchAction": "manipulation",
-        "msUserSelect": "none",
-        "touchAction": "manipulation",
-        "userSelect": "none",
-      }
-    }
-    tabIndex="0"
-  >
-    <svg
-      fill="#e0fbfc"
-      focusable={false}
-      height={16}
-      secondaryFill={null}
-      secondaryOpacity={0.4}
-      size={16}
-      style={
-        Object {
-          "marginBottom": "auto",
-          "marginTop": "auto",
-        }
-      }
-      viewBox="0 0 512 512"
-      width={16}
-    >
-      <path
-        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-        fill="#e0fbfc"
-        fillOpacity={1}
-        height={16}
-        secondaryFill={null}
-        secondaryOpacity={0.4}
-        size={16}
-        style={
-          Object {
-            "marginBottom": "auto",
-            "marginTop": "auto",
-          }
-        }
-        width={16}
-      />
-    </svg>
-  </div>
-  <input
-    autoCapitalize="sentences"
-    autoComplete="on"
-    autoCorrect="on"
-    className="css-textinput-11aywtz"
-    data-focusable={true}
-    defaultValue="Editing Todo"
-    dir="auto"
-    onBlur={[Function]}
-    onChange={[Function]}
-    onFocus={[Function]}
-    onKeyDown={[Function]}
-    onSelect={[Function]}
-    readOnly={false}
-    spellCheck={true}
-    style={
-      Object {
-        "WebkitBoxFlex": 1,
-        "WebkitFlexGrow": 1,
-        "backgroundColor": "rgba(0,0,0,0.00)",
-        "borderBottomWidth": "0px",
-        "borderLeftWidth": "0px",
-        "borderRightWidth": "0px",
-        "borderTopWidth": "0px",
         "flexGrow": 1,
-        "marginLeft": "9px",
-        "msFlexPositive": 1,
-        "paddingBottom": "0px",
-        "paddingLeft": "0px",
-        "paddingRight": "0px",
-        "paddingTop": "0px",
+        "flexShrink": 1,
       }
     }
-    type="text"
-  />
-  <div
-    className="css-view-1dbjc4n"
-    data-focusable={true}
-    onClick={[Function]}
-    onContextMenu={[Function]}
-    onKeyDown={[Function]}
-    style={
-      Object {
-        "MozUserSelect": "none",
-        "WebkitUserSelect": "none",
-        "cursor": "pointer",
-        "display": "inline-flex",
-        "msTouchAction": "manipulation",
-        "msUserSelect": "none",
-        "touchAction": "manipulation",
-        "userSelect": "none",
-      }
-    }
-    tabIndex="0"
+    testID="todo-unchecked-undefined"
   >
-    <svg
-      fill="#3d5a80"
-      focusable={false}
-      height={16}
-      secondaryFill={null}
-      secondaryOpacity={0.4}
-      size={16}
+    <View
       style={
-        Object {
-          "marginBottom": "auto",
-          "marginTop": "auto",
-        }
+        Array [
+          Object {
+            "paddingHorizontal": 16,
+          },
+          Object {
+            "paddingVertical": 16,
+          },
+          Object {
+            "flexDirection": "row",
+            "width": "100%",
+          },
+        ]
       }
-      viewBox="0 0 512 512"
-      width={16}
     >
-      <path
-        d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"
-        fill="#3d5a80"
-        fillOpacity={1}
-        height={16}
-        secondaryFill={null}
-        secondaryOpacity={0.4}
-        size={16}
+      <View
         style={
           Object {
-            "marginBottom": "auto",
-            "marginTop": "auto",
+            "paddingTop": 4,
           }
         }
-        width={16}
-      />
-    </svg>
-  </div>
-</div>
+      >
+        <View
+          accessibilityLiveRegion="polite"
+          accessibilityRole="checkbox"
+          accessibilityState={
+            Object {
+              "checked": false,
+              "disabled": undefined,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              Object {
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 18,
+                "height": 36,
+                "padding": 6,
+                "width": 36,
+              },
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "transform": Array [
+                  Object {
+                    "scale": 1,
+                  },
+                ],
+              }
+            }
+          >
+            <Text
+              accessibilityElementsHidden={true}
+              allowFontScaling={false}
+              importantForAccessibility="no-hide-descendants"
+              pointerEvents="none"
+              selectable={false}
+              style={
+                Array [
+                  Object {
+                    "color": "rgba(0, 0, 0, 0.54)",
+                    "fontSize": 24,
+                  },
+                  Array [
+                    Object {
+                      "lineHeight": 24,
+                      "transform": Array [
+                        Object {
+                          "scaleX": 1,
+                        },
+                      ],
+                    },
+                    Object {
+                      "backgroundColor": "transparent",
+                    },
+                  ],
+                  Object {
+                    "fontFamily": "material-community",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              󰄱
+            </Text>
+            <View
+              style={
+                Array [
+                  Object {
+                    "bottom": 0,
+                    "left": 0,
+                    "position": "absolute",
+                    "right": 0,
+                    "top": 0,
+                  },
+                  Object {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                  },
+                ]
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "borderColor": "rgba(0, 0, 0, 0.54)",
+                    "borderWidth": 0,
+                    "height": 14,
+                    "width": 14,
+                  }
+                }
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "backgroundColor": "rgb(231, 231, 231)",
+              "borderTopLeftRadius": 4,
+              "borderTopRightRadius": 4,
+            },
+            Object {
+              "borderWidth": 0,
+              "flexShrink": 1,
+              "marginLeft": 9,
+              "padding": 0,
+              "width": "100%",
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "backgroundColor": "rgba(0, 0, 0, 0.26)",
+              "bottom": 0,
+              "height": 2,
+              "left": 0,
+              "position": "absolute",
+              "right": 0,
+              "transform": Array [
+                Object {
+                  "scaleY": 0.5,
+                },
+              ],
+            }
+          }
+        />
+        <View
+          style={
+            Array [
+              Object {
+                "paddingBottom": 0,
+                "paddingTop": 0,
+              },
+              Object {
+                "minHeight": 40,
+              },
+            ]
+          }
+        >
+          <TextInput
+            allowFontScaling={true}
+            blurOnSubmit={true}
+            editable={true}
+            multiline={true}
+            numberOfLines={4}
+            onBlur={[Function]}
+            onChangeText={[Function]}
+            onFocus={[Function]}
+            onSubmitEditing={[Function]}
+            placeholderTextColor="rgba(0, 0, 0, 0.54)"
+            rejectResponderTermination={true}
+            selectTextOnFocus={true}
+            selectionColor="#6200ee"
+            style={
+              Array [
+                Object {
+                  "flexGrow": 1,
+                  "margin": 0,
+                  "zIndex": 1,
+                },
+                Object {
+                  "paddingLeft": 12,
+                  "paddingRight": 12,
+                },
+                Object {},
+                Object {
+                  "paddingBottom": 9,
+                  "paddingTop": 9,
+                },
+                Object {
+                  "color": "#000000",
+                  "fontFamily": "System",
+                  "fontSize": 16,
+                  "fontWeight": undefined,
+                  "textAlign": "left",
+                  "textAlignVertical": "top",
+                },
+                false,
+                Array [
+                  Object {},
+                ],
+              ]
+            }
+            underlineColorAndroid="transparent"
+            value="Editing Todo"
+          />
+        </View>
+      </View>
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          Object {
+            "disabled": undefined,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        hitSlop={
+          Object {
+            "bottom": 6,
+            "left": 6,
+            "right": 6,
+            "top": 6,
+          }
+        }
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Array [
+              Object {
+                "alignItems": "center",
+                "justifyContent": "center",
+                "margin": 6,
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 15,
+                "height": 30,
+                "width": 30,
+              },
+              undefined,
+              undefined,
+            ],
+          ]
+        }
+      >
+        <View>
+          <Text
+            accessibilityElementsHidden={true}
+            allowFontScaling={false}
+            importantForAccessibility="no-hide-descendants"
+            pointerEvents="none"
+            selectable={false}
+            style={
+              Array [
+                Object {
+                  "color": "#424242",
+                  "fontSize": 20,
+                },
+                Array [
+                  Object {
+                    "lineHeight": 20,
+                    "transform": Array [
+                      Object {
+                        "scaleX": 1,
+                      },
+                    ],
+                  },
+                  Object {
+                    "backgroundColor": "transparent",
+                  },
+                ],
+                Object {
+                  "fontFamily": "material-community",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                Object {},
+              ]
+            }
+          >
+            󰜺
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
 `;
 
 exports[`Storyshots Todo Item Editing Uncommitted Todo 1`] = `
-<div
-  className="css-text-901oao"
-  dir="auto"
-  id="todo-unchecked-undefined"
-  onClick={[Function]}
+<View
   style={
     Object {
-      "backgroundColor": "rgba(152,193,217,1.00)",
-      "borderTopColor": "rgba(224,251,252,1.00)",
-      "borderTopWidth": "1px",
-      "color": "rgba(224,251,252,1.00)",
-      "cursor": "pointer",
-      "display": "flex",
-      "fontFamily": "monospace,monospace",
-      "fontSize": "20px",
-      "paddingBottom": "8px",
-      "paddingLeft": "8px",
-      "paddingRight": "8px",
-      "paddingTop": "8px",
-      "width": "100%",
+      "backgroundColor": "#ffffff",
+      "borderRadius": 0,
+      "elevation": 1,
+      "shadowColor": "#000000",
+      "shadowOffset": Object {
+        "height": 0.5,
+        "width": 0,
+      },
+      "shadowOpacity": 0.24,
+      "shadowRadius": 0.75,
     }
   }
 >
-  <div
-    className="css-view-1dbjc4n"
-    data-focusable={true}
+  <View
+    accessible={true}
+    focusable={true}
     onClick={[Function]}
-    onContextMenu={[Function]}
-    onKeyDown={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
     style={
       Object {
-        "MozUserSelect": "none",
-        "WebkitUserSelect": "none",
-        "cursor": "pointer",
-        "display": "inline-flex",
-        "msTouchAction": "manipulation",
-        "msUserSelect": "none",
-        "touchAction": "manipulation",
-        "userSelect": "none",
-      }
-    }
-    tabIndex="0"
-  >
-    <svg
-      fill="#e0fbfc"
-      focusable={false}
-      height={16}
-      secondaryFill={null}
-      secondaryOpacity={0.4}
-      size={16}
-      style={
-        Object {
-          "marginBottom": "auto",
-          "marginTop": "auto",
-        }
-      }
-      viewBox="0 0 512 512"
-      width={16}
-    >
-      <path
-        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-        fill="#e0fbfc"
-        fillOpacity={1}
-        height={16}
-        secondaryFill={null}
-        secondaryOpacity={0.4}
-        size={16}
-        style={
-          Object {
-            "marginBottom": "auto",
-            "marginTop": "auto",
-          }
-        }
-        width={16}
-      />
-    </svg>
-  </div>
-  <input
-    autoCapitalize="sentences"
-    autoComplete="on"
-    autoCorrect="on"
-    className="css-textinput-11aywtz"
-    data-focusable={true}
-    defaultValue="Uncommitted edit..."
-    dir="auto"
-    onBlur={[Function]}
-    onChange={[Function]}
-    onFocus={[Function]}
-    onKeyDown={[Function]}
-    onSelect={[Function]}
-    readOnly={false}
-    spellCheck={true}
-    style={
-      Object {
-        "WebkitBoxFlex": 1,
-        "WebkitFlexGrow": 1,
-        "backgroundColor": "rgba(0,0,0,0.00)",
-        "borderBottomWidth": "0px",
-        "borderLeftWidth": "0px",
-        "borderRightWidth": "0px",
-        "borderTopWidth": "0px",
         "flexGrow": 1,
-        "marginLeft": "9px",
-        "msFlexPositive": 1,
-        "paddingBottom": "0px",
-        "paddingLeft": "0px",
-        "paddingRight": "0px",
-        "paddingTop": "0px",
+        "flexShrink": 1,
       }
     }
-    type="text"
-  />
-  <div
-    className="css-view-1dbjc4n"
-    data-focusable={true}
-    onClick={[Function]}
-    onContextMenu={[Function]}
-    onKeyDown={[Function]}
-    style={
-      Object {
-        "MozUserSelect": "none",
-        "WebkitUserSelect": "none",
-        "cursor": "pointer",
-        "display": "inline-flex",
-        "msTouchAction": "manipulation",
-        "msUserSelect": "none",
-        "touchAction": "manipulation",
-        "userSelect": "none",
-      }
-    }
-    tabIndex="0"
+    testID="todo-unchecked-undefined"
   >
-    <svg
-      fill="#3d5a80"
-      focusable={false}
-      height={16}
-      secondaryFill={null}
-      secondaryOpacity={0.4}
-      size={16}
+    <View
       style={
-        Object {
-          "marginBottom": "auto",
-          "marginTop": "auto",
-        }
+        Array [
+          Object {
+            "paddingHorizontal": 16,
+          },
+          Object {
+            "paddingVertical": 16,
+          },
+          Object {
+            "flexDirection": "row",
+            "width": "100%",
+          },
+        ]
       }
-      viewBox="0 0 512 512"
-      width={16}
     >
-      <path
-        d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"
-        fill="#3d5a80"
-        fillOpacity={1}
-        height={16}
-        secondaryFill={null}
-        secondaryOpacity={0.4}
-        size={16}
+      <View
         style={
           Object {
-            "marginBottom": "auto",
-            "marginTop": "auto",
+            "paddingTop": 4,
           }
         }
-        width={16}
-      />
-    </svg>
-  </div>
-</div>
+      >
+        <View
+          accessibilityLiveRegion="polite"
+          accessibilityRole="checkbox"
+          accessibilityState={
+            Object {
+              "checked": false,
+              "disabled": undefined,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              Object {
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 18,
+                "height": 36,
+                "padding": 6,
+                "width": 36,
+              },
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "transform": Array [
+                  Object {
+                    "scale": 1,
+                  },
+                ],
+              }
+            }
+          >
+            <Text
+              accessibilityElementsHidden={true}
+              allowFontScaling={false}
+              importantForAccessibility="no-hide-descendants"
+              pointerEvents="none"
+              selectable={false}
+              style={
+                Array [
+                  Object {
+                    "color": "rgba(0, 0, 0, 0.54)",
+                    "fontSize": 24,
+                  },
+                  Array [
+                    Object {
+                      "lineHeight": 24,
+                      "transform": Array [
+                        Object {
+                          "scaleX": 1,
+                        },
+                      ],
+                    },
+                    Object {
+                      "backgroundColor": "transparent",
+                    },
+                  ],
+                  Object {
+                    "fontFamily": "material-community",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              󰄱
+            </Text>
+            <View
+              style={
+                Array [
+                  Object {
+                    "bottom": 0,
+                    "left": 0,
+                    "position": "absolute",
+                    "right": 0,
+                    "top": 0,
+                  },
+                  Object {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                  },
+                ]
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "borderColor": "rgba(0, 0, 0, 0.54)",
+                    "borderWidth": 0,
+                    "height": 14,
+                    "width": 14,
+                  }
+                }
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "backgroundColor": "rgb(231, 231, 231)",
+              "borderTopLeftRadius": 4,
+              "borderTopRightRadius": 4,
+            },
+            Object {
+              "borderWidth": 0,
+              "flexShrink": 1,
+              "marginLeft": 9,
+              "padding": 0,
+              "width": "100%",
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "backgroundColor": "rgba(0, 0, 0, 0.26)",
+              "bottom": 0,
+              "height": 2,
+              "left": 0,
+              "position": "absolute",
+              "right": 0,
+              "transform": Array [
+                Object {
+                  "scaleY": 0.5,
+                },
+              ],
+            }
+          }
+        />
+        <View
+          style={
+            Array [
+              Object {
+                "paddingBottom": 0,
+                "paddingTop": 0,
+              },
+              Object {
+                "minHeight": 40,
+              },
+            ]
+          }
+        >
+          <TextInput
+            allowFontScaling={true}
+            blurOnSubmit={true}
+            editable={true}
+            multiline={true}
+            numberOfLines={4}
+            onBlur={[Function]}
+            onChangeText={[Function]}
+            onFocus={[Function]}
+            onSubmitEditing={[Function]}
+            placeholderTextColor="rgba(0, 0, 0, 0.54)"
+            rejectResponderTermination={true}
+            selectTextOnFocus={true}
+            selectionColor="#6200ee"
+            style={
+              Array [
+                Object {
+                  "flexGrow": 1,
+                  "margin": 0,
+                  "zIndex": 1,
+                },
+                Object {
+                  "paddingLeft": 12,
+                  "paddingRight": 12,
+                },
+                Object {},
+                Object {
+                  "paddingBottom": 9,
+                  "paddingTop": 9,
+                },
+                Object {
+                  "color": "#000000",
+                  "fontFamily": "System",
+                  "fontSize": 16,
+                  "fontWeight": undefined,
+                  "textAlign": "left",
+                  "textAlignVertical": "top",
+                },
+                false,
+                Array [
+                  Object {},
+                ],
+              ]
+            }
+            underlineColorAndroid="transparent"
+            value="Editing Todo"
+          />
+        </View>
+      </View>
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          Object {
+            "disabled": undefined,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        hitSlop={
+          Object {
+            "bottom": 6,
+            "left": 6,
+            "right": 6,
+            "top": 6,
+          }
+        }
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Array [
+              Object {
+                "alignItems": "center",
+                "justifyContent": "center",
+                "margin": 6,
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 15,
+                "height": 30,
+                "width": 30,
+              },
+              undefined,
+              undefined,
+            ],
+          ]
+        }
+      >
+        <View>
+          <Text
+            accessibilityElementsHidden={true}
+            allowFontScaling={false}
+            importantForAccessibility="no-hide-descendants"
+            pointerEvents="none"
+            selectable={false}
+            style={
+              Array [
+                Object {
+                  "color": "#424242",
+                  "fontSize": 20,
+                },
+                Array [
+                  Object {
+                    "lineHeight": 20,
+                    "transform": Array [
+                      Object {
+                        "scaleX": 1,
+                      },
+                    ],
+                  },
+                  Object {
+                    "backgroundColor": "transparent",
+                  },
+                ],
+                Object {
+                  "fontFamily": "material-community",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                Object {},
+              ]
+            }
+          >
+            󰜺
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
 `;
 
 exports[`Storyshots Todo Item Uncommitted Edit Todo 1`] = `
-<div
-  className="css-text-901oao"
-  dir="auto"
-  id="todo-unchecked-undefined"
-  onClick={[Function]}
+<View
   style={
     Object {
-      "backgroundColor": "rgba(61,90,128,1.00)",
-      "borderTopColor": "rgba(224,251,252,1.00)",
-      "borderTopWidth": "1px",
-      "color": "rgba(224,251,252,1.00)",
-      "cursor": "pointer",
-      "display": "flex",
-      "fontFamily": "monospace,monospace",
-      "fontSize": "20px",
-      "paddingBottom": "8px",
-      "paddingLeft": "8px",
-      "paddingRight": "8px",
-      "paddingTop": "8px",
-      "width": "100%",
+      "backgroundColor": "#ffffff",
+      "borderRadius": 0,
+      "elevation": 1,
+      "shadowColor": "#000000",
+      "shadowOffset": Object {
+        "height": 0.5,
+        "width": 0,
+      },
+      "shadowOpacity": 0.24,
+      "shadowRadius": 0.75,
     }
   }
 >
-  <div
-    className="css-view-1dbjc4n"
-    data-focusable={true}
+  <View
+    accessible={true}
+    focusable={true}
     onClick={[Function]}
-    onContextMenu={[Function]}
-    onKeyDown={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
     style={
       Object {
-        "MozUserSelect": "none",
-        "WebkitUserSelect": "none",
-        "cursor": "pointer",
-        "display": "inline-flex",
-        "msTouchAction": "manipulation",
-        "msUserSelect": "none",
-        "touchAction": "manipulation",
-        "userSelect": "none",
-      }
-    }
-    tabIndex="0"
-  >
-    <svg
-      fill="#e0fbfc"
-      focusable={false}
-      height={16}
-      secondaryFill={null}
-      secondaryOpacity={0.4}
-      size={16}
-      style={
-        Object {
-          "marginBottom": "auto",
-          "marginTop": "auto",
-        }
-      }
-      viewBox="0 0 512 512"
-      width={16}
-    >
-      <path
-        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
-        fill="#e0fbfc"
-        fillOpacity={1}
-        height={16}
-        secondaryFill={null}
-        secondaryOpacity={0.4}
-        size={16}
-        style={
-          Object {
-            "marginBottom": "auto",
-            "marginTop": "auto",
-          }
-        }
-        width={16}
-      />
-    </svg>
-  </div>
-  <span
-    className="css-text-901oao css-textHasAncestor-16my406"
-    onClick={[Function]}
-    style={
-      Object {
-        "WebkitBoxFlex": 1,
-        "WebkitFlexGrow": 1,
         "flexGrow": 1,
-        "marginLeft": "9px",
-        "msFlexPositive": 1,
+        "flexShrink": 1,
       }
     }
+    testID="todo-unchecked-undefined"
   >
-    Uncommitted Edit Todo
-  </span>
-  <div
-    className="css-view-1dbjc4n"
-    data-focusable={true}
-    onClick={[Function]}
-    onContextMenu={[Function]}
-    onKeyDown={[Function]}
-    style={
-      Object {
-        "MozUserSelect": "none",
-        "WebkitUserSelect": "none",
-        "cursor": "pointer",
-        "display": "inline-flex",
-        "msTouchAction": "manipulation",
-        "msUserSelect": "none",
-        "touchAction": "manipulation",
-        "userSelect": "none",
-      }
-    }
-    tabIndex="0"
-  >
-    <svg
-      fill="red"
-      focusable={false}
-      height={16}
-      secondaryFill={null}
-      secondaryOpacity={0.4}
-      size={16}
+    <View
       style={
-        Object {
-          "marginBottom": "auto",
-          "marginTop": "auto",
-          "paddingRight": "1px",
-        }
+        Array [
+          Object {
+            "paddingHorizontal": 16,
+          },
+          Object {
+            "paddingVertical": 16,
+          },
+          Object {
+            "flexDirection": "row",
+            "width": "100%",
+          },
+        ]
       }
-      viewBox="0 0 448 512"
-      width={16}
     >
-      <path
-        d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-        fill="red"
-        fillOpacity={1}
-        height={16}
-        secondaryFill={null}
-        secondaryOpacity={0.4}
-        size={16}
+      <View
         style={
           Object {
-            "marginBottom": "auto",
-            "marginTop": "auto",
-            "paddingRight": "1px",
+            "paddingTop": 4,
           }
         }
-        width={16}
-      />
-    </svg>
-  </div>
-  <svg
-    fill="#f7b6a6"
-    focusable={false}
-    height={16}
-    secondaryFill={null}
-    secondaryOpacity={0.4}
-    size={16}
-    style={
-      Object {
-        "marginBottom": "auto",
-        "marginTop": "auto",
-        "paddingLeft": "5px",
-      }
-    }
-    viewBox="0 0 576 512"
-    width={16}
-  >
-    <path
-      d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
-      fill="#f7b6a6"
-      fillOpacity={1}
-      height={16}
-      secondaryFill={null}
-      secondaryOpacity={0.4}
-      size={16}
-      style={
-        Object {
-          "marginBottom": "auto",
-          "marginTop": "auto",
-          "paddingLeft": "5px",
+      >
+        <View
+          accessibilityLiveRegion="polite"
+          accessibilityRole="checkbox"
+          accessibilityState={
+            Object {
+              "checked": false,
+              "disabled": undefined,
+            }
+          }
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              Object {
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 18,
+                "height": 36,
+                "padding": 6,
+                "width": 36,
+              },
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "transform": Array [
+                  Object {
+                    "scale": 1,
+                  },
+                ],
+              }
+            }
+          >
+            <Text
+              accessibilityElementsHidden={true}
+              allowFontScaling={false}
+              importantForAccessibility="no-hide-descendants"
+              pointerEvents="none"
+              selectable={false}
+              style={
+                Array [
+                  Object {
+                    "color": "rgba(0, 0, 0, 0.54)",
+                    "fontSize": 24,
+                  },
+                  Array [
+                    Object {
+                      "lineHeight": 24,
+                      "transform": Array [
+                        Object {
+                          "scaleX": 1,
+                        },
+                      ],
+                    },
+                    Object {
+                      "backgroundColor": "transparent",
+                    },
+                  ],
+                  Object {
+                    "fontFamily": "material-community",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              󰄱
+            </Text>
+            <View
+              style={
+                Array [
+                  Object {
+                    "bottom": 0,
+                    "left": 0,
+                    "position": "absolute",
+                    "right": 0,
+                    "top": 0,
+                  },
+                  Object {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                  },
+                ]
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "borderColor": "rgba(0, 0, 0, 0.54)",
+                    "borderWidth": 0,
+                    "height": 14,
+                    "width": 14,
+                  }
+                }
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "flexBasis": 0,
+            "flexGrow": 1,
+            "marginLeft": 9,
+          }
         }
-      }
-      width={16}
-    />
-  </svg>
-</div>
+      >
+        <View
+          style={
+            Object {
+              "flexGrow": 1,
+            }
+          }
+        />
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#000000",
+                "fontFamily": "System",
+                "fontWeight": "400",
+              },
+              Object {
+                "textAlign": "left",
+              },
+              Object {
+                "fontSize": 16,
+              },
+            ]
+          }
+        >
+          Uncommitted Edit Todo
+        </Text>
+        <View
+          style={
+            Object {
+              "flexGrow": 1,
+            }
+          }
+        />
+      </View>
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          Object {
+            "disabled": undefined,
+          }
+        }
+        accessible={true}
+        focusable={true}
+        hitSlop={
+          Object {
+            "bottom": 6,
+            "left": 6,
+            "right": 6,
+            "top": 6,
+          }
+        }
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "overflow": "hidden",
+            },
+            Array [
+              Object {
+                "alignItems": "center",
+                "justifyContent": "center",
+                "margin": 6,
+                "overflow": "hidden",
+              },
+              Object {
+                "borderRadius": 15,
+                "height": 30,
+                "width": 30,
+              },
+              undefined,
+              undefined,
+            ],
+          ]
+        }
+      >
+        <View>
+          <Text
+            accessibilityElementsHidden={true}
+            allowFontScaling={false}
+            importantForAccessibility="no-hide-descendants"
+            pointerEvents="none"
+            selectable={false}
+            style={
+              Array [
+                Object {
+                  "color": "#f44336",
+                  "fontSize": 20,
+                },
+                Array [
+                  Object {
+                    "lineHeight": 20,
+                    "transform": Array [
+                      Object {
+                        "scaleX": 1,
+                      },
+                    ],
+                  },
+                  Object {
+                    "backgroundColor": "transparent",
+                  },
+                ],
+                Object {
+                  "fontFamily": "material-community",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                Object {},
+              ]
+            }
+          >
+            󰩺
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
 `;

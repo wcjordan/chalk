@@ -6,7 +6,7 @@ UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-image-dev
 .PHONY: test
 test:
 	# Lint
-	cd js; yarn eslint --ext 'js,jsx,ts,tsx' .
+	cd js; yarn eslint --max-warnings=0 --ext='js,jsx,ts,tsx' .
 	# Typecheck
 	cd js; yarn tsc
 	# Unit & snapshot tests for UI

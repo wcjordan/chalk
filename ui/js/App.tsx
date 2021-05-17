@@ -1,6 +1,5 @@
 import Constants from 'expo-constants';
 import React from 'react';
-import { Platform } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 import * as Sentry from 'sentry-expo';

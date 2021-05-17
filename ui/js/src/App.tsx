@@ -5,6 +5,7 @@ import {
   Platform,
   ScrollView,
   StatusBar,
+  StyleProp,
   StyleSheet,
   View,
   ViewStyle,
@@ -25,7 +26,8 @@ https://coolors.co/3d5a80-98c1d9-e0fbfc-ee6c4d-293241
 
 interface Style {
   root: ViewStyle;
-  container: ViewStyle;
+  containerMobile: ViewStyle;
+  containerWeb: ViewStyle;
 }
 interface TopStyle {
   top: ViewStyle;
@@ -63,7 +65,7 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
     />
   ));
 
-  let containerStyle =
+  let containerStyle: StyleProp<ViewStyle> =
     Platform.OS === 'web' ? styles.containerWeb : styles.containerMobile;
   const paddingTop = Platform.OS === 'android' ? StatusBar.currentHeight : 80;
   const topStyle = StyleSheet.create<TopStyle>({
