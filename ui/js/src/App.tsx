@@ -15,15 +15,6 @@ import { ReduxState } from './redux/types';
 import TodoItem from './components/TodoItem';
 import { createTodo, updateTodo, setTodoEditId } from './redux/reducers';
 
-/* Color palette
-https://coolors.co/3d5a80-98c1d9-e0fbfc-ee6c4d-293241
-#e0fbfc - light
-#98c1d9 - medium
-#3d5a80 - dark
-#293241 - near black
-#ee6c4d - stand out
-*/
-
 interface Style {
   root: ViewStyle;
   containerMobile: ViewStyle;
@@ -37,7 +28,7 @@ const styles = StyleSheet.create<Style>({
   root: {
     height: '100%',
     width: '100%',
-    backgroundColor: '#293241',
+    backgroundColor: '#364263',
   },
   containerMobile: {
     height: '100%',
