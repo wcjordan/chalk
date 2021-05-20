@@ -20,15 +20,13 @@ interface Style {
   containerMobile: ViewStyle;
   containerWeb: ViewStyle;
 }
-interface TopStyle {
-  top: ViewStyle;
-}
 
+const BG_COLOR = '#364263';
 const styles = StyleSheet.create<Style>({
   root: {
     height: '100%',
     width: '100%',
-    backgroundColor: '#364263',
+    backgroundColor: BG_COLOR,
   },
   containerMobile: {
     height: '100%',
@@ -56,17 +54,15 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
     />
   ));
 
-  let containerStyle: StyleProp<ViewStyle> =
+  const containerStyle: StyleProp<ViewStyle> =
     Platform.OS === 'web' ? styles.containerWeb : styles.containerMobile;
-  const paddingTop = Platform.OS === 'android' ? StatusBar.currentHeight : 80;
-  const topStyle = StyleSheet.create<TopStyle>({
-    top: {
-      paddingTop: paddingTop,
-    },
-  });
-  containerStyle = StyleSheet.compose(containerStyle, topStyle.top);
   return (
     <View style={styles.root}>
+      <StatusBar
+        animated={true}
+        backgroundColor={BG_COLOR}
+        barStyle={'light-content'}
+      />
       <View testID="todo-list" style={containerStyle}>
         <AddTodo createTodo={createTodo} />
         <ScrollView>{todoViews}</ScrollView>
