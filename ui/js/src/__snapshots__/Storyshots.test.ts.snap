@@ -113,7 +113,7 @@ exports[`Storyshots App Default Layout 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#293241",
+      "backgroundColor": "#364263",
       "height": "100%",
       "width": "100%",
     }
@@ -121,15 +121,10 @@ exports[`Storyshots App Default Layout 1`] = `
 >
   <View
     style={
-      Array [
-        Object {
-          "height": "100%",
-          "width": "100%",
-        },
-        Object {
-          "paddingTop": 80,
-        },
-      ]
+      Object {
+        "height": "100%",
+        "width": "100%",
+      }
     }
     testID="todo-list"
   >
@@ -250,7 +245,7 @@ exports[`Storyshots App List Todos Layout 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#293241",
+      "backgroundColor": "#364263",
       "height": "100%",
       "width": "100%",
     }
@@ -258,15 +253,10 @@ exports[`Storyshots App List Todos Layout 1`] = `
 >
   <View
     style={
-      Array [
-        Object {
-          "height": "100%",
-          "width": "100%",
-        },
-        Object {
-          "paddingTop": 80,
-        },
-      ]
+      Object {
+        "height": "100%",
+        "width": "100%",
+      }
     }
     testID="todo-list"
   >
