@@ -14,7 +14,8 @@ function getWsRoot() {
   return wsroot;
 }
 
-function getTodosApi() {
+// Exported for testing
+export function getTodosApi(): string {
   return getWsRoot() + 'api/todos/todos/';
 }
 

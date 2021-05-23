@@ -2,7 +2,11 @@ import '../__mocks__/matchMediaMock';
 import configureMockStore from 'redux-mock-store';
 import fetchMock from 'fetch-mock-jest';
 import thunk from 'redux-thunk';
-import todosApiSlice, { createTodo, listTodos } from './todosApiSlice';
+import todosApiSlice, {
+  createTodo,
+  getTodosApi,
+  listTodos,
+} from './todosApiSlice';
 
 // NOTE (jordan) updateTodo tested in reducers.test.ts
 const mockStore = configureMockStore([thunk]);
@@ -15,7 +19,7 @@ describe('createTodo', function () {
   it('should make a POST request and dispatch actions', async function () {
     const stubDescription = 'test todo';
     const stubTodo = getStubTodo({ description: stubDescription });
-    fetchMock.postOnce('/api/todos/todos/', {
+    fetchMock.postOnce(getTodosApi(), {
       body: stubTodo,
     });
 
@@ -51,7 +55,7 @@ describe('listTodos', function () {
       getStubTodo({ id: 1, description: 'todo 1' }),
       getStubTodo({ id: 2, description: 'todo 2' }),
     ];
-    fetchMock.getOnce('/api/todos/todos/', {
+    fetchMock.getOnce(getTodosApi(), {
       body: stubTodos,
     });
 

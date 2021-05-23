@@ -1,50 +1,46 @@
-import React, { useCallback } from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  NativeSyntheticEvent,
-  TextInputSubmitEditingEventData,
-} from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import { TextInput } from 'react-native-paper';
 
-const styles = StyleSheet.create({
-  addTodo: {
-    backgroundColor: '#98c1d9',
-    borderWidth: 0,
-    display: 'flex',
-    fontFamily: 'monospace',
-    padding: 8,
+interface Style {
+  addTodoView: ViewStyle;
+  addTodoInput: TextStyle;
+}
+
+const styles = StyleSheet.create<Style>({
+  addTodoView: {
     width: '100%',
+    maxHeight: 104,
   },
   addTodoInput: {
-    backgroundColor: 'transparent',
-    color: '#293241',
-    fontFamily: 'inherit',
-    fontSize: 20,
-    marginLeft: 4,
-    padding: 4,
-    flexGrow: 1,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    paddingBottom: 4,
+    paddingTop: 4,
   },
 });
 
 const AddTodo: React.FC<Props> = function (props: Props) {
   const { createTodo } = props;
-  const addTodo = useCallback(
-    (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-      createTodo(event.nativeEvent.text);
-    },
-    [createTodo],
-  );
+  const [textValue, setTextValue] = useState('');
 
-  // TODO remove input outline on focus
+  const addTodo = useCallback(() => {
+    createTodo(textValue);
+    setTextValue('');
+  }, [createTodo, textValue]);
+
   return (
-    <View style={styles.addTodo}>
+    <View style={styles.addTodoView}>
       <TextInput
-        nativeID="add-todo-input"
-        style={styles.addTodoInput}
-        placeholder="Add a new todo..."
-        placeholderTextColor="#e0fbfc"
+        blurOnSubmit={true}
+        multiline={true}
+        numberOfLines={3}
+        onChangeText={setTextValue}
         onSubmitEditing={addTodo}
+        placeholder="Add a new todo..."
+        style={styles.addTodoInput}
+        testID="add-todo-input"
+        value={textValue}
       />
     </View>
   );

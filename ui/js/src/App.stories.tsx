@@ -16,9 +16,7 @@ function stubTodo(patch: TodoPatch): Todo {
 
 const defaultProps = {
   todos: [],
-  workspace: {
-    uncommittedEdits: {},
-  },
+  workspace: {},
 };
 
 export default {

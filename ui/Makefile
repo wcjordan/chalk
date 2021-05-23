@@ -6,7 +6,7 @@ UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-image-dev
 .PHONY: test
 test:
 	# Lint
-	cd js; yarn eslint --ext 'js,jsx,ts,tsx' .
+	cd js; yarn eslint --max-warnings=0 --ext='js,jsx,ts,tsx' .
 	# Typecheck
 	cd js; yarn tsc
 	# Unit & snapshot tests for UI
@@ -15,8 +15,8 @@ test:
 	cd js; yarn build
 
 # Start Expo mobile dev
-.PHONY: start-dev
-start-dev:
+.PHONY: start
+start:
 	cd js; yarn start
 
 # ESLint & Prettier JS formatting
@@ -44,3 +44,10 @@ fix-imports:
 .PHONY: publish
 publish:
 	cd js; npx expo login --non-interactive -u $$EXPO_USERNAME && npx expo publish --non-interactive
+
+# Hard clean which fixes some react-native issues
+# Use yarn install and yarn start --clean after this
+.PHONY: clean
+clean:
+	cd js; rm -rf node_modules && rm -f yarn.lock && yarn cache clean
+

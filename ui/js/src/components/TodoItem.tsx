@@ -1,127 +1,85 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   GestureResponderEvent,
-  NativeSyntheticEvent,
-  StyleProp,
+  Platform,
   StyleSheet,
-  Text,
-  TextInput,
-  TextInputSubmitEditingEventData,
   TextStyle,
-  TouchableHighlight,
+  View,
+  ViewStyle,
 } from 'react-native';
 import {
-  FontAwesomeIcon,
-  FontAwesomeIconStyle,
-} from '@fortawesome/react-native-fontawesome';
-import {
-  faBan,
-  faExclamationTriangle,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
-import { faCheckCircle, faCircle } from '@fortawesome/free-regular-svg-icons';
+  Card,
+  Checkbox,
+  Colors,
+  IconButton,
+  Text,
+  TextInput,
+} from 'react-native-paper';
 import { Todo, TodoPatch } from '../redux/types';
 
 interface Style {
-  todoItem: TextStyle;
-  todoEdit: TextStyle;
-  todoDescription: TextStyle;
+  checkbox: ViewStyle;
   editTodoInput: TextStyle;
-  iconMargin: FontAwesomeIconStyle;
-  iconCheck: FontAwesomeIconStyle;
-  iconCancel: FontAwesomeIconStyle;
-  iconDelete: FontAwesomeIconStyle;
-  iconWarn: FontAwesomeIconStyle;
+  spacer: ViewStyle;
+  todoDescription: TextStyle;
+  todoDescriptionText: TextStyle;
+  todoItemCard: ViewStyle & { cursor?: string };
+  todoItemContent: ViewStyle;
+}
+
+const todoItemCardStyle: ViewStyle & { cursor?: string } = {
+  borderRadius: 0,
+};
+if (Platform.OS === 'web') {
+  todoItemCardStyle['cursor'] = 'pointer';
 }
 
 const styles = StyleSheet.create<Style>({
-  todoItem: {
-    backgroundColor: '#3d5a80',
-    color: '#e0fbfc',
-    display: 'flex',
-    fontFamily: 'monospace',
-    padding: 8,
-    fontSize: 20,
-    width: '100%',
-    borderTopWidth: 1,
-    borderTopColor: '#e0fbfc',
-    // cursor: 'pointer',
+  checkbox: {
+    paddingTop: 4,
   },
-  todoEdit: {
-    backgroundColor: '#98c1d9',
-    color: '#e0fbfc',
+  editTodoInput: {
+    borderWidth: 0,
+    flexShrink: 1,
+    marginLeft: 9,
+    padding: 0,
+    width: '100%',
+  },
+  spacer: {
+    flexGrow: 1,
   },
   todoDescription: {
     marginLeft: 9,
     flexGrow: 1,
+    flexBasis: 0,
   },
-  editTodoInput: {
-    backgroundColor: 'transparent',
-    borderWidth: 0,
-    // color: 'inherit',
-    flexGrow: 1,
-    // fontFamily: 'inherit',
-    // fontSize: 'inherit',
-    // lineHeight: 'inherit',
-    marginLeft: 9,
-    padding: 0,
+  todoDescriptionText: {
+    fontSize: 16,
   },
-  iconMargin: {
-    marginVertical: 'auto',
-  },
-  iconCheck: {
-    color: '#e0fbfc',
-  },
-  iconCancel: {
-    color: '#3d5a80',
-  },
-  iconDelete: {
-    color: 'red',
-    paddingRight: 1,
-    // visibility: 'hidden',
-  },
-  iconWarn: {
-    color: '#f7b6a6',
-    paddingLeft: 5,
+  todoItemCard: todoItemCardStyle,
+  todoItemContent: {
+    flexDirection: 'row',
+    width: '100%',
   },
 });
 
 const TodoItem: React.FC<Props> = function (props: Props) {
-  const { editing, todo, setTodoEditId, uncommittedEdit, updateTodo } = props;
+  const { editing, todo, setTodoEditId, updateTodo } = props;
+  const [textValue, setTextValue] = useState(todo.description);
 
-  const updateTodoCb = useCallback(
-    (text: string) => {
-      updateTodo(
-        {
-          id: todo.id,
-          description: text,
-        },
-        false,
-      );
-    },
-    [updateTodo, todo.id],
-  );
+  const commitTodo = useCallback(() => {
+    updateTodo({
+      id: todo.id,
+      description: textValue,
+    });
+  }, [updateTodo, todo.id, textValue]);
 
-  const commitTodo = useCallback(
-    (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-      updateTodo({
-        id: todo.id,
-        description: event.nativeEvent.text,
-      });
-    },
-    [updateTodo, todo.id],
-  );
-
-  const toggleTodo = useCallback(
-    (event: GestureResponderEvent) => {
-      event.stopPropagation();
-      updateTodo({
-        id: todo.id,
-        completed: !todo.completed,
-      });
-    },
-    [updateTodo, todo.id, todo.completed],
-  );
+  const toggleTodo = useCallback(() => {
+    updateTodo({
+      id: todo.id,
+      completed: !todo.completed,
+    });
+  }, [updateTodo, todo.id, todo.completed]);
 
   const archiveTodo = useCallback(
     (event: GestureResponderEvent) => {
@@ -147,71 +105,77 @@ const TodoItem: React.FC<Props> = function (props: Props) {
       return;
     }
 
+    setTextValue(todo.description);
     setTodoEditId(null);
   }, [setTodoEditId, editing]);
 
   let content;
-  let itemStyle: StyleProp<TextStyle> = styles.todoItem;
   if (editing) {
-    itemStyle = StyleSheet.compose(itemStyle, styles.todoEdit);
     content = [
-      // TODO remove input outline on focus
       <TextInput
-        defaultValue={uncommittedEdit || todo.description}
+        blurOnSubmit={true}
+        dense={true}
         key="input"
-        style={styles.editTodoInput}
-        selectionColor="#3d5a80"
-        onChangeText={updateTodoCb}
+        multiline={true}
+        numberOfLines={4}
+        onChangeText={setTextValue}
         onSubmitEditing={commitTodo}
         selectTextOnFocus={true}
+        style={styles.editTodoInput}
+        value={textValue}
       />,
-      <TouchableHighlight key="cancel" onPress={cancelEdit}>
-        <FontAwesomeIcon
-          icon={faBan}
-          style={[styles.iconMargin, styles.iconCancel]}
-          size={16}
-        />
-      </TouchableHighlight>,
+      <IconButton
+        key="cancel"
+        icon="cancel"
+        color={Colors.grey800}
+        size={20}
+        onPress={cancelEdit}
+      />,
     ];
   } else {
     content = [
-      <Text style={styles.todoDescription} key="description">
-        {todo.description}
-      </Text>,
-      <TouchableHighlight key="archive" onPress={archiveTodo}>
-        <FontAwesomeIcon
-          icon={faTrash}
-          style={[styles.iconMargin, styles.iconDelete]}
-          size={16}
-        />
-      </TouchableHighlight>,
+      <View key="description" style={styles.todoDescription}>
+        <View style={styles.spacer} />
+        <Text key="descriptionText" style={styles.todoDescriptionText}>
+          {todo.description}
+        </Text>
+        <View style={styles.spacer} />
+      </View>,
+      <IconButton
+        key="delete"
+        icon="trash-can-outline"
+        color={Colors.red500}
+        size={20}
+        onPress={archiveTodo}
+      />,
     ];
-    if (uncommittedEdit) {
+    if (textValue !== todo.description) {
       content.push(
-        <FontAwesomeIcon
-          icon={faExclamationTriangle}
+        <IconButton
           key="warn"
-          style={[styles.iconMargin, styles.iconWarn]}
-          size={16}
-          // title={`Uncommitted edit: ${uncommittedEdit}`}
+          icon="alert-outline"
+          color={Colors.orange300}
+          size={20}
         />,
+        // title={`Uncommitted edit: ${textValue}`}
+        // TODO w/ onLongPress
       );
     }
   }
 
-  const checkboxIcon = todo.completed ? faCheckCircle : faCircle;
   const testId = `todo-${todo.completed ? 'checked' : 'unchecked'}-${todo.id}`;
   return (
-    <Text style={itemStyle} onPress={beginEdit} nativeID={testId}>
-      <TouchableHighlight key="checkbox" onPress={toggleTodo}>
-        <FontAwesomeIcon
-          icon={checkboxIcon}
-          style={[styles.iconMargin, styles.iconCheck]}
-          size={16}
-        />
-      </TouchableHighlight>
-      {content}
-    </Text>
+    <Card onPress={beginEdit} testID={testId} style={styles.todoItemCard}>
+      <Card.Content style={styles.todoItemContent}>
+        <View style={styles.checkbox}>
+          <Checkbox.Android
+            status={todo.completed ? 'checked' : 'unchecked'}
+            onPress={toggleTodo}
+          />
+        </View>
+        {content}
+      </Card.Content>
+    </Card>
   );
 };
 
@@ -220,7 +184,6 @@ type Props = {
   todo: Todo;
   updateTodo: (todoPatch: TodoPatch, commitEdit?: boolean) => void;
   setTodoEditId: (id: number | null) => void;
-  uncommittedEdit: string | undefined;
 };
 
 export default TodoItem;

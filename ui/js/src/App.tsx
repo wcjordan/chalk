@@ -1,36 +1,38 @@
 import _ from 'lodash';
 import { connect, ConnectedProps } from 'react-redux';
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, ViewStyle } from 'react-native';
+import {
+  Platform,
+  ScrollView,
+  StatusBar,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import AddTodo from './components/AddTodo';
 import { ReduxState } from './redux/types';
 import TodoItem from './components/TodoItem';
 import { createTodo, updateTodo, setTodoEditId } from './redux/reducers';
 
-/* Color palette
-https://coolors.co/3d5a80-98c1d9-e0fbfc-ee6c4d-293241
-#e0fbfc - light
-#98c1d9 - medium
-#3d5a80 - dark
-#293241 - near black
-#ee6c4d - stand out
-*/
-
 interface Style {
   root: ViewStyle;
-  container: ViewStyle;
-}
-interface TopStyle {
-  top: ViewStyle;
+  containerMobile: ViewStyle;
+  containerWeb: ViewStyle;
 }
 
+const BG_COLOR = '#364263';
 const styles = StyleSheet.create<Style>({
   root: {
     height: '100%',
     width: '100%',
-    backgroundColor: '#293241',
+    backgroundColor: BG_COLOR,
   },
-  container: {
+  containerMobile: {
+    height: '100%',
+    width: '100%',
+  },
+  containerWeb: {
     height: '100%',
     width: '66%',
     marginHorizontal: 'auto',
@@ -41,30 +43,29 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
 ) {
   const { createTodo, setTodoEditId, todos, updateTodo, workspace } = props;
-  const { editId, uncommittedEdits } = workspace;
+  const { editId } = workspace;
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
       editing={todo.id === editId}
       key={todo.id || ''}
       setTodoEditId={setTodoEditId}
       todo={todo}
-      uncommittedEdit={uncommittedEdits[todo.id]}
       updateTodo={updateTodo}
     />
   ));
 
-  const paddingTop = Platform.OS === 'android' ? StatusBar.currentHeight : 80;
-  const topStyle = StyleSheet.create<TopStyle>({
-    top: {
-      paddingTop: paddingTop,
-    },
-  }).top;
-  const containerStyles = StyleSheet.compose(styles.container, topStyle);
+  const containerStyle: StyleProp<ViewStyle> =
+    Platform.OS === 'web' ? styles.containerWeb : styles.containerMobile;
   return (
     <View style={styles.root}>
-      <View nativeID="todo-list" style={containerStyles}>
+      <StatusBar
+        animated={true}
+        backgroundColor={BG_COLOR}
+        barStyle={'light-content'}
+      />
+      <View testID="todo-list" style={containerStyle}>
         <AddTodo createTodo={createTodo} />
-        {todoViews}
+        <ScrollView>{todoViews}</ScrollView>
       </View>
     </View>
   );

@@ -3,6 +3,7 @@ import configureMockStore from 'redux-mock-store';
 import fetchMock from 'fetch-mock-jest';
 import thunk from 'redux-thunk';
 import reducers, { updateTodo } from './reducers';
+import { getTodosApi } from './todosApiSlice';
 
 const mockStore = configureMockStore([thunk]);
 
@@ -22,7 +23,7 @@ describe('updateTodo', function () {
       },
       stubTodoPatch,
     );
-    fetchMock.patchOnce(`/api/todos/todos/${stubTodoPatch.id}/`, {
+    fetchMock.patchOnce(`${getTodosApi()}${stubTodoPatch.id}/`, {
       body: stubTodo,
     });
 
@@ -55,14 +56,9 @@ describe('updateTodo', function () {
 });
 
 describe('workspace reducer', function () {
-  const stubEdit = {
-    1: 'uncommitted edit',
-  };
-
   it('should return the initial state', function () {
     expect(reducers.workspace(undefined, {})).toEqual({
       editId: null,
-      uncommittedEdits: {},
     });
   });
 
@@ -71,7 +67,6 @@ describe('workspace reducer', function () {
       const result = reducers.workspace(
         {
           editId: 1,
-          uncommittedEdits: stubEdit,
         },
         {
           type: 'workspace/setTodoEditId',
@@ -80,15 +75,13 @@ describe('workspace reducer', function () {
       );
       expect(result).toEqual({
         editId: 2,
-        uncommittedEdits: stubEdit,
       });
     });
 
-    it('should clear uncommitted edits when cancelling an edit', function () {
+    it('should support cancelling an edit', function () {
       const result = reducers.workspace(
         {
           editId: 1,
-          uncommittedEdits: stubEdit,
         },
         {
           type: 'workspace/setTodoEditId',
@@ -97,33 +90,6 @@ describe('workspace reducer', function () {
       );
       expect(result).toEqual({
         editId: null,
-        uncommittedEdits: {},
-      });
-    });
-  });
-
-  describe('workspace/updateTodoUncommitted', function () {
-    it('should update uncommitted edits', function () {
-      const result = reducers.workspace(
-        {
-          editId: 1,
-          uncommittedEdits: {
-            1: 'old value',
-          },
-        },
-        {
-          type: 'workspace/updateTodoUncommitted',
-          payload: {
-            id: 1,
-            description: 'new value',
-          },
-        },
-      );
-      expect(result).toEqual({
-        editId: 1,
-        uncommittedEdits: {
-          1: 'new value',
-        },
       });
     });
   });
