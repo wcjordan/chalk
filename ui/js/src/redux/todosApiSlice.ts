@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Constants from 'expo-constants';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Platform } from 'react-native';
 import { ApiState, NewTodo, ReduxState, Todo, TodoPatch } from './types';
@@ -7,8 +8,10 @@ import { create, list, patch } from './fetchApi';
 const API_NAME = 'todosApi';
 
 function getWsRoot() {
+  const subdomain =
+    Constants.manifest.extra.ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
   const wsroot = Platform.select({
-    native: 'http://chalk-dev.flipperkid.com/',
+    native: `http://${subdomain}.flipperkid.com/`,
     default: '',
   });
   return wsroot;
@@ -16,7 +19,7 @@ function getWsRoot() {
 
 // Exported for testing
 export function getTodosApi(): string {
-  return getWsRoot() + 'api/todos/todos/';
+  return `${getWsRoot()}api/todos/todos/`;
 }
 
 interface ErrorAction {

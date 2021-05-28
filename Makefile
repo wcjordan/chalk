@@ -7,9 +7,12 @@ UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-image-dev
 # Build containers
 .PHONY: build
 build:
-	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.dev -t $(UI_IMAGE_DEV):latest ui
-	DOCKER_BUILDKIT=1 docker build -t $(UI_IMAGE):latest ui
 	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):latest server
+	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.dev -t $(UI_IMAGE_DEV):latest ui
+	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
+		DOCKER_BUILDKIT=1 docker build \
+			--build-arg sentryDsn=$$SENTRY_DSN \
+			-t $(UI_IMAGE):latest ui'
 
 # Test & lint
 .PHONY: test
@@ -37,7 +40,8 @@ format:
 # To delete: helm delete chalk-prod
 .PHONY: deploy
 deploy: build
-	docker run --env-file .prod.env --rm -t -w / $(UI_IMAGE_DEV):latest make publish
+	docker run --env-file .prod.env --env ENVIRONMENT=prod --env DEBUG=false \
+		--rm -t -w / $(UI_IMAGE_DEV):latest make publish
 	docker push $(SERVER_IMAGE):latest
 	docker push $(UI_IMAGE):latest
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \

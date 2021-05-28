@@ -2,6 +2,11 @@
 FROM gcr.io/flipperkid-default/chalk-ui-base:latest as js_app
 WORKDIR /js
 
+ENV ENVIRONMENT=prod
+ENV DEBUG=false
+ARG sentryDsn
+ENV SENTRY_DSN=$sentryDsn
+
 # Install React dependencies
 COPY js/yarn.lock .
 COPY js/package.json .
@@ -31,6 +36,6 @@ COPY conf.d/default.conf /etc/nginx/conf.d/default.conf
 COPY conf.d/app.conf /etc/nginx/conf-includes/app.conf
 
 # Copy over built JS files from React app
-COPY --from=js_app /js/web-build/* /www/client/
+COPY --from=js_app /js/web-build/ /www/client/
 
 CMD ["nginx", "-g", "daemon off;"]

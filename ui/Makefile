@@ -17,7 +17,8 @@ test:
 # Start Expo mobile dev
 .PHONY: start
 start:
-	cd js; yarn start
+	env $$(grep -v '^#' ../.prod.env | xargs) ENVIRONMENT=dev DEBUG=true \
+		sh -c 'cd js; yarn start'
 
 # ESLint & Prettier JS formatting
 .PHONY: format

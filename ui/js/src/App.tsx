@@ -20,6 +20,9 @@ interface Style {
   containerMobile: ViewStyle;
   containerWeb: ViewStyle;
 }
+interface TopStyle {
+  top: ViewStyle;
+}
 
 const BG_COLOR = '#364263';
 const styles = StyleSheet.create<Style>({
@@ -54,8 +57,17 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
     />
   ));
 
-  const containerStyle: StyleProp<ViewStyle> =
+  let containerStyle: StyleProp<ViewStyle> =
     Platform.OS === 'web' ? styles.containerWeb : styles.containerMobile;
+  if (Platform.OS === 'web') {
+    const topStyle = StyleSheet.create<TopStyle>({
+      top: {
+        paddingTop: 80,
+      },
+    }).top;
+    containerStyle = StyleSheet.compose(containerStyle, topStyle);
+  }
+
   return (
     <View style={styles.root}>
       <StatusBar

@@ -50,6 +50,7 @@ coverage.xml
 # JS ignores
 node_modules/
 .expo/
+web-build
 
 # bash history mounted in Docker container
 .bash_history

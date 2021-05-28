@@ -1,7 +1,7 @@
 export default {
   name: 'chalk',
   slug: 'chalk',
-  version: '0.1.0',
+  version: '0.1.3',
   orientation: 'portrait',
   icon: './assets/icon.png',
   splash: {
