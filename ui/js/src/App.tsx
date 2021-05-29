@@ -75,9 +75,9 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
         backgroundColor={BG_COLOR}
         barStyle={'light-content'}
       />
-      <View testID="todo-list" style={containerStyle}>
+      <View style={containerStyle}>
         <AddTodo createTodo={createTodo} />
-        <ScrollView>{todoViews}</ScrollView>
+        <ScrollView testID="todo-list">{todoViews}</ScrollView>
       </View>
     </View>
   );

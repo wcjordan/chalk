@@ -29,6 +29,7 @@ COPY js/web ./web
 COPY js/app.config.js ./app.config.js
 COPY js/App.tsx ./App.tsx
 COPY js/assets ./assets
+COPY js/__mocks__ ./__mocks__
 COPY js/src ./src
 
 # Set CI true so we don't add a ton of watchers in Expo

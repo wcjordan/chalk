@@ -130,31 +130,37 @@ const TodoItem: React.FC<Props> = function (props: Props) {
         color={Colors.grey800}
         size={20}
         onPress={cancelEdit}
+        testID="cancel-edit"
       />,
     ];
   } else {
     content = [
       <View key="description" style={styles.todoDescription}>
         <View style={styles.spacer} />
-        <Text key="descriptionText" style={styles.todoDescriptionText}>
+        <Text
+          key="descriptionText"
+          testID="description-text"
+          style={styles.todoDescriptionText}
+        >
           {todo.description}
         </Text>
         <View style={styles.spacer} />
       </View>,
       <IconButton
-        key="delete"
-        icon="trash-can-outline"
         color={Colors.red500}
-        size={20}
+        icon="trash-can-outline"
+        key="delete"
         onPress={archiveTodo}
+        size={20}
+        testID="delete-todo"
       />,
     ];
     if (textValue !== todo.description) {
       content.push(
         <IconButton
-          key="warn"
-          icon="alert-outline"
           color={Colors.orange300}
+          icon="alert-outline"
+          key="warn"
           size={20}
         />,
         // title={`Uncommitted edit: ${textValue}`}
@@ -163,14 +169,14 @@ const TodoItem: React.FC<Props> = function (props: Props) {
     }
   }
 
-  const testId = `todo-${todo.completed ? 'checked' : 'unchecked'}-${todo.id}`;
   return (
-    <Card onPress={beginEdit} testID={testId} style={styles.todoItemCard}>
+    <Card onPress={beginEdit} style={styles.todoItemCard}>
       <Card.Content style={styles.todoItemContent}>
         <View style={styles.checkbox}>
           <Checkbox.Android
             status={todo.completed ? 'checked' : 'unchecked'}
             onPress={toggleTodo}
+            testID="complete-todo"
           />
         </View>
         {content}

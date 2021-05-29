@@ -10,7 +10,7 @@ from helpers.todo_helpers import add_todo, delete_todo, edit_todo, find_todo, fi
 @pytest.mark.parametrize('test_name', ['Todo: Create, Update, Delete'])
 def test_todos_crud(driver, todo_prefix):
     # Add todo
-    todo_description = "{} test todo".format(todo_prefix)
+    todo_description = f'{todo_prefix} test todo'
     add_todo(driver, todo_description)
 
     # Find todo & verify
@@ -18,7 +18,7 @@ def test_todos_crud(driver, todo_prefix):
     created_todo = find_todo(driver, todo_description)
 
     # Edit todo
-    updated_todo_description = "{} test todo updated".format(todo_prefix)
+    updated_todo_description = f'{todo_prefix} test todo updated'
     edit_todo(created_todo, updated_todo_description)
 
     # Verify

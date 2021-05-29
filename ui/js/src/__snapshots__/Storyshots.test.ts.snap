@@ -126,7 +126,6 @@ exports[`Storyshots App Default Layout 1`] = `
         "width": "100%",
       }
     }
-    testID="todo-list"
   >
     <View
       style={
@@ -234,7 +233,9 @@ exports[`Storyshots App Default Layout 1`] = `
         </View>
       </View>
     </View>
-    <RCTScrollView>
+    <RCTScrollView
+      testID="todo-list"
+    >
       <View />
     </RCTScrollView>
   </View>
@@ -258,7 +259,6 @@ exports[`Storyshots App List Todos Layout 1`] = `
         "width": "100%",
       }
     }
-    testID="todo-list"
   >
     <View
       style={
@@ -366,7 +366,9 @@ exports[`Storyshots App List Todos Layout 1`] = `
         </View>
       </View>
     </View>
-    <RCTScrollView>
+    <RCTScrollView
+      testID="todo-list"
+    >
       <View>
         <View
           style={
@@ -400,7 +402,6 @@ exports[`Storyshots App List Todos Layout 1`] = `
                 "flexShrink": 1,
               }
             }
-            testID="todo-unchecked-1"
           >
             <View
               style={
@@ -456,6 +457,7 @@ exports[`Storyshots App List Todos Layout 1`] = `
                       },
                     ]
                   }
+                  testID="complete-todo"
                 >
                   <View
                     style={
@@ -532,6 +534,7 @@ exports[`Storyshots App List Todos Layout 1`] = `
                       },
                     ]
                   }
+                  testID="description-text"
                 >
                   First todo
                 </Text>
@@ -589,6 +592,7 @@ exports[`Storyshots App List Todos Layout 1`] = `
                     ],
                   ]
                 }
+                testID="delete-todo"
               >
                 <View>
                   <Text />
@@ -629,7 +633,6 @@ exports[`Storyshots App List Todos Layout 1`] = `
                 "flexShrink": 1,
               }
             }
-            testID="todo-unchecked-2"
           >
             <View
               style={
@@ -685,6 +688,7 @@ exports[`Storyshots App List Todos Layout 1`] = `
                       },
                     ]
                   }
+                  testID="complete-todo"
                 >
                   <View
                     style={
@@ -761,6 +765,7 @@ exports[`Storyshots App List Todos Layout 1`] = `
                       },
                     ]
                   }
+                  testID="description-text"
                 >
                   2nd todo
                 </Text>
@@ -818,6 +823,7 @@ exports[`Storyshots App List Todos Layout 1`] = `
                     ],
                   ]
                 }
+                testID="delete-todo"
               >
                 <View>
                   <Text />
@@ -865,7 +871,6 @@ exports[`Storyshots Todo Item Checked Todo 1`] = `
         "flexShrink": 1,
       }
     }
-    testID="todo-checked-undefined"
   >
     <View
       style={
@@ -921,6 +926,7 @@ exports[`Storyshots Todo Item Checked Todo 1`] = `
               },
             ]
           }
+          testID="complete-todo"
         >
           <View
             style={
@@ -1032,6 +1038,7 @@ exports[`Storyshots Todo Item Checked Todo 1`] = `
               },
             ]
           }
+          testID="description-text"
         >
           Checked Todo
         </Text>
@@ -1089,6 +1096,7 @@ exports[`Storyshots Todo Item Checked Todo 1`] = `
             ],
           ]
         }
+        testID="delete-todo"
       >
         <View>
           <Text
@@ -1167,7 +1175,6 @@ exports[`Storyshots Todo Item Default Todo 1`] = `
         "flexShrink": 1,
       }
     }
-    testID="todo-unchecked-undefined"
   >
     <View
       style={
@@ -1223,6 +1230,7 @@ exports[`Storyshots Todo Item Default Todo 1`] = `
               },
             ]
           }
+          testID="complete-todo"
         >
           <View
             style={
@@ -1334,6 +1342,7 @@ exports[`Storyshots Todo Item Default Todo 1`] = `
               },
             ]
           }
+          testID="description-text"
         >
           Default Todo
         </Text>
@@ -1391,6 +1400,7 @@ exports[`Storyshots Todo Item Default Todo 1`] = `
             ],
           ]
         }
+        testID="delete-todo"
       >
         <View>
           <Text
@@ -1469,7 +1479,6 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
         "flexShrink": 1,
       }
     }
-    testID="todo-unchecked-undefined"
   >
     <View
       style={
@@ -1525,6 +1534,7 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
               },
             ]
           }
+          testID="complete-todo"
         >
           <View
             style={
@@ -1747,6 +1757,7 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
             ],
           ]
         }
+        testID="cancel-edit"
       >
         <View>
           <Text
@@ -1825,7 +1836,6 @@ exports[`Storyshots Todo Item Editing Uncommitted Todo 1`] = `
         "flexShrink": 1,
       }
     }
-    testID="todo-unchecked-undefined"
   >
     <View
       style={
@@ -1881,6 +1891,7 @@ exports[`Storyshots Todo Item Editing Uncommitted Todo 1`] = `
               },
             ]
           }
+          testID="complete-todo"
         >
           <View
             style={
@@ -2103,6 +2114,7 @@ exports[`Storyshots Todo Item Editing Uncommitted Todo 1`] = `
             ],
           ]
         }
+        testID="cancel-edit"
       >
         <View>
           <Text
@@ -2181,7 +2193,6 @@ exports[`Storyshots Todo Item Uncommitted Edit Todo 1`] = `
         "flexShrink": 1,
       }
     }
-    testID="todo-unchecked-undefined"
   >
     <View
       style={
@@ -2237,6 +2248,7 @@ exports[`Storyshots Todo Item Uncommitted Edit Todo 1`] = `
               },
             ]
           }
+          testID="complete-todo"
         >
           <View
             style={
@@ -2348,6 +2360,7 @@ exports[`Storyshots Todo Item Uncommitted Edit Todo 1`] = `
               },
             ]
           }
+          testID="description-text"
         >
           Uncommitted Edit Todo
         </Text>
@@ -2405,6 +2418,7 @@ exports[`Storyshots Todo Item Uncommitted Edit Todo 1`] = `
             ],
           ]
         }
+        testID="delete-todo"
       >
         <View>
           <Text

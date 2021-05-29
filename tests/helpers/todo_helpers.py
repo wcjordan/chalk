@@ -4,8 +4,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 
+CHECKED_ICON_TEXT = '󰄲'
+DELETE_ICON_TEXT = '󰩺'
+UNCHECKED_ICON_TEXT = '󰄱'
+WARNING_ICON_TEXT = '󰀪'
+
+
 def add_todo(driver, description):
-    add_input = driver.find_element_by_id("add-todo-input")
+    add_input = driver.find_element(By.CSS_SELECTOR, 'textarea[data-testid="add-todo-input"]');
 
     # Clear input
     add_input.send_keys(Keys.COMMAND + "a")
@@ -17,20 +23,18 @@ def add_todo(driver, description):
 
 
 def complete_todo(todo_item):
-    item_svgs = todo_item.find_elements_by_tag_name('svg')
-    assert len(item_svgs) >= 1
-    item_svgs[0].click()
+    complete_button = todo_item.find_element(By.CSS_SELECTOR, 'div[data-testid="complete-todo"]');
+    complete_button.click()
 
 
 def delete_todo(todo_item):
-    item_svgs = todo_item.find_elements_by_tag_name('svg')
-    assert len(item_svgs) >= 2
-    item_svgs[1].click()
+    delete_button = todo_item.find_element(By.CSS_SELECTOR, 'div[data-testid="delete-todo"]');
+    delete_button.click()
 
 
 def edit_todo(todo_item, new_description, submit=True):
     todo_item.click()
-    todo_input = todo_item.find_element_by_tag_name('input')
+    todo_input = todo_item.find_element_by_tag_name('textarea')
     todo_input.click()
     todo_input.send_keys(new_description)
     if submit:
@@ -44,32 +48,32 @@ def find_todo(driver, description, partial=False):
 
 
 def find_todos(driver, description, partial=False):
-    def _has_span_child_matching_text(parent):
+    def _has_div_child_matching_text(parent):
         def _comparator(item):
             if partial:
                 return item.text.startswith(description)
             return item.text == description
 
-        children = parent.find_elements_by_tag_name('span')
+        children = parent.find_elements_by_tag_name('div')
         return any(_comparator(item) for item in children)
 
-    todo_list = driver.find_element_by_id('todo-list')
-    todo_items = todo_list.find_elements_by_tag_name('div')
-    return [ item for item in todo_items if _has_span_child_matching_text(item) ]
+    todo_list = driver.find_element(By.CSS_SELECTOR, 'div[data-testid="todo-list"]').find_element(By.XPATH, './div');
+    todo_items = todo_list.find_elements(By.XPATH, './div')
+    return [ item for item in todo_items if _has_div_child_matching_text(item) ]
 
 
 def list_todo_descriptions(driver, prefix):
     todo_items = find_todos(driver, prefix, partial=True)
-    return [ item.find_element_by_tag_name('span').text for item in todo_items ]
+    return [ item.find_element(By.CSS_SELECTOR, 'div[data-testid="description-text"]').text for item in todo_items ]
 
 
 def wait_for_todo(driver, description):
     WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//span[text()="{}"]'.format(description)))
+        EC.presence_of_element_located((By.XPATH, f'//div[text()="{description}"]'))
     )
 
 
 def wait_for_todo_to_disappear(driver, description):
     WebDriverWait(driver, 10).until(
-        EC.invisibility_of_element_located((By.XPATH, '//span[text()="{}"]'.format(description)))
+        EC.invisibility_of_element_located((By.XPATH, f'//div[text()="{description}"]'))
     )

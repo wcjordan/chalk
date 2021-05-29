@@ -3,6 +3,9 @@ import pytest
 import random
 
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from helpers.todo_helpers import delete_todo, find_todos
 
@@ -73,6 +76,13 @@ def driver(request, todo_prefix, test_name):
         raise e
 
     finally:
+        cancel_edit_buttons = driver.find_elements(By.CSS_SELECTOR, 'div[data-testid="cancel-edit"]');
+        for btn in cancel_edit_buttons:
+            btn.click()
+        WebDriverWait(driver, 10).until(
+            EC.invisibility_of_element_located((By.CSS_SELECTOR, 'div[data-testid="cancel-edit"]'))
+        )
+
         todos_to_delete = find_todos(driver, todo_prefix, partial=True)
         for todo in todos_to_delete:
             delete_todo(todo)
