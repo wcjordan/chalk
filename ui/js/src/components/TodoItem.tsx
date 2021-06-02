@@ -65,14 +65,19 @@ const styles = StyleSheet.create<Style>({
 
 const TodoItem: React.FC<Props> = function (props: Props) {
   const { editing, todo, setTodoEditId, updateTodo } = props;
-  const [textValue, setTextValue] = useState(todo.description);
+  const [editingValue, setEditingValue] = useState<string | null>(null);
 
   const commitTodo = useCallback(() => {
+    if (!editingValue) {
+      return;
+    }
+
     updateTodo({
       id: todo.id,
-      description: textValue,
+      description: editingValue,
     });
-  }, [updateTodo, todo.id, textValue]);
+    setEditingValue(null);
+  }, [updateTodo, todo.id, editingValue]);
 
   const toggleTodo = useCallback(() => {
     updateTodo({
@@ -105,12 +110,13 @@ const TodoItem: React.FC<Props> = function (props: Props) {
       return;
     }
 
-    setTextValue(todo.description);
+    setEditingValue(null);
     setTodoEditId(null);
   }, [setTodoEditId, editing]);
 
   let content;
   if (editing) {
+    const textValue = editingValue == null ? todo.description : editingValue;
     content = [
       <TextInput
         blurOnSubmit={true}
@@ -118,7 +124,7 @@ const TodoItem: React.FC<Props> = function (props: Props) {
         key="input"
         multiline={true}
         numberOfLines={4}
-        onChangeText={setTextValue}
+        onChangeText={setEditingValue}
         onSubmitEditing={commitTodo}
         selectTextOnFocus={true}
         style={styles.editTodoInput}
@@ -155,7 +161,7 @@ const TodoItem: React.FC<Props> = function (props: Props) {
         testID="delete-todo"
       />,
     ];
-    if (textValue !== todo.description) {
+    if (editingValue !== null) {
       content.push(
         <IconButton
           color={Colors.orange300}
@@ -163,7 +169,7 @@ const TodoItem: React.FC<Props> = function (props: Props) {
           key="warn"
           size={20}
         />,
-        // title={`Uncommitted edit: ${textValue}`}
+        // title={`Uncommitted edit: ${editingValue}`}
         // TODO w/ onLongPress
       );
     }
