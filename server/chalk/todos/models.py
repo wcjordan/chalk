@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils import timezone
+from simple_history.models import HistoricalRecords
 
 
 class TodoModel(models.Model):
@@ -17,6 +18,7 @@ class TodoModel(models.Model):
     completed_at = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.description

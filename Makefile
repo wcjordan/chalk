@@ -46,8 +46,11 @@ deploy: build
 	docker push $(UI_IMAGE):latest
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		helm upgrade --install \
-			--set server.secretKey=$$SECRET_KEY \
 			--set server.dbPassword=$$POSTGRES_PASSWORD \
+			--set server.djangoEmail=$$DJANGO_EMAIL \
+			--set server.djangoPassword=$$DJANGO_PASSWORD \
+			--set server.djangoUsername=$$DJANGO_USERNAME \
+			--set server.secretKey=$$SECRET_KEY \
 			--set ui.environment=prod \
 			--set ui.sentryDsn=$$SENTRY_DSN \
 			--set ui.sentryToken=$$SENTRY_TOKEN \

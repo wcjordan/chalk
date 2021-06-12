@@ -28,12 +28,15 @@ create-migrations:
 		python manage.py makemigrations --verbosity 3
 
 # Add an admin to Django
+# For production env:  make create-superuser ENV_NAME=prod
+ENV_NAME ?= dev
+YQ_EXPRESSION = '.metadata.name = "create-superuser-chalk-$(ENV_NAME)" \
+  | .spec.template.spec.containers[0].command[1] = "-instances=flipperkid-default:us-east4:chalk-$(ENV_NAME)=tcp:5432" \
+  | .spec.template.spec.containers[1].env[].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server-secrets"'
+
 .PHONY: create-superuser
 create-superuser:
-	exit 1
-	# TODO (jordan) Create a k8s Job to add an admin user
-	# Build on https://stackoverflow.com/questions/30027203/create-django-super-user-in-a-docker-container-without-inputting-password
-	# or python manage.py createsuperuser
+	yq eval $(YQ_EXPRESSION) jobs/create_superuser.yaml | kubectl apply -f -
 
 # Update starter data for server
 .PHONY: update-starter-data

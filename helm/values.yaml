@@ -14,6 +14,9 @@ ui:
 
 server:
   dbPassword:
+  djangoEmail:
+  djangoPassword:
+  djangoUsername:
   secretKey:
 
 serviceAccount:

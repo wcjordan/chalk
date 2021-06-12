@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-superuser-chalk-dev
+spec:
+  template:
+    spec:
+      serviceAccountName: chalk-sa
+      shareProcessNamespace: true
+      containers:
+        - name: create-superuser-cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:latest
+          command:
+            - "/cloud_sql_proxy"
+            - "-instances=flipperkid-default:us-east4:chalk-dev=tcp:5432"
+          securityContext:
+            runAsNonRoot: true
+        - name: create-superuser
+          image: gcr.io/flipperkid-default/chalk-server-image:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              python manage.py createsuperuser --no-input;
+              sql_proxy_pid=$(pgrep cloud_sql_proxy) && kill -INT $sql_proxy_pid;
+          securityContext:
+            capabilities:
+              add:
+                - SYS_PTRACE
+          env:
+            - name: DJANGO_SUPERUSER_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: chalk-dev-server-secrets
+                  key: django-email
+            - name: DJANGO_SUPERUSER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: chalk-dev-server-secrets
+                  key: django-password
+            - name: DJANGO_SUPERUSER_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: chalk-dev-server-secrets
+                  key: django-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: chalk-dev-server-secrets
+                  key: db-password
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: chalk-dev-server-secrets
+                  key: secret-key
+      restartPolicy: Never
+  backoffLimit: 3
+
