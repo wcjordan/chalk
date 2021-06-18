@@ -1,7 +1,8 @@
+{{- $fullName := include "..fullname" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "..fullname" . }}-ui
+  name: {{ $fullName }}-ui
   labels:
     {{- include "..uiLabels" . | nindent 4 }}
 spec:
@@ -18,19 +19,36 @@ spec:
       serviceAccountName: {{ include "..serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}-ui
-          {{- if .Values.DEV }}
+          {{- if eq .Values.environment "DEV" }}
           image: "gcr.io/flipperkid-default/chalk-ui-image-dev:latest"
           {{- else }}
           image: "gcr.io/flipperkid-default/chalk-ui-image-prod:latest"
           {{- end }}
           imagePullPolicy: Always
           env:
-            {{- include "..uiEnv" . | nindent 12 }}
+            - name: ENVIRONMENT
+              value: {{ .Values.environment }}
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $fullName }}-ui
+                  key: sentry-dsn
+            - name: SENTRY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $fullName }}-ui
+                  key: sentry-token
+            - name: DEBUG
+            {{- if eq .Values.environment "DEV" }}
+              value: 'true'
+            {{- else }}
+              value: 'false'
+            {{- end }}
           ports:
             - name: http
               containerPort: 19006
               protocol: TCP
-          {{- if .Values.DEV }}
+          {{- if eq .Values.environment "DEV" }}
             - name: expo
               containerPort: 19002
               protocol: TCP

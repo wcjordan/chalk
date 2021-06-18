@@ -6,10 +6,10 @@ metadata:
   labels:
     {{- include "..labels" . | nindent 4 }}
   annotations:
-    {{- if .Values.DEV }}
-    kubernetes.io/ingress.global-static-ip-name: "chalk-dev-ip"
-    {{- else }}
+    {{- if eq .Values.environment "PROD" }}
     kubernetes.io/ingress.global-static-ip-name: "chalk-ip"
+    {{- else if eq .Values.environment "DEV" }}
+    kubernetes.io/ingress.global-static-ip-name: "chalk-dev-ip"
     {{- end }}
 spec:
   rules:

@@ -1,0 +1,19 @@
+apiVersion: sql.cnrm.cloud.google.com/v1beta1
+kind: SQLInstance
+metadata:
+  name: {{ include "..fullname" . }}
+spec:
+  databaseVersion: POSTGRES_12
+  region: us-east4
+  settings:
+    availabilityType: ZONAL
+    backupConfiguration:
+      enabled: true
+      pointInTimeRecoveryEnabled: true
+    insightsConfig:
+      queryInsightsEnabled: true
+      recordApplicationTags: true
+      recordClientAddress: true
+    locationPreference:
+      zone: us-east4-c
+    tier: db-f1-micro
