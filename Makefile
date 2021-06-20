@@ -59,3 +59,9 @@ deploy: build
 # NOTE deploy from built on Jenkins rather than building & pushing here
 # Make it so helm to deploy can be used from here and from jenkins for tests
 # Probably use a python script to call Helm to add flexibility
+
+# Stops the dev env and deletes the Cloud SQL DB used by dev
+# Also deletes _env_id.txt since that DB name won't be reusable for a week
+.PHONY: superclean
+superclean: stop
+	gcloud sql instances delete chalk-dev-$$(cat _env_id.txt) && rm _env_id.txt
