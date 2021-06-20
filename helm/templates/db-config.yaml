@@ -1,7 +1,10 @@
+{{- $fullName := include "..fullname" . -}}
 apiVersion: sql.cnrm.cloud.google.com/v1beta1
 kind: SQLInstance
 metadata:
-  name: {{ include "..fullname" . }}
+  annotations:
+    cnrm.cloud.google.com/deletion-policy: abandon
+  name: {{ $fullName }}
 spec:
   databaseVersion: POSTGRES_12
   region: us-east4
@@ -17,3 +20,28 @@ spec:
     locationPreference:
       zone: us-east4-c
     tier: db-f1-micro
+
+---
+
+apiVersion: sql.cnrm.cloud.google.com/v1beta1
+kind: SQLDatabase
+metadata:
+  name: {{ $fullName }}
+spec:
+  instanceRef:
+    name: {{ $fullName }}
+
+---
+
+apiVersion: sql.cnrm.cloud.google.com/v1beta1
+kind: SQLUser
+metadata:
+  name: {{ $fullName }}
+spec:
+  instanceRef:
+    name: {{ $fullName }}
+  password:
+    valueFrom:
+      secretKeyRef:
+        key: db-password
+        name: {{ $fullName }}-server

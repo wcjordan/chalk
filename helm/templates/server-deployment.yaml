@@ -3,16 +3,20 @@ Server Env
 */}}
 {{- define "..serverEnv" -}}
 {{- $fullName := include "..fullname" . -}}
+- name: DB_NAME
+  value: {{ $fullName }}
+- name: DB_USER
+  value: {{ $fullName }}
+- name: DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ $fullName }}-server
+      key: db-password
 - name: SECRET_KEY
   valueFrom:
     secretKeyRef:
       name: {{ $fullName }}-server
       key: secret-key
-- name: POSTGRES_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ $fullName }}-server
-      key: db-password
 {{- if eq .Values.environment "DEV" }}
 - name: DEBUG
   value: 'true'
