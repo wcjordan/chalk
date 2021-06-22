@@ -5,10 +5,10 @@
 nameOverride: ""
 fullnameOverride: ""
 
-DEV: false
+# DEV, CI, STAGING, or PROD
+environment: DEV
 
 ui:
-  environment:
   sentryDsn:
   sentryToken:
 

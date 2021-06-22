@@ -1,7 +1,33 @@
+{{/*
+Server Env
+*/}}
+{{- define "..serverEnv" -}}
+{{- $fullName := include "..fullname" . -}}
+- name: DB_NAME
+  value: {{ $fullName }}
+- name: DB_USER
+  value: {{ $fullName }}
+- name: DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ $fullName }}-server
+      key: db-password
+- name: SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ $fullName }}-server
+      key: secret-key
+{{- if eq .Values.environment "DEV" }}
+- name: DEBUG
+  value: 'true'
+{{- end }}
+{{- end }}
+
+{{- $fullName := include "..fullname" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "..fullname" . }}-server
+  name: {{ $fullName }}-server
   labels:
     {{- include "..serverLabels" . | nindent 4 }}
 spec:
@@ -19,7 +45,7 @@ spec:
       volumes:
         - name: nginx-conf
           configMap:
-            name: {{ include "..fullname" . }}-server
+            name: {{ $fullName }}-server
         - name: staticfiles
           emptyDir: {}
       initContainers:
@@ -37,11 +63,7 @@ spec:
           image: gcr.io/cloudsql-docker/gce-proxy:latest
           command:
             - "/cloud_sql_proxy"
-            {{- if .Values.DEV }}
-            - "-instances=flipperkid-default:us-east4:chalk-dev=tcp:5432"
-            {{- else }}
-            - "-instances=flipperkid-default:us-east4:chalk-prod=tcp:5432"
-            {{- end }}
+            - {{ $fullName | printf "-instances=flipperkid-default:us-east4:%s=tcp:5432" | quote }}
           securityContext:
             runAsNonRoot: true
         - name: {{ .Chart.Name }}-server-nginx

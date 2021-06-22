@@ -61,3 +61,6 @@ tilt_modules/
 
 # Env files for dev & prod config
 *.env
+
+# File tracking env id
+_env_id.txt
