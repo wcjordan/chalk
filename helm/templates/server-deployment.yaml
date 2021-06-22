@@ -41,7 +41,7 @@ spec:
       labels:
         {{- include "..serverSelectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: chalk-sa
+      serviceAccountName: {{ include "..serviceAccountName" . }}
       volumes:
         - name: nginx-conf
           configMap:
