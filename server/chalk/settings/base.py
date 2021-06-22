@@ -80,8 +80,8 @@ WSGI_APPLICATION = 'chalk.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
+        'NAME': os.getenv('DB_NAME', 'chalk'),
+        'USER': os.getenv('DB_USER', 'chalk'),
         'PASSWORD': os.environ['DB_PASSWORD'],
         'HOST': '127.0.0.1',
         'PORT': 5432

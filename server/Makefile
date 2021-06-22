@@ -29,7 +29,7 @@ create-migrations:
 
 # Add an admin to Django
 # For production env:  make create-superuser ENV_NAME=prod
-ENV_NAME ?= dev
+ENV_NAME ?= dev-$(shell cat ../_env_id.txt)
 YQ_EXPRESSION = '.metadata.name = "create-superuser-chalk-$(ENV_NAME)" \
   | .spec.template.spec.containers[0].command[1] = "-instances=flipperkid-default:us-east4:chalk-$(ENV_NAME)=tcp:5432" \
   | .spec.template.spec.containers[1].env[].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server-secrets"'

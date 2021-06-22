@@ -4,7 +4,7 @@ allow_k8s_contexts(os.environ.get('K8S_CONTEXT'))
 
 env_arr = [
     'environment=DEV',
-    'server.dbPassword=%s' % os.environ.get('POSTGRES_PASSWORD'),
+    'server.dbPassword=%s' % os.environ.get('DB_PASSWORD'),
     'server.djangoEmail=%s' % os.environ.get('DJANGO_EMAIL'),
     'server.djangoPassword=%s' % os.environ.get('DJANGO_PASSWORD'),
     'server.djangoUsername=%s' % os.environ.get('DJANGO_USERNAME'),

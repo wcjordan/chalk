@@ -47,7 +47,7 @@ deploy: build
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		helm upgrade --install \
 			--set environment=PROD \
-			--set server.dbPassword=$$POSTGRES_PASSWORD \
+			--set server.dbPassword=$$DB_PASSWORD \
 			--set server.djangoEmail=$$DJANGO_EMAIL \
 			--set server.djangoPassword=$$DJANGO_PASSWORD \
 			--set server.djangoUsername=$$DJANGO_USERNAME \
