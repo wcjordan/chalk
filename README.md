@@ -1,9 +1,7 @@
-# chalk
-Todo app
+# Chalk - Todo app
 
-Setup
------
-Copy .env_default to .env
+## Setup
+Copy .env_default to .env & .prod.env
 Set SECRET_KEY & POSTGRES_PASSWORD in .env
   These should be random secure strings
   e.g. head -c 32 /dev/urandom | base64
@@ -13,3 +11,7 @@ As root, create /etc/docker/daemon.json with the content
 {
   "bip": "10.1.10.1/24"
 }
+
+## TODO
+Add instructions for other env setup
+Add setup instructions for static IP claim

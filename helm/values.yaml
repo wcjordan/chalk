@@ -4,6 +4,7 @@
 
 nameOverride: ""
 fullnameOverride: ""
+gcpProjectName: ""
 
 # DEV, CI, STAGING, or PROD
 environment: DEV
