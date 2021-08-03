@@ -1,5 +1,11 @@
 #!make
-IMAGE_REPO = gcr.io/flipperkid-default
+ifneq (,$(wildcard .env))
+	include .env
+else
+    include ../.env
+endif
+
+IMAGE_REPO = gcr.io/$(GCP_PROJECT)
 UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-image-dev
 
 # Test w/ Jest

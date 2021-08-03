@@ -16,9 +16,9 @@ pipeline {
                             }
                             steps {
                                 container('dind') {
-                                    withDockerRegistry(credentialsId: 'gcr:flipperkid-default', url: 'https://gcr.io/flipperkid-default') {
-                                        sh "docker build -f ui/Dockerfile -t gcr.io/flipperkid-default/chalk-ui:${env.BUILD_TAG} ui"
-                                        sh "docker push gcr.io/flipperkid-default/chalk-ui:${env.BUILD_TAG}"
+                                    withDockerRegistry(credentialsId: "gcr:${env.GCP_PROJECT}", url: "https://gcr.io/${env.GCP_PROJECT}") {
+                                        sh "docker build -f ui/Dockerfile -t gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG} ui"
+                                        sh "docker push gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG}"
                                     }
                                 }
                             }
@@ -58,9 +58,9 @@ pipeline {
                             }
                             steps {
                                 container('dind') {
-                                    withDockerRegistry(credentialsId: 'gcr:flipperkid-default', url: 'https://gcr.io/flipperkid-default') {
-                                        sh "docker build -f server/Dockerfile -t gcr.io/flipperkid-default/chalk-server:${env.BUILD_TAG} server"
-                                        sh "docker push gcr.io/flipperkid-default/chalk-server:${env.BUILD_TAG}"
+                                    withDockerRegistry(credentialsId: "gcr:${env.GCP_PROJECT}", url: "https://gcr.io/${env.GCP_PROJECT}") {
+                                        sh "docker build -f server/Dockerfile -t gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG} server"
+                                        sh "docker push gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG}"
                                     }
                                 }
                             }

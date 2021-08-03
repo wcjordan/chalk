@@ -3,7 +3,7 @@ kind: Pod
 spec:
   containers:
   - name: jenkins-worker-ui
-    image: gcr.io/flipperkid-default/chalk-ui-base:latest
+    image: gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest
     command:
     - cat
     tty: true

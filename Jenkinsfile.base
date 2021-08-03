@@ -12,9 +12,9 @@ pipeline {
             }
             steps {
                 container('dind') {
-                    withDockerRegistry(credentialsId: 'gcr:flipperkid-default', url: 'https://gcr.io/flipperkid-default') {
-                        sh "docker build -f ui/Dockerfile.base -t gcr.io/flipperkid-default/chalk-ui-base:latest ui"
-                        sh "docker push gcr.io/flipperkid-default/chalk-ui-base:latest"
+                    withDockerRegistry(credentialsId: "gcr:${env.GCP_PROJECT}", url: "https://gcr.io/${env.GCP_PROJECT}") {
+                        sh "docker build -f ui/Dockerfile.base -t gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest ui"
+                        sh "docker push gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest"
                     }
                 }
             }

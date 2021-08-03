@@ -12,11 +12,11 @@ spec:
           image: gcr.io/cloudsql-docker/gce-proxy:latest
           command:
             - "/cloud_sql_proxy"
-            - "-instances=flipperkid-default:us-east4:chalk-dev=tcp:5432"
+            - "-instances=GCP_PROJECT:us-east4:chalk-dev=tcp:5432"
           securityContext:
             runAsNonRoot: true
         - name: create-superuser
-          image: gcr.io/flipperkid-default/chalk-server-image:latest
+          image: gcr.io/GCP_PROJECT/chalk-server-image:latest
           command: ["/bin/sh", "-c"]
           args:
             - |
@@ -30,27 +30,27 @@ spec:
             - name: DJANGO_SUPERUSER_EMAIL
               valueFrom:
                 secretKeyRef:
-                  name: chalk-dev-server-secrets
+                  name: chalk-ENV-server-secrets
                   key: django-email
             - name: DJANGO_SUPERUSER_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: chalk-dev-server-secrets
+                  name: chalk-ENV-server-secrets
                   key: django-password
             - name: DJANGO_SUPERUSER_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: chalk-dev-server-secrets
+                  name: chalk-ENV-server-secrets
                   key: django-username
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: chalk-dev-server-secrets
+                  name: chalk-ENV-server-secrets
                   key: db-password
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: chalk-dev-server-secrets
+                  name: chalk-ENV-server-secrets
                   key: secret-key
       restartPolicy: Never
   backoffLimit: 3

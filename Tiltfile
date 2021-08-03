@@ -16,11 +16,16 @@ env_arr = [
 ]
 
 docker_build('gcr.io/%s/chalk-server-image' % GCP_PROJECT, 'server')
-docker_build('gcr.io/%s/chalk-ui-image-dev' % GCP_PROJECT, 'ui', dockerfile='ui/Dockerfile.dev', live_update=[
-    fall_back_on(['ui/js/package.json', 'ui/js/yarn.lock']),
-    sync('ui/js/public', '/js/public'),
-    sync('ui/js/src', '/js/src'),
-])
+docker_build(
+    'gcr.io/%s/chalk-ui-image-dev' % GCP_PROJECT,
+    'ui',
+    dockerfile='ui/Dockerfile.dev',
+    build_args={'GCP_PROJECT': GCP_PROJECT},
+    live_update=[
+        fall_back_on(['ui/js/package.json', 'ui/js/yarn.lock']),
+        sync('ui/js/public', '/js/public'),
+        sync('ui/js/src', '/js/src'),
+    ])
 
 RANDOM_TAG = str(local('cat _env_id.txt || true')).strip()
 if not RANDOM_TAG:
