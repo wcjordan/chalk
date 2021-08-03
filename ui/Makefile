@@ -1,8 +1,12 @@
 #!make
 ifneq (,$(wildcard .env))
     include .env
-else
+else ifneq (,$(wildcard ../.env))
     include ../.env
+else
+    # When running within a container, we don't want to leak any credentials by including a .env file
+    # and we don't need the GCP_PROJECT
+    GCP_PROJECT = SKIPPED_INCLUDING_PROJECT
 endif
 
 IMAGE_REPO = gcr.io/$(GCP_PROJECT)
