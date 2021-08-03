@@ -1,6 +1,6 @@
 #!make
 ifneq (,$(wildcard .env))
-	include .env
+    include .env
 else
     include ../.env
 endif

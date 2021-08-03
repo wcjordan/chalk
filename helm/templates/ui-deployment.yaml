@@ -20,9 +20,9 @@ spec:
       containers:
         - name: {{ .Chart.Name }}-ui
           {{- if eq .Values.environment "DEV" }}
-          image: {{ printf "gcr.io/%s/chalk-ui-image-dev:latest" .Values.gcpProjectName | quote }}
+          image: {{ printf "gcr.io/%s/chalk-ui-image-dev:latest" .Values.gcpProject | quote }}
           {{- else }}
-          image: {{ printf "gcr.io/%s/chalk-ui-image-prod:latest" .Values.gcpProjectName | quote }}
+          image: {{ printf "gcr.io/%s/chalk-ui-image-prod:latest" .Values.gcpProject | quote }}
           {{- end }}
           imagePullPolicy: Always
           env:

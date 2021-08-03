@@ -50,7 +50,7 @@ deploy: build
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		helm upgrade --install \
 			--set environment=PROD \
-			--set gcpProjectName=$$GCP_PROJECT \
+			--set gcpProject=$$GCP_PROJECT \
 			--set server.dbPassword=$$DB_PASSWORD \
 			--set server.djangoEmail=$$DJANGO_EMAIL \
 			--set server.djangoPassword=$$DJANGO_PASSWORD \
