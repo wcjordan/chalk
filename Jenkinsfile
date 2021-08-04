@@ -109,7 +109,7 @@ pipeline {
                 }
             }
             options {
-                timeout(time: 10, unit: 'MINUTES')
+                timeout(time: 20, unit: 'MINUTES')
             }
             steps {
                 browserstack(credentialsId: 'f5043d10-054c-41a9-94e5-4e81c0b56f01') {
