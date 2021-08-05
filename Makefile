@@ -14,7 +14,7 @@ build:
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
 			--build-arg sentryDsn=$$SENTRY_DSN \
-			--build-arg "GCP_PROJECT=$(GCP_PROJECT)"
+			--build-arg "GCP_PROJECT=$(GCP_PROJECT)" \
 			-t $(UI_IMAGE):latest ui'
 
 # Test & lint

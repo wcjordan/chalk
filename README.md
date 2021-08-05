@@ -1,8 +1,8 @@
 # Chalk - Todo app
 
-## Setup
+## Env Setup
 Copy .env_default to .env & .prod.env
-Set SECRET_KEY & POSTGRES_PASSWORD in .env
+Set SECRET_KEY & DB_PASSWORD in .env
   These should be random secure strings
   e.g. head -c 32 /dev/urandom | base64
 
