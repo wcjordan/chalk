@@ -1,5 +1,15 @@
 #!make
-IMAGE_REPO = gcr.io/flipperkid-default
+ifneq (,$(wildcard .env))
+    include .env
+else ifneq (,$(wildcard ../.env))
+    include ../.env
+else
+    # When running within a container, we don't want to leak any credentials by including a .env file
+    # and we don't need the GCP_PROJECT
+    GCP_PROJECT = SKIPPED_INCLUDING_PROJECT
+endif
+
+IMAGE_REPO = gcr.io/$(GCP_PROJECT)
 UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-image-dev
 
 # Test w/ Jest
@@ -39,7 +49,7 @@ update-snapshots:
 # Fix import ordering
 .PHONY: fix-imports
 fix-imports:
-	cd js; npx eslint --fix "**/*.{ts,tsx,js,jsx}"
+	cd js; npx eslint --fix "**/*.{ts,tsx,js,jsx}" --ignore-pattern "build"
 
 # Publish Expo
 .PHONY: publish

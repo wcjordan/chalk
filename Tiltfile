@@ -2,8 +2,10 @@
 
 allow_k8s_contexts(os.environ.get('K8S_CONTEXT'))
 
+GCP_PROJECT = os.environ.get('GCP_PROJECT')
 env_arr = [
     'environment=DEV',
+    'gcpProject=%s' % GCP_PROJECT,
     'server.dbPassword=%s' % os.environ.get('DB_PASSWORD'),
     'server.djangoEmail=%s' % os.environ.get('DJANGO_EMAIL'),
     'server.djangoPassword=%s' % os.environ.get('DJANGO_PASSWORD'),
@@ -13,12 +15,17 @@ env_arr = [
     'ui.sentryToken=%s' % os.environ.get('SENTRY_TOKEN'),
 ]
 
-docker_build('gcr.io/flipperkid-default/chalk-server-image', 'server')
-docker_build('gcr.io/flipperkid-default/chalk-ui-image-dev', 'ui', dockerfile='ui/Dockerfile.dev', live_update=[
-    fall_back_on(['ui/js/package.json', 'ui/js/yarn.lock']),
-    sync('ui/js/public', '/js/public'),
-    sync('ui/js/src', '/js/src'),
-])
+docker_build('gcr.io/%s/chalk-server-image' % GCP_PROJECT, 'server')
+docker_build(
+    'gcr.io/%s/chalk-ui-image-dev' % GCP_PROJECT,
+    'ui',
+    dockerfile='ui/Dockerfile.dev',
+    build_args={'GCP_PROJECT': GCP_PROJECT},
+    live_update=[
+        fall_back_on(['ui/js/package.json', 'ui/js/yarn.lock']),
+        sync('ui/js/public', '/js/public'),
+        sync('ui/js/src', '/js/src'),
+    ])
 
 RANDOM_TAG = str(local('cat _env_id.txt || true')).strip()
 if not RANDOM_TAG:

@@ -1,5 +1,6 @@
 # Multistage build for JS artifacts
-FROM gcr.io/flipperkid-default/chalk-ui-base:latest as js_app
+ARG GCP_PROJECT
+FROM gcr.io/${GCP_PROJECT}/chalk-ui-base:latest as js_app
 WORKDIR /js
 
 ENV ENVIRONMENT=prod

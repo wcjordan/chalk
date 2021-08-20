@@ -1,5 +1,7 @@
 #!make
-IMAGE_REPO = gcr.io/flipperkid-default
+include .env
+
+IMAGE_REPO = gcr.io/$(GCP_PROJECT)
 SERVER_IMAGE = $(IMAGE_REPO)/chalk-server-image
 UI_IMAGE = $(IMAGE_REPO)/chalk-ui-image-prod
 UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-image-dev
@@ -8,10 +10,11 @@ UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-image-dev
 .PHONY: build
 build:
 	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):latest server
-	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.dev -t $(UI_IMAGE_DEV):latest ui
+	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.dev --build-arg "GCP_PROJECT=$(GCP_PROJECT)" -t $(UI_IMAGE_DEV):latest ui
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
 			--build-arg sentryDsn=$$SENTRY_DSN \
+			--build-arg "GCP_PROJECT=$(GCP_PROJECT)" \
 			-t $(UI_IMAGE):latest ui'
 
 # Test & lint
@@ -47,6 +50,7 @@ deploy: build
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		helm upgrade --install \
 			--set environment=PROD \
+			--set gcpProject=$$GCP_PROJECT \
 			--set server.dbPassword=$$DB_PASSWORD \
 			--set server.djangoEmail=$$DJANGO_EMAIL \
 			--set server.djangoPassword=$$DJANGO_PASSWORD \

@@ -50,7 +50,8 @@ spec:
           emptyDir: {}
       initContainers:
         - name: collectstatic
-          image: "gcr.io/flipperkid-default/chalk-server-image:latest"
+          image: {{ printf "gcr.io/%s/chalk-server-image:latest" .Values.gcpProject | quote }}
+
           imagePullPolicy: Always
           command: ["python", "manage.py", "collectstatic", "--noinput"]
           volumeMounts:
@@ -63,7 +64,7 @@ spec:
           image: gcr.io/cloudsql-docker/gce-proxy:latest
           command:
             - "/cloud_sql_proxy"
-            - {{ $fullName | printf "-instances=flipperkid-default:us-east4:%s=tcp:5432" | quote }}
+            - {{ printf "-instances=%s:us-east4:%s=tcp:5432" .Values.gcpProject $fullName | quote }}
           securityContext:
             runAsNonRoot: true
         - name: {{ .Chart.Name }}-server-nginx
@@ -90,7 +91,7 @@ spec:
             requests:
               cpu: 10m
         - name: {{ .Chart.Name }}-server
-          image: "gcr.io/flipperkid-default/chalk-server-image:latest"
+          image: {{ printf "gcr.io/%s/chalk-server-image:latest" .Values.gcpProject | quote }}
           imagePullPolicy: Always
           env:
             {{- include "..serverEnv" . | nindent 12 }}

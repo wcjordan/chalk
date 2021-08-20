@@ -1,5 +1,15 @@
 #!make
-IMAGE_REPO = gcr.io/flipperkid-default
+ifneq (,$(wildcard .env))
+    include .env
+else ifneq (,$(wildcard ../.env))
+    include ../.env
+else
+    # When running within a container, we don't want to leak any credentials by including a .env file
+    # and we don't need the GCP_PROJECT
+    GCP_PROJECT = SKIPPED_INCLUDING_PROJECT
+endif
+
+IMAGE_REPO = gcr.io/$(GCP_PROJECT)
 SERVER_IMAGE = $(IMAGE_REPO)/chalk-server-image
 
 PARENT_DIR = $(dir $(PWD))
@@ -31,8 +41,16 @@ create-migrations:
 # For production env:  make create-superuser ENV_NAME=prod
 ENV_NAME ?= dev-$(shell cat ../_env_id.txt)
 YQ_EXPRESSION = '.metadata.name = "create-superuser-chalk-$(ENV_NAME)" \
-  | .spec.template.spec.containers[0].command[1] = "-instances=flipperkid-default:us-east4:chalk-$(ENV_NAME)=tcp:5432" \
-  | .spec.template.spec.containers[1].env[].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server-secrets"'
+  | .spec.template.spec.serviceAccountName = "chalk-$(ENV_NAME)" \
+  | .spec.template.spec.containers[0].command[1] = "-instances=$(GCP_PROJECT):us-east4:chalk-$(ENV_NAME)=tcp:5432" \
+  | .spec.template.spec.containers[1].image = "gcr.io/$(GCP_PROJECT)/chalk-server-image:latest" \
+  | .spec.template.spec.containers[1].env[0].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
+  | .spec.template.spec.containers[1].env[1].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
+  | .spec.template.spec.containers[1].env[2].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
+  | .spec.template.spec.containers[1].env[3].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
+  | .spec.template.spec.containers[1].env[4].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
+  | .spec.template.spec.containers[1].env[5].value = "chalk-$(ENV_NAME)" \
+  | .spec.template.spec.containers[1].env[6].value = "chalk-$(ENV_NAME)"'
 
 .PHONY: create-superuser
 create-superuser:

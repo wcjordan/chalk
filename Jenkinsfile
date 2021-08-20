@@ -16,9 +16,9 @@ pipeline {
                             }
                             steps {
                                 container('dind') {
-                                    withDockerRegistry(credentialsId: 'gcr:flipperkid-default', url: 'https://gcr.io/flipperkid-default') {
-                                        sh "docker build -f ui/Dockerfile -t gcr.io/flipperkid-default/chalk-ui:${env.BUILD_TAG} ui"
-                                        sh "docker push gcr.io/flipperkid-default/chalk-ui:${env.BUILD_TAG}"
+                                    withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
+                                        sh "docker build -f ui/Dockerfile --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' -t gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG} ui"
+                                        sh "docker push gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG}"
                                     }
                                 }
                             }
@@ -26,7 +26,22 @@ pipeline {
                         stage('Test UI') {
                             agent {
                                 kubernetes {
-                                    yamlFile 'jenkins-worker-ui.yml'
+                                    yaml """
+                                        apiVersion: v1
+                                        kind: Pod
+                                        spec:
+                                          containers:
+                                          - name: jenkins-worker-ui
+                                            image: gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest
+                                            command:
+                                            - cat
+                                            tty: true
+                                            resources:
+                                              requests:
+                                                cpu: "500m"
+                                                memory: "3.0Gi"
+
+                                    """
                                 }
                             }
                             options {
@@ -58,9 +73,9 @@ pipeline {
                             }
                             steps {
                                 container('dind') {
-                                    withDockerRegistry(credentialsId: 'gcr:flipperkid-default', url: 'https://gcr.io/flipperkid-default') {
-                                        sh "docker build -f server/Dockerfile -t gcr.io/flipperkid-default/chalk-server:${env.BUILD_TAG} server"
-                                        sh "docker push gcr.io/flipperkid-default/chalk-server:${env.BUILD_TAG}"
+                                    withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
+                                        sh "docker build -f server/Dockerfile --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' -t gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG} server"
+                                        sh "docker push gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG}"
                                     }
                                 }
                             }
@@ -94,10 +109,10 @@ pipeline {
                 }
             }
             options {
-                timeout(time: 10, unit: 'MINUTES')
+                timeout(time: 20, unit: 'MINUTES')
             }
             steps {
-                browserstack(credentialsId: 'f5043d10-054c-41a9-94e5-4e81c0b56f01') {
+                browserstack(credentialsId: 'browserstack_key') {
                     container('jenkins-worker-python') {
                         dir('tests') {
                             sh 'pip install "selenium==3.141.0" "pytest==6.2.2"'
