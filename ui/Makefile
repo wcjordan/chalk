@@ -49,7 +49,7 @@ update-snapshots:
 # Fix import ordering
 .PHONY: fix-imports
 fix-imports:
-	cd js; npx eslint --fix "**/*.{ts,tsx,js,jsx}"
+	cd js; npx eslint --fix "**/*.{ts,tsx,js,jsx}" --ignore-pattern "build"
 
 # Publish Expo
 .PHONY: publish
