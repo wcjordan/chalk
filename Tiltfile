@@ -5,7 +5,7 @@ allow_k8s_contexts(os.environ.get('K8S_CONTEXT'))
 GCP_PROJECT = os.environ.get('GCP_PROJECT')
 env_arr = [
     'environment=DEV',
-    'gcpProject=%s' % GCP_PROJECT
+    'gcpProject=%s' % GCP_PROJECT,
     'server.dbPassword=%s' % os.environ.get('DB_PASSWORD'),
     'server.djangoEmail=%s' % os.environ.get('DJANGO_EMAIL'),
     'server.djangoPassword=%s' % os.environ.get('DJANGO_PASSWORD'),

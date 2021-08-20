@@ -6,6 +6,27 @@ Set SECRET_KEY & DB_PASSWORD in .env
   These should be random secure strings  
   e.g. head -c 32 /dev/urandom | base64  
 
+## Allocate static IPs & create DNS entries
+Explore doing this w/ Config Connector once [#101](https://github.com/GoogleCloudPlatform/k8s-config-connector/issues/101) is resolved.
+
+```
+PROJECT_NAME=<PROJECT_NAME>
+ZONE_NAME=$PROJEC_NAME-dns
+DOMAIN_NAME=<DOMAIN_NAME>
+
+gcloud compute addresses create chalk-ip --global
+gcloud compute addresses create chalk-dev-ip --global
+
+DEV_IP=gcloud compute addresses describe chalk-dev-ip --global --format json | jq .address | tr -d '"'
+PROD_IP=gcloud compute addresses describe chalk-ip --global --format json | jq .address | tr -d '"'
+
+gcloud beta dns record-sets transaction start --zone=$ZONE_NAME
+gcloud beta dns record-sets transaction add $DEV_IP --name=chalk-dev.$DOMAIN_NAME. --ttl=300 --type=A --zone=$ZONE_NAME
+gcloud beta dns record-sets transaction add $PROD_IP --name=chalk.$DOMAIN_NAME. --ttl=1800 --type=A --zone=$ZONE_NAME
+gcloud beta dns record-sets transaction execute --zone=$ZONE_NAME
+
+```
+
 ## Setup Jenkins Builds
 ### Chalk Build
 Create a Multibranch Pipeline build named `Chalk`  
