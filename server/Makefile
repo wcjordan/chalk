@@ -63,3 +63,10 @@ update-starter-data:
 	# TODO (jordan) old version below.  Need a k8s compatible version
 	# echo "Rerun if failed w/ could not connect to server: Connection refused"
 	# cd ../; docker-compose run --rm -v $(PARENT_DIR)db/starter_db:/starter_db server pg_dump -h db -U postgres -f /starter_db/starter_db.sql chalk
+	#
+	# Also can build on gcloud commands
+	# Requires creating bucket and adding CloudSQL service account w/ read & write permissions
+	# gcloud sql export sql chalk-prod gs://default-323301-db-backups/test.gz -d chalk-prod
+	# gcloud sql databases delete chalk-prod --instance chalk-prod && \
+	# gcloud sql databases create chalk-prod --instance chalk-prod && \
+	# gcloud sql import sql chalk-prod gs://default-323301-db-backups/test.gz -d chalk-prod --user=chalk-prod
