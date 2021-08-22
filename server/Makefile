@@ -10,7 +10,7 @@ else
 endif
 
 IMAGE_REPO = gcr.io/$(GCP_PROJECT)
-SERVER_IMAGE = $(IMAGE_REPO)/chalk-server-image
+SERVER_IMAGE = $(IMAGE_REPO)/chalk-server
 
 PARENT_DIR = $(dir $(PWD))
 
@@ -27,14 +27,14 @@ test:
 # Yapf formatting
 .PHONY: format
 format:
-	docker run --rm -v $(PWD)/server:/usr/src/app $(SERVER_IMAGE):latest yapf -ri .
+	docker run --rm -v $(PWD)/server:/usr/src/app $(SERVER_IMAGE):local-latest yapf -ri .
 
 # Make migrations for server
 .PHONY: create-migrations
 create-migrations:
 	DJANGO_SETTINGS_MODULE=chalk.settings.testing docker run --rm \
 		--env-file ../.env --env DJANGO_SETTINGS_MODULE \
-		-v $(PWD):/usr/src/app $(SERVER_IMAGE):latest \
+		-v $(PWD):/usr/src/app $(SERVER_IMAGE):local-latest \
 		python manage.py makemigrations --verbosity 3
 
 # Add an admin to Django
@@ -43,7 +43,7 @@ ENV_NAME ?= dev-$(shell cat ../_env_id.txt)
 YQ_EXPRESSION = '.metadata.name = "create-superuser-chalk-$(ENV_NAME)" \
   | .spec.template.spec.serviceAccountName = "chalk-$(ENV_NAME)" \
   | .spec.template.spec.containers[0].command[1] = "-instances=$(GCP_PROJECT):us-east4:chalk-$(ENV_NAME)=tcp:5432" \
-  | .spec.template.spec.containers[1].image = "gcr.io/$(GCP_PROJECT)/chalk-server-image:latest" \
+  | .spec.template.spec.containers[1].image = "gcr.io/$(GCP_PROJECT)/chalk-server:local-latest" \
   | .spec.template.spec.containers[1].env[0].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
   | .spec.template.spec.containers[1].env[1].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
   | .spec.template.spec.containers[1].env[2].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \

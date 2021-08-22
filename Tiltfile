@@ -15,9 +15,9 @@ env_arr = [
     'ui.sentryToken=%s' % os.environ.get('SENTRY_TOKEN'),
 ]
 
-docker_build('gcr.io/%s/chalk-server-image' % GCP_PROJECT, 'server')
+docker_build('gcr.io/%s/chalk-server' % GCP_PROJECT, 'server')
 docker_build(
-    'gcr.io/%s/chalk-ui-image-dev' % GCP_PROJECT,
+    'gcr.io/%s/chalk-ui-dev' % GCP_PROJECT,
     'ui',
     dockerfile='ui/Dockerfile.dev',
     build_args={'GCP_PROJECT': GCP_PROJECT},

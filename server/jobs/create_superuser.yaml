@@ -16,7 +16,7 @@ spec:
           securityContext:
             runAsNonRoot: true
         - name: create-superuser
-          image: gcr.io/GCP_PROJECT/chalk-server-image:latest
+          image: gcr.io/GCP_PROJECT/chalk-server:local-latest
           command: ["/bin/sh", "-c"]
           args:
             - |

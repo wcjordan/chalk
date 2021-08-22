@@ -2,26 +2,26 @@
 include .env
 
 IMAGE_REPO = gcr.io/$(GCP_PROJECT)
-SERVER_IMAGE = $(IMAGE_REPO)/chalk-server-image
-UI_IMAGE = $(IMAGE_REPO)/chalk-ui-image-prod
-UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-image-dev
+SERVER_IMAGE = $(IMAGE_REPO)/chalk
+UI_IMAGE = $(IMAGE_REPO)/chalk-ui
+UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-dev
 
 # Build containers
 .PHONY: build
 build:
-	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):latest server
-	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.dev --build-arg "GCP_PROJECT=$(GCP_PROJECT)" -t $(UI_IMAGE_DEV):latest ui
+	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):local-latest server
+	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.dev --build-arg "GCP_PROJECT=$(GCP_PROJECT)" -t $(UI_IMAGE_DEV):local-latest ui
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
 			--build-arg sentryDsn=$$SENTRY_DSN \
 			--build-arg "GCP_PROJECT=$(GCP_PROJECT)" \
-			-t $(UI_IMAGE):latest ui'
+			-t $(UI_IMAGE):local-latest ui'
 
 # Test & lint
 .PHONY: test
 test: build
-	docker run --rm -t -w / $(UI_IMAGE_DEV):latest make test
-	DB_HOSTNAME=localhost docker run --env-file .env --env DB_HOSTNAME --rm $(SERVER_IMAGE):latest make test
+	docker run --rm -t -w / $(UI_IMAGE_DEV):local-latest make test
+	DB_HOSTNAME=localhost docker run --env-file .env --env DB_HOSTNAME --rm $(SERVER_IMAGE):local-latest make test
 
 # Start environment for development
 .PHONY: start
@@ -44,9 +44,9 @@ format:
 .PHONY: deploy
 deploy: build
 	docker run --env-file .prod.env --env ENVIRONMENT=prod --env DEBUG=false \
-		--rm -t -w / $(UI_IMAGE_DEV):latest make publish
-	docker push $(SERVER_IMAGE):latest
-	docker push $(UI_IMAGE):latest
+		--rm -t -w / $(UI_IMAGE_DEV):local-latest make publish
+	docker push $(SERVER_IMAGE):local-latest
+	docker push $(UI_IMAGE):local-latest
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		helm upgrade --install \
 			--set environment=PROD \
