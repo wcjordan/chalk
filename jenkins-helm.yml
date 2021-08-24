@@ -9,5 +9,5 @@ spec:
     tty: true
     resources:
       requests:
-        cpu: "300m"
-        memory: "0.5Gi"
+        cpu: "1000m"
+        memory: "2Gi"
