@@ -102,28 +102,54 @@ pipeline {
                 }
             }
         }
-        stage('Selenium Tests') {
-            agent {
-                kubernetes {
-                    yamlFile 'jenkins-worker-python.yml'
+        stage('Integration Tests') {
+            stage('Deploy Integration Server') {
+                agent {
+                    kubernetes {
+                        yamlFile 'jenkins-helm.yml'
+                    }
                 }
-            }
-            options {
-                timeout(time: 20, unit: 'MINUTES')
-            }
-            steps {
-                browserstack(credentialsId: 'browserstack_key') {
-                    container('jenkins-worker-python') {
-                        dir('tests') {
-                            sh 'pip install "selenium==3.141.0" "pytest==6.2.2"'
-                            sh 'pytest .'
-                        }
+                options {
+                    timeout(time: 10, unit: 'MINUTES')
+                }
+                steps {
+                    container('jenkins-helm') {
+                        sh 'helm template test-chart helm > k8s-manifest.yml'
+                        sh 'cat k8s-manifest.yml'
+                        // step([
+                        //     $class: 'KubernetesEngineBuilder',
+                        //     projectId: env.GCP_PROJECT,
+                        //     clusterName: env.GCP_PROJECT + '-gke',
+                        //     location: 'us-east4-c',
+                        //     manifestPattern: 'k8s-manifest.yml',
+                        //     credentialsId: 'gcr:gke_key',
+                        //     verifyDeployments: true])
                     }
                 }
             }
-            post {
-                always {
-                    browserStackReportPublisher 'automate'
+            stage('Selenium Tests') {
+                agent {
+                    kubernetes {
+                        yamlFile 'jenkins-worker-python.yml'
+                    }
+                }
+                options {
+                    timeout(time: 20, unit: 'MINUTES')
+                }
+                steps {
+                    browserstack(credentialsId: 'browserstack_key') {
+                        container('jenkins-worker-python') {
+                            dir('tests') {
+                                sh 'pip install "selenium==3.141.0" "pytest==6.2.2"'
+                                sh 'pytest .'
+                            }
+                        }
+                    }
+                }
+                post {
+                    always {
+                        browserStackReportPublisher 'automate'
+                    }
                 }
             }
         }

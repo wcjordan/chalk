@@ -10,12 +10,12 @@ gcpProject: ""
 environment: DEV
 
 ui:
-  sentryDsn:
-  sentryToken:
+  sentryDsn: ""
+  sentryToken: ""
 
 server:
-  dbPassword:
-  djangoEmail:
-  djangoPassword:
-  djangoUsername:
-  secretKey:
+  dbPassword: ""
+  djangoEmail: ""
+  djangoPassword: ""
+  djangoUsername: ""
+  secretKey: ""
