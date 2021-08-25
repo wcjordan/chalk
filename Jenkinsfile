@@ -115,7 +115,8 @@ pipeline {
                     }
                     steps {
                         container('jenkins-helm') {
-                            sh 'helm install test-chart helm'
+                            sh 'kubectl config get-contexts'
+                            // sh 'helm install test-chart helm'
                         }
                     }
                 }
