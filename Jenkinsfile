@@ -8,7 +8,7 @@ pipeline {
                         stage('Build UI') {
                             agent {
                                 kubernetes {
-                                    yamlFile 'jenkins-worker-dind.yml'
+                                    yamlFile 'jenkins/jenkins-worker-dind.yml'
                                 }
                             }
                             options {
@@ -65,7 +65,7 @@ pipeline {
                         stage('Build Server') {
                             agent {
                                 kubernetes {
-                                    yamlFile 'jenkins-worker-dind.yml'
+                                    yamlFile 'jenkins/jenkins-worker-dind.yml'
                                 }
                             }
                             options {
@@ -83,7 +83,7 @@ pipeline {
                         stage('Test Server') {
                             agent {
                                 kubernetes {
-                                    yamlFile 'jenkins-worker-python.yml'
+                                    yamlFile 'jenkins/jenkins-worker-python.yml'
                                 }
                             }
                             options {
@@ -107,7 +107,22 @@ pipeline {
                 stage('Deploy Integration Server') {
                     agent {
                         kubernetes {
-                            yamlFile 'jenkins-helm.yml'
+                            yaml """
+                                apiVersion: v1
+                                kind: Pod
+                                spec:
+                                  containers:
+                                  - name: jenkins-helm
+                                    image: gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest
+                                    command:
+                                    - cat
+                                    tty: true
+                                    resources:
+                                      requests:
+                                        cpu: "500m"
+                                        memory: "1Gi"
+
+                            """
                         }
                     }
                     options {
@@ -115,7 +130,12 @@ pipeline {
                     }
                     steps {
                         container('jenkins-helm') {
-                            sh 'kubectl config get-contexts'
+                            withCredentials([file(credentialsId: 'gke-sa-key.json', variable: 'FILE')]) {
+                                sh 'echo $FILE'
+                                sh 'cat $FILE'
+                                sh 'kubectl config get-contexts'
+                            }
+
                             // sh 'helm install test-chart helm'
                         }
                     }
@@ -123,7 +143,7 @@ pipeline {
                 stage('Selenium Tests') {
                     agent {
                         kubernetes {
-                            yamlFile 'jenkins-worker-python.yml'
+                            yamlFile 'jenkins/jenkins-worker-python.yml'
                         }
                     }
                     options {

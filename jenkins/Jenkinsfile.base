@@ -4,7 +4,7 @@ pipeline {
         stage('Build Base') {
             agent {
                 kubernetes {
-                    yamlFile 'jenkins-worker-dind.yml'
+                    yamlFile 'jenkins/jenkins-worker-dind.yml'
                 }
             }
             options {
@@ -15,6 +15,9 @@ pipeline {
                     withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
                         sh "docker build -f ui/Dockerfile.base -t gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest ui"
                         sh "docker push gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest"
+
+                        sh "docker build -t gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest - < jenkins/gcloud_helm.Dockerfile"
+                        sh "docker push gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest"
                     }
                 }
             }
