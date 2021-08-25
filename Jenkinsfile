@@ -130,7 +130,7 @@ pipeline {
                     }
                     steps {
                         container('jenkins-helm') {
-                            withCredentials([file(credentialsId: 'gke-sa-key.json', variable: 'FILE')]) {
+                            withCredentials([file(credentialsId: 'jenkins-gke-sa', variable: 'FILE')]) {
                                 sh 'echo $FILE'
                                 sh 'cat $FILE'
                                 sh 'kubectl config get-contexts'
