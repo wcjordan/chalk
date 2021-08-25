@@ -115,16 +115,7 @@ pipeline {
                     }
                     steps {
                         container('jenkins-helm') {
-                            sh 'helm template test-chart helm > k8s-manifest.yml'
-                            sh 'cat k8s-manifest.yml'
-                            // step([
-                            //     $class: 'KubernetesEngineBuilder',
-                            //     projectId: env.GCP_PROJECT,
-                            //     clusterName: env.GCP_PROJECT + '-gke',
-                            //     location: 'us-east4-c',
-                            //     manifestPattern: 'k8s-manifest.yml',
-                            //     credentialsId: 'gcr:gke_key',
-                            //     verifyDeployments: true])
+                            sh 'helm install test-chart helm'
                         }
                     }
                 }
