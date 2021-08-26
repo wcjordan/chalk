@@ -191,7 +191,7 @@ pipeline {
                     agent {
                         kubernetes {
                             yamlFile 'jenkins/jenkins-worker-python.yml'
-                            name 'jenkins-test-python'
+                            schedulerName 'jenkins-test-python'
                         }
                     }
                     options {
