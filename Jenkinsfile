@@ -4,6 +4,22 @@ def HELM_DEPLOY_NAME = null
 pipeline {
     agent none
     stages {
+        stage('Testing') {
+            steps {
+                script {
+                    HELM_DEPLOY_NAME = sh (
+                        script: """
+                            parts=(\$(echo ${env.BUILD_TAG} | tr _- "\n"))
+                            part_len=\$(echo \${#parts[@]})
+                            branch_part=\$(echo "\${parts[@]:2:\$part_len-3}" | tr " " - | head -c 12)
+                            echo \$parts[1]-\$parts[2]-\$branch_part-\$parts[-1]
+                        """,
+                        returnStdout: true
+                    ).trim()
+                }
+                sh "echo ${HELM_DEPLOY_NAME}"
+            }
+        }
         stage('Build') {
             parallel {
                 stage('UI') {
@@ -128,26 +144,6 @@ pipeline {
             }
             stages {
                 stage('Deploy Integration Server') {
-                    // agent {
-                    //     kubernetes {
-                    //         yaml """
-                    //             apiVersion: v1
-                    //             kind: Pod
-                    //             spec:
-                    //               containers:
-                    //               - name: jenkins-helm
-                    //                 image: gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest
-                    //                 command:
-                    //                 - cat
-                    //                 tty: true
-                    //                 resources:
-                    //                   requests:
-                    //                     cpu: "500m"
-                    //                     memory: "1Gi"
-
-                    //         """
-                    //     }
-                    // }
                     options {
                         timeout(time: 10, unit: 'MINUTES')
                     }
