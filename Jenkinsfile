@@ -132,7 +132,7 @@ pipeline {
                         container('jenkins-helm') {
                             withCredentials([file(credentialsId: 'jenkins-gke-sa', variable: 'FILE')]) {
                                 sh "gcloud auth activate-service-account default-jenkins@${env.GCP_PROJECT}.iam.gserviceaccount.com --key-file $FILE"
-                                sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME} --project ${env.GCP_PROJECT}"
+                                sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME} --project ${env.GCP_PROJECT} --zone us-east4-c"
                                 sh 'kubectl get deployments'
                                 sh 'kubectl config get-contexts'
                             }
