@@ -30,6 +30,7 @@ pipeline {
                     script {
                         HELM_DEPLOY_NAME = sh (
                             script: """#!/bin/bash
+                                set -x
                                 hmm=\$(bash --version)
                                 hmm2=\$(echo \$hmm)
                                 bash --version
