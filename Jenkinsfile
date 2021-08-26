@@ -164,7 +164,7 @@ pipeline {
                                             do
                                                 server_ip=\$(kubectl get ingress ${HELM_DEPLOY_NAME} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
                                             done
-                                            echo $server_ip
+                                            echo \$server_ip
                                         """,
                                         returnStdout: true
                                     ).trim()
