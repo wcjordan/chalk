@@ -139,7 +139,12 @@ pipeline {
 
                                 script {
                                     HELM_DEPLOY_NAME = sh (
-                                        script: "echo ${env.BUILD_TAG} | tr _ -",
+                                        script: """
+                                            parts=(\$(echo ${env.BUILD_TAG} | tr _- "\n"))
+                                            part_len=\$(echo \${#parts[@]})
+                                            branch_part=\$(echo "\${parts[@]:2:\$part_len-3}" | tr " " - | head -c 12)
+                                            echo \$parts[1]-\$parts[2]-\$branch_part-\$parts[-1]
+                                        """,
                                         returnStdout: true
                                     ).trim()
                                 }
@@ -200,8 +205,34 @@ pipeline {
                 }
             }
             post {
+                agent {
+                    kubernetes {
+                        yaml """
+                            apiVersion: v1
+                            kind: Pod
+                            spec:
+                              containers:
+                              - name: jenkins-helm
+                                image: gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest
+                                command:
+                                - cat
+                                tty: true
+                                resources:
+                                  requests:
+                                    cpu: "500m"
+                                    memory: "1Gi"
+
+                        """
+                    }
+                }
                 always {
-                    sh "helm uninstall ${HELM_DEPLOY_NAME}"
+                    container('jenkins-helm') {
+                        withCredentials([file(credentialsId: 'jenkins-gke-sa', variable: 'FILE')]) {
+                            sh "gcloud auth activate-service-account default-jenkins@${env.GCP_PROJECT}.iam.gserviceaccount.com --key-file $FILE"
+                            sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
+                            sh "helm uninstall ${HELM_DEPLOY_NAME}"
+                        }
+                    }
                 }
             }
         }
