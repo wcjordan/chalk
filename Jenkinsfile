@@ -131,9 +131,10 @@ pipeline {
                     steps {
                         container('jenkins-helm') {
                             withCredentials([file(credentialsId: 'jenkins-gke-sa', variable: 'FILE')]) {
-                                sh 'echo $FILE'
-                                sh 'cat $FILE'
-                                sh 'kubectl config get-contexts'
+                                sh "gcloud auth activate-service-account account_name --key-file $FILE"
+                                sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME} --project ${env.GCP_PROJECT}"
+                                sh "kubectl get deployments"
+                                sh "kubectl config get-contexts"
                             }
 
                             // sh 'helm install test-chart helm'
