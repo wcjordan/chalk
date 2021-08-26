@@ -122,7 +122,15 @@ pipeline {
                               requests:
                                 cpu: "500m"
                                 memory: "1Gi"
-
+                          - name: jenkins-worker-python
+                            image: python:3
+                            command:
+                            - cat
+                            tty: true
+                            resources:
+                              requests:
+                                cpu: "300m"
+                                memory: "1.5Gi"
                     """
                 }
             }
@@ -188,18 +196,12 @@ pipeline {
                     }
                 }
                 stage('Selenium Tests') {
-                    agent {
-                        kubernetes {
-                            yamlFile 'jenkins/jenkins-worker-python.yml'
-                            schedulerName 'jenkins-test-python'
-                        }
-                    }
                     options {
                         timeout(time: 20, unit: 'MINUTES')
                     }
                     steps {
                         browserstack(credentialsId: 'browserstack_key') {
-                            container('jenkins-test-python') {
+                            container('jenkins-worker-python') {
                                 dir('tests') {
                                     sh 'pip install "selenium==3.141.0" "pytest==6.2.2"'
                                     sh "pytest . --server_domain ${SERVER_IP}"
