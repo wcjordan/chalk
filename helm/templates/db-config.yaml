@@ -4,7 +4,7 @@ kind: SQLInstance
 metadata:
   annotations:
     cnrm.cloud.google.com/deletion-policy: abandon
-  name: {{ $fullName }}
+  name: {{ include "..dbInstanceName" . }}
 spec:
   databaseVersion: POSTGRES_12
   region: us-east4
@@ -29,7 +29,7 @@ metadata:
   name: {{ $fullName }}
 spec:
   instanceRef:
-    name: {{ $fullName }}
+    name: {{ include "..dbInstanceName" . }}
 
 ---
 
@@ -37,11 +37,13 @@ apiVersion: sql.cnrm.cloud.google.com/v1beta1
 kind: SQLUser
 metadata:
   annotations:
+    {{- if ne .Values.environment "CI" }}
     cnrm.cloud.google.com/deletion-policy: abandon
+    {{- end }}
   name: {{ $fullName }}
 spec:
   instanceRef:
-    name: {{ $fullName }}
+    name: {{ include "..dbInstanceName" . }}
   password:
     valueFrom:
       secretKeyRef:
