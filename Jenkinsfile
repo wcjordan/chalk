@@ -148,10 +148,12 @@ pipeline {
                                         --set ui.sentryToken=${env.SENTRY_TOKEN} \
                                         ${env.BUILD_TAG} helm
                                     """
-                                SERVER_IP = sh (
-                                    script: "kubectl get ingress ${env.BUILD_TAG} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'",
-                                    returnStdout: true
-                                ).trim()
+                                script {
+                                    SERVER_IP = sh (
+                                        script: "kubectl get ingress ${env.BUILD_TAG} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'",
+                                        returnStdout: true
+                                    ).trim()
+                                }
                                 sh "echo ${SERVER_IP}"
                             }
                         }
