@@ -132,7 +132,6 @@ pipeline {
                                 cpu: "300m"
                                 memory: "1.5Gi"
                     """
-                    defaultContainer 'jenkins-worker-python'
                 }
             }
             stages {
@@ -174,13 +173,11 @@ pipeline {
                                 script {
                                     SERVER_IP = sh (
                                         script: """
-                                            echo 'Waiting for server replicas'
                                             until [ ! -z \$ready_replicas ] && [ \$ready_replicas -ge 1 ]
                                             do
                                                 sleep 15
                                                 ready_replicas=\$(kubectl get deployments ${HELM_DEPLOY_NAME}-server -o jsonpath='{.status.readyReplicas}')
                                             done
-                                            echo 'Server replicas ready!'
 
                                             until [ ! -z \$server_ip ]
                                             do
