@@ -140,7 +140,7 @@ pipeline {
                                         --set environment=CI \
                                         --set gcpProject=${env.GCP_PROJECT} \
                                         --set server.dbPassword=\$(head -c 32 /dev/urandom | base64) \
-                                        --set server.djangoEmail="" \
+                                        --set server.djangoEmail="test@testmail.com" \
                                         --set server.djangoPassword=\$(head -c 32 /dev/urandom | base64) \
                                         --set server.djangoUsername=\$(head -c 32 /dev/urandom | base64) \
                                         --set server.secretKey=\$(head -c 32 /dev/urandom | base64) \
