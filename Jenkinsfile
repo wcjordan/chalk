@@ -5,19 +5,26 @@ pipeline {
     agent none
     stages {
         stage('Testing') {
-            steps {
-                script {
-                    HELM_DEPLOY_NAME = sh (
-                        script: """
-                            parts=(\$(echo ${env.BUILD_TAG} | tr _- "\n"))
-                            part_len=\$(echo \${#parts[@]})
-                            branch_part=\$(echo "\${parts[@]:2:\$part_len-3}" | tr " " - | head -c 12)
-                            echo \$parts[1]-\$parts[2]-\$branch_part-\$parts[-1]
-                        """,
-                        returnStdout: true
-                    ).trim()
+            agent {
+                kubernetes {
+                    yamlFile 'jenkins/jenkins-worker-dind.yml'
                 }
-                sh "echo ${HELM_DEPLOY_NAME}"
+            }
+            steps {
+                container('dind') {
+                    script {
+                        HELM_DEPLOY_NAME = sh (
+                            script: """
+                                parts=\$(echo ${env.BUILD_TAG} | tr _- "\n")
+                                part_len=\$(echo \${#parts[@]})
+                                branch_part=\$(echo "\${parts[@]:2:\$part_len-3}" | tr " " - | head -c 12)
+                                echo \$parts[1]-\$parts[2]-\$branch_part-\$parts[-1]
+                            """,
+                            returnStdout: true
+                        ).trim()
+                    }
+                    sh "echo ${HELM_DEPLOY_NAME}"
+                }
             }
         }
         stage('Build') {
