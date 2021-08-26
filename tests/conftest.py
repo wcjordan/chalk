@@ -22,13 +22,25 @@ def pytest_runtest_makereport(item, call):
     setattr(item, "rep_" + rep.when, rep)
 
 
+def pytest_addoption(parser):
+    parser.addoption("--server_domain", action="store", default="chalk.flipperkid.com")
+
+
+def pytest_generate_tests(metafunc):
+    # This is called for every test. Only get/set command line arguments
+    # if the argument is specified in the list of test "fixturenames".
+    server_domain = metafunc.config.option.server_domain
+    if 'server_domain' in metafunc.fixturenames and server_domain is not None:
+        metafunc.parametrize("server_domain", [server_domain])
+
+
 @pytest.fixture
 def todo_prefix():
     return 'Temp Test Prefix {} -'.format(random.randrange(10000))
 
 
 @pytest.fixture
-def driver(request, todo_prefix, test_name):
+def driver(request, todo_prefix, test_name, server_domain):
 
     username = os.getenv("BROWSERSTACK_USERNAME")
     access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
@@ -55,7 +67,7 @@ def driver(request, todo_prefix, test_name):
 
     try:
         # Load page
-        driver.get("http://chalk.flipperkid.com/")
+        driver.get(f"http://{server_domain}/")
         if not "chalk" in driver.title:
             raise Exception("Unable to load page.")
 
