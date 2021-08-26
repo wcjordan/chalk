@@ -165,6 +165,14 @@ pipeline {
                                 script {
                                     SERVER_IP = sh (
                                         script: """
+                                            echo 'Waiting for server replicas'
+                                            until [ ! \$ready_replicas -ge 1 ]
+                                            do
+                                                sleep 5
+                                                ready_replicas=\$(kubectl get deployments ${HELM_DEPLOY_NAME}-server -o jsonpath='{.status.readyReplicas}')
+                                            done
+                                            echo 'Server replicas ready!'
+
                                             until [ ! -z \$server_ip ]
                                             do
                                                 sleep 5
