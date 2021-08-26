@@ -168,7 +168,7 @@ pipeline {
                                             echo 'Waiting for server replicas'
                                             until [ ! \$ready_replicas -ge 1 ]
                                             do
-                                                sleep 5
+                                                sleep 15
                                                 ready_replicas=\$(kubectl get deployments ${HELM_DEPLOY_NAME}-server -o jsonpath='{.status.readyReplicas}')
                                             done
                                             echo 'Server replicas ready!'
@@ -191,6 +191,7 @@ pipeline {
                     agent {
                         kubernetes {
                             yamlFile 'jenkins/jenkins-worker-python.yml'
+                            name 'jenkins-test-python'
                         }
                     }
                     options {
@@ -198,7 +199,7 @@ pipeline {
                     }
                     steps {
                         browserstack(credentialsId: 'browserstack_key') {
-                            container('jenkins-worker-python') {
+                            container('jenkins-test-python') {
                                 dir('tests') {
                                     sh 'pip install "selenium==3.141.0" "pytest==6.2.2"'
                                     sh "pytest . --server_domain ${SERVER_IP}"
