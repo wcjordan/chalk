@@ -106,28 +106,48 @@ pipeline {
             }
         }
         stage('Integration Tests') {
+            agent {
+                kubernetes {
+                    yaml """
+                        apiVersion: v1
+                        kind: Pod
+                        spec:
+                          containers:
+                          - name: jenkins-helm
+                            image: gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest
+                            command:
+                            - cat
+                            tty: true
+                            resources:
+                              requests:
+                                cpu: "500m"
+                                memory: "1Gi"
+
+                    """
+                }
+            }
             stages {
                 stage('Deploy Integration Server') {
-                    agent {
-                        kubernetes {
-                            yaml """
-                                apiVersion: v1
-                                kind: Pod
-                                spec:
-                                  containers:
-                                  - name: jenkins-helm
-                                    image: gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest
-                                    command:
-                                    - cat
-                                    tty: true
-                                    resources:
-                                      requests:
-                                        cpu: "500m"
-                                        memory: "1Gi"
+                    // agent {
+                    //     kubernetes {
+                    //         yaml """
+                    //             apiVersion: v1
+                    //             kind: Pod
+                    //             spec:
+                    //               containers:
+                    //               - name: jenkins-helm
+                    //                 image: gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest
+                    //                 command:
+                    //                 - cat
+                    //                 tty: true
+                    //                 resources:
+                    //                   requests:
+                    //                     cpu: "500m"
+                    //                     memory: "1Gi"
 
-                            """
-                        }
-                    }
+                    //         """
+                    //     }
+                    // }
                     options {
                         timeout(time: 10, unit: 'MINUTES')
                     }
@@ -205,26 +225,6 @@ pipeline {
                 }
             }
             post {
-                agent {
-                    kubernetes {
-                        yaml """
-                            apiVersion: v1
-                            kind: Pod
-                            spec:
-                              containers:
-                              - name: jenkins-helm
-                                image: gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest
-                                command:
-                                - cat
-                                tty: true
-                                resources:
-                                  requests:
-                                    cpu: "500m"
-                                    memory: "1Gi"
-
-                        """
-                    }
-                }
                 always {
                     container('jenkins-helm') {
                         withCredentials([file(credentialsId: 'jenkins-gke-sa', variable: 'FILE')]) {
