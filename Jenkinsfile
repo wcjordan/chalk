@@ -7,11 +7,26 @@ pipeline {
         stage('Testing') {
             agent {
                 kubernetes {
-                    yamlFile 'jenkins/jenkins-worker-dind.yml'
+                    yaml """
+                        apiVersion: v1
+                        kind: Pod
+                        spec:
+                          containers:
+                          - name: jenkins-helm
+                            image: gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest
+                            command:
+                            - cat
+                            tty: true
+                            resources:
+                              requests:
+                                cpu: "500m"
+                                memory: "1Gi"
+
+                    """
                 }
             }
             steps {
-                container('dind') {
+                container('jenkins-helm') {
                     script {
                         HELM_DEPLOY_NAME = sh (
                             script: """#!/bin/bash
