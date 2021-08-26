@@ -1,4 +1,4 @@
-def server_ip = null
+def SERVER_IP = null
 
 pipeline {
     agent none
@@ -145,9 +145,12 @@ pipeline {
                                     --set server.secretKey=\$(head -c 32 /dev/urandom | base64) \
                                     --set ui.sentryDsn=${env.SENTRY_DSN} \
                                     --set ui.sentryToken=${env.SENTRY_TOKEN} \
-                                  ${env.BUILD_TAG} helm"
-                                server_ip = sh "kubectl get ingress ${env.BUILD_TAG} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
-                                sh "echo ${server_ip}"
+                                    ${env.BUILD_TAG} helm"
+                                SERVER_IP = sh (
+                                    script: "kubectl get ingress ${env.BUILD_TAG} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'",
+                                    returnStdout: true
+                                ).trim()
+                                sh "echo ${SERVER_IP}"
                             }
                         }
                     }
@@ -166,8 +169,8 @@ pipeline {
                             container('jenkins-worker-python') {
                                 dir('tests') {
                                     sh 'pip install "selenium==3.141.0" "pytest==6.2.2"'
-                                    sh "echo ${server_ip}"
-                                    sh "pytest . --server_domain ${server_ip}"
+                                    sh "echo ${SERVER_IP}"
+                                    sh "pytest . --server_domain ${SERVER_IP}"
                                 }
                             }
                         }
