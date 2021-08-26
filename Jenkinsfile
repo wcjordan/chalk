@@ -1,4 +1,5 @@
 def SERVER_IP = null
+def HELM_DEPLOY_NAME = null
 
 pipeline {
     agent none
@@ -135,6 +136,13 @@ pipeline {
                             withCredentials([file(credentialsId: 'jenkins-gke-sa', variable: 'FILE')]) {
                                 sh "gcloud auth activate-service-account default-jenkins@${env.GCP_PROJECT}.iam.gserviceaccount.com --key-file $FILE"
                                 sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
+
+                                script {
+                                    HELM_DEPLOY_NAME = sh (
+                                        script: "echo ${env.BUILD_TAG} | tr _ -",
+                                        returnStdout: true
+                                    ).trim()
+                                }
                                 sh """
                                     helm install \
                                         --set environment=CI \
@@ -146,11 +154,11 @@ pipeline {
                                         --set server.secretKey=\$(head -c 32 /dev/urandom | base64) \
                                         --set ui.sentryDsn=${env.SENTRY_DSN} \
                                         --set ui.sentryToken=${env.SENTRY_TOKEN} \
-                                        ${env.BUILD_TAG} helm
+                                        ${HELM_DEPLOY_NAME} helm
                                     """
                                 script {
                                     SERVER_IP = sh (
-                                        script: "kubectl get ingress ${env.BUILD_TAG} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'",
+                                        script: "kubectl get ingress ${HELM_DEPLOY_NAME} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'",
                                         returnStdout: true
                                     ).trim()
                                 }
