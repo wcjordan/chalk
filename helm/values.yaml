@@ -5,6 +5,7 @@
 nameOverride: ""
 fullnameOverride: ""
 gcpProject: ""
+imageTag: local-latest
 
 # DEV, CI, STAGING, or PROD
 environment: DEV

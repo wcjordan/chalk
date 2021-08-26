@@ -147,6 +147,7 @@ pipeline {
                                     helm install \
                                         --set environment=CI \
                                         --set gcpProject=${env.GCP_PROJECT} \
+                                        --set imageTag=${env.BUILD_TAG} \
                                         --set server.dbPassword=\$(head -c 32 /dev/urandom | base64) \
                                         --set server.djangoEmail="test@testmail.com" \
                                         --set server.djangoPassword=\$(head -c 32 /dev/urandom | base64) \
@@ -163,12 +164,10 @@ pipeline {
                                             do
                                                 server_ip=\$(kubectl get ingress ${HELM_DEPLOY_NAME} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
                                             done
-                                            echo \$server_ip
                                         """,
                                         returnStdout: true
                                     ).trim()
                                 }
-                                sh "echo ${SERVER_IP}"
                             }
                         }
                     }
@@ -187,7 +186,6 @@ pipeline {
                             container('jenkins-worker-python') {
                                 dir('tests') {
                                     sh 'pip install "selenium==3.141.0" "pytest==6.2.2"'
-                                    sh "echo ${SERVER_IP}"
                                     sh "pytest . --server_domain ${SERVER_IP}"
                                 }
                             }
