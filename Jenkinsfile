@@ -16,7 +16,7 @@ pipeline {
                         HELM_DEPLOY_NAME = sh (
                             script: """
                                 #!/bin/bash
-                                parts=(\$(echo ${env.BUILD_TAG} | tr _- "\n"))
+                                parts=\(\$(echo ${env.BUILD_TAG} | tr _- "\n"))
                                 part_len=\$(echo \${#parts[@]})
                                 branch_part=\$(echo "\${parts[@]:2:\$part_len-3}" | tr " " - | head -c 12)
                                 echo \$parts[1]-\$parts[2]-\$branch_part-\$parts[-1]
