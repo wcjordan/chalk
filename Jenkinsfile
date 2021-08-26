@@ -135,17 +135,19 @@ pipeline {
                             withCredentials([file(credentialsId: 'jenkins-gke-sa', variable: 'FILE')]) {
                                 sh "gcloud auth activate-service-account default-jenkins@${env.GCP_PROJECT}.iam.gserviceaccount.com --key-file $FILE"
                                 sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
-                                sh "helm install \
-                                    --set environment=CI \
-                                    --set gcpProject=${env.GCP_PROJECT} \
-                                    --set server.dbPassword=\$(head -c 32 /dev/urandom | base64) \
-                                    --set server.djangoEmail="" \
-                                    --set server.djangoPassword=\$(head -c 32 /dev/urandom | base64) \
-                                    --set server.djangoUsername=\$(head -c 32 /dev/urandom | base64) \
-                                    --set server.secretKey=\$(head -c 32 /dev/urandom | base64) \
-                                    --set ui.sentryDsn=${env.SENTRY_DSN} \
-                                    --set ui.sentryToken=${env.SENTRY_TOKEN} \
-                                    ${env.BUILD_TAG} helm"
+                                sh """
+                                    helm install \
+                                        --set environment=CI \
+                                        --set gcpProject=${env.GCP_PROJECT} \
+                                        --set server.dbPassword=\$(head -c 32 /dev/urandom | base64) \
+                                        --set server.djangoEmail="" \
+                                        --set server.djangoPassword=\$(head -c 32 /dev/urandom | base64) \
+                                        --set server.djangoUsername=\$(head -c 32 /dev/urandom | base64) \
+                                        --set server.secretKey=\$(head -c 32 /dev/urandom | base64) \
+                                        --set ui.sentryDsn=${env.SENTRY_DSN} \
+                                        --set ui.sentryToken=${env.SENTRY_TOKEN} \
+                                        ${env.BUILD_TAG} helm
+                                    """
                                 SERVER_IP = sh (
                                     script: "kubectl get ingress ${env.BUILD_TAG} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'",
                                     returnStdout: true
