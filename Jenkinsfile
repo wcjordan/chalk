@@ -199,6 +199,11 @@ pipeline {
                     }
                 }
             }
+            post {
+                always {
+                    sh "helm uninstall ${HELM_DEPLOY_NAME}"
+                }
+            }
         }
     }
 }
