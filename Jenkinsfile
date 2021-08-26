@@ -15,7 +15,8 @@ pipeline {
                     script {
                         HELM_DEPLOY_NAME = sh (
                             script: """
-                                #!/bin/bash -l
+                                #!/bin/bash
+                                bash --version
                                 multi_parts=\$(echo ${env.BUILD_TAG} | tr _- "\n")
                                 declare -a parts=(echo \$multi_parts)
                                 part_len=\$(echo \${#parts[@]})
