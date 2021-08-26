@@ -95,9 +95,9 @@ Name for our CloudSQL DB instance
 Reuse the same instance for all CI deployments since these are slow to create
 */}}
 {{- define "..dbInstanceName" -}}
-{{- if eq .Values.environment "CI" }}
+{{- if eq .Values.environment "CI" -}}
 chalk-ci
-{{- else }}
+{{- else -}}
 {{- include "..fullname" . }}
 {{- end }}
 {{- end }}

@@ -51,7 +51,6 @@ spec:
       initContainers:
         - name: collectstatic
           image: {{ printf "gcr.io/%s/chalk-server:%s" .Values.gcpProject .Values.imageTag | quote }}
-
           imagePullPolicy: Always
           command: ["python", "manage.py", "collectstatic", "--noinput"]
           volumeMounts:
