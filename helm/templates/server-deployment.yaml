@@ -50,8 +50,7 @@ spec:
           emptyDir: {}
       initContainers:
         - name: collectstatic
-          image: {{ printf "gcr.io/%s/chalk-server:local-latest" .Values.gcpProject | quote }}
-
+          image: {{ printf "gcr.io/%s/chalk-server:%s" .Values.gcpProject .Values.imageTag | quote }}
           imagePullPolicy: Always
           command: ["python", "manage.py", "collectstatic", "--noinput"]
           volumeMounts:
@@ -64,7 +63,7 @@ spec:
           image: gcr.io/cloudsql-docker/gce-proxy:latest
           command:
             - "/cloud_sql_proxy"
-            - {{ printf "-instances=%s:us-east4:%s=tcp:5432" .Values.gcpProject $fullName | quote }}
+            - {{ printf "-instances=%s:us-east4:%s=tcp:5432" .Values.gcpProject (include "..dbInstanceName" .) | quote }}
           securityContext:
             runAsNonRoot: true
         - name: {{ .Chart.Name }}-server-nginx
@@ -91,7 +90,7 @@ spec:
             requests:
               cpu: 10m
         - name: {{ .Chart.Name }}-server
-          image: {{ printf "gcr.io/%s/chalk-server:local-latest" .Values.gcpProject | quote }}
+          image: {{ printf "gcr.io/%s/chalk-server:%s" .Values.gcpProject .Values.imageTag | quote }}
           imagePullPolicy: Always
           env:
             {{- include "..serverEnv" . | nindent 12 }}

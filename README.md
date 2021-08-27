@@ -54,7 +54,7 @@ Set SCM to git w/ URL `https://github.com/wcjordan/chalk`.
 Use `Add Branch` under Branch Specifier and set it to `*/jenkins`.  
 This means a jenkins branch can be use to create a new base build.  
 
-Set script path to `Jenkinsfile.base`  
+Set script path to `jenkins/Jenkinsfile.base`  
 Enable lightweight checkout  
 
 ## TODO

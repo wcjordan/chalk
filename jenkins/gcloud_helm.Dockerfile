@@ -1,0 +1,10 @@
+FROM gcr.io/google.com/cloudsdktool/cloud-sdk:alpine
+
+RUN gcloud components install kubectl
+
+# Install Helm
+RUN mkdir helm_tmp \
+  && curl -o helm_tmp/helm.tar.gz https://get.helm.sh/helm-v3.6.3-linux-amd64.tar.gz \
+  && tar -zxvf helm_tmp/helm.tar.gz -C helm_tmp \
+  && mv helm_tmp/linux-amd64/helm /bin/helm \
+  && rm -rf helm_tmp

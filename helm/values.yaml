@@ -5,17 +5,18 @@
 nameOverride: ""
 fullnameOverride: ""
 gcpProject: ""
+imageTag: local-latest
 
 # DEV, CI, STAGING, or PROD
 environment: DEV
 
 ui:
-  sentryDsn:
-  sentryToken:
+  sentryDsn: ""
+  sentryToken: ""
 
 server:
-  dbPassword:
-  djangoEmail:
-  djangoPassword:
-  djangoUsername:
-  secretKey:
+  dbPassword: ""
+  djangoEmail: ""
+  djangoPassword: ""
+  djangoUsername: ""
+  secretKey: ""
