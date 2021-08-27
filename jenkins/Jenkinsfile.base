@@ -21,8 +21,6 @@ pipeline {
                         }
                     }
                 }
-            }
-            stages {
                 stage('Build Helm') {
                     steps {
                         container('dind') {
