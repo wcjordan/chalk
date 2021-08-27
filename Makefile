@@ -2,7 +2,7 @@
 include .env
 
 IMAGE_REPO = gcr.io/$(GCP_PROJECT)
-SERVER_IMAGE = $(IMAGE_REPO)/chalk
+SERVER_IMAGE = $(IMAGE_REPO)/chalk-server
 UI_IMAGE = $(IMAGE_REPO)/chalk-ui
 UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-dev
 
