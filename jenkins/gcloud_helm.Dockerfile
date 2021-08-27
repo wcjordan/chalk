@@ -1,6 +1,6 @@
 FROM gcr.io/google.com/cloudsdktool/cloud-sdk:alpine
 
-RUN gcloud components install kubectl -q
+RUN gcloud components install kubectl -q --no-user-output-enabled
 
 # Install Helm
 RUN mkdir helm_tmp \
