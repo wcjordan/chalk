@@ -1,7 +1,7 @@
 pipeline {
     agent none
     stages {
-        stage('Build Base') {
+        stage('Build Containers') {
             agent {
                 kubernetes {
                     yamlFile 'jenkins/jenkins-worker-dind.yml'
@@ -10,14 +10,25 @@ pipeline {
             options {
                 timeout(time: 15, unit: 'MINUTES')
             }
-            steps {
-                container('dind') {
-                    withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
-                        sh "docker build -f ui/Dockerfile.base -t gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest ui"
-                        sh "docker push gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest"
-
-                        sh "docker build -t gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest - < jenkins/gcloud_helm.Dockerfile"
-                        sh "docker push gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest"
+            stages {
+                stage('Build UI Base') {
+                    steps {
+                        container('dind') {
+                            withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
+                                sh "docker build -f ui/Dockerfile.base -t gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest ui"
+                                sh "docker push gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest"
+                            }
+                        }
+                    }
+                }
+                stage('Build Helm') {
+                    steps {
+                        container('dind') {
+                            withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
+                                sh "docker build -t gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest - < jenkins/gcloud_helm.Dockerfile"
+                                sh "docker push gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest"
+                            }
+                        }
                     }
                 }
             }
