@@ -10,7 +10,7 @@ else
 endif
 
 IMAGE_REPO = gcr.io/$(GCP_PROJECT)
-UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-image-dev
+UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-dev
 
 # Test w/ Jest
 .PHONY: test
@@ -39,12 +39,12 @@ format:
 storybook:
 	docker run --rm -v $(PWD)/js/src:/js/src -p 127.0.0.1:9009:9009 \
 		-a stdin -a stdout -i -t \
-		$(UI_IMAGE_DEV):latest yarn run storybook
+		$(UI_IMAGE_DEV):local-latest yarn run storybook
 
 # Update snapshot tests
 .PHONY: update-snapshots
 update-snapshots:
-	docker run --rm -v $(PWD)/js/src:/js/src $(UI_IMAGE_DEV):latest yarn jest -u
+	docker run --rm -v $(PWD)/js/src:/js/src $(UI_IMAGE_DEV):local-latest yarn jest -u
 
 # Fix import ordering
 .PHONY: fix-imports

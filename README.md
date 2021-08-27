@@ -29,7 +29,8 @@ gcloud beta dns record-sets transaction execute --zone=$ZONE_NAME
 
 ## Setup Jenkins Builds
 ### Chalk Build
-Create a Multibranch Pipeline build named `Chalk`  
+Create a Multibranch Pipeline build named `chalk`  
+Set the Display Name to `Chalk` (under Advanced)
 
 Add source Github  
 Set repository URL to `https://github.com/wcjordan/chalk`  
@@ -41,7 +42,8 @@ Set Scan Periodically to `1 day`
 Discard old builds, keep max of 5 old items  
 
 ### Chalk Base Build
-Create a Pipeline build named `Chalk Base`  
+Create a Pipeline build named `chalk_base`
+Set the Display Name to `Chalk Base` (under Advanced)
 
 Enable `Discard old builds`, set max # of builds to keep to `50`.  
 Enable `Build periodically`, set schedule to `H 0 * * 0`.  
