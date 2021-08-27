@@ -61,7 +61,7 @@ spec:
             {{- include "..serverEnv" . | nindent 12 }}
       containers:
         - name: {{ .Chart.Name }}-server-cloud-sql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:local-latest
+          image: gcr.io/cloudsql-docker/gce-proxy:latest
           command:
             - "/cloud_sql_proxy"
             - {{ printf "-instances=%s:us-east4:%s=tcp:5432" .Values.gcpProject $fullName | quote }}
