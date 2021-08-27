@@ -51,8 +51,8 @@ Enable `Build periodically`, set schedule to `H 0 * * 0`.
 Set Pipeline config as `Pipeline script from SCM`.  
 Set SCM to git w/ URL `https://github.com/wcjordan/chalk`.  
 
-Use `Add Branch` under Branch Specifier and set it to `*/jenkins`.  
-This means a jenkins branch can be use to create a new base build.  
+Use `Add Branch` under Branch Specifier and set it to `*/jenkins-base`.  
+This means a `jenkins-base` branch can be use to create a new base build.  
 
 Set script path to `jenkins/Jenkinsfile.base`  
 Enable lightweight checkout  
