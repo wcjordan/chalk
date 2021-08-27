@@ -185,6 +185,12 @@ pipeline {
                                                 server_ip=\$(kubectl get ingress ${HELM_DEPLOY_NAME} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
                                             done
                                             echo \$server_ip
+
+                                            until [ ! -z \$todos_ready ] && [ \$todos_ready -eq 200 ]
+                                            do
+                                                sleep 15
+                                                todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/api/todos/todos/)
+                                            done
                                         """,
                                         returnStdout: true
                                     ).trim()
