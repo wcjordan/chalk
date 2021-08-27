@@ -67,7 +67,7 @@ def driver(request, todo_prefix, test_name, server_domain):
 
     try:
         # Load page
-        driver.get(f"http://{server_domain}/")
+        driver.get(f'http://{server_domain}/')
         if not "chalk" in driver.title:
             raise Exception("Unable to load page.")
 
@@ -85,7 +85,6 @@ def driver(request, todo_prefix, test_name, server_domain):
     except Exception as e:
         failure_msg = 'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "An exception occurred while setting up the driver and loading the page."}}'
         driver.execute_script(failure_msg)
-        raise e
 
     finally:
         cancel_edit_buttons = driver.find_elements(By.CSS_SELECTOR, 'div[data-testid="cancel-edit"]');
