@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
   - name: dind
-    image: docker:19-dind
+    image: docker:dind
     securityContext:
       privileged: true
     volumeMounts:

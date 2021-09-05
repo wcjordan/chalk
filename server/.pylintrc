@@ -1,6 +1,7 @@
 [MASTER]
 ignore=migrations,tests
 good-names=logger,urlpatterns,router
+django-settings-module=chalk.settings.base
 
 [FORMAT]
 max-line-length=80
