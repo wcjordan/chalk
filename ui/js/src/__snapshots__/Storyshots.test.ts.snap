@@ -374,6 +374,7 @@ exports[`Storyshots App List Todos Layout 1`] = `
           style={
             Object {
               "backgroundColor": "#ffffff",
+              "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
               "elevation": 1,
               "shadowColor": "#000000",
@@ -605,6 +606,7 @@ exports[`Storyshots App List Todos Layout 1`] = `
           style={
             Object {
               "backgroundColor": "#ffffff",
+              "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
               "elevation": 1,
               "shadowColor": "#000000",
@@ -843,6 +845,7 @@ exports[`Storyshots Todo Item Checked Todo 1`] = `
   style={
     Object {
       "backgroundColor": "#ffffff",
+      "borderColor": "rgba(0, 0, 0, 0.12)",
       "borderRadius": 0,
       "elevation": 1,
       "shadowColor": "#000000",
@@ -1147,6 +1150,7 @@ exports[`Storyshots Todo Item Default Todo 1`] = `
   style={
     Object {
       "backgroundColor": "#ffffff",
+      "borderColor": "rgba(0, 0, 0, 0.12)",
       "borderRadius": 0,
       "elevation": 1,
       "shadowColor": "#000000",
@@ -1451,6 +1455,7 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
   style={
     Object {
       "backgroundColor": "#ffffff",
+      "borderColor": "rgba(0, 0, 0, 0.12)",
       "borderRadius": 0,
       "elevation": 1,
       "shadowColor": "#000000",
@@ -1808,6 +1813,7 @@ exports[`Storyshots Todo Item Editing Uncommitted Todo 1`] = `
   style={
     Object {
       "backgroundColor": "#ffffff",
+      "borderColor": "rgba(0, 0, 0, 0.12)",
       "borderRadius": 0,
       "elevation": 1,
       "shadowColor": "#000000",
@@ -2165,6 +2171,7 @@ exports[`Storyshots Todo Item Uncommitted Edit Todo 1`] = `
   style={
     Object {
       "backgroundColor": "#ffffff",
+      "borderColor": "rgba(0, 0, 0, 0.12)",
       "borderRadius": 0,
       "elevation": 1,
       "shadowColor": "#000000",

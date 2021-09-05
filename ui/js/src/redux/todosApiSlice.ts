@@ -6,10 +6,13 @@ import { ApiState, NewTodo, ReduxState, Todo, TodoPatch } from './types';
 import { create, list, patch } from './fetchApi';
 
 const API_NAME = 'todosApi';
+const configs =
+  Constants.manifest && Constants.manifest.extra
+    ? Constants.manifest.extra
+    : {};
 
 function getWsRoot() {
-  const subdomain =
-    Constants.manifest.extra.ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
+  const subdomain = configs.ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
   const wsroot = Platform.select({
     native: `http://${subdomain}.flipperkid.com/`,
     default: '',
