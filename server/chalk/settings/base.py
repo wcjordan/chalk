@@ -168,3 +168,7 @@ logging.config.dictConfig({
         },
     },
 })
+
+# Models
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
