@@ -3,7 +3,7 @@ Django Rest Framework serializers for todos
 """
 from rest_framework import serializers
 
-from chalk.todos.models import TodoModel
+from chalk.todos.models import LabelModel, TodoModel
 
 
 class TodoSerializer(serializers.ModelSerializer):
@@ -21,4 +21,17 @@ class TodoSerializer(serializers.ModelSerializer):
             'created_at',
             'description',
             'id',
+        ]
+
+
+class LabelSerializer(serializers.ModelSerializer):
+    """
+    Serializer for labels
+    """
+
+    class Meta:
+        model = LabelModel
+        fields = [
+            'id',
+            'name',
         ]
