@@ -6,6 +6,22 @@ import string
 
 from django.test import TestCase
 
+DEFAULT_LABELS = [
+    'low-energy',
+    'high-energy',
+    'vague',
+    'work',
+    'home',
+    'errand',
+    'mobile',
+    'desktop',
+    'email',
+    'urgent',
+    '5 minutes',
+    '25 minutes',
+    '60 minutes',
+]
+
 
 class AnyArg():  # pylint: disable=R0903
     """
@@ -32,15 +48,23 @@ def _stub_todo_matcher(description):
     }
 
 
+def _stub_label_matcher(name):
+    return {
+        'id': AnyArg(),
+        'name': name,
+    }
+
+
 class ServiceTests(TestCase):
     """
     Tests for todo view
     """
+    maxDiff = None
 
     def test_todos_api(self):
         """
         Basic test which creates, updates, & deletes todos
-        and then fetches them to ensure they're persisted.
+        and fetches them to ensure they're persisted.
         """
         todo_description1 = _generate_random_string()
         todo_description2 = _generate_random_string()
@@ -85,6 +109,47 @@ class ServiceTests(TestCase):
         fetched_data = self._fetch_todos()
         self.assertCountEqual(fetched_data, expected_data)
 
+    def test_labels_api(self):
+        """
+        Basic test which creates, updates, & deletes labels
+        and fetches them to ensure they're persisted.
+        """
+        new_label = _generate_random_string()
+
+        # Fetch and verify expectations
+        fetched_data = self._fetch_labels()
+        expected_data = [_stub_label_matcher(label) for label in DEFAULT_LABELS]
+        self.assertCountEqual(fetched_data, expected_data)
+
+        # Create
+        label_id = self._create_label({
+            'name': new_label,
+        })['id']
+
+        # Fetch and verify expectations
+        fetched_data = self._fetch_labels()
+        expected_data.append(_stub_label_matcher(new_label))
+        self.assertCountEqual(fetched_data, expected_data)
+
+        # Update first label
+        patch = {
+            'name': _generate_random_string(),
+        }
+        self._update_label(label_id, patch)
+
+        # Fetch and verify expectations
+        expected_data[-1].update(patch)
+        fetched_data = self._fetch_labels()
+        self.assertCountEqual(fetched_data, expected_data)
+
+        # Delete first todo
+        self._delete_label(label_id)
+
+        # Fetch and verify expectations
+        expected_data = [_stub_label_matcher(label) for label in DEFAULT_LABELS]
+        fetched_data = self._fetch_labels()
+        self.assertCountEqual(fetched_data, expected_data)
+
     def _create_todo(self, data):
         return self._create_entity(data, 'todos')
 
@@ -96,6 +161,18 @@ class ServiceTests(TestCase):
 
     def _delete_todo(self, entry_id):
         return self._delete_entity(entry_id, 'todos')
+
+    def _create_label(self, data):
+        return self._create_entity(data, 'labels')
+
+    def _fetch_labels(self):
+        return self._fetch_entity('labels')
+
+    def _update_label(self, entry_id, patch):
+        return self._update_entity(entry_id, patch, 'labels')
+
+    def _delete_label(self, entry_id):
+        return self._delete_entity(entry_id, 'labels')
 
     def _create_entity(self, data, route):
         response = self.client.post('/api/todos/{}/'.format(route),
