@@ -36,7 +36,7 @@ def _generate_random_string():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
 
 
-def _stub_todo_matcher(description):
+def _stub_todo_matcher(description, labels):
     return {
         'id': AnyArg(),
         'description': description,
@@ -45,6 +45,7 @@ def _stub_todo_matcher(description):
         'completed': False,
         'completed_at': AnyArg(),
         'created_at': AnyArg(),
+        'label_set': labels,
     }
 
 
@@ -67,29 +68,34 @@ class ServiceTests(TestCase):
         and fetches them to ensure they're persisted.
         """
         todo_description1 = _generate_random_string()
+        labels1 = ['desktop', 'home']
         todo_description2 = _generate_random_string()
+        labels2 = ['work']
 
         # Create a todo
         todo1_id = self._create_todo({
             'description': todo_description1,
+            'label_set': labels1,
         })['id']
 
         # Create another todo
         self._create_todo({
             'description': todo_description2,
+            'label_set': labels2,
         })
 
         # Fetch todos and verify they match expectations
         fetched_data = self._fetch_todos()
         expected_data = [
-            _stub_todo_matcher(todo_description1),
-            _stub_todo_matcher(todo_description2),
+            _stub_todo_matcher(todo_description1, labels1),
+            _stub_todo_matcher(todo_description2, labels2),
         ]
         self.assertCountEqual(fetched_data, expected_data)
 
         # Update first todo
         patch = {
             'description': _generate_random_string(),
+            'label_set': ['urgent'],
         }
         self._update_todo(todo1_id, patch)
 
@@ -202,5 +208,6 @@ class ServiceTests(TestCase):
     def _assert_status_code(self, expected_code, response):
         self.assertEqual(
             response.status_code, expected_code,
-            'Expected status {}, received {}'.format(expected_code,
-                                                     response.status_code))
+            'Expected status {}, received {}. {}'.format(expected_code,
+                                                         response.status_code,
+                                                         response.content))
