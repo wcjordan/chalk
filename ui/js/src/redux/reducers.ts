@@ -11,6 +11,9 @@ type AppThunk = ThunkAction<void, ReduxState, unknown, Action<string>>;
 
 const initialWorkspace: WorkspaceState = {
   editId: null,
+  labelPickerVisible: false,
+  labels: [],
+  selectedLabels: [],
 };
 const workspaceSlice = createSlice({
   name: 'workspace',

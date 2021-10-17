@@ -23,6 +23,7 @@ class LabelStringField(serializers.StringRelatedField):
     """
     Serializer for labels based on their name field
     """
+
     def to_internal_value(self, data):
         return LabelModel.objects.get(name=data)
 

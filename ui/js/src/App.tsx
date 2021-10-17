@@ -11,6 +11,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import AddTodo from './components/AddTodo';
+import LabelPicker from './components/LabelPicker';
 import { ReduxState } from './redux/types';
 import TodoItem from './components/TodoItem';
 import { createTodo, updateTodo, setTodoEditId } from './redux/reducers';
@@ -24,7 +25,13 @@ interface TopStyle {
   top: ViewStyle;
 }
 
-const BG_COLOR = '#364263';
+// --columbia-blue: #d9f0ffff;
+// --baby-blue-eyes: #a3d5ffff;
+// --light-sky-blue: #83c9f4ff;
+// --oxford-blue: #061a40ff;
+// --usafa-blue: #0353a4ff;
+
+const BG_COLOR = '#061a40ff';
 const styles = StyleSheet.create<Style>({
   root: {
     height: '100%',
@@ -46,7 +53,7 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
 ) {
   const { createTodo, setTodoEditId, todos, updateTodo, workspace } = props;
-  const { editId } = workspace;
+  const { editId, labelPickerVisible, labels, selectedLabels } = workspace;
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
       editing={todo.id === editId}
@@ -79,6 +86,11 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
         <AddTodo createTodo={createTodo} />
         <ScrollView testID="todo-list">{todoViews}</ScrollView>
       </View>
+      <LabelPicker
+        labels={labels}
+        selectedLabels={selectedLabels}
+        visible={labelPickerVisible}
+      />
     </View>
   );
 };

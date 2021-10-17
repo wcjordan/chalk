@@ -208,6 +208,5 @@ class ServiceTests(TestCase):
     def _assert_status_code(self, expected_code, response):
         self.assertEqual(
             response.status_code, expected_code,
-            'Expected status {}, received {}. {}'.format(expected_code,
-                                                         response.status_code,
-                                                         response.content))
+            'Expected status {}, received {}. {}'.format(
+                expected_code, response.status_code, response.content))

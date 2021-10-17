@@ -34,4 +34,7 @@ export interface ReduxState {
 
 export interface WorkspaceState {
   editId: number | null;
+  labelPickerVisible: boolean;
+  labels: string[];
+  selectedLabels: { [label: string]: boolean };
 }
