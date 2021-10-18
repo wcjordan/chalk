@@ -9,6 +9,7 @@ function stubTodo(patch: TodoPatch): Todo {
       completed: false,
       created_at: null,
       description: `New todo`,
+      label_set: [],
     },
     patch,
   );
@@ -26,7 +27,7 @@ const defaultProps = {
     }),
   ],
   workspace: {
-    labelPickerVisible: false,
+    labelTodoId: null,
     labels: [
       'low-energy',
       'high-energy',
@@ -63,7 +64,7 @@ export const DefaultLayout: React.FC = () => (
 export const ListTodosLayout: React.FC = () => <App {...defaultProps} />;
 
 const labelPickerWorkspace = Object.assign({}, defaultProps.workspace, {
-  labelPickerVisible: true,
+  labelTodoId: 1,
 });
 export const LabelPickerLayout: React.FC = () => (
   <App {...defaultProps} workspace={labelPickerWorkspace} />

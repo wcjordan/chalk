@@ -9,19 +9,45 @@ import todosApiSlice, {
 
 type AppThunk = ThunkAction<void, ReduxState, unknown, Action<string>>;
 
+const DEFAULT_LABELS = [
+  'low-energy',
+  'high-energy',
+  'vague',
+  'work',
+  'home',
+  'errand',
+  'mobile',
+  'desktop',
+  'email',
+  'urgent',
+  '5 minutes',
+  '25 minutes',
+  '60 minutes',
+];
+
+const DEFAULT_SELECTED_LABELS = {
+  '5 minutes': true,
+  work: true,
+  home: true,
+  'low-energy': true,
+  mobile: true,
+};
+
 const initialWorkspace: WorkspaceState = {
   editId: null,
-  labelPickerVisible: false,
-  labels: [],
-  selectedLabels: [],
+  labelTodoId: null,
+  labels: DEFAULT_LABELS, //[],
+  selectedLabels: DEFAULT_SELECTED_LABELS, //{},
 };
 const workspaceSlice = createSlice({
   name: 'workspace',
   initialState: initialWorkspace,
   reducers: {
+    setTodoLabelingId: (state, action) => {
+      state.labelTodoId = action.payload;
+    },
     setTodoEditId: (state, action) => {
-      const editId = action.payload;
-      state.editId = editId;
+      state.editId = action.payload;
     },
   },
 });
@@ -36,6 +62,7 @@ export const updateTodo =
   };
 
 export const setTodoEditId = workspaceSlice.actions.setTodoEditId;
+export const setTodoLabelingId = workspaceSlice.actions.setTodoLabelingId;
 export { createTodo, listTodos };
 export default {
   todosApi: todosApiSlice.reducer,

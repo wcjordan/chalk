@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { Chip, Modal } from 'react-native-paper';
 
@@ -41,6 +41,11 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
   //   selectLabel(label)
   // }, [selectLabel]);
 
+  const { setTodoLabelingId } = props;
+  const dismissLabeling = useCallback(() => {
+    setTodoLabelingId(null);
+  }, [setTodoLabelingId]);
+
   const chips = props.labels.map((label) => (
     <LabelChip
       key={label}
@@ -50,7 +55,11 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
     />
   ));
   return (
-    <Modal style={styles.modalView} visible={props.visible}>
+    <Modal
+      onDismiss={dismissLabeling}
+      style={styles.modalView}
+      visible={props.visible}
+    >
       <View style={styles.labelPickerView}>{chips}</View>
     </Modal>
   );
@@ -60,6 +69,7 @@ type Props = {
   labels: string[];
   selectedLabels: { [label: string]: boolean };
   // selectLabel: (label: string) => void;
+  setTodoLabelingId: (id: number | null) => void;
   visible: boolean;
 };
 

@@ -14,7 +14,12 @@ import AddTodo from './components/AddTodo';
 import LabelPicker from './components/LabelPicker';
 import { ReduxState } from './redux/types';
 import TodoItem from './components/TodoItem';
-import { createTodo, updateTodo, setTodoEditId } from './redux/reducers';
+import {
+  createTodo,
+  updateTodo,
+  setTodoEditId,
+  setTodoLabelingId,
+} from './redux/reducers';
 
 interface Style {
   root: ViewStyle;
@@ -52,10 +57,18 @@ const styles = StyleSheet.create<Style>({
 export const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
 ) {
-  const { createTodo, setTodoEditId, todos, updateTodo, workspace } = props;
-  const { editId, labelPickerVisible, labels, selectedLabels } = workspace;
+  const {
+    createTodo,
+    setTodoEditId,
+    setTodoLabelingId,
+    todos,
+    updateTodo,
+    workspace,
+  } = props;
+  const { editId, labelTodoId, labels, selectedLabels } = workspace;
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
+      setTodoLabelingId={setTodoLabelingId}
       editing={todo.id === editId}
       key={todo.id || ''}
       setTodoEditId={setTodoEditId}
@@ -89,7 +102,8 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
       <LabelPicker
         labels={labels}
         selectedLabels={selectedLabels}
-        visible={labelPickerVisible}
+        setTodoLabelingId={setTodoLabelingId}
+        visible={labelTodoId !== null}
       />
     </View>
   );
@@ -101,6 +115,11 @@ const mapStateToProps = (state: ReduxState) => {
     workspace: state.workspace,
   };
 };
-const mapDispatchToProps = { createTodo, setTodoEditId, updateTodo };
+const mapDispatchToProps = {
+  createTodo,
+  setTodoEditId,
+  setTodoLabelingId,
+  updateTodo,
+};
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export default connector(App);

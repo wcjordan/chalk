@@ -64,7 +64,7 @@ const styles = StyleSheet.create<Style>({
 });
 
 const TodoItem: React.FC<Props> = function (props: Props) {
-  const { editing, todo, setTodoEditId, updateTodo } = props;
+  const { editing, todo, setTodoEditId, setTodoLabelingId, updateTodo } = props;
   const [editingValue, setEditingValue] = useState<string | null>(null);
 
   const commitTodo = useCallback(() => {
@@ -95,6 +95,14 @@ const TodoItem: React.FC<Props> = function (props: Props) {
       });
     },
     [updateTodo, todo.id],
+  );
+
+  const labelTodo = useCallback(
+    (event: GestureResponderEvent) => {
+      event.stopPropagation();
+      setTodoLabelingId(todo.id);
+    },
+    [setTodoLabelingId, todo.id],
   );
 
   const beginEdit = useCallback(() => {
@@ -153,8 +161,16 @@ const TodoItem: React.FC<Props> = function (props: Props) {
         <View style={styles.spacer} />
       </View>,
       <IconButton
+        color="#a3d5ffff"
+        icon="tag-plus"
+        key="label"
+        onPress={labelTodo}
+        size={20}
+        testID="label-todo"
+      />,
+      <IconButton
         color={Colors.red500}
-        icon="trash-can-outline"
+        icon="delete-outline"
         key="delete"
         onPress={archiveTodo}
         size={20}
@@ -193,9 +209,10 @@ const TodoItem: React.FC<Props> = function (props: Props) {
 
 type Props = {
   editing: boolean;
+  setTodoEditId: (id: number | null) => void;
+  setTodoLabelingId: (id: number | null) => void;
   todo: Todo;
   updateTodo: (todoPatch: TodoPatch, commitEdit?: boolean) => void;
-  setTodoEditId: (id: number | null) => void;
 };
 
 export default TodoItem;

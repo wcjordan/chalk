@@ -37,22 +37,3 @@ export const EditingTodo: React.FC = () => (
     })}
   />
 );
-
-export const UncommittedEditTodo: React.FC = () => (
-  <TodoItem
-    {...defaultProps}
-    todo={Object.assign({}, defaultTodo, {
-      description: 'Uncommitted Edit Todo',
-    })}
-  />
-);
-
-export const EditingUncommittedTodo: React.FC = () => (
-  <TodoItem
-    {...defaultProps}
-    editing={true}
-    todo={Object.assign({}, defaultTodo, {
-      description: 'Editing Todo',
-    })}
-  />
-);

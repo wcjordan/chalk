@@ -4,6 +4,7 @@ export interface Todo {
   completed: boolean;
   created_at: number;
   description: string;
+  label_set: string[];
 }
 
 export interface TodoPatch {
@@ -34,7 +35,7 @@ export interface ReduxState {
 
 export interface WorkspaceState {
   editId: number | null;
-  labelPickerVisible: boolean;
+  labelTodoId: number | null;
   labels: string[];
   selectedLabels: { [label: string]: boolean };
 }
