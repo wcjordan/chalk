@@ -59,6 +59,29 @@ describe('workspace reducer', function () {
   it('should return the initial state', function () {
     expect(reducers.workspace(undefined, {})).toEqual({
       editId: null,
+      labelTodoId: null,
+      labels: [
+        'low-energy',
+        'high-energy',
+        'vague',
+        'work',
+        'home',
+        'errand',
+        'mobile',
+        'desktop',
+        'email',
+        'urgent',
+        '5 minutes',
+        '25 minutes',
+        '60 minutes',
+      ],
+      selectedLabels: {
+        '5 minutes': true,
+        home: true,
+        'low-energy': true,
+        mobile: true,
+        work: true,
+      },
     });
   });
 
