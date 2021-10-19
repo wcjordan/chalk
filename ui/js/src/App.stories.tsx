@@ -16,6 +16,21 @@ function stubTodo(patch: TodoPatch): Todo {
 }
 
 const defaultProps = {
+  labels: [
+    { name: 'low-energy' },
+    { name: 'high-energy' },
+    { name: 'vague' },
+    { name: 'work' },
+    { name: 'home' },
+    { name: 'errand' },
+    { name: 'mobile' },
+    { name: 'desktop' },
+    { name: 'email' },
+    { name: 'urgent' },
+    { name: '5 minutes' },
+    { name: '25 minutes' },
+    { name: '60 minutes' },
+  ],
   todos: [
     stubTodo({
       id: 1,
@@ -28,21 +43,6 @@ const defaultProps = {
   ],
   workspace: {
     labelTodoId: null,
-    labels: [
-      'low-energy',
-      'high-energy',
-      'vague',
-      'work',
-      'home',
-      'errand',
-      'mobile',
-      'desktop',
-      'email',
-      'urgent',
-      '5 minutes',
-      '25 minutes',
-      '60 minutes',
-    ],
     selectedLabels: {
       '5 minutes': true,
       work: true,

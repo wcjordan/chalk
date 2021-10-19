@@ -1,3 +1,11 @@
+import Constants from 'expo-constants';
+import { Platform } from 'react-native';
+
+const configs =
+  Constants.manifest && Constants.manifest.extra
+    ? Constants.manifest.extra
+    : {};
+
 export async function list<T>(apiUri: string): Promise<Array<T>> {
   const response = await fetch(apiUri, getRequestOpts('GET'));
   return handleResponse<Array<T>>(response);
@@ -36,4 +44,13 @@ async function handleResponse<T>(response: Response): Promise<T> {
     throw new Error(`${response.status} ${response.statusText}`);
   }
   return await response.json();
+}
+
+export function getWsRoot(): string {
+  const subdomain = configs.ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
+  const wsroot = Platform.select({
+    native: `http://${subdomain}.flipperkid.com/`,
+    default: '',
+  });
+  return wsroot;
 }

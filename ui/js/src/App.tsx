@@ -59,13 +59,14 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
 ) {
   const {
     createTodo,
+    labels,
     setTodoEditId,
     setTodoLabelingId,
     todos,
     updateTodo,
     workspace,
   } = props;
-  const { editId, labelTodoId, labels, selectedLabels } = workspace;
+  const { editId, labelTodoId, selectedLabels } = workspace;
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
       setTodoLabelingId={setTodoLabelingId}
@@ -100,7 +101,7 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
         <ScrollView testID="todo-list">{todoViews}</ScrollView>
       </View>
       <LabelPicker
-        labels={labels}
+        labels={labels.map((label) => label.name)}
         selectedLabels={selectedLabels}
         setTodoLabelingId={setTodoLabelingId}
         visible={labelTodoId !== null}
@@ -111,6 +112,7 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
 
 const mapStateToProps = (state: ReduxState) => {
   return {
+    labels: state.labelsApi.entries,
     todos: state.todosApi.entries,
     workspace: state.workspace,
   };

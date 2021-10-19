@@ -1,6 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action, createSlice } from '@reduxjs/toolkit';
 import { ReduxState, TodoPatch, WorkspaceState } from './types';
+import labelsApiSlice, { listLabels } from './labelsApiSlice';
 import todosApiSlice, {
   createTodo,
   listTodos,
@@ -8,22 +9,6 @@ import todosApiSlice, {
 } from './todosApiSlice';
 
 type AppThunk = ThunkAction<void, ReduxState, unknown, Action<string>>;
-
-const DEFAULT_LABELS = [
-  'low-energy',
-  'high-energy',
-  'vague',
-  'work',
-  'home',
-  'errand',
-  'mobile',
-  'desktop',
-  'email',
-  'urgent',
-  '5 minutes',
-  '25 minutes',
-  '60 minutes',
-];
 
 const DEFAULT_SELECTED_LABELS = {
   '5 minutes': true,
@@ -36,7 +21,6 @@ const DEFAULT_SELECTED_LABELS = {
 const initialWorkspace: WorkspaceState = {
   editId: null,
   labelTodoId: null,
-  labels: DEFAULT_LABELS, //[],
   selectedLabels: DEFAULT_SELECTED_LABELS, //{},
 };
 const workspaceSlice = createSlice({
@@ -63,8 +47,9 @@ export const updateTodo =
 
 export const setTodoEditId = workspaceSlice.actions.setTodoEditId;
 export const setTodoLabelingId = workspaceSlice.actions.setTodoLabelingId;
-export { createTodo, listTodos };
+export { createTodo, listLabels, listTodos };
 export default {
+  labelsApi: labelsApiSlice.reducer,
   todosApi: todosApiSlice.reducer,
   workspace: workspaceSlice.reducer,
 };

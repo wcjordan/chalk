@@ -1,3 +1,8 @@
+export interface Label {
+  id: number;
+  name: string;
+}
+
 export interface Todo {
   id: number;
   archived: boolean;
@@ -29,6 +34,7 @@ export interface ApiState<T> {
 }
 
 export interface ReduxState {
+  labelsApi: ApiState<Label>;
   todosApi: ApiState<Todo>;
   workspace: WorkspaceState;
 }
@@ -36,6 +42,5 @@ export interface ReduxState {
 export interface WorkspaceState {
   editId: number | null;
   labelTodoId: number | null;
-  labels: string[];
   selectedLabels: { [label: string]: boolean };
 }
