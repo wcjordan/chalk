@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useSelector } from 'react-redux';
 import React from 'react';
 import {
   Platform,
@@ -12,13 +12,20 @@ import {
 } from 'react-native';
 import AddTodo from './components/AddTodo';
 import LabelPicker from './components/LabelPicker';
-import { ReduxState } from './redux/types';
+import {
+  Label,
+  ReduxState,
+  Todo,
+  TodoPatch,
+  WorkspaceState,
+} from './redux/types';
 import TodoItem from './components/TodoItem';
 import {
   createTodo,
-  updateTodo,
   setTodoEditId,
   setTodoLabelingId,
+  updateTodo,
+  updateTodoLabels,
 } from './redux/reducers';
 
 interface Style {
@@ -54,19 +61,45 @@ const styles = StyleSheet.create<Style>({
   },
 });
 
-export const App: React.FC<ConnectedProps<typeof connector>> = function (
+const selectSelectedLabels = (state: ReduxState) => {
+  const labelingTodo = state.todosApi.entries.find(
+    (todo) => todo.id === state.workspace.labelTodoId,
+  );
+  if (labelingTodo) {
+    return labelingTodo.label_set.reduce(
+      (acc: { [label: string]: boolean }, next: string) => {
+        acc[next] = true;
+        return acc;
+      },
+      {},
+    );
+  }
+
+  return {};
+};
+
+const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
 ) {
+  const selectedLabels = useSelector(selectSelectedLabels);
+
+  return <AppLayout {...props} selectedLabels={selectedLabels} />;
+};
+
+export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
   const {
     createTodo,
     labels,
+    selectedLabels,
     setTodoEditId,
     setTodoLabelingId,
     todos,
     updateTodo,
+    updateTodoLabels,
     workspace,
   } = props;
-  const { editId, labelTodoId, selectedLabels } = workspace;
+  const { editId, labelTodoId } = workspace;
+
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
       setTodoLabelingId={setTodoLabelingId}
@@ -104,10 +137,23 @@ export const App: React.FC<ConnectedProps<typeof connector>> = function (
         labels={labels.map((label) => label.name)}
         selectedLabels={selectedLabels}
         setTodoLabelingId={setTodoLabelingId}
+        updateTodoLabels={updateTodoLabels}
         visible={labelTodoId !== null}
       />
     </View>
   );
+};
+
+type LayoutProps = {
+  createTodo: (description: string) => void;
+  labels: Label[];
+  selectedLabels: { [label: string]: boolean };
+  setTodoEditId: (id: number | null) => void;
+  setTodoLabelingId: (id: number | null) => void;
+  todos: Todo[];
+  updateTodo: (todoPatch: TodoPatch) => void;
+  updateTodoLabels: (label_set: string[]) => void;
+  workspace: WorkspaceState;
 };
 
 const mapStateToProps = (state: ReduxState) => {
@@ -122,6 +168,7 @@ const mapDispatchToProps = {
   setTodoEditId,
   setTodoLabelingId,
   updateTodo,
+  updateTodoLabels,
 };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export default connector(App);

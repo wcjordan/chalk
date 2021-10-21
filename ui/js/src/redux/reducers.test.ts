@@ -60,13 +60,6 @@ describe('workspace reducer', function () {
     expect(reducers.workspace(undefined, {})).toEqual({
       editId: null,
       labelTodoId: null,
-      selectedLabels: {
-        '5 minutes': true,
-        home: true,
-        'low-energy': true,
-        mobile: true,
-        work: true,
-      },
     });
   });
 

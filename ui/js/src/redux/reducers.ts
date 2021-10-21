@@ -10,18 +10,9 @@ import todosApiSlice, {
 
 type AppThunk = ThunkAction<void, ReduxState, unknown, Action<string>>;
 
-const DEFAULT_SELECTED_LABELS = {
-  '5 minutes': true,
-  work: true,
-  home: true,
-  'low-energy': true,
-  mobile: true,
-};
-
 const initialWorkspace: WorkspaceState = {
   editId: null,
   labelTodoId: null,
-  selectedLabels: DEFAULT_SELECTED_LABELS, //{},
 };
 const workspaceSlice = createSlice({
   name: 'workspace',
@@ -43,6 +34,22 @@ export const updateTodo =
       dispatch(workspaceSlice.actions.setTodoEditId(null)),
       dispatch(updateTodoApi(todoPatch)),
     ]);
+  };
+
+export const updateTodoLabels =
+  (label_set: string[]): AppThunk =>
+  (dispatch, getState) => {
+    const todoId = getState().workspace.labelTodoId;
+    if (todoId === null) {
+      throw new Error('Unable to edit a todo w/ null ID');
+    }
+
+    return dispatch(
+      updateTodoApi({
+        id: todoId,
+        label_set,
+      }),
+    );
   };
 
 export const setTodoEditId = workspaceSlice.actions.setTodoEditId;

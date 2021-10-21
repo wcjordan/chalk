@@ -1,5 +1,5 @@
 import React from 'react';
-import { App } from './App';
+import { AppLayout } from './App';
 import { Todo, TodoPatch } from './redux/types';
 
 function stubTodo(patch: TodoPatch): Todo {
@@ -31,6 +31,13 @@ const defaultProps = {
     { name: '25 minutes' },
     { name: '60 minutes' },
   ],
+  selectedLabels: {
+    '5 minutes': true,
+    work: true,
+    home: true,
+    'low-energy': true,
+    mobile: true,
+  },
   todos: [
     stubTodo({
       id: 1,
@@ -43,29 +50,22 @@ const defaultProps = {
   ],
   workspace: {
     labelTodoId: null,
-    selectedLabels: {
-      '5 minutes': true,
-      work: true,
-      home: true,
-      'low-energy': true,
-      mobile: true,
-    },
   },
 };
 
 export default {
-  title: 'App',
-  component: App,
+  title: 'App Layout',
+  component: AppLayout,
 };
 export const DefaultLayout: React.FC = () => (
-  <App {...defaultProps} todos={[]} />
+  <AppLayout {...defaultProps} todos={[]} />
 );
 
-export const ListTodosLayout: React.FC = () => <App {...defaultProps} />;
+export const ListTodosLayout: React.FC = () => <AppLayout {...defaultProps} />;
 
 const labelPickerWorkspace = Object.assign({}, defaultProps.workspace, {
   labelTodoId: 1,
 });
 export const LabelPickerLayout: React.FC = () => (
-  <App {...defaultProps} workspace={labelPickerWorkspace} />
+  <AppLayout {...defaultProps} workspace={labelPickerWorkspace} />
 );

@@ -18,6 +18,7 @@ export interface TodoPatch {
   completed?: boolean;
   created_at?: number;
   description?: string;
+  label_set?: string[];
 }
 
 export interface NewTodo {
@@ -42,5 +43,4 @@ export interface ReduxState {
 export interface WorkspaceState {
   editId: number | null;
   labelTodoId: number | null;
-  selectedLabels: { [label: string]: boolean };
 }
