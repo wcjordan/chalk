@@ -16,6 +16,7 @@ import {
   TextInput,
 } from 'react-native-paper';
 import { Todo, TodoPatch } from '../redux/types';
+import LabelChip from './LabelChip';
 
 interface Style {
   checkbox: ViewStyle;
@@ -25,6 +26,7 @@ interface Style {
   todoDescriptionText: TextStyle;
   todoItemCard: ViewStyle & { cursor?: string };
   todoItemContent: ViewStyle;
+  todoLabelsContent: ViewStyle;
 }
 
 const todoItemCardStyle: ViewStyle & { cursor?: string } = {
@@ -60,6 +62,10 @@ const styles = StyleSheet.create<Style>({
   todoItemContent: {
     flexDirection: 'row',
     width: '100%',
+  },
+  todoLabelsContent: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });
 
@@ -191,17 +197,28 @@ const TodoItem: React.FC<Props> = function (props: Props) {
     }
   }
 
+  let labelContent = null;
+  if (todo.label_set.length) {
+    const chips = todo.label_set.map((label) => (
+      <LabelChip key={label} label={label} selected={false} />
+    ));
+    labelContent = <View style={styles.todoLabelsContent}>{chips}</View>;
+  }
+
   return (
     <Card onPress={beginEdit} style={styles.todoItemCard}>
-      <Card.Content style={styles.todoItemContent}>
-        <View style={styles.checkbox}>
-          <Checkbox.Android
-            status={todo.completed ? 'checked' : 'unchecked'}
-            onPress={toggleTodo}
-            testID="complete-todo"
-          />
+      <Card.Content>
+        <View style={styles.todoItemContent}>
+          <View style={styles.checkbox}>
+            <Checkbox.Android
+              status={todo.completed ? 'checked' : 'unchecked'}
+              onPress={toggleTodo}
+              testID="complete-todo"
+            />
+          </View>
+          {content}
         </View>
-        {content}
+        {labelContent}
       </Card.Content>
     </Card>
   );
