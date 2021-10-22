@@ -37,7 +37,7 @@ export const updateTodo =
   };
 
 export const updateTodoLabels =
-  (label_set: string[]): AppThunk =>
+  (labels: string[]): AppThunk =>
   (dispatch, getState) => {
     const todoId = getState().workspace.labelTodoId;
     if (todoId === null) {
@@ -47,7 +47,7 @@ export const updateTodoLabels =
     return dispatch(
       updateTodoApi({
         id: todoId,
-        label_set,
+        labels,
       }),
     );
   };

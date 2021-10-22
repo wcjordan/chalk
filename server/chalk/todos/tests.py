@@ -45,7 +45,7 @@ def _stub_todo_matcher(description, labels):
         'completed': False,
         'completed_at': AnyArg(),
         'created_at': AnyArg(),
-        'label_set': labels,
+        'labels': labels,
     }
 
 
@@ -75,13 +75,13 @@ class ServiceTests(TestCase):
         # Create a todo
         todo1_id = self._create_todo({
             'description': todo_description1,
-            'label_set': labels1,
+            'labels': labels1,
         })['id']
 
         # Create another todo
         self._create_todo({
             'description': todo_description2,
-            'label_set': labels2,
+            'labels': labels2,
         })
 
         # Fetch todos and verify they match expectations
@@ -95,7 +95,7 @@ class ServiceTests(TestCase):
         # Update first todo
         patch = {
             'description': _generate_random_string(),
-            'label_set': ['urgent'],
+            'labels': ['urgent'],
         }
         self._update_todo(todo1_id, patch)
 
@@ -137,7 +137,7 @@ class ServiceTests(TestCase):
         expected_data.append(_stub_label_matcher(new_label))
         self.assertCountEqual(fetched_data, expected_data)
 
-        # Update first label
+        # Update label
         patch = {
             'name': _generate_random_string(),
         }
@@ -148,7 +148,7 @@ class ServiceTests(TestCase):
         fetched_data = self._fetch_labels()
         self.assertCountEqual(fetched_data, expected_data)
 
-        # Delete first todo
+        # Delete label
         self._delete_label(label_id)
 
         # Fetch and verify expectations

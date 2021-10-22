@@ -35,7 +35,7 @@ export const createTodo = createAsyncThunk<
   const newTodo = {
     created_at: Date.now(),
     description: todoTitle,
-    label_set: [],
+    labels: [],
   };
   return create<Todo, NewTodo>(getTodosApi(), newTodo);
 });

@@ -9,7 +9,7 @@ export interface Todo {
   completed: boolean;
   created_at: number;
   description: string;
-  label_set: string[];
+  labels: string[];
 }
 
 export interface TodoPatch {
@@ -18,7 +18,7 @@ export interface TodoPatch {
   completed?: boolean;
   created_at?: number;
   description?: string;
-  label_set?: string[];
+  labels?: string[];
 }
 
 export interface NewTodo {

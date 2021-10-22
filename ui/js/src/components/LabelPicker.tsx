@@ -27,16 +27,13 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
       const label_dict = Object.assign({}, selectedLabels, {
         [label]: !selectedLabels[label],
       });
-      const label_set = Object.keys(label_dict).reduce(
-        (acc: string[], label) => {
-          if (label_dict[label]) {
-            acc.push(label);
-          }
-          return acc;
-        },
-        [],
-      );
-      updateTodoLabels(label_set);
+      const labels = Object.keys(label_dict).reduce((acc: string[], label) => {
+        if (label_dict[label]) {
+          acc.push(label);
+        }
+        return acc;
+      }, []);
+      updateTodoLabels(labels);
     },
     [updateTodoLabels, selectedLabels],
   );
@@ -67,7 +64,7 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
 type Props = {
   labels: string[];
   selectedLabels: { [label: string]: boolean };
-  updateTodoLabels: (label_set: string[]) => void;
+  updateTodoLabels: (labels: string[]) => void;
   setTodoLabelingId: (id: number | null) => void;
   visible: boolean;
 };

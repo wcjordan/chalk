@@ -198,8 +198,8 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   }
 
   let labelContent = null;
-  if (todo.label_set.length) {
-    const chips = todo.label_set.map((label) => (
+  if (todo.labels.length) {
+    const chips = todo.labels.map((label) => (
       <LabelChip key={label} label={label} selected={false} />
     ));
     labelContent = <View style={styles.todoLabelsContent}>{chips}</View>;

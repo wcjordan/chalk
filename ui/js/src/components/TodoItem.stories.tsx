@@ -6,7 +6,7 @@ const defaultTodo = {
   completed: false,
   created_at: null,
   description: 'Default Todo',
-  label_set: ['errand', '5min', 'low-effort'],
+  labels: ['errand', '5min', 'low-effort'],
 };
 const defaultProps = {
   editing: false,
@@ -44,7 +44,7 @@ export const NoLabelsTodo: React.FC = () => (
     {...defaultProps}
     todo={Object.assign({}, defaultTodo, {
       description: 'No Labels Todo',
-      label_set: [],
+      labels: [],
     })}
   />
 );
@@ -54,7 +54,7 @@ export const WrappedLabelsTodo: React.FC = () => (
     {...defaultProps}
     todo={Object.assign({}, defaultTodo, {
       description: 'Wrapped Labels Todo',
-      label_set: [
+      labels: [
         'low-energy',
         'high-energy',
         'vague',

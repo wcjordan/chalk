@@ -9,7 +9,7 @@ function stubTodo(patch: TodoPatch): Todo {
       completed: false,
       created_at: null,
       description: `New todo`,
-      label_set: [
+      labels: [
         'low-energy',
         'high-energy',
         'vague',

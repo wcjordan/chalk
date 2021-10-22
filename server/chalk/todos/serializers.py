@@ -32,7 +32,7 @@ class TodoSerializer(serializers.ModelSerializer):
     """
     Serializer for todos
     """
-    label_set = LabelStringField(many=True)
+    labels = LabelStringField(many=True)
 
     class Meta:
         model = TodoModel
@@ -44,5 +44,5 @@ class TodoSerializer(serializers.ModelSerializer):
             'created_at',
             'description',
             'id',
-            'label_set',
+            'labels',
         ]

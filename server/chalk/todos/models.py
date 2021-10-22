@@ -45,7 +45,7 @@ class LabelModel(models.Model):
     A label for todos
     """
     name = models.TextField()
-    todo_set = models.ManyToManyField(TodoModel, related_name="label_set")
+    todo_set = models.ManyToManyField(TodoModel, related_name="labels")
 
     def __str__(self):
         return self.name

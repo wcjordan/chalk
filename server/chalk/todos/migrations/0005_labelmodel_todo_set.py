@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='labelmodel',
             name='todo_set',
-            field=models.ManyToManyField(related_name='label_set',
+            field=models.ManyToManyField(related_name='labels',
                                          to='todos.TodoModel'),
         ),
     ]

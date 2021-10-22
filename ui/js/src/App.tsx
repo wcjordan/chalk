@@ -66,7 +66,7 @@ const selectSelectedLabels = (state: ReduxState) => {
     (todo) => todo.id === state.workspace.labelTodoId,
   );
   if (labelingTodo) {
-    return labelingTodo.label_set.reduce(
+    return labelingTodo.labels.reduce(
       (acc: { [label: string]: boolean }, next: string) => {
         acc[next] = true;
         return acc;
@@ -82,7 +82,6 @@ const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
 ) {
   const selectedLabels = useSelector(selectSelectedLabels);
-
   return <AppLayout {...props} selectedLabels={selectedLabels} />;
 };
 
@@ -152,7 +151,7 @@ type LayoutProps = {
   setTodoLabelingId: (id: number | null) => void;
   todos: Todo[];
   updateTodo: (todoPatch: TodoPatch) => void;
-  updateTodoLabels: (label_set: string[]) => void;
+  updateTodoLabels: (labels: string[]) => void;
   workspace: WorkspaceState;
 };
 
