@@ -664,6 +664,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                     "flexWrap": "wrap",
                   }
                 }
+                testID="todo-labels"
               >
                 <View
                   style={
@@ -2224,6 +2225,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                     "flexWrap": "wrap",
                   }
                 }
+                testID="todo-labels"
               >
                 <View
                   style={
@@ -3575,6 +3577,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
               "flexWrap": "wrap",
             }
           }
+          testID="label-picker"
         >
           <View
             style={
@@ -5331,6 +5334,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
                     "flexWrap": "wrap",
                   }
                 }
+                testID="todo-labels"
               >
                 <View
                   style={
@@ -6891,6 +6895,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
                     "flexWrap": "wrap",
                   }
                 }
+                testID="todo-labels"
               >
                 <View
                   style={
@@ -8621,6 +8626,7 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
             "flexWrap": "wrap",
           }
         }
+        testID="label-picker"
       >
         <View
           style={
@@ -10529,6 +10535,7 @@ exports[`Storyshots Todo Item Checked Todo 1`] = `
             "flexWrap": "wrap",
           }
         }
+        testID="todo-labels"
       >
         <View
           style={
@@ -11227,6 +11234,7 @@ exports[`Storyshots Todo Item Default Todo 1`] = `
             "flexWrap": "wrap",
           }
         }
+        testID="todo-labels"
       >
         <View
           style={
@@ -11891,6 +11899,7 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
             "flexWrap": "wrap",
           }
         }
+        testID="todo-labels"
       >
         <View
           style={
@@ -12987,6 +12996,7 @@ exports[`Storyshots Todo Item Wrapped Labels Todo 1`] = `
             "flexWrap": "wrap",
           }
         }
+        testID="todo-labels"
       >
         <View
           style={

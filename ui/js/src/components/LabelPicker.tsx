@@ -56,7 +56,9 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
       style={styles.modalView}
       visible={props.visible}
     >
-      <View style={styles.labelPickerView}>{chips}</View>
+      <View style={styles.labelPickerView} testID="label-picker">
+        {chips}
+      </View>
     </Modal>
   );
 };

@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from helpers.todo_helpers import (CHECKED_ICON_TEXT, DELETE_ICON_TEXT, add_todo, complete_todo, find_todo, list_todo_descriptions, wait_for_todo)
+from helpers.todo_helpers import (CHECKED_ICON_TEXT, DELETE_ICON_TEXT, LABELS_ICON_TEXT, add_todo, complete_todo, find_todo, list_todo_descriptions, wait_for_todo)
 
 
 @pytest.mark.parametrize('test_name', ['Todo: Checkmark Persistence'])
@@ -35,7 +35,7 @@ def test_todos_checkmark_persistence(driver, todo_prefix):
     first_todo = find_todo(driver, todo1_description)
     first_todo_checkmark = first_todo.find_element(By.CSS_SELECTOR, 'div[aria-checked="true"]');
     assert first_todo_checkmark
-    expected_text = f'{CHECKED_ICON_TEXT}\n{todo1_description}\n{DELETE_ICON_TEXT}'
+    expected_text = f'{CHECKED_ICON_TEXT}\n{todo1_description}\n{LABELS_ICON_TEXT}\n{DELETE_ICON_TEXT}'
     assert first_todo.text == expected_text
 
     # Verify that the 2nd todo appears before 1st todo once the 1st is completed

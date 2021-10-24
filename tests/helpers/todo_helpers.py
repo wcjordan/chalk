@@ -5,7 +5,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 
 CHECKED_ICON_TEXT = '󰄲'
-DELETE_ICON_TEXT = '󰩺'
+DELETE_ICON_TEXT = '󰧧'
+LABELS_ICON_TEXT = '󰜢'
 UNCHECKED_ICON_TEXT = '󰄱'
 WARNING_ICON_TEXT = '󰀪'
 
