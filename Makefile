@@ -20,8 +20,8 @@ build:
 # Test & lint
 .PHONY: test
 test: build
-	docker run --rm -t -w / $(UI_IMAGE_DEV):local-latest make test
 	DB_HOSTNAME=localhost docker run --env-file .env --env DB_HOSTNAME --rm $(SERVER_IMAGE):local-latest make test
+	docker run --rm -t -w / $(UI_IMAGE_DEV):local-latest make test
 
 # Start environment for development
 .PHONY: start

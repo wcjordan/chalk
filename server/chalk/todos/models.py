@@ -38,3 +38,14 @@ def update_timestamps(sender, instance, *args, **kwargs):
         instance.archived_at = timezone.now()
     if not instance.archived and instance.archived_at is not None:
         instance.archived_at = None
+
+
+class LabelModel(models.Model):
+    """
+    A label for todos
+    """
+    name = models.TextField()
+    todo_set = models.ManyToManyField(TodoModel, related_name="labels")
+
+    def __str__(self):
+        return self.name

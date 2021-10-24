@@ -6,6 +6,7 @@ const defaultTodo = {
   completed: false,
   created_at: null,
   description: 'Default Todo',
+  labels: ['errand', '5min', 'low-effort'],
 };
 const defaultProps = {
   editing: false,
@@ -38,21 +39,36 @@ export const EditingTodo: React.FC = () => (
   />
 );
 
-export const UncommittedEditTodo: React.FC = () => (
+export const NoLabelsTodo: React.FC = () => (
   <TodoItem
     {...defaultProps}
     todo={Object.assign({}, defaultTodo, {
-      description: 'Uncommitted Edit Todo',
+      description: 'No Labels Todo',
+      labels: [],
     })}
   />
 );
 
-export const EditingUncommittedTodo: React.FC = () => (
+export const WrappedLabelsTodo: React.FC = () => (
   <TodoItem
     {...defaultProps}
-    editing={true}
     todo={Object.assign({}, defaultTodo, {
-      description: 'Editing Todo',
+      description: 'Wrapped Labels Todo',
+      labels: [
+        'low-energy',
+        'high-energy',
+        'vague',
+        'work',
+        'home',
+        'errand',
+        'mobile',
+        'desktop',
+        'email',
+        'urgent',
+        '5 minutes',
+        '25 minutes',
+        '60 minutes',
+      ],
     })}
   />
 );

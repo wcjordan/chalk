@@ -1,6 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action, createSlice } from '@reduxjs/toolkit';
 import { ReduxState, TodoPatch, WorkspaceState } from './types';
+import labelsApiSlice, { listLabels } from './labelsApiSlice';
 import todosApiSlice, {
   createTodo,
   listTodos,
@@ -11,14 +12,17 @@ type AppThunk = ThunkAction<void, ReduxState, unknown, Action<string>>;
 
 const initialWorkspace: WorkspaceState = {
   editId: null,
+  labelTodoId: null,
 };
 const workspaceSlice = createSlice({
   name: 'workspace',
   initialState: initialWorkspace,
   reducers: {
+    setTodoLabelingId: (state, action) => {
+      state.labelTodoId = action.payload;
+    },
     setTodoEditId: (state, action) => {
-      const editId = action.payload;
-      state.editId = editId;
+      state.editId = action.payload;
     },
   },
 });
@@ -32,9 +36,27 @@ export const updateTodo =
     ]);
   };
 
+export const updateTodoLabels =
+  (labels: string[]): AppThunk =>
+  (dispatch, getState) => {
+    const todoId = getState().workspace.labelTodoId;
+    if (todoId === null) {
+      throw new Error('Unable to edit a todo w/ null ID');
+    }
+
+    return dispatch(
+      updateTodoApi({
+        id: todoId,
+        labels,
+      }),
+    );
+  };
+
 export const setTodoEditId = workspaceSlice.actions.setTodoEditId;
-export { createTodo, listTodos };
+export const setTodoLabelingId = workspaceSlice.actions.setTodoLabelingId;
+export { createTodo, listLabels, listTodos };
 export default {
+  labelsApi: labelsApiSlice.reducer,
   todosApi: todosApiSlice.reducer,
   workspace: workspaceSlice.reducer,
 };

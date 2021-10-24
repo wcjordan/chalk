@@ -1,9 +1,15 @@
+export interface Label {
+  id: number;
+  name: string;
+}
+
 export interface Todo {
   id: number;
   archived: boolean;
   completed: boolean;
   created_at: number;
   description: string;
+  labels: string[];
 }
 
 export interface TodoPatch {
@@ -12,6 +18,7 @@ export interface TodoPatch {
   completed?: boolean;
   created_at?: number;
   description?: string;
+  labels?: string[];
 }
 
 export interface NewTodo {
@@ -28,10 +35,12 @@ export interface ApiState<T> {
 }
 
 export interface ReduxState {
+  labelsApi: ApiState<Label>;
   todosApi: ApiState<Todo>;
   workspace: WorkspaceState;
 }
 
 export interface WorkspaceState {
   editId: number | null;
+  labelTodoId: number | null;
 }

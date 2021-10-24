@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from helpers.todo_helpers import (UNCHECKED_ICON_TEXT, DELETE_ICON_TEXT, WARNING_ICON_TEXT, add_todo, complete_todo, edit_todo, find_todo, list_todo_descriptions, wait_for_todo, wait_for_todo_to_disappear)
+from helpers.todo_helpers import (DELETE_ICON_TEXT, LABELS_ICON_TEXT, UNCHECKED_ICON_TEXT, WARNING_ICON_TEXT, add_todo, complete_todo, edit_todo, find_todo, list_todo_descriptions, wait_for_todo, wait_for_todo_to_disappear)
 
 
 @pytest.mark.parametrize('test_name', ['Todo: Partial Edit'])
@@ -37,7 +37,7 @@ def test_todos_partial_edit(driver, todo_prefix):
     assert warning_icon
 
     # Verify that 1st todo text is todo1_description
-    expected_text = f'{UNCHECKED_ICON_TEXT}\n{todo1_description}\n{DELETE_ICON_TEXT}\n{WARNING_ICON_TEXT}'
+    expected_text = f'{UNCHECKED_ICON_TEXT}\n{todo1_description}\n{LABELS_ICON_TEXT}\n{DELETE_ICON_TEXT}\n{WARNING_ICON_TEXT}'
     assert first_todo.text == expected_text
 
     # Return to editing the first todod
@@ -59,7 +59,7 @@ def test_todos_partial_edit(driver, todo_prefix):
 
     # Verify that the original description is still there and the warning icon is gone
     first_todo = find_todo(driver, todo1_description)
-    expected_text = f'{UNCHECKED_ICON_TEXT}\n{todo1_description}\n{DELETE_ICON_TEXT}'
+    expected_text = f'{UNCHECKED_ICON_TEXT}\n{todo1_description}\n{LABELS_ICON_TEXT}\n{DELETE_ICON_TEXT}'
     assert first_todo.text == expected_text
     warning_icons = first_todo.find_elements(By.XPATH, f'//div[text()="{WARNING_ICON_TEXT}"]')
     assert len(warning_icons) == 0

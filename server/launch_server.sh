@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ex
 
 # Sleep for 2 seconds to allow DB proxy to come up
 # TODO (jordan) Officially wait for DB to come up

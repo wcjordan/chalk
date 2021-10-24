@@ -59,6 +59,7 @@ describe('workspace reducer', function () {
   it('should return the initial state', function () {
     expect(reducers.workspace(undefined, {})).toEqual({
       editId: null,
+      labelTodoId: null,
     });
   });
 
