@@ -8463,42 +8463,7 @@ exports[`Storyshots Label Chip Selected Label Chip 1`] = `
             ]
           }
         >
-          <Text
-            accessibilityElementsHidden={true}
-            allowFontScaling={false}
-            importantForAccessibility="no-hide-descendants"
-            pointerEvents="none"
-            selectable={false}
-            style={
-              Array [
-                Object {
-                  "color": "rgba(0, 0, 0, 0.54)",
-                  "fontSize": 18,
-                },
-                Array [
-                  Object {
-                    "lineHeight": 18,
-                    "transform": Array [
-                      Object {
-                        "scaleX": 1,
-                      },
-                    ],
-                  },
-                  Object {
-                    "backgroundColor": "transparent",
-                  },
-                ],
-                Object {
-                  "fontFamily": "material-community",
-                  "fontStyle": "normal",
-                  "fontWeight": "normal",
-                },
-                Object {},
-              ]
-            }
-          >
-            󰄬
-          </Text>
+          <Text />
         </View>
         <Text
           numberOfLines={1}
@@ -8696,42 +8661,7 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
                   ]
                 }
               >
-                <Text
-                  accessibilityElementsHidden={true}
-                  allowFontScaling={false}
-                  importantForAccessibility="no-hide-descendants"
-                  pointerEvents="none"
-                  selectable={false}
-                  style={
-                    Array [
-                      Object {
-                        "color": "rgba(0, 0, 0, 0.54)",
-                        "fontSize": 18,
-                      },
-                      Array [
-                        Object {
-                          "lineHeight": 18,
-                          "transform": Array [
-                            Object {
-                              "scaleX": 1,
-                            },
-                          ],
-                        },
-                        Object {
-                          "backgroundColor": "transparent",
-                        },
-                      ],
-                      Object {
-                        "fontFamily": "material-community",
-                        "fontStyle": "normal",
-                        "fontWeight": "normal",
-                      },
-                      Object {},
-                    ]
-                  }
-                >
-                  󰄬
-                </Text>
+                <Text />
               </View>
               <Text
                 numberOfLines={1}
@@ -9035,42 +8965,7 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
                   ]
                 }
               >
-                <Text
-                  accessibilityElementsHidden={true}
-                  allowFontScaling={false}
-                  importantForAccessibility="no-hide-descendants"
-                  pointerEvents="none"
-                  selectable={false}
-                  style={
-                    Array [
-                      Object {
-                        "color": "rgba(0, 0, 0, 0.54)",
-                        "fontSize": 18,
-                      },
-                      Array [
-                        Object {
-                          "lineHeight": 18,
-                          "transform": Array [
-                            Object {
-                              "scaleX": 1,
-                            },
-                          ],
-                        },
-                        Object {
-                          "backgroundColor": "transparent",
-                        },
-                      ],
-                      Object {
-                        "fontFamily": "material-community",
-                        "fontStyle": "normal",
-                        "fontWeight": "normal",
-                      },
-                      Object {},
-                    ]
-                  }
-                >
-                  󰄬
-                </Text>
+                <Text />
               </View>
               <Text
                 numberOfLines={1}
@@ -9180,42 +9075,7 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
                   ]
                 }
               >
-                <Text
-                  accessibilityElementsHidden={true}
-                  allowFontScaling={false}
-                  importantForAccessibility="no-hide-descendants"
-                  pointerEvents="none"
-                  selectable={false}
-                  style={
-                    Array [
-                      Object {
-                        "color": "rgba(0, 0, 0, 0.54)",
-                        "fontSize": 18,
-                      },
-                      Array [
-                        Object {
-                          "lineHeight": 18,
-                          "transform": Array [
-                            Object {
-                              "scaleX": 1,
-                            },
-                          ],
-                        },
-                        Object {
-                          "backgroundColor": "transparent",
-                        },
-                      ],
-                      Object {
-                        "fontFamily": "material-community",
-                        "fontStyle": "normal",
-                        "fontWeight": "normal",
-                      },
-                      Object {},
-                    ]
-                  }
-                >
-                  󰄬
-                </Text>
+                <Text />
               </View>
               <Text
                 numberOfLines={1}
@@ -9422,42 +9282,7 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
                   ]
                 }
               >
-                <Text
-                  accessibilityElementsHidden={true}
-                  allowFontScaling={false}
-                  importantForAccessibility="no-hide-descendants"
-                  pointerEvents="none"
-                  selectable={false}
-                  style={
-                    Array [
-                      Object {
-                        "color": "rgba(0, 0, 0, 0.54)",
-                        "fontSize": 18,
-                      },
-                      Array [
-                        Object {
-                          "lineHeight": 18,
-                          "transform": Array [
-                            Object {
-                              "scaleX": 1,
-                            },
-                          ],
-                        },
-                        Object {
-                          "backgroundColor": "transparent",
-                        },
-                      ],
-                      Object {
-                        "fontFamily": "material-community",
-                        "fontStyle": "normal",
-                        "fontWeight": "normal",
-                      },
-                      Object {},
-                    ]
-                  }
-                >
-                  󰄬
-                </Text>
+                <Text />
               </View>
               <Text
                 numberOfLines={1}
@@ -9858,42 +9683,7 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
                   ]
                 }
               >
-                <Text
-                  accessibilityElementsHidden={true}
-                  allowFontScaling={false}
-                  importantForAccessibility="no-hide-descendants"
-                  pointerEvents="none"
-                  selectable={false}
-                  style={
-                    Array [
-                      Object {
-                        "color": "rgba(0, 0, 0, 0.54)",
-                        "fontSize": 18,
-                      },
-                      Array [
-                        Object {
-                          "lineHeight": 18,
-                          "transform": Array [
-                            Object {
-                              "scaleX": 1,
-                            },
-                          ],
-                        },
-                        Object {
-                          "backgroundColor": "transparent",
-                        },
-                      ],
-                      Object {
-                        "fontFamily": "material-community",
-                        "fontStyle": "normal",
-                        "fontWeight": "normal",
-                      },
-                      Object {},
-                    ]
-                  }
-                >
-                  󰄬
-                </Text>
+                <Text />
               </View>
               <Text
                 numberOfLines={1}
@@ -10242,42 +10032,7 @@ exports[`Storyshots Todo Item Checked Todo 1`] = `
                 }
               }
             >
-              <Text
-                accessibilityElementsHidden={true}
-                allowFontScaling={false}
-                importantForAccessibility="no-hide-descendants"
-                pointerEvents="none"
-                selectable={false}
-                style={
-                  Array [
-                    Object {
-                      "color": "#03dac4",
-                      "fontSize": 24,
-                    },
-                    Array [
-                      Object {
-                        "lineHeight": 24,
-                        "transform": Array [
-                          Object {
-                            "scaleX": 1,
-                          },
-                        ],
-                      },
-                      Object {
-                        "backgroundColor": "transparent",
-                      },
-                    ],
-                    Object {
-                      "fontFamily": "material-community",
-                      "fontStyle": "normal",
-                      "fontWeight": "normal",
-                    },
-                    Object {},
-                  ]
-                }
-              >
-                󰄲
-              </Text>
+              <Text />
               <View
                 style={
                   Array [
@@ -10402,42 +10157,7 @@ exports[`Storyshots Todo Item Checked Todo 1`] = `
           testID="label-todo"
         >
           <View>
-            <Text
-              accessibilityElementsHidden={true}
-              allowFontScaling={false}
-              importantForAccessibility="no-hide-descendants"
-              pointerEvents="none"
-              selectable={false}
-              style={
-                Array [
-                  Object {
-                    "color": "#a3d5ffff",
-                    "fontSize": 20,
-                  },
-                  Array [
-                    Object {
-                      "lineHeight": 20,
-                      "transform": Array [
-                        Object {
-                          "scaleX": 1,
-                        },
-                      ],
-                    },
-                    Object {
-                      "backgroundColor": "transparent",
-                    },
-                  ],
-                  Object {
-                    "fontFamily": "material-community",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal",
-                  },
-                  Object {},
-                ]
-              }
-            >
-              󰜢
-            </Text>
+            <Text />
           </View>
         </View>
         <View
@@ -10489,42 +10209,7 @@ exports[`Storyshots Todo Item Checked Todo 1`] = `
           testID="delete-todo"
         >
           <View>
-            <Text
-              accessibilityElementsHidden={true}
-              allowFontScaling={false}
-              importantForAccessibility="no-hide-descendants"
-              pointerEvents="none"
-              selectable={false}
-              style={
-                Array [
-                  Object {
-                    "color": "#f44336",
-                    "fontSize": 20,
-                  },
-                  Array [
-                    Object {
-                      "lineHeight": 20,
-                      "transform": Array [
-                        Object {
-                          "scaleX": 1,
-                        },
-                      ],
-                    },
-                    Object {
-                      "backgroundColor": "transparent",
-                    },
-                  ],
-                  Object {
-                    "fontFamily": "material-community",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal",
-                  },
-                  Object {},
-                ]
-              }
-            >
-              󰧧
-            </Text>
+            <Text />
           </View>
         </View>
       </View>
@@ -10941,42 +10626,7 @@ exports[`Storyshots Todo Item Default Todo 1`] = `
                 }
               }
             >
-              <Text
-                accessibilityElementsHidden={true}
-                allowFontScaling={false}
-                importantForAccessibility="no-hide-descendants"
-                pointerEvents="none"
-                selectable={false}
-                style={
-                  Array [
-                    Object {
-                      "color": "rgba(0, 0, 0, 0.54)",
-                      "fontSize": 24,
-                    },
-                    Array [
-                      Object {
-                        "lineHeight": 24,
-                        "transform": Array [
-                          Object {
-                            "scaleX": 1,
-                          },
-                        ],
-                      },
-                      Object {
-                        "backgroundColor": "transparent",
-                      },
-                    ],
-                    Object {
-                      "fontFamily": "material-community",
-                      "fontStyle": "normal",
-                      "fontWeight": "normal",
-                    },
-                    Object {},
-                  ]
-                }
-              >
-                󰄱
-              </Text>
+              <Text />
               <View
                 style={
                   Array [
@@ -11101,42 +10751,7 @@ exports[`Storyshots Todo Item Default Todo 1`] = `
           testID="label-todo"
         >
           <View>
-            <Text
-              accessibilityElementsHidden={true}
-              allowFontScaling={false}
-              importantForAccessibility="no-hide-descendants"
-              pointerEvents="none"
-              selectable={false}
-              style={
-                Array [
-                  Object {
-                    "color": "#a3d5ffff",
-                    "fontSize": 20,
-                  },
-                  Array [
-                    Object {
-                      "lineHeight": 20,
-                      "transform": Array [
-                        Object {
-                          "scaleX": 1,
-                        },
-                      ],
-                    },
-                    Object {
-                      "backgroundColor": "transparent",
-                    },
-                  ],
-                  Object {
-                    "fontFamily": "material-community",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal",
-                  },
-                  Object {},
-                ]
-              }
-            >
-              󰜢
-            </Text>
+            <Text />
           </View>
         </View>
         <View
@@ -11188,42 +10803,7 @@ exports[`Storyshots Todo Item Default Todo 1`] = `
           testID="delete-todo"
         >
           <View>
-            <Text
-              accessibilityElementsHidden={true}
-              allowFontScaling={false}
-              importantForAccessibility="no-hide-descendants"
-              pointerEvents="none"
-              selectable={false}
-              style={
-                Array [
-                  Object {
-                    "color": "#f44336",
-                    "fontSize": 20,
-                  },
-                  Array [
-                    Object {
-                      "lineHeight": 20,
-                      "transform": Array [
-                        Object {
-                          "scaleX": 1,
-                        },
-                      ],
-                    },
-                    Object {
-                      "backgroundColor": "transparent",
-                    },
-                  ],
-                  Object {
-                    "fontFamily": "material-community",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal",
-                  },
-                  Object {},
-                ]
-              }
-            >
-              󰧧
-            </Text>
+            <Text />
           </View>
         </View>
       </View>
@@ -11640,42 +11220,7 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
                 }
               }
             >
-              <Text
-                accessibilityElementsHidden={true}
-                allowFontScaling={false}
-                importantForAccessibility="no-hide-descendants"
-                pointerEvents="none"
-                selectable={false}
-                style={
-                  Array [
-                    Object {
-                      "color": "rgba(0, 0, 0, 0.54)",
-                      "fontSize": 24,
-                    },
-                    Array [
-                      Object {
-                        "lineHeight": 24,
-                        "transform": Array [
-                          Object {
-                            "scaleX": 1,
-                          },
-                        ],
-                      },
-                      Object {
-                        "backgroundColor": "transparent",
-                      },
-                    ],
-                    Object {
-                      "fontFamily": "material-community",
-                      "fontStyle": "normal",
-                      "fontWeight": "normal",
-                    },
-                    Object {},
-                  ]
-                }
-              >
-                󰄱
-              </Text>
+              <Text />
               <View
                 style={
                   Array [
@@ -11853,42 +11398,7 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
           testID="cancel-edit"
         >
           <View>
-            <Text
-              accessibilityElementsHidden={true}
-              allowFontScaling={false}
-              importantForAccessibility="no-hide-descendants"
-              pointerEvents="none"
-              selectable={false}
-              style={
-                Array [
-                  Object {
-                    "color": "#424242",
-                    "fontSize": 20,
-                  },
-                  Array [
-                    Object {
-                      "lineHeight": 20,
-                      "transform": Array [
-                        Object {
-                          "scaleX": 1,
-                        },
-                      ],
-                    },
-                    Object {
-                      "backgroundColor": "transparent",
-                    },
-                  ],
-                  Object {
-                    "fontFamily": "material-community",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal",
-                  },
-                  Object {},
-                ]
-              }
-            >
-              󰜺
-            </Text>
+            <Text />
           </View>
         </View>
       </View>
@@ -12305,42 +11815,7 @@ exports[`Storyshots Todo Item No Labels Todo 1`] = `
                 }
               }
             >
-              <Text
-                accessibilityElementsHidden={true}
-                allowFontScaling={false}
-                importantForAccessibility="no-hide-descendants"
-                pointerEvents="none"
-                selectable={false}
-                style={
-                  Array [
-                    Object {
-                      "color": "rgba(0, 0, 0, 0.54)",
-                      "fontSize": 24,
-                    },
-                    Array [
-                      Object {
-                        "lineHeight": 24,
-                        "transform": Array [
-                          Object {
-                            "scaleX": 1,
-                          },
-                        ],
-                      },
-                      Object {
-                        "backgroundColor": "transparent",
-                      },
-                    ],
-                    Object {
-                      "fontFamily": "material-community",
-                      "fontStyle": "normal",
-                      "fontWeight": "normal",
-                    },
-                    Object {},
-                  ]
-                }
-              >
-                󰄱
-              </Text>
+              <Text />
               <View
                 style={
                   Array [
@@ -12465,42 +11940,7 @@ exports[`Storyshots Todo Item No Labels Todo 1`] = `
           testID="label-todo"
         >
           <View>
-            <Text
-              accessibilityElementsHidden={true}
-              allowFontScaling={false}
-              importantForAccessibility="no-hide-descendants"
-              pointerEvents="none"
-              selectable={false}
-              style={
-                Array [
-                  Object {
-                    "color": "#a3d5ffff",
-                    "fontSize": 20,
-                  },
-                  Array [
-                    Object {
-                      "lineHeight": 20,
-                      "transform": Array [
-                        Object {
-                          "scaleX": 1,
-                        },
-                      ],
-                    },
-                    Object {
-                      "backgroundColor": "transparent",
-                    },
-                  ],
-                  Object {
-                    "fontFamily": "material-community",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal",
-                  },
-                  Object {},
-                ]
-              }
-            >
-              󰜢
-            </Text>
+            <Text />
           </View>
         </View>
         <View
@@ -12552,42 +11992,7 @@ exports[`Storyshots Todo Item No Labels Todo 1`] = `
           testID="delete-todo"
         >
           <View>
-            <Text
-              accessibilityElementsHidden={true}
-              allowFontScaling={false}
-              importantForAccessibility="no-hide-descendants"
-              pointerEvents="none"
-              selectable={false}
-              style={
-                Array [
-                  Object {
-                    "color": "#f44336",
-                    "fontSize": 20,
-                  },
-                  Array [
-                    Object {
-                      "lineHeight": 20,
-                      "transform": Array [
-                        Object {
-                          "scaleX": 1,
-                        },
-                      ],
-                    },
-                    Object {
-                      "backgroundColor": "transparent",
-                    },
-                  ],
-                  Object {
-                    "fontFamily": "material-community",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal",
-                  },
-                  Object {},
-                ]
-              }
-            >
-              󰧧
-            </Text>
+            <Text />
           </View>
         </View>
       </View>
@@ -12703,42 +12108,7 @@ exports[`Storyshots Todo Item Wrapped Labels Todo 1`] = `
                 }
               }
             >
-              <Text
-                accessibilityElementsHidden={true}
-                allowFontScaling={false}
-                importantForAccessibility="no-hide-descendants"
-                pointerEvents="none"
-                selectable={false}
-                style={
-                  Array [
-                    Object {
-                      "color": "rgba(0, 0, 0, 0.54)",
-                      "fontSize": 24,
-                    },
-                    Array [
-                      Object {
-                        "lineHeight": 24,
-                        "transform": Array [
-                          Object {
-                            "scaleX": 1,
-                          },
-                        ],
-                      },
-                      Object {
-                        "backgroundColor": "transparent",
-                      },
-                    ],
-                    Object {
-                      "fontFamily": "material-community",
-                      "fontStyle": "normal",
-                      "fontWeight": "normal",
-                    },
-                    Object {},
-                  ]
-                }
-              >
-                󰄱
-              </Text>
+              <Text />
               <View
                 style={
                   Array [
@@ -12863,42 +12233,7 @@ exports[`Storyshots Todo Item Wrapped Labels Todo 1`] = `
           testID="label-todo"
         >
           <View>
-            <Text
-              accessibilityElementsHidden={true}
-              allowFontScaling={false}
-              importantForAccessibility="no-hide-descendants"
-              pointerEvents="none"
-              selectable={false}
-              style={
-                Array [
-                  Object {
-                    "color": "#a3d5ffff",
-                    "fontSize": 20,
-                  },
-                  Array [
-                    Object {
-                      "lineHeight": 20,
-                      "transform": Array [
-                        Object {
-                          "scaleX": 1,
-                        },
-                      ],
-                    },
-                    Object {
-                      "backgroundColor": "transparent",
-                    },
-                  ],
-                  Object {
-                    "fontFamily": "material-community",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal",
-                  },
-                  Object {},
-                ]
-              }
-            >
-              󰜢
-            </Text>
+            <Text />
           </View>
         </View>
         <View
@@ -12950,42 +12285,7 @@ exports[`Storyshots Todo Item Wrapped Labels Todo 1`] = `
           testID="delete-todo"
         >
           <View>
-            <Text
-              accessibilityElementsHidden={true}
-              allowFontScaling={false}
-              importantForAccessibility="no-hide-descendants"
-              pointerEvents="none"
-              selectable={false}
-              style={
-                Array [
-                  Object {
-                    "color": "#f44336",
-                    "fontSize": 20,
-                  },
-                  Array [
-                    Object {
-                      "lineHeight": 20,
-                      "transform": Array [
-                        Object {
-                          "scaleX": 1,
-                        },
-                      ],
-                    },
-                    Object {
-                      "backgroundColor": "transparent",
-                    },
-                  ],
-                  Object {
-                    "fontFamily": "material-community",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal",
-                  },
-                  Object {},
-                ]
-              }
-            >
-              󰧧
-            </Text>
+            <Text />
           </View>
         </View>
       </View>

@@ -11,6 +11,7 @@ imageTag: local-latest
 environment: DEV
 
 ui:
+  hostIp: ""
   sentryDsn: ""
   sentryToken: ""
 
