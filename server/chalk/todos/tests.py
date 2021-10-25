@@ -181,32 +181,30 @@ class ServiceTests(TestCase):
         return self._delete_entity(entry_id, 'labels')
 
     def _create_entity(self, data, route):
-        response = self.client.post('/api/todos/{}/'.format(route),
+        response = self.client.post(f'/api/todos/{route}/',
                                     data,
                                     content_type='application/json')
         self._assert_status_code(201, response)
         return response.json()
 
     def _fetch_entity(self, route):
-        response = self.client.get('/api/todos/{}/'.format(route))
+        response = self.client.get(f'/api/todos/{route}/')
         self._assert_status_code(200, response)
         return response.json()
 
     def _update_entity(self, entry_id, patch, route):
-        response = self.client.patch('/api/todos/{}/{}/'.format(
-            route, entry_id),
+        response = self.client.patch(f'/api/todos/{route}/{entry_id}/',
                                      patch,
                                      content_type='application/json')
         self._assert_status_code(200, response)
         return response.json()
 
     def _delete_entity(self, entry_id, route):
-        response = self.client.delete('/api/todos/{}/{}/'.format(
-            route, entry_id))
+        response = self.client.delete(f'/api/todos/{route}/{entry_id}/')
         self._assert_status_code(204, response)
 
     def _assert_status_code(self, expected_code, response):
         self.assertEqual(
             response.status_code, expected_code,
-            'Expected status {}, received {}. {}'.format(
-                expected_code, response.status_code, response.content))
+            (f'Expected status {expected_code}, '
+             f'received {response.status_code}. {response.content}'))
