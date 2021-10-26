@@ -1,8 +1,8 @@
 # -*- mode: Python -*-
-
 allow_k8s_contexts(os.environ.get('K8S_CONTEXT'))
 
 GCP_PROJECT = os.environ.get('GCP_PROJECT')
+HOST_IP = os.environ.get('HOST_IP')
 env_arr = [
     'environment=DEV',
     'gcpProject=%s' % GCP_PROJECT,
@@ -13,6 +13,7 @@ env_arr = [
     'server.secretKey=%s' % os.environ.get('SECRET_KEY'),
     'ui.sentryDsn=%s' % os.environ.get('SENTRY_DSN'),
     'ui.sentryToken=%s' % os.environ.get('SENTRY_TOKEN'),
+    'ui.hostIp=%s' % HOST_IP,
 ]
 
 docker_build('gcr.io/%s/chalk-server' % GCP_PROJECT, 'server')
@@ -35,4 +36,7 @@ if not RANDOM_TAG:
 RELEASE_NAME = 'chalk-dev-%s' % RANDOM_TAG
 helm = helm('helm', name=RELEASE_NAME, set=env_arr)
 k8s_yaml(helm)
-k8s_resource('%s-ui' % RELEASE_NAME, port_forwards=['19002'], pod_readiness='ignore')
+k8s_resource('%s-ui' % RELEASE_NAME, port_forwards=[
+    port_forward(19002, host='localhost', name='expo-devtools'),
+    port_forward(19000, host=HOST_IP, link_path='/debugger-ui/', name='debugger-ui'),
+])

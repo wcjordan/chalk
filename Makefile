@@ -24,14 +24,15 @@ test: build
 	docker run --rm -t -w / $(UI_IMAGE_DEV):local-latest make test
 
 # Start environment for development
+# Note, you need to manually navigate to <host>:19000/debugger-ui/ to get Expo to work on mobile
 .PHONY: start
 start:
-	env $$(grep -v '^#' .env | xargs) tilt up
+	env $$(grep -v '^#' .env | xargs) HOST_IP=$$(ipconfig getifaddr en0) tilt up
 
 # Stop environment
 .PHONY: stop
 stop:
-	env $$(grep -v '^#' .env | xargs) tilt down
+	env $$(grep -v '^#' .env | xargs) HOST_IP=$$(ipconfig getifaddr en0) tilt down
 
 # Format code
 .PHONY: format

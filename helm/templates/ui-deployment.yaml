@@ -1,4 +1,8 @@
 {{- $fullName := include "..fullname" . -}}
+{{- $healthz := "http" -}}
+{{- if eq .Values.environment "DEV" -}}
+  {{- $healthz = "expo-debugger" -}}
+{{- end -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -44,27 +48,34 @@ spec:
             {{- else }}
               value: 'false'
             {{- end }}
+            {{- if eq .Values.environment "DEV" }}
+            - name: REACT_NATIVE_PACKAGER_HOSTNAME
+              value: {{ .Values.ui.hostIp }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 19006
               protocol: TCP
           {{- if eq .Values.environment "DEV" }}
-            - name: expo
+            - name: expo-devtools
               containerPort: 19002
+              protocol: TCP
+            - name: expo-debugger
+              containerPort: 19000
               protocol: TCP
           {{- end }}
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: {{ $healthz }}
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: {{ $healthz }}
           startupProbe:
             httpGet:
               path: /
-              port: http
+              port: {{ $healthz }}
             failureThreshold: 60
           {{- if eq .Values.environment "DEV" }}
           # TODO (jordan) figure resource limits for containers

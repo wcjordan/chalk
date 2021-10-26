@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
   bash \
   build-essential \
   && rm -rf /var/lib/apt/lists/*
+RUN npm install -g sharp-cli
 
 # Install React dependencies
 COPY js/yarn.lock .
