@@ -13,7 +13,7 @@ const wrapper = (chip) => <View style={styles.wrapper}>{chip}</View>;
 const defaultProps = {
   label: 'errand',
   selected: false,
-  updateTodoLabel: () => null,
+  onPress: () => null,
 };
 
 export default {
@@ -27,4 +27,4 @@ export const SelectedLabelChip: React.FC = () =>
   wrapper(<LabelChip {...defaultProps} selected={true} />);
 
 export const ReadOnlyLabelChip: React.FC = () =>
-  wrapper(<LabelChip {...defaultProps} updateTodoLabel={undefined} />);
+  wrapper(<LabelChip {...defaultProps} onPress={undefined} />);

@@ -13,6 +13,7 @@ type AppThunk = ThunkAction<void, ReduxState, unknown, Action<string>>;
 const initialWorkspace: WorkspaceState = {
   editId: null,
   labelTodoId: null,
+  filterLabels: [],
 };
 const workspaceSlice = createSlice({
   name: 'workspace',
@@ -23,6 +24,9 @@ const workspaceSlice = createSlice({
     },
     setTodoEditId: (state, action) => {
       state.editId = action.payload;
+    },
+    filterByLabels: (state, action) => {
+      state.filterLabels = Array.from(action.payload);
     },
   },
 });
@@ -52,6 +56,7 @@ export const updateTodoLabels =
     );
   };
 
+export const filterByLabels = workspaceSlice.actions.filterByLabels;
 export const setTodoEditId = workspaceSlice.actions.setTodoEditId;
 export const setTodoLabelingId = workspaceSlice.actions.setTodoLabelingId;
 export { createTodo, listLabels, listTodos };

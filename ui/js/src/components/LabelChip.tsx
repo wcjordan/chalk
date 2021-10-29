@@ -24,23 +24,23 @@ const styles = StyleSheet.create<Style>({
 });
 
 const LabelChip: React.FC<Props> = function (props: Props) {
-  const { label, selected, updateTodoLabel } = props;
-  const readOnlyDisplay = updateTodoLabel === undefined;
+  const { label, selected, onPress } = props;
+  const readOnlyDisplay = onPress === undefined;
   const style =
     selected || readOnlyDisplay ? styles.chipSelectedStyle : styles.chipStyle;
 
   const selectLabel = useCallback(() => {
-    if (updateTodoLabel) {
-      updateTodoLabel(label);
+    if (onPress) {
+      onPress(label);
     }
-  }, [label, updateTodoLabel]);
+  }, [label, onPress]);
 
   return (
     <Chip
-      style={style}
-      textStyle={styles.chipTextStyle}
       onPress={readOnlyDisplay ? undefined : selectLabel}
       selected={selected}
+      style={style}
+      textStyle={styles.chipTextStyle}
     >
       {props.label}
     </Chip>
@@ -48,9 +48,9 @@ const LabelChip: React.FC<Props> = function (props: Props) {
 };
 
 type Props = {
+  onPress?: (label: string) => void;
   label: string;
   selected: boolean;
-  updateTodoLabel?: (label: string) => void;
 };
 
 export default LabelChip;

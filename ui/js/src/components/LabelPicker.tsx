@@ -20,20 +20,29 @@ const styles = StyleSheet.create<Style>({
 });
 
 const LabelPicker: React.FC<Props> = function (props: Props) {
-  const { selectedLabels, setTodoLabelingId, updateTodoLabels } = props;
+  const {
+    labels,
+    selectedLabels,
+    setTodoLabelingId,
+    updateTodoLabels,
+    visible,
+  } = props;
 
   const updateTodoLabelCb = useCallback(
     (label) => {
-      const label_dict = Object.assign({}, selectedLabels, {
+      const labelDict = Object.assign({}, selectedLabels, {
         [label]: !selectedLabels[label],
       });
-      const labels = Object.keys(label_dict).reduce((acc: string[], label) => {
-        if (label_dict[label]) {
-          acc.push(label);
-        }
-        return acc;
-      }, []);
-      updateTodoLabels(labels);
+      const todoLabels = Object.keys(labelDict).reduce(
+        (acc: string[], label) => {
+          if (labelDict[label]) {
+            acc.push(label);
+          }
+          return acc;
+        },
+        [],
+      );
+      updateTodoLabels(todoLabels);
     },
     [updateTodoLabels, selectedLabels],
   );
@@ -42,19 +51,19 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
     setTodoLabelingId(null);
   }, [setTodoLabelingId]);
 
-  const chips = props.labels.map((label) => (
+  const chips = labels.map((label) => (
     <LabelChip
+      onPress={updateTodoLabelCb}
       key={label}
       label={label}
       selected={selectedLabels[label] || false}
-      updateTodoLabel={updateTodoLabelCb}
     />
   ));
   return (
     <Modal
       onDismiss={dismissLabeling}
       style={styles.modalView}
-      visible={props.visible}
+      visible={visible}
     >
       <View style={styles.labelPickerView} testID="label-picker">
         {chips}
@@ -66,8 +75,8 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
 type Props = {
   labels: string[];
   selectedLabels: { [label: string]: boolean };
-  updateTodoLabels: (labels: string[]) => void;
   setTodoLabelingId: (id: number | null) => void;
+  updateTodoLabels: (labels: string[]) => void;
   visible: boolean;
 };
 

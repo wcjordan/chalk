@@ -43,4 +43,5 @@ export interface ReduxState {
 export interface WorkspaceState {
   editId: number | null;
   labelTodoId: number | null;
+  filterLabels: string[];
 }

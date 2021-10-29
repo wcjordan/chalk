@@ -11,6 +11,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import AddTodo from './components/AddTodo';
+import LabelFilter from './components/LabelFilter';
 import LabelPicker from './components/LabelPicker';
 import {
   Label,
@@ -22,6 +23,7 @@ import {
 import TodoItem from './components/TodoItem';
 import {
   createTodo,
+  filterByLabels,
   setTodoEditId,
   setTodoLabelingId,
   updateTodo,
@@ -61,7 +63,7 @@ const styles = StyleSheet.create<Style>({
   },
 });
 
-const selectSelectedLabels = (state: ReduxState) => {
+const selectSelectedPickerLabels = (state: ReduxState) => {
   const labelingTodo = state.todosApi.entries.find(
     (todo) => todo.id === state.workspace.labelTodoId,
   );
@@ -81,15 +83,16 @@ const selectSelectedLabels = (state: ReduxState) => {
 const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
 ) {
-  const selectedLabels = useSelector(selectSelectedLabels);
-  return <AppLayout {...props} selectedLabels={selectedLabels} />;
+  const selectedPickerLabels = useSelector(selectSelectedPickerLabels);
+  return <AppLayout {...props} selectedPickerLabels={selectedPickerLabels} />;
 };
 
 export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
   const {
     createTodo,
     labels,
-    selectedLabels,
+    filterByLabels,
+    selectedPickerLabels,
     setTodoEditId,
     setTodoLabelingId,
     todos,
@@ -97,7 +100,10 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
     updateTodoLabels,
     workspace,
   } = props;
-  const { editId, labelTodoId } = workspace;
+  const { editId, filterLabels, labelTodoId } = workspace;
+
+  // TODO (jordan) look into memoizing
+  const labelNames = labels.map((label) => label.name);
 
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
@@ -115,7 +121,7 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
   if (Platform.OS === 'web') {
     const topStyle = StyleSheet.create<TopStyle>({
       top: {
-        paddingTop: 80,
+        paddingTop: 20,
       },
     }).top;
     containerStyle = StyleSheet.compose(containerStyle, topStyle);
@@ -130,11 +136,16 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
       />
       <View style={containerStyle}>
         <AddTodo createTodo={createTodo} />
+        <LabelFilter
+          labels={labelNames}
+          selectedLabels={filterLabels}
+          filterByLabels={filterByLabels}
+        />
         <ScrollView testID="todo-list">{todoViews}</ScrollView>
       </View>
       <LabelPicker
-        labels={labels.map((label) => label.name)}
-        selectedLabels={selectedLabels}
+        labels={labelNames}
+        selectedLabels={selectedPickerLabels}
         setTodoLabelingId={setTodoLabelingId}
         updateTodoLabels={updateTodoLabels}
         visible={labelTodoId !== null}
@@ -145,8 +156,9 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
 
 type LayoutProps = {
   createTodo: (description: string) => void;
+  filterByLabels: (labels: string[]) => void;
   labels: Label[];
-  selectedLabels: { [label: string]: boolean };
+  selectedPickerLabels: { [label: string]: boolean };
   setTodoEditId: (id: number | null) => void;
   setTodoLabelingId: (id: number | null) => void;
   todos: Todo[];
@@ -164,6 +176,7 @@ const mapStateToProps = (state: ReduxState) => {
 };
 const mapDispatchToProps = {
   createTodo,
+  filterByLabels,
   setTodoEditId,
   setTodoLabelingId,
   updateTodo,

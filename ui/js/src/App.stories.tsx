@@ -45,7 +45,7 @@ const defaultProps = {
     { name: '25 minutes' },
     { name: '60 minutes' },
   ],
-  selectedLabels: {
+  selectedPickerLabels: {
     '5 minutes': true,
     work: true,
     home: true,
@@ -63,6 +63,7 @@ const defaultProps = {
     }),
   ],
   workspace: {
+    filterLabels: ['5 minutes', 'work', 'home', 'low-energy', 'mobile'],
     labelTodoId: null,
   },
 };
