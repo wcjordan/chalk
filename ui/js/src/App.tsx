@@ -11,6 +11,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import AddTodo from './components/AddTodo';
+import LabelFilter from './components/LabelFilter';
 import LabelPicker from './components/LabelPicker';
 import {
   Label,
@@ -22,11 +23,13 @@ import {
 import TodoItem from './components/TodoItem';
 import {
   createTodo,
+  filterByLabels,
   setTodoEditId,
   setTodoLabelingId,
   updateTodo,
   updateTodoLabels,
 } from './redux/reducers';
+import { selectFilteredTodos, selectSelectedPickerLabels } from './selectors';
 
 interface Style {
   root: ViewStyle;
@@ -61,45 +64,39 @@ const styles = StyleSheet.create<Style>({
   },
 });
 
-const selectSelectedLabels = (state: ReduxState) => {
-  const labelingTodo = state.todosApi.entries.find(
-    (todo) => todo.id === state.workspace.labelTodoId,
-  );
-  if (labelingTodo) {
-    return labelingTodo.labels.reduce(
-      (acc: { [label: string]: boolean }, next: string) => {
-        acc[next] = true;
-        return acc;
-      },
-      {},
-    );
-  }
-
-  return {};
-};
-
 const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
 ) {
-  const selectedLabels = useSelector(selectSelectedLabels);
-  return <AppLayout {...props} selectedLabels={selectedLabels} />;
+  const selectedPickerLabels = useSelector(selectSelectedPickerLabels);
+  const filteredTodos = useSelector(selectFilteredTodos);
+  return (
+    <AppLayout
+      {...props}
+      filteredTodos={filteredTodos}
+      selectedPickerLabels={selectedPickerLabels}
+    />
+  );
 };
 
 export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
   const {
     createTodo,
     labels,
-    selectedLabels,
+    filterByLabels,
+    filteredTodos,
+    selectedPickerLabels,
     setTodoEditId,
     setTodoLabelingId,
-    todos,
     updateTodo,
     updateTodoLabels,
     workspace,
   } = props;
-  const { editId, labelTodoId } = workspace;
+  const { editId, filterLabels, labelTodoId } = workspace;
 
-  const todoViews = _.map(todos, (todo) => (
+  // TODO (jordan) look into memoizing
+  const labelNames = labels.map((label) => label.name);
+
+  const todoViews = _.map(filteredTodos, (todo) => (
     <TodoItem
       setTodoLabelingId={setTodoLabelingId}
       editing={todo.id === editId}
@@ -115,7 +112,7 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
   if (Platform.OS === 'web') {
     const topStyle = StyleSheet.create<TopStyle>({
       top: {
-        paddingTop: 80,
+        paddingTop: 20,
       },
     }).top;
     containerStyle = StyleSheet.compose(containerStyle, topStyle);
@@ -130,11 +127,16 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
       />
       <View style={containerStyle}>
         <AddTodo createTodo={createTodo} />
+        <LabelFilter
+          labels={labelNames}
+          selectedLabels={filterLabels}
+          filterByLabels={filterByLabels}
+        />
         <ScrollView testID="todo-list">{todoViews}</ScrollView>
       </View>
       <LabelPicker
-        labels={labels.map((label) => label.name)}
-        selectedLabels={selectedLabels}
+        labels={labelNames}
+        selectedLabels={selectedPickerLabels}
         setTodoLabelingId={setTodoLabelingId}
         updateTodoLabels={updateTodoLabels}
         visible={labelTodoId !== null}
@@ -145,11 +147,12 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
 
 type LayoutProps = {
   createTodo: (description: string) => void;
+  filterByLabels: (labels: string[]) => void;
+  filteredTodos: Todo[];
   labels: Label[];
-  selectedLabels: { [label: string]: boolean };
+  selectedPickerLabels: { [label: string]: boolean };
   setTodoEditId: (id: number | null) => void;
   setTodoLabelingId: (id: number | null) => void;
-  todos: Todo[];
   updateTodo: (todoPatch: TodoPatch) => void;
   updateTodoLabels: (labels: string[]) => void;
   workspace: WorkspaceState;
@@ -158,12 +161,12 @@ type LayoutProps = {
 const mapStateToProps = (state: ReduxState) => {
   return {
     labels: state.labelsApi.entries,
-    todos: state.todosApi.entries,
     workspace: state.workspace,
   };
 };
 const mapDispatchToProps = {
   createTodo,
+  filterByLabels,
   setTodoEditId,
   setTodoLabelingId,
   updateTodo,
