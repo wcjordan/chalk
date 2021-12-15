@@ -31,11 +31,6 @@ RUN yarn build
 # Multistage - nginx container
 FROM nginx:alpine
 
-# Copy over nginx configuration
-RUN rm -f /etc/nginx/conf.d/*
-COPY conf.d/default.conf /etc/nginx/conf.d/default.conf
-COPY conf.d/app.conf /etc/nginx/conf-includes/app.conf
-
 # Copy over built JS files from React app
 COPY --from=js_app /js/web-build/ /www/client/
 

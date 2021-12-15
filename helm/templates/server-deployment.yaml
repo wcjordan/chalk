@@ -36,8 +36,6 @@ spec:
       {{- include "..serverSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      annotations:
-        timestamp: "{{ date "20060102150405" .Release.Time }}"
       labels:
         {{- include "..serverSelectorLabels" . | nindent 8 }}
     spec:
@@ -59,14 +57,14 @@ spec:
           env:
             {{- include "..serverEnv" . | nindent 12 }}
       containers:
-        - name: {{ .Chart.Name }}-server-cloud-sql-proxy
+        - name: server-cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:latest
           command:
             - "/cloud_sql_proxy"
             - {{ printf "-instances=%s:us-east4:%s=tcp:5432" .Values.gcpProject (include "..dbInstanceName" .) | quote }}
           securityContext:
             runAsNonRoot: true
-        - name: {{ .Chart.Name }}-server-nginx
+        - name: server-nginx
           image: nginx:stable
           imagePullPolicy: Always
           ports:
@@ -89,7 +87,7 @@ spec:
           resources:
             requests:
               cpu: 10m
-        - name: {{ .Chart.Name }}-server
+        - name: server
           image: {{ printf "gcr.io/%s/chalk-server:%s" .Values.gcpProject .Values.imageTag | quote }}
           imagePullPolicy: Always
           env:
