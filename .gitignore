@@ -64,3 +64,5 @@ tilt_modules/
 
 # File tracking env id
 _env_id.txt
+
+helm/secrets/
