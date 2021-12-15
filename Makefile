@@ -20,7 +20,7 @@ build:
 # Test & lint
 .PHONY: test
 test: build
-	DB_HOSTNAME=localhost docker run --env-file .env --env DB_HOSTNAME --rm $(SERVER_IMAGE):local-latest make test
+	docker run --env-file .env --rm $(SERVER_IMAGE):local-latest make test
 	docker run --rm -t -w / $(UI_IMAGE_DEV):local-latest make test
 
 # Start environment for development
@@ -50,6 +50,7 @@ deploy: build
 	docker push $(UI_IMAGE):local-latest
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		helm upgrade --install \
+			--set domain=chalk.$$ROOT_DOMAIN \
 			--set environment=PROD \
 			--set gcpProject=$$GCP_PROJECT \
 			--set server.dbPassword=$$DB_PASSWORD \
