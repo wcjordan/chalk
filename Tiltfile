@@ -4,6 +4,7 @@ allow_k8s_contexts(os.environ.get('K8S_CONTEXT'))
 GCP_PROJECT = os.environ.get('GCP_PROJECT')
 HOST_IP = os.environ.get('HOST_IP')
 env_arr = [
+    'domain=chalk-dev.%s' % os.environ.get('ROOT_DOMAIN'),
     'environment=DEV',
     'gcpProject=%s' % GCP_PROJECT,
     'server.dbPassword=%s' % os.environ.get('DB_PASSWORD'),
@@ -17,6 +18,13 @@ env_arr = [
 ]
 
 docker_build('gcr.io/%s/chalk-server' % GCP_PROJECT, 'server')
+docker_build(
+    'gcr.io/%s/chalk-ui' % GCP_PROJECT,
+    'ui',
+    build_args={'GCP_PROJECT': GCP_PROJECT},
+    live_update=[
+        sync('ui/js', '/js'),
+    ])
 docker_build(
     'gcr.io/%s/chalk-ui-dev' % GCP_PROJECT,
     'ui',

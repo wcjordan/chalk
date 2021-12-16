@@ -1,8 +1,4 @@
 {{- $fullName := include "..fullname" . -}}
-{{- $healthz := "http" -}}
-{{- if eq .Values.environment "DEV" -}}
-  {{- $healthz = "expo-debugger" -}}
-{{- end -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,19 +11,36 @@ spec:
       {{- include "..uiSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      annotations:
-        timestamp: "{{ date "20060102150405" .Release.Time }}"
       labels:
         {{- include "..uiSelectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "..serviceAccountName" . }}
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: {{ $fullName }}-ui
       containers:
-        - name: {{ .Chart.Name }}-ui
-          {{- if eq .Values.environment "DEV" }}
-          image: {{ printf "gcr.io/%s/chalk-ui-dev:%s" .Values.gcpProject .Values.imageTag | quote }}
-          {{- else }}
+        - name: ui
           image: {{ printf "gcr.io/%s/chalk-ui:%s" .Values.gcpProject .Values.imageTag | quote }}
-          {{- end }}
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d/
+          livenessProbe:
+            httpGet:
+              path: /healthz/
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthz/
+              port: http
+        {{- if eq .Values.environment "DEV" }}
+        - name: ui-dev
+          image: {{ printf "gcr.io/%s/chalk-ui-dev:%s" .Values.gcpProject .Values.imageTag | quote }}
           imagePullPolicy: Always
           env:
             - name: ENVIRONMENT
@@ -43,44 +56,35 @@ spec:
                   name: {{ $fullName }}-ui
                   key: sentry-token
             - name: DEBUG
-            {{- if eq .Values.environment "DEV" }}
               value: 'true'
-            {{- else }}
-              value: 'false'
-            {{- end }}
-            {{- if eq .Values.environment "DEV" }}
             - name: REACT_NATIVE_PACKAGER_HOSTNAME
               value: {{ .Values.ui.hostIp }}
-            {{- end }}
           ports:
             - name: http
               containerPort: 19006
               protocol: TCP
-          {{- if eq .Values.environment "DEV" }}
             - name: expo-devtools
               containerPort: 19002
               protocol: TCP
             - name: expo-debugger
               containerPort: 19000
               protocol: TCP
-          {{- end }}
           livenessProbe:
             httpGet:
               path: /
-              port: {{ $healthz }}
+              port: expo-debugger
           readinessProbe:
             httpGet:
               path: /
-              port: {{ $healthz }}
+              port: expo-debugger
           startupProbe:
             httpGet:
               path: /
-              port: {{ $healthz }}
+              port: expo-debugger
             failureThreshold: 60
-          {{- if eq .Values.environment "DEV" }}
           # TODO (jordan) figure resource limits for containers
           resources:
             limits:
               cpu: 750m
               memory: 2Gi
-          {{- end}}
+        {{- end }}
