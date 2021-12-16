@@ -167,8 +167,6 @@ pipeline {
                                         --set server.djangoPassword=\$(head -c 32 /dev/urandom | base64) \
                                         --set server.djangoUsername=\$(head -c 32 /dev/urandom | base64) \
                                         --set server.secretKey=\$(head -c 32 /dev/urandom | base64) \
-                                        --set ui.sentryDsn=${env.SENTRY_DSN} \
-                                        --set ui.sentryToken=${env.SENTRY_TOKEN} \
                                         ${HELM_DEPLOY_NAME} helm
                                     """
                                 script {
