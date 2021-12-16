@@ -158,6 +158,7 @@ pipeline {
                                 }
                                 sh """
                                     helm install \
+                                        --set domain=_ \
                                         --set environment=CI \
                                         --set gcpProject=${env.GCP_PROJECT} \
                                         --set imageTag=${env.BUILD_TAG} \
