@@ -3,11 +3,12 @@ import Constants from 'expo-constants';
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
-import * as Sentry from 'sentry-expo';
+import { init as sentryInit } from 'sentry-expo';
+
 import App from './src/App';
 import store from './src/redux/store';
 
-Sentry.init({
+sentryInit({
   dsn: Constants.manifest.extra.SENTRY_DSN,
   enableInExpoDevelopment: true,
   environment: Constants.manifest.extra.ENVIRONMENT,

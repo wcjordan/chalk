@@ -11,11 +11,6 @@ domain: ""
 # DEV, CI, STAGING, or PROD
 environment: DEV
 
-ui:
-  hostIp: ""
-  sentryDsn: ""
-  sentryToken: ""
-
 server:
   dbPassword: ""
   djangoEmail: ""

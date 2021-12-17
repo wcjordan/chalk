@@ -5,6 +5,10 @@ Copy .env_default to .env & .prod.env
 Set SECRET_KEY & DB_PASSWORD in .env  
   These should be random secure strings  
   e.g. head -c 32 /dev/urandom | base64  
+  
+Install `nginx`  
+(which the dev env now requires)  
+On Mac: `brew install nginx`
 
 ## Allocate static IPs & create DNS entries
 Explore doing this w/ Config Connector once [#101](https://github.com/GoogleCloudPlatform/k8s-config-connector/issues/101) is resolved.
