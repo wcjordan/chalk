@@ -55,7 +55,3 @@ publish:
 .PHONY: clean
 clean:
 	cd js; rm -rf node_modules && rm -f yarn.lock && yarn cache clean
-
-.PHONY: dev
-dev:
-	cd js; env $$(grep -v '^#' ../../.env | xargs) yarn web

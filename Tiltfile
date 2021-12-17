@@ -27,3 +27,16 @@ if not RANDOM_TAG:
 RELEASE_NAME = 'chalk-dev-%s' % RANDOM_TAG
 helm = helm('helm', name=RELEASE_NAME, set=env_arr)
 k8s_yaml(helm)
+
+expo_env = {
+    'DEBUG': 'true',
+    'ENVIRONMENT': 'DEV',
+    'SENTRY_DSN': os.environ.get('SENTRY_DSN'),
+}
+local_resource('expo',
+               serve_cmd='yarn web',
+               serve_dir='ui/js',
+               serve_env=expo_env)
+local_resource('local_nginx',
+               serve_cmd='nginx -c %s/dev_nginx.conf' % os.getcwd(),
+               deps='dev_nginx.conf')
