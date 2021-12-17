@@ -27,6 +27,15 @@ if not RANDOM_TAG:
 RELEASE_NAME = 'chalk-dev-%s' % RANDOM_TAG
 helm = helm('helm', name=RELEASE_NAME, set=env_arr)
 k8s_yaml(helm)
+k8s_resource(objects=[
+    '%s:ServiceAccount' % RELEASE_NAME,
+    '%s:IAMServiceAccount' % RELEASE_NAME,
+    '%s:IAMPolicy' % RELEASE_NAME,
+    '%s-project-iam-policy:IAMPolicyMember' % RELEASE_NAME,
+], new_name='GCloud Svc Acct')
+k8s_resource('%s-ui' % RELEASE_NAME, trigger_mode=TRIGGER_MODE_MANUAL)
+k8s_resource('%s-server' % RELEASE_NAME, resource_deps=['GCloud Svc Acct'])
+k8s_resource(objects=['%s:ingress' % RELEASE_NAME], new_name='Ingress')
 
 expo_env = {
     'DEBUG': 'true',
@@ -36,7 +45,15 @@ expo_env = {
 local_resource('expo',
                serve_cmd='yarn web',
                serve_dir='ui/js',
-               serve_env=expo_env)
+               serve_env=expo_env,
+               links=link('http://localhost:19002/', 'Expo Devtools'),
+               readiness_probe=probe(
+                  http_get=http_get_action(port=19006, path="/")
+               ))
 local_resource('local_nginx',
                serve_cmd='nginx -c %s/dev_nginx.conf' % os.getcwd(),
-               deps='dev_nginx.conf')
+               deps='dev_nginx.conf',
+               links=link('http://localhost:8080/', 'Chalk Web'),
+               readiness_probe=probe(
+                  http_get=http_get_action(port=8080, path="/healthz/")
+               ))
