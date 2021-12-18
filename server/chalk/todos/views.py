@@ -28,7 +28,10 @@ def auth_callback(request):
     user = authenticate(request, token=request.GET['code'])
     if user is not None:
         login(request, user)
-        return redirect('/')
+
+        if 'state' in request.GET:
+            return redirect('/')
+        return Response('Logged in!')
 
     # Return an 'invalid login' error message.
     return Response('Not authenticated', status=401)
@@ -57,7 +60,7 @@ class TodoViewSet(viewsets.ModelViewSet):  # pylint: disable=R0901
     """
     queryset = TodoModel.objects.all()
     serializer_class = TodoSerializer
-    permission_classes = [permissions.AllowAny]  # permissions.IsAuthenticated
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class LabelViewSet(viewsets.ModelViewSet):  # pylint: disable=R0901
@@ -66,4 +69,4 @@ class LabelViewSet(viewsets.ModelViewSet):  # pylint: disable=R0901
     """
     queryset = LabelModel.objects.all()
     serializer_class = LabelSerializer
-    permission_classes = [permissions.AllowAny]  # permissions.IsAuthenticated
+    permission_classes = [permissions.IsAuthenticated]

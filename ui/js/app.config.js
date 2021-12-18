@@ -4,6 +4,7 @@ export default {
   version: '0.1.3',
   orientation: 'portrait',
   icon: './assets/icon.png',
+  scheme: 'chalk',
   splash: {
     image: './assets/splash.png',
     resizeMode: 'contain',
@@ -32,8 +33,9 @@ export default {
     ],
   },
   extra: {
-    SENTRY_DSN: process.env.SENTRY_DSN,
     DEBUG: process.env.DEBUG,
     ENVIRONMENT: process.env.ENVIRONMENT,
+    EXPO_CLIENT_ID: process.env.EXPO_CLIENT_ID,
+    SENTRY_DSN: process.env.SENTRY_DSN,
   },
 };

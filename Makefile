@@ -10,9 +10,9 @@ UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-dev
 .PHONY: build
 build:
 	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):local-latest server
-	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.dev --build-arg "GCP_PROJECT=$(GCP_PROJECT)" -t $(UI_IMAGE_DEV):local-latest ui
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
+			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
 			--build-arg "GCP_PROJECT=$(GCP_PROJECT)" \
 			-t $(UI_IMAGE):local-latest ui'

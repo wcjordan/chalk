@@ -44,4 +44,5 @@ export interface WorkspaceState {
   editId: number | null;
   labelTodoId: number | null;
   filterLabels: string[];
+  sessionCookie: string | null;
 }

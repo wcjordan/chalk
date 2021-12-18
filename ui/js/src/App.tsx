@@ -1,18 +1,9 @@
-import _ from 'lodash';
 import { connect, ConnectedProps, useSelector } from 'react-redux';
 import React from 'react';
-import {
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native';
-import AddTodo from './components/AddTodo';
-import LabelFilter from './components/LabelFilter';
-import LabelPicker from './components/LabelPicker';
+import { StatusBar, StyleSheet, View, ViewStyle } from 'react-native';
+
+import TodoList from './components/TodoList';
+import Login from './components/Login';
 import {
   Label,
   ReduxState,
@@ -20,10 +11,11 @@ import {
   TodoPatch,
   WorkspaceState,
 } from './redux/types';
-import TodoItem from './components/TodoItem';
 import {
+  completeAuthentication,
   createTodo,
   filterByLabels,
+  loadSessionCookie,
   setTodoEditId,
   setTodoLabelingId,
   updateTodo,
@@ -33,11 +25,6 @@ import { selectFilteredTodos, selectSelectedPickerLabels } from './selectors';
 
 interface Style {
   root: ViewStyle;
-  containerMobile: ViewStyle;
-  containerWeb: ViewStyle;
-}
-interface TopStyle {
-  top: ViewStyle;
 }
 
 // --columbia-blue: #d9f0ffff;
@@ -52,15 +39,6 @@ const styles = StyleSheet.create<Style>({
     height: '100%',
     width: '100%',
     backgroundColor: BG_COLOR,
-  },
-  containerMobile: {
-    height: '100%',
-    width: '100%',
-  },
-  containerWeb: {
-    height: '100%',
-    width: '66%',
-    marginHorizontal: 'auto',
   },
 });
 
@@ -79,43 +57,19 @@ const App: React.FC<ConnectedProps<typeof connector>> = function (
 };
 
 export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
-  const {
-    createTodo,
-    labels,
-    filterByLabels,
-    filteredTodos,
-    selectedPickerLabels,
-    setTodoEditId,
-    setTodoLabelingId,
-    updateTodo,
-    updateTodoLabels,
-    workspace,
-  } = props;
-  const { editId, filterLabels, labelTodoId } = workspace;
+  const { completeAuthentication, loadSessionCookie, workspace } = props;
+  const { sessionCookie } = workspace;
 
-  // TODO (jordan) look into memoizing
-  const labelNames = labels.map((label) => label.name);
-
-  const todoViews = _.map(filteredTodos, (todo) => (
-    <TodoItem
-      setTodoLabelingId={setTodoLabelingId}
-      editing={todo.id === editId}
-      key={todo.id || ''}
-      setTodoEditId={setTodoEditId}
-      todo={todo}
-      updateTodo={updateTodo}
-    />
-  ));
-
-  let containerStyle: StyleProp<ViewStyle> =
-    Platform.OS === 'web' ? styles.containerWeb : styles.containerMobile;
-  if (Platform.OS === 'web') {
-    const topStyle = StyleSheet.create<TopStyle>({
-      top: {
-        paddingTop: 20,
-      },
-    }).top;
-    containerStyle = StyleSheet.compose(containerStyle, topStyle);
+  let content: JSX.Element | null = null;
+  if (!sessionCookie) {
+    content = (
+      <Login
+        completeAuthentication={completeAuthentication}
+        loadSessionCookie={loadSessionCookie}
+      />
+    );
+  } else {
+    content = <TodoList {...props} />;
   }
 
   return (
@@ -125,31 +79,18 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
         backgroundColor={BG_COLOR}
         barStyle={'light-content'}
       />
-      <View style={containerStyle}>
-        <AddTodo createTodo={createTodo} />
-        <LabelFilter
-          labels={labelNames}
-          selectedLabels={filterLabels}
-          filterByLabels={filterByLabels}
-        />
-        <ScrollView testID="todo-list">{todoViews}</ScrollView>
-      </View>
-      <LabelPicker
-        labels={labelNames}
-        selectedLabels={selectedPickerLabels}
-        setTodoLabelingId={setTodoLabelingId}
-        updateTodoLabels={updateTodoLabels}
-        visible={labelTodoId !== null}
-      />
+      {content}
     </View>
   );
 };
 
 type LayoutProps = {
+  completeAuthentication: (token: string) => void;
   createTodo: (description: string) => void;
   filterByLabels: (labels: string[]) => void;
   filteredTodos: Todo[];
   labels: Label[];
+  loadSessionCookie: () => void;
   selectedPickerLabels: { [label: string]: boolean };
   setTodoEditId: (id: number | null) => void;
   setTodoLabelingId: (id: number | null) => void;
@@ -165,8 +106,10 @@ const mapStateToProps = (state: ReduxState) => {
   };
 };
 const mapDispatchToProps = {
+  completeAuthentication,
   createTodo,
   filterByLabels,
+  loadSessionCookie,
   setTodoEditId,
   setTodoLabelingId,
   updateTodo,

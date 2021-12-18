@@ -6,6 +6,9 @@ import os
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth import get_user_model
 import google_auth_oauthlib.flow
+from google.auth.transport.requests import AuthorizedSession
+from google.oauth2.credentials import Credentials
+
 
 CLIENT_SECRETS_FILE = "/mnt/oauth_web_client_secret.json"
 REDIRECT_URI = f'http://{os.environ["DOMAIN"]}/api/todos/auth_callback/'
@@ -31,7 +34,15 @@ class OAuthBackend(BaseBackend):
 
     def authenticate(self, request, **kwargs):
         user_model = get_user_model()
-        email = _get_email(kwargs['token'], request.GET['state'])
+        token = kwargs['token']
+
+        if 'state' in request.GET:
+            session = _get_authorized_session(token,
+                                              request.GET['state'])
+        else:
+            session = AuthorizedSession(Credentials(token))
+
+        email = _get_email(session)
         if email:
             try:
                 user = user_model.objects.get(username=email)
@@ -51,7 +62,13 @@ class OAuthBackend(BaseBackend):
             return None
 
 
-def _get_email(token, state):
+def _get_email(session):
+    profile_info = session.get(
+        'https://www.googleapis.com/userinfo/v2/me').json()
+    return profile_info['email']
+
+
+def _get_authorized_session(token, state):
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         CLIENT_SECRETS_FILE, scopes=SCOPES, state=state)
     flow.redirect_uri = REDIRECT_URI
@@ -59,6 +76,4 @@ def _get_email(token, state):
     flow.fetch_token(code=token)
 
     session = flow.authorized_session()
-    profile_info = session.get(
-        'https://www.googleapis.com/userinfo/v2/me').json()
-    return profile_info['email']
+    return session

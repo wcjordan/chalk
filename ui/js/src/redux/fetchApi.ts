@@ -39,8 +39,13 @@ function getRequestOpts(method: string): RequestInit {
     headers['X-CSRFToken'] = csrftoken;
   }
 
+  const credentials: RequestCredentials = Platform.select({
+    native: 'include',
+    default: 'same-origin',
+  });
+
   return {
-    credentials: 'same-origin',
+    credentials: credentials,
     headers: headers,
     method: method,
   };
@@ -60,4 +65,14 @@ export function getWsRoot(): string {
     default: '',
   });
   return wsroot;
+}
+
+export async function completeAuthCallback(token: string) {
+  const response = await fetch(
+    `${getWsRoot()}api/todos/auth_callback/?code=${token}`,
+    getRequestOpts('GET'),
+  );
+
+  const cookies = response?.headers?.get('set-cookie')?.split(' ');
+  return cookies?.find((val) => val.startsWith('sessionid'))?.slice(10, -1);
 }

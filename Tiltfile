@@ -43,8 +43,8 @@ expo_env = {
     'SENTRY_DSN': os.environ.get('SENTRY_DSN'),
 }
 local_resource('expo',
-               serve_cmd='yarn web',
-               serve_dir='ui/js',
+               serve_cmd='bash start.sh',
+               serve_dir='ui',
                serve_env=expo_env,
                links=link('http://localhost:19002/', 'Expo Devtools'),
                readiness_probe=probe(
