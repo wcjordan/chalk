@@ -3,12 +3,6 @@ Server Env
 */}}
 {{- define "..serverEnv" -}}
 {{- $fullName := include "..fullname" . -}}
-- name: DOMAIN
-  {{- if eq .Values.environment "DEV" }}
-  value: 'localhost:8080'
-  {{- else }}
-  value: {{ .Values.domain }}
-  {{- end }}
 - name: DB_NAME
   value: {{ $fullName }}
 - name: DB_USER
@@ -52,14 +46,6 @@ spec:
             name: {{ $fullName }}-server
         - name: staticfiles
           emptyDir: {}
-        - name: {{ $fullName }}-oauth
-          projected:
-            sources:
-            - secret:
-                name: {{ $fullName }}-oauth
-                items:
-                  - key: oauth_web_client_secret.json
-                    path: oauth_web_client_secret.json
       initContainers:
         - name: collectstatic
           image: {{ printf "gcr.io/%s/chalk-server:%s" .Values.gcpProject .Values.imageTag | quote }}
@@ -110,15 +96,11 @@ spec:
             - name: http
               containerPort: 8003
               protocol: TCP
-          volumeMounts:
-            - name:  {{ $fullName }}-oauth
-              mountPath: /mnt
-              readOnly: true
           livenessProbe:
             httpGet:
-              path: /api/todos/healthz/
+              path: /api/todos/todos/
               port: http
           readinessProbe:
             httpGet:
-              path: /api/todos/healthz/
+              path: /api/todos/todos/
               port: http
