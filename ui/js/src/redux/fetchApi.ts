@@ -1,6 +1,8 @@
 import Constants from 'expo-constants';
+import Cookies from 'js-cookie';
 import { Platform } from 'react-native';
 
+const csrftoken = Cookies.get('csrftoken');
 const configs =
   Constants.manifest && Constants.manifest.extra
     ? Constants.manifest.extra
@@ -29,12 +31,17 @@ export async function create<T, Q>(apiUri: string, newEntry: Q): Promise<T> {
 }
 
 function getRequestOpts(method: string): RequestInit {
+  const headers: HeadersInit = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  if (csrftoken) {
+    headers['X-CSRFToken'] = csrftoken;
+  }
+
   return {
     credentials: 'same-origin',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    headers: headers,
     method: method,
   };
 }

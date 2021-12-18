@@ -11,5 +11,9 @@ router.register('todos', views.TodoViewSet)
 router.register('labels', views.LabelViewSet)
 
 urlpatterns = [
+    path('auth/', views.auth),
+    path('auth_callback/', views.auth_callback),
+    path('auth_test/', views.auth_test),
+    path('healthz/', views.healthz),
     path('', include(router.urls)),
 ]
