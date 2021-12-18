@@ -96,7 +96,7 @@ pipeline {
                                 container('jenkins-worker-python') {
                                     dir('server') {
                                         sh 'pip install --no-cache-dir -r dev-requirements.txt'
-                                        sh 'env $(grep -v "^#" ../.env_default | xargs) DOMAIN=localhost SECRET_KEY=testkey make test'
+                                        sh 'env $(grep -v "^#" ../.env_default | xargs) SECRET_KEY=testkey make test'
                                     }
                                 }
                             }
