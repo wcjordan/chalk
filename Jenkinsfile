@@ -161,7 +161,7 @@ pipeline {
                                 }
                                 sh """
                                     mkdir helm/secrets;
-                                    cp $OAUTH_WEB_SECRET /helm/secrets/oauth_web_client_secret.json
+                                    cp $OAUTH_WEB_SECRET helm/secrets/oauth_web_client_secret.json
                                     helm install \
                                         --set domain=_ \
                                         --set environment=CI \
