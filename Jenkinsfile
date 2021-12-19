@@ -141,8 +141,11 @@ pipeline {
                     }
                     steps {
                         container('jenkins-helm') {
-                            withCredentials([file(credentialsId: 'jenkins-gke-sa', variable: 'FILE')]) {
-                                sh "gcloud auth activate-service-account default-jenkins@${env.GCP_PROJECT}.iam.gserviceaccount.com --key-file $FILE"
+                            withCredentials([
+                                file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
+                                file(credentialsId: 'chalk-oauth-web-secret', variable: 'OAUTH_WEB_SECRET')
+                            ]) {
+                                sh "gcloud auth activate-service-account default-jenkins@${env.GCP_PROJECT}.iam.gserviceaccount.com --key-file $GKE_SA_FILE"
                                 sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
                                 script {
                                     HELM_DEPLOY_NAME = sh (
@@ -157,6 +160,8 @@ pipeline {
                                     ).trim()
                                 }
                                 sh """
+                                    mkdir helm/secrets;
+                                    cp $OAUTH_WEB_SECRET /helm/secrets/oauth_web_client_secret.json
                                     helm install \
                                         --set domain=_ \
                                         --set environment=CI \

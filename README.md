@@ -33,7 +33,9 @@ gcloud beta dns record-sets transaction execute --zone=$ZONE_NAME
 
 ## OAuth Setup
 Create an [OAuth client ID](https://console.cloud.google.com/apis/credentials)
-Download the client ID as JSON and place at helm/secrets/oauth_web_client_secret.json
+Download the client ID / secret as JSON and place at helm/secrets/oauth_web_client_secret.json
+Also copy the client ID / secret to the gcp-setup repo at ./secrets/chalk_oauth_web_client_secret.json
+so Jenkins integration tests can deploy the secret.
 
 ## Setup Jenkins Builds
 ### Chalk Build
