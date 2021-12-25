@@ -80,10 +80,6 @@ spec:
             httpGet:
               path: /admin_static/rest_framework/css/default.css
               port: nginx-http
-          livenessProbe:
-            httpGet:
-              path: /admin_static/rest_framework/css/default.css
-              port: nginx-http
           resources:
             requests:
               cpu: 10m
@@ -96,11 +92,8 @@ spec:
             - name: http
               containerPort: 8003
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /api/todos/todos/
-              port: http
           readinessProbe:
             httpGet:
               path: /api/todos/todos/
               port: http
+            timeoutSeconds: 5
