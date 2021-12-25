@@ -96,4 +96,4 @@ spec:
             httpGet:
               path: /api/todos/todos/
               port: http
-            timeoutSeconds: 5
+            timeoutSeconds: 3
