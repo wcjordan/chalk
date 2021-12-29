@@ -94,10 +94,6 @@ spec:
             httpGet:
               path: /admin_static/rest_framework/css/default.css
               port: nginx-http
-          livenessProbe:
-            httpGet:
-              path: /admin_static/rest_framework/css/default.css
-              port: nginx-http
           resources:
             requests:
               cpu: 10m
@@ -114,11 +110,8 @@ spec:
             - name:  {{ $fullName }}-oauth
               mountPath: /mnt
               readOnly: true
-          livenessProbe:
-            httpGet:
-              path: /api/todos/healthz/
-              port: http
           readinessProbe:
             httpGet:
               path: /api/todos/healthz/
               port: http
+            timeoutSeconds: 3

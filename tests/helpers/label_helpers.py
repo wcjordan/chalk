@@ -12,16 +12,12 @@ def _add_labels(driver, todo_item, labels):
     label_button.click()
 
     # Click specified label chips
-    label_picker = driver.find_element(By.CSS_SELECTOR, 'div[data-testid="label-picker"]')
-    chips = { chip.text: chip for chip in label_picker.find_elements(By.XPATH, './div') }
-
     for label in labels:
-        chips[label].click()
+        label_picker = driver.find_element(By.CSS_SELECTOR, 'div[data-testid="label-picker"]')
+        chip = label_picker.find_element(By.XPATH, f'.//div[text()="{label}"]')
+        chip.click()
 
-    # Dismiss modal
-    # Click offset from modal center to avoid dialog
-    modal = driver.find_element(By.CSS_SELECTOR, 'div[aria-label="Close modal"]')
-    ActionChains(driver).move_to_element(modal).move_by_offset(0, -100).click().perform()
+    dismiss_add_label_modal(driver)
 
 
 def add_todo_w_labels(driver, todo_description, labels):
@@ -44,6 +40,14 @@ def add_todo_w_labels(driver, todo_description, labels):
         )
 
     return todo_item
+
+
+def dismiss_add_label_modal(driver, optional=False):
+    # Click offset from modal center to avoid dialog
+    modals = driver.find_elements(By.CSS_SELECTOR, 'div[aria-label="Close modal"]')
+    if modals or not optional:
+        assert len(modals) == 1
+        ActionChains(driver).move_to_element(modals[0]).move_by_offset(0, -100).click().perform()
 
 
 def toggle_label_filter(driver, label):

@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+from helpers.label_helpers import dismiss_add_label_modal
 from helpers.todo_helpers import delete_todo, find_todos
 
 
@@ -87,6 +88,8 @@ def driver(request, todo_prefix, test_name, server_domain):
         driver.execute_script(failure_msg)
 
     finally:
+        dismiss_add_label_modal(driver, optional=True)
+
         cancel_edit_buttons = driver.find_elements(By.CSS_SELECTOR, 'div[data-testid="cancel-edit"]');
         for btn in cancel_edit_buttons:
             btn.click()
