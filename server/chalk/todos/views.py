@@ -43,7 +43,7 @@ def auth_test(request):
     return Response('Logged in!')
 
 
-@api_view(['GET'])
+@api_view(['GET', 'HEAD'])
 def healthz(request):
     """
     API endpoint that indicates the server is healthy
