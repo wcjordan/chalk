@@ -24,7 +24,7 @@ data:
       }
 
       location @auth {
-          return 302 /api/todos/auth/;
+          return 302 http:/$host/api/todos/auth/;
       }
 
       location /healthz/ {
