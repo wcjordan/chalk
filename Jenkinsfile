@@ -1,5 +1,6 @@
-def SERVER_IP = null
 def HELM_DEPLOY_NAME = null
+def SERVER_HOSTNAME = null
+def SERVER_IP = null
 
 pipeline {
     agent none
@@ -158,12 +159,13 @@ pipeline {
                                         """,
                                         returnStdout: true
                                     ).trim()
+                                    SERVER_HOSTNAME = "${HELM_DEPLOY_NAME}.jenkins.flipperkid.com"
                                 }
                                 sh """
                                     mkdir helm/secrets;
                                     cp $OAUTH_WEB_SECRET helm/secrets/oauth_web_client_secret.json
                                     helm install \
-                                        --set domain=_ \
+                                        --set domain=${SERVER_HOSTNAME} \
                                         --set environment=CI \
                                         --set gcpProject=${env.GCP_PROJECT} \
                                         --set imageTag=${env.BUILD_TAG} \
@@ -190,15 +192,27 @@ pipeline {
                                             done
                                             echo \$server_ip
 
-                                            until [ ! -z \$todos_ready ] && [ \$todos_ready -eq 200 ]
+                                            until [ ! -z \$server_ready ] && [ \$server_ready -eq 200 ]
                                             do
                                                 sleep 15
-                                                todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/api/todos/todos/)
+                                                server_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/api/todos/healthz/)
                                             done
                                         """,
                                         returnStdout: true
                                     ).trim()
                                 }
+                                sh """
+                                    gcloud dns --project=${env.GCP_PROJECT} record-sets transaction start --zone=${env.GCP_PROJECT_NAME}-dns
+                                    gcloud dns --project=${env.GCP_PROJECT} record-sets transaction add ${SERVER_IP} --name=${SERVER_HOSTNAME}. --ttl=180 --type=A --zone=${env.GCP_PROJECT_NAME}-dns
+                                    gcloud dns --project=${env.GCP_PROJECT} record-sets transaction execute --zone=${env.GCP_PROJECT_NAME}-dns
+                                    """
+                                sh """
+                                    until [ ! -z \$dns_ready ] && [ \$dns_ready -eq 200 ]
+                                    do
+                                        sleep 15
+                                        dns_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://${SERVER_HOSTNAME}/api/todos/healthz/)
+                                    done
+                                    """
                             }
                         }
                     }
@@ -212,7 +226,7 @@ pipeline {
                             container('jenkins-worker-python') {
                                 dir('tests') {
                                     sh 'pip install "selenium==4.0.0" "pytest==6.2.5"'
-                                    sh "pytest . --server_domain ${SERVER_IP}"
+                                    sh "pytest . --server_domain ${SERVER_HOSTNAME}"
                                 }
                             }
                         }
@@ -231,6 +245,11 @@ pipeline {
                             sh "gcloud auth activate-service-account default-jenkins@${env.GCP_PROJECT}.iam.gserviceaccount.com --key-file $FILE"
                             sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
                             sh "helm uninstall ${HELM_DEPLOY_NAME}"
+                            sh """
+                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction start --zone=${env.GCP_PROJECT_NAME}-dns
+                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction remove ${SERVER_IP} --name=${SERVER_HOSTNAME}. --ttl=180 --type=A --zone=${env.GCP_PROJECT_NAME}-dns
+                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction execute --zone=${env.GCP_PROJECT_NAME}-dns
+                                """
                         }
                     }
                 }
