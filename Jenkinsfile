@@ -159,7 +159,27 @@ pipeline {
                                         """,
                                         returnStdout: true
                                     ).trim()
-                                    SERVER_HOSTNAME = "${HELM_DEPLOY_NAME}.jenkins.flipperkid.com"
+
+                                    SERVER_HOSTNAME = sh (
+                                        script: """
+                                            SUBDOMAIN_NUM=1
+                                            while true
+                                            do
+                                                SERVER_HOSTNAME=chalk-ci-\$SUBDOMAIN_NUM.jenkins.flipperkid.com
+                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction start --zone=${env.GCP_PROJECT_NAME}-dns
+                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction add 127.0.0.1 "--name=\$SERVER_HOSTNAME." '--ttl=180' '--type=A' --zone=${env.GCP_PROJECT_NAME}-dns
+                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction execute --zone=${env.GCP_PROJECT_NAME}-dns
+                                                if [ \$? -eq 0 ]
+                                                then
+                                                    break
+                                                fi
+                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction abort --zone=${env.GCP_PROJECT_NAME}-dns
+                                                SUBDOMAIN_NUM=\$[\$SUBDOMAIN_NUM +1]
+                                            done
+                                            echo \$SERVER_HOSTNAME
+                                        """,
+                                        returnStdout: true
+                                    ).trim().readLines().reverse()[0]
                                 }
                                 sh """
                                     mkdir helm/secrets;
@@ -195,28 +215,12 @@ pipeline {
                                         returnStdout: true
                                     ).trim()
                                 }
-                                script {
-                                    SERVER_HOSTNAME = sh (
-                                        script: """
-                                            SUBDOMAIN_NUM=1
-                                            while true
-                                            do
-                                                SERVER_HOSTNAME=chalk-ci-\$SUBDOMAIN_NUM.jenkins.flipperkid.com
-                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction start --zone=${env.GCP_PROJECT_NAME}-dns
-                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction add ${SERVER_IP} "--name=\$SERVER_HOSTNAME." '--ttl=180' '--type=A' --zone=${env.GCP_PROJECT_NAME}-dns
-                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction execute --zone=${env.GCP_PROJECT_NAME}-dns
-                                                if [ \$? -eq 0 ]
-                                                then
-                                                    break
-                                                fi
-                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction abort --zone=${env.GCP_PROJECT_NAME}-dns
-                                                SUBDOMAIN_NUM=\$[\$SUBDOMAIN_NUM +1]
-                                            done
-                                            echo \$SERVER_HOSTNAME
-                                        """,
-                                        returnStdout: true
-                                    ).trim().readLines().reverse()[0]
-                                }
+                                sh """
+                                    gcloud dns --project=${env.GCP_PROJECT} record-sets transaction start --zone=${env.GCP_PROJECT_NAME}-dns
+                                    gcloud dns --project=${env.GCP_PROJECT} record-sets transaction remove 127.0.0.1 --name=${SERVER_HOSTNAME}. '--ttl=180' '--type=A' --zone=${env.GCP_PROJECT_NAME}-dns
+                                    gcloud dns --project=${env.GCP_PROJECT} record-sets transaction add ${SERVER_IP} --name=${SERVER_HOSTNAME}. '--ttl=180' '--type=A' --zone=${env.GCP_PROJECT_NAME}-dns
+                                    gcloud dns --project=${env.GCP_PROJECT} record-sets transaction execute --zone=${env.GCP_PROJECT_NAME}-dns
+                                    """
                                 sh """
                                     until [ ! -z \$dns_ready ] && [ \$dns_ready -eq 200 ]
                                     do
@@ -258,6 +262,7 @@ pipeline {
                             sh "helm uninstall ${HELM_DEPLOY_NAME}"
                             sh """
                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction start --zone=${env.GCP_PROJECT_NAME}-dns
+                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction remove 127.0.0.1 --name=${SERVER_HOSTNAME}. --ttl=180 --type=A --zone=${env.GCP_PROJECT_NAME}-dns
                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction remove ${SERVER_IP} --name=${SERVER_HOSTNAME}. --ttl=180 --type=A --zone=${env.GCP_PROJECT_NAME}-dns
                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction execute --zone=${env.GCP_PROJECT_NAME}-dns
                                 """
