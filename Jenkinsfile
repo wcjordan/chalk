@@ -215,7 +215,7 @@ pipeline {
                                             echo \$SERVER_HOSTNAME
                                         """,
                                         returnStdout: true
-                                    ).trim()
+                                    ).trim().readLines().reverse()[0]
                                 }
                                 sh """
                                     until [ ! -z \$dns_ready ] && [ \$dns_ready -eq 200 ]
