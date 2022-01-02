@@ -176,7 +176,7 @@ pipeline {
                                                     break
                                                 fi
                                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction abort --zone=${env.GCP_PROJECT_NAME}-dns
-                                                SUBDOMAIN_NUM=\$[\$SUBDOMAIN_NUM +1]
+                                                SUBDOMAIN_NUM=\$[\$SUBDOMAIN_NUM+1]
                                             done
                                             echo \$SERVER_HOSTNAME
                                         """,
