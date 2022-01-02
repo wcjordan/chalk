@@ -162,8 +162,8 @@ pipeline {
                                     ).trim()
 
                                     def subdomain_num = 1
-                                    SERVER_HOSTNAME="chalk-ci-${subdomain_num}.jenkins.flipperkid.com"
                                     while(true) {
+                                        SERVER_HOSTNAME="chalk-ci-${subdomain_num}.jenkins.flipperkid.com"
                                         try {
                                             sh """
                                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction start --zone=${env.GCP_PROJECT_NAME}-dns
