@@ -173,7 +173,7 @@ pipeline {
                                             break
                                         } catch (ex) {
                                             echo "failed for ${subdomain_num}"
-                                            subdomain_num++
+                                            subdomain_num=subdomain_num + 1
                                             sh "gcloud dns --project=${env.GCP_PROJECT} record-sets transaction abort --zone=${env.GCP_PROJECT_NAME}-dns"
                                         }
                                     }
