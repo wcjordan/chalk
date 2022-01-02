@@ -1,6 +1,7 @@
 def HELM_DEPLOY_NAME = null
 def SERVER_HOSTNAME = null
-def SERVER_IP = null
+def SERVER_IP_STANDIN = "127.0.0.1"
+def SERVER_IP = SERVER_IP_STANDIN
 
 pipeline {
     agent none
@@ -167,7 +168,7 @@ pipeline {
                                             do
                                                 SERVER_HOSTNAME=chalk-ci-\$SUBDOMAIN_NUM.jenkins.flipperkid.com
                                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction start --zone=${env.GCP_PROJECT_NAME}-dns
-                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction add 127.0.0.1 "--name=\$SERVER_HOSTNAME." '--ttl=180' '--type=A' --zone=${env.GCP_PROJECT_NAME}-dns
+                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction add ${SERVER_IP_STANDIN} "--name=\$SERVER_HOSTNAME." '--ttl=180' '--type=A' --zone=${env.GCP_PROJECT_NAME}-dns
                                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction execute --zone=${env.GCP_PROJECT_NAME}-dns
                                                 if [ \$? -eq 0 ]
                                                 then
@@ -217,7 +218,7 @@ pipeline {
                                 }
                                 sh """
                                     gcloud dns --project=${env.GCP_PROJECT} record-sets transaction start --zone=${env.GCP_PROJECT_NAME}-dns
-                                    gcloud dns --project=${env.GCP_PROJECT} record-sets transaction remove 127.0.0.1 --name=${SERVER_HOSTNAME}. '--ttl=180' '--type=A' --zone=${env.GCP_PROJECT_NAME}-dns
+                                    gcloud dns --project=${env.GCP_PROJECT} record-sets transaction remove ${SERVER_IP_STANDIN} --name=${SERVER_HOSTNAME}. '--ttl=180' '--type=A' --zone=${env.GCP_PROJECT_NAME}-dns
                                     gcloud dns --project=${env.GCP_PROJECT} record-sets transaction add ${SERVER_IP} --name=${SERVER_HOSTNAME}. '--ttl=180' '--type=A' --zone=${env.GCP_PROJECT_NAME}-dns
                                     gcloud dns --project=${env.GCP_PROJECT} record-sets transaction execute --zone=${env.GCP_PROJECT_NAME}-dns
                                     """
@@ -262,7 +263,6 @@ pipeline {
                             sh "helm uninstall ${HELM_DEPLOY_NAME}"
                             sh """
                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction start --zone=${env.GCP_PROJECT_NAME}-dns
-                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction remove 127.0.0.1 --name=${SERVER_HOSTNAME}. --ttl=180 --type=A --zone=${env.GCP_PROJECT_NAME}-dns
                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction remove ${SERVER_IP} --name=${SERVER_HOSTNAME}. --ttl=180 --type=A --zone=${env.GCP_PROJECT_NAME}-dns
                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction execute --zone=${env.GCP_PROJECT_NAME}-dns
                                 """
