@@ -217,7 +217,7 @@ pipeline {
                                     until [ ! -z \$dns_ready ] && [ \$dns_ready -eq 200 ]
                                     do
                                         sleep 15
-                                        dns_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://${SERVER_HOSTNAME}/api/todos/healthz/)
+                                        dns_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://${SERVER_HOSTNAME}/api/todos/todos/)
                                     done
                                     """
                             }
