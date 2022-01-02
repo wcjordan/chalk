@@ -43,7 +43,8 @@ class OAuthBackend(BaseBackend):
         if 'state' in request.GET:
             session = _get_authorized_session(token, request.GET['state'])
         elif 'ci_refresh' in request.GET:
-            with open(CLIENT_SECRETS_FILE, 'r') as client_secrets_file:
+            with open(CLIENT_SECRETS_FILE, 'r',
+                      encoding='UTF-8') as client_secrets_file:
                 client_secrets_data = client_secrets_file.read()
             client_secrets_obj = json.loads(client_secrets_data)["web"]
 
