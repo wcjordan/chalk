@@ -161,27 +161,22 @@ pipeline {
                                         returnStdout: true
                                     ).trim()
 
-                                    SERVER_HOSTNAME = sh (
-                                        script: """
-                                            set +e
-                                            SUBDOMAIN_NUM=1
-                                            while true
-                                            do
-                                                SERVER_HOSTNAME=chalk-ci-\$SUBDOMAIN_NUM.jenkins.flipperkid.com
+                                    def subdomain_num = 1
+                                    SERVER_HOSTNAME="chalk-ci-${subdomain_num}.jenkins.flipperkid.com"
+                                    while(true) {
+                                        try {
+                                            sh """
                                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction start --zone=${env.GCP_PROJECT_NAME}-dns
-                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction add ${SERVER_IP_STANDIN} "--name=\$SERVER_HOSTNAME." '--ttl=180' '--type=A' --zone=${env.GCP_PROJECT_NAME}-dns
+                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction add ${SERVER_IP_STANDIN} "--name=${SERVER_HOSTNAME}." '--ttl=180' '--type=A' --zone=${env.GCP_PROJECT_NAME}-dns
                                                 gcloud dns --project=${env.GCP_PROJECT} record-sets transaction execute --zone=${env.GCP_PROJECT_NAME}-dns
-                                                if [ \$? -eq 0 ]
-                                                then
-                                                    break
-                                                fi
-                                                gcloud dns --project=${env.GCP_PROJECT} record-sets transaction abort --zone=${env.GCP_PROJECT_NAME}-dns
-                                                SUBDOMAIN_NUM=\$[\$SUBDOMAIN_NUM+1]
-                                            done
-                                            echo \$SERVER_HOSTNAME
-                                        """,
-                                        returnStdout: true
-                                    ).trim().readLines().reverse()[0]
+                                                """
+                                            break
+                                        } catch (ex) {
+                                            echo "failed for ${subdomain_num}"
+                                            subdomain_num++
+                                            sh "gcloud dns --project=${env.GCP_PROJECT} record-sets transaction abort --zone=${env.GCP_PROJECT_NAME}-dns"
+                                        }
+                                    }
                                 }
                                 sh """
                                     mkdir helm/secrets;
