@@ -163,6 +163,7 @@ pipeline {
 
                                     SERVER_HOSTNAME = sh (
                                         script: """
+                                            #!/bin/sh
                                             SUBDOMAIN_NUM=1
                                             while true
                                             do
