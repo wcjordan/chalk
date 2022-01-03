@@ -20,7 +20,7 @@ build:
 # Test & lint
 .PHONY: test
 test: build
-	docker run --env-file .env --rm $(SERVER_IMAGE):local-latest make test
+	DOMAIN=localhost docker run --env-file .env --env DOMAIN --rm $(SERVER_IMAGE):local-latest make test
 	docker run --rm -t -w / $(UI_IMAGE_DEV):local-latest make test
 
 # Run integration tests

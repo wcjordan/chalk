@@ -1,3 +1,4 @@
+import logging
 import os
 import pytest
 import random
@@ -24,7 +25,7 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_addoption(parser):
-    parser.addoption("--server_domain", action="store", default="chalk.flipperkid.com")
+    parser.addoption("--server_domain", action="store")
 
 
 def pytest_generate_tests(metafunc):
@@ -45,6 +46,7 @@ def driver(request, todo_prefix, test_name, server_domain):
 
     username = os.getenv("BROWSERSTACK_USERNAME")
     access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
+    refresh_token = os.getenv("OAUTH_REFRESH_TOKEN")
     build_name = os.getenv("BROWSERSTACK_BUILD_NAME", 'Local')
 
     desired_cap = {
@@ -62,6 +64,7 @@ def driver(request, todo_prefix, test_name, server_domain):
         'browserstack.user': username,
         'browserstack.key': access_key
     }
+
     driver = webdriver.Remote(
         command_executor='https://hub-cloud.browserstack.com/wd/hub',
         desired_capabilities=desired_cap)
@@ -69,6 +72,9 @@ def driver(request, todo_prefix, test_name, server_domain):
     try:
         # Load page
         driver.get(f'http://{server_domain}/')
+        if "Sign in" in driver.title:
+            driver.get(f'http://{server_domain}/api/todos/auth_callback/?ci_refresh=true&code={refresh_token}')
+
         if not "chalk" in driver.title:
             raise Exception("Unable to load page.")
 
@@ -83,22 +89,26 @@ def driver(request, todo_prefix, test_name, server_domain):
         else:
             driver.execute_script('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed", "reason": "Test completed all steps without issue."}}')
 
-    except Exception as e:
+    except Exception:
+        logging.exception('Failed to execute test')
         failure_msg = 'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "An exception occurred while setting up the driver and loading the page."}}'
         driver.execute_script(failure_msg)
 
     finally:
-        dismiss_add_label_modal(driver, optional=True)
+        try:
+            dismiss_add_label_modal(driver, optional=True)
 
-        cancel_edit_buttons = driver.find_elements(By.CSS_SELECTOR, 'div[data-testid="cancel-edit"]');
-        for btn in cancel_edit_buttons:
-            btn.click()
-        WebDriverWait(driver, 10).until(
-            EC.invisibility_of_element_located((By.CSS_SELECTOR, 'div[data-testid="cancel-edit"]'))
-        )
+            cancel_edit_buttons = driver.find_elements(By.CSS_SELECTOR, 'div[data-testid="cancel-edit"]');
+            for btn in cancel_edit_buttons:
+                btn.click()
+            WebDriverWait(driver, 10).until(
+                EC.invisibility_of_element_located((By.CSS_SELECTOR, 'div[data-testid="cancel-edit"]'))
+            )
 
-        todos_to_delete = find_todos(driver, todo_prefix, partial=True)
-        for todo in todos_to_delete:
-            delete_todo(todo)
+            todos_to_delete = find_todos(driver, todo_prefix, partial=True)
+            for todo in todos_to_delete:
+                delete_todo(todo)
+        except Exception:
+            logging.exception('Failed to cleanup test')
 
         driver.quit()

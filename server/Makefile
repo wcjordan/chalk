@@ -37,25 +37,6 @@ create-migrations:
 		-v $(PWD):/usr/src/app $(SERVER_IMAGE):local-latest \
 		python manage.py makemigrations --verbosity 3
 
-# Add an admin to Django
-# For production env:  make create-superuser ENV_NAME=prod
-ENV_NAME ?= dev-$(shell cat ../_env_id.txt)
-YQ_EXPRESSION = '.metadata.name = "create-superuser-chalk-$(ENV_NAME)" \
-  | .spec.template.spec.serviceAccountName = "chalk-$(ENV_NAME)" \
-  | .spec.template.spec.containers[0].command[1] = "-instances=$(GCP_PROJECT):us-east4:chalk-$(ENV_NAME)=tcp:5432" \
-  | .spec.template.spec.containers[1].image = "gcr.io/$(GCP_PROJECT)/chalk-server:local-latest" \
-  | .spec.template.spec.containers[1].env[0].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
-  | .spec.template.spec.containers[1].env[1].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
-  | .spec.template.spec.containers[1].env[2].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
-  | .spec.template.spec.containers[1].env[3].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
-  | .spec.template.spec.containers[1].env[4].valueFrom.secretKeyRef.name = "chalk-$(ENV_NAME)-server" \
-  | .spec.template.spec.containers[1].env[5].value = "chalk-$(ENV_NAME)" \
-  | .spec.template.spec.containers[1].env[6].value = "chalk-$(ENV_NAME)"'
-
-.PHONY: create-superuser
-create-superuser:
-	yq eval $(YQ_EXPRESSION) jobs/create_superuser.yaml | kubectl apply -f -
-
 # Update starter data for server
 .PHONY: update-starter-data
 update-starter-data:

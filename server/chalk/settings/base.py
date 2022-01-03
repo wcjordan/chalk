@@ -46,8 +46,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # TODO (jordan) investigate re-enabling this
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -170,5 +169,7 @@ logging.config.dictConfig({
 })
 
 # Models
-
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# Auth Backend
+AUTHENTICATION_BACKENDS = ['chalk.todos.oauth.OAuthBackend']

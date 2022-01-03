@@ -5,6 +5,7 @@ import random
 import string
 
 from django.test import TestCase
+from django.contrib.auth import get_user_model
 
 DEFAULT_LABELS = [
     'low-energy',
@@ -61,6 +62,12 @@ class ServiceTests(TestCase):
     Tests for todo view
     """
     maxDiff = None
+
+    def setUp(self):
+        test_username = 'tester@localhost'
+        user_model = get_user_model()
+        user = user_model.objects.create(username=test_username)
+        self.client.force_login(user)
 
     def test_todos_api(self):
         """
