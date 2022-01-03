@@ -17,7 +17,7 @@ def auth(request):
     """
     API endpoint that redirects a user to Google for login
     """
-    return redirect(get_authorization_url())
+    return redirect(get_authorization_url(request.get_host()))
 
 
 @api_view(['GET'])
@@ -46,7 +46,7 @@ def auth_test(request):
     return Response('Logged in!')
 
 
-@api_view(['GET'])
+@api_view(['GET', 'HEAD'])
 def healthz(request):
     """
     API endpoint that indicates the server is healthy

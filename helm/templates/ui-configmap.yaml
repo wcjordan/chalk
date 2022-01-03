@@ -24,7 +24,7 @@ data:
       }
 
       location @auth {
-          return 302 http://{{ .Values.domain }}/api/todos/auth/;
+          return 302 http://$host/api/todos/auth/;
       }
 
       location /healthz/ {

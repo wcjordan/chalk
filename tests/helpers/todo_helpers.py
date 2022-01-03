@@ -12,7 +12,7 @@ WARNING_ICON_TEXT = '󰀪'
 
 
 def add_todo(driver, description):
-    add_input = driver.find_element(By.CSS_SELECTOR, 'textarea[data-testid="add-todo-input"]');
+    add_input = driver.find_element(By.CSS_SELECTOR, 'textarea[data-testid="add-todo-input"]')
 
     # Clear input
     add_input.send_keys(Keys.COMMAND + "a")
@@ -24,12 +24,12 @@ def add_todo(driver, description):
 
 
 def complete_todo(todo_item):
-    complete_button = todo_item.find_element(By.CSS_SELECTOR, 'div[data-testid="complete-todo"]');
+    complete_button = todo_item.find_element(By.CSS_SELECTOR, 'div[data-testid="complete-todo"]')
     complete_button.click()
 
 
 def delete_todo(todo_item):
-    delete_button = todo_item.find_element(By.CSS_SELECTOR, 'div[data-testid="delete-todo"]');
+    delete_button = todo_item.find_element(By.CSS_SELECTOR, 'div[data-testid="delete-todo"]')
     delete_button.click()
 
 
