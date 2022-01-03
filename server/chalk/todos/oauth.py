@@ -103,7 +103,6 @@ def _get_redirect_uri(host):
     if not settings.DEBUG:
         return REDIRECT_URI
 
-    print(host)
     if host == 'localhost':
         return REDIRECT_URI.replace(os.environ["DOMAIN"], 'localhost:8080')
     return REDIRECT_URI
