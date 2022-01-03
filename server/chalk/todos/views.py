@@ -17,7 +17,7 @@ def auth(request):
     """
     API endpoint that redirects a user to Google for login
     """
-    return redirect(get_authorization_url())
+    return redirect(get_authorization_url(request.get_host()))
 
 
 @api_view(['GET'])

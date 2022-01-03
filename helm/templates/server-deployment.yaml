@@ -4,11 +4,7 @@ Server Env
 {{- define "..serverEnv" -}}
 {{- $fullName := include "..fullname" . -}}
 - name: DOMAIN
-  {{- if eq .Values.environment "DEV" }}
-  value: 'localhost:8080'
-  {{- else }}
   value: {{ .Values.domain }}
-  {{- end }}
 - name: DB_NAME
   value: {{ $fullName }}
 - name: DB_USER

@@ -9,19 +9,21 @@ from django.contrib.auth import get_user_model
 import google_auth_oauthlib.flow
 from google.auth.transport.requests import AuthorizedSession
 from google.oauth2.credentials import Credentials
+from django.conf import settings
+
 
 CLIENT_SECRETS_FILE = "/mnt/oauth_web_client_secret.json"
 REDIRECT_URI = f'http://{os.environ["DOMAIN"]}/api/todos/auth_callback/'
 SCOPES = ['openid', 'https://www.googleapis.com/auth/userinfo.email']
 
 
-def get_authorization_url():
+def get_authorization_url(host):
     """
     Create an authorization URL to redirect a user to for OAuth login
     """
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         CLIENT_SECRETS_FILE, scopes=SCOPES)
-    flow.redirect_uri = REDIRECT_URI
+    flow.redirect_uri = _get_redirect_uri(host)
 
     # TODO use offline access to get a refresh token
     # Needed for integration test auth workflows,
@@ -41,7 +43,7 @@ class OAuthBackend(BaseBackend):
         token = kwargs['token']
 
         if 'state' in request.GET:
-            session = _get_authorized_session(token, request.GET['state'])
+            session = _get_authorized_session(token, request.GET['state'], request.get_host())
         elif 'ci_refresh' in request.GET:
             with open(CLIENT_SECRETS_FILE, 'r',
                       encoding='UTF-8') as client_secrets_file:
@@ -85,13 +87,23 @@ def _get_email(session):
     return profile_info['email']
 
 
-def _get_authorized_session(token, state):
+def _get_authorized_session(token, state, host):
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         CLIENT_SECRETS_FILE, scopes=SCOPES, state=state)
-    flow.redirect_uri = REDIRECT_URI
+    flow.redirect_uri = _get_redirect_uri(host)
 
     flow.fetch_token(code=token)
     # print(flow.credentials.refresh_token)
 
     session = flow.authorized_session()
     return session
+
+
+def _get_redirect_uri(host):
+    if not settings.DEBUG:
+        return REDIRECT_URI
+
+    print(host)
+    if host == 'localhost':
+        return REDIRECT_URI.replace(os.environ["DOMAIN"], 'localhost:8080')
+    return REDIRECT_URI
