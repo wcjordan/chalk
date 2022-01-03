@@ -11,7 +11,6 @@ from google.auth.transport.requests import AuthorizedSession
 from google.oauth2.credentials import Credentials
 from django.conf import settings
 
-
 CLIENT_SECRETS_FILE = "/mnt/oauth_web_client_secret.json"
 REDIRECT_URI = f'http://{os.environ["DOMAIN"]}/api/todos/auth_callback/'
 SCOPES = ['openid', 'https://www.googleapis.com/auth/userinfo.email']
@@ -43,7 +42,8 @@ class OAuthBackend(BaseBackend):
         token = kwargs['token']
 
         if 'state' in request.GET:
-            session = _get_authorized_session(token, request.GET['state'], request.get_host())
+            session = _get_authorized_session(token, request.GET['state'],
+                                              request.get_host())
         elif 'ci_refresh' in request.GET:
             with open(CLIENT_SECRETS_FILE, 'r',
                       encoding='UTF-8') as client_secrets_file:
