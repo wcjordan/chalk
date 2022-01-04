@@ -61,6 +61,7 @@ describe('workspace reducer', function () {
       editId: null,
       filterLabels: [],
       labelTodoId: null,
+      sessionCookie: null,
     });
   });
 

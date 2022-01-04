@@ -65,6 +65,7 @@ const defaultProps = {
   workspace: {
     filterLabels: ['5 minutes', 'work', 'home', 'low-energy', 'mobile'],
     labelTodoId: null,
+    sessionCookie: 'test',
   },
 };
 

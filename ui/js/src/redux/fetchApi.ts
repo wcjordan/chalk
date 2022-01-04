@@ -3,10 +3,6 @@ import Cookies from 'js-cookie';
 import { Platform } from 'react-native';
 
 const csrftoken = Cookies.get('csrftoken');
-const configs =
-  Constants.manifest && Constants.manifest.extra
-    ? Constants.manifest.extra
-    : {};
 
 export async function list<T>(apiUri: string): Promise<Array<T>> {
   const response = await fetch(apiUri, getRequestOpts('GET'));
@@ -59,7 +55,8 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export function getWsRoot(): string {
-  const subdomain = configs.ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
+  const subdomain =
+    Constants.manifest?.extra?.ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
   const wsroot = Platform.select({
     native: `http://${subdomain}.flipperkid.com/`,
     default: '',

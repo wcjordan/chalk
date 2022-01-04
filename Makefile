@@ -22,7 +22,7 @@ build:
 # Test & lint
 .PHONY: test
 test: build
-	DOMAIN=localhost docker run --env-file .env --env DOMAIN --rm $(SERVER_IMAGE):local-latest make test
+	DOMAIN=localhost docker run --env-file .env --env DOMAIN --rm -t $(SERVER_IMAGE):local-latest make test
 	docker run --rm -t -w / \
 		-v $(PWD)/ui/Makefile:/Makefile \
 		-v $(PWD)/ui/js/src:/js/src \
