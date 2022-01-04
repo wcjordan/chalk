@@ -10,7 +10,7 @@ else
 endif
 
 IMAGE_REPO = gcr.io/$(GCP_PROJECT)
-UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-dev
+UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
 
 # Test w/ Jest
 .PHONY: test
@@ -21,8 +21,6 @@ test:
 	cd js; yarn tsc
 	# Unit & snapshot tests for UI
 	cd js; yarn test
-	# Build as a sanity check
-	cd js; yarn build
 
 # ESLint & Prettier JS formatting
 .PHONY: format
@@ -31,14 +29,24 @@ format:
 
 .PHONY: storybook
 storybook:
-	docker run --rm -v $(PWD)/js/src:/js/src -p 127.0.0.1:9009:9009 \
+	docker run --rm -p 127.0.0.1:9009:9009 \
 		-a stdin -a stdout -i -t \
-		$(UI_IMAGE_DEV):local-latest yarn run storybook
+		-v $(PWD)/js/src:/js/src \
+		-v $(PWD)/js/.storybook:/js/.storybook \
+		$(UI_IMAGE_BASE):local-latest \
+		yarn run storybook
 
 # Update snapshot tests
 .PHONY: update-snapshots
 update-snapshots:
-	docker run --rm -v $(PWD)/js/src:/js/src $(UI_IMAGE_DEV):local-latest yarn jest -u
+	docker run --rm -t \
+		-v $(PWD)/js/src:/js/src \
+		-v $(PWD)/js/babel.config.js:/js/babel.config.js \
+		-v $(PWD)/js/jest.config.js:/js/jest.config.js \
+		-v $(PWD)/js/.storybook:/js/.storybook \
+		-v $(PWD)/js/__mocks__:/js/__mocks__ \
+		$(UI_IMAGE_BASE):local-latest \
+		yarn jest -u
 
 # Fix import ordering
 .PHONY: fix-imports
