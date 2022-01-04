@@ -4,24 +4,36 @@ include .env
 IMAGE_REPO = gcr.io/$(GCP_PROJECT)
 SERVER_IMAGE = $(IMAGE_REPO)/chalk-server
 UI_IMAGE = $(IMAGE_REPO)/chalk-ui
-UI_IMAGE_DEV = $(IMAGE_REPO)/chalk-ui-dev
+UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
 
 # Build containers
 .PHONY: build
 build:
 	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):local-latest server
+	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.base -t $(UI_IMAGE_BASE):local-latest ui
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
 			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
 			--build-arg "GCP_PROJECT=$(GCP_PROJECT)" \
+			--build-arg "BASE_IMAGE_TAG=local-latest" \
 			-t $(UI_IMAGE):local-latest ui'
 
 # Test & lint
 .PHONY: test
 test: build
 	DOMAIN=localhost docker run --env-file .env --env DOMAIN --rm $(SERVER_IMAGE):local-latest make test
-	docker run --rm -t -w / $(UI_IMAGE_DEV):local-latest make test
+	docker run --rm -t -w / \
+		-v $(PWD)/ui/Makefile:/Makefile \
+		-v $(PWD)/ui/js/src:/js/src \
+		-v $(PWD)/ui/js/.eslintrc:/js/.eslintrc \
+		-v $(PWD)/ui/js/babel.config.js:/js/babel.config.js \
+		-v $(PWD)/ui/js/jest.config.js:/js/jest.config.js \
+		-v $(PWD)/ui/js/tsconfig.json:/js/tsconfig.json \
+		-v $(PWD)/ui/js/.storybook:/js/.storybook \
+		-v $(PWD)/ui/js/__mocks__:/js/__mocks__ \
+		$(UI_IMAGE_BASE):local-latest \
+		make test
 
 # Run integration tests
 # Requires dev env to be running (make start)
@@ -54,7 +66,16 @@ format:
 .PHONY: deploy
 deploy: build
 	docker run --env-file .prod.env --env ENVIRONMENT=prod --env DEBUG=false \
-		--rm -t -w / $(UI_IMAGE_DEV):local-latest make publish
+		--rm -t -w / \
+		-v $(PWD)/ui/Makefile:/Makefile \
+		-v $(PWD)/ui/js/src:/js/src \
+		-v $(PWD)/ui/js/web:/js/web \
+		-v $(PWD)/ui/js/app.config.js:/js/app.config.js \
+		-v $(PWD)/ui/js/App.tsx:/js/App.tsx \
+		-v $(PWD)/ui/js/assets:/js/assets \
+		-v $(PWD)/ui/js/babel.config.js:/js/babel.config.js \
+		$(UI_IMAGE_BASE):local-latest \
+		make publish
 	docker push $(SERVER_IMAGE):local-latest
 	docker push $(UI_IMAGE):local-latest
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \

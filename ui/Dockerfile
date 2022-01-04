@@ -1,6 +1,7 @@
 # Multistage build for JS artifacts
 ARG GCP_PROJECT
-FROM gcr.io/${GCP_PROJECT}/chalk-ui-base:latest as js_app
+ARG BASE_IMAGE_TAG=latest
+FROM gcr.io/${GCP_PROJECT}/chalk-ui-base:${BASE_IMAGE_TAG} as js_app
 WORKDIR /js
 
 ENV ENVIRONMENT=prod
