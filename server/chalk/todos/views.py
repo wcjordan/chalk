@@ -29,7 +29,7 @@ def auth_callback(request):
     if user is not None:
         login(request, user)
 
-        if 'state' in request.GET:
+        if 'state' in request.GET or 'ci_refresh' in request.GET:
             return redirect('/')
         return Response('Logged in!')
 
