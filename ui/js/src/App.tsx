@@ -15,7 +15,6 @@ import {
   completeAuthentication,
   createTodo,
   filterByLabels,
-  loadSessionCookie,
   setTodoEditId,
   setTodoLabelingId,
   updateTodo,
@@ -57,17 +56,12 @@ const App: React.FC<ConnectedProps<typeof connector>> = function (
 };
 
 export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
-  const { completeAuthentication, loadSessionCookie, workspace } = props;
-  const { sessionCookie } = workspace;
+  const { completeAuthentication, workspace } = props;
+  const { loggedIn } = workspace;
 
   let content: JSX.Element | null = null;
-  if (!sessionCookie) {
-    content = (
-      <Login
-        completeAuthentication={completeAuthentication}
-        loadSessionCookie={loadSessionCookie}
-      />
-    );
+  if (!loggedIn) {
+    content = <Login completeAuthentication={completeAuthentication} />;
   } else {
     content = <TodoList {...props} />;
   }
@@ -90,7 +84,6 @@ type LayoutProps = {
   filterByLabels: (labels: string[]) => void;
   filteredTodos: Todo[];
   labels: Label[];
-  loadSessionCookie: () => void;
   selectedPickerLabels: { [label: string]: boolean };
   setTodoEditId: (id: number | null) => void;
   setTodoLabelingId: (id: number | null) => void;
@@ -109,7 +102,6 @@ const mapDispatchToProps = {
   completeAuthentication,
   createTodo,
   filterByLabels,
-  loadSessionCookie,
   setTodoEditId,
   setTodoLabelingId,
   updateTodo,

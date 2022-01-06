@@ -1,6 +1,6 @@
+import { Platform } from 'react-native';
 import { ThunkAction } from 'redux-thunk';
 import { Action, createSlice } from '@reduxjs/toolkit';
-import { getItemAsync, setItemAsync } from 'expo-secure-store';
 
 import { ReduxState, TodoPatch, WorkspaceState } from './types';
 import labelsApiSlice, { listLabels } from './labelsApiSlice';
@@ -13,11 +13,17 @@ import { completeAuthCallback } from './fetchApi';
 
 type AppThunk = ThunkAction<void, ReduxState, unknown, Action<string>>;
 
+const isWeb = Platform.select({
+  native: false,
+  default: true,
+});
+
 const initialWorkspace: WorkspaceState = {
+  csrfToken: null,
   editId: null,
   labelTodoId: null,
   filterLabels: [],
-  sessionCookie: null,
+  loggedIn: isWeb,
 };
 const workspaceSlice = createSlice({
   name: 'workspace',
@@ -26,10 +32,9 @@ const workspaceSlice = createSlice({
     filterByLabels: (state, action) => {
       state.filterLabels = Array.from(action.payload);
     },
-    setSessionCookie: (state, action) => {
-      const sessionCookie = action.payload;
-      state.sessionCookie = sessionCookie;
-      setItemAsync('session_cookie', sessionCookie);
+    logIn: (state, action) => {
+      state.loggedIn = action.payload.loggedIn;
+      state.csrfToken = action.payload.csrfToken;
     },
     setTodoLabelingId: (state, action) => {
       state.labelTodoId = action.payload;
@@ -65,17 +70,23 @@ export const updateTodoLabels =
     );
   };
 
+// Used only for mobile
 export const completeAuthentication =
   (accessToken: string): AppThunk =>
   async (dispatch) => {
-    const cookie = await completeAuthCallback(accessToken);
-    return dispatch(workspaceSlice.actions.setSessionCookie(cookie));
+    const authResult = await completeAuthCallback(accessToken);
+    if (authResult.status === 200) {
+      dispatch(
+        workspaceSlice.actions.logIn({
+          loggedIn: true,
+          csrfToken: authResult.csrfToken,
+        }),
+      );
+    } else {
+      // TODO
+      console.log('Log in failed');
+    }
   };
-
-export const loadSessionCookie = (): AppThunk => async (dispatch) => {
-  const cookie = await getItemAsync('session_cookie');
-  return dispatch(workspaceSlice.actions.setSessionCookie(cookie));
-};
 
 export const filterByLabels = workspaceSlice.actions.filterByLabels;
 export const setTodoEditId = workspaceSlice.actions.setTodoEditId;

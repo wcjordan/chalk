@@ -104,6 +104,6 @@ def _get_redirect_uri(host):
     if not settings.DEBUG:
         return REDIRECT_URI
 
-    if host == 'localhost':
+    if host == 'localhost:8080':
         return REDIRECT_URI.replace(os.environ["DOMAIN"], 'localhost:8080')
     return REDIRECT_URI

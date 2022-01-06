@@ -41,8 +41,9 @@ export interface ReduxState {
 }
 
 export interface WorkspaceState {
+  csrfToken: string | null;
   editId: number | null;
   labelTodoId: number | null;
   filterLabels: string[];
-  sessionCookie: string | null;
+  loggedIn: boolean;
 }

@@ -63,9 +63,10 @@ const defaultProps = {
     }),
   ],
   workspace: {
+    csrfToken: null,
     filterLabels: ['5 minutes', 'work', 'home', 'low-energy', 'mobile'],
     labelTodoId: null,
-    sessionCookie: 'test',
+    loggedIn: true,
   },
 };
 
