@@ -11,7 +11,6 @@ import google_auth_oauthlib.flow
 from google.auth.transport.requests import AuthorizedSession
 from google.oauth2.credentials import Credentials
 
-
 CLIENT_SECRETS_FILE = "/mnt/oauth_web_client_secret.json"
 REDIRECT_URI = f'http://{os.environ["DOMAIN"]}/api/todos/auth_callback/'
 SCOPES = ['openid', 'https://www.googleapis.com/auth/userinfo.email']

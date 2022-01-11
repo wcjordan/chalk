@@ -13,17 +13,12 @@ import { completeAuthCallback } from './fetchApi';
 
 type AppThunk = ThunkAction<void, ReduxState, unknown, Action<string>>;
 
-const isWeb = Platform.select({
-  native: false,
-  default: true,
-});
-
 const initialWorkspace: WorkspaceState = {
   csrfToken: null,
   editId: null,
   labelTodoId: null,
   filterLabels: [],
-  loggedIn: isWeb,
+  loggedIn: Platform.OS === 'web',
 };
 const workspaceSlice = createSlice({
   name: 'workspace',
@@ -70,7 +65,7 @@ export const updateTodoLabels =
     );
   };
 
-// Used only for mobile
+// Used to exchange login token for session cookie in mobile login flow
 export const completeAuthentication =
   (accessToken: string): AppThunk =>
   async (dispatch) => {

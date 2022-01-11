@@ -6,6 +6,7 @@ import { useAuthRequest } from 'expo-auth-session/providers/google';
 
 maybeCompleteAuthSession();
 
+// Used to login w/ Google OAuth for mobile workflows
 const Login: React.FC<Props> = function (props: Props) {
   const { completeAuthentication } = props;
   const [request, response, promptAsync] = useAuthRequest({
