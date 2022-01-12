@@ -56,14 +56,17 @@ const App: React.FC<ConnectedProps<typeof connector>> = function (
 };
 
 export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
-  const { completeAuthentication, workspace } = props;
+  const { completeAuthentication, filteredTodos, workspace, ...otherProps } =
+    props;
   const { loggedIn } = workspace;
 
   let content: JSX.Element | null = null;
   if (!loggedIn) {
     content = <Login completeAuthentication={completeAuthentication} />;
   } else {
-    content = <TodoList {...props} />;
+    content = (
+      <TodoList todos={filteredTodos} workspace={workspace} {...otherProps} />
+    );
   }
 
   return (

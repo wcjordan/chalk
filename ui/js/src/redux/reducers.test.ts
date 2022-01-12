@@ -27,7 +27,7 @@ describe('updateTodo', function () {
       body: stubTodo,
     });
 
-    const store = mockStore();
+    const store = mockStore({ workspace: {} });
     await store.dispatch(updateTodo(stubTodoPatch));
 
     const actions = store.getActions();

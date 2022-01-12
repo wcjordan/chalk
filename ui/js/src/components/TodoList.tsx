@@ -41,10 +41,10 @@ const TodoList: React.FC<Props> = function (props: Props) {
     createTodo,
     labels,
     filterByLabels,
-    filteredTodos,
     selectedPickerLabels,
     setTodoEditId,
     setTodoLabelingId,
+    todos,
     updateTodo,
     updateTodoLabels,
     workspace,
@@ -56,7 +56,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
   // TODO (jordan) look into memoizing
   const labelNames = labels.map((label) => label.name);
 
-  const todoViews = _.map(filteredTodos, (todo) => (
+  const todoViews = _.map(todos, (todo) => (
     <TodoItem
       setTodoLabelingId={setTodoLabelingId}
       editing={todo.id === editId}
@@ -103,11 +103,11 @@ const TodoList: React.FC<Props> = function (props: Props) {
 type Props = {
   createTodo: (description: string) => void;
   filterByLabels: (labels: string[]) => void;
-  filteredTodos: Todo[];
   labels: Label[];
   selectedPickerLabels: { [label: string]: boolean };
   setTodoEditId: (id: number | null) => void;
   setTodoLabelingId: (id: number | null) => void;
+  todos: Todo[];
   updateTodo: (todoPatch: TodoPatch) => void;
   updateTodoLabels: (labels: string[]) => void;
   workspace: WorkspaceState;

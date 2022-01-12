@@ -23,7 +23,7 @@ describe('createTodo', function () {
       body: stubTodo,
     });
 
-    const store = mockStore();
+    const store = mockStore({ workspace: {} });
     await store.dispatch(createTodo(stubDescription));
 
     const actions = store.getActions();
