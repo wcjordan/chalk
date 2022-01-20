@@ -81,17 +81,8 @@ export function getWsRoot(): string {
 
 // Used to exchange login token for session cookie in mobile login flow
 export async function completeAuthCallback(token: string) {
-  const response = await fetch(
+  return await fetch(
     `${getWsRoot()}api/todos/auth_callback/?code=${token}`,
     getRequestOpts('GET'),
   );
-
-  const cookies = response?.headers?.get('set-cookie')?.split(' ');
-  const csrfToken = cookies
-    ?.find((val) => val.startsWith('csrftoken'))
-    ?.slice(10, -1);
-  return {
-    status: response?.status,
-    csrfToken,
-  };
 }

@@ -49,28 +49,49 @@ export const completeAuthentication =
   (accessToken: string): AppThunk =>
   async (dispatch) => {
     try {
-      const authResult = await completeAuthCallback(accessToken);
-      if (authResult.status === 200) {
-        dispatch(
-          workspaceSlice.actions.logIn({
-            loggedIn: true,
-            csrfToken: authResult.csrfToken,
-          }),
-        );
-      } else {
-        // TODO Login failed w/ status & message
-        // response.status and response.statusText and response.text()
+      const response = await completeAuthCallback(accessToken);
+      const cookies = response.headers.get('set-cookie')?.split(' ');
+      const csrfToken = cookies
+        ?.find((val) => val.startsWith('csrftoken'))
+        ?.slice(10, -1);
+
+      if (response.status !== 200) {
+        const responseText = await response.text();
+        const message = `Login failed with status: ${response.status} ${response.statusText}\n${responseText}`;
+        dispatch(notificationsSlice.actions.addNotification(message));
+        throw new Error(message);
+      }
+
+      if (!csrfToken) {
         dispatch(
           notificationsSlice.actions.addNotification(
-            `Login failed with status: ${authResult.status}`,
+            'Unexpectedly missing CSRFToken.  Please refresh and login again.',
           ),
         );
+        throw new Error(
+          `CSRFToken missing from set-cookie header\n${response.headers.get(
+            'set-cookie',
+          )}`,
+        );
       }
+
+      dispatch(
+        workspaceSlice.actions.logIn({
+          loggedIn: true,
+          csrfToken: csrfToken,
+        }),
+      );
     } catch (ex) {
-      // TODO Login failed with error
+      dispatch(
+        notificationsSlice.actions.addNotification(
+          'Login failed with a network error.  Please refresh and login again.',
+        ),
+      );
+      throw ex;
     }
   };
 
+export const addNotification = notificationsSlice.actions.addNotification;
 export const dismissNotification =
   notificationsSlice.actions.dismissNotification;
 export const filterByLabels = workspaceSlice.actions.filterByLabels;

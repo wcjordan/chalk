@@ -8,7 +8,7 @@ maybeCompleteAuthSession();
 
 // Used to login w/ Google OAuth for mobile workflows
 const Login: React.FC<Props> = function (props: Props) {
-  const { completeAuthentication } = props;
+  const { addNotification, completeAuthentication } = props;
   const [request, response, promptAsync] = useAuthRequest({
     expoClientId: Constants.manifest?.extra?.EXPO_CLIENT_ID,
   });
@@ -20,10 +20,13 @@ const Login: React.FC<Props> = function (props: Props) {
       if (authentication && authentication['accessToken']) {
         completeAuthentication(authentication['accessToken']);
       } else {
-        // TODO issue with authentication and no access token
+        addNotification(
+          'Unexpectedly missing access token.  Please refresh and login again.',
+        );
+        throw new Error(`Missing access token\n${authentication}`);
       }
-    } else {
-      // TODO login was unsuccessful
+    } else if (response) {
+      addNotification('Login failed');
     }
   }, [response]);
 
@@ -39,6 +42,7 @@ const Login: React.FC<Props> = function (props: Props) {
 };
 
 type Props = {
+  addNotification: (text: string) => void;
   completeAuthentication: (token: string) => void;
 };
 

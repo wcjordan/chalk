@@ -13,6 +13,7 @@ import {
   WorkspaceState,
 } from './redux/types';
 import {
+  addNotification,
   completeAuthentication,
   createTodo,
   dismissNotification,
@@ -59,6 +60,7 @@ const App: React.FC<ConnectedProps<typeof connector>> = function (
 
 export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
   const {
+    addNotification,
     completeAuthentication,
     dismissNotification,
     filteredTodos,
@@ -70,7 +72,12 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
 
   let content: JSX.Element | null = null;
   if (!loggedIn) {
-    content = <Login completeAuthentication={completeAuthentication} />;
+    content = (
+      <Login
+        addNotification={addNotification}
+        completeAuthentication={completeAuthentication}
+      />
+    );
   } else {
     content = (
       <TodoList todos={filteredTodos} workspace={workspace} {...otherProps} />
@@ -97,6 +104,7 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
 };
 
 type LayoutProps = {
+  addNotification: (text: string) => void;
   completeAuthentication: (token: string) => void;
   createTodo: (description: string) => void;
   dismissNotification: () => void;
@@ -120,6 +128,7 @@ const mapStateToProps = (state: ReduxState) => {
   };
 };
 const mapDispatchToProps = {
+  addNotification,
   completeAuthentication,
   createTodo,
   dismissNotification,
