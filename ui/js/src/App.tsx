@@ -2,8 +2,9 @@ import { connect, ConnectedProps, useSelector } from 'react-redux';
 import React from 'react';
 import { StatusBar, StyleSheet, View, ViewStyle } from 'react-native';
 
-import TodoList from './components/TodoList';
+import ErrorBar from './components/ErrorBar';
 import Login from './components/Login';
+import TodoList from './components/TodoList';
 import {
   Label,
   ReduxState,
@@ -14,6 +15,7 @@ import {
 import {
   completeAuthentication,
   createTodo,
+  dismissNotification,
   filterByLabels,
   setTodoEditId,
   setTodoLabelingId,
@@ -56,8 +58,14 @@ const App: React.FC<ConnectedProps<typeof connector>> = function (
 };
 
 export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
-  const { completeAuthentication, filteredTodos, workspace, ...otherProps } =
-    props;
+  const {
+    completeAuthentication,
+    dismissNotification,
+    filteredTodos,
+    notificationQueue,
+    workspace,
+    ...otherProps
+  } = props;
   const { loggedIn } = workspace;
 
   let content: JSX.Element | null = null;
@@ -69,6 +77,8 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
     );
   }
 
+  const notificationText =
+    notificationQueue.length > 0 ? notificationQueue[0] : null;
   return (
     <View style={styles.root}>
       <StatusBar
@@ -77,6 +87,11 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
         barStyle={'light-content'}
       />
       {content}
+      <ErrorBar
+        key={notificationText}
+        text={notificationText}
+        dismissNotification={dismissNotification}
+      />
     </View>
   );
 };
@@ -84,9 +99,11 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
 type LayoutProps = {
   completeAuthentication: (token: string) => void;
   createTodo: (description: string) => void;
+  dismissNotification: () => void;
   filterByLabels: (labels: string[]) => void;
   filteredTodos: Todo[];
   labels: Label[];
+  notificationQueue: string[];
   selectedPickerLabels: { [label: string]: boolean };
   setTodoEditId: (id: number | null) => void;
   setTodoLabelingId: (id: number | null) => void;
@@ -99,11 +116,13 @@ const mapStateToProps = (state: ReduxState) => {
   return {
     labels: state.labelsApi.entries,
     workspace: state.workspace,
+    notificationQueue: state.notifications.notificationQueue,
   };
 };
 const mapDispatchToProps = {
   completeAuthentication,
   createTodo,
+  dismissNotification,
   filterByLabels,
   setTodoEditId,
   setTodoLabelingId,

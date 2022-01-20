@@ -12182,6 +12182,83 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
 </View>
 `;
 
+exports[`Storyshots Error Bar Default Error Bar 1`] = `
+<RCTSafeAreaView
+  emulateUnlessSupported={true}
+  pointerEvents="box-none"
+  style={
+    Array [
+      Object {
+        "bottom": 0,
+        "position": "absolute",
+        "width": "100%",
+      },
+      Object {
+        "width": "90%",
+      },
+    ]
+  }
+>
+  <View
+    accessibilityLiveRegion="polite"
+    pointerEvents="box-none"
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#FAA0A0",
+        "borderRadius": 4,
+        "elevation": 6,
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "margin": 8,
+        "opacity": 0,
+        "shadowColor": "#000000",
+        "shadowOffset": Object {
+          "height": 5,
+          "width": 0,
+        },
+        "shadowOpacity": 0.24,
+        "shadowRadius": 6,
+        "transform": Array [
+          Object {
+            "scale": 0.9,
+          },
+        ],
+      }
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "color": "#000000",
+            "fontFamily": "System",
+            "fontWeight": "400",
+          },
+          Object {
+            "textAlign": "left",
+          },
+          Array [
+            Object {
+              "flex": 1,
+              "flexWrap": "wrap",
+              "marginLeft": 16,
+              "marginVertical": 14,
+            },
+            Object {
+              "color": "black",
+              "marginRight": 16,
+            },
+          ],
+        ]
+      }
+    >
+      Snacks!
+    </Text>
+  </View>
+</RCTSafeAreaView>
+`;
+
 exports[`Storyshots Label Chip Default Label Chip 1`] = `
 <View
   style={

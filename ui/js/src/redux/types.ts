@@ -3,6 +3,10 @@ export interface Label {
   name: string;
 }
 
+export interface NotificationsState {
+  notificationQueue: string[];
+}
+
 export interface Todo {
   id: number;
   archived: boolean;
@@ -36,6 +40,7 @@ export interface ApiState<T> {
 
 export interface ReduxState {
   labelsApi: ApiState<Label>;
+  notifications: NotificationsState;
   todosApi: ApiState<Todo>;
   workspace: WorkspaceState;
 }

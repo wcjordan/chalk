@@ -19,7 +19,11 @@ const Login: React.FC<Props> = function (props: Props) {
 
       if (authentication && authentication['accessToken']) {
         completeAuthentication(authentication['accessToken']);
+      } else {
+        // TODO issue with authentication and no access token
       }
+    } else {
+      // TODO login was unsuccessful
     }
   }, [response]);
 
