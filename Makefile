@@ -84,9 +84,6 @@ deploy: build
 			--set environment=PROD \
 			--set gcpProject=$$GCP_PROJECT \
 			--set server.dbPassword=$$DB_PASSWORD \
-			--set server.djangoEmail=$$DJANGO_EMAIL \
-			--set server.djangoPassword=$$DJANGO_PASSWORD \
-			--set server.djangoUsername=$$DJANGO_USERNAME \
 			--set server.secretKey=$$SECRET_KEY \
 			chalk-prod helm'
 

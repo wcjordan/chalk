@@ -7,9 +7,6 @@ env_arr = [
     'environment=DEV',
     'gcpProject=%s' % GCP_PROJECT,
     'server.dbPassword=%s' % os.environ.get('DB_PASSWORD'),
-    'server.djangoEmail=%s' % os.environ.get('DJANGO_EMAIL'),
-    'server.djangoPassword=%s' % os.environ.get('DJANGO_PASSWORD'),
-    'server.djangoUsername=%s' % os.environ.get('DJANGO_USERNAME'),
     'server.secretKey=%s' % os.environ.get('SECRET_KEY'),
 ]
 
