@@ -2,10 +2,10 @@ import React, { useCallback, useState } from 'react';
 import { Snackbar } from 'react-native-paper';
 
 const ErrorBar: React.FC<Props> = function (props: Props) {
-  const { dismissNotification, text } = props;
+  const { dismissNotification, permanent, text } = props;
   const [visible, setVisible] = useState(text != null);
   const dismissCb = useCallback(() => {
-    if (text == null) {
+    if (text == null || permanent) {
       return;
     }
 
@@ -31,6 +31,7 @@ const ErrorBar: React.FC<Props> = function (props: Props) {
 
 type Props = {
   dismissNotification: () => void;
+  permanent?: boolean;
   text: string | null;
 };
 

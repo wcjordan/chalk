@@ -45,6 +45,7 @@ const defaultProps = {
     { name: '25 minutes' },
     { name: '60 minutes' },
   ],
+  notificationQueue: [],
   selectedPickerLabels: {
     '5 minutes': true,
     work: true,
@@ -85,4 +86,8 @@ const labelPickerWorkspace = Object.assign({}, defaultProps.workspace, {
 });
 export const LabelPickerLayout: React.FC = () => (
   <AppLayout {...defaultProps} workspace={labelPickerWorkspace} />
+);
+
+export const NotificationLayout: React.FC = () => (
+  <AppLayout {...defaultProps} notificationQueue={['Error logging in...']} />
 );
