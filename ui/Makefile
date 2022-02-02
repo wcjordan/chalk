@@ -32,6 +32,8 @@ storybook:
 	docker run --rm -p 127.0.0.1:9009:9009 \
 		-a stdin -a stdout -i -t \
 		-v $(PWD)/js/src:/js/src \
+		-v $(PWD)/js/__mocks__:/js/__mocks__ \
+		-v $(PWD)/js/assets:/js/assets \
 		-v $(PWD)/js/.storybook:/js/.storybook \
 		$(UI_IMAGE_BASE):local-latest \
 		yarn run storybook
@@ -41,6 +43,7 @@ storybook:
 update-snapshots:
 	docker run --rm -t \
 		-v $(PWD)/js/src:/js/src \
+		-v $(PWD)/js/assets:/js/assets \
 		-v $(PWD)/js/babel.config.js:/js/babel.config.js \
 		-v $(PWD)/js/jest.config.js:/js/jest.config.js \
 		-v $(PWD)/js/.storybook:/js/.storybook \

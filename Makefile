@@ -26,6 +26,7 @@ test: build
 	docker run --rm -t -w / \
 		-v $(PWD)/ui/Makefile:/Makefile \
 		-v $(PWD)/ui/js/src:/js/src \
+		-v $(PWD)/ui/js/assets:/js/assets \
 		-v $(PWD)/ui/js/.eslintrc:/js/.eslintrc \
 		-v $(PWD)/ui/js/babel.config.js:/js/babel.config.js \
 		-v $(PWD)/ui/js/jest.config.js:/js/jest.config.js \

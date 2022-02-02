@@ -20128,6 +20128,166 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
 </View>
 `;
 
+exports[`Storyshots Login Default Login 1`] = `
+<View
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "row",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#4285F4",
+        "borderColor": "transparent",
+        "borderRadius": 0,
+        "borderStyle": "solid",
+        "borderWidth": 0,
+        "elevation": 2,
+        "minWidth": 64,
+        "shadowColor": "#000000",
+        "shadowOffset": Object {
+          "height": 0.75,
+          "width": 0,
+        },
+        "shadowOpacity": 0.24,
+        "shadowRadius": 1.5,
+      }
+    }
+  >
+    <View
+      accessibilityRole="button"
+      accessibilityState={
+        Object {
+          "disabled": false,
+        }
+      }
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Array [
+          Object {
+            "overflow": "hidden",
+          },
+          Object {
+            "borderRadius": 0,
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "center",
+            },
+            undefined,
+          ]
+        }
+      >
+        <Text
+          numberOfLines={1}
+          selectable={false}
+          style={
+            Array [
+              Object {
+                "color": "#000000",
+                "fontFamily": "System",
+                "fontWeight": "400",
+              },
+              Object {
+                "textAlign": "left",
+              },
+              Array [
+                Object {
+                  "letterSpacing": 1,
+                  "marginHorizontal": 16,
+                  "marginVertical": 9,
+                  "textAlign": "center",
+                },
+                undefined,
+                false,
+                Object {
+                  "color": "#ffffff",
+                  "fontFamily": "Roboto_500Medium",
+                  "fontWeight": "500",
+                },
+                Object {
+                  "fontFamily": "Roboto_500Medium",
+                  "fontWeight": "500",
+                },
+                Object {
+                  "marginBottom": 0,
+                  "marginLeft": 0,
+                  "marginRight": 0,
+                  "marginTop": 0,
+                },
+              ],
+            ]
+          }
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "height": 40,
+                "justifyContent": "center",
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "alignItems": "center",
+                  "backgroundColor": "white",
+                  "height": 38,
+                  "justifyContent": "center",
+                  "marginLeft": 1,
+                  "width": 34,
+                }
+              }
+            >
+              <Image
+                resizeMode="center"
+                source={1}
+                style={
+                  Object {
+                    "height": 18,
+                    "width": 18,
+                  }
+                }
+              />
+            </View>
+            <Text
+              style={
+                Object {
+                  "marginLeft": 8,
+                  "marginRight": 8,
+                }
+              }
+            >
+              Sign in with Google
+            </Text>
+          </View>
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;
+
 exports[`Storyshots Todo Item Checked Todo 1`] = `
 <View
   style={
