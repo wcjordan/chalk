@@ -75,7 +75,7 @@ const Login: React.FC<Props> = function (props: Props) {
     Roboto_500Medium,
   });
 
-  const [request, response, promptAsync] = useAuthRequest({
+  const [, response, promptAsync] = useAuthRequest({
     expoClientId: Constants.manifest?.extra?.EXPO_CLIENT_ID,
   });
   const promptLogin = useCallback(() => promptAsync(), [promptAsync]);
