@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Surface, TouchableRipple } from 'react-native-paper';
 import Constants from 'expo-constants';
 import React, { useCallback, useEffect } from 'react';
 import { maybeCompleteAuthSession } from 'expo-web-browser';
@@ -19,9 +19,9 @@ maybeCompleteAuthSession();
 
 interface Style {
   buttonStyle: ViewStyle;
-  buttonViewStyle: ViewStyle;
   iconStyle: ImageStyle;
   logoStyle: ViewStyle;
+  surfaceStyle: ViewStyle;
   textStyle: TextStyle;
   wrapperStyle: ViewStyle;
 }
@@ -30,12 +30,6 @@ interface Style {
 // https://docs.expo.dev/versions/latest/react-native/pixelratio/
 const styles = StyleSheet.create<Style>({
   buttonStyle: {
-    marginLeft: 0,
-    marginRight: 0,
-    marginTop: 0,
-    marginBottom: 0,
-  },
-  buttonViewStyle: {
     alignItems: 'center',
     flexDirection: 'row',
     height: 40,
@@ -53,13 +47,23 @@ const styles = StyleSheet.create<Style>({
     marginLeft: 1,
     width: 34,
   },
+  surfaceStyle: {
+    backgroundColor: '#4285F4',
+    borderRadius: 0,
+    borderWidth: 0,
+    minWidth: 64,
+  },
   textStyle: {
+    color: 'white',
+    fontFamily: 'Roboto_500Medium',
     marginLeft: 8,
     marginRight: 8,
   },
   wrapperStyle: {
     display: 'flex',
     flexDirection: 'row',
+    paddingTop: 32,
+    justifyContent: 'center',
   },
 });
 
@@ -97,39 +101,30 @@ const Login: React.FC<Props> = function (props: Props) {
     return null; // TODO loading indicator
   }
 
-  const theme = {
-    colors: {
-      primary: '#4285F4',
-    },
-    fonts: {
-      medium: {
-        fontFamily: 'Roboto_500Medium',
-      },
-    },
-    roundness: 0,
-  };
-
   return (
     <View style={styles.wrapperStyle}>
-      <Button
-        labelStyle={styles.buttonStyle}
-        disabled={!request}
-        mode="contained"
-        onPress={promptLogin}
-        theme={theme}
-        uppercase={false}
-      >
-        <View style={styles.buttonViewStyle}>
-          <View style={styles.logoStyle}>
-            <Image
-              resizeMode="center"
-              source={GoogleIcon}
-              style={styles.iconStyle}
-            />
+      <Surface style={styles.surfaceStyle}>
+        <TouchableRipple
+          accessibilityRole="button"
+          accessibilityState={{ disabled: false }}
+          borderless
+          delayPressIn={0}
+          disabled={false}
+          onPress={promptLogin}
+          rippleColor="rgba(0, 0, 0, 0.32)"
+        >
+          <View style={styles.buttonStyle}>
+            <View style={styles.logoStyle}>
+              <Image
+                resizeMode="center"
+                source={GoogleIcon}
+                style={styles.iconStyle}
+              />
+            </View>
+            <Text style={styles.textStyle}>Sign in with Google</Text>
           </View>
-          <Text style={styles.textStyle}>Sign in with Google</Text>
-        </View>
-      </Button>
+        </TouchableRipple>
+      </Surface>
     </View>
   );
 };
