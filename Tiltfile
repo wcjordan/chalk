@@ -7,9 +7,6 @@ env_arr = [
     'environment=DEV',
     'gcpProject=%s' % GCP_PROJECT,
     'server.dbPassword=%s' % os.environ.get('DB_PASSWORD'),
-    'server.djangoEmail=%s' % os.environ.get('DJANGO_EMAIL'),
-    'server.djangoPassword=%s' % os.environ.get('DJANGO_PASSWORD'),
-    'server.djangoUsername=%s' % os.environ.get('DJANGO_USERNAME'),
     'server.secretKey=%s' % os.environ.get('SECRET_KEY'),
 ]
 
@@ -43,8 +40,8 @@ expo_env = {
     'SENTRY_DSN': os.environ.get('SENTRY_DSN'),
 }
 local_resource('expo',
-               serve_cmd='yarn web',
-               serve_dir='ui/js',
+               serve_cmd='bash start.sh',
+               serve_dir='ui',
                serve_env=expo_env,
                links=link('http://localhost:19002/', 'Expo Devtools'),
                readiness_probe=probe(

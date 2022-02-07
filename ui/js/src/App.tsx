@@ -1,18 +1,10 @@
-import _ from 'lodash';
 import { connect, ConnectedProps, useSelector } from 'react-redux';
 import React from 'react';
-import {
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native';
-import AddTodo from './components/AddTodo';
-import LabelFilter from './components/LabelFilter';
-import LabelPicker from './components/LabelPicker';
+import { StatusBar, StyleSheet, View, ViewStyle } from 'react-native';
+
+import ErrorBar from './components/ErrorBar';
+import Login from './components/Login';
+import TodoList from './components/TodoList';
 import {
   Label,
   ReduxState,
@@ -20,9 +12,11 @@ import {
   TodoPatch,
   WorkspaceState,
 } from './redux/types';
-import TodoItem from './components/TodoItem';
 import {
+  addNotification,
+  completeAuthentication,
   createTodo,
+  dismissNotification,
   filterByLabels,
   setTodoEditId,
   setTodoLabelingId,
@@ -33,11 +27,6 @@ import { selectFilteredTodos, selectSelectedPickerLabels } from './selectors';
 
 interface Style {
   root: ViewStyle;
-  containerMobile: ViewStyle;
-  containerWeb: ViewStyle;
-}
-interface TopStyle {
-  top: ViewStyle;
 }
 
 // --columbia-blue: #d9f0ffff;
@@ -52,15 +41,6 @@ const styles = StyleSheet.create<Style>({
     height: '100%',
     width: '100%',
     backgroundColor: BG_COLOR,
-  },
-  containerMobile: {
-    height: '100%',
-    width: '100%',
-  },
-  containerWeb: {
-    height: '100%',
-    width: '66%',
-    marginHorizontal: 'auto',
   },
 });
 
@@ -80,44 +60,32 @@ const App: React.FC<ConnectedProps<typeof connector>> = function (
 
 export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
   const {
-    createTodo,
-    labels,
-    filterByLabels,
+    addNotification,
+    completeAuthentication,
+    dismissNotification,
     filteredTodos,
-    selectedPickerLabels,
-    setTodoEditId,
-    setTodoLabelingId,
-    updateTodo,
-    updateTodoLabels,
+    notificationQueue,
     workspace,
+    ...otherProps
   } = props;
-  const { editId, filterLabels, labelTodoId } = workspace;
+  const { loggedIn } = workspace;
 
-  // TODO (jordan) look into memoizing
-  const labelNames = labels.map((label) => label.name);
-
-  const todoViews = _.map(filteredTodos, (todo) => (
-    <TodoItem
-      setTodoLabelingId={setTodoLabelingId}
-      editing={todo.id === editId}
-      key={todo.id || ''}
-      setTodoEditId={setTodoEditId}
-      todo={todo}
-      updateTodo={updateTodo}
-    />
-  ));
-
-  let containerStyle: StyleProp<ViewStyle> =
-    Platform.OS === 'web' ? styles.containerWeb : styles.containerMobile;
-  if (Platform.OS === 'web') {
-    const topStyle = StyleSheet.create<TopStyle>({
-      top: {
-        paddingTop: 20,
-      },
-    }).top;
-    containerStyle = StyleSheet.compose(containerStyle, topStyle);
+  let content: JSX.Element | null = null;
+  if (!loggedIn) {
+    content = (
+      <Login
+        addNotification={addNotification}
+        completeAuthentication={completeAuthentication}
+      />
+    );
+  } else {
+    content = (
+      <TodoList todos={filteredTodos} workspace={workspace} {...otherProps} />
+    );
   }
 
+  const notificationText =
+    notificationQueue.length > 0 ? notificationQueue[0] : null;
   return (
     <View style={styles.root}>
       <StatusBar
@@ -125,31 +93,25 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
         backgroundColor={BG_COLOR}
         barStyle={'light-content'}
       />
-      <View style={containerStyle}>
-        <AddTodo createTodo={createTodo} />
-        <LabelFilter
-          labels={labelNames}
-          selectedLabels={filterLabels}
-          filterByLabels={filterByLabels}
-        />
-        <ScrollView testID="todo-list">{todoViews}</ScrollView>
-      </View>
-      <LabelPicker
-        labels={labelNames}
-        selectedLabels={selectedPickerLabels}
-        setTodoLabelingId={setTodoLabelingId}
-        updateTodoLabels={updateTodoLabels}
-        visible={labelTodoId !== null}
+      {content}
+      <ErrorBar
+        key={notificationText}
+        text={notificationText}
+        dismissNotification={dismissNotification}
       />
     </View>
   );
 };
 
 type LayoutProps = {
+  addNotification: (text: string) => void;
+  completeAuthentication: (token: string) => void;
   createTodo: (description: string) => void;
+  dismissNotification: () => void;
   filterByLabels: (labels: string[]) => void;
   filteredTodos: Todo[];
   labels: Label[];
+  notificationQueue: string[];
   selectedPickerLabels: { [label: string]: boolean };
   setTodoEditId: (id: number | null) => void;
   setTodoLabelingId: (id: number | null) => void;
@@ -162,10 +124,14 @@ const mapStateToProps = (state: ReduxState) => {
   return {
     labels: state.labelsApi.entries,
     workspace: state.workspace,
+    notificationQueue: state.notifications.notificationQueue,
   };
 };
 const mapDispatchToProps = {
+  addNotification,
+  completeAuthentication,
   createTodo,
+  dismissNotification,
   filterByLabels,
   setTodoEditId,
   setTodoLabelingId,

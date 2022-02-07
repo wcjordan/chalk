@@ -6,7 +6,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { init as sentryInit } from 'sentry-expo';
 
 import App from './src/App';
-import store from './src/redux/store';
+import getStore from './src/redux/store';
 
 sentryInit({
   dsn: Constants.manifest.extra.SENTRY_DSN,
@@ -36,7 +36,7 @@ const theme = {
 
 const TopApp: React.FC = function () {
   return (
-    <ReduxProvider store={store}>
+    <ReduxProvider store={getStore()}>
       <PaperProvider theme={theme}>
         <App />
       </PaperProvider>

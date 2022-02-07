@@ -1,12 +1,15 @@
 import Constants from 'expo-constants';
 import Cookies from 'js-cookie';
 import { Platform } from 'react-native';
+import { ReduxState } from './types';
 
-const csrftoken = Cookies.get('csrftoken');
-const configs =
-  Constants.manifest && Constants.manifest.extra
-    ? Constants.manifest.extra
-    : {};
+const webCsrfToken = Cookies.get('csrftoken');
+export function getCsrfToken(getState: () => ReduxState): string {
+  return Platform.select({
+    native: getState().workspace.csrfToken,
+    default: webCsrfToken,
+  }) as string;
+}
 
 export async function list<T>(apiUri: string): Promise<Array<T>> {
   const response = await fetch(apiUri, getRequestOpts('GET'));
@@ -16,31 +19,44 @@ export async function list<T>(apiUri: string): Promise<Array<T>> {
 export async function patch<T, Q extends { id: number }>(
   apiUri: string,
   entryPatch: Q,
+  csrfToken: string,
 ): Promise<T> {
-  const requestOpts = getRequestOpts('PATCH');
+  const requestOpts = getRequestOpts('PATCH', csrfToken);
   requestOpts.body = JSON.stringify(entryPatch);
   const response = await fetch(`${apiUri}${entryPatch.id}/`, requestOpts);
   return handleResponse<T>(response);
 }
 
-export async function create<T, Q>(apiUri: string, newEntry: Q): Promise<T> {
-  const requestOpts = getRequestOpts('POST');
+export async function create<T, Q>(
+  apiUri: string,
+  newEntry: Q,
+  csrfToken: string,
+): Promise<T> {
+  const requestOpts = getRequestOpts('POST', csrfToken);
   requestOpts.body = JSON.stringify(newEntry);
   const response = await fetch(apiUri, requestOpts);
   return handleResponse<T>(response);
 }
 
-function getRequestOpts(method: string): RequestInit {
+function getRequestOpts(
+  method: string,
+  csrfToken: string | null = null,
+): RequestInit {
   const headers: HeadersInit = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   };
-  if (csrftoken) {
-    headers['X-CSRFToken'] = csrftoken;
+  if (csrfToken) {
+    headers['X-CSRFToken'] = csrfToken;
   }
 
+  const credentials: RequestCredentials = Platform.select({
+    native: 'include',
+    default: 'same-origin',
+  });
+
   return {
-    credentials: 'same-origin',
+    credentials: credentials,
     headers: headers,
     method: method,
   };
@@ -54,10 +70,19 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export function getWsRoot(): string {
-  const subdomain = configs.ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
+  const subdomain =
+    Constants.manifest?.extra?.ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
   const wsroot = Platform.select({
     native: `http://${subdomain}.flipperkid.com/`,
     default: '',
   });
   return wsroot;
+}
+
+// Used to exchange login token for session cookie in mobile login flow
+export async function completeAuthCallback(token: string) {
+  return await fetch(
+    `${getWsRoot()}api/todos/auth_callback/?code=${token}`,
+    getRequestOpts('GET'),
+  );
 }

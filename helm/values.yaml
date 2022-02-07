@@ -13,7 +13,4 @@ environment: DEV
 
 server:
   dbPassword: ""
-  djangoEmail: ""
-  djangoPassword: ""
-  djangoUsername: ""
   secretKey: ""

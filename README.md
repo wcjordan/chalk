@@ -4,7 +4,8 @@
 Copy .env_default to .env & .prod.env  
 Set SECRET_KEY & DB_PASSWORD in .env  
   These should be random secure strings  
-  e.g. head -c 32 /dev/urandom | base64  
+  e.g. `python -c "import secrets; print(secrets.token_urlsafe())"`
+  or `head -c 32 /dev/urandom | base64`
   
 Install `nginx`  
 (which the dev env now requires)  

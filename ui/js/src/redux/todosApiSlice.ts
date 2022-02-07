@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ApiState, NewTodo, ReduxState, Todo, TodoPatch } from './types';
-import { create, getWsRoot, list, patch } from './fetchApi';
+import { create, getCsrfToken, getWsRoot, list, patch } from './fetchApi';
 
 const API_NAME = 'todosApi';
 
@@ -27,18 +27,21 @@ const initialState: ApiState<Todo> = {
   loading: false,
 };
 
-export const createTodo = createAsyncThunk<
-  Todo,
-  string,
-  Record<string, unknown>
->(`${API_NAME}/create`, async (todoTitle: string) => {
-  const newTodo = {
-    created_at: Date.now(),
-    description: todoTitle,
-    labels: [],
-  };
-  return create<Todo, NewTodo>(getTodosApi(), newTodo);
-});
+export const createTodo = createAsyncThunk<Todo, string, { state: ReduxState }>(
+  `${API_NAME}/create`,
+  async (todoTitle: string, { getState }) => {
+    const newTodo = {
+      created_at: Date.now(),
+      description: todoTitle,
+      labels: [],
+    };
+    return create<Todo, NewTodo>(
+      getTodosApi(),
+      newTodo,
+      getCsrfToken(getState),
+    );
+  },
+);
 
 export const listTodos = createAsyncThunk<Todo[], void, { state: ReduxState }>(
   `${API_NAME}/list`,
@@ -53,9 +56,9 @@ export const listTodos = createAsyncThunk<Todo[], void, { state: ReduxState }>(
 export const updateTodo = createAsyncThunk<
   Todo,
   TodoPatch,
-  Record<string, unknown>
->(`${API_NAME}/update`, async (entryPatch) =>
-  patch<Todo, TodoPatch>(getTodosApi(), entryPatch),
+  { state: ReduxState }
+>(`${API_NAME}/update`, async (entryPatch, { getState }) =>
+  patch<Todo, TodoPatch>(getTodosApi(), entryPatch, getCsrfToken(getState)),
 );
 
 /**

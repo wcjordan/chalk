@@ -168,9 +168,6 @@ pipeline {
                                         --set gcpProject=${env.GCP_PROJECT} \
                                         --set imageTag=${env.BUILD_TAG} \
                                         --set server.dbPassword=\$(head -c 32 /dev/urandom | base64) \
-                                        --set server.djangoEmail="test@testmail.com" \
-                                        --set server.djangoPassword=\$(head -c 32 /dev/urandom | base64) \
-                                        --set server.djangoUsername=\$(head -c 32 /dev/urandom | base64) \
                                         --set server.secretKey=\$(head -c 32 /dev/urandom | base64) \
                                         ${HELM_DEPLOY_NAME} helm
                                     """

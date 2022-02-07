@@ -1,6 +1,5 @@
 import React from 'react';
-import { AppLayout } from './App';
-import { Todo, TodoPatch } from './redux/types';
+import TodoList from './TodoList';
 
 function stubTodo(patch: TodoPatch): Todo {
   return Object.assign(
@@ -9,21 +8,7 @@ function stubTodo(patch: TodoPatch): Todo {
       completed: false,
       created_at: null,
       description: `New todo`,
-      labels: [
-        'low-energy',
-        'high-energy',
-        'vague',
-        'work',
-        'home',
-        'errand',
-        'mobile',
-        'desktop',
-        'email',
-        'urgent',
-        '5 minutes',
-        '25 minutes',
-        '60 minutes',
-      ],
+      labels: ['low-energy', 'vague', 'work', 'home', 'mobile', '5 minutes'],
     },
     patch,
   );
@@ -45,7 +30,6 @@ const defaultProps = {
     { name: '25 minutes' },
     { name: '60 minutes' },
   ],
-  notificationQueue: [],
   selectedPickerLabels: {
     '5 minutes': true,
     work: true,
@@ -62,32 +46,40 @@ const defaultProps = {
       id: 2,
       description: '2nd todo',
     }),
+    stubTodo({
+      id: 3,
+      description: '3rd todo',
+    }),
+    stubTodo({
+      id: 4,
+      description: '4th todo',
+    }),
+    stubTodo({
+      id: 5,
+      description: '5th todo',
+    }),
+    stubTodo({
+      id: 6,
+      description: '6th todo',
+    }),
   ],
   workspace: {
-    csrfToken: null,
     filterLabels: ['5 minutes', 'work', 'home', 'low-energy', 'mobile'],
     labelTodoId: null,
-    loggedIn: true,
+    editId: 3,
   },
 };
 
 export default {
-  title: 'App Layout',
-  component: AppLayout,
+  title: 'Todo List',
+  component: TodoList,
 };
-export const DefaultLayout: React.FC = () => (
-  <AppLayout {...defaultProps} todos={[]} />
-);
-
-export const ListTodosLayout: React.FC = () => <AppLayout {...defaultProps} />;
+export const DefaultTodoList: React.FC = () => <TodoList {...defaultProps} />;
 
 const labelPickerWorkspace = Object.assign({}, defaultProps.workspace, {
-  labelTodoId: 1,
+  labelTodoId: 3,
+  editId: null,
 });
-export const LabelPickerLayout: React.FC = () => (
-  <AppLayout {...defaultProps} workspace={labelPickerWorkspace} />
-);
-
-export const NotificationLayout: React.FC = () => (
-  <AppLayout {...defaultProps} notificationQueue={['Error logging in...']} />
+export const LabelPickerOverlay: React.FC = () => (
+  <TodoList {...defaultProps} workspace={labelPickerWorkspace} />
 );

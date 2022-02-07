@@ -2,8 +2,13 @@ import '../__mocks__/matchMediaMock';
 import configureMockStore from 'redux-mock-store';
 import fetchMock from 'fetch-mock-jest';
 import thunk from 'redux-thunk';
-import reducers, { updateTodo } from './reducers';
+import {
+  completeAuthentication,
+  updateTodo,
+  updateTodoLabels,
+} from './reducers';
 import { getTodosApi } from './todosApiSlice';
+import { getWsRoot } from './fetchApi';
 
 const mockStore = configureMockStore([thunk]);
 
@@ -27,25 +32,31 @@ describe('updateTodo', function () {
       body: stubTodo,
     });
 
-    const store = mockStore();
+    const store = mockStore({ workspace: {} });
     await store.dispatch(updateTodo(stubTodoPatch));
 
     const actions = store.getActions();
-    expect(actions.length).toEqual(3);
+    expect(actions.length).toEqual(4);
+
+    // Verify we show a notification
+    expect(actions[0]).toEqual({
+      payload: 'Saving Todo: test todo',
+      type: 'notifications/addNotification',
+    });
 
     // Verify we stop editing the todo
-    expect(actions[0]).toEqual({
+    expect(actions[1]).toEqual({
       payload: null,
       type: 'workspace/setTodoEditId',
     });
 
     // Verify the pending handler is called based on the patch argument
-    const pendingAction = actions[1];
+    const pendingAction = actions[2];
     expect(pendingAction.meta.arg).toEqual(stubTodoPatch);
     expect(pendingAction.type).toEqual('todosApi/update/pending');
 
     // Verify the fulfilled handler is called with the returned todo
-    const fulfilledAction = actions[2];
+    const fulfilledAction = actions[3];
     expect(fulfilledAction.meta.arg).toEqual(stubTodoPatch);
     expect(fulfilledAction.payload).toEqual(stubTodo);
     expect(fulfilledAction.type).toEqual('todosApi/update/fulfilled');
@@ -55,45 +66,90 @@ describe('updateTodo', function () {
   });
 });
 
-describe('workspace reducer', function () {
-  it('should return the initial state', function () {
-    expect(reducers.workspace(undefined, {})).toEqual({
-      editId: null,
-      filterLabels: [],
-      labelTodoId: null,
-    });
+describe('updateTodoLabels', function () {
+  afterEach(function () {
+    fetchMock.restore();
   });
 
-  describe('workspace/setTodoEditId', function () {
-    it('should update the edit id', function () {
-      const result = reducers.workspace(
-        {
-          editId: 1,
-        },
-        {
-          type: 'workspace/setTodoEditId',
-          payload: 2,
-        },
-      );
-      expect(result).toEqual({
-        editId: 2,
-      });
+  it('should make a PATCH request and dispatch actions', async function () {
+    const todoId = 1;
+    const newLabels = ['new', 'labels'];
+    const payload = {
+      id: todoId,
+      labels: newLabels,
+    };
+    fetchMock.patchOnce(`${getTodosApi()}${todoId}/`, {
+      body: payload,
     });
 
-    it('should support cancelling an edit', function () {
-      const result = reducers.workspace(
-        {
-          editId: 1,
-        },
-        {
-          type: 'workspace/setTodoEditId',
-          payload: null,
-        },
-      );
-      expect(result).toEqual({
-        editId: null,
-      });
+    const store = mockStore({
+      workspace: {
+        labelTodoId: todoId,
+      },
     });
+    await store.dispatch(updateTodoLabels(newLabels));
+
+    const actions = store.getActions();
+    expect(actions.length).toEqual(2);
+
+    // Verify the pending handler is called based on the patch argument
+    const pendingAction = actions[0];
+    expect(pendingAction.meta.arg).toEqual(payload);
+    expect(pendingAction.type).toEqual('todosApi/update/pending');
+
+    // Verify the fulfilled handler is called with the returned todo
+    const fulfilledAction = actions[1];
+    expect(fulfilledAction.meta.arg).toEqual(payload);
+    expect(fulfilledAction.payload).toEqual(payload);
+    expect(fulfilledAction.type).toEqual('todosApi/update/fulfilled');
+
+    // Verify we make the server request
+    expect(fetchMock).toBeDone();
+  });
+
+  it('should error if no Todo is being labeled', async function () {
+    expect.assertions(1);
+
+    const store = mockStore({
+      workspace: {
+        labelTodoId: null,
+      },
+    });
+    await expect(
+      async () => await store.dispatch(updateTodoLabels([])),
+    ).rejects.toThrow('Unable to edit a todo w/ null ID');
+  });
+});
+
+describe('completeAuthentication', function () {
+  it('should make a request to auth_callback with the auth token', async function () {
+    const token = 'token';
+
+    fetchMock.getOnce(`${getWsRoot()}api/todos/auth_callback/?code=${token}`, {
+      body: 'Logged In!',
+      status: 200,
+      headers: {
+        'set-cookie':
+          'csrftoken=CSRFToken; Max-Age=31449600; Path=/; SameSite=Lax',
+      },
+    });
+
+    const store = mockStore();
+    await store.dispatch(completeAuthentication(token));
+
+    const actions = store.getActions();
+    expect(actions.length).toEqual(1);
+
+    // Verify the pending handler is called based on the patch argument
+    const pendingAction = actions[0];
+    expect(pendingAction.type).toEqual('workspace/logIn');
+    expect(pendingAction.payload).toEqual({
+      loggedIn: true,
+      csrfToken: 'CSRFToken',
+    });
+
+    // Verify we make the server request
+    expect(fetchMock).toBeDone();
   });
 });
 

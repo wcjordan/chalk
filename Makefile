@@ -13,6 +13,7 @@ build:
 	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.base -t $(UI_IMAGE_BASE):local-latest ui
 	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
+			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
 			--build-arg "GCP_PROJECT=$(GCP_PROJECT)" \
 			--build-arg "BASE_IMAGE_TAG=local-latest" \
@@ -21,10 +22,11 @@ build:
 # Test & lint
 .PHONY: test
 test: build
-	DOMAIN=localhost docker run --env-file .env --env DOMAIN --rm $(SERVER_IMAGE):local-latest make test
+	DOMAIN=localhost docker run --env-file .env --env DOMAIN --rm -t $(SERVER_IMAGE):local-latest make test
 	docker run --rm -t -w / \
 		-v $(PWD)/ui/Makefile:/Makefile \
 		-v $(PWD)/ui/js/src:/js/src \
+		-v $(PWD)/ui/js/assets:/js/assets \
 		-v $(PWD)/ui/js/.eslintrc:/js/.eslintrc \
 		-v $(PWD)/ui/js/babel.config.js:/js/babel.config.js \
 		-v $(PWD)/ui/js/jest.config.js:/js/jest.config.js \
@@ -83,9 +85,6 @@ deploy: build
 			--set environment=PROD \
 			--set gcpProject=$$GCP_PROJECT \
 			--set server.dbPassword=$$DB_PASSWORD \
-			--set server.djangoEmail=$$DJANGO_EMAIL \
-			--set server.djangoPassword=$$DJANGO_PASSWORD \
-			--set server.djangoUsername=$$DJANGO_USERNAME \
 			--set server.secretKey=$$SECRET_KEY \
 			chalk-prod helm'
 

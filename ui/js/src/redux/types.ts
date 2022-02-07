@@ -3,6 +3,10 @@ export interface Label {
   name: string;
 }
 
+export interface NotificationsState {
+  notificationQueue: string[];
+}
+
 export interface Todo {
   id: number;
   archived: boolean;
@@ -36,12 +40,17 @@ export interface ApiState<T> {
 
 export interface ReduxState {
   labelsApi: ApiState<Label>;
+  notifications: NotificationsState;
   todosApi: ApiState<Todo>;
   workspace: WorkspaceState;
 }
 
 export interface WorkspaceState {
+  // CSRF token is only set here for mobile auth
+  // For web we extract the CSRF token from cookies
+  csrfToken: string | null;
   editId: number | null;
   labelTodoId: number | null;
   filterLabels: string[];
+  loggedIn: boolean;
 }
