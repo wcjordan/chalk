@@ -38,4 +38,5 @@ export default {
     EXPO_CLIENT_ID: process.env.EXPO_CLIENT_ID,
     SENTRY_DSN: process.env.SENTRY_DSN,
   },
+  plugins: ['sentry-expo'],
 };
