@@ -14,7 +14,7 @@ ENV SENTRY_DSN=$sentryDsn
 # Install React dependencies
 COPY js/yarn.lock .
 COPY js/package.json .
-RUN yarn install --pure-lockfile && yarn cache clean
+RUN yarn --silent install --immutable --prefer-offline && yarn cache clean
 
 # Install React app
 COPY js/.prettierrc .

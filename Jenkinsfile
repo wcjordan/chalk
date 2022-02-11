@@ -53,7 +53,8 @@ pipeline {
                             steps {
                                 container('jenkins-worker-ui') {
                                     dir('ui/js') {
-                                        sh 'yarn install --pure-lockfile'
+                                        sh 'cp -r /js/node_modules .'
+                                        sh 'yarn --silent install --immutable --prefer-offline'
                                     }
                                     dir('ui') {
                                         sh 'make test'
