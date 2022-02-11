@@ -15,4 +15,4 @@ RUN npm install -g sharp-cli
 # Install React dependencies
 COPY js/yarn.lock .
 COPY js/package.json .
-RUN yarn install --pure-lockfile && yarn cache clean
+RUN yarn install --immutable
