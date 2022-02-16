@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`selectFilteredTodos should filter any labeled todos with the unlabeled filter 1`] = `
+Array [
+  Object {
+    "description": "passing todo 1",
+    "id": 3,
+    "labels": Array [],
+  },
+]
+`;
+
 exports[`selectFilteredTodos should filter out todos missing any labels 1`] = `
 Array [
   Object {

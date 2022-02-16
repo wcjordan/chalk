@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Platform,
   ScrollView,
@@ -53,9 +53,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
 
   useDataLoader();
 
-  // TODO (jordan) look into memoizing
-  const labelNames = labels.map((label) => label.name);
-
+  const labelNames = useMemo(() => labels.map((label) => label.name), [labels]);
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
       setTodoLabelingId={setTodoLabelingId}
