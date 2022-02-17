@@ -84,6 +84,66 @@ describe('selectFilteredTodos', function () {
     const result = selectFilteredTodos(state);
     expect(result).toEqual([]);
   });
+
+  it('should filter any labeled todos with the unlabeled filter', function () {
+    const state = {
+      workspace: {
+        filterLabels: ['Unlabeled'],
+      },
+      todosApi: {
+        entries: [
+          {
+            id: 1,
+            description: 'filtered todo 1',
+            labels: ['5 minutes'],
+          },
+          {
+            id: 2,
+            description: 'filtered todo 2',
+            labels: ['25 minutes', 'home'],
+          },
+          {
+            id: 3,
+            description: 'passing todo 1',
+            labels: [],
+          },
+        ],
+      },
+    };
+
+    const result = selectFilteredTodos(state);
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should filter all todos when the unlabeled filter is combined with another filter', function () {
+    const state = {
+      workspace: {
+        filterLabels: ['Unlabeled', '5 minutes'],
+      },
+      todosApi: {
+        entries: [
+          {
+            id: 1,
+            description: 'filtered todo 1',
+            labels: ['5 minutes'],
+          },
+          {
+            id: 2,
+            description: 'filtered todo 2',
+            labels: ['5 minutes', 'home'],
+          },
+          {
+            id: 3,
+            description: 'filtered todo 3',
+            labels: [],
+          },
+        ],
+      },
+    };
+
+    const result = selectFilteredTodos(state);
+    expect(result).toEqual([]);
+  });
 });
 
 describe('selectSelectedPickerLabels', function () {

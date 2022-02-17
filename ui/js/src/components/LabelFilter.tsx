@@ -6,6 +6,7 @@ interface Style {
   labelFilterView: ViewStyle;
 }
 
+const UNLABELED = 'Unlabeled';
 const styles = StyleSheet.create<Style>({
   labelFilterView: {
     flexDirection: 'row',
@@ -47,6 +48,12 @@ const LabelFilter: React.FC<Props> = function (props: Props) {
   return (
     <View style={styles.labelFilterView} testID="label-filter">
       {chips}
+      <LabelChip
+        key={UNLABELED}
+        label={UNLABELED}
+        onPress={filterByLabelCb}
+        selected={selectedLabels.includes(UNLABELED) || false}
+      />
     </View>
   );
 };
