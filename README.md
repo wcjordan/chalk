@@ -46,7 +46,7 @@ Set the Display Name to `Chalk` (under Advanced)
 Add source Github  
 Set repository URL to `https://github.com/wcjordan/chalk`  
 
-Delete the Behaviors and just add 1 for Discover Branches set to `All Branches`  
+Ensure Behaviors has just Discover Branches  
 
 Build by Jenkinsfile
 Set Scan Periodically to `1 day`  
@@ -63,7 +63,7 @@ Set Pipeline config as `Pipeline script from SCM`.
 Set SCM to git w/ URL `https://github.com/wcjordan/chalk`.  
 
 Use `Add Branch` under Branch Specifier and set it to `*/jenkins-base`.  
-This means a `jenkins-base` branch can be use to create a new base build.  
+This means a `jenkins-base` branch can be use to create a new base build in addition to `master`.  
 
 Set script path to `jenkins/Jenkinsfile.base`  
 Enable lightweight checkout  
