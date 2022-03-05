@@ -201,7 +201,7 @@ pipeline {
                         }
                     }
                 }
-                stage('Selenium Tests') {
+                stage('Playwright Tests') {
                     options {
                         timeout(time: 20, unit: 'MINUTES')
                     }
@@ -209,7 +209,7 @@ pipeline {
                         browserstack(credentialsId: 'browserstack_key') {
                             container('jenkins-worker-python') {
                                 dir('tests') {
-                                    sh 'pip install "selenium==4.0.0" "pytest==6.2.5"'
+                                    sh 'pip install "playwright==1.19.1" "pytest==7.0.1"'
                                     sh "pytest . --server_domain ${SERVER_IP}"
                                 }
                             }
