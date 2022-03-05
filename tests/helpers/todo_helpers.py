@@ -11,70 +11,65 @@ UNCHECKED_ICON_TEXT = '󰄱'
 WARNING_ICON_TEXT = '󰀪'
 
 
-def add_todo(driver, description):
-    add_input = driver.find_element(By.CSS_SELECTOR, 'textarea[data-testid="add-todo-input"]')
-
-    # Clear input
-    add_input.send_keys(Keys.COMMAND + "a")
-    add_input.send_keys(Keys.DELETE)
-
-    # Add new todo
-    add_input.send_keys(description)
-    add_input.send_keys(Keys.RETURN)
+def add_todo(page, description):
+    add_input = page.locator('[data-testid="add-todo-input"]')
+    add_input.fill(description)
+    add_input.press('Enter')
 
 
 def complete_todo(todo_item):
-    complete_button = todo_item.find_element(By.CSS_SELECTOR, 'div[data-testid="complete-todo"]')
+    complete_button = todo_item.locator('[data-testid="complete-todo"]')
     complete_button.click()
 
 
 def delete_todo(todo_item):
-    delete_button = todo_item.find_element(By.CSS_SELECTOR, 'div[data-testid="delete-todo"]')
+    delete_button = todo_item.locator('[data-testid="delete-todo"]')
     delete_button.click()
 
 
 def edit_todo(todo_item, new_description, submit=True):
     todo_item.click()
-    todo_input = todo_item.find_element_by_tag_name('textarea')
+    todo_input = todo_item.locator('textarea')
     todo_input.click()
-    todo_input.send_keys(new_description)
+    todo_input.fill(new_description)
     if submit:
-        todo_input.send_keys(Keys.RETURN)
+        todo_input.press('Enter')
 
 
-def find_todo(driver, description, partial=False):
-    todos = find_todos(driver, description, partial)
+def find_todo(page, description, partial=False):
+    todos = find_todos(page, description, partial)
     assert len(todos) == 1
     return todos[0]
 
 
-def find_todos(driver, description, partial=False):
-    def _has_div_child_matching_text(parent):
-        def _comparator(item):
-            if partial:
-                return item.text.startswith(description)
-            return item.text == description
+def find_todos(page, description, partial=False):
+    # TODO clean this up w/ `has` / `has_text` when Playwright v19 is available
+    # on Browserstack
+    text_pattern = f'text={description}' if partial else f'text="{description}"'
+    todo_items = page.locator(f'[data-testid="todo-list"] > div > div')
 
-        children = parent.find_elements_by_tag_name('div')
-        return any(_comparator(item) for item in children)
+    matching_todos = []
+    todo_count = todo_items.count()
+    for todo_idx in range(todo_count):
+        todo = todo_items.nth(todo_idx)
+        if todo.locator(text_pattern).is_visible():
+            matching_todos.append(todo)
 
-    todo_list = driver.find_element(By.CSS_SELECTOR, 'div[data-testid="todo-list"]').find_element(By.XPATH, './div');
-    todo_items = todo_list.find_elements(By.XPATH, './div')
-    return [ item for item in todo_items if _has_div_child_matching_text(item) ]
-
-
-def list_todo_descriptions(driver, prefix):
-    todo_items = find_todos(driver, prefix, partial=True)
-    return [ item.find_element(By.CSS_SELECTOR, 'div[data-testid="description-text"]').text for item in todo_items ]
+    return matching_todos
 
 
-def wait_for_todo(driver, description):
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, f'//div[text()="{description}"]'))
-    )
+def list_todo_descriptions(page, prefix):
+    # TODO clean this up to use all_text_contents when find_todos is switched
+    # to use `has` / `has_text`
+
+    todo_items = find_todos(page, prefix, partial=True)
+    return [item.locator('[data-testid="description-text"]').text_content()
+            for item in todo_items]
 
 
-def wait_for_todo_to_disappear(driver, description):
-    WebDriverWait(driver, 10).until(
-        EC.invisibility_of_element_located((By.XPATH, f'//div[text()="{description}"]'))
-    )
+def wait_for_todo(page, description):
+    page.locator(f'text="{description}"').wait_for()
+
+
+def wait_for_todo_to_disappear(page, description):
+    page.locator(f'text="{description}"').wait_for(state='detached')

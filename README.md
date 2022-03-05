@@ -16,14 +16,14 @@ Explore doing this w/ Config Connector once [#101](https://github.com/GoogleClou
 
 ```
 PROJECT_NAME=<PROJECT_NAME>
-ZONE_NAME=$PROJEC_NAME-dns
+ZONE_NAME=$PROJECT_NAME-dns
 DOMAIN_NAME=<DOMAIN_NAME>
 
 gcloud compute addresses create chalk-ip --global
 gcloud compute addresses create chalk-dev-ip --global
 
-DEV_IP=gcloud compute addresses describe chalk-dev-ip --global --format json | jq .address | tr -d '"'
-PROD_IP=gcloud compute addresses describe chalk-ip --global --format json | jq .address | tr -d '"'
+DEV_IP=$(gcloud compute addresses describe chalk-dev-ip --global --format json | jq .address | tr -d '"')
+PROD_IP=$(gcloud compute addresses describe chalk-ip --global --format json | jq .address | tr -d '"')
 
 gcloud beta dns record-sets transaction start --zone=$ZONE_NAME
 gcloud beta dns record-sets transaction add $DEV_IP --name=chalk-dev.$DOMAIN_NAME. --ttl=300 --type=A --zone=$ZONE_NAME

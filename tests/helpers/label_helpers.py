@@ -1,55 +1,50 @@
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-
 from helpers.todo_helpers import (add_todo, find_todo, wait_for_todo)
 
 
-def _add_labels(driver, todo_item, labels):
+def _add_labels(page, todo_item, labels):
     # Open label picker
-    label_button = todo_item.find_element(By.CSS_SELECTOR, 'div[data-testid="label-todo"]')
+    label_button = todo_item.locator('[data-testid="label-todo"]')
     label_button.click()
 
     # Click specified label chips
     for label in labels:
-        label_picker = driver.find_element(By.CSS_SELECTOR, 'div[data-testid="label-picker"]')
-        chip = label_picker.find_element(By.XPATH, f'.//div[text()="{label}"]')
+        chip = page.locator(f'[data-testid="label-picker"] :text-is("{label}")')
         chip.click()
+        # Wait for selected label to appear
+        todo_item.locator(f'text="{label}"').wait_for()
 
-    dismiss_add_label_modal(driver)
+    dismiss_add_label_modal(page)
 
 
-def add_todo_w_labels(driver, todo_description, labels):
+def add_todo_w_labels(page, todo_description, labels):
     # Add todos
-    add_todo(driver, todo_description)
+    add_todo(page, todo_description)
 
     # Wait for todo to appear`
-    wait_for_todo(driver, todo_description)
-    todo_item = find_todo(driver, todo_description)
+    wait_for_todo(page, todo_description)
+    todo_item = find_todo(page, todo_description)
 
     # Add labels
-    _add_labels(driver, todo_item, labels)
-
-    # Wait for selected labels to appear
-    todo_list = driver.find_element(By.CSS_SELECTOR, 'div[data-testid="todo-list"]')
-    for item in labels:
-        xpath_selector = f'./div/div[.//div[text()="{todo_description}"] and .//div[text()="{item}"]]'
-        WebDriverWait(todo_list, 10).until(
-            EC.presence_of_element_located((By.XPATH, xpath_selector))
-        )
-
+    _add_labels(page, todo_item, labels)
     return todo_item
 
 
-def dismiss_add_label_modal(driver, optional=False):
-    # Click offset from modal center to avoid dialog
-    modals = driver.find_elements(By.CSS_SELECTOR, 'div[aria-label="Close modal"]')
-    if modals or not optional:
-        assert len(modals) == 1
-        ActionChains(driver).move_to_element(modals[0]).move_by_offset(0, -100).click().perform()
+def clear_label_filters(page):
+    selected_chips = page.locator(f'[data-testid="label-filter"] [aria-selected=true]')
+    chip_elements = selected_chips.element_handles()
+    for chip in chip_elements:
+        chip.click()
 
 
-def toggle_label_filter(driver, label):
-    label_toggle = driver.find_element(By.XPATH, f'//div[@data-testid="label-filter"]//div[text()="{label}"]')
+def dismiss_add_label_modal(page, optional=False):
+    modals = page.locator('[aria-label="Close modal"]')
+    modals_count = modals.count()
+    if modals_count or not optional:
+        assert modals_count == 1
+        # Click offset from modal center to avoid dialog
+        modals.first.click(position={'x': 0, 'y': 0})
+
+
+def toggle_label_filter(page, label):
+    label_toggle = page.locator(f'[data-testid="label-filter"] :text-is("{label}")')
     label_toggle.click()
