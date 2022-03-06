@@ -36,10 +36,6 @@ spec:
 apiVersion: sql.cnrm.cloud.google.com/v1beta1
 kind: SQLUser
 metadata:
-  annotations:
-    {{- if ne .Values.environment "CI" }}
-    cnrm.cloud.google.com/deletion-policy: abandon
-    {{- end }}
   name: {{ $fullName }}
 spec:
   instanceRef:
