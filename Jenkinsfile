@@ -229,11 +229,9 @@ pipeline {
                             sh "gcloud auth activate-service-account default-jenkins@${env.GCP_PROJECT}.iam.gserviceaccount.com --key-file $FILE"
                             sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
                             sh "helm uninstall ${HELM_DEPLOY_NAME}"
-                            sh """
-                                for i in 1 2 3 4 5; do
-                                gcloud sql users delete ${HELM_DEPLOY_NAME} --instance=chalk-ci --quiet && break || sleep 15;
-                                done
-                                """
+                            retry(5) {
+                                sh "gcloud sql users delete ${HELM_DEPLOY_NAME} --instance=chalk-ci --quiet"
+                            }
                         }
                     }
                 }
