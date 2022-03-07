@@ -1,4 +1,4 @@
 module.exports = {
-  preset: 'jest-expo',
+  preset: 'jest-expo/android',
   testEnvironment: 'jsdom',
 };
