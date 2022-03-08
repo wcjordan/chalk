@@ -230,6 +230,7 @@ pipeline {
                             sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
                             sh "helm uninstall ${HELM_DEPLOY_NAME}"
                             retry(5) {
+                                sleep 10
                                 sh "gcloud sql users delete ${HELM_DEPLOY_NAME} --instance=chalk-ci --quiet"
                             }
                         }
