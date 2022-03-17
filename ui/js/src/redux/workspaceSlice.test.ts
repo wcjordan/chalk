@@ -5,10 +5,10 @@ describe('workspace reducer', function () {
   it('should return the initial state', function () {
     expect(workspaceSlice.reducer(undefined, {})).toEqual({
       csrfToken: null,
-      editId: null,
       filterLabels: [],
       labelTodoId: null,
       loggedIn: false,
+      todoEditId: null,
     });
   });
 
@@ -65,7 +65,7 @@ describe('workspace reducer', function () {
     it('should update the edit id', function () {
       const result = workspaceSlice.reducer(
         {
-          editId: 1,
+          todoEditId: 1,
         },
         {
           type: 'workspace/setTodoEditId',
@@ -73,14 +73,14 @@ describe('workspace reducer', function () {
         },
       );
       expect(result).toEqual({
-        editId: 2,
+        todoEditId: 2,
       });
     });
 
     it('should support cancelling an edit', function () {
       const result = workspaceSlice.reducer(
         {
-          editId: 1,
+          todoEditId: 1,
         },
         {
           type: 'workspace/setTodoEditId',
@@ -88,7 +88,7 @@ describe('workspace reducer', function () {
         },
       );
       expect(result).toEqual({
-        editId: null,
+        todoEditId: null,
       });
     });
   });

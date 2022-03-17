@@ -49,7 +49,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
     updateTodoLabels,
     workspace,
   } = props;
-  const { editId, filterLabels, labelTodoId } = workspace;
+  const { todoEditId, filterLabels, labelTodoId } = workspace;
 
   useDataLoader();
 
@@ -57,7 +57,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
       setTodoLabelingId={setTodoLabelingId}
-      editing={todo.id === editId}
+      editing={todo.id === todoEditId}
       key={todo.id || ''}
       setTodoEditId={setTodoEditId}
       todo={todo}

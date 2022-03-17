@@ -5,10 +5,10 @@ import { WorkspaceState } from './types';
 
 const initialState: WorkspaceState = {
   csrfToken: null,
-  editId: null,
   labelTodoId: null,
   filterLabels: [],
   loggedIn: Platform.OS === 'web',
+  todoEditId: null,
 };
 export default createSlice({
   name: 'workspace',
@@ -25,7 +25,7 @@ export default createSlice({
       state.labelTodoId = action.payload;
     },
     setTodoEditId: (state, action) => {
-      state.editId = action.payload;
+      state.todoEditId = action.payload;
     },
   },
 });
