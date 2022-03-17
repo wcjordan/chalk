@@ -86,7 +86,7 @@ def page(request, playwright, todo_prefix, test_name, server_domain):
     try:
         # Load page
         page.goto(f'http://{server_domain}/')
-        if "Sign in" in page.title():
+        if "accounts.google.com" in page.url:
             page.goto(f'http://{server_domain}/api/todos/auth_callback/?ci_refresh=true&code={refresh_token}')
 
         if not "chalk" in page.title():
@@ -130,4 +130,4 @@ def page(request, playwright, todo_prefix, test_name, server_domain):
 
 def set_session_status(page, status, reason):
     command = f'browserstack_executor: {{"action": "setSessionStatus", "arguments": {{"status": "{status}", "reason": "{reason}"}}}}'
-    page.evaluate("_ => {}", command)
+    page.evaluate("() => {}", command)

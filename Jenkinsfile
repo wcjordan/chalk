@@ -193,6 +193,12 @@ pipeline {
                                                 sleep 15
                                                 todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/api/todos/healthz/)
                                             done
+
+                                            until [ ! -z \$html_ready ] && [ \$html_ready -eq 302 ]
+                                            do
+                                                sleep 5
+                                                html_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/)
+                                            done
                                         """,
                                         returnStdout: true
                                     ).trim()
