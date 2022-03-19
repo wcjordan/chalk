@@ -19,24 +19,38 @@ import { Todo, TodoPatch } from '../redux/types';
 import LabelChip from './LabelChip';
 
 interface Style {
+  activeCard: ViewStyle & { cursor?: string };
+  card: ViewStyle & { cursor?: string };
+  cardContent: ViewStyle;
   checkbox: ViewStyle;
   editTodoInput: TextStyle;
   spacer: ViewStyle;
   todoDescription: TextStyle;
   todoDescriptionText: TextStyle;
-  todoItemCard: ViewStyle & { cursor?: string };
-  todoItemContent: ViewStyle;
   todoLabelsContent: ViewStyle;
 }
 
-const todoItemCardStyle: ViewStyle & { cursor?: string } = {
+const cardStyle: ViewStyle & { cursor?: string } = {
   borderRadius: 0,
 };
 if (Platform.OS === 'web') {
-  todoItemCardStyle['cursor'] = 'pointer';
+  cardStyle['cursor'] = 'pointer';
 }
+const activeCardStyle = Object.assign(
+  {
+    borderColor: '#a3d5ffff',
+    borderLeftWidth: 12,
+  },
+  cardStyle,
+);
 
 const styles = StyleSheet.create<Style>({
+  activeCard: activeCardStyle,
+  card: cardStyle,
+  cardContent: {
+    flexDirection: 'row',
+    width: '100%',
+  },
   checkbox: {
     paddingTop: 4,
   },
@@ -58,11 +72,6 @@ const styles = StyleSheet.create<Style>({
   todoDescriptionText: {
     fontSize: 16,
   },
-  todoItemCard: todoItemCardStyle,
-  todoItemContent: {
-    flexDirection: 'row',
-    width: '100%',
-  },
   todoLabelsContent: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -70,7 +79,14 @@ const styles = StyleSheet.create<Style>({
 });
 
 const TodoItem: React.FC<Props> = function (props: Props) {
-  const { editing, todo, setTodoEditId, setTodoLabelingId, updateTodo } = props;
+  const {
+    editing,
+    labeling,
+    todo,
+    setTodoEditId,
+    setTodoLabelingId,
+    updateTodo,
+  } = props;
   const [editingValue, setEditingValue] = useState<string | null>(null);
 
   const commitTodo = useCallback(() => {
@@ -210,9 +226,13 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   }
 
   return (
-    <Card onPress={beginEdit} style={styles.todoItemCard}>
+    <Card
+      onPress={beginEdit}
+      style={labeling ? styles.activeCard : styles.card}
+      mode="outlined"
+    >
       <Card.Content>
-        <View style={styles.todoItemContent}>
+        <View style={styles.cardContent}>
           <View style={styles.checkbox}>
             <Checkbox.Android
               status={todo.completed ? 'checked' : 'unchecked'}
@@ -230,6 +250,7 @@ const TodoItem: React.FC<Props> = function (props: Props) {
 
 type Props = {
   editing: boolean;
+  labeling: boolean;
   setTodoEditId: (id: number | null) => void;
   setTodoLabelingId: (id: number | null) => void;
   todo: Todo;

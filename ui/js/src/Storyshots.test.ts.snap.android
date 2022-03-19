@@ -3440,16 +3440,11 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
           style={
             Object {
               "backgroundColor": "#ffffff",
-              "borderColor": "rgba(0, 0, 0, 0.12)",
+              "borderColor": "#a3d5ffff",
+              "borderLeftWidth": 12,
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -5094,14 +5089,8 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
               "backgroundColor": "#ffffff",
               "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -6821,6 +6810,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
         <View
           style={
             Object {
+              "backgroundColor": "rgba(0, 0, 0, 0.15)",
               "flexDirection": "row",
               "flexWrap": "wrap",
             }
@@ -9918,14 +9908,8 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
               "backgroundColor": "#ffffff",
               "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -11570,14 +11554,8 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
               "backgroundColor": "#ffffff",
               "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -14889,14 +14867,8 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
               "backgroundColor": "#ffffff",
               "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -16541,14 +16513,8 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
               "backgroundColor": "#ffffff",
               "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -20420,6 +20386,7 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
       <View
         style={
           Object {
+            "backgroundColor": "rgba(0, 0, 0, 0.15)",
             "flexDirection": "row",
             "flexWrap": "wrap",
           }
@@ -21960,14 +21927,8 @@ exports[`Storyshots Todo Item Checked Todo 1`] = `
       "backgroundColor": "#ffffff",
       "borderColor": "rgba(0, 0, 0, 0.12)",
       "borderRadius": 0,
-      "elevation": 1,
-      "shadowColor": "#000000",
-      "shadowOffset": Object {
-        "height": 0.5,
-        "width": 0,
-      },
-      "shadowOpacity": 0.24,
-      "shadowRadius": 0.75,
+      "borderWidth": 1,
+      "elevation": 0,
     }
   }
 >
@@ -22575,14 +22536,8 @@ exports[`Storyshots Todo Item Default Todo 1`] = `
       "backgroundColor": "#ffffff",
       "borderColor": "rgba(0, 0, 0, 0.12)",
       "borderRadius": 0,
-      "elevation": 1,
-      "shadowColor": "#000000",
-      "shadowOffset": Object {
-        "height": 0.5,
-        "width": 0,
-      },
-      "shadowOpacity": 0.24,
-      "shadowRadius": 0.75,
+      "borderWidth": 1,
+      "elevation": 0,
     }
   }
 >
@@ -23190,14 +23145,8 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
       "backgroundColor": "#ffffff",
       "borderColor": "rgba(0, 0, 0, 0.12)",
       "borderRadius": 0,
-      "elevation": 1,
-      "shadowColor": "#000000",
-      "shadowOffset": Object {
-        "height": 0.5,
-        "width": 0,
-      },
-      "shadowOpacity": 0.24,
-      "shadowRadius": 0.75,
+      "borderWidth": 1,
+      "elevation": 0,
     }
   }
 >
@@ -23806,14 +23755,8 @@ exports[`Storyshots Todo Item No Labels Todo 1`] = `
       "backgroundColor": "#ffffff",
       "borderColor": "rgba(0, 0, 0, 0.12)",
       "borderRadius": 0,
-      "elevation": 1,
-      "shadowColor": "#000000",
-      "shadowOffset": Object {
-        "height": 0.5,
-        "width": 0,
-      },
-      "shadowOpacity": 0.24,
-      "shadowRadius": 0.75,
+      "borderWidth": 1,
+      "elevation": 0,
     }
   }
 >
@@ -24099,14 +24042,8 @@ exports[`Storyshots Todo Item Wrapped Labels Todo 1`] = `
       "backgroundColor": "#ffffff",
       "borderColor": "rgba(0, 0, 0, 0.12)",
       "borderRadius": 0,
-      "elevation": 1,
-      "shadowColor": "#000000",
-      "shadowOffset": Object {
-        "height": 0.5,
-        "width": 0,
-      },
-      "shadowOpacity": 0.24,
-      "shadowRadius": 0.75,
+      "borderWidth": 1,
+      "elevation": 0,
     }
   }
 >
@@ -27405,14 +27342,8 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
             "backgroundColor": "#ffffff",
             "borderColor": "rgba(0, 0, 0, 0.12)",
             "borderRadius": 0,
-            "elevation": 1,
-            "shadowColor": "#000000",
-            "shadowOffset": Object {
-              "height": 0.5,
-              "width": 0,
-            },
-            "shadowOpacity": 0.24,
-            "shadowRadius": 0.75,
+            "borderWidth": 1,
+            "elevation": 0,
           }
         }
       >
@@ -28329,14 +28260,8 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
             "backgroundColor": "#ffffff",
             "borderColor": "rgba(0, 0, 0, 0.12)",
             "borderRadius": 0,
-            "elevation": 1,
-            "shadowColor": "#000000",
-            "shadowOffset": Object {
-              "height": 0.5,
-              "width": 0,
-            },
-            "shadowOpacity": 0.24,
-            "shadowRadius": 0.75,
+            "borderWidth": 1,
+            "elevation": 0,
           }
         }
       >
@@ -29253,14 +29178,8 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
             "backgroundColor": "#ffffff",
             "borderColor": "rgba(0, 0, 0, 0.12)",
             "borderRadius": 0,
-            "elevation": 1,
-            "shadowColor": "#000000",
-            "shadowOffset": Object {
-              "height": 0.5,
-              "width": 0,
-            },
-            "shadowOpacity": 0.24,
-            "shadowRadius": 0.75,
+            "borderWidth": 1,
+            "elevation": 0,
           }
         }
       >
@@ -30178,14 +30097,8 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
             "backgroundColor": "#ffffff",
             "borderColor": "rgba(0, 0, 0, 0.12)",
             "borderRadius": 0,
-            "elevation": 1,
-            "shadowColor": "#000000",
-            "shadowOffset": Object {
-              "height": 0.5,
-              "width": 0,
-            },
-            "shadowOpacity": 0.24,
-            "shadowRadius": 0.75,
+            "borderWidth": 1,
+            "elevation": 0,
           }
         }
       >
@@ -31102,14 +31015,8 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
             "backgroundColor": "#ffffff",
             "borderColor": "rgba(0, 0, 0, 0.12)",
             "borderRadius": 0,
-            "elevation": 1,
-            "shadowColor": "#000000",
-            "shadowOffset": Object {
-              "height": 0.5,
-              "width": 0,
-            },
-            "shadowOpacity": 0.24,
-            "shadowRadius": 0.75,
+            "borderWidth": 1,
+            "elevation": 0,
           }
         }
       >
@@ -32026,14 +31933,8 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
             "backgroundColor": "#ffffff",
             "borderColor": "rgba(0, 0, 0, 0.12)",
             "borderRadius": 0,
-            "elevation": 1,
-            "shadowColor": "#000000",
-            "shadowOffset": Object {
-              "height": 0.5,
-              "width": 0,
-            },
-            "shadowOpacity": 0.24,
-            "shadowRadius": 0.75,
+            "borderWidth": 1,
+            "elevation": 0,
           }
         }
       >
@@ -34608,14 +34509,8 @@ Array [
               "backgroundColor": "#ffffff",
               "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -35532,14 +35427,8 @@ Array [
               "backgroundColor": "#ffffff",
               "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -36454,16 +36343,11 @@ Array [
           style={
             Object {
               "backgroundColor": "#ffffff",
-              "borderColor": "rgba(0, 0, 0, 0.12)",
+              "borderColor": "#a3d5ffff",
+              "borderLeftWidth": 12,
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -37380,14 +37264,8 @@ Array [
               "backgroundColor": "#ffffff",
               "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -38304,14 +38182,8 @@ Array [
               "backgroundColor": "#ffffff",
               "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -39228,14 +39100,8 @@ Array [
               "backgroundColor": "#ffffff",
               "borderColor": "rgba(0, 0, 0, 0.12)",
               "borderRadius": 0,
-              "elevation": 1,
-              "shadowColor": "#000000",
-              "shadowOffset": Object {
-                "height": 0.5,
-                "width": 0,
-              },
-              "shadowOpacity": 0.24,
-              "shadowRadius": 0.75,
+              "borderWidth": 1,
+              "elevation": 0,
             }
           }
         >
@@ -40227,6 +40093,7 @@ Array [
         <View
           style={
             Object {
+              "backgroundColor": "rgba(0, 0, 0, 0.15)",
               "flexDirection": "row",
               "flexWrap": "wrap",
             }
