@@ -36,6 +36,38 @@ describe('selectFilteredTodos', function () {
     expect(result).toMatchSnapshot();
   });
 
+  it('should not filter out todos missing labels if they are active', function () {
+    const state = {
+      workspace: {
+        labelTodoId: 2,
+        filterLabels: ['5 minutes', 'home'],
+        todoEditId: 3,
+      },
+      todosApi: {
+        entries: [
+          {
+            id: 1,
+            description: 'filtered todo 1',
+            labels: ['5 minutes'],
+          },
+          {
+            id: 2,
+            description: 'passing todo 1',
+            labels: ['5 minutes'],
+          },
+          {
+            id: 3,
+            description: 'passing todo 2',
+            labels: ['5 minutes'],
+          },
+        ],
+      },
+    };
+
+    const result = selectFilteredTodos(state);
+    expect(result).toMatchSnapshot();
+  });
+
   it('should handle when no filters are selected', function () {
     const state = {
       workspace: {
@@ -106,6 +138,38 @@ describe('selectFilteredTodos', function () {
             id: 3,
             description: 'passing todo 1',
             labels: [],
+          },
+        ],
+      },
+    };
+
+    const result = selectFilteredTodos(state);
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should not filter any active todos with the unlabeled filter', function () {
+    const state = {
+      workspace: {
+        labelTodoId: 2,
+        filterLabels: ['Unlabeled'],
+        todoEditId: 3,
+      },
+      todosApi: {
+        entries: [
+          {
+            id: 1,
+            description: 'filtered todo 1',
+            labels: ['5 minutes'],
+          },
+          {
+            id: 2,
+            description: 'passing todo 1',
+            labels: ['5 minutes'],
+          },
+          {
+            id: 3,
+            description: 'passing todo 2',
+            labels: ['5 minutes'],
           },
         ],
       },
