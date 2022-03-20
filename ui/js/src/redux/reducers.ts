@@ -23,7 +23,7 @@ export const updateTodo =
           `Saving Todo: ${todoPatch.description}`,
         ),
       ),
-      dispatch(workspaceSlice.actions.setTodoEditId(null)),
+      dispatch(workspaceSlice.actions.setEditTodoId(null)),
       dispatch(updateTodoApi(todoPatch)),
     ]);
   };
@@ -95,8 +95,8 @@ export const addNotification = notificationsSlice.actions.addNotification;
 export const dismissNotification =
   notificationsSlice.actions.dismissNotification;
 export const filterByLabels = workspaceSlice.actions.filterByLabels;
-export const setTodoEditId = workspaceSlice.actions.setTodoEditId;
-export const setTodoLabelingId = workspaceSlice.actions.setTodoLabelingId;
+export const setEditTodoId = workspaceSlice.actions.setEditTodoId;
+export const setLabelTodoId = workspaceSlice.actions.setLabelTodoId;
 export { createTodo, listLabels, listTodos };
 export default {
   labelsApi: labelsApiSlice.reducer,

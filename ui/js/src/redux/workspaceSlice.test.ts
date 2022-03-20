@@ -5,10 +5,10 @@ describe('workspace reducer', function () {
   it('should return the initial state', function () {
     expect(workspaceSlice.reducer(undefined, {})).toEqual({
       csrfToken: null,
+      editTodoId: null,
       filterLabels: [],
       labelTodoId: null,
       loggedIn: false,
-      todoEditId: null,
     });
   });
 
@@ -29,14 +29,14 @@ describe('workspace reducer', function () {
     });
   });
 
-  describe('workspace/setTodoLabelingId', function () {
+  describe('workspace/setLabelTodoId', function () {
     it('should update the labeling id', function () {
       const result = workspaceSlice.reducer(
         {
           labelTodoId: 1,
         },
         {
-          type: 'workspace/setTodoLabelingId',
+          type: 'workspace/setLabelTodoId',
           payload: 2,
         },
       );
@@ -51,7 +51,7 @@ describe('workspace reducer', function () {
           labelTodoId: 1,
         },
         {
-          type: 'workspace/setTodoLabelingId',
+          type: 'workspace/setLabelTodoId',
           payload: null,
         },
       );
@@ -61,34 +61,34 @@ describe('workspace reducer', function () {
     });
   });
 
-  describe('workspace/setTodoEditId', function () {
+  describe('workspace/setEditTodoId', function () {
     it('should update the edit id', function () {
       const result = workspaceSlice.reducer(
         {
-          todoEditId: 1,
+          editTodoId: 1,
         },
         {
-          type: 'workspace/setTodoEditId',
+          type: 'workspace/setEditTodoId',
           payload: 2,
         },
       );
       expect(result).toEqual({
-        todoEditId: 2,
+        editTodoId: 2,
       });
     });
 
     it('should support cancelling an edit', function () {
       const result = workspaceSlice.reducer(
         {
-          todoEditId: 1,
+          editTodoId: 1,
         },
         {
-          type: 'workspace/setTodoEditId',
+          type: 'workspace/setEditTodoId',
           payload: null,
         },
       );
       expect(result).toEqual({
-        todoEditId: null,
+        editTodoId: null,
       });
     });
   });

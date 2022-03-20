@@ -18,7 +18,7 @@ const performFilter = (
 
 export const selectFilteredTodos = (state: ReduxState) => {
   // TODO (jordan) optimize w/ set intersection?
-  const { labelTodoId, filterLabels, todoEditId } = state.workspace;
+  const { editTodoId, filterLabels, labelTodoId } = state.workspace;
   const unlabeledFlag = filterLabels.includes('Unlabeled');
   if (unlabeledFlag && filterLabels.length > 1) {
     return [];
@@ -28,8 +28,8 @@ export const selectFilteredTodos = (state: ReduxState) => {
   if (labelTodoId) {
     preserveIds.push(labelTodoId);
   }
-  if (todoEditId) {
-    preserveIds.push(todoEditId);
+  if (editTodoId) {
+    preserveIds.push(editTodoId);
   }
 
   return state.todosApi.entries.filter((todo) =>

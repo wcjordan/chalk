@@ -21,13 +21,8 @@ const styles = StyleSheet.create<Style>({
 });
 
 const LabelPicker: React.FC<Props> = function (props: Props) {
-  const {
-    labels,
-    selectedLabels,
-    setTodoLabelingId,
-    updateTodoLabels,
-    visible,
-  } = props;
+  const { labels, selectedLabels, setLabelTodoId, updateTodoLabels, visible } =
+    props;
 
   const updateTodoLabelCb = useCallback(
     (label) => {
@@ -49,8 +44,8 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
   );
 
   const dismissLabeling = useCallback(() => {
-    setTodoLabelingId(null);
-  }, [setTodoLabelingId]);
+    setLabelTodoId(null);
+  }, [setLabelTodoId]);
 
   const chips = labels.map((label) => (
     <LabelChip
@@ -76,7 +71,7 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
 type Props = {
   labels: string[];
   selectedLabels: { [label: string]: boolean };
-  setTodoLabelingId: (id: number | null) => void;
+  setLabelTodoId: (id: number | null) => void;
   updateTodoLabels: (labels: string[]) => void;
   visible: boolean;
 };

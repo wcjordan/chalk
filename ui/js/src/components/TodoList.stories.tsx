@@ -64,9 +64,9 @@ const defaultProps = {
     }),
   ],
   workspace: {
+    editTodoId: 3,
     filterLabels: ['5 minutes', 'work', 'home', 'low-energy', 'mobile'],
     labelTodoId: null,
-    todoEditId: 3,
   },
 };
 
@@ -77,8 +77,8 @@ export default {
 export const DefaultTodoList: React.FC = () => <TodoList {...defaultProps} />;
 
 const labelPickerWorkspace = Object.assign({}, defaultProps.workspace, {
+  editTodoId: null,
   labelTodoId: 3,
-  todoEditId: null,
 });
 export const LabelPickerOverlay: React.FC = () => (
   <TodoList {...defaultProps} workspace={labelPickerWorkspace} />

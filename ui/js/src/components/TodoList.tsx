@@ -42,25 +42,25 @@ const TodoList: React.FC<Props> = function (props: Props) {
     labels,
     filterByLabels,
     selectedPickerLabels,
-    setTodoEditId,
-    setTodoLabelingId,
+    setEditTodoId,
+    setLabelTodoId,
     todos,
     updateTodo,
     updateTodoLabels,
     workspace,
   } = props;
-  const { todoEditId, filterLabels, labelTodoId } = workspace;
+  const { editTodoId, filterLabels, labelTodoId } = workspace;
 
   useDataLoader();
 
   const labelNames = useMemo(() => labels.map((label) => label.name), [labels]);
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
-      editing={todo.id === todoEditId}
+      editing={todo.id === editTodoId}
       key={todo.id || ''}
       labeling={todo.id === labelTodoId}
-      setTodoEditId={setTodoEditId}
-      setTodoLabelingId={setTodoLabelingId}
+      setEditTodoId={setEditTodoId}
+      setLabelTodoId={setLabelTodoId}
       todo={todo}
       updateTodo={updateTodo}
     />
@@ -91,7 +91,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
       <LabelPicker
         labels={labelNames}
         selectedLabels={selectedPickerLabels}
-        setTodoLabelingId={setTodoLabelingId}
+        setLabelTodoId={setLabelTodoId}
         updateTodoLabels={updateTodoLabels}
         visible={labelTodoId !== null}
       />
@@ -104,8 +104,8 @@ type Props = {
   filterByLabels: (labels: string[]) => void;
   labels: Label[];
   selectedPickerLabels: { [label: string]: boolean };
-  setTodoEditId: (id: number | null) => void;
-  setTodoLabelingId: (id: number | null) => void;
+  setEditTodoId: (id: number | null) => void;
+  setLabelTodoId: (id: number | null) => void;
   todos: Todo[];
   updateTodo: (todoPatch: TodoPatch) => void;
   updateTodoLabels: (labels: string[]) => void;

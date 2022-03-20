@@ -49,8 +49,8 @@ export interface WorkspaceState {
   // CSRF token is only set here for mobile auth
   // For web we extract the CSRF token from cookies
   csrfToken: string | null;
-  labelTodoId: number | null;
+  editTodoId: number | null;
   filterLabels: string[];
+  labelTodoId: number | null;
   loggedIn: boolean;
-  todoEditId: number | null;
 }

@@ -39,9 +39,9 @@ describe('selectFilteredTodos', function () {
   it('should not filter out todos missing labels if they are active', function () {
     const state = {
       workspace: {
-        labelTodoId: 2,
+        editTodoId: 3,
         filterLabels: ['5 minutes', 'home'],
-        todoEditId: 3,
+        labelTodoId: 2,
       },
       todosApi: {
         entries: [
@@ -150,9 +150,9 @@ describe('selectFilteredTodos', function () {
   it('should not filter any active todos with the unlabeled filter', function () {
     const state = {
       workspace: {
-        labelTodoId: 2,
+        editTodoId: 3,
         filterLabels: ['Unlabeled'],
-        todoEditId: 3,
+        labelTodoId: 2,
       },
       todosApi: {
         entries: [

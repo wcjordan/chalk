@@ -18,8 +18,8 @@ import {
   createTodo,
   dismissNotification,
   filterByLabels,
-  setTodoEditId,
-  setTodoLabelingId,
+  setEditTodoId,
+  setLabelTodoId,
   updateTodo,
   updateTodoLabels,
 } from './redux/reducers';
@@ -113,8 +113,8 @@ type LayoutProps = {
   labels: Label[];
   notificationQueue: string[];
   selectedPickerLabels: { [label: string]: boolean };
-  setTodoEditId: (id: number | null) => void;
-  setTodoLabelingId: (id: number | null) => void;
+  setEditTodoId: (id: number | null) => void;
+  setLabelTodoId: (id: number | null) => void;
   updateTodo: (todoPatch: TodoPatch) => void;
   updateTodoLabels: (labels: string[]) => void;
   workspace: WorkspaceState;
@@ -133,8 +133,8 @@ const mapDispatchToProps = {
   createTodo,
   dismissNotification,
   filterByLabels,
-  setTodoEditId,
-  setTodoLabelingId,
+  setEditTodoId,
+  setLabelTodoId,
   updateTodo,
   updateTodoLabels,
 };

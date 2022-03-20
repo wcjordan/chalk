@@ -8,7 +8,7 @@ const initialState: WorkspaceState = {
   labelTodoId: null,
   filterLabels: [],
   loggedIn: Platform.OS === 'web',
-  todoEditId: null,
+  editTodoId: null,
 };
 export default createSlice({
   name: 'workspace',
@@ -21,11 +21,11 @@ export default createSlice({
       state.loggedIn = action.payload.loggedIn;
       state.csrfToken = action.payload.csrfToken;
     },
-    setTodoLabelingId: (state, action) => {
-      state.labelTodoId = action.payload;
+    setEditTodoId: (state, action) => {
+      state.editTodoId = action.payload;
     },
-    setTodoEditId: (state, action) => {
-      state.todoEditId = action.payload;
+    setLabelTodoId: (state, action) => {
+      state.labelTodoId = action.payload;
     },
   },
 });

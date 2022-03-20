@@ -79,14 +79,8 @@ const styles = StyleSheet.create<Style>({
 });
 
 const TodoItem: React.FC<Props> = function (props: Props) {
-  const {
-    editing,
-    labeling,
-    todo,
-    setTodoEditId,
-    setTodoLabelingId,
-    updateTodo,
-  } = props;
+  const { editing, labeling, todo, setEditTodoId, setLabelTodoId, updateTodo } =
+    props;
   const [editingValue, setEditingValue] = useState<string | null>(null);
 
   const commitTodo = useCallback(() => {
@@ -122,9 +116,9 @@ const TodoItem: React.FC<Props> = function (props: Props) {
   const labelTodo = useCallback(
     (event: GestureResponderEvent) => {
       event.stopPropagation();
-      setTodoLabelingId(todo.id);
+      setLabelTodoId(todo.id);
     },
-    [setTodoLabelingId, todo.id],
+    [setLabelTodoId, todo.id],
   );
 
   const beginEdit = useCallback(() => {
@@ -132,8 +126,8 @@ const TodoItem: React.FC<Props> = function (props: Props) {
       return;
     }
 
-    setTodoEditId(todo.id);
-  }, [setTodoEditId, todo.id, editing]);
+    setEditTodoId(todo.id);
+  }, [setEditTodoId, todo.id, editing]);
 
   const cancelEdit = useCallback(() => {
     if (!editing) {
@@ -141,8 +135,8 @@ const TodoItem: React.FC<Props> = function (props: Props) {
     }
 
     setEditingValue(null);
-    setTodoEditId(null);
-  }, [setTodoEditId, editing]);
+    setEditTodoId(null);
+  }, [setEditTodoId, editing]);
 
   let content;
   if (editing) {
@@ -251,8 +245,8 @@ const TodoItem: React.FC<Props> = function (props: Props) {
 type Props = {
   editing: boolean;
   labeling: boolean;
-  setTodoEditId: (id: number | null) => void;
-  setTodoLabelingId: (id: number | null) => void;
+  setEditTodoId: (id: number | null) => void;
+  setLabelTodoId: (id: number | null) => void;
   todo: Todo;
   updateTodo: (todoPatch: TodoPatch, commitEdit?: boolean) => void;
 };

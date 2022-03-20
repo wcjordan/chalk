@@ -47,7 +47,7 @@ describe('updateTodo', function () {
     // Verify we stop editing the todo
     expect(actions[1]).toEqual({
       payload: null,
-      type: 'workspace/setTodoEditId',
+      type: 'workspace/setEditTodoId',
     });
 
     // Verify the pending handler is called based on the patch argument
