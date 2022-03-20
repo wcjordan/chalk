@@ -2,8 +2,8 @@ import pytest
 
 from helpers.todo_helpers import (DELETE_ICON_TEXT, LABELS_ICON_TEXT,
                                   UNCHECKED_ICON_TEXT, WARNING_ICON_TEXT,
-                                  add_todo, edit_todo, find_todo, wait_for_todo,
-                                  wait_for_todo_to_disappear)
+                                  add_todo, cancel_edit, edit_todo, find_todo,
+                                  wait_for_todo, wait_for_todo_to_disappear)
 
 
 @pytest.mark.parametrize('test_name', ['Todo: Partial Edit'])
@@ -49,8 +49,7 @@ def test_todos_partial_edit(page, todo_prefix):
     assert todo_input.input_value() == edit_description
 
     # Click cancel button
-    cancel_button = first_todo.locator('[data-testid="cancel-edit"]')
-    cancel_button.click()
+    cancel_edit(page, first_todo)
 
     # Wait for todo1_description to appeaer
     wait_for_todo(page, todo1_description)

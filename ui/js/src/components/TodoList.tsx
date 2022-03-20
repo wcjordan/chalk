@@ -56,10 +56,11 @@ const TodoList: React.FC<Props> = function (props: Props) {
   const labelNames = useMemo(() => labels.map((label) => label.name), [labels]);
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
-      setTodoLabelingId={setTodoLabelingId}
       editing={todo.id === todoEditId}
       key={todo.id || ''}
+      labeling={todo.id === labelTodoId}
       setTodoEditId={setTodoEditId}
+      setTodoLabelingId={setTodoLabelingId}
       todo={todo}
       updateTodo={updateTodo}
     />

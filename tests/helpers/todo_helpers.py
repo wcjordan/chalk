@@ -11,6 +11,11 @@ def add_todo(page, description):
     add_input.press('Enter')
 
 
+def cancel_edit(page, todo):
+    cancel_button = todo.locator('[data-testid="cancel-edit"]')
+    cancel_button.click()
+
+
 def complete_todo(todo_item):
     complete_button = todo_item.locator('[data-testid="complete-todo"]')
     complete_button.click()

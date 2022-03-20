@@ -10,12 +10,13 @@ interface Style {
 
 const styles = StyleSheet.create<Style>({
   labelPickerView: {
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
   modalView: {
-    width: '80%',
     marginHorizontal: 'auto',
+    width: '80%',
   },
 });
 

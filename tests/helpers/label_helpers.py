@@ -1,10 +1,11 @@
 from helpers.todo_helpers import (add_todo, find_todo, wait_for_todo)
 
 
-def _add_labels(page, todo_item, labels):
+def add_labels(page, todo_item, labels, dismiss_picker=True, open_picker=True):
     # Open label picker
-    label_button = todo_item.locator('[data-testid="label-todo"]')
-    label_button.click()
+    if open_picker:
+        label_button = todo_item.locator('[data-testid="label-todo"]')
+        label_button.click()
 
     # Click specified label chips
     for label in labels:
@@ -13,7 +14,8 @@ def _add_labels(page, todo_item, labels):
         # Wait for selected label to appear
         todo_item.locator(f'text="{label}"').wait_for()
 
-    dismiss_add_label_modal(page)
+    if dismiss_picker:
+        dismiss_add_label_modal(page)
 
 
 def add_todo_w_labels(page, todo_description, labels):
@@ -25,7 +27,7 @@ def add_todo_w_labels(page, todo_description, labels):
     todo_item = find_todo(page, todo_description)
 
     # Add labels
-    _add_labels(page, todo_item, labels)
+    add_labels(page, todo_item, labels)
     return todo_item
 
 

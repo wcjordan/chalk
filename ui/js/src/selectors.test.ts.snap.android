@@ -32,6 +32,44 @@ Array [
 ]
 `;
 
+exports[`selectFilteredTodos should not filter any active todos with the unlabeled filter 1`] = `
+Array [
+  Object {
+    "description": "passing todo 1",
+    "id": 2,
+    "labels": Array [
+      "5 minutes",
+    ],
+  },
+  Object {
+    "description": "passing todo 2",
+    "id": 3,
+    "labels": Array [
+      "5 minutes",
+    ],
+  },
+]
+`;
+
+exports[`selectFilteredTodos should not filter out todos missing labels if they are active 1`] = `
+Array [
+  Object {
+    "description": "passing todo 1",
+    "id": 2,
+    "labels": Array [
+      "5 minutes",
+    ],
+  },
+  Object {
+    "description": "passing todo 2",
+    "id": 3,
+    "labels": Array [
+      "5 minutes",
+    ],
+  },
+]
+`;
+
 exports[`selectSelectedPickerLabels should return a map for looking up label presence 1`] = `
 Object {
   "5 minutes": true,

@@ -1,17 +1,39 @@
-import { ReduxState } from './redux/types';
+import { ReduxState, Todo } from './redux/types';
+
+const performFilter = (
+  unlabeledFlag: boolean,
+  filterLabels: string[],
+  preserveIds: number[],
+  todo: Todo,
+) => {
+  if (preserveIds.includes(todo.id)) {
+    return true;
+  }
+
+  if (unlabeledFlag) {
+    return todo.labels.length === 0;
+  }
+  return filterLabels.every((label) => todo.labels.includes(label));
+};
 
 export const selectFilteredTodos = (state: ReduxState) => {
   // TODO (jordan) optimize w/ set intersection?
-  const { filterLabels } = state.workspace;
-  if (filterLabels.includes('Unlabeled')) {
-    if (filterLabels.length > 1) {
-      return [];
-    }
-    return state.todosApi.entries.filter((todo) => todo.labels.length === 0);
+  const { labelTodoId, filterLabels, todoEditId } = state.workspace;
+  const unlabeledFlag = filterLabels.includes('Unlabeled');
+  if (unlabeledFlag && filterLabels.length > 1) {
+    return [];
+  }
+
+  const preserveIds: number[] = [];
+  if (labelTodoId) {
+    preserveIds.push(labelTodoId);
+  }
+  if (todoEditId) {
+    preserveIds.push(todoEditId);
   }
 
   return state.todosApi.entries.filter((todo) =>
-    filterLabels.every((label) => todo.labels.includes(label)),
+    performFilter(unlabeledFlag, filterLabels, preserveIds, todo),
   );
 };
 
