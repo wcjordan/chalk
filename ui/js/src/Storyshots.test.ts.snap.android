@@ -6784,10 +6784,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             "marginBottom": 0,
             "marginTop": 42,
           },
-          Object {
-            "marginHorizontal": "auto",
-            "width": "80%",
-          },
+          undefined,
         ]
       }
     >
@@ -6796,6 +6793,8 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
           Object {
             "backgroundColor": "transparent",
             "justifyContent": "center",
+            "marginLeft": "auto",
+            "marginRight": "auto",
             "opacity": 1,
             "shadowColor": "#000000",
             "shadowOffset": Object {
@@ -6804,6 +6803,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             },
             "shadowOpacity": 0.24,
             "shadowRadius": 4,
+            "width": "80%",
           }
         }
       >
@@ -20360,10 +20360,7 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
           "marginBottom": 0,
           "marginTop": 42,
         },
-        Object {
-          "marginHorizontal": "auto",
-          "width": "80%",
-        },
+        undefined,
       ]
     }
   >
@@ -20372,6 +20369,8 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
         Object {
           "backgroundColor": "transparent",
           "justifyContent": "center",
+          "marginLeft": "auto",
+          "marginRight": "auto",
           "opacity": 1,
           "shadowColor": "#000000",
           "shadowOffset": Object {
@@ -20380,6 +20379,7 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
           },
           "shadowOpacity": 0.24,
           "shadowRadius": 4,
+          "width": "80%",
         }
       }
     >
@@ -40067,10 +40067,7 @@ Array [
             "marginBottom": 0,
             "marginTop": 42,
           },
-          Object {
-            "marginHorizontal": "auto",
-            "width": "80%",
-          },
+          undefined,
         ]
       }
     >
@@ -40079,6 +40076,8 @@ Array [
           Object {
             "backgroundColor": "transparent",
             "justifyContent": "center",
+            "marginLeft": "auto",
+            "marginRight": "auto",
             "opacity": 1,
             "shadowColor": "#000000",
             "shadowOffset": Object {
@@ -40087,6 +40086,7 @@ Array [
             },
             "shadowOpacity": 0.24,
             "shadowRadius": 4,
+            "width": "80%",
           }
         }
       >

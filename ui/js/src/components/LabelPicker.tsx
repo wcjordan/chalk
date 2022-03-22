@@ -15,7 +15,8 @@ const styles = StyleSheet.create<Style>({
     flexWrap: 'wrap',
   },
   modalView: {
-    marginHorizontal: 'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     width: '80%',
   },
 });
@@ -58,7 +59,7 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
   return (
     <Modal
       onDismiss={dismissLabeling}
-      style={styles.modalView}
+      contentContainerStyle={styles.modalView}
       visible={visible}
     >
       <View style={styles.labelPickerView} testID="label-picker">
