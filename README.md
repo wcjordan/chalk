@@ -45,6 +45,7 @@ Set the Display Name to `Chalk` (under Advanced)
 
 Add source Github  
 Set repository URL to `https://github.com/wcjordan/chalk`  
+Set credentials to github_ssh  
 
 Ensure Behaviors has just Discover Branches  
 
@@ -61,6 +62,7 @@ Enable `Build periodically`, set schedule to `H 0 * * 0`.
 
 Set Pipeline config as `Pipeline script from SCM`.  
 Set SCM to git w/ URL `https://github.com/wcjordan/chalk`.  
+Set credentials to github_ssh  
 
 Use `Add Branch` under Branch Specifier and set it to `*/jenkins-base`.  
 This means a `jenkins-base` branch can be use to create a new base build in addition to `master`.  
