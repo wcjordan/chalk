@@ -33,19 +33,17 @@ gcloud beta dns record-sets transaction execute --zone=$ZONE_NAME
 ```
 
 ## OAuth Setup
-Create an [OAuth client ID](https://console.cloud.google.com/apis/credentials)
-Download the client ID / secret as JSON and place at helm/secrets/oauth_web_client_secret.json
-Also copy the client ID / secret to the gcp-setup repo at ./secrets/chalk_oauth_web_client_secret.json
-so Jenkins integration tests can deploy the secret.
+Create an [OAuth client ID](https://console.cloud.google.com/apis/credentials)  
+Download the client ID / secret as JSON and place at helm/secrets/oauth_web_client_secret.json  
+Also set the chalk_oauth_client_secret Terraform variable for the gcp-setup with the contents of chalk_oauth_web_client_secret.json so that Jenkins integration tests can deploy the secret.
 
 ## Setup Jenkins Builds
 ### Chalk Build
 Create a Multibranch Pipeline build named `chalk`  
-Set the Display Name to `Chalk` (under Advanced)
+Set the Display Name to `Chalk`
 
 Add source Github  
 Set repository URL to `https://github.com/wcjordan/chalk`  
-Set credentials to github_ssh  
 
 Ensure Behaviors has just Discover Branches  
 
@@ -62,8 +60,8 @@ Enable `Build periodically`, set schedule to `H 0 * * 0`.
 
 Set Pipeline config as `Pipeline script from SCM`.  
 Set SCM to git w/ URL `https://github.com/wcjordan/chalk`.  
-Set credentials to github_ssh  
 
+Update the branch to build to `*/main`.  
 Use `Add Branch` under Branch Specifier and set it to `*/jenkins-base`.  
 This means a `jenkins-base` branch can be use to create a new base build in addition to `master`.  
 
