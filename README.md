@@ -32,10 +32,29 @@ gcloud beta dns record-sets transaction execute --zone=$ZONE_NAME
 
 ```
 
-## OAuth Setup
-Create an [OAuth client ID](https://console.cloud.google.com/apis/credentials)  
+## Secrets: OAuth Setup
+Create 2 [OAuth client IDs](https://console.cloud.google.com/apis/credentials)  
+
+1) for Web Application  
+Name: chalk-dev-web  
+Authorized URIs:  
+- http://chalk.flipperkid.com  
+- http://chalk-dev.flipperkid.com  
+- http://localhost:8080  
+Authorized redirect URIs:   
+- http://chalk.flipperkid.com/api/todos/auth_callback/  
+- http://chalk-dev.flipperkid.com/api/todos/auth_callback/  
+- http://localhost:8080/api/todos/auth_callback/  
+
 Download the client ID / secret as JSON and place at helm/secrets/oauth_web_client_secret.json  
-Also set the chalk_oauth_client_secret Terraform variable for the gcp-setup with the contents of chalk_oauth_web_client_secret.json so that Jenkins integration tests can deploy the secret.
+Also set the chalk_oauth_client_secret Terraform variable for the gcp-setup with the contents of chalk_oauth_web_client_secret.json so that Jenkins integration tests can deploy the secret.  
+
+2) for Web Application
+Name: chalk-dev-expo
+Authorized URIs: 
+- https://auth.expo.io
+Authorized redirect URIs: 
+- https://auth.expo.io/@flipperkid/chalk
 
 ## Setup Jenkins Builds
 ### Chalk Build
