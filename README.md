@@ -58,7 +58,13 @@ Authorized redirect URIs:
 
 Fill in EXPO_CLIENT_ID in .env & prod.env  
 
-Also run a dev server and login using a tester account to capture the refresh token for Jenkins integration tests to use.  Fill in OAUTH_REFRESH_TOKEN in .env and also the oauth_refresh_token variable in Terraform Cloud.  
+Also run a dev server and login using a tester account to capture the refresh token for Jenkins integration tests to use.  
+Fill in OAUTH_REFRESH_TOKEN in .env and also the oauth_refresh_token variable in Terraform Cloud.  
+Generating this token is tricky since it is never sent to the browser.  
+See oauth.py and look for a print statement to uncomment in the \_get_authorized_session method.  
+Also edit the get_authorization_url function to pass access_type='offline' in the flow.authorization_url call.  
+A final gotcha is the refresh token will only be returned when the app is initially authorized.  
+Visit https://myaccount.google.com/u/0/permissions to revoke authorization.  
 
 ## Setup Jenkins Builds
 ### Chalk Build
