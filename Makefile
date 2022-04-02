@@ -73,7 +73,11 @@ format:
 # To delete: helm delete chalk-prod
 .PHONY: deploy
 deploy: build
-	if [ $(PROD_ENV_FILE) = .prod.env ]; then \
+	if [ $$(kubectl config current-context) != $(K8S_CONTEXT) ]; then \
+		exit 1; \
+	fi
+
+	if [ $(ENVIRONMENT) = PROD ]; then \
 		docker run --env-file $(PROD_ENV_FILE) --env ENVIRONMENT=prod --env DEBUG=false \
 			--rm -t -w / \
 			-v $(PWD)/ui/Makefile:/Makefile \
