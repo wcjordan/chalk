@@ -1,5 +1,12 @@
 #!make
-include .env
+ENVIRONMENT ?= PROD
+ifeq ($(ENVIRONMENT),STAGING)
+  PROD_ENV_FILE = .staging.env
+else
+  PROD_ENV_FILE = .prod.env
+endif
+
+include $(PROD_ENV_FILE)
 
 IMAGE_REPO = gcr.io/$(GCP_PROJECT)
 SERVER_IMAGE = $(IMAGE_REPO)/chalk-server
@@ -11,7 +18,7 @@ UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
 build:
 	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):local-latest server
 	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.base -t $(UI_IMAGE_BASE):local-latest ui
-	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
+	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
 			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
@@ -66,23 +73,30 @@ format:
 # To delete: helm delete chalk-prod
 .PHONY: deploy
 deploy: build
-	docker run --env-file .prod.env --env ENVIRONMENT=prod --env DEBUG=false \
-		--rm -t -w / \
-		-v $(PWD)/ui/Makefile:/Makefile \
-		-v $(PWD)/ui/js/src:/js/src \
-		-v $(PWD)/ui/js/web:/js/web \
-		-v $(PWD)/ui/js/app.config.js:/js/app.config.js \
-		-v $(PWD)/ui/js/App.tsx:/js/App.tsx \
-		-v $(PWD)/ui/js/assets:/js/assets \
-		-v $(PWD)/ui/js/babel.config.js:/js/babel.config.js \
-		$(UI_IMAGE_BASE):local-latest \
-		make publish
+	if [ $$(kubectl config current-context) != $(K8S_CONTEXT) ]; then \
+		exit 1; \
+	fi
+
+	if [ $(ENVIRONMENT) = PROD ]; then \
+		docker run --env-file $(PROD_ENV_FILE) --env ENVIRONMENT=prod --env DEBUG=false \
+			--rm -t -w / \
+			-v $(PWD)/ui/Makefile:/Makefile \
+			-v $(PWD)/ui/js/src:/js/src \
+			-v $(PWD)/ui/js/web:/js/web \
+			-v $(PWD)/ui/js/app.config.js:/js/app.config.js \
+			-v $(PWD)/ui/js/App.tsx:/js/App.tsx \
+			-v $(PWD)/ui/js/assets:/js/assets \
+			-v $(PWD)/ui/js/babel.config.js:/js/babel.config.js \
+			$(UI_IMAGE_BASE):local-latest \
+			make publish; \
+	fi
+
 	docker push $(SERVER_IMAGE):local-latest
 	docker push $(UI_IMAGE):local-latest
-	env $$(grep -v '^#' .prod.env | xargs) sh -c ' \
+	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
 		helm upgrade --install \
 			--set domain=chalk.$$ROOT_DOMAIN \
-			--set environment=PROD \
+			--set environment=$(ENVIRONMENT) \
 			--set gcpProject=$$GCP_PROJECT \
 			--set server.dbPassword=$$DB_PASSWORD \
 			--set server.secretKey=$$SECRET_KEY \

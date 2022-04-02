@@ -32,20 +32,47 @@ gcloud beta dns record-sets transaction execute --zone=$ZONE_NAME
 
 ```
 
-## OAuth Setup
-Create an [OAuth client ID](https://console.cloud.google.com/apis/credentials)
-Download the client ID / secret as JSON and place at helm/secrets/oauth_web_client_secret.json
-Also copy the client ID / secret to the gcp-setup repo at ./secrets/chalk_oauth_web_client_secret.json
-so Jenkins integration tests can deploy the secret.
+## Secrets: OAuth Setup
+Create 2 [OAuth client IDs](https://console.cloud.google.com/apis/credentials)  
+
+1) for Web Application  
+Name: chalk-dev-web  
+Authorized URIs:  
+- http://chalk.flipperkid.com  
+- http://chalk-dev.flipperkid.com  
+- http://localhost:8080  
+Authorized redirect URIs:   
+- http://chalk.flipperkid.com/api/todos/auth_callback/  
+- http://chalk-dev.flipperkid.com/api/todos/auth_callback/  
+- http://localhost:8080/api/todos/auth_callback/  
+
+Download the client ID / secret as JSON and place at helm/secrets/oauth_web_client_secret.json  
+Also set the chalk_oauth_client_secret Terraform variable for the gcp-setup with the contents of chalk_oauth_web_client_secret.json so that Jenkins integration tests can deploy the secret.  
+
+2) for Web Application
+Name: chalk-dev-expo
+Authorized URIs: 
+- https://auth.expo.io
+Authorized redirect URIs: 
+- https://auth.expo.io/@flipperkid/chalk
+
+Fill in EXPO_CLIENT_ID in .env & prod.env  
+
+Also run a dev server and login using a tester account to capture the refresh token for Jenkins integration tests to use.  
+Fill in OAUTH_REFRESH_TOKEN in .env and also the oauth_refresh_token variable in Terraform Cloud.  
+Generating this token is tricky since it is never sent to the browser.  
+See oauth.py and look for a print statement to uncomment in the \_get_authorized_session method.  
+Also edit the get_authorization_url function to pass access_type='offline' in the flow.authorization_url call.  
+A final gotcha is the refresh token will only be returned when the app is initially authorized.  
+Visit https://myaccount.google.com/u/0/permissions to revoke authorization.  
 
 ## Setup Jenkins Builds
 ### Chalk Build
 Create a Multibranch Pipeline build named `chalk`  
-Set the Display Name to `Chalk` (under Advanced)
+Set the Display Name to `Chalk`
 
 Add source Github  
 Set repository URL to `https://github.com/wcjordan/chalk`  
-Set credentials to github_ssh  
 
 Ensure Behaviors has just Discover Branches  
 
@@ -62,8 +89,8 @@ Enable `Build periodically`, set schedule to `H 0 * * 0`.
 
 Set Pipeline config as `Pipeline script from SCM`.  
 Set SCM to git w/ URL `https://github.com/wcjordan/chalk`.  
-Set credentials to github_ssh  
 
+Update the branch to build to `*/main`.  
 Use `Add Branch` under Branch Specifier and set it to `*/jenkins-base`.  
 This means a `jenkins-base` branch can be use to create a new base build in addition to `master`.  
 
