@@ -66,3 +66,4 @@ tilt_modules/
 _env_id.txt
 
 helm/secrets/
+helm/secrets.staging/

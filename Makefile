@@ -1,5 +1,11 @@
 #!make
-PROD_ENV_FILE ?= .prod.env
+ENVIRONMENT ?= PROD
+ifeq ($(ENVIRONMENT),STAGING)
+  PROD_ENV_FILE = .staging.env
+else
+  PROD_ENV_FILE = .prod.env
+endif
+
 include $(PROD_ENV_FILE)
 
 IMAGE_REPO = gcr.io/$(GCP_PROJECT)
@@ -86,7 +92,7 @@ deploy: build
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
 		helm upgrade --install \
 			--set domain=chalk.$$ROOT_DOMAIN \
-			--set environment=PROD \
+			--set environment=$(ENVIRONMENT) \
 			--set gcpProject=$$GCP_PROJECT \
 			--set server.dbPassword=$$DB_PASSWORD \
 			--set server.secretKey=$$SECRET_KEY \
