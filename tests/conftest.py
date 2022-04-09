@@ -51,7 +51,7 @@ def playwright():
 def page(request, playwright, todo_prefix, test_name, server_domain):
     username = os.getenv("BROWSERSTACK_USERNAME")
     access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
-    refresh_token = os.getenv("OAUTH_REFRESH_TOKEN")
+    refresh_token = os.getenv("CHALK_OAUTH_REFRESH_TOKEN")
     build_name = os.getenv("BROWSERSTACK_BUILD_NAME", 'Local')
 
     desired_cap = {
