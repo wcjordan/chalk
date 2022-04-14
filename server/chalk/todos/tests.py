@@ -21,6 +21,10 @@ DEFAULT_LABELS = [
     '5 minutes',
     '25 minutes',
     '60 minutes',
+    'Chalk',
+    'Den Setup',
+    'Jenkins',
+    'Infra',
 ]
 
 
