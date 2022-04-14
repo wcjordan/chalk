@@ -1,0 +1,12 @@
+name: "Repo Visualizer"
+
+on:
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [main]
+
+jobs:
+  visualize:
+    steps:
+    - name: Repo Visualizer
+      uses: githubocto/repo-visualizer@0.8.2
