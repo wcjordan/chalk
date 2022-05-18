@@ -97,6 +97,7 @@ export const dismissNotification =
 export const filterByLabels = workspaceSlice.actions.filterByLabels;
 export const setEditTodoId = workspaceSlice.actions.setEditTodoId;
 export const setLabelTodoId = workspaceSlice.actions.setLabelTodoId;
+export const setWorkContext = workspaceSlice.actions.setWorkContext;
 export { createTodo, listLabels, listTodos };
 export default {
   labelsApi: labelsApiSlice.reducer,

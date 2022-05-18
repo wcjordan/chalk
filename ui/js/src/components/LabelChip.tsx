@@ -24,7 +24,7 @@ const styles = StyleSheet.create<Style>({
 });
 
 const LabelChip: React.FC<Props> = function (props: Props) {
-  const { label, selected, onPress } = props;
+  const { display, label, selected, onPress } = props;
   const readOnlyDisplay = onPress === undefined;
   const style =
     selected || readOnlyDisplay ? styles.chipSelectedStyle : styles.chipStyle;
@@ -42,14 +42,15 @@ const LabelChip: React.FC<Props> = function (props: Props) {
       style={style}
       textStyle={styles.chipTextStyle}
     >
-      {props.label}
+      {display || label}
     </Chip>
   );
 };
 
 type Props = {
-  onPress?: (label: string) => void;
+  display?: string;
   label: string;
+  onPress?: (label: string) => void;
   selected: boolean;
 };
 

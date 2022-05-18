@@ -45,6 +45,11 @@ export interface ReduxState {
   workspace: WorkspaceState;
 }
 
+export interface WorkContext {
+  displayName: string;
+  labels: string[];
+}
+
 export interface WorkspaceState {
   // CSRF token is only set here for mobile auth
   // For web we extract the CSRF token from cookies

@@ -1,4 +1,5 @@
 import { ReduxState, Todo } from './redux/types';
+import { workContexts } from './redux/workspaceSlice';
 
 const performFilter = (
   unlabeledFlag: boolean,
@@ -52,4 +53,13 @@ export const selectSelectedPickerLabels = (state: ReduxState) => {
   }
 
   return {};
+};
+
+export const selectActiveWorkContext = (state: ReduxState) => {
+  const { filterLabels } = state.workspace;
+  return Object.keys(workContexts).find((workContext) => {
+    const labels = workContexts[workContext].labels;
+    const sizeMatch = labels.length === filterLabels.length;
+    return sizeMatch && labels.every((label) => filterLabels.includes(label));
+  });
 };

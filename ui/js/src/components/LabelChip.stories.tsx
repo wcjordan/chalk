@@ -28,3 +28,6 @@ export const SelectedLabelChip: React.FC = () =>
 
 export const ReadOnlyLabelChip: React.FC = () =>
   wrapper(<LabelChip {...defaultProps} onPress={undefined} />);
+
+export const DisplayNameLabelChip: React.FC = () =>
+  wrapper(<LabelChip {...defaultProps} display="Display name" />);
