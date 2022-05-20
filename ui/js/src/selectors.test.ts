@@ -1,4 +1,8 @@
-import { selectFilteredTodos, selectSelectedPickerLabels } from './selectors';
+import {
+  selectActiveWorkContext,
+  selectFilteredTodos,
+  selectSelectedPickerLabels,
+} from './selectors';
 
 describe('selectFilteredTodos', function () {
   it('should filter out todos missing any labels', function () {
@@ -280,6 +284,41 @@ describe('selectSelectedPickerLabels', function () {
 
     const result = selectSelectedPickerLabels(state);
     expect(result).toEqual({});
+  });
+});
+
+describe('selectActiveWorkContext', function () {
+  it('should return a work context if labels match', function () {
+    const state = {
+      workspace: {
+        filterLabels: ['Chalk', '25 minutes'],
+      },
+    };
+
+    const result = selectActiveWorkContext(state);
+    expect(result).toEqual('chalkCoding');
+  });
+
+  it('should not return a work context if additional labels are selected', function () {
+    const state = {
+      workspace: {
+        filterLabels: ['Chalk', '25 minutes', 'Home'],
+      },
+    };
+
+    const result = selectActiveWorkContext(state);
+    expect(result).toEqual(undefined);
+  });
+
+  it('should not return a work context if some of the contexts labels are not selected', function () {
+    const state = {
+      workspace: {
+        filterLabels: ['Chalk'],
+      },
+    };
+
+    const result = selectActiveWorkContext(state);
+    expect(result).toEqual(undefined);
   });
 });
 

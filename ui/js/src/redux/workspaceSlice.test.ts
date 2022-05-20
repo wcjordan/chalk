@@ -92,6 +92,38 @@ describe('workspace reducer', function () {
       });
     });
   });
+
+  describe('workspace/setWorkContext', function () {
+    it('should update filter labels to match the work context', function () {
+      const result = workspaceSlice.reducer(
+        {
+          filterLabels: ['Chalk'],
+        },
+        {
+          type: 'workspace/setWorkContext',
+          payload: 'inbox',
+        },
+      );
+      expect(result).toEqual({
+        filterLabels: ['Unlabeled'],
+      });
+    });
+
+    it('should ignore invalid work contexts', function () {
+      const result = workspaceSlice.reducer(
+        {
+          filterLabels: ['Chalk'],
+        },
+        {
+          type: 'workspace/setWorkContext',
+          payload: 'I made this up',
+        },
+      );
+      expect(result).toEqual({
+        filterLabels: ['Chalk'],
+      });
+    });
+  });
 });
 
 export {};
