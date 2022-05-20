@@ -20,10 +20,16 @@ import {
   filterByLabels,
   setEditTodoId,
   setLabelTodoId,
+  setWorkContext,
   updateTodo,
   updateTodoLabels,
 } from './redux/reducers';
-import { selectFilteredTodos, selectSelectedPickerLabels } from './selectors';
+import {
+  selectActiveWorkContext,
+  selectFilteredTodos,
+  selectSelectedPickerLabels,
+} from './selectors';
+import { workContexts } from './redux/workspaceSlice';
 
 interface Style {
   root: ViewStyle;
@@ -49,9 +55,11 @@ const App: React.FC<ConnectedProps<typeof connector>> = function (
 ) {
   const selectedPickerLabels = useSelector(selectSelectedPickerLabels);
   const filteredTodos = useSelector(selectFilteredTodos);
+  const activeWorkContext = useSelector(selectActiveWorkContext);
   return (
     <AppLayout
       {...props}
+      activeWorkContext={activeWorkContext}
       filteredTodos={filteredTodos}
       selectedPickerLabels={selectedPickerLabels}
     />
@@ -60,6 +68,7 @@ const App: React.FC<ConnectedProps<typeof connector>> = function (
 
 export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
   const {
+    activeWorkContext,
     addNotification,
     completeAuthentication,
     dismissNotification,
@@ -80,7 +89,13 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
     );
   } else {
     content = (
-      <TodoList todos={filteredTodos} workspace={workspace} {...otherProps} />
+      <TodoList
+        activeWorkContext={activeWorkContext}
+        todos={filteredTodos}
+        workContexts={workContexts}
+        workspace={workspace}
+        {...otherProps}
+      />
     );
   }
 
@@ -104,6 +119,7 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
 };
 
 type LayoutProps = {
+  activeWorkContext: string | undefined;
   addNotification: (text: string) => void;
   completeAuthentication: (token: string) => void;
   createTodo: (description: string) => void;
@@ -115,6 +131,7 @@ type LayoutProps = {
   selectedPickerLabels: { [label: string]: boolean };
   setEditTodoId: (id: number | null) => void;
   setLabelTodoId: (id: number | null) => void;
+  setWorkContext: (workContext: string) => void;
   updateTodo: (todoPatch: TodoPatch) => void;
   updateTodoLabels: (labels: string[]) => void;
   workspace: WorkspaceState;
@@ -135,6 +152,7 @@ const mapDispatchToProps = {
   filterByLabels,
   setEditTodoId,
   setLabelTodoId,
+  setWorkContext,
   updateTodo,
   updateTodoLabels,
 };

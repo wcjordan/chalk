@@ -9,12 +9,19 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { Label, Todo, TodoPatch, WorkspaceState } from '../redux/types';
+import {
+  Label,
+  Todo,
+  TodoPatch,
+  WorkContext,
+  WorkspaceState,
+} from '../redux/types';
 import { useDataLoader } from '../hooks';
 import AddTodo from './AddTodo';
 import LabelFilter from './LabelFilter';
 import LabelPicker from './LabelPicker';
 import TodoItem from './TodoItem';
+import WorkContextFilter from './WorkContextFilter';
 
 interface Style {
   containerMobile: ViewStyle;
@@ -38,15 +45,18 @@ const styles = StyleSheet.create<Style>({
 
 const TodoList: React.FC<Props> = function (props: Props) {
   const {
+    activeWorkContext,
     createTodo,
     labels,
     filterByLabels,
     selectedPickerLabels,
     setEditTodoId,
     setLabelTodoId,
+    setWorkContext,
     todos,
     updateTodo,
     updateTodoLabels,
+    workContexts,
     workspace,
   } = props;
   const { editTodoId, filterLabels, labelTodoId } = workspace;
@@ -81,6 +91,11 @@ const TodoList: React.FC<Props> = function (props: Props) {
     <React.Fragment>
       <View style={containerStyle}>
         <AddTodo createTodo={createTodo} />
+        <WorkContextFilter
+          activeWorkContext={activeWorkContext}
+          setWorkContext={setWorkContext}
+          workContexts={workContexts}
+        />
         <LabelFilter
           labels={labelNames}
           selectedLabels={filterLabels}
@@ -100,15 +115,18 @@ const TodoList: React.FC<Props> = function (props: Props) {
 };
 
 type Props = {
+  activeWorkContext: string | undefined;
   createTodo: (description: string) => void;
   filterByLabels: (labels: string[]) => void;
   labels: Label[];
   selectedPickerLabels: { [label: string]: boolean };
   setEditTodoId: (id: number | null) => void;
   setLabelTodoId: (id: number | null) => void;
+  setWorkContext: (workContext: string) => void;
   todos: Todo[];
   updateTodo: (todoPatch: TodoPatch) => void;
   updateTodoLabels: (labels: string[]) => void;
+  workContexts: { [key: string]: WorkContext };
   workspace: WorkspaceState;
 };
 

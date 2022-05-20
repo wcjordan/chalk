@@ -1,4 +1,6 @@
 import React from 'react';
+import { Todo, TodoPatch } from '../redux/types';
+import { workContexts } from '../redux/workspaceSlice';
 import TodoList from './TodoList';
 
 function stubTodo(patch: TodoPatch): Todo {
@@ -63,6 +65,7 @@ const defaultProps = {
       description: '6th todo',
     }),
   ],
+  workContexts,
   workspace: {
     editTodoId: 3,
     filterLabels: ['5 minutes', 'work', 'home', 'low-energy', 'mobile'],
