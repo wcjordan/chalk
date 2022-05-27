@@ -101,8 +101,12 @@ export default createSlice({
         state.entries,
         (entry) => entry.id === updatedEntry.id,
       );
-      Object.assign(existingEntry, updatedEntry);
-      state.entries = processTodos(state.entries);
+      if (existingEntry) {
+        Object.assign(existingEntry, updatedEntry);
+        state.entries = processTodos(state.entries);
+      } else {
+        console.warn('Unable to find todo by id: ' + updatedEntry.id);
+      }
     },
     [updateTodo.rejected.type]: (_state, action: ErrorAction) => {
       console.warn(`Updating Todo failed. ${action.error.message}`);
