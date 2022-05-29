@@ -50,7 +50,7 @@ TEST_TO_RUN ?= ""
 .PHONY: integration-test
 integration-test:
 	env $$(grep -v '^#' .env | xargs) sh -c ' \
-		pytest tests/$(TEST_TO_RUN) --server_domain chalk-dev.$$ROOT_DOMAIN'
+		pytest tests/$(TEST_TO_RUN) -n 1 --server_domain chalk-dev.$$ROOT_DOMAIN'
 
 # Start environment for development
 # Note, you need to manually navigate to <host>:19000/debugger-ui/ to get Expo to work on mobile
