@@ -1,5 +1,6 @@
 import { cleanup, renderHook } from '@testing-library/react-hooks';
 import configureMockStore from 'redux-mock-store';
+import fetchMock from 'fetch-mock-jest';
 import thunk from 'redux-thunk';
 
 import { useDataLoader } from './hooks';
@@ -28,7 +29,18 @@ jest.mock('expo-constants', () => ({
 }));
 
 describe('useDataLoader', function () {
+  afterEach(function () {
+    fetchMock.restore();
+  });
+
   it('should setup loading labels and todos', function () {
+    fetchMock.getOnce('http://chalk-dev.flipperkid.com/api/todos/labels/', {
+      body: [],
+    });
+    fetchMock.get('http://chalk-dev.flipperkid.com/api/todos/todos/', {
+      body: [],
+    });
+
     jest.useFakeTimers();
 
     renderHook(useDataLoader);
@@ -55,6 +67,9 @@ describe('useDataLoader', function () {
     jest.advanceTimersByTime(30000);
     actions = getStore().getActions();
     expect(actions.length).toEqual(3);
+
+    // Verify we make the server requests
+    expect(fetchMock).toBeDone();
   });
 });
 
