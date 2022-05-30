@@ -14,7 +14,7 @@ export function useDataLoader() {
 
     const intervalId = window.setInterval(
       () => store.dispatch(listTodos()),
-      3000,
+      10000,
     );
 
     return () => {
