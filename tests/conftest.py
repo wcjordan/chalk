@@ -69,6 +69,7 @@ def page(request, playwright, todo_prefix, test_name, server_domain):
         'browserstack.username': username,
         'browserstack.accessKey': access_key,
         'client.playwrightVersion': '1.19.1',
+        'browserstack.playwrightVersion': '1.19.1',
     }
 
     browser = None
@@ -119,8 +120,10 @@ def page(request, playwright, todo_prefix, test_name, server_domain):
             page.locator('[data-testid="cancel-edit"]').wait_for(state='detached')
 
             todos_to_delete = find_todos(page, todo_prefix, partial=True)
-            for todo in reversed(todos_to_delete):
+            todo_count = todos_to_delete.count()
+            for todo_idx in reversed(range(todo_count)):
                 # reverse list so locators are still valid as later items are removed
+                todo = todos_to_delete.nth(todo_idx)
                 delete_todo(todo)
         except Exception:
             logging.exception('Failed to cleanup test')

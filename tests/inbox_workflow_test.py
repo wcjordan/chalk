@@ -20,16 +20,16 @@ def test_inbox_workflow(page, todo_prefix):
 
     # Verify todo visible
     todos = find_todos(page, todo_description)
-    assert len(todos) == 1
-    todo_item = todos[0]
+    assert todos.count() == 1
+    todo_item = todos.first
 
     # Add label
     add_labels(page, todo_item, ['errand'], dismiss_picker=False)
 
     # Verify todo visible
     todos = find_todos(page, todo_description)
-    assert len(todos) == 1
-    todo_item = todos[0]
+    assert todos.count() == 1
+    todo_item = todos.first
 
     # Verify labels
     todo_labels = todo_item.locator('[data-testid="todo-labels"] > div').all_text_contents()
@@ -41,8 +41,8 @@ def test_inbox_workflow(page, todo_prefix):
 
     # Verify todo visible
     todos = find_todos(page, todo_description)
-    assert len(todos) == 1
-    todo_item = todos[0]
+    assert todos.count() == 1
+    todo_item = todos.first
 
     # Verify labels
     todo_labels = todo_item.locator('[data-testid="todo-labels"] > div').all_text_contents()
@@ -54,4 +54,4 @@ def test_inbox_workflow(page, todo_prefix):
     # Verify todo is not visible
     wait_for_todo_to_disappear(page, todo_description)
     todos = find_todos(page, todo_description)
-    assert len(todos) == 0
+    assert todos.count() == 0

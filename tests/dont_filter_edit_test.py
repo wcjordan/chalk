@@ -21,7 +21,7 @@ def test_dont_filter_edit(page, todo_prefix):
 
     # Edit the todo
     edit_description = f'{todo_prefix} edited description'
-    edit_todo(todo_to_edit, edit_description, submit=False)
+    edit_todo(page, todo_to_edit, edit_description, submit=False)
 
     # Add filter
     toggle_label_filter(page, 'home')
@@ -31,11 +31,11 @@ def test_dont_filter_edit(page, todo_prefix):
 
     # Verify todo being edited is visible
     todos = find_todos(page, edit_description)
-    assert len(todos) == 1
-    todo_item = todos[0]
+    assert todos.count() == 1
+    todo_item = todos.first
 
     # Cancel edit and verify todo is filtered
     cancel_edit(page, todo_item)
     wait_for_todo_to_disappear(page, edit_description)
     todos = find_todos(page, todo_prefix, partial=True)
-    assert len(todos) == 0
+    assert todos.count() == 0

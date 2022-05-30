@@ -44,7 +44,8 @@ def dismiss_add_label_modal(page, optional=False):
     if modals_count or not optional:
         assert modals_count == 1
         # Click offset from modal center to avoid dialog
-        modals.first.click(position={'x': 0, 'y': 0})
+        modals.click(position={'x': 0, 'y': 0})
+        modals.wait_for(state='detached')
 
 
 def toggle_label_filter(page, label):
