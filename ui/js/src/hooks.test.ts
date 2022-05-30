@@ -38,13 +38,13 @@ describe('useDataLoader', function () {
     expect(actions[0].type).toEqual('labelsApi/list/pending');
 
     // Move forward long enough to load Todos
-    jest.advanceTimersByTime(3000);
+    jest.advanceTimersByTime(10000);
     actions = getStore().getActions();
     expect(actions.length).toEqual(2);
     expect(actions[1].type).toEqual('todosApi/list/pending');
 
     // Move forward long enough to load Todos again
-    jest.advanceTimersByTime(3000);
+    jest.advanceTimersByTime(10000);
     actions = getStore().getActions();
     expect(actions.length).toEqual(3);
     expect(actions[2].type).toEqual('todosApi/list/pending');
