@@ -26,44 +26,31 @@ def delete_todo(todo_item):
     delete_button.click()
 
 
-def edit_todo(todo_item, new_description, submit=True):
+def edit_todo(page, todo_item, new_description, submit=True):
     todo_item.click()
     todo_input = todo_item.locator('textarea')
     todo_input.click()
     todo_input.fill(new_description)
     if submit:
-        todo_input.press('Enter')
+        # Need to re-find todo since locator was on the old description
+        find_todo(page, new_description).locator('textarea').press('Enter')
 
 
 def find_todo(page, description, partial=False):
     todos = find_todos(page, description, partial)
-    assert len(todos) == 1
-    return todos[0]
+    assert todos.count() == 1
+    return todos.first
 
 
 def find_todos(page, description, partial=False):
-    # TODO clean this up w/ `has` / `has_text` when Playwright v19 is available
-    # on Browserstack
     text_pattern = f'text={description}' if partial else f'text="{description}"'
-    todo_items = page.locator(f'[data-testid="todo-list"] > div > div')
-
-    matching_todos = []
-    todo_count = todo_items.count()
-    for todo_idx in range(todo_count):
-        todo = todo_items.nth(todo_idx)
-        if todo.locator(text_pattern).is_visible():
-            matching_todos.append(todo)
-
-    return matching_todos
+    return page.locator(f'[data-testid="todo-list"] > div > div',
+                        has=page.locator(text_pattern))
 
 
 def list_todo_descriptions(page, prefix):
-    # TODO clean this up to use all_text_contents when find_todos is switched
-    # to use `has` / `has_text`
-
-    todo_items = find_todos(page, prefix, partial=True)
-    return [item.locator('[data-testid="description-text"]').text_content()
-            for item in todo_items]
+    return find_todos(page, prefix, partial=True).locator(
+        '[data-testid="description-text"]').all_text_contents()
 
 
 def wait_for_todo(page, description):

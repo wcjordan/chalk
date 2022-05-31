@@ -22,7 +22,7 @@ def test_todos_partial_edit(page, todo_prefix):
 
     # Edit the first todo
     edit_description = f'{todo_prefix} edited description'
-    edit_todo(first_todo, edit_description, submit=False)
+    edit_todo(page, first_todo, edit_description, submit=False)
 
     # Switch to editing the 2nd todo
     second_todo.click()
@@ -45,6 +45,7 @@ def test_todos_partial_edit(page, todo_prefix):
     wait_for_todo_to_disappear(page, todo1_description)
 
     # Verify that the input text is still edit_description
+    first_todo = find_todo(page, edit_description)
     todo_input = first_todo.locator('textarea')
     assert todo_input.input_value() == edit_description
 
