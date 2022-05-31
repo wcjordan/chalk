@@ -80,9 +80,7 @@
   "browserslist": [
     "last 1 chrome version"
   ],
-  "_resolution_comment": "Promise is set to match react-native's promise version: https://docs.sentry.io/platforms/react-native/troubleshooting/#manually-forcing-a-package-resolution",
   "resolutions": {
-    "promise": "^8.0.3",
     "@testing-library/react-hooks/@types/react-dom": "<18.0.0",
     "@types/react": "<18.0.0"
   }
