@@ -11,17 +11,14 @@ metadata:
     {{- else if eq .Values.environment "DEV" }}
     kubernetes.io/ingress.global-static-ip-name: "chalk-dev-ip"
     {{- end }}
+
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/auth-url: http://{{ $fullName }}-server.default.svc.cluster.local:8001/api/todos/auth_test/
+    nginx.ingress.kubernetes.io/auth-signin: http://$host/api/todos/auth/
 spec:
   rules:
     - http:
         paths:
-        - path: /api/
-          pathType: Prefix
-          backend:
-            service:
-              name: {{ $fullName }}-server
-              port:
-                name: http
         - path: /admin_static/
           pathType: Prefix
           backend:
@@ -34,5 +31,33 @@ spec:
           backend:
             service:
               name: {{ $fullName }}-ui
+              port:
+                name: http
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}-api
+  labels:
+    {{- include "..labels" . | nindent 4 }}
+  annotations:
+    {{- if or (eq .Values.environment "PROD") (eq .Values.environment "STAGING") }}
+    kubernetes.io/ingress.global-static-ip-name: "chalk-ip"
+    {{- else if eq .Values.environment "DEV" }}
+    kubernetes.io/ingress.global-static-ip-name: "chalk-dev-ip"
+    {{- end }}
+
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - http:
+        paths:
+        - path: /api/
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ $fullName }}-server
               port:
                 name: http

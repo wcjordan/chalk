@@ -173,3 +173,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Auth Backend
 AUTHENTICATION_BACKENDS = ['chalk.todos.oauth.OAuthBackend']
+
+# Switch to 401 for unauthorized responses
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'chalk.todos.auth_override.custom_exception_handler'
+}
