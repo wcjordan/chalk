@@ -26,7 +26,7 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
     props;
 
   const updateTodoLabelCb = useCallback(
-    (label) => {
+    (label: string) => {
       const labelDict = Object.assign({}, selectedLabels, {
         [label]: !selectedLabels[label],
       });

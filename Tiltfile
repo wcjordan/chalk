@@ -43,7 +43,6 @@ local_resource('expo',
                serve_cmd='bash start.sh',
                serve_dir='ui',
                serve_env=expo_env,
-               links=link('http://localhost:19002/', 'Expo Devtools'),
                readiness_probe=probe(
                   http_get=http_get_action(port=19006, path="/")
                ))

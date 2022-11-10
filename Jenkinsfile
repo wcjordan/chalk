@@ -124,7 +124,7 @@ pipeline {
                                 cpu: "500m"
                                 memory: "1Gi"
                           - name: jenkins-worker-python
-                            image: python:3
+                            image: python:3.10
                             command:
                             - cat
                             tty: true
@@ -191,7 +191,7 @@ pipeline {
                                             until [ ! -z \$todos_ready ] && [ \$todos_ready -eq 200 ]
                                             do
                                                 sleep 15
-                                                todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/api/todos/healthz/)
+                                                todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/api/todos/healthz/ || true)
                                             done
 
                                             until [ ! -z \$html_ready ] && [ \$html_ready -eq 302 ]
@@ -215,7 +215,7 @@ pipeline {
                         browserstack(credentialsId: 'browserstack_key') {
                             container('jenkins-worker-python') {
                                 dir('tests') {
-                                    sh 'pip install "playwright==1.21.0" "pytest==7.1.2"'
+                                    sh 'pip install "playwright==1.25.1" "pytest==7.2.0"'
                                     sh "pytest . --server_domain ${SERVER_IP}"
                                 }
                             }

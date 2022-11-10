@@ -10,18 +10,6 @@ export function getTodosApi(): string {
   return `${getWsRoot()}api/todos/todos/`;
 }
 
-interface ErrorAction {
-  error: Error;
-}
-
-interface TodoAction {
-  payload: Todo;
-}
-
-interface TodoListAction {
-  payload: Array<Todo>;
-}
-
 const initialState: ApiState<Todo> = {
   entries: [],
   loading: false,
@@ -76,40 +64,44 @@ export default createSlice({
   name: API_NAME,
   initialState,
   reducers: {},
-  extraReducers: {
-    [createTodo.fulfilled.type]: (state, action: TodoAction) => {
-      state.entries.push(action.payload);
-      state.entries = processTodos(state.entries);
-    },
-    [createTodo.rejected.type]: (_state, action: ErrorAction) => {
-      console.warn(`Creating Todo failed. ${action.error.message}`);
-    },
-    [listTodos.pending.type]: (state) => {
-      state.loading = true;
-    },
-    [listTodos.fulfilled.type]: (state, action: TodoListAction) => {
-      state.loading = false;
-      state.entries = processTodos(action.payload);
-    },
-    [listTodos.rejected.type]: (state, action: ErrorAction) => {
-      state.loading = false;
-      console.warn(`Loading Todo failed. ${action.error.message}`);
-    },
-    [updateTodo.fulfilled.type]: (state, action: TodoAction) => {
-      const updatedEntry = action.payload;
-      const existingEntry = _.find(
-        state.entries,
-        (entry) => entry.id === updatedEntry.id,
-      );
-      if (existingEntry) {
-        Object.assign(existingEntry, updatedEntry);
+  extraReducers: (builder) => {
+    builder
+      // create todo
+      .addCase(createTodo.fulfilled, (state, action) => {
+        state.entries.push(action.payload);
         state.entries = processTodos(state.entries);
-      } else {
-        console.warn('Unable to find todo by id: ' + updatedEntry.id);
-      }
-    },
-    [updateTodo.rejected.type]: (_state, action: ErrorAction) => {
-      console.warn(`Updating Todo failed. ${action.error.message}`);
-    },
+      })
+      .addCase(createTodo.rejected, (_, action) => {
+        console.warn(`Creating Todo failed. ${action.error.message}`);
+      })
+      // list todos
+      .addCase(listTodos.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(listTodos.fulfilled, (state, action) => {
+        state.loading = false;
+        state.entries = processTodos(action.payload);
+      })
+      .addCase(listTodos.rejected, (state, action) => {
+        state.loading = false;
+        console.warn(`Loading Todo failed. ${action.error.message}`);
+      })
+      // update todo
+      .addCase(updateTodo.fulfilled, (state, action) => {
+        const updatedEntry = action.payload;
+        const existingEntry = _.find(
+          state.entries,
+          (entry) => entry.id === updatedEntry.id,
+        );
+        if (existingEntry) {
+          Object.assign(existingEntry, updatedEntry);
+          state.entries = processTodos(state.entries);
+        } else {
+          console.warn('Unable to find todo by id: ' + updatedEntry.id);
+        }
+      })
+      .addCase(updateTodo.rejected, (_, action) => {
+        console.warn(`Updating Todo failed. ${action.error.message}`);
+      });
   },
 });

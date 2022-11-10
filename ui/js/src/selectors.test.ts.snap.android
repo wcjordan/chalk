@@ -1,29 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`selectFilteredTodos should filter any labeled todos with the unlabeled filter 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "passing todo 1",
     "id": 3,
-    "labels": Array [],
+    "labels": [],
   },
 ]
 `;
 
 exports[`selectFilteredTodos should filter out todos missing any labels 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "passing todo 1",
     "id": 3,
-    "labels": Array [
+    "labels": [
       "5 minutes",
       "home",
     ],
   },
-  Object {
+  {
     "description": "passing todo 2",
     "id": 4,
-    "labels": Array [
+    "labels": [
       "5 minutes",
       "home",
       "low-energy",
@@ -33,18 +33,18 @@ Array [
 `;
 
 exports[`selectFilteredTodos should not filter any active todos with the unlabeled filter 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "passing todo 1",
     "id": 2,
-    "labels": Array [
+    "labels": [
       "5 minutes",
     ],
   },
-  Object {
+  {
     "description": "passing todo 2",
     "id": 3,
-    "labels": Array [
+    "labels": [
       "5 minutes",
     ],
   },
@@ -52,18 +52,18 @@ Array [
 `;
 
 exports[`selectFilteredTodos should not filter out todos missing labels if they are active 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "passing todo 1",
     "id": 2,
-    "labels": Array [
+    "labels": [
       "5 minutes",
     ],
   },
-  Object {
+  {
     "description": "passing todo 2",
     "id": 3,
-    "labels": Array [
+    "labels": [
       "5 minutes",
     ],
   },
@@ -71,7 +71,7 @@ Array [
 `;
 
 exports[`selectSelectedPickerLabels should return a map for looking up label presence 1`] = `
-Object {
+{
   "5 minutes": true,
   "home": true,
   "low-energy": true,

@@ -19,7 +19,7 @@ PARENT_DIR = $(dir $(PWD))
 test:
 	flake8 chalk/todos  # TODO change to .
 	# TODO (jordan) remove need to hardcode apps
-	pylint -j 0 --load-plugins pylint_django chalk
+	PYTHONPATH=$(PWD) pylint -j 0 --load-plugins pylint_django chalk
 
 	# Unit tests
 	DJANGO_SETTINGS_MODULE=chalk.settings.testing python manage.py test chalk.todos

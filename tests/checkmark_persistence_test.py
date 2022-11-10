@@ -27,10 +27,11 @@ def test_todos_checkmark_persistence(page, todo_prefix):
     complete_todo(first_todo)
 
     # Wait for and verify that checkbox appears checked
-    xpath_selector = f'xpath=//div[@data-testid="complete-todo" and @aria-checked="true"]/../following-sibling::div/div[text()="{todo1_description}"]'
-    page.locator(xpath_selector).wait_for()
+    checked_selector = f'div:has([data-testid="complete-todo"]):has-text("{CHECKED_ICON_TEXT}") + div:has-text("{todo1_description}")'
+    page.locator(checked_selector).wait_for()
+
     first_todo = find_todo(page, todo1_description)
-    first_todo_checkmark = first_todo.locator('[aria-checked="true"]')
+    first_todo_checkmark = first_todo.locator(f'text="{CHECKED_ICON_TEXT}"')
     assert first_todo_checkmark.count() == 1
     expected_text = f'{CHECKED_ICON_TEXT}{todo1_description}{LABELS_ICON_TEXT}{DELETE_ICON_TEXT}'
     assert first_todo.text_content() == expected_text

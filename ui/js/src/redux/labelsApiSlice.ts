@@ -9,14 +9,6 @@ export function getLabelsApi(): string {
   return `${getWsRoot()}api/todos/labels/`;
 }
 
-interface ErrorAction {
-  error: Error;
-}
-
-interface LabelListAction {
-  payload: Array<Label>;
-}
-
 const initialState: ApiState<Label> = {
   entries: [],
   loading: false,
@@ -36,17 +28,18 @@ export default createSlice({
   name: API_NAME,
   initialState,
   reducers: {},
-  extraReducers: {
-    [listLabels.pending.type]: (state) => {
-      state.loading = true;
-    },
-    [listLabels.fulfilled.type]: (state, action: LabelListAction) => {
-      state.loading = false;
-      state.entries = action.payload;
-    },
-    [listLabels.rejected.type]: (state, action: ErrorAction) => {
-      state.loading = false;
-      console.warn(`Loading Labels failed. ${action.error.message}`);
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(listLabels.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(listLabels.fulfilled, (state, action) => {
+        state.loading = false;
+        state.entries = action.payload;
+      })
+      .addCase(listLabels.rejected, (state, action) => {
+        state.loading = false;
+        console.warn(`Loading Labels failed. ${action.error.message}`);
+      });
   },
 });

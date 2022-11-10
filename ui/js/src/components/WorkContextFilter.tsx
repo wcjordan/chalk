@@ -20,7 +20,7 @@ const WorkContextFilter: React.FC<Props> = function (props: Props) {
   const { activeWorkContext, setWorkContext, workContexts } = props;
 
   const setWorkContextCb = useCallback(
-    (workContext) => {
+    (workContext: string) => {
       setWorkContext(workContext);
     },
     [setWorkContext],

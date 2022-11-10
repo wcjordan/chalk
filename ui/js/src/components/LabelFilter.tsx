@@ -22,7 +22,7 @@ const LabelFilter: React.FC<Props> = function (props: Props) {
   const { filterByLabels, labels, selectedLabels } = props;
 
   const filterByLabelCb = useCallback(
-    (label) => {
+    (label: string) => {
       const newLabels = Array.from(selectedLabels);
       const labelIndex = newLabels.indexOf(label);
       if (labelIndex > -1) {
