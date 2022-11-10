@@ -3,6 +3,10 @@ def HELM_DEPLOY_NAME = null
 
 pipeline {
     agent none
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+    }
     stages {
         stage('Build') {
             parallel {
