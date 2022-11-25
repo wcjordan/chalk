@@ -59,7 +59,10 @@ fix-imports:
 # Publish Expo
 .PHONY: publish
 publish:
-	cd js; npx expo login --non-interactive -u $$EXPO_USERNAME && npx expo publish --non-interactive
+	cd js; CI=1 npx eas-cli build --platform android --profile preview
+# 		npx eas-cli login -u $$EXPO_USERNAME -p $$EXPO_CLI_PASSWORD && \
+# 		npx eas secret:push --force --scope project --env-file ../../$(PROD_ENV_FILE) && \
+
 
 # Hard clean which fixes some react-native issues
 # Use yarn install and yarn start --clean after this

@@ -1,5 +1,4 @@
 import color from 'color';
-import Constants from 'expo-constants';
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
@@ -7,12 +6,14 @@ import { init as sentryInit } from 'sentry-expo';
 
 import App from './src/App';
 import getStore from './src/redux/store';
+import { getEnvFlags } from './src/helpers';
 
+const envFlags = getEnvFlags();
 sentryInit({
-  dsn: Constants.manifest.extra.SENTRY_DSN,
+  dsn: envFlags.SENTRY_DSN,
   enableInExpoDevelopment: true,
-  environment: Constants.manifest.extra.ENVIRONMENT,
-  debug: Constants.manifest.extra.DEBUG == 'true',
+  environment: envFlags.ENVIRONMENT,
+  debug: envFlags.DEBUG == 'true',
 });
 
 // https://callstack.github.io/react-native-paper/theming.html

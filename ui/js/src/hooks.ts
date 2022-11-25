@@ -1,10 +1,11 @@
-import Constants from 'expo-constants';
 import { useEffect } from 'react';
+
 import getStore from './redux/store';
 import { listLabels, listTodos } from './redux/reducers';
+import { getEnvFlags } from './helpers';
 
 export function useDataLoader() {
-  if (Constants.manifest?.extra?.ENVIRONMENT === 'test') {
+  if (getEnvFlags().ENVIRONMENT === 'test') {
     return;
   }
 
