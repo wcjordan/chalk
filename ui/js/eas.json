@@ -14,7 +14,7 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "ENVIRONMENT": "staging",
+        "ENVIRONMENT": "prod",
         "DEBUG": "false"
       }
     },
