@@ -11,7 +11,7 @@ import { Surface, TouchableRipple } from 'react-native-paper';
 import React, { useCallback, useEffect } from 'react';
 import { maybeCompleteAuthSession } from 'expo-web-browser';
 import { useAuthRequest } from 'expo-auth-session/providers/google';
-// import { useFonts, Roboto_500Medium } from '@expo-google-fonts/roboto';
+import { useFonts, Roboto_500Medium } from '@expo-google-fonts/roboto';
 
 import GoogleIcon from '../../assets/g-logo.png';
 import { getEnvFlags } from '../helpers';
@@ -56,6 +56,7 @@ const styles = StyleSheet.create<Style>({
   },
   textStyle: {
     color: 'white',
+    fontFamily: 'Roboto_500Medium',
     marginLeft: 8,
     marginRight: 8,
   },
@@ -71,9 +72,9 @@ const styles = StyleSheet.create<Style>({
 const Login: React.FC<Props> = function (props: Props) {
   const { addNotification, completeAuthentication } = props;
 
-  // const [fontsLoaded] = useFonts({
-  //   Roboto_500Medium,
-  // });
+  const [fontsLoaded] = useFonts({
+    Roboto_500Medium,
+  });
 
   const [, response, promptAsync] = useAuthRequest(
     {
@@ -109,9 +110,9 @@ const Login: React.FC<Props> = function (props: Props) {
     }
   }, [response]);
 
-  // if (!fontsLoaded) {
-  //   return null; // TODO loading indicator
-  // }
+  if (!fontsLoaded) {
+    return null; // TODO loading indicator
+  }
 
   return (
     <View style={styles.wrapperStyle}>

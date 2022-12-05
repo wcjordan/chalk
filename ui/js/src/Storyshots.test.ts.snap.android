@@ -25611,6 +25611,7 @@ exports[`Storyshots Login Default Login 1`] = `
           style={
             {
               "color": "white",
+              "fontFamily": "Roboto_500Medium",
               "marginLeft": 8,
               "marginRight": 8,
             }
