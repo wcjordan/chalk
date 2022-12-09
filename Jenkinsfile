@@ -224,11 +224,7 @@ pipeline {
                                 }
                             }
                         }
-                    }
-                    post {
-                        always {
-                            browserStackReportPublisher 'automate'
-                        }
+                        browserStackReportPublisher 'automate'
                     }
                 }
             }
