@@ -13,6 +13,7 @@
     "expo-device": "~4.3.0",
     "expo-font": "~10.2.0",
     "expo-random": "~12.3.0",
+    "expo-splash-screen": "~0.16.2",
     "expo-updates": "~0.14.7",
     "expo-web-browser": "~11.0.0",
     "fetch-mock-jest": "^1.5.1",
