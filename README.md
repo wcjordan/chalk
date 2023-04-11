@@ -63,10 +63,9 @@ Fill in EXPO_CLIENT_ID in .env & prod.env
 Name: chalk-staging-android  
 Package Name: com.<DOMAIN_NAME w/o .com>.chalk  
 SHA-1 Certificate Fingerprint: get from running `npx eas credentials` in ui/js directory  
+Store client id in ANDROID_CLIENT_ID .prod.env
 
-Store client id in Expo  
-`npx eas secret:create --scope project --name ANDROID_CLIENT_ID --value <CLIENT_ID> --type string`  
-
+4) OAuth refresh token for Playwright tests
 Also run a dev server and login using a tester account to capture the refresh token for Jenkins integration tests to use.  
 Fill in CHALK_OAUTH_REFRESH_TOKEN in .env and also the chalk_oauth_refresh_token variable in Terraform Cloud.  
 Generating this token is tricky since it is never sent to the browser.  
