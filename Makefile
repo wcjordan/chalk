@@ -79,12 +79,12 @@ publish:
 # To delete: helm delete chalk-prod
 .PHONY: deploy
 deploy: build
-	if [ $$(kubectl config current-context) != $(K8S_CONTEXT) ]; then \
+	if [ "$$(kubectl config current-context)" != "$(K8S_CONTEXT)" ]; then \
 		exit 1; \
 	fi
 
-	if [ $(ENVIRONMENT) = PROD ]; then \
-		$(MAKE) -C ui publish
+	if [ "$(ENVIRONMENT)" = "PROD" ]; then \
+		$(MAKE) -C ui publish; \
 	fi
 
 	docker push $(SERVER_IMAGE):local-latest
