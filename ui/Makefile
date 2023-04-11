@@ -63,7 +63,6 @@ publish:
 	npx eas secret:push --force --scope project --env-file ../../$(PROD_ENV_FILE) && \
 	CI=1 npx eas-cli build --platform android --profile preview
 
-
 # Hard clean which fixes some react-native issues
 # Use yarn install and yarn start --clean after this
 .PHONY: clean
