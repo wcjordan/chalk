@@ -21,7 +21,7 @@ jest.mock('./redux/store', () => ({
 }));
 
 jest.mock('expo-constants', () => ({
-  manifest: {
+  expoConfig: {
     extra: {
       ENVIRONMENT: 'not_test',
     },

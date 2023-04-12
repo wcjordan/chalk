@@ -6,6 +6,7 @@ else
   PROD_ENV_FILE = .prod.env
 endif
 
+export PROD_ENV_FILE
 include $(PROD_ENV_FILE)
 
 IMAGE_REPO = gcr.io/$(GCP_PROJECT)
@@ -69,26 +70,21 @@ format:
 	$(MAKE) -C ui format
 	$(MAKE) -C server format
 
+
+.PHONY: publish
+publish:
+	$(MAKE) -C ui publish
+
 # Deploy to production
 # To delete: helm delete chalk-prod
 .PHONY: deploy
 deploy: build
-	if [ $$(kubectl config current-context) != $(K8S_CONTEXT) ]; then \
+	if [ "$$(kubectl config current-context)" != "$(K8S_CONTEXT)" ]; then \
 		exit 1; \
 	fi
 
-	if [ $(ENVIRONMENT) = PROD ]; then \
-		docker run --env-file $(PROD_ENV_FILE) --env ENVIRONMENT=prod --env DEBUG=false \
-			--rm -t -w / \
-			-v $(PWD)/ui/Makefile:/Makefile \
-			-v $(PWD)/ui/js/src:/js/src \
-			-v $(PWD)/ui/js/web:/js/web \
-			-v $(PWD)/ui/js/app.config.js:/js/app.config.js \
-			-v $(PWD)/ui/js/App.tsx:/js/App.tsx \
-			-v $(PWD)/ui/js/assets:/js/assets \
-			-v $(PWD)/ui/js/babel.config.js:/js/babel.config.js \
-			$(UI_IMAGE_BASE):local-latest \
-			make publish; \
+	if [ "$(ENVIRONMENT)" = "PROD" ]; then \
+		$(MAKE) -C ui publish; \
 	fi
 
 	docker push $(SERVER_IMAGE):local-latest

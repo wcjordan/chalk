@@ -8,12 +8,13 @@ import {
   ViewStyle,
 } from 'react-native';
 import { Surface, TouchableRipple } from 'react-native-paper';
-import Constants from 'expo-constants';
 import React, { useCallback, useEffect } from 'react';
 import { maybeCompleteAuthSession } from 'expo-web-browser';
 import { useAuthRequest } from 'expo-auth-session/providers/google';
 import { useFonts, Roboto_500Medium } from '@expo-google-fonts/roboto';
+
 import GoogleIcon from '../../assets/g-logo.png';
+import { getEnvFlags } from '../helpers';
 
 maybeCompleteAuthSession();
 
@@ -75,10 +76,22 @@ const Login: React.FC<Props> = function (props: Props) {
     Roboto_500Medium,
   });
 
-  const [, response, promptAsync] = useAuthRequest({
-    expoClientId: Constants.manifest?.extra?.EXPO_CLIENT_ID,
-  });
-  const promptLogin = useCallback(() => promptAsync(), [promptAsync]);
+  const [, response, promptAsync] = useAuthRequest(
+    {
+      expoClientId: getEnvFlags().EXPO_CLIENT_ID,
+      androidClientId: getEnvFlags().ANDROID_CLIENT_ID,
+    },
+    {
+      projectNameForProxy: '@flipperkid/chalk',
+    },
+  );
+  const promptLogin = useCallback(
+    () =>
+      promptAsync({
+        projectNameForProxy: '@flipperkid/chalk',
+      }),
+    [promptAsync],
+  );
 
   useEffect(() => {
     if (response?.type === 'success') {

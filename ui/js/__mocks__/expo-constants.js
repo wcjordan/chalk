@@ -1,5 +1,5 @@
 module.exports = {
-  manifest: {
+  expoConfig: {
     extra: {
       ENVIRONMENT: 'test',
     },

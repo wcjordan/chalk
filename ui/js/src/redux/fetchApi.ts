@@ -1,6 +1,7 @@
-import Constants from 'expo-constants';
 import Cookies from 'js-cookie';
 import { Platform } from 'react-native';
+
+import { getEnvFlags } from '../helpers';
 import { ReduxState } from './types';
 
 const webCsrfToken = Cookies.get('csrftoken');
@@ -71,7 +72,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 export function getWsRoot(): string {
   const subdomain =
-    Constants.manifest?.extra?.ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
+    getEnvFlags().ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
   const wsroot = Platform.select({
     native: `http://${subdomain}.flipperkid.com/`,
     default: '',
