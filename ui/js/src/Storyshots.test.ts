@@ -1,5 +1,6 @@
 import './__mocks__/matchMediaMock';
 import initStoryshots from '@storybook/addon-storyshots';
+jest.mock('expo-font');
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
