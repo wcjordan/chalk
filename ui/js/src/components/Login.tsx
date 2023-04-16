@@ -63,7 +63,7 @@ const styles = StyleSheet.create<Style>({
   wrapperStyle: {
     display: 'flex',
     flexDirection: 'row',
-    paddingTop: 32,
+    paddingTop: 48,
     justifyContent: 'center',
   },
 });
@@ -121,7 +121,6 @@ const Login: React.FC<Props> = function (props: Props) {
           accessibilityRole="button"
           accessibilityState={{ disabled: false }}
           borderless
-          delayPressIn={0}
           disabled={false}
           onPress={promptLogin}
           rippleColor="rgba(0, 0, 0, 0.32)"

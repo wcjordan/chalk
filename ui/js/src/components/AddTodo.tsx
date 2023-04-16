@@ -4,7 +4,8 @@ import { TextInput } from 'react-native-paper';
 
 interface Style {
   addTodoView: ViewStyle;
-  addTodoInput: TextStyle;
+  addTodoInput: ViewStyle;
+  addTodoInputContent: TextStyle;
 }
 
 const styles = StyleSheet.create<Style>({
@@ -13,10 +14,15 @@ const styles = StyleSheet.create<Style>({
     maxHeight: 104,
   },
   addTodoInput: {
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    paddingBottom: 4,
-    paddingTop: 4,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+  },
+  addTodoInputContent: {
+    fontFamily: 'sans-serif',
+    paddingBottom: 8,
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 8,
   },
 });
 
@@ -33,6 +39,7 @@ const AddTodo: React.FC<Props> = function (props: Props) {
     <View style={styles.addTodoView}>
       <TextInput
         blurOnSubmit={true}
+        contentStyle={styles.addTodoInputContent}
         multiline={true}
         numberOfLines={3}
         onChangeText={setTextValue}
