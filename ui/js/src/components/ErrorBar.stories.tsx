@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ErrorBar from './ErrorBar';
 
 const styles = StyleSheet.create({
@@ -7,9 +8,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     height: '100%',
+    paddingTop: '60px',
+    padddingBottom: '40px',
   },
 });
-const wrapper = (snackbar) => <View style={styles.wrapper}>{snackbar}</View>;
+const wrapper = (snackbar) => (
+  <SafeAreaProvider>
+    <View style={styles.wrapper}>{snackbar}</View>
+  </SafeAreaProvider>
+);
 
 export default {
   title: 'Error Bar',

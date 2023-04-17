@@ -1,4 +1,5 @@
 import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppLayout } from './App';
 import { Todo, TodoPatch } from './redux/types';
 
@@ -71,23 +72,25 @@ const defaultProps = {
   },
 };
 
+const wrapper = (appLayout) => <SafeAreaProvider>{appLayout}</SafeAreaProvider>;
+
 export default {
   title: 'App Layout',
   component: AppLayout,
 };
-export const DefaultLayout: React.FC = () => (
-  <AppLayout {...defaultProps} todos={[]} />
-);
+export const DefaultLayout: React.FC = () =>
+  wrapper(<AppLayout {...defaultProps} todos={[]} />);
 
-export const ListTodosLayout: React.FC = () => <AppLayout {...defaultProps} />;
+export const ListTodosLayout: React.FC = () =>
+  wrapper(<AppLayout {...defaultProps} />);
 
 const labelPickerWorkspace = Object.assign({}, defaultProps.workspace, {
   labelTodoId: 1,
 });
-export const LabelPickerLayout: React.FC = () => (
-  <AppLayout {...defaultProps} workspace={labelPickerWorkspace} />
-);
+export const LabelPickerLayout: React.FC = () =>
+  wrapper(<AppLayout {...defaultProps} workspace={labelPickerWorkspace} />);
 
-export const NotificationLayout: React.FC = () => (
-  <AppLayout {...defaultProps} notificationQueue={['Error logging in...']} />
-);
+export const NotificationLayout: React.FC = () =>
+  wrapper(
+    <AppLayout {...defaultProps} notificationQueue={['Error logging in...']} />,
+  );

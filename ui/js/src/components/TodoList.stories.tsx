@@ -1,4 +1,5 @@
 import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Todo, TodoPatch } from '../redux/types';
 import { workContexts } from '../redux/workspaceSlice';
 import TodoList from './TodoList';
@@ -73,16 +74,18 @@ const defaultProps = {
   },
 };
 
+const wrapper = (component) => <SafeAreaProvider>{component}</SafeAreaProvider>;
+
 export default {
   title: 'Todo List',
   component: TodoList,
 };
-export const DefaultTodoList: React.FC = () => <TodoList {...defaultProps} />;
+export const DefaultTodoList: React.FC = () =>
+  wrapper(<TodoList {...defaultProps} />);
 
 const labelPickerWorkspace = Object.assign({}, defaultProps.workspace, {
   editTodoId: null,
   labelTodoId: 3,
 });
-export const LabelPickerOverlay: React.FC = () => (
-  <TodoList {...defaultProps} workspace={labelPickerWorkspace} />
-);
+export const LabelPickerOverlay: React.FC = () =>
+  wrapper(<TodoList {...defaultProps} workspace={labelPickerWorkspace} />);
