@@ -219,7 +219,7 @@ pipeline {
                         browserstack(credentialsId: 'browserstack_key') {
                             container('jenkins-worker-python') {
                                 dir('tests') {
-                                    sh 'pip install "playwright==1.25.1" "pytest==7.2.0"'
+                                    sh 'pip install "playwright==1.32.1" "pytest==7.3.1"'
                                     sh "pytest . --server_domain ${SERVER_IP}"
                                 }
                             }
