@@ -68,8 +68,7 @@ def page(request, playwright, todo_prefix, test_name, server_domain):
 
         'browserstack.username': username,
         'browserstack.accessKey': access_key,
-        'client.playwrightVersion': '1.25.1',
-        'browserstack.playwrightVersion': '1.25.1',
+        'browserstack.playwrightVersion': '1.latest',
     }
 
     browser = None
