@@ -28,7 +28,7 @@ def test_todos_partial_edit(page, todo_prefix):
     second_todo.click()
 
     # Wait for and verify that the 1st todo has a warning icon and shows original description
-    xpath_selector = f'xpath=//div[text()="{todo1_description}"]/../following-sibling::div/following-sibling::div/div/div[text()="{WARNING_ICON_TEXT}"]'
+    xpath_selector = f'xpath=//div[text()="{todo1_description}"]/../following-sibling::div/following-sibling::div/button/div[text()="{WARNING_ICON_TEXT}"]'
     page.locator(xpath_selector).wait_for()
     first_todo = find_todo(page, todo1_description)
     warning_icon = first_todo.locator(f'text="{WARNING_ICON_TEXT}"')

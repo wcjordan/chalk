@@ -24,8 +24,14 @@ pipeline {
                             steps {
                                 container('dind') {
                                     withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
-                                        sh "docker build -f ui/Dockerfile --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' -t gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG} ui"
-                                        sh "docker push gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG}"
+                                        sh """
+                                            while (! docker stats --no-stream ); do
+                                                echo "Waiting for Docker to launch..."
+                                                sleep 1
+                                            done
+                                            docker build -f ui/Dockerfile --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' -t gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG} ui
+                                            docker push gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG}
+                                        """
                                     }
                                 }
                             }
@@ -82,8 +88,14 @@ pipeline {
                             steps {
                                 container('dind') {
                                     withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
-                                        sh "docker build -f server/Dockerfile --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' -t gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG} server"
-                                        sh "docker push gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG}"
+                                        sh """
+                                            while (! docker stats --no-stream ); do
+                                                echo "Waiting for Docker to launch..."
+                                                sleep 1
+                                            done
+                                            docker build -f server/Dockerfile --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' -t gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG} server
+                                            docker push gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG}
+                                        """
                                     }
                                 }
                             }
@@ -219,7 +231,7 @@ pipeline {
                         browserstack(credentialsId: 'browserstack_key') {
                             container('jenkins-worker-python') {
                                 dir('tests') {
-                                    sh 'pip install "playwright==1.25.1" "pytest==7.2.0"'
+                                    sh 'pip install "playwright==1.32.1" "pytest==7.3.1"'
                                     sh "pytest . --server_domain ${SERVER_IP}"
                                 }
                             }

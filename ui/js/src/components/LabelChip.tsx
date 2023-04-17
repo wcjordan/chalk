@@ -18,7 +18,10 @@ const styles = StyleSheet.create<Style>({
     backgroundColor: '#a3d5ffff',
   },
   chipTextStyle: {
+    fontFamily: 'sans-serif',
     marginBottom: 0,
+    marginLeft: 8,
+    marginRight: 8,
     marginTop: 0,
   },
 });

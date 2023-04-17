@@ -84,7 +84,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
         paddingTop: 20,
       },
     }).top;
-    containerStyle = StyleSheet.compose(containerStyle, topStyle);
+    containerStyle = [containerStyle, topStyle];
   }
 
   return (

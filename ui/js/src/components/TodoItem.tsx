@@ -10,7 +10,6 @@ import {
 import {
   Card,
   Checkbox,
-  Colors,
   IconButton,
   Text,
   TextInput,
@@ -22,8 +21,9 @@ interface Style {
   activeCard: ViewStyle & { cursor?: string };
   card: ViewStyle & { cursor?: string };
   cardContent: ViewStyle;
-  checkbox: ViewStyle;
+  cardPadding: ViewStyle;
   editTodoInput: TextStyle;
+  iconButton: ViewStyle;
   spacer: ViewStyle;
   todoDescription: TextStyle;
   todoDescriptionText: TextStyle;
@@ -32,17 +32,15 @@ interface Style {
 
 const cardStyle: ViewStyle & { cursor?: string } = {
   borderRadius: 0,
+  borderColor: '#0000001f',
 };
 if (Platform.OS === 'web') {
   cardStyle['cursor'] = 'pointer';
 }
-const activeCardStyle = Object.assign(
-  {
-    borderColor: '#a3d5ffff',
-    borderLeftWidth: 12,
-  },
-  cardStyle,
-);
+const activeCardStyle = Object.assign({}, cardStyle, {
+  borderColor: '#a3d5ffff',
+  borderLeftWidth: 12,
+});
 
 const styles = StyleSheet.create<Style>({
   activeCard: activeCardStyle,
@@ -51,8 +49,11 @@ const styles = StyleSheet.create<Style>({
     flexDirection: 'row',
     width: '100%',
   },
-  checkbox: {
-    paddingTop: 4,
+  cardPadding: {
+    paddingBottom: 8,
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 8,
   },
   editTodoInput: {
     borderWidth: 0,
@@ -60,6 +61,9 @@ const styles = StyleSheet.create<Style>({
     marginLeft: 9,
     padding: 0,
     width: '100%',
+  },
+  iconButton: {
+    margin: 0,
   },
   spacer: {
     flexGrow: 1,
@@ -70,6 +74,7 @@ const styles = StyleSheet.create<Style>({
     flexBasis: 0,
   },
   todoDescriptionText: {
+    fontFamily: 'sans-serif',
     fontSize: 16,
   },
   todoLabelsContent: {
@@ -157,8 +162,9 @@ const TodoItem: React.FC<Props> = function (props: Props) {
       <IconButton
         key="cancel"
         icon="cancel"
-        color={Colors.grey800}
+        iconColor="#424242"
         size={20}
+        style={styles.iconButton}
         onPress={cancelEdit}
         testID="cancel-edit"
       />,
@@ -177,32 +183,35 @@ const TodoItem: React.FC<Props> = function (props: Props) {
         <View style={styles.spacer} />
       </View>,
       <IconButton
-        color="#a3d5ffff"
+        iconColor="#a3d5ffff"
         icon="tag-plus"
         key="label"
         onPress={labelTodo}
         size={20}
+        style={styles.iconButton}
         testID="label-todo"
       />,
       <IconButton
-        color={Colors.red500}
+        iconColor="#f44336"
         icon="delete-outline"
         key="delete"
         onPress={archiveTodo}
         size={20}
+        style={styles.iconButton}
         testID="delete-todo"
       />,
     ];
     if (editingValue !== null) {
       content.push(
+        // TODO figure out showing accessibility label on hover & long press
         <IconButton
-          color={Colors.orange300}
+          accessibilityLabel={`Uncommitted edit: ${editingValue}`}
+          iconColor="#ffb74d"
           icon="alert-outline"
           key="warn"
+          style={styles.iconButton}
           size={20}
         />,
-        // title={`Uncommitted edit: ${editingValue}`}
-        // TODO w/ onLongPress
       );
     }
   }
@@ -225,9 +234,9 @@ const TodoItem: React.FC<Props> = function (props: Props) {
       style={labeling ? styles.activeCard : styles.card}
       mode="outlined"
     >
-      <Card.Content>
+      <Card.Content style={styles.cardPadding}>
         <View style={styles.cardContent}>
-          <View style={styles.checkbox}>
+          <View>
             <Checkbox.Android
               status={todo.completed ? 'checked' : 'unchecked'}
               onPress={toggleTodo}
