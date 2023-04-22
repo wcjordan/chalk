@@ -10,6 +10,10 @@ export const workContexts: { [key: string]: WorkContext } = {
     displayName: 'Inbox',
     labels: ['Unlabeled'],
   },
+  urgent: {
+    displayName: 'Urgent',
+    labels: ['urgent'],
+  },
   chores: {
     displayName: 'Chores',
     labels: ['errand'],
@@ -31,7 +35,7 @@ export const workContexts: { [key: string]: WorkContext } = {
 const initialState: WorkspaceState = {
   csrfToken: null,
   labelTodoId: null,
-  filterLabels: [],
+  filterLabels: ['Unlabeled'],
   loggedIn: Platform.OS === 'web',
   editTodoId: null,
 };
