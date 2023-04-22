@@ -6,7 +6,7 @@ describe('workspace reducer', function () {
     expect(workspaceSlice.reducer(undefined, {})).toEqual({
       csrfToken: null,
       editTodoId: null,
-      filterLabels: [],
+      filterLabels: ['Unlabeled'],
       labelTodoId: null,
       loggedIn: false,
     });
