@@ -1533,7 +1533,7 @@ exports[`Storyshots App Layout Default Layout 1`] = `
         collapsable={false}
         style={
           {
-            "backgroundColor": "#a3d5ffff",
+            "backgroundColor": "#ffb347ff",
             "borderColor": "rgba(121, 116, 126, 1)",
             "borderRadius": 8,
             "borderStyle": "solid",
@@ -1545,7 +1545,7 @@ exports[`Storyshots App Layout Default Layout 1`] = `
             "transform": undefined,
           }
         }
-        testID="chip-active-container"
+        testID="chip-inverted-container"
       >
         <View
           accessibilityRole="button"
@@ -1594,7 +1594,7 @@ exports[`Storyshots App Layout Default Layout 1`] = `
               ],
             ]
           }
-          testID="chip-active"
+          testID="chip-inverted"
         >
           <View
             style={
@@ -4542,7 +4542,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
         collapsable={false}
         style={
           {
-            "backgroundColor": "#a3d5ffff",
+            "backgroundColor": "#ffb347ff",
             "borderColor": "rgba(121, 116, 126, 1)",
             "borderRadius": 8,
             "borderStyle": "solid",
@@ -4554,7 +4554,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             "transform": undefined,
           }
         }
-        testID="chip-active-container"
+        testID="chip-inverted-container"
       >
         <View
           accessibilityRole="button"
@@ -4603,7 +4603,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
               ],
             ]
           }
-          testID="chip-active"
+          testID="chip-inverted"
         >
           <View
             style={
@@ -13951,7 +13951,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
         collapsable={false}
         style={
           {
-            "backgroundColor": "#a3d5ffff",
+            "backgroundColor": "#ffb347ff",
             "borderColor": "rgba(121, 116, 126, 1)",
             "borderRadius": 8,
             "borderStyle": "solid",
@@ -13963,7 +13963,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
             "transform": undefined,
           }
         }
-        testID="chip-active-container"
+        testID="chip-inverted-container"
       >
         <View
           accessibilityRole="button"
@@ -14012,7 +14012,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
               ],
             ]
           }
-          testID="chip-active"
+          testID="chip-inverted"
         >
           <View
             style={
@@ -21377,7 +21377,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
         collapsable={false}
         style={
           {
-            "backgroundColor": "#a3d5ffff",
+            "backgroundColor": "#ffb347ff",
             "borderColor": "rgba(121, 116, 126, 1)",
             "borderRadius": 8,
             "borderStyle": "solid",
@@ -21389,7 +21389,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
             "transform": undefined,
           }
         }
-        testID="chip-active-container"
+        testID="chip-inverted-container"
       >
         <View
           accessibilityRole="button"
@@ -21438,7 +21438,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
               ],
             ]
           }
-          testID="chip-active"
+          testID="chip-inverted"
         >
           <View
             style={
@@ -28886,7 +28886,7 @@ exports[`Storyshots Label Filter Default Label Filter 1`] = `
     collapsable={false}
     style={
       {
-        "backgroundColor": "#a3d5ffff",
+        "backgroundColor": "#ffb347ff",
         "borderColor": "rgba(121, 116, 126, 1)",
         "borderRadius": 8,
         "borderStyle": "solid",
@@ -28898,7 +28898,7 @@ exports[`Storyshots Label Filter Default Label Filter 1`] = `
         "transform": undefined,
       }
     }
-    testID="chip-active-container"
+    testID="chip-inverted-container"
   >
     <View
       accessibilityRole="button"
@@ -28947,7 +28947,7 @@ exports[`Storyshots Label Filter Default Label Filter 1`] = `
           ],
         ]
       }
-      testID="chip-active"
+      testID="chip-inverted"
     >
       <View
         style={
@@ -39071,7 +39071,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
       collapsable={false}
       style={
         {
-          "backgroundColor": "#a3d5ffff",
+          "backgroundColor": "#ffb347ff",
           "borderColor": "rgba(121, 116, 126, 1)",
           "borderRadius": 8,
           "borderStyle": "solid",
@@ -39083,7 +39083,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
           "transform": undefined,
         }
       }
-      testID="chip-active-container"
+      testID="chip-inverted-container"
     >
       <View
         accessibilityRole="button"
@@ -39132,7 +39132,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
             ],
           ]
         }
-        testID="chip-active"
+        testID="chip-inverted"
       >
         <View
           style={
@@ -49492,7 +49492,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
         collapsable={false}
         style={
           {
-            "backgroundColor": "#a3d5ffff",
+            "backgroundColor": "#ffb347ff",
             "borderColor": "rgba(121, 116, 126, 1)",
             "borderRadius": 8,
             "borderStyle": "solid",
@@ -49504,7 +49504,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
             "transform": undefined,
           }
         }
-        testID="chip-active-container"
+        testID="chip-inverted-container"
       >
         <View
           accessibilityRole="button"
@@ -49553,7 +49553,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
               ],
             ]
           }
-          testID="chip-active"
+          testID="chip-inverted"
         >
           <View
             style={

@@ -19,7 +19,7 @@ const labels = [
 ];
 const selectedLabels = {
   '5 minutes': FILTER_STATUS.Active,
-  work: FILTER_STATUS.Active,
+  work: FILTER_STATUS.Inverted,
   home: FILTER_STATUS.Active,
   'low-energy': FILTER_STATUS.Active,
   mobile: FILTER_STATUS.Active,
