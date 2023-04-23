@@ -1,6 +1,7 @@
 import pytest
 
-from helpers.label_helpers import (add_labels, clear_label_filters, dismiss_add_label_modal, get_label_filter_status, toggle_label_filter)
+from helpers.label_helpers import (add_labels, clear_label_filters, dismiss_add_label_modal,
+                                   get_label_filter_status, toggle_label_filter)
 from helpers.todo_helpers import (add_todo, find_todos, wait_for_todo,
                                   wait_for_todo_to_disappear)
 

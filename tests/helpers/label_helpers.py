@@ -59,7 +59,7 @@ def toggle_label_filter(page, label):
 
 
 def get_label_filter_status(page, label):
-    chip = page.locator('[data-testid="label-filter"]', has_text=label)
+    chip = page.locator('[data-testid="label-filter"] div').filter(has=page.locator(f':text-is("{label}")'))
     if chip.locator('[data-testid="chip-active"]').is_visible():
         return 'Active'
     if chip.locator('[data-testid="chip-inverted"]').is_visible():
