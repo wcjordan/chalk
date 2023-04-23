@@ -213,7 +213,7 @@ pipeline {
                                             until [ ! -z \$html_ready ] && [ \$html_ready -eq 302 ]
                                             do
                                                 sleep 5
-                                                html_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/)
+                                                html_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/ || true)
                                             done
                                         """,
                                         returnStdout: true
