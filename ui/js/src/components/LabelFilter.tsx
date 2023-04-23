@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import { FILTER_STATUS, FilterState } from '../redux/types';
+import { FilterState } from '../redux/types';
 import LabelChip from './LabelChip';
 
 interface Style {
@@ -19,25 +19,13 @@ const styles = StyleSheet.create<Style>({
 
 const LabelFilter: React.FC<Props> = function (props: Props) {
   // TODO (jordan) memoize the conversion
-  const { filterByLabels, labels, selectedLabels } = props;
+  const { labels, selectedLabels, toggleLabel } = props;
 
   const filterByLabelCb = useCallback(
     (label: string) => {
-      const newLabels = Object.assign({}, selectedLabels);
-      const prevStatus = newLabels[label];
-      if (prevStatus === FILTER_STATUS.Active) {
-        // Invert existing item
-        newLabels[label] = FILTER_STATUS.Inverted;
-      } else if (prevStatus === FILTER_STATUS.Inverted) {
-        // Delete inverted item
-        delete newLabels[label];
-      } else {
-        newLabels[label] = FILTER_STATUS.Active;
-      }
-
-      filterByLabels(newLabels);
+      toggleLabel(label);
     },
-    [filterByLabels, selectedLabels],
+    [toggleLabel],
   );
 
   const chips = labels.map((label) => (
@@ -62,7 +50,7 @@ const LabelFilter: React.FC<Props> = function (props: Props) {
 };
 
 type Props = {
-  filterByLabels: (labels: FilterState) => void;
+  toggleLabel: (label: string) => void;
   labels: string[];
   selectedLabels: FilterState;
 };

@@ -7,7 +7,6 @@ import Login from './components/Login';
 import TodoList from './components/TodoList';
 import {
   Label,
-  FilterState,
   ReduxState,
   Todo,
   TodoPatch,
@@ -18,10 +17,10 @@ import {
   completeAuthentication,
   createTodo,
   dismissNotification,
-  filterByLabels,
   setEditTodoId,
   setLabelTodoId,
   setWorkContext,
+  toggleLabel,
   updateTodo,
   updateTodoLabels,
 } from './redux/reducers';
@@ -125,7 +124,6 @@ type LayoutProps = {
   completeAuthentication: (token: string) => void;
   createTodo: (description: string) => void;
   dismissNotification: () => void;
-  filterByLabels: (labels: FilterState) => void;
   filteredTodos: Todo[];
   labels: Label[];
   notificationQueue: string[];
@@ -133,6 +131,7 @@ type LayoutProps = {
   setEditTodoId: (id: number | null) => void;
   setLabelTodoId: (id: number | null) => void;
   setWorkContext: (workContext: string) => void;
+  toggleLabel: (label: string) => void;
   updateTodo: (todoPatch: TodoPatch) => void;
   updateTodoLabels: (labels: string[]) => void;
   workspace: WorkspaceState;
@@ -150,10 +149,10 @@ const mapDispatchToProps = {
   completeAuthentication,
   createTodo,
   dismissNotification,
-  filterByLabels,
   setEditTodoId,
   setLabelTodoId,
   setWorkContext,
+  toggleLabel,
   updateTodo,
   updateTodoLabels,
 };

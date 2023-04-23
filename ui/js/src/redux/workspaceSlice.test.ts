@@ -15,26 +15,64 @@ describe('workspace reducer', function () {
     });
   });
 
-  describe('workspace/filterByLabels', function () {
-    it('should update the filterLabels', function () {
+  describe('workspace/toggleLabel', function () {
+    it('should toggle a new label to active', function () {
       const result = workspaceSlice.reducer(
         {
           filterLabels: {
-            old: FILTER_STATUS.Active,
+            other: FILTER_STATUS.Active,
           },
         },
         {
-          type: 'workspace/filterByLabels',
-          payload: {
-            new: FILTER_STATUS.Inverted,
-            otherNew: FILTER_STATUS.Active,
-          },
+          type: 'workspace/toggleLabel',
+          payload: 'new',
         },
       );
       expect(result).toEqual({
         filterLabels: {
-          new: FILTER_STATUS.Inverted,
-          otherNew: FILTER_STATUS.Active,
+          new: FILTER_STATUS.Active,
+          other: FILTER_STATUS.Active,
+        },
+      });
+    });
+
+    it('should toggle an active label to inverted', function () {
+      const result = workspaceSlice.reducer(
+        {
+          filterLabels: {
+            activeLabel: FILTER_STATUS.Active,
+            other: FILTER_STATUS.Active,
+          },
+        },
+        {
+          type: 'workspace/toggleLabel',
+          payload: 'activeLabel',
+        },
+      );
+      expect(result).toEqual({
+        filterLabels: {
+          activeLabel: FILTER_STATUS.Inverted,
+          other: FILTER_STATUS.Active,
+        },
+      });
+    });
+
+    it('should toggle an inverted label to unset', function () {
+      const result = workspaceSlice.reducer(
+        {
+          filterLabels: {
+            invertedLabel: FILTER_STATUS.Inverted,
+            other: FILTER_STATUS.Active,
+          },
+        },
+        {
+          type: 'workspace/toggleLabel',
+          payload: 'invertedLabel',
+        },
+      );
+      expect(result).toEqual({
+        filterLabels: {
+          other: FILTER_STATUS.Active,
         },
       });
     });

@@ -59,9 +59,6 @@ export default createSlice({
   name: 'workspace',
   initialState,
   reducers: {
-    filterByLabels: (state, action) => {
-      state.filterLabels = Object.assign({}, action.payload);
-    },
     logIn: (state, action) => {
       state.loggedIn = action.payload.loggedIn;
       state.csrfToken = action.payload.csrfToken;
@@ -77,6 +74,23 @@ export default createSlice({
       if (workContext) {
         state.filterLabels = Object.assign({}, workContext.labels);
       }
+    },
+    toggleLabel: (state, action) => {
+      const newLabels = Object.assign({}, state.filterLabels);
+
+      const toggledLabel = action.payload;
+      const prevStatus = newLabels[toggledLabel];
+      if (prevStatus === FILTER_STATUS.Active) {
+        // Invert existing item
+        newLabels[toggledLabel] = FILTER_STATUS.Inverted;
+      } else if (prevStatus === FILTER_STATUS.Inverted) {
+        // Delete inverted item
+        delete newLabels[toggledLabel];
+      } else {
+        newLabels[toggledLabel] = FILTER_STATUS.Active;
+      }
+
+      state.filterLabels = newLabels;
     },
   },
 });

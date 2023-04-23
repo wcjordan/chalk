@@ -11,7 +11,6 @@ import {
 
 import {
   Label,
-  FilterState,
   Todo,
   TodoPatch,
   WorkContext,
@@ -49,12 +48,12 @@ const TodoList: React.FC<Props> = function (props: Props) {
     activeWorkContext,
     createTodo,
     labels,
-    filterByLabels,
     selectedPickerLabels,
     setEditTodoId,
     setLabelTodoId,
     setWorkContext,
     todos,
+    toggleLabel,
     updateTodo,
     updateTodoLabels,
     workContexts,
@@ -100,7 +99,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
         <LabelFilter
           labels={labelNames}
           selectedLabels={filterLabels}
-          filterByLabels={filterByLabels}
+          toggleLabel={toggleLabel}
         />
         <ScrollView testID="todo-list">{todoViews}</ScrollView>
       </View>
@@ -118,13 +117,13 @@ const TodoList: React.FC<Props> = function (props: Props) {
 type Props = {
   activeWorkContext: string | undefined;
   createTodo: (description: string) => void;
-  filterByLabels: (labels: FilterState) => void;
   labels: Label[];
   selectedPickerLabels: { [label: string]: boolean };
   setEditTodoId: (id: number | null) => void;
   setLabelTodoId: (id: number | null) => void;
   setWorkContext: (workContext: string) => void;
   todos: Todo[];
+  toggleLabel: (label: string) => void;
   updateTodo: (todoPatch: TodoPatch) => void;
   updateTodoLabels: (labels: string[]) => void;
   workContexts: { [key: string]: WorkContext };
