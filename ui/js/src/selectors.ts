@@ -16,13 +16,11 @@ const performFilter = (
   if (unlabeledFlag) {
     return todo.labels.length === 0;
   }
-  if (labeledFlag) {
-    return todo.labels.length > 0;
-  }
 
   return (
-    activeFilters.every((label) => todo.labels.includes(label)) &&
-    invertedFilters.every((label) => !todo.labels.includes(label))
+    (!labeledFlag || todo.labels.length > 0) && // Require labels if labeledFlag is true
+    activeFilters.every((label) => todo.labels.includes(label)) && // Require every active filter
+    invertedFilters.every((label) => !todo.labels.includes(label)) // Disallow every inverted filter
   );
 };
 
@@ -31,13 +29,21 @@ export const selectFilteredTodos = (state: ReduxState) => {
   const { editTodoId, filterLabels, labelTodoId } = state.workspace;
   const labeledFlag = filterLabels['Unlabeled'] === FILTER_STATUS.Inverted;
   const unlabeledFlag = filterLabels['Unlabeled'] === FILTER_STATUS.Active;
+
+  // Filter down to active filters excluding 'Unlabeled'
   const activeFilters = Object.keys(filterLabels).filter(
-    (labelKey) => filterLabels[labelKey] === FILTER_STATUS.Active,
+    (labelKey) =>
+      labelKey !== 'Unlabeled' &&
+      filterLabels[labelKey] === FILTER_STATUS.Active,
   );
+  // Filter down to inverted filters excluding 'Unlabeled'
   const invertedFilters = Object.keys(filterLabels).filter(
-    (labelKey) => filterLabels[labelKey] === FILTER_STATUS.Inverted,
+    (labelKey) =>
+      labelKey !== 'Unlabeled' &&
+      filterLabels[labelKey] === FILTER_STATUS.Inverted,
   );
-  if (unlabeledFlag && activeFilters.length > 1) {
+
+  if (unlabeledFlag && activeFilters.length > 0) {
     return [];
   }
 

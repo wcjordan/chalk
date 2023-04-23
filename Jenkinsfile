@@ -236,7 +236,11 @@ pipeline {
                                 }
                             }
                         }
-                        browserStackReportPublisher 'automate'
+                    }
+                    post {
+                        always {
+                            browserStackReportPublisher 'automate'
+                        }
                     }
                 }
             }

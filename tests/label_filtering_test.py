@@ -39,12 +39,16 @@ def test_label_filtering(page, todo_prefix):
     assert todo_descriptions == []
 
     # Unselect 5 minutes & verify 1 low-energy 25 minutes todos shown
+    # Toggle twice since once switches to inverted
+    toggle_label_filter(page, '5 minutes')
     toggle_label_filter(page, '5 minutes')
     wait_for_todo(page, todo_25min_low_desc)
     todo_descriptions = list_todo_descriptions(page, todo_prefix)
     assert todo_descriptions == [todo_25min_low_desc]
 
     # Unselect low-energy & verify 2 25 minutes todos shown
+    # Toggle twice since once switches to inverted
+    toggle_label_filter(page, 'low-energy')
     toggle_label_filter(page, 'low-energy')
     wait_for_todo(page, todo_25min_high_desc)
     todo_descriptions = list_todo_descriptions(page, todo_prefix)
