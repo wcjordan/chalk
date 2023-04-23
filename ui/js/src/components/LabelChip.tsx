@@ -1,21 +1,27 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
 import { Chip } from 'react-native-paper';
+import { FILTER_STATUS } from '../redux/types';
 
 interface Style {
+  chipActiveStyle: ViewStyle;
+  chipInvertedStyle: ViewStyle;
   chipStyle: ViewStyle;
-  chipSelectedStyle: ViewStyle;
   chipTextStyle: TextStyle;
 }
 
 const styles = StyleSheet.create<Style>({
+  chipActiveStyle: {
+    margin: 3,
+    backgroundColor: '#a3d5ffff',
+  },
+  chipInvertedStyle: {
+    margin: 3,
+    backgroundColor: '#ffb347ff',
+  },
   chipStyle: {
     margin: 3,
     backgroundColor: '#d9f0ffff',
-  },
-  chipSelectedStyle: {
-    margin: 3,
-    backgroundColor: '#a3d5ffff',
   },
   chipTextStyle: {
     fontFamily: 'sans-serif',
@@ -27,10 +33,14 @@ const styles = StyleSheet.create<Style>({
 });
 
 const LabelChip: React.FC<Props> = function (props: Props) {
-  const { display, label, selected, onPress } = props;
+  const { display, label, status, onPress } = props;
   const readOnlyDisplay = onPress === undefined;
-  const style =
-    selected || readOnlyDisplay ? styles.chipSelectedStyle : styles.chipStyle;
+  let style = styles.chipStyle;
+  if (status === FILTER_STATUS.Active || readOnlyDisplay) {
+    style = styles.chipActiveStyle;
+  } else if (status === FILTER_STATUS.Inverted) {
+    style = styles.chipInvertedStyle;
+  }
 
   const selectLabel = useCallback(() => {
     if (onPress) {
@@ -41,7 +51,9 @@ const LabelChip: React.FC<Props> = function (props: Props) {
   return (
     <Chip
       onPress={readOnlyDisplay ? undefined : selectLabel}
-      selected={selected}
+      selected={
+        status === FILTER_STATUS.Active || status === FILTER_STATUS.Inverted
+      }
       style={style}
       textStyle={styles.chipTextStyle}
     >
@@ -54,7 +66,7 @@ type Props = {
   display?: string;
   label: string;
   onPress?: (label: string) => void;
-  selected: boolean;
+  status?: FILTER_STATUS;
 };
 
 export default LabelChip;

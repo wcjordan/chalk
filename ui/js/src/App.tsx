@@ -7,6 +7,7 @@ import Login from './components/Login';
 import TodoList from './components/TodoList';
 import {
   Label,
+  FilterState,
   ReduxState,
   Todo,
   TodoPatch,
@@ -124,7 +125,7 @@ type LayoutProps = {
   completeAuthentication: (token: string) => void;
   createTodo: (description: string) => void;
   dismissNotification: () => void;
-  filterByLabels: (labels: string[]) => void;
+  filterByLabels: (labels: FilterState) => void;
   filteredTodos: Todo[];
   labels: Label[];
   notificationQueue: string[];

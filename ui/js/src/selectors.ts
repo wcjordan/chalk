@@ -1,9 +1,11 @@
-import { ReduxState, Todo } from './redux/types';
+import { FILTER_STATUS, ReduxState, Todo } from './redux/types';
 import { workContexts } from './redux/workspaceSlice';
 
 const performFilter = (
+  labeledFlag: boolean,
   unlabeledFlag: boolean,
-  filterLabels: string[],
+  activeFilters: string[],
+  invertedFilters: string[],
   preserveIds: number[],
   todo: Todo,
 ) => {
@@ -14,17 +16,32 @@ const performFilter = (
   if (unlabeledFlag) {
     return todo.labels.length === 0;
   }
-  return filterLabels.every((label) => todo.labels.includes(label));
+  if (labeledFlag) {
+    return todo.labels.length > 0;
+  }
+
+  return (
+    activeFilters.every((label) => todo.labels.includes(label)) &&
+    invertedFilters.every((label) => !todo.labels.includes(label))
+  );
 };
 
 export const selectFilteredTodos = (state: ReduxState) => {
   // TODO (jordan) optimize w/ set intersection?
   const { editTodoId, filterLabels, labelTodoId } = state.workspace;
-  const unlabeledFlag = filterLabels.includes('Unlabeled');
-  if (unlabeledFlag && filterLabels.length > 1) {
+  const labeledFlag = filterLabels['Unlabeled'] === FILTER_STATUS.Inverted;
+  const unlabeledFlag = filterLabels['Unlabeled'] === FILTER_STATUS.Active;
+  const activeFilters = Object.keys(filterLabels).filter(
+    (labelKey) => filterLabels[labelKey] === FILTER_STATUS.Active,
+  );
+  const invertedFilters = Object.keys(filterLabels).filter(
+    (labelKey) => filterLabels[labelKey] === FILTER_STATUS.Inverted,
+  );
+  if (unlabeledFlag && activeFilters.length > 1) {
     return [];
   }
 
+  // Preserve todo items being edited or labeled even if they don't match the filters
   const preserveIds: number[] = [];
   if (labelTodoId) {
     preserveIds.push(labelTodoId);
@@ -34,7 +51,14 @@ export const selectFilteredTodos = (state: ReduxState) => {
   }
 
   return state.todosApi.entries.filter((todo) =>
-    performFilter(unlabeledFlag, filterLabels, preserveIds, todo),
+    performFilter(
+      labeledFlag,
+      unlabeledFlag,
+      activeFilters,
+      invertedFilters,
+      preserveIds,
+      todo,
+    ),
   );
 };
 
@@ -59,7 +83,11 @@ export const selectActiveWorkContext = (state: ReduxState) => {
   const { filterLabels } = state.workspace;
   return Object.keys(workContexts).find((workContext) => {
     const labels = workContexts[workContext].labels;
-    const sizeMatch = labels.length === filterLabels.length;
-    return sizeMatch && labels.every((label) => filterLabels.includes(label));
+    const labelKeys = Object.keys(labels);
+    const sizeMatch = labelKeys.length === Object.keys(filterLabels).length;
+    return (
+      sizeMatch &&
+      labelKeys.every((labelKey) => labels[labelKey] === filterLabels[labelKey])
+    );
   });
 };

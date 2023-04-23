@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Todo, TodoPatch } from '../redux/types';
+import { FILTER_STATUS } from '../redux/types';
 import { workContexts } from '../redux/workspaceSlice';
 import TodoList from './TodoList';
 
@@ -69,7 +70,13 @@ const defaultProps = {
   workContexts,
   workspace: {
     editTodoId: 3,
-    filterLabels: ['5 minutes', 'work', 'home', 'low-energy', 'mobile'],
+    filterLabels: {
+      '5 minutes': FILTER_STATUS.Active,
+      work: FILTER_STATUS.Active,
+      home: FILTER_STATUS.Active,
+      'low-energy': FILTER_STATUS.Active,
+      mobile: FILTER_STATUS.Active,
+    },
     labelTodoId: null,
   },
 };

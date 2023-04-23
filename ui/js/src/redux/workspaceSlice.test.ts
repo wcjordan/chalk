@@ -1,4 +1,5 @@
 import '../__mocks__/matchMediaMock';
+import { FILTER_STATUS } from './types';
 import workspaceSlice from './workspaceSlice';
 
 describe('workspace reducer', function () {
@@ -6,7 +7,7 @@ describe('workspace reducer', function () {
     expect(workspaceSlice.reducer(undefined, {})).toEqual({
       csrfToken: null,
       editTodoId: null,
-      filterLabels: [],
+      filterLabels: {},
       labelTodoId: null,
       loggedIn: false,
     });
@@ -16,15 +17,23 @@ describe('workspace reducer', function () {
     it('should update the filterLabels', function () {
       const result = workspaceSlice.reducer(
         {
-          filterLabels: ['old'],
+          filterLabels: {
+            old: FILTER_STATUS.Active,
+          },
         },
         {
           type: 'workspace/filterByLabels',
-          payload: ['new', 'otherNew'],
+          payload: {
+            new: FILTER_STATUS.Inverted,
+            otherNew: FILTER_STATUS.Active,
+          },
         },
       );
       expect(result).toEqual({
-        filterLabels: ['new', 'otherNew'],
+        filterLabels: {
+          new: FILTER_STATUS.Inverted,
+          otherNew: FILTER_STATUS.Active,
+        },
       });
     });
   });
@@ -97,7 +106,9 @@ describe('workspace reducer', function () {
     it('should update filter labels to match the work context', function () {
       const result = workspaceSlice.reducer(
         {
-          filterLabels: ['Chalk'],
+          filterLabels: {
+            Chalk: FILTER_STATUS.Active,
+          },
         },
         {
           type: 'workspace/setWorkContext',
@@ -105,14 +116,18 @@ describe('workspace reducer', function () {
         },
       );
       expect(result).toEqual({
-        filterLabels: ['Unlabeled'],
+        filterLabels: {
+          Unlabeled: FILTER_STATUS.Active,
+        },
       });
     });
 
     it('should ignore invalid work contexts', function () {
       const result = workspaceSlice.reducer(
         {
-          filterLabels: ['Chalk'],
+          filterLabels: {
+            Chalk: FILTER_STATUS.Active,
+          },
         },
         {
           type: 'workspace/setWorkContext',
@@ -120,7 +135,9 @@ describe('workspace reducer', function () {
         },
       );
       expect(result).toEqual({
-        filterLabels: ['Chalk'],
+        filterLabels: {
+          Chalk: FILTER_STATUS.Active,
+        },
       });
     });
   });

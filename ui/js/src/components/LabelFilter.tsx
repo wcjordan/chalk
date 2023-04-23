@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
+import { FILTER_STATUS, FilterState } from '../redux/types';
 import LabelChip from './LabelChip';
 
 interface Style {
@@ -17,19 +18,21 @@ const styles = StyleSheet.create<Style>({
 });
 
 const LabelFilter: React.FC<Props> = function (props: Props) {
-  // TODO (jordan) Convert selectedLabels to a map for quick lookups
-  // Also memoize the conversion
+  // TODO (jordan) memoize the conversion
   const { filterByLabels, labels, selectedLabels } = props;
 
   const filterByLabelCb = useCallback(
     (label: string) => {
-      const newLabels = Array.from(selectedLabels);
-      const labelIndex = newLabels.indexOf(label);
-      if (labelIndex > -1) {
-        // Remove existing item
-        newLabels.splice(labelIndex, 1);
+      const newLabels = Object.assign({}, selectedLabels);
+      const prevStatus = newLabels[label];
+      if (prevStatus === FILTER_STATUS.Active) {
+        // Invert existing item
+        newLabels[label] = FILTER_STATUS.Inverted;
+      } else if (prevStatus === FILTER_STATUS.Inverted) {
+        // Delete inverted item
+        delete newLabels[label];
       } else {
-        newLabels.push(label);
+        newLabels[label] = FILTER_STATUS.Active;
       }
 
       filterByLabels(newLabels);
@@ -42,7 +45,7 @@ const LabelFilter: React.FC<Props> = function (props: Props) {
       key={label}
       label={label}
       onPress={filterByLabelCb}
-      selected={selectedLabels.includes(label) || false}
+      status={selectedLabels[label]}
     />
   ));
   return (
@@ -52,16 +55,16 @@ const LabelFilter: React.FC<Props> = function (props: Props) {
         key={UNLABELED}
         label={UNLABELED}
         onPress={filterByLabelCb}
-        selected={selectedLabels.includes(UNLABELED) || false}
+        status={selectedLabels[UNLABELED]}
       />
     </View>
   );
 };
 
 type Props = {
-  filterByLabels: (labels: string[]) => void;
+  filterByLabels: (labels: FilterState) => void;
   labels: string[];
-  selectedLabels: string[];
+  selectedLabels: FilterState;
 };
 
 export default LabelFilter;

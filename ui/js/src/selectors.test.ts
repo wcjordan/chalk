@@ -3,12 +3,16 @@ import {
   selectFilteredTodos,
   selectSelectedPickerLabels,
 } from './selectors';
+import { FILTER_STATUS } from './redux/types';
 
 describe('selectFilteredTodos', function () {
   it('should filter out todos missing any labels', function () {
     const state = {
       workspace: {
-        filterLabels: ['5 minutes', 'home'],
+        filterLabels: {
+          '5 minutes': FILTER_STATUS.Active,
+          home: FILTER_STATUS.Active,
+        },
       },
       todosApi: {
         entries: [
@@ -44,7 +48,10 @@ describe('selectFilteredTodos', function () {
     const state = {
       workspace: {
         editTodoId: 3,
-        filterLabels: ['5 minutes', 'home'],
+        filterLabels: {
+          '5 minutes': FILTER_STATUS.Active,
+          home: FILTER_STATUS.Active,
+        },
         labelTodoId: 2,
       },
       todosApi: {
@@ -75,7 +82,7 @@ describe('selectFilteredTodos', function () {
   it('should handle when no filters are selected', function () {
     const state = {
       workspace: {
-        filterLabels: [],
+        filterLabels: {},
       },
       todosApi: {
         entries: [
@@ -110,7 +117,7 @@ describe('selectFilteredTodos', function () {
   it('should handle when no todos exist', function () {
     const state = {
       workspace: {
-        filterLabels: [],
+        filterLabels: {},
       },
       todosApi: {
         entries: [],
@@ -124,7 +131,9 @@ describe('selectFilteredTodos', function () {
   it('should filter any labeled todos with the unlabeled filter', function () {
     const state = {
       workspace: {
-        filterLabels: ['Unlabeled'],
+        filterLabels: {
+          Unlabeled: FILTER_STATUS.Active,
+        },
       },
       todosApi: {
         entries: [
@@ -155,7 +164,9 @@ describe('selectFilteredTodos', function () {
     const state = {
       workspace: {
         editTodoId: 3,
-        filterLabels: ['Unlabeled'],
+        filterLabels: {
+          Unlabeled: FILTER_STATUS.Active,
+        },
         labelTodoId: 2,
       },
       todosApi: {
@@ -186,7 +197,10 @@ describe('selectFilteredTodos', function () {
   it('should filter all todos when the unlabeled filter is combined with another filter', function () {
     const state = {
       workspace: {
-        filterLabels: ['Unlabeled', '5 minutes'],
+        filterLabels: {
+          Unlabeled: FILTER_STATUS.Active,
+          '5 minutes': FILTER_STATUS.Active,
+        },
       },
       todosApi: {
         entries: [
@@ -291,7 +305,10 @@ describe('selectActiveWorkContext', function () {
   it('should return a work context if labels match', function () {
     const state = {
       workspace: {
-        filterLabels: ['Chalk', '25 minutes'],
+        filterLabels: {
+          Chalk: FILTER_STATUS.Active,
+          '25 minutes': FILTER_STATUS.Active,
+        },
       },
     };
 
@@ -302,7 +319,11 @@ describe('selectActiveWorkContext', function () {
   it('should not return a work context if additional labels are selected', function () {
     const state = {
       workspace: {
-        filterLabels: ['Chalk', '25 minutes', 'Home'],
+        filterLabels: {
+          Chalk: FILTER_STATUS.Active,
+          '25 minutes': FILTER_STATUS.Active,
+          Home: FILTER_STATUS.Active,
+        },
       },
     };
 
@@ -313,7 +334,9 @@ describe('selectActiveWorkContext', function () {
   it('should not return a work context if some of the contexts labels are not selected', function () {
     const state = {
       workspace: {
-        filterLabels: ['Chalk'],
+        filterLabels: {
+          Chalk: FILTER_STATUS.Active,
+        },
       },
     };
 

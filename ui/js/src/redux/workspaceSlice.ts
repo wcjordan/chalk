@@ -1,37 +1,49 @@
 import { Platform } from 'react-native';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { WorkContext, WorkspaceState } from './types';
+import { FILTER_STATUS, WorkContext, WorkspaceState } from './types';
 
 // TODO (jordan) Improve to support or'd label groups
 // Will be useful for adding Chalk + vague to Chalk Planning
 export const workContexts: { [key: string]: WorkContext } = {
   inbox: {
     displayName: 'Inbox',
-    labels: ['Unlabeled'],
+    labels: {
+      Unlabeled: FILTER_STATUS.Active,
+    },
   },
   chores: {
     displayName: 'Chores',
-    labels: ['errand'],
+    labels: {
+      errand: FILTER_STATUS.Active,
+    },
   },
   quickFixes: {
     displayName: 'Quick Fixes',
-    labels: ['5 minutes'],
+    labels: {
+      '5 minutes': FILTER_STATUS.Active,
+    },
   },
   chalkCoding: {
     displayName: 'Chalk Coding',
-    labels: ['Chalk', '25 minutes'],
+    labels: {
+      Chalk: FILTER_STATUS.Active,
+      '25 minutes': FILTER_STATUS.Active,
+    },
   },
   chalkPlanning: {
     displayName: 'Chalk Planning',
-    labels: ['Chalk', '60 minutes'],
+    labels: {
+      Chalk: FILTER_STATUS.Active,
+      '60 minutes': FILTER_STATUS.Active,
+    },
   },
 };
 
 const initialState: WorkspaceState = {
   csrfToken: null,
   labelTodoId: null,
-  filterLabels: [],
+  filterLabels: {},
   loggedIn: Platform.OS === 'web',
   editTodoId: null,
 };
@@ -40,7 +52,7 @@ export default createSlice({
   initialState,
   reducers: {
     filterByLabels: (state, action) => {
-      state.filterLabels = Array.from(action.payload);
+      state.filterLabels = Object.assign({}, action.payload);
     },
     logIn: (state, action) => {
       state.loggedIn = action.payload.loggedIn;
@@ -55,7 +67,7 @@ export default createSlice({
     setWorkContext: (state, action) => {
       const workContext = workContexts[action.payload];
       if (workContext) {
-        state.filterLabels = Array.from(workContext.labels);
+        state.filterLabels = Object.assign({}, workContext.labels);
       }
     },
   },

@@ -11,6 +11,7 @@ import {
 
 import {
   Label,
+  FilterState,
   Todo,
   TodoPatch,
   WorkContext,
@@ -117,7 +118,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
 type Props = {
   activeWorkContext: string | undefined;
   createTodo: (description: string) => void;
-  filterByLabels: (labels: string[]) => void;
+  filterByLabels: (labels: FilterState) => void;
   labels: Label[];
   selectedPickerLabels: { [label: string]: boolean };
   setEditTodoId: (id: number | null) => void;

@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Modal } from 'react-native-paper';
+import { FILTER_STATUS } from '../redux/types';
 import LabelChip from './LabelChip';
 
 interface Style {
@@ -53,7 +54,7 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
       onPress={updateTodoLabelCb}
       key={label}
       label={label}
-      selected={selectedLabels[label] || false}
+      status={selectedLabels[label] ? FILTER_STATUS.Active : undefined}
     />
   ));
   return (

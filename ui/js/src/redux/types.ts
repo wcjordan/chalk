@@ -1,3 +1,8 @@
+export enum FILTER_STATUS {
+  Active = 'ACTIVE',
+  Inverted = 'INVERTED',
+}
+
 export interface Label {
   id: number;
   name: string;
@@ -45,9 +50,13 @@ export interface ReduxState {
   workspace: WorkspaceState;
 }
 
+export interface FilterState {
+  [index: string]: FILTER_STATUS;
+}
+
 export interface WorkContext {
   displayName: string;
-  labels: string[];
+  labels: FilterState;
 }
 
 export interface WorkspaceState {
@@ -55,7 +64,7 @@ export interface WorkspaceState {
   // For web we extract the CSRF token from cookies
   csrfToken: string | null;
   editTodoId: number | null;
-  filterLabels: string[];
+  filterLabels: FilterState;
   labelTodoId: number | null;
   loggedIn: boolean;
 }

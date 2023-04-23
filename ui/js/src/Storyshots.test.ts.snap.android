@@ -27103,6 +27103,173 @@ exports[`Storyshots Error Bar Permanent Error Bar 1`] = `
 </View>
 `;
 
+exports[`Storyshots Label Chip Active Label Chip 1`] = `
+<View
+  style={
+    {
+      "flexDirection": "row",
+      "flexWrap": "wrap",
+    }
+  }
+>
+  <View
+    collapsable={false}
+    style={
+      {
+        "backgroundColor": "#a3d5ffff",
+        "borderColor": "rgba(121, 116, 126, 1)",
+        "borderRadius": 8,
+        "borderStyle": "solid",
+        "borderWidth": 0,
+        "elevation": 0,
+        "flexDirection": "column",
+        "margin": 3,
+        "padding": undefined,
+        "transform": undefined,
+      }
+    }
+    testID="chip-container"
+  >
+    <View
+      accessibilityRole="button"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": false,
+          "expanded": undefined,
+          "selected": true,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        [
+          {
+            "overflow": "hidden",
+          },
+          false,
+          [
+            {
+              "borderRadius": 8,
+            },
+            {
+              "flexGrow": 1,
+            },
+          ],
+        ]
+      }
+      testID="chip"
+    >
+      <View
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "flexGrow": 1,
+              "paddingLeft": 4,
+              "position": "relative",
+            },
+            {
+              "paddingLeft": 0,
+            },
+            {
+              "paddingRight": 0,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            [
+              {
+                "alignSelf": "center",
+                "padding": 4,
+              },
+              {
+                "paddingLeft": 8,
+                "paddingRight": 0,
+              },
+              null,
+            ]
+          }
+        >
+          <Text />
+        </View>
+        <Text
+          numberOfLines={1}
+          selectable={false}
+          style={
+            [
+              {
+                "fontFamily": "sans-serif-medium",
+                "fontSize": 14,
+                "fontWeight": "500",
+                "letterSpacing": 0.1,
+                "lineHeight": 20,
+              },
+              {
+                "textAlign": "left",
+              },
+              {
+                "color": "rgba(28, 27, 31, 1)",
+                "writingDirection": "ltr",
+              },
+              [
+                {
+                  "marginVertical": 6,
+                  "textAlignVertical": "center",
+                },
+                {
+                  "color": "rgba(29, 25, 43, 1)",
+                  "fontFamily": "sans-serif-medium",
+                  "fontSize": 14,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.1,
+                  "lineHeight": 20,
+                },
+                {
+                  "marginLeft": 8,
+                  "marginRight": 16,
+                },
+                {
+                  "fontFamily": "sans-serif",
+                  "marginBottom": 0,
+                  "marginLeft": 8,
+                  "marginRight": 8,
+                  "marginTop": 0,
+                },
+              ],
+            ]
+          }
+        >
+          errand
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;
+
 exports[`Storyshots Label Chip Default Label Chip 1`] = `
 <View
   style={
@@ -27403,7 +27570,7 @@ exports[`Storyshots Label Chip Display Name Label Chip 1`] = `
 </View>
 `;
 
-exports[`Storyshots Label Chip Read Only Label Chip 1`] = `
+exports[`Storyshots Label Chip Inverted Label Chip 1`] = `
 <View
   style={
     {
@@ -27416,157 +27583,7 @@ exports[`Storyshots Label Chip Read Only Label Chip 1`] = `
     collapsable={false}
     style={
       {
-        "backgroundColor": "#a3d5ffff",
-        "borderColor": "rgba(121, 116, 126, 1)",
-        "borderRadius": 8,
-        "borderStyle": "solid",
-        "borderWidth": 0,
-        "elevation": 0,
-        "flexDirection": "column",
-        "margin": 3,
-        "padding": undefined,
-        "transform": undefined,
-      }
-    }
-    testID="chip-container"
-  >
-    <View
-      accessibilityRole="button"
-      accessibilityState={
-        {
-          "busy": undefined,
-          "checked": undefined,
-          "disabled": true,
-          "expanded": undefined,
-          "selected": false,
-        }
-      }
-      accessibilityValue={
-        {
-          "max": undefined,
-          "min": undefined,
-          "now": undefined,
-          "text": undefined,
-        }
-      }
-      accessible={true}
-      collapsable={false}
-      focusable={true}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onFocus={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        [
-          {
-            "overflow": "hidden",
-          },
-          false,
-          [
-            {
-              "borderRadius": 8,
-            },
-            {
-              "flexGrow": 1,
-            },
-          ],
-        ]
-      }
-      testID="chip"
-    >
-      <View
-        style={
-          [
-            {
-              "alignItems": "center",
-              "flexDirection": "row",
-              "flexGrow": 1,
-              "paddingLeft": 4,
-              "position": "relative",
-            },
-            {
-              "paddingLeft": 0,
-            },
-            {
-              "paddingRight": 0,
-            },
-          ]
-        }
-      >
-        <Text
-          numberOfLines={1}
-          selectable={false}
-          style={
-            [
-              {
-                "fontFamily": "sans-serif-medium",
-                "fontSize": 14,
-                "fontWeight": "500",
-                "letterSpacing": 0.1,
-                "lineHeight": 20,
-              },
-              {
-                "textAlign": "left",
-              },
-              {
-                "color": "rgba(28, 27, 31, 1)",
-                "writingDirection": "ltr",
-              },
-              [
-                {
-                  "marginVertical": 6,
-                  "textAlignVertical": "center",
-                },
-                {
-                  "color": "rgba(29, 25, 43, 1)",
-                  "fontFamily": "sans-serif-medium",
-                  "fontSize": 14,
-                  "fontWeight": "500",
-                  "letterSpacing": 0.1,
-                  "lineHeight": 20,
-                },
-                {
-                  "marginLeft": 16,
-                  "marginRight": 16,
-                },
-                {
-                  "fontFamily": "sans-serif",
-                  "marginBottom": 0,
-                  "marginLeft": 8,
-                  "marginRight": 8,
-                  "marginTop": 0,
-                },
-              ],
-            ]
-          }
-        >
-          errand
-        </Text>
-      </View>
-    </View>
-  </View>
-</View>
-`;
-
-exports[`Storyshots Label Chip Selected Label Chip 1`] = `
-<View
-  style={
-    {
-      "flexDirection": "row",
-      "flexWrap": "wrap",
-    }
-  }
->
-  <View
-    collapsable={false}
-    style={
-      {
-        "backgroundColor": "#a3d5ffff",
+        "backgroundColor": "#ffb347ff",
         "borderColor": "rgba(121, 116, 126, 1)",
         "borderRadius": 8,
         "borderStyle": "solid",
@@ -27699,6 +27716,156 @@ exports[`Storyshots Label Chip Selected Label Chip 1`] = `
                 },
                 {
                   "marginLeft": 8,
+                  "marginRight": 16,
+                },
+                {
+                  "fontFamily": "sans-serif",
+                  "marginBottom": 0,
+                  "marginLeft": 8,
+                  "marginRight": 8,
+                  "marginTop": 0,
+                },
+              ],
+            ]
+          }
+        >
+          errand
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`Storyshots Label Chip Read Only Label Chip 1`] = `
+<View
+  style={
+    {
+      "flexDirection": "row",
+      "flexWrap": "wrap",
+    }
+  }
+>
+  <View
+    collapsable={false}
+    style={
+      {
+        "backgroundColor": "#a3d5ffff",
+        "borderColor": "rgba(121, 116, 126, 1)",
+        "borderRadius": 8,
+        "borderStyle": "solid",
+        "borderWidth": 0,
+        "elevation": 0,
+        "flexDirection": "column",
+        "margin": 3,
+        "padding": undefined,
+        "transform": undefined,
+      }
+    }
+    testID="chip-container"
+  >
+    <View
+      accessibilityRole="button"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": true,
+          "expanded": undefined,
+          "selected": false,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        [
+          {
+            "overflow": "hidden",
+          },
+          false,
+          [
+            {
+              "borderRadius": 8,
+            },
+            {
+              "flexGrow": 1,
+            },
+          ],
+        ]
+      }
+      testID="chip"
+    >
+      <View
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "flexGrow": 1,
+              "paddingLeft": 4,
+              "position": "relative",
+            },
+            {
+              "paddingLeft": 0,
+            },
+            {
+              "paddingRight": 0,
+            },
+          ]
+        }
+      >
+        <Text
+          numberOfLines={1}
+          selectable={false}
+          style={
+            [
+              {
+                "fontFamily": "sans-serif-medium",
+                "fontSize": 14,
+                "fontWeight": "500",
+                "letterSpacing": 0.1,
+                "lineHeight": 20,
+              },
+              {
+                "textAlign": "left",
+              },
+              {
+                "color": "rgba(28, 27, 31, 1)",
+                "writingDirection": "ltr",
+              },
+              [
+                {
+                  "marginVertical": 6,
+                  "textAlignVertical": "center",
+                },
+                {
+                  "color": "rgba(29, 25, 43, 1)",
+                  "fontFamily": "sans-serif-medium",
+                  "fontSize": 14,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.1,
+                  "lineHeight": 20,
+                },
+                {
+                  "marginLeft": 16,
                   "marginRight": 16,
                 },
                 {
