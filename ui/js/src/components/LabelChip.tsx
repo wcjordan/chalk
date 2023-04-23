@@ -35,11 +35,15 @@ const styles = StyleSheet.create<Style>({
 const LabelChip: React.FC<Props> = function (props: Props) {
   const { display, label, status, onPress } = props;
   const readOnlyDisplay = onPress === undefined;
+
   let style = styles.chipStyle;
+  let testId = 'chip';
   if (status === FILTER_STATUS.Active || readOnlyDisplay) {
     style = styles.chipActiveStyle;
+    testId = 'chip-active';
   } else if (status === FILTER_STATUS.Inverted) {
     style = styles.chipInvertedStyle;
+    testId = 'chip-inverted';
   }
 
   const selectLabel = useCallback(() => {
@@ -55,6 +59,7 @@ const LabelChip: React.FC<Props> = function (props: Props) {
         status === FILTER_STATUS.Active || status === FILTER_STATUS.Inverted
       }
       style={style}
+      testID={testId}
       textStyle={styles.chipTextStyle}
     >
       {display || label}

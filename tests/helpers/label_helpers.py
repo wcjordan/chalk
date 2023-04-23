@@ -32,8 +32,13 @@ def add_todo_w_labels(page, todo_description, labels):
 
 
 def clear_label_filters(page):
-    selected_chips = page.locator(f'[data-testid="label-filter"] [aria-selected=true]')
-    chip_elements = selected_chips.element_handles()
+    active_chips = page.locator('[data-testid="label-filter"] [data-testid="chip-active"]')
+    chip_elements = active_chips.element_handles()
+    for chip in chip_elements:
+        chip.click()
+
+    inverted_chips = page.locator('[data-testid="label-filter"] [data-testid="chip-inverted"]')
+    chip_elements = inverted_chips.element_handles()
     for chip in chip_elements:
         chip.click()
 
@@ -51,3 +56,12 @@ def dismiss_add_label_modal(page, optional=False):
 def toggle_label_filter(page, label):
     label_toggle = page.locator(f'[data-testid="label-filter"] :text-is("{label}")')
     label_toggle.click()
+
+
+def get_label_filter_status(page, label):
+    chip = page.locator('[data-testid="label-filter"]', has_text=label)
+    if chip.locator('[data-testid="chip-active"]').is_visible():
+        return 'Active'
+    if chip.locator('[data-testid="chip-inverted"]').is_visible():
+        return 'Inverted'
+    return 'Disabled'

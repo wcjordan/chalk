@@ -1,12 +1,12 @@
 import pytest
 
-from helpers.label_helpers import (add_todo_w_labels, toggle_label_filter)
+from helpers.label_helpers import (add_todo_w_labels, clear_label_filters)
 
 
 @pytest.mark.parametrize('test_name', ['Label: Label Persistence'])
 def test_label_persistence(page, todo_prefix):
     # Remove default filter
-    toggle_label_filter(page, 'Unlabeled')
+    clear_label_filters(page)
 
     # Add todo w/ 5 min & errand labels
     todo_description = f'{todo_prefix} test todo'
