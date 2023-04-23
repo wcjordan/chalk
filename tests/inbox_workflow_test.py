@@ -1,15 +1,18 @@
 import pytest
 
-from helpers.label_helpers import (add_labels, dismiss_add_label_modal,
-                                   toggle_label_filter)
+from helpers.label_helpers import (add_labels, clear_label_filters, dismiss_add_label_modal,
+                                   get_label_filter_status, toggle_label_filter)
 from helpers.todo_helpers import (add_todo, find_todos, wait_for_todo,
                                   wait_for_todo_to_disappear)
 
 
 @pytest.mark.parametrize('test_name', ['Workflow: Inbox Workflow'])
 def test_inbox_workflow(page, todo_prefix):
+    # Verify Unlabeled starts selected
+    assert get_label_filter_status(page, 'Unlabeled') == 'Active'
+
     # Remove default filter
-    toggle_label_filter(page, 'Unlabeled')
+    clear_label_filters(page)
 
     # Add todo
     todo_description = f'{todo_prefix} fold laundry'

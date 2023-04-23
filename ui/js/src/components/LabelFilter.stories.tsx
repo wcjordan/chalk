@@ -1,4 +1,5 @@
 import React from 'react';
+import { FILTER_STATUS } from '../redux/types';
 import LabelFilter from './LabelFilter';
 
 const labels = [
@@ -16,7 +17,13 @@ const labels = [
   '25 minutes',
   '60 minutes',
 ];
-const selectedLabels = ['5 minutes', 'work', 'home', 'low-energy', 'mobile'];
+const selectedLabels = {
+  '5 minutes': FILTER_STATUS.Active,
+  work: FILTER_STATUS.Inverted,
+  home: FILTER_STATUS.Active,
+  'low-energy': FILTER_STATUS.Active,
+  mobile: FILTER_STATUS.Active,
+};
 
 export default {
   title: 'Label Filter',

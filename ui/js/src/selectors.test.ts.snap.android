@@ -1,5 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`selectFilteredTodos should combine active and inverted filters to find items with one label and without another 1`] = `
+[
+  {
+    "description": "passing todo 1",
+    "id": 4,
+    "labels": [
+      "25 minutes",
+      "home",
+    ],
+  },
+]
+`;
+
 exports[`selectFilteredTodos should filter any labeled todos with the unlabeled filter 1`] = `
 [
   {
@@ -32,6 +45,53 @@ exports[`selectFilteredTodos should filter out todos missing any labels 1`] = `
 ]
 `;
 
+exports[`selectFilteredTodos should filter out todos which have an inverted filters label 1`] = `
+[
+  {
+    "description": "passing todo 1",
+    "id": 2,
+    "labels": [
+      "25 minutes",
+      "home",
+    ],
+  },
+  {
+    "description": "passing todo 2",
+    "id": 3,
+    "labels": [
+      "25 minutes",
+      "work",
+    ],
+  },
+]
+`;
+
+exports[`selectFilteredTodos should filter out todos which have any inverted filters label 1`] = `
+[
+  {
+    "description": "passing todo 1",
+    "id": 3,
+    "labels": [
+      "25 minutes",
+      "work",
+    ],
+  },
+]
+`;
+
+exports[`selectFilteredTodos should filter todos missing any labels even when unlabeled is inverted 1`] = `
+[
+  {
+    "description": "filtered todo 2",
+    "id": 2,
+    "labels": [
+      "5 minutes",
+      "home",
+    ],
+  },
+]
+`;
+
 exports[`selectFilteredTodos should not filter any active todos with the unlabeled filter 1`] = `
 [
   {
@@ -51,7 +111,7 @@ exports[`selectFilteredTodos should not filter any active todos with the unlabel
 ]
 `;
 
-exports[`selectFilteredTodos should not filter out todos missing labels if they are active 1`] = `
+exports[`selectFilteredTodos should not filter out todos missing labels if they are actively being modified 1`] = `
 [
   {
     "description": "passing todo 1",
@@ -65,6 +125,19 @@ exports[`selectFilteredTodos should not filter out todos missing labels if they 
     "id": 3,
     "labels": [
       "5 minutes",
+    ],
+  },
+]
+`;
+
+exports[`selectFilteredTodos should show labeled items without a specific label when unlabeled and a label are both inverted 1`] = `
+[
+  {
+    "description": "passing todo 1",
+    "id": 3,
+    "labels": [
+      "25 minutes",
+      "work",
     ],
   },
 ]

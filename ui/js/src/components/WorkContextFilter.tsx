@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import { WorkContext } from '../redux/types';
+import { FILTER_STATUS, WorkContext } from '../redux/types';
 import LabelChip from './LabelChip';
 
 interface Style {
@@ -32,7 +32,9 @@ const WorkContextFilter: React.FC<Props> = function (props: Props) {
       key={workContext}
       label={workContext}
       onPress={setWorkContextCb}
-      selected={workContext === activeWorkContext}
+      status={
+        workContext === activeWorkContext ? FILTER_STATUS.Active : undefined
+      }
     />
   ));
   return (

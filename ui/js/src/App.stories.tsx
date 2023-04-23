@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppLayout } from './App';
-import { Todo, TodoPatch } from './redux/types';
+import { FILTER_STATUS, Todo, TodoPatch } from './redux/types';
 
 function stubTodo(patch: TodoPatch): Todo {
   return Object.assign(
@@ -66,7 +66,13 @@ const defaultProps = {
   ],
   workspace: {
     csrfToken: null,
-    filterLabels: ['5 minutes', 'work', 'home', 'low-energy', 'mobile'],
+    filterLabels: {
+      '5 minutes': FILTER_STATUS.Active,
+      work: FILTER_STATUS.Inverted,
+      home: FILTER_STATUS.Active,
+      'low-energy': FILTER_STATUS.Active,
+      mobile: FILTER_STATUS.Active,
+    },
     labelTodoId: null,
     loggedIn: true,
   },
