@@ -8,6 +8,9 @@ from helpers.todo_helpers import (add_todo, cancel_edit, edit_todo, find_todo,
 
 @pytest.mark.parametrize('test_name', ['Todo: Don\'t Filter During Edit'])
 def test_dont_filter_edit(page, todo_prefix):
+    # Remove default filter
+    toggle_label_filter(page, 'Unlabeled')
+
     # Add todos
     todo1_description = f'{todo_prefix} todo to edit'
     add_todo(page, todo1_description)

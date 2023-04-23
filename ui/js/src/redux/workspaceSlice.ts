@@ -12,6 +12,12 @@ export const workContexts: { [key: string]: WorkContext } = {
       Unlabeled: FILTER_STATUS.Active,
     },
   },
+  urgent: {
+    displayName: 'Urgent',
+    labels: {
+      urgent: FILTER_STATUS.Active,
+    },
+  },
   chores: {
     displayName: 'Chores',
     labels: {
@@ -43,7 +49,9 @@ export const workContexts: { [key: string]: WorkContext } = {
 const initialState: WorkspaceState = {
   csrfToken: null,
   labelTodoId: null,
-  filterLabels: {},
+  filterLabels: {
+    Unlabeled: FILTER_STATUS.Active,
+  },
   loggedIn: Platform.OS === 'web',
   editTodoId: null,
 };
