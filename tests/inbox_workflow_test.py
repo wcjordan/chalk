@@ -8,6 +8,9 @@ from helpers.todo_helpers import (add_todo, find_todos, wait_for_todo,
 
 @pytest.mark.parametrize('test_name', ['Workflow: Inbox Workflow'])
 def test_inbox_workflow(page, todo_prefix):
+    # Remove default filter
+    toggle_label_filter(page, 'Unlabeled')
+
     # Add todo
     todo_description = f'{todo_prefix} fold laundry'
     add_todo(page, todo_description)

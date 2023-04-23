@@ -7,6 +7,9 @@ from helpers.todo_helpers import (list_todo_descriptions, wait_for_todo,
 
 @pytest.mark.parametrize('test_name', ['Label: Label Filtering'])
 def test_label_filtering(page, todo_prefix):
+    # Remove default filter
+    toggle_label_filter(page, 'Unlabeled')
+
     # Add todos w/ labels
     todo_5min_low_desc = f'{todo_prefix} test todo - 5min low energy'
     add_todo_w_labels(page, todo_5min_low_desc, ['low-energy', '5 minutes'])
