@@ -21,7 +21,7 @@ export const workContexts: { [key: string]: WorkContext } = {
   chores: {
     displayName: 'Chores',
     labels: {
-      errand: FILTER_STATUS.Active,
+      chore: FILTER_STATUS.Active,
     },
   },
   quickFixes: {
