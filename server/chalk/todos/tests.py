@@ -25,6 +25,9 @@ DEFAULT_LABELS = [
     'Den Setup',
     'Jenkins',
     'Infra',
+    'House',
+    'Shopping',
+    'chore',
 ]
 
 
