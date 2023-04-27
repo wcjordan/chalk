@@ -32,7 +32,6 @@ pipeline {
                                             docker buildx build --push \
                                                 -f ui/Dockerfile \
                                                 -t gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG} \
-                                                --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' \
                                                 --cache-to type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-ui \
                                                 --cache-from type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-ui \
                                                 ui
@@ -101,7 +100,6 @@ pipeline {
                                             docker buildx build --push \
                                                 -f server/Dockerfile \
                                                 -t gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG} \
-                                                --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' \
                                                 --cache-to type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-server \
                                                 --cache-from type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-server \
                                                 server

@@ -1,7 +1,5 @@
 # Multistage build for JS artifacts
-ARG GCP_PROJECT
-ARG BASE_IMAGE_TAG=latest
-FROM gcr.io/${GCP_PROJECT}/chalk-ui-base:${BASE_IMAGE_TAG} as js_app
+FROM node:16 as js_app
 WORKDIR /js
 
 ENV ENVIRONMENT=prod
@@ -11,10 +9,18 @@ ENV EXPO_CLIENT_ID=$expoClientId
 ARG sentryDsn
 ENV SENTRY_DSN=$sentryDsn
 
+# Install system packages for dev tooling
+# RUN apk add --no-cache bash g++ make python3
+RUN apt-get update && apt-get install -y \
+  bash \
+  build-essential \
+  && rm -rf /var/lib/apt/lists/*
+RUN npm install -g sharp-cli
+
 # Install React dependencies
 COPY js/yarn.lock .
 COPY js/package.json .
-RUN yarn --silent install --immutable --prefer-offline && yarn cache clean
+RUN yarn --silent install --immutable && yarn cache clean
 
 # Install React app
 COPY js/.prettierrc .

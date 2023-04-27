@@ -17,14 +17,16 @@ UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
 # Build containers
 .PHONY: build
 build:
-	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):local-latest server
-	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.base -t $(UI_IMAGE_BASE):local-latest ui
+	docker buildx build \
+		--cache-to type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-server \
+		--cache-from type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-server \
+		-t $(SERVER_IMAGE):local-latest server
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
-		DOCKER_BUILDKIT=1 docker build \
+		docker buildx build \
 			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
-			--build-arg "GCP_PROJECT=$(GCP_PROJECT)" \
-			--build-arg "BASE_IMAGE_TAG=local-latest" \
+			--cache-to type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-ui \
+			--cache-from type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-ui \
 			-t $(UI_IMAGE):local-latest ui'
 
 # Test & lint
