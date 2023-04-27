@@ -29,8 +29,13 @@ pipeline {
                                                 echo "Waiting for Docker to launch..."
                                                 sleep 1
                                             done
-                                            docker build -f ui/Dockerfile --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' -t gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG} ui
-                                            docker push gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG}
+                                            docker buildx build --push \
+                                                -f ui/Dockerfile \
+                                                -t gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG} \
+                                                --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' \
+                                                --cache-to type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-ui \
+                                                --cache-from type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-ui \
+                                                ui
                                         """
                                     }
                                 }
@@ -93,8 +98,13 @@ pipeline {
                                                 echo "Waiting for Docker to launch..."
                                                 sleep 1
                                             done
-                                            docker build -f server/Dockerfile --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' -t gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG} server
-                                            docker push gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG}
+                                            docker buildx build --push \
+                                                -f server/Dockerfile \
+                                                -t gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG} \
+                                                --build-arg 'GCP_PROJECT=${env.GCP_PROJECT}' \
+                                                --cache-to type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-server \
+                                                --cache-from type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-server \
+                                                server
                                         """
                                     }
                                 }
