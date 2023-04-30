@@ -120,6 +120,8 @@ pipeline {
                                                 sleep 1
                                             done
 
+                                            docker buildx create --driver docker-container --name chalk-default
+                                            docker buildx use chalk-default
                                             docker buildx build --push \
                                                 --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server \
                                                 --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server \
