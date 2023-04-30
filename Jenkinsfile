@@ -27,7 +27,7 @@ pipeline {
                                         file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
                                     ]) {
                                         sh """
-                                            gcloud auth activate-service-account --key-file \$GKE_SA_FILE"
+                                            gcloud auth activate-service-account --key-file \$GKE_SA_FILE
                                             gcloud auth configure-docker us-east4-docker.pkg.dev
 
                                             while (! docker stats --no-stream ); do
@@ -102,7 +102,7 @@ pipeline {
                                         file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
                                     ]) {
                                         sh """
-                                            gcloud auth activate-service-account --key-file \$GKE_SA_FILE"
+                                            gcloud auth activate-service-account --key-file \$GKE_SA_FILE
                                             gcloud auth configure-docker us-east4-docker.pkg.dev
 
                                             while (! docker stats --no-stream ); do
