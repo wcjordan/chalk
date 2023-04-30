@@ -36,6 +36,7 @@ const styles = StyleSheet.create<Style>({
     height: '100%',
     width: '100%',
   },
+
   containerWeb: {
     height: '100%',
     width: '66%',
