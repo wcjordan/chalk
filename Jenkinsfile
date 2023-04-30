@@ -23,12 +23,20 @@ pipeline {
                             }
                             steps {
                                 container('dind') {
-                                    withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar") {
+                                    withCredentials([
+                                        file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
+                                    ]) {
                                         sh """
+                                            gcloud auth activate-service-account --key-file \$GKE_SA_FILE"
+                                            gcloud auth configure-docker us-east4-docker.pkg.dev
+
                                             while (! docker stats --no-stream ); do
                                                 echo "Waiting for Docker to launch..."
                                                 sleep 1
                                             done
+
+                                            docker buildx create --driver docker-container --name chalk-default
+                                            docker buildx use chalk-default
                                             docker buildx build --push \
                                                 --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui \
                                                 --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui \
@@ -90,12 +98,18 @@ pipeline {
                             }
                             steps {
                                 container('dind') {
-                                    withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar") {
+                                    withCredentials([
+                                        file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
+                                    ]) {
                                         sh """
+                                            gcloud auth activate-service-account --key-file \$GKE_SA_FILE"
+                                            gcloud auth configure-docker us-east4-docker.pkg.dev
+
                                             while (! docker stats --no-stream ); do
                                                 echo "Waiting for Docker to launch..."
                                                 sleep 1
                                             done
+
                                             docker buildx build --push \
                                                 --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server \
                                                 --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server \
