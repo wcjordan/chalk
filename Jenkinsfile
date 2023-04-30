@@ -27,6 +27,7 @@ pipeline {
                                         file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
                                     ]) {
                                         sh """
+                                            apk --no-cache add curl
                                             curl https://sdk.cloud.google.com > install.sh
                                             bash install.sh --disable-prompts
 
@@ -105,6 +106,7 @@ pipeline {
                                         file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
                                     ]) {
                                         sh """
+                                            apk --no-cache add curl
                                             curl https://sdk.cloud.google.com > install.sh
                                             bash install.sh --disable-prompts
 
