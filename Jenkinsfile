@@ -27,9 +27,8 @@ pipeline {
                                         file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
                                     ]) {
                                         sh """
-                                            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-                                            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-                                            apt-get update -y && apt-get install -y apt-transport-https ca-certificates gnupg google-cloud-cli && rm -rf /var/lib/apt/lists/*
+                                            curl https://sdk.cloud.google.com > install.sh
+                                            bash install.sh --disable-prompts
 
                                             gcloud auth activate-service-account --key-file \$GKE_SA_FILE
                                             gcloud auth configure-docker us-east4-docker.pkg.dev
@@ -106,9 +105,8 @@ pipeline {
                                         file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
                                     ]) {
                                         sh """
-                                            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-                                            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-                                            apt-get update -y && apt-get install -y apt-transport-https ca-certificates gnupg google-cloud-cli && rm -rf /var/lib/apt/lists/*
+                                            curl https://sdk.cloud.google.com > install.sh
+                                            bash install.sh --disable-prompts
 
                                             gcloud auth activate-service-account --key-file \$GKE_SA_FILE
                                             gcloud auth configure-docker us-east4-docker.pkg.dev
