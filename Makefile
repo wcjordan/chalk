@@ -20,14 +20,14 @@ build:
 	docker buildx create --driver docker-container --name chalk-default || true
 	docker buildx use chalk-default
 	docker buildx build --load \
-		--cache-to type=registry,ref=${SERVER_IMAGE} \
+		--cache-to type=registry,ref=${SERVER_IMAGE},mode=max \
 		--cache-from type=registry,ref=${SERVER_IMAGE} \
 		-t $(SERVER_IMAGE):local-latest server
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
 		docker buildx build --load \
 			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
-			--cache-to type=registry,ref=${UI_IMAGE} \
+			--cache-to type=registry,ref=${UI_IMAGE},mode=max \
 			--cache-from type=registry,ref=${UI_IMAGE} \
 			-t $(UI_IMAGE):local-latest ui'
 

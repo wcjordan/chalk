@@ -43,7 +43,7 @@ pipeline {
                                             docker buildx create --driver docker-container --name chalk-default
                                             docker buildx use chalk-default
                                             docker buildx build --push \
-                                                --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui \
+                                                --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui,mode=max \
                                                 --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui \
                                                 -t us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui:${env.BUILD_TAG} \
                                                 ui
@@ -123,7 +123,7 @@ pipeline {
                                             docker buildx create --driver docker-container --name chalk-default
                                             docker buildx use chalk-default
                                             docker buildx build --push \
-                                                --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server \
+                                                --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server,mode=max \
                                                 --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server \
                                                 -t us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server:${env.BUILD_TAG} \
                                                 server
