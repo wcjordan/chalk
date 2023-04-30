@@ -23,17 +23,16 @@ pipeline {
                             }
                             steps {
                                 container('dind') {
-                                    withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
+                                    withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar") {
                                         sh """
                                             while (! docker stats --no-stream ); do
                                                 echo "Waiting for Docker to launch..."
                                                 sleep 1
                                             done
                                             docker buildx build --push \
-                                                -f ui/Dockerfile \
-                                                -t gcr.io/${env.GCP_PROJECT}/chalk-ui:${env.BUILD_TAG} \
-                                                --cache-to type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-ui \
-                                                --cache-from type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-ui \
+                                                --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui \
+                                                --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui \
+                                                -t us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui:${env.BUILD_TAG} \
                                                 ui
                                         """
                                     }
@@ -91,17 +90,16 @@ pipeline {
                             }
                             steps {
                                 container('dind') {
-                                    withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
+                                    withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar") {
                                         sh """
                                             while (! docker stats --no-stream ); do
                                                 echo "Waiting for Docker to launch..."
                                                 sleep 1
                                             done
                                             docker buildx build --push \
-                                                -f server/Dockerfile \
-                                                -t gcr.io/${env.GCP_PROJECT}/chalk-server:${env.BUILD_TAG} \
-                                                --cache-to type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-server \
-                                                --cache-from type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-server \
+                                                --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server \
+                                                --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server \
+                                                -t us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server:${env.BUILD_TAG} \
                                                 server
                                         """
                                     }

@@ -9,7 +9,7 @@ endif
 export PROD_ENV_FILE
 include $(PROD_ENV_FILE)
 
-IMAGE_REPO = gcr.io/$(GCP_PROJECT)
+IMAGE_REPO = us-east4-docker.pkg.dev/$(GCP_PROJECT)/default-gar
 SERVER_IMAGE = $(IMAGE_REPO)/chalk-server
 UI_IMAGE = $(IMAGE_REPO)/chalk-ui
 UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
@@ -17,16 +17,18 @@ UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
 # Build containers
 .PHONY: build
 build:
-	docker buildx build \
-		--cache-to type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-server \
-		--cache-from type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-server \
+	docker buildx create --driver docker-container --name chalk-default || true
+	docker buildx use chalk-default
+	docker buildx build --load \
+		--cache-to type=registry,ref=${SERVER_IMAGE} \
+		--cache-from type=registry,ref=${SERVER_IMAGE} \
 		-t $(SERVER_IMAGE):local-latest server
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
-		docker buildx build \
+		docker buildx build --load \
 			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
-			--cache-to type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-ui \
-			--cache-from type=registry,ref=gcr.io/${env.GCP_PROJECT}/chalk-ui \
+			--cache-to type=registry,ref=${UI_IMAGE} \
+			--cache-from type=registry,ref=${UI_IMAGE} \
 			-t $(UI_IMAGE):local-latest ui'
 
 # Test & lint

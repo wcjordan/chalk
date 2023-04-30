@@ -9,7 +9,7 @@ else
     GCP_PROJECT = SKIPPED_INCLUDING_PROJECT
 endif
 
-IMAGE_REPO = gcr.io/$(GCP_PROJECT)
+IMAGE_REPO = us-east4-docker.pkg.dev/$(GCP_PROJECT)/default-gar
 UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
 
 # Test w/ Jest

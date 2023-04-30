@@ -21,7 +21,7 @@ spec:
             name: {{ $fullName }}-ui
       containers:
         - name: ui
-          image: {{ printf "gcr.io/%s/chalk-ui:%s" .Values.gcpProject .Values.imageTag | quote }}
+          image: {{ printf "us-east4-docker.pkg.dev/%s/default-gar/chalk-ui:%s" .Values.gcpProject .Values.imageTag | quote }}
           imagePullPolicy: Always
           ports:
             - name: http
