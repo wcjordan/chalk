@@ -19,7 +19,6 @@ const styles = StyleSheet.create<Style>({
     margin: 3,
     backgroundColor: '#ffb347ff',
   },
-
   chipStyle: {
     margin: 3,
     backgroundColor: '#d9f0ffff',
