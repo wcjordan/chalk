@@ -30,7 +30,7 @@ pipeline {
                                             apk --no-cache add bash curl python3
                                             curl https://sdk.cloud.google.com > install.sh
                                             bash install.sh --disable-prompts
-                                            source /root/google-cloud-sdk/path.bash.inc
+                                            export PATH="/root/google-cloud-sdk/bin:\$PATH"
 
                                             gcloud auth activate-service-account --key-file \$GKE_SA_FILE
                                             gcloud auth configure-docker us-east4-docker.pkg.dev
@@ -110,7 +110,7 @@ pipeline {
                                             apk --no-cache add bash curl python3
                                             curl https://sdk.cloud.google.com > install.sh
                                             bash install.sh --disable-prompts
-                                            source /root/google-cloud-sdk/path.bash.inc
+                                            export PATH="/root/google-cloud-sdk/bin:\$PATH"
 
                                             gcloud auth activate-service-account --key-file \$GKE_SA_FILE
                                             gcloud auth configure-docker us-east4-docker.pkg.dev
