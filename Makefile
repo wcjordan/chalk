@@ -9,7 +9,7 @@ endif
 export PROD_ENV_FILE
 include $(PROD_ENV_FILE)
 
-IMAGE_REPO = gcr.io/$(GCP_PROJECT)
+IMAGE_REPO = us-east4-docker.pkg.dev/$(GCP_PROJECT)/default-gar
 SERVER_IMAGE = $(IMAGE_REPO)/chalk-server
 UI_IMAGE = $(IMAGE_REPO)/chalk-ui
 UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
@@ -18,14 +18,17 @@ UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
 .PHONY: build
 build:
 	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):local-latest server
-	DOCKER_BUILDKIT=1 docker build -f ui/Dockerfile.base -t $(UI_IMAGE_BASE):local-latest ui
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
 			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
-			--build-arg "GCP_PROJECT=$(GCP_PROJECT)" \
-			--build-arg "BASE_IMAGE_TAG=local-latest" \
 			-t $(UI_IMAGE):local-latest ui'
+	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
+		DOCKER_BUILDKIT=1 docker build \
+			--build-arg expoClientId=$$EXPO_CLIENT_ID \
+			--build-arg sentryDsn=$$SENTRY_DSN \
+			--target base \
+			-t $(UI_IMAGE_BASE):local-latest ui'
 
 # Test & lint
 .PHONY: test

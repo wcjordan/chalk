@@ -11,22 +11,6 @@ pipeline {
                 timeout(time: 15, unit: 'MINUTES')
             }
             stages {
-                stage('Build UI Base') {
-                    steps {
-                        container('dind') {
-                            withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
-                                sh """
-                                    while (! docker stats --no-stream ); do
-                                        echo "Waiting for Docker to launch..."
-                                        sleep 1
-                                    done
-                                    docker build -f ui/Dockerfile.base -t gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest ui
-                                    docker push gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest
-                                """
-                            }
-                        }
-                    }
-                }
                 stage('Build Helm') {
                     steps {
                         container('dind') {

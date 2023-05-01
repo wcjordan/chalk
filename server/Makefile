@@ -9,7 +9,7 @@ else
     GCP_PROJECT = SKIPPED_INCLUDING_PROJECT
 endif
 
-IMAGE_REPO = gcr.io/$(GCP_PROJECT)
+IMAGE_REPO = us-east4-docker.pkg.dev/$(GCP_PROJECT)/default-gar
 SERVER_IMAGE = $(IMAGE_REPO)/chalk-server
 
 PARENT_DIR = $(dir $(PWD))

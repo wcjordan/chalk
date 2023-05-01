@@ -58,7 +58,7 @@ spec:
                     path: oauth_web_client_secret.json
       initContainers:
         - name: collectstatic
-          image: {{ printf "gcr.io/%s/chalk-server:%s" .Values.gcpProject .Values.imageTag | quote }}
+          image: {{ printf "us-east4-docker.pkg.dev/%s/default-gar/chalk-server:%s" .Values.gcpProject .Values.imageTag | quote }}
           imagePullPolicy: Always
           command: ["python", "manage.py", "collectstatic", "--noinput"]
           volumeMounts:
@@ -94,7 +94,7 @@ spec:
             requests:
               cpu: 10m
         - name: server
-          image: {{ printf "gcr.io/%s/chalk-server:%s" .Values.gcpProject .Values.imageTag | quote }}
+          image: {{ printf "us-east4-docker.pkg.dev/%s/default-gar/chalk-server:%s" .Values.gcpProject .Values.imageTag | quote }}
           imagePullPolicy: Always
           env:
             {{- include "..serverEnv" . | nindent 12 }}

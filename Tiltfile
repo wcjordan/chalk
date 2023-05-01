@@ -10,9 +10,9 @@ env_arr = [
     'server.secretKey=%s' % os.environ.get('SECRET_KEY'),
 ]
 
-docker_build('gcr.io/%s/chalk-server' % GCP_PROJECT, 'server')
+docker_build('us-east4-docker.pkg.dev/%s/default-gar/chalk-server' % GCP_PROJECT, 'server')
 docker_build(
-    'gcr.io/%s/chalk-ui' % GCP_PROJECT,
+    'us-east4-docker.pkg.dev/%s/default-gar/chalk-ui' % GCP_PROJECT,
     'ui',
     build_args={'GCP_PROJECT': GCP_PROJECT})
 
