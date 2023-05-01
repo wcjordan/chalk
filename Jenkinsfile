@@ -285,7 +285,7 @@ pipeline {
                 always {
                     container('jenkins-helm') {
                         withCredentials([file(credentialsId: 'jenkins-gke-sa', variable: 'FILE')]) {
-                            sh "gcloud auth activate-service-account --key-file $FILE"
+                            sh "gcloud auth activate-service-account --key-file \$FILE"
                             sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
                             sh "helm uninstall ${HELM_DEPLOY_NAME}"
                             retry(5) {
