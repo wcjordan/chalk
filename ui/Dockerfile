@@ -1,5 +1,5 @@
 # Multistage build for JS artifacts
-FROM node:16 as js_app
+FROM node:16 as base
 WORKDIR /js
 
 ENV ENVIRONMENT=prod
@@ -21,6 +21,9 @@ RUN npm install -g sharp-cli
 COPY js/yarn.lock .
 COPY js/package.json .
 RUN yarn --silent install --immutable && yarn cache clean
+
+# Multistage - built app
+FROM base as js_app
 
 # Install React app
 COPY js/.prettierrc .

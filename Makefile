@@ -27,7 +27,7 @@ build:
 		DOCKER_BUILDKIT=1 docker build \
 			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
-			--target js_app \
+			--target base \
 			-t $(UI_IMAGE_BASE):local-latest ui'
 
 # Test & lint
