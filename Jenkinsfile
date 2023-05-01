@@ -264,14 +264,12 @@ pipeline {
                             container('jenkins-worker-python') {
                                 dir('tests') {
                                     sh 'pip install "playwright==1.32.1" "pytest==7.3.1"'
-                                    sh "pytest . --server_domain ${SERVER_IP}"
+                                    sh "pytest . --server_domain ${SERVER_IP} --junitxml=playwright_results.xml || true"
+
+                                    junit testResults: 'playwright_results.xml' checksName: 'playwright'
+                                    browserStackReportPublisher 'automate'
                                 }
                             }
-                        }
-                    }
-                    post {
-                        always {
-                            browserStackReportPublisher 'automate'
                         }
                     }
                 }
