@@ -30,6 +30,14 @@ build:
 			--cache-to type=registry,ref=${UI_IMAGE},mode=max \
 			--cache-from type=registry,ref=${UI_IMAGE} \
 			-t $(UI_IMAGE):local-latest ui'
+	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
+		docker buildx build --load \
+			--build-arg expoClientId=$$EXPO_CLIENT_ID \
+			--build-arg sentryDsn=$$SENTRY_DSN \
+			--cache-to type=registry,ref=${UI_IMAGE},mode=max \
+			--cache-from type=registry,ref=${UI_IMAGE} \
+			--target js_app
+			-t $(UI_IMAGE_BASE):local-latest ui'
 
 # Test & lint
 .PHONY: test

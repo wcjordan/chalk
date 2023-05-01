@@ -47,6 +47,13 @@ pipeline {
                                                 --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui \
                                                 -t us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui:${env.BUILD_TAG} \
                                                 ui
+
+                                            docker buildx build --push \
+                                                --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui,mode=max \
+                                                --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui \
+                                                -t us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui-base:${env.BUILD_TAG} \
+                                                --target js_app
+                                                ui
                                         """
                                     }
                                 }
@@ -61,7 +68,7 @@ pipeline {
                                         spec:
                                           containers:
                                           - name: jenkins-worker-ui
-                                            image: gcr.io/${env.GCP_PROJECT}/chalk-ui-base:latest
+                                            image: us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui-base:${env.BUILD_TAG}
                                             command:
                                             - cat
                                             tty: true
