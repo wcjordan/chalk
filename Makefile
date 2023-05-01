@@ -17,26 +17,17 @@ UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
 # Build containers
 .PHONY: build
 build:
-	docker buildx create --driver docker-container --name chalk-default || true
-	docker buildx use chalk-default
-	docker buildx build --load \
-		--cache-to type=registry,ref=${SERVER_IMAGE},mode=max \
-		--cache-from type=registry,ref=${SERVER_IMAGE} \
-		-t $(SERVER_IMAGE):local-latest server
+	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):local-latest server
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
-		docker buildx build --load \
+		DOCKER_BUILDKIT=1 docker build \
 			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
-			--cache-to type=registry,ref=${UI_IMAGE},mode=max \
-			--cache-from type=registry,ref=${UI_IMAGE} \
 			-t $(UI_IMAGE):local-latest ui'
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
-		docker buildx build --load \
+		DOCKER_BUILDKIT=1 docker build \
 			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
-			--cache-to type=registry,ref=${UI_IMAGE},mode=max \
-			--cache-from type=registry,ref=${UI_IMAGE} \
-			--target js_app
+			--target js_app \
 			-t $(UI_IMAGE_BASE):local-latest ui'
 
 # Test & lint
