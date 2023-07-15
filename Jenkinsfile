@@ -270,7 +270,7 @@ pipeline {
                         browserstack(credentialsId: 'browserstack_key') {
                             container('jenkins-worker-python') {
                                 dir('tests') {
-                                    sh 'pip install "playwright==1.32.1" "pytest==7.3.1"'
+                                    sh 'pip install "playwright==1.34.0" "pytest==7.4.0"'
                                     sh "pytest . --server_domain ${SERVER_IP} --junitxml=playwright_results.xml || true"
 
                                     junit testResults: 'playwright_results.xml'
@@ -285,8 +285,8 @@ pipeline {
                 always {
                     container('jenkins-helm') {
                         withCredentials([file(credentialsId: 'jenkins-gke-sa', variable: 'FILE')]) {
-                            sh "gcloud auth activate-service-account --key-file \$FILE"
-                            sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
+                            sh 'gcloud auth activate-service-account --key-file $FILE'
+                            sh 'gcloud container clusters get-credentials ${GCP_PROJECT_NAME}-gke --project ${GCP_PROJECT} --zone us-east4-c'
                             sh "helm uninstall ${HELM_DEPLOY_NAME}"
                             retry(5) {
                                 sleep 10
