@@ -223,6 +223,7 @@ pipeline {
                                         --set environment=CI \
                                         --set gcpProject=${env.GCP_PROJECT} \
                                         --set imageTag=${env.BUILD_TAG} \
+                                        --set permittedUsers=flipperkid.tester@gmail.com \
                                         --set server.dbPassword=\$(head -c 32 /dev/urandom | base64) \
                                         --set server.secretKey=\$(head -c 32 /dev/urandom | base64) \
                                         ${HELM_DEPLOY_NAME} helm
