@@ -6,6 +6,7 @@ env_arr = [
     'domain=chalk-dev.%s' % os.environ.get('ROOT_DOMAIN'),
     'environment=DEV',
     'gcpProject=%s' % GCP_PROJECT,
+    'permittedUsers=%s' % os.environ.get('PERMITTED_USERS'),
     'server.dbPassword=%s' % os.environ.get('DB_PASSWORD'),
     'server.secretKey=%s' % os.environ.get('SECRET_KEY'),
 ]
