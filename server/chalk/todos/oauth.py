@@ -66,6 +66,9 @@ class OAuthBackend(BaseBackend):
             try:
                 user = user_model.objects.get(username=email)
             except user_model.DoesNotExist:
+                permitted_users = os.getenv('PERMITTED_USERS', '').split(',')
+                if email not in permitted_users:
+                    return None
                 user = user_model(username=email, email=email)
                 user.is_staff = True
                 user.is_superuser = True

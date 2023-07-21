@@ -97,6 +97,7 @@ deploy: build
 			--set domain=chalk.$$ROOT_DOMAIN \
 			--set environment=$(ENVIRONMENT) \
 			--set gcpProject=$$GCP_PROJECT \
+			--set permittedUsers=$$PERMITTED_USERS \
 			--set server.dbPassword=$$DB_PASSWORD \
 			--set server.secretKey=$$SECRET_KEY \
 			chalk-prod helm'
