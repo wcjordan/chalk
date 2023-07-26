@@ -92,12 +92,8 @@ Create the name of the service account to use
 
 {{/*
 Name for our CloudSQL DB instance
-Reuse the same instance for all CI deployments since these are slow to create
+Reuse the same instance for all deployments to save costs
 */}}
 {{- define "..dbInstanceName" -}}
-{{- if eq .Values.environment "CI" -}}
-chalk-ci
-{{- else -}}
-{{- include "..fullname" . }}
-{{- end }}
+default-shared-db
 {{- end }}

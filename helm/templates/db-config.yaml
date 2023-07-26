@@ -1,35 +1,11 @@
 {{- $fullName := include "..fullname" . -}}
 apiVersion: sql.cnrm.cloud.google.com/v1beta1
-kind: SQLInstance
-metadata:
-  annotations:
-    cnrm.cloud.google.com/deletion-policy: abandon
-  name: {{ include "..dbInstanceName" . }}
-spec:
-  databaseVersion: POSTGRES_12
-  region: us-east4
-  settings:
-    availabilityType: ZONAL
-    backupConfiguration:
-      enabled: true
-      pointInTimeRecoveryEnabled: true
-    insightsConfig:
-      queryInsightsEnabled: true
-      recordApplicationTags: true
-      recordClientAddress: true
-    locationPreference:
-      zone: us-east4-c
-    tier: db-f1-micro
-
----
-
-apiVersion: sql.cnrm.cloud.google.com/v1beta1
 kind: SQLDatabase
 metadata:
   name: {{ $fullName }}
 spec:
   instanceRef:
-    name: {{ include "..dbInstanceName" . }}
+    external: {{ include "..dbInstanceName" . }}
 
 ---
 
@@ -39,7 +15,7 @@ metadata:
   name: {{ $fullName }}
 spec:
   instanceRef:
-    name: {{ include "..dbInstanceName" . }}
+    external: {{ include "..dbInstanceName" . }}
   password:
     valueFrom:
       secretKeyRef:

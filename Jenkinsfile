@@ -289,10 +289,6 @@ pipeline {
                             sh 'gcloud auth activate-service-account --key-file $FILE'
                             sh 'gcloud container clusters get-credentials ${GCP_PROJECT_NAME}-gke --project ${GCP_PROJECT} --zone us-east4-c'
                             sh "helm uninstall ${HELM_DEPLOY_NAME}"
-                            retry(5) {
-                                sleep 10
-                                sh "gcloud sql users delete ${HELM_DEPLOY_NAME} --instance=chalk-ci --quiet"
-                            }
                         }
                     }
                 }
