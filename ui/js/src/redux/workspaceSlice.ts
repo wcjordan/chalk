@@ -48,12 +48,14 @@ export const workContexts: { [key: string]: WorkContext } = {
 
 const initialState: WorkspaceState = {
   csrfToken: null,
-  labelTodoId: null,
+  editTodoId: null,
   filterLabels: {
     Unlabeled: FILTER_STATUS.Active,
   },
+  labelTodoId: null,
   loggedIn: Platform.OS === 'web',
-  editTodoId: null,
+  showCompletedTodos: false,
+  showLabelFilter: false,
 };
 export default createSlice({
   name: 'workspace',
@@ -91,6 +93,12 @@ export default createSlice({
       }
 
       state.filterLabels = newLabels;
+    },
+    toggleShowCompletedTodos: (state) => {
+      state.showCompletedTodos = !state.showCompletedTodos;
+    },
+    toggleShowLabelFilter: (state) => {
+      state.showLabelFilter = !state.showLabelFilter;
     },
   },
 });

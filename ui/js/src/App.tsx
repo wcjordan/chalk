@@ -21,6 +21,8 @@ import {
   setLabelTodoId,
   setWorkContext,
   toggleLabel,
+  toggleShowCompletedTodos,
+  toggleShowLabelFilter,
   updateTodo,
   updateTodoLabels,
 } from './redux/reducers';
@@ -77,7 +79,7 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
     workspace,
     ...otherProps
   } = props;
-  const { loggedIn } = workspace;
+  const { loggedIn, showCompletedTodos, showLabelFilter } = workspace;
 
   let content: JSX.Element | null = null;
   if (!loggedIn) {
@@ -91,6 +93,8 @@ export const AppLayout: React.FC<LayoutProps> = function (props: LayoutProps) {
     content = (
       <TodoList
         activeWorkContext={activeWorkContext}
+        showCompletedTodos={showCompletedTodos}
+        showLabelFilter={showLabelFilter}
         todos={filteredTodos}
         workContexts={workContexts}
         workspace={workspace}
@@ -132,6 +136,8 @@ type LayoutProps = {
   setLabelTodoId: (id: number | null) => void;
   setWorkContext: (workContext: string) => void;
   toggleLabel: (label: string) => void;
+  toggleShowCompletedTodos: () => void;
+  toggleShowLabelFilter: () => void;
   updateTodo: (todoPatch: TodoPatch) => void;
   updateTodoLabels: (labels: string[]) => void;
   workspace: WorkspaceState;
@@ -153,6 +159,8 @@ const mapDispatchToProps = {
   setLabelTodoId,
   setWorkContext,
   toggleLabel,
+  toggleShowCompletedTodos,
+  toggleShowLabelFilter,
   updateTodo,
   updateTodoLabels,
 };

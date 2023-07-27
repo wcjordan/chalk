@@ -98,6 +98,10 @@ export const setEditTodoId = workspaceSlice.actions.setEditTodoId;
 export const setLabelTodoId = workspaceSlice.actions.setLabelTodoId;
 export const setWorkContext = workspaceSlice.actions.setWorkContext;
 export const toggleLabel = workspaceSlice.actions.toggleLabel;
+export const toggleShowCompletedTodos =
+  workspaceSlice.actions.toggleShowCompletedTodos;
+export const toggleShowLabelFilter =
+  workspaceSlice.actions.toggleShowLabelFilter;
 export { createTodo, listLabels, listTodos };
 export default {
   labelsApi: labelsApiSlice.reducer,
