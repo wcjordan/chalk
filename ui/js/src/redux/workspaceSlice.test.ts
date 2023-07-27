@@ -12,6 +12,8 @@ describe('workspace reducer', function () {
       },
       labelTodoId: null,
       loggedIn: false,
+      showCompletedTodos: false,
+      showLabelFilter: false,
     });
   });
 
