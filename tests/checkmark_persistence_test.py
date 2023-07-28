@@ -26,7 +26,10 @@ def test_todos_checkmark_persistence(page, todo_prefix):
     # Check off the 1st todo
     complete_todo(first_todo)
 
+    # Show completed todos, then
     # Wait for and verify that checkbox appears checked
+    show_completed_btn = page.locator('[data-testid="show-completed-todos"]')
+    show_completed_btn.click()
     checked_selector = f'div:has([data-testid="complete-todo"]):has-text("{CHECKED_ICON_TEXT}") + div:has-text("{todo1_description}")'
     page.locator(checked_selector).wait_for()
 

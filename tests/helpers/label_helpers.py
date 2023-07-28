@@ -32,15 +32,24 @@ def add_todo_w_labels(page, todo_description, labels):
 
 
 def clear_label_filters(page):
+    # Show the label filter section
+    show_labels_btn = page.locator('[data-testid="show-labels"]')
+    show_labels_btn.click()
+
+    # Click all active chips in the label filter
     active_chips = page.locator('[data-testid="label-filter"] [data-testid="chip-active"]')
     chip_elements = active_chips.element_handles()
     for chip in chip_elements:
         chip.click()
 
+    # Click all inverted chips in the label filter
     inverted_chips = page.locator('[data-testid="label-filter"] [data-testid="chip-inverted"]')
     chip_elements = inverted_chips.element_handles()
     for chip in chip_elements:
         chip.click()
+
+    # Close the label filter section
+    show_labels_btn.click()
 
 
 def dismiss_add_label_modal(page, optional=False):
