@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, Text, TextStyle, ViewStyle } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
@@ -38,6 +38,13 @@ const FilterViewControls: React.FC<Props> = function (props: Props) {
     );
   }
 
+  const toggleShowLabelFilterCb = useCallback(() => {
+    toggleShowLabelFilter();
+  }, [toggleShowLabelFilter]);
+  const toggleShowCompletedTodosCb = useCallback(() => {
+    toggleShowCompletedTodos();
+  }, [toggleShowCompletedTodos]);
+
   return (
     <Text style={styles.toggles}>
       {filterIcon}
@@ -45,7 +52,7 @@ const FilterViewControls: React.FC<Props> = function (props: Props) {
         iconColor="#000"
         icon={showLabelFilter ? 'tag-multiple' : 'tag-multiple-outline'}
         key="show-labels"
-        onPress={toggleShowLabelFilter}
+        onPress={toggleShowLabelFilterCb}
         selected={showLabelFilter}
         size={20}
         style={styles.iconButton}
@@ -59,7 +66,7 @@ const FilterViewControls: React.FC<Props> = function (props: Props) {
             : 'checkbox-blank-outline'
         }
         key="show-completed"
-        onPress={toggleShowCompletedTodos}
+        onPress={toggleShowCompletedTodosCb}
         selected={showCompletedTodos}
         size={20}
         style={styles.iconButton}

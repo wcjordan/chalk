@@ -1210,7 +1210,7 @@ exports[`Storyshots App Layout Default Layout 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": true,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -1294,7 +1294,7 @@ exports[`Storyshots App Layout Default Layout 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": true,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -2457,7 +2457,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": true,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -2541,7 +2541,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": true,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -10104,7 +10104,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": true,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -10188,7 +10188,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": true,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -15768,7 +15768,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": true,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -15852,7 +15852,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": true,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -23544,7 +23544,7 @@ exports[`Storyshots Label Filter Default Label Filter 1`] = `
           {
             "busy": undefined,
             "checked": undefined,
-            "disabled": true,
+            "disabled": false,
             "expanded": undefined,
             "selected": undefined,
           }
@@ -23628,7 +23628,7 @@ exports[`Storyshots Label Filter Default Label Filter 1`] = `
           {
             "busy": undefined,
             "checked": undefined,
-            "disabled": true,
+            "disabled": false,
             "expanded": undefined,
             "selected": undefined,
           }
@@ -31967,7 +31967,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
             {
               "busy": undefined,
               "checked": undefined,
-              "disabled": true,
+              "disabled": false,
               "expanded": undefined,
               "selected": undefined,
             }
@@ -32051,7 +32051,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
             {
               "busy": undefined,
               "checked": undefined,
-              "disabled": true,
+              "disabled": false,
               "expanded": undefined,
               "selected": undefined,
             }
@@ -40626,7 +40626,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": true,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -40710,7 +40710,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": true,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -51112,7 +51112,7 @@ exports[`Storyshots Work Context Filter Active Work Context Filter 1`] = `
           {
             "busy": undefined,
             "checked": undefined,
-            "disabled": true,
+            "disabled": false,
             "expanded": undefined,
             "selected": undefined,
           }
@@ -51196,7 +51196,7 @@ exports[`Storyshots Work Context Filter Active Work Context Filter 1`] = `
           {
             "busy": undefined,
             "checked": undefined,
-            "disabled": true,
+            "disabled": false,
             "expanded": undefined,
             "selected": undefined,
           }
@@ -52138,7 +52138,7 @@ exports[`Storyshots Work Context Filter Default Work Context Filter 1`] = `
           {
             "busy": undefined,
             "checked": undefined,
-            "disabled": true,
+            "disabled": false,
             "expanded": undefined,
             "selected": undefined,
           }
@@ -52222,7 +52222,7 @@ exports[`Storyshots Work Context Filter Default Work Context Filter 1`] = `
           {
             "busy": undefined,
             "checked": undefined,
-            "disabled": true,
+            "disabled": false,
             "expanded": undefined,
             "selected": undefined,
           }
