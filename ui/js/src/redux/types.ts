@@ -67,4 +67,6 @@ export interface WorkspaceState {
   filterLabels: FilterState;
   labelTodoId: number | null;
   loggedIn: boolean;
+  showCompletedTodos: boolean;
+  showLabelFilter: boolean;
 }

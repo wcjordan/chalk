@@ -52,8 +52,12 @@ const TodoList: React.FC<Props> = function (props: Props) {
     setEditTodoId,
     setLabelTodoId,
     setWorkContext,
+    showCompletedTodos,
+    showLabelFilter,
     todos,
     toggleLabel,
+    toggleShowCompletedTodos,
+    toggleShowLabelFilter,
     updateTodo,
     updateTodoLabels,
     workContexts,
@@ -87,20 +91,41 @@ const TodoList: React.FC<Props> = function (props: Props) {
     containerStyle = [containerStyle, topStyle];
   }
 
+  let labelFilter = null;
+  let workContextFilter = null;
+  if (showLabelFilter) {
+    labelFilter = (
+      <LabelFilter
+        labels={labelNames}
+        selectedLabels={filterLabels}
+        showCompletedTodos={showCompletedTodos}
+        showLabelFilter={showLabelFilter}
+        toggleLabel={toggleLabel}
+        toggleShowCompletedTodos={toggleShowCompletedTodos}
+        toggleShowLabelFilter={toggleShowLabelFilter}
+      />
+    );
+  } else {
+    workContextFilter = (
+      <WorkContextFilter
+        activeWorkContext={activeWorkContext}
+        isFiltered={Object.keys(filterLabels).length > 0}
+        setWorkContext={setWorkContext}
+        showCompletedTodos={showCompletedTodos}
+        showLabelFilter={showLabelFilter}
+        toggleShowCompletedTodos={toggleShowCompletedTodos}
+        toggleShowLabelFilter={toggleShowLabelFilter}
+        workContexts={workContexts}
+      />
+    );
+  }
+
   return (
     <React.Fragment>
       <View style={containerStyle}>
         <AddTodo createTodo={createTodo} />
-        <WorkContextFilter
-          activeWorkContext={activeWorkContext}
-          setWorkContext={setWorkContext}
-          workContexts={workContexts}
-        />
-        <LabelFilter
-          labels={labelNames}
-          selectedLabels={filterLabels}
-          toggleLabel={toggleLabel}
-        />
+        {workContextFilter}
+        {labelFilter}
         <ScrollView testID="todo-list">{todoViews}</ScrollView>
       </View>
       <LabelPicker
@@ -122,8 +147,12 @@ type Props = {
   setEditTodoId: (id: number | null) => void;
   setLabelTodoId: (id: number | null) => void;
   setWorkContext: (workContext: string) => void;
+  showCompletedTodos: boolean;
+  showLabelFilter: boolean;
   todos: Todo[];
   toggleLabel: (label: string) => void;
+  toggleShowCompletedTodos: () => void;
+  toggleShowLabelFilter: () => void;
   updateTodo: (todoPatch: TodoPatch) => void;
   updateTodoLabels: (labels: string[]) => void;
   workContexts: { [key: string]: WorkContext };

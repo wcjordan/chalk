@@ -1,6 +1,7 @@
 import pytest
 
-from helpers.label_helpers import (clear_label_filters, toggle_label_filter)
+from helpers.label_helpers import (clear_label_filters, toggle_label_filter,
+                                   toggle_label_filter_section)
 from helpers.todo_helpers import (add_todo, cancel_edit, edit_todo, find_todo,
                                   find_todos, wait_for_todo,
                                   wait_for_todo_to_disappear)
@@ -27,6 +28,7 @@ def test_dont_filter_edit(page, todo_prefix):
     edit_todo(page, todo_to_edit, edit_description, submit=False)
 
     # Add filter
+    toggle_label_filter_section(page)
     toggle_label_filter(page, 'home')
 
     # Wait for the filter to apply

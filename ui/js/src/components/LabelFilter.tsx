@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { FilterState } from '../redux/types';
+import FilterViewControls from './FilterViewControls';
 import LabelChip from './LabelChip';
 
 interface Style {
   labelFilterView: ViewStyle;
+  spacer: ViewStyle;
 }
 
 const UNLABELED = 'Unlabeled';
@@ -15,11 +17,22 @@ const styles = StyleSheet.create<Style>({
     width: '100%',
     backgroundColor: '#d9f0ffff',
   },
+  spacer: {
+    flexGrow: 1,
+  },
 });
 
 const LabelFilter: React.FC<Props> = function (props: Props) {
   // TODO (jordan) memoize the conversion
-  const { labels, selectedLabels, toggleLabel } = props;
+  const {
+    labels,
+    selectedLabels,
+    showCompletedTodos,
+    showLabelFilter,
+    toggleLabel,
+    toggleShowCompletedTodos,
+    toggleShowLabelFilter,
+  } = props;
 
   const filterByLabelCb = useCallback(
     (label: string) => {
@@ -45,14 +58,26 @@ const LabelFilter: React.FC<Props> = function (props: Props) {
         onPress={filterByLabelCb}
         status={selectedLabels[UNLABELED]}
       />
+      <View style={styles.spacer} />
+      <FilterViewControls
+        isFiltered={Object.keys(selectedLabels).length > 0}
+        showCompletedTodos={showCompletedTodos}
+        showLabelFilter={showLabelFilter}
+        toggleShowCompletedTodos={toggleShowCompletedTodos}
+        toggleShowLabelFilter={toggleShowLabelFilter}
+      />
     </View>
   );
 };
 
 type Props = {
-  toggleLabel: (label: string) => void;
   labels: string[];
   selectedLabels: FilterState;
+  showCompletedTodos: boolean;
+  showLabelFilter: boolean;
+  toggleLabel: (label: string) => void;
+  toggleShowCompletedTodos: () => void;
+  toggleShowLabelFilter: () => void;
 };
 
 export default LabelFilter;

@@ -6,11 +6,16 @@ const performFilter = (
   unlabeledFlag: boolean,
   activeFilters: string[],
   invertedFilters: string[],
+  showCompletedTodos: boolean,
   preserveIds: number[],
   todo: Todo,
 ) => {
   if (preserveIds.includes(todo.id)) {
     return true;
+  }
+
+  if (!showCompletedTodos && todo.completed) {
+    return false;
   }
 
   if (unlabeledFlag) {
@@ -26,7 +31,8 @@ const performFilter = (
 
 export const selectFilteredTodos = (state: ReduxState) => {
   // TODO (jordan) optimize w/ set intersection?
-  const { editTodoId, filterLabels, labelTodoId } = state.workspace;
+  const { editTodoId, filterLabels, labelTodoId, showCompletedTodos } =
+    state.workspace;
   const labeledFlag = filterLabels['Unlabeled'] === FILTER_STATUS.Inverted;
   const unlabeledFlag = filterLabels['Unlabeled'] === FILTER_STATUS.Active;
 
@@ -62,6 +68,7 @@ export const selectFilteredTodos = (state: ReduxState) => {
       unlabeledFlag,
       activeFilters,
       invertedFilters,
+      showCompletedTodos,
       preserveIds,
       todo,
     ),

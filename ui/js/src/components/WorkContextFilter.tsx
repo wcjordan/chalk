@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { FILTER_STATUS, WorkContext } from '../redux/types';
+import FilterViewControls from './FilterViewControls';
 import LabelChip from './LabelChip';
 
 interface Style {
   filterView: ViewStyle;
+  spacer: ViewStyle;
 }
 
 const styles = StyleSheet.create<Style>({
@@ -14,10 +16,22 @@ const styles = StyleSheet.create<Style>({
     width: '100%',
     backgroundColor: '#d9f0ffff',
   },
+  spacer: {
+    flexGrow: 1,
+  },
 });
 
 const WorkContextFilter: React.FC<Props> = function (props: Props) {
-  const { activeWorkContext, setWorkContext, workContexts } = props;
+  const {
+    activeWorkContext,
+    isFiltered,
+    setWorkContext,
+    showCompletedTodos,
+    showLabelFilter,
+    toggleShowCompletedTodos,
+    toggleShowLabelFilter,
+    workContexts,
+  } = props;
 
   const setWorkContextCb = useCallback(
     (workContext: string) => {
@@ -40,13 +54,26 @@ const WorkContextFilter: React.FC<Props> = function (props: Props) {
   return (
     <View style={styles.filterView} testID="work-context-filter">
       {chips}
+      <View style={styles.spacer} />
+      <FilterViewControls
+        isFiltered={isFiltered}
+        showCompletedTodos={showCompletedTodos}
+        showLabelFilter={showLabelFilter}
+        toggleShowCompletedTodos={toggleShowCompletedTodos}
+        toggleShowLabelFilter={toggleShowLabelFilter}
+      />
     </View>
   );
 };
 
 type Props = {
   activeWorkContext: string | undefined;
+  isFiltered: boolean;
   setWorkContext: (workContext: string) => void;
+  showCompletedTodos: boolean;
+  showLabelFilter: boolean;
+  toggleShowCompletedTodos: () => void;
+  toggleShowLabelFilter: () => void;
   workContexts: { [key: string]: WorkContext };
 };
 
