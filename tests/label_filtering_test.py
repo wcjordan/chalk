@@ -1,7 +1,8 @@
 import pytest
 
-from helpers.label_helpers import (add_todo_w_labels, clear_label_filters, get_label_filter_status,
-                                   toggle_label_filter)
+from helpers.label_helpers import (add_todo_w_labels, clear_label_filters,
+                                   get_label_filter_status, toggle_label_filter,
+                                   toggle_label_filter_section)
 from helpers.todo_helpers import (list_todo_descriptions, wait_for_todo,
                                   wait_for_todo_to_disappear)
 
@@ -22,6 +23,7 @@ def test_label_filtering(page, todo_prefix):
     add_todo_w_labels(page, todo_25min_high_desc, ['high-energy', '25 minutes'])
 
     # Select low-energy & verify 2 low-energy todos shown
+    toggle_label_filter_section(page)
     toggle_label_filter(page, 'low-energy')
     wait_for_todo_to_disappear(page, todo_25min_high_desc)
     todo_descriptions = list_todo_descriptions(page, todo_prefix)
