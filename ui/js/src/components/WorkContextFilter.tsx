@@ -1,14 +1,12 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { FILTER_STATUS, WorkContext } from '../redux/types';
+import FilterViewControls from './FilterViewControls';
 import LabelChip from './LabelChip';
 
 interface Style {
   filterView: ViewStyle;
-  iconButton: ViewStyle;
   spacer: ViewStyle;
-  toggles: TextStyle;
 }
 
 const styles = StyleSheet.create<Style>({
@@ -18,14 +16,8 @@ const styles = StyleSheet.create<Style>({
     width: '100%',
     backgroundColor: '#d9f0ffff',
   },
-  iconButton: {
-    margin: 0,
-  },
   spacer: {
     flexGrow: 1,
-  },
-  toggles: {
-    paddingRight: 8,
   },
 });
 
@@ -62,32 +54,12 @@ const WorkContextFilter: React.FC<Props> = function (props: Props) {
     <View style={styles.filterView} testID="work-context-filter">
       {chips}
       <View style={styles.spacer} />
-      <Text style={styles.toggles}>
-        <IconButton
-          iconColor="#000"
-          icon={showLabelFilter ? 'tag-multiple' : 'tag-multiple-outline'}
-          key="show-labels"
-          onPress={toggleShowLabelFilter}
-          selected={showLabelFilter}
-          size={20}
-          style={styles.iconButton}
-          testID="show-labels"
-        />
-        <IconButton
-          iconColor="#000"
-          icon={
-            showCompletedTodos
-              ? 'checkbox-marked-outline'
-              : 'checkbox-blank-outline'
-          }
-          key="show-completed"
-          onPress={toggleShowCompletedTodos}
-          selected={showCompletedTodos}
-          size={20}
-          style={styles.iconButton}
-          testID="show-completed-todos"
-        />
-      </Text>
+      <FilterViewControls
+        showCompletedTodos={showCompletedTodos}
+        showLabelFilter={showLabelFilter}
+        toggleShowCompletedTodos={toggleShowCompletedTodos}
+        toggleShowLabelFilter={toggleShowLabelFilter}
+      />
     </View>
   );
 };
