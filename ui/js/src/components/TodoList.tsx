@@ -92,12 +92,29 @@ const TodoList: React.FC<Props> = function (props: Props) {
   }
 
   let labelFilter = null;
+  let workContextFilter = null;
   if (showLabelFilter) {
     labelFilter = (
       <LabelFilter
         labels={labelNames}
         selectedLabels={filterLabels}
+        showCompletedTodos={showCompletedTodos}
+        showLabelFilter={showLabelFilter}
         toggleLabel={toggleLabel}
+        toggleShowCompletedTodos={toggleShowCompletedTodos}
+        toggleShowLabelFilter={toggleShowLabelFilter}
+      />
+    );
+  } else {
+    workContextFilter = (
+      <WorkContextFilter
+        activeWorkContext={activeWorkContext}
+        setWorkContext={setWorkContext}
+        showCompletedTodos={showCompletedTodos}
+        showLabelFilter={showLabelFilter}
+        toggleShowCompletedTodos={toggleShowCompletedTodos}
+        toggleShowLabelFilter={toggleShowLabelFilter}
+        workContexts={workContexts}
       />
     );
   }
@@ -106,15 +123,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
     <React.Fragment>
       <View style={containerStyle}>
         <AddTodo createTodo={createTodo} />
-        <WorkContextFilter
-          activeWorkContext={activeWorkContext}
-          setWorkContext={setWorkContext}
-          showCompletedTodos={showCompletedTodos}
-          showLabelFilter={showLabelFilter}
-          toggleShowCompletedTodos={toggleShowCompletedTodos}
-          toggleShowLabelFilter={toggleShowLabelFilter}
-          workContexts={workContexts}
-        />
+        {workContextFilter}
         {labelFilter}
         <ScrollView testID="todo-list">{todoViews}</ScrollView>
       </View>
