@@ -24,6 +24,7 @@ const styles = StyleSheet.create<Style>({
 const WorkContextFilter: React.FC<Props> = function (props: Props) {
   const {
     activeWorkContext,
+    isFiltered,
     setWorkContext,
     showCompletedTodos,
     showLabelFilter,
@@ -55,6 +56,7 @@ const WorkContextFilter: React.FC<Props> = function (props: Props) {
       {chips}
       <View style={styles.spacer} />
       <FilterViewControls
+        isFiltered={isFiltered}
         showCompletedTodos={showCompletedTodos}
         showLabelFilter={showLabelFilter}
         toggleShowCompletedTodos={toggleShowCompletedTodos}
@@ -66,6 +68,7 @@ const WorkContextFilter: React.FC<Props> = function (props: Props) {
 
 type Props = {
   activeWorkContext: string | undefined;
+  isFiltered: boolean;
   setWorkContext: (workContext: string) => void;
   showCompletedTodos: boolean;
   showLabelFilter: boolean;

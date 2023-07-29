@@ -60,6 +60,7 @@ const LabelFilter: React.FC<Props> = function (props: Props) {
       />
       <View style={styles.spacer} />
       <FilterViewControls
+        isFiltered={Object.keys(selectedLabels).length > 0}
         showCompletedTodos={showCompletedTodos}
         showLabelFilter={showLabelFilter}
         toggleShowCompletedTodos={toggleShowCompletedTodos}

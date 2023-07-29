@@ -18,14 +18,29 @@ const styles = StyleSheet.create<Style>({
 
 const FilterViewControls: React.FC<Props> = function (props: Props) {
   const {
+    isFiltered,
     showCompletedTodos,
     showLabelFilter,
     toggleShowCompletedTodos,
     toggleShowLabelFilter,
   } = props;
 
+  let filterIcon = null;
+  if (isFiltered) {
+    filterIcon = (
+      <IconButton
+        iconColor="#000"
+        icon={'filter'}
+        key="filtered"
+        size={20}
+        style={styles.iconButton}
+      />
+    );
+  }
+
   return (
     <Text style={styles.toggles}>
+      {filterIcon}
       <IconButton
         iconColor="#000"
         icon={showLabelFilter ? 'tag-multiple' : 'tag-multiple-outline'}
@@ -55,6 +70,7 @@ const FilterViewControls: React.FC<Props> = function (props: Props) {
 };
 
 type Props = {
+  isFiltered: boolean;
   showCompletedTodos: boolean;
   showLabelFilter: boolean;
   toggleShowCompletedTodos: () => void;

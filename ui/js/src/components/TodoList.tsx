@@ -109,6 +109,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
     workContextFilter = (
       <WorkContextFilter
         activeWorkContext={activeWorkContext}
+        isFiltered={Object.keys(filterLabels).length > 0}
         setWorkContext={setWorkContext}
         showCompletedTodos={showCompletedTodos}
         showLabelFilter={showLabelFilter}
