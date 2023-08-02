@@ -1,12 +1,14 @@
+const IS_DEV = process.env.ENVIRONMENT === 'dev';
+
 export default {
-  name: 'chalk',
+  name: IS_DEV ? 'chalk (dev)' : 'chalk',
   slug: 'chalk',
   version: '0.1.3',
   orientation: 'portrait',
   icon: './assets/icon.png',
   scheme: 'chalk',
   android: {
-    package: 'com.flipperkid.chalk',
+    package: IS_DEV ? 'com.flipperkid.chalk.dev' : 'com.flipperkid.chalk',
     versionCode: 1,
   },
   runtimeVersion: {
