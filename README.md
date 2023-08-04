@@ -51,13 +51,11 @@ Download the client ID / secret as JSON and place at helm/secrets/oauth_web_clie
 Also set the chalk_oauth_client_secret Terraform variable for the gcp-setup with the contents of chalk_oauth_web_client_secret.json so that Jenkins integration tests can deploy the secret.  
 
 2) for Expo Go (mobile dev)  
-Name: chalk-dev-expo  
-Authorized URIs:  
-- https://auth.expo.io  
-Authorized redirect URIs:  
-- https://auth.expo.io/@flipperkid/chalk  
-
-Fill in EXPO_CLIENT_ID in .env & prod.env   
+Application type: Android  
+Name: chalk-dev-android  
+Package Name: com.<DOMAIN_NAME w/o .com>.chalk.dev  
+SHA-1 Certificate Fingerprint: get from running `npx eas credentials` in ui/js directory  
+Store client id in EXPO_CLIENT_ID .env & prod.env  
 
 3) for Android (staging & prod)  
 Name: chalk-staging-android  

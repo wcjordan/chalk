@@ -43,10 +43,11 @@ export default {
     ],
   },
   extra: {
-    ANDROID_CLIENT_ID: process.env.ANDROID_CLIENT_ID,
     DEBUG: process.env.DEBUG,
     ENVIRONMENT: process.env.ENVIRONMENT,
-    EXPO_CLIENT_ID: process.env.EXPO_CLIENT_ID,
+    AUTH_CLIENT_ID: IS_DEV
+      ? process.env.EXPO_CLIENT_ID
+      : process.env.ANDROID_CLIENT_ID,
     SENTRY_DSN: process.env.SENTRY_DSN,
     eas: {
       projectId: 'b52e213a-3078-4069-84b0-331d55010927',
