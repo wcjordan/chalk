@@ -52,5 +52,5 @@ export default {
       projectId: 'b52e213a-3078-4069-84b0-331d55010927',
     },
   },
-  plugins: ['sentry-expo'],
+  plugins: ['@react-native-google-signin/google-signin', 'sentry-expo'],
 };
