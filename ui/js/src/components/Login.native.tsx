@@ -38,8 +38,8 @@ const Login: React.FC<Props> = function (props: Props) {
       const tokens = await GoogleSignin.getTokens();
       completeAuthentication(tokens.accessToken);
       setInProgress(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      // eslint-disable-line @typescript-eslint/no-explicit-any
       let message = 'Login Error: unknown error';
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         message = 'Login Error: us cancelled the login';
