@@ -20,12 +20,10 @@ build:
 	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):local-latest server
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
-			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
 			-t $(UI_IMAGE):local-latest ui'
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
-			--build-arg expoClientId=$$EXPO_CLIENT_ID \
 			--build-arg sentryDsn=$$SENTRY_DSN \
 			--target base \
 			-t $(UI_IMAGE_BASE):local-latest ui'

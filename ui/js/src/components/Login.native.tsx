@@ -9,7 +9,8 @@ import {
 import { getEnvFlags } from '../helpers';
 
 GoogleSignin.configure({
-  webClientId: getEnvFlags().AUTH_CLIENT_ID,
+  webClientId: getEnvFlags().OAUTH_CLIENT_ID,
+  offlineAccess: true,
 });
 
 interface Style {
@@ -34,9 +35,8 @@ const Login: React.FC<Props> = function (props: Props) {
     setInProgress(true);
     try {
       await GoogleSignin.hasPlayServices();
-      await GoogleSignin.signIn();
-      const tokens = await GoogleSignin.getTokens();
-      completeAuthentication(tokens.accessToken);
+      const userInfo = await GoogleSignin.signIn();
+      completeAuthentication(userInfo.idToken);
       setInProgress(false);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -49,8 +49,8 @@ const Login: React.FC<Props> = function (props: Props) {
         message = 'Login Error: Play Services is not available';
       }
 
-      console.log(message);
-      console.log(error);
+      console.error(message);
+      console.error(error);
       addNotification(message);
       setInProgress(false);
     }
