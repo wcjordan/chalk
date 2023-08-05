@@ -1,12 +1,14 @@
+const IS_DEV = process.env.ENVIRONMENT === 'dev';
+
 export default {
-  name: 'chalk',
+  name: IS_DEV ? 'chalk (dev)' : 'chalk',
   slug: 'chalk',
   version: '0.1.3',
   orientation: 'portrait',
   icon: './assets/icon.png',
   scheme: 'chalk',
   android: {
-    package: 'com.flipperkid.chalk',
+    package: IS_DEV ? 'com.flipperkid.chalk.dev' : 'com.flipperkid.chalk',
     versionCode: 1,
   },
   runtimeVersion: {
@@ -41,14 +43,13 @@ export default {
     ],
   },
   extra: {
-    ANDROID_CLIENT_ID: process.env.ANDROID_CLIENT_ID,
     DEBUG: process.env.DEBUG,
     ENVIRONMENT: process.env.ENVIRONMENT,
-    EXPO_CLIENT_ID: process.env.EXPO_CLIENT_ID,
+    OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
     SENTRY_DSN: process.env.SENTRY_DSN,
     eas: {
       projectId: 'b52e213a-3078-4069-84b0-331d55010927',
     },
   },
-  plugins: ['sentry-expo'],
+  plugins: ['@react-native-google-signin/google-signin', 'sentry-expo'],
 };

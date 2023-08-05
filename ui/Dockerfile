@@ -4,8 +4,6 @@ WORKDIR /js
 
 ENV ENVIRONMENT=prod
 ENV DEBUG=false
-ARG expoClientId
-ENV EXPO_CLIENT_ID=$expoClientId
 ARG sentryDsn
 ENV SENTRY_DSN=$sentryDsn
 

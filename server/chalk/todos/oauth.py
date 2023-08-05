@@ -2,18 +2,21 @@
 Module to provide Google OAuth integrations
 """
 import json
+import logging
 import os
 
 from django.conf import settings
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth import get_user_model
 import google_auth_oauthlib.flow
-from google.auth.transport.requests import AuthorizedSession
+from google.auth.transport.requests import AuthorizedSession, Request
+from google.oauth2 import id_token
 from google.oauth2.credentials import Credentials
 
 CLIENT_SECRETS_FILE = "/mnt/oauth_web_client_secret.json"
 REDIRECT_URI = f'http://{os.environ["DOMAIN"]}/api/todos/auth_callback/'
 SCOPES = ['openid', 'https://www.googleapis.com/auth/userinfo.email']
+logger = logging.getLogger(__name__)
 
 
 def get_authorization_url(host):
@@ -40,16 +43,13 @@ class OAuthBackend(BaseBackend):
     def authenticate(self, request, **kwargs):
         user_model = get_user_model()
         token = kwargs['token']
+        session = None
 
         if 'state' in request.GET:
             session = _get_authorized_session(token, request.GET['state'],
                                               request.get_host())
         elif 'ci_refresh' in request.GET:
-            with open(CLIENT_SECRETS_FILE, 'r',
-                      encoding='UTF-8') as client_secrets_file:
-                client_secrets_data = client_secrets_file.read()
-            client_secrets_obj = json.loads(client_secrets_data)["web"]
-
+            client_secrets_obj = _get_clients_secret_obj()
             session = AuthorizedSession(
                 Credentials(
                     None,
@@ -58,10 +58,12 @@ class OAuthBackend(BaseBackend):
                     client_id=client_secrets_obj['client_id'],
                     client_secret=client_secrets_obj['client_secret'],
                 ))
-        else:
-            session = AuthorizedSession(Credentials(token))
 
-        email = _get_email(session)
+        if session is not None:
+            email = _get_email_from_session(session)
+        else:
+            email = _get_email_from_id_token(token)
+
         if email:
             try:
                 user = user_model.objects.get(username=email)
@@ -84,7 +86,25 @@ class OAuthBackend(BaseBackend):
             return None
 
 
-def _get_email(session):
+def _get_clients_secret_obj():
+    with open(CLIENT_SECRETS_FILE, 'r',
+              encoding='UTF-8') as client_secrets_file:
+        client_secrets_data = client_secrets_file.read()
+    return json.loads(client_secrets_data)["web"]
+
+
+def _get_email_from_id_token(token):
+    try:
+        client_secrets_obj = _get_clients_secret_obj()
+        id_info = id_token.verify_oauth2_token(token, Request(),
+                                               client_secrets_obj['client_id'])
+        return id_info['email']
+    except ValueError:
+        logger.exception('Error getting the email from the the ID token')
+    return None
+
+
+def _get_email_from_session(session):
     profile_info = session.get(
         'https://www.googleapis.com/userinfo/v2/me').json()
     return profile_info['email']

@@ -11,7 +11,6 @@ import { getEnvFlags } from './src/helpers';
 const envFlags = getEnvFlags();
 sentryInit({
   dsn: envFlags.SENTRY_DSN,
-  enableInExpoDevelopment: true,
   environment: envFlags.ENVIRONMENT,
   debug: envFlags.DEBUG == 'true',
 });

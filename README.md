@@ -49,23 +49,9 @@ Authorized redirect URIs:
 
 Download the client ID / secret as JSON and place at helm/secrets/oauth_web_client_secret.json  
 Also set the chalk_oauth_client_secret Terraform variable for the gcp-setup with the contents of chalk_oauth_web_client_secret.json so that Jenkins integration tests can deploy the secret.  
+Also set OAUTH_CLIENT_ID to the client ID in .env & .prod.env
 
-2) for Expo Go (mobile dev)  
-Name: chalk-dev-expo  
-Authorized URIs:  
-- https://auth.expo.io  
-Authorized redirect URIs:  
-- https://auth.expo.io/@flipperkid/chalk  
-
-Fill in EXPO_CLIENT_ID in .env & prod.env   
-
-3) for Android (staging & prod)  
-Name: chalk-staging-android  
-Package Name: com.<DOMAIN_NAME w/o .com>.chalk  
-SHA-1 Certificate Fingerprint: get from running `npx eas credentials` in ui/js directory  
-Store client id in ANDROID_CLIENT_ID .prod.env
-
-4) OAuth refresh token for Playwright tests
+2) OAuth refresh token for Playwright tests
 Also run a dev server and login using a tester account to capture the refresh token for Jenkins integration tests to use.  
 Fill in CHALK_OAUTH_REFRESH_TOKEN in .env and also the chalk_oauth_refresh_token variable in Terraform Cloud.  
 Generating this token is tricky since it is never sent to the browser.  
