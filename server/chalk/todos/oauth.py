@@ -96,10 +96,12 @@ def _get_clients_secret_obj():
 def _get_email_from_id_token(token):
     try:
         client_secrets_obj = _get_clients_secret_obj()
-        id_info = id_token.verify_oauth2_token(token, Request(), client_secrets_obj['client_id'])
+        id_info = id_token.verify_oauth2_token(token, Request(),
+                                               client_secrets_obj['client_id'])
         return id_info['email']
     except ValueError:
         logger.exception('Error getting the email from the the ID token')
+    return None
 
 
 def _get_email_from_session(session):

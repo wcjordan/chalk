@@ -36,8 +36,16 @@ const Login: React.FC<Props> = function (props: Props) {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      completeAuthentication(userInfo.idToken);
+
       setInProgress(false);
+      if (userInfo.idToken) {
+        completeAuthentication(userInfo.idToken);
+      } else {
+        const message =
+          'Login Error: ID token unexpectedly not found after login';
+        console.error(message);
+        addNotification(message);
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       let message = 'Login Error: unknown error';
