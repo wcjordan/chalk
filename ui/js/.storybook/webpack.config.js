@@ -1,4 +1,5 @@
 import path from 'path';
+import webpack from 'webpack';
 
 module.exports = ({ config }) => {
   config.module.rules.push({
@@ -39,6 +40,12 @@ module.exports = ({ config }) => {
     v8: false,
     worker_threads: false,
   };
+
+  config.plugins.push(
+    new webpack.NormalModuleReplacementPlugin(/node:/, (resource) => {
+      resource.request = resource.request.replace(/^node:/, '');
+    }),
+  );
 
   return config;
 };

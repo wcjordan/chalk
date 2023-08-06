@@ -1,5 +1,5 @@
 # Multistage build for JS artifacts
-FROM node:16 as base
+FROM node:20 as base
 WORKDIR /js
 
 ENV ENVIRONMENT=prod

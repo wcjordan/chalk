@@ -60,6 +60,16 @@ Also edit the get_authorization_url function to pass access_type='offline' in th
 A final gotcha is the refresh token will only be returned when the app is initially authorized.  
 Visit https://myaccount.google.com/u/0/permissions to revoke authorization.  
 
+3) for Android (staging & prod)  
+Name: chalk-prod-android  
+Package Name: com.<DOMAIN_NAME w/o .com>.chalk  
+SHA-1 Certificate Fingerprint: get from running `npx eas credentials` in ui/js directory  
+
+4) for Android (dev)  
+Name: chalk-dev-android  
+Package Name: com.<DOMAIN_NAME w/o .com>.chalk.dev  
+SHA-1 Certificate Fingerprint: get from running `npx eas credentials` in ui/js directory  
+
 ## Setup Jenkins Builds
 ### Chalk Build
 Create a Multibranch Pipeline build named `chalk`  
