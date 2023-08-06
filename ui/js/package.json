@@ -81,14 +81,9 @@
     "xmldom": "^0.6.0"
   },
   "scripts": {
-    "start": "expo start",
-    "android": "npx expo start --android",
-    "ios": "npx expo start --ios",
-    "web": "npx expo start --web",
     "build": "npx expo export:web",
     "test": "yarn jest",
     "storybook": "storybook dev -p 9009",
-    "build-storybook": "storybook build",
     "prepare": "cd ../../ && husky install ui/js/.husky"
   },
   "browserslist": [
