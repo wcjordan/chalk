@@ -1,5 +1,5 @@
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   GoogleSignin,
   GoogleSigninButton,
@@ -63,6 +63,15 @@ const Login: React.FC<Props> = function (props: Props) {
       setInProgress(false);
     }
   }, [completeAuthentication, addNotification, setInProgress]);
+
+  useEffect(() => {
+    async function autoSignIn() {
+      if (await GoogleSignin.isSignedIn()) {
+        signIn();
+      }
+    }
+    autoSignIn();
+  }, [signIn]);
 
   return (
     <View style={styles.wrapperStyle}>
