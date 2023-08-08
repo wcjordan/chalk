@@ -30,18 +30,23 @@ export const workContexts: { [key: string]: WorkContext } = {
       '5 minutes': FILTER_STATUS.Active,
     },
   },
-  chalkCoding: {
-    displayName: 'Chalk Coding',
+  upNext: {
+    displayName: 'Up Next',
     labels: {
-      Chalk: FILTER_STATUS.Active,
-      '25 minutes': FILTER_STATUS.Active,
+      'up next': FILTER_STATUS.Active,
+    },
+  },
+  shopping: {
+    displayName: 'Shopping',
+    labels: {
+      Shopping: FILTER_STATUS.Active,
     },
   },
   chalkPlanning: {
     displayName: 'Chalk Planning',
     labels: {
       Chalk: FILTER_STATUS.Active,
-      '60 minutes': FILTER_STATUS.Active,
+      vague: FILTER_STATUS.Active,
     },
   },
 };

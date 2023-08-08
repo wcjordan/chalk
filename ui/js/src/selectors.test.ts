@@ -261,13 +261,13 @@ describe('selectActiveWorkContext', function () {
       workspace: {
         filterLabels: {
           Chalk: FILTER_STATUS.Active,
-          '25 minutes': FILTER_STATUS.Active,
+          vague: FILTER_STATUS.Active,
         },
       },
     };
 
     const result = selectActiveWorkContext(state);
-    expect(result).toEqual('chalkCoding');
+    expect(result).toEqual('chalkPlanning');
   });
 
   it('should not return a work context if additional labels are selected', function () {
@@ -275,7 +275,7 @@ describe('selectActiveWorkContext', function () {
       workspace: {
         filterLabels: {
           Chalk: FILTER_STATUS.Active,
-          '25 minutes': FILTER_STATUS.Active,
+          vague: FILTER_STATUS.Active,
           Home: FILTER_STATUS.Active,
         },
       },
