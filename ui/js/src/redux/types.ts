@@ -40,6 +40,7 @@ export interface NewTodo {
 
 export interface ApiState<T> {
   entries: T[];
+  initialLoad: boolean;
   loading: boolean;
 }
 

@@ -13,6 +13,7 @@ export function getTodosApi(): string {
 const initialState: ApiState<Todo> = {
   entries: [],
   loading: false,
+  initialLoad: true,
 };
 
 export const createTodo = createAsyncThunk<Todo, string, { state: ReduxState }>(
@@ -79,10 +80,12 @@ export default createSlice({
         state.loading = true;
       })
       .addCase(listTodos.fulfilled, (state, action) => {
+        state.initialLoad = false;
         state.loading = false;
         state.entries = processTodos(action.payload);
       })
       .addCase(listTodos.rejected, (state, action) => {
+        state.initialLoad = false;
         state.loading = false;
         console.warn(`Loading Todo failed. ${action.error.message}`);
       })
