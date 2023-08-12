@@ -55,6 +55,7 @@ describe('listLabels', function () {
 describe('labelsApiSlice reducer', function () {
   const initialState = {
     entries: [],
+    initialLoad: true,
     loading: false,
   };
 
@@ -69,6 +70,7 @@ describe('labelsApiSlice reducer', function () {
       });
       expect(result).toEqual({
         entries: [],
+        initialLoad: true,
         loading: true,
       });
     });
@@ -89,6 +91,7 @@ describe('labelsApiSlice reducer', function () {
       const result = labelsApiSlice.reducer(
         {
           entries: [],
+          initialLoad: true,
           loading: true,
         },
         {
@@ -98,6 +101,7 @@ describe('labelsApiSlice reducer', function () {
       );
       expect(result).toEqual({
         entries: [],
+        initialLoad: false,
         loading: false,
       });
       expect(console.warn).toHaveBeenCalledWith(
@@ -111,6 +115,7 @@ describe('labelsApiSlice reducer', function () {
       const result = labelsApiSlice.reducer(
         {
           entries: [],
+          initialLoad: true,
           loading: true,
         },
         {
@@ -120,6 +125,7 @@ describe('labelsApiSlice reducer', function () {
       );
       expect(result).toEqual({
         entries: [],
+        initialLoad: false,
         loading: false,
       });
     });

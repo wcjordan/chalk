@@ -104,3 +104,7 @@ export const selectActiveWorkContext = (state: ReduxState) => {
     );
   });
 };
+
+export const selectIsLoading = (state: ReduxState) => {
+  return state.labelsApi.initialLoad || state.todosApi.initialLoad;
+};

@@ -94,6 +94,7 @@ describe('listTodos', function () {
 describe('todosApiSlice reducer', function () {
   const initialState = {
     entries: [],
+    initialLoad: true,
     loading: false,
   };
 
@@ -109,6 +110,7 @@ describe('todosApiSlice reducer', function () {
       });
       expect(result).toEqual({
         entries: [getStubTodo()],
+        initialLoad: true,
         loading: false,
       });
     });
@@ -120,6 +122,7 @@ describe('todosApiSlice reducer', function () {
             getStubTodo({ id: 2 }),
             getStubTodo({ id: 1, completed: true }),
           ],
+          initialLoad: false,
           loading: false,
         },
         {
@@ -133,6 +136,7 @@ describe('todosApiSlice reducer', function () {
           getStubTodo({ id: 3 }),
           getStubTodo({ id: 1, completed: true }),
         ],
+        initialLoad: false,
         loading: false,
       });
     });
@@ -141,6 +145,7 @@ describe('todosApiSlice reducer', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
+          initialLoad: false,
           loading: false,
         },
         {
@@ -150,6 +155,7 @@ describe('todosApiSlice reducer', function () {
       );
       expect(result).toEqual({
         entries: [],
+        initialLoad: false,
         loading: false,
       });
     });
@@ -162,6 +168,7 @@ describe('todosApiSlice reducer', function () {
       });
       expect(result).toEqual({
         entries: [],
+        initialLoad: true,
         loading: true,
       });
     });
@@ -182,6 +189,7 @@ describe('todosApiSlice reducer', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
+          initialLoad: true,
           loading: true,
         },
         {
@@ -191,6 +199,7 @@ describe('todosApiSlice reducer', function () {
       );
       expect(result).toEqual({
         entries: [],
+        initialLoad: false,
         loading: false,
       });
       expect(console.warn).toHaveBeenCalledWith(
@@ -204,6 +213,7 @@ describe('todosApiSlice reducer', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
+          initialLoad: true,
           loading: true,
         },
         {
@@ -213,6 +223,7 @@ describe('todosApiSlice reducer', function () {
       );
       expect(result).toEqual({
         entries: [],
+        initialLoad: false,
         loading: false,
       });
     });
@@ -221,6 +232,7 @@ describe('todosApiSlice reducer', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [getStubTodo({ id: 1, description: 'overwritten' })],
+          initialLoad: true,
           loading: true,
         },
         {
@@ -230,6 +242,7 @@ describe('todosApiSlice reducer', function () {
       );
       expect(result).toEqual({
         entries: [getStubTodo({ id: 2 }), getStubTodo({ id: 3 })],
+        initialLoad: false,
         loading: false,
       });
     });
@@ -238,6 +251,7 @@ describe('todosApiSlice reducer', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
+          initialLoad: true,
           loading: true,
         },
         {
@@ -255,6 +269,7 @@ describe('todosApiSlice reducer', function () {
           getStubTodo({ id: 3 }),
           getStubTodo({ id: 1, completed: true }),
         ],
+        initialLoad: false,
         loading: false,
       });
     });
@@ -263,6 +278,7 @@ describe('todosApiSlice reducer', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
+          initialLoad: true,
           loading: true,
         },
         {
@@ -272,6 +288,7 @@ describe('todosApiSlice reducer', function () {
       );
       expect(result).toEqual({
         entries: [],
+        initialLoad: false,
         loading: false,
       });
     });
@@ -286,6 +303,7 @@ describe('todosApiSlice reducer', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [getStubTodo({ id: 1 }), getStubTodo({ id: 2 })],
+          initialLoad: false,
           loading: false,
         },
         {
@@ -295,6 +313,7 @@ describe('todosApiSlice reducer', function () {
       );
       expect(result).toEqual({
         entries: [updatedTodo, getStubTodo({ id: 2 })],
+        initialLoad: false,
         loading: false,
       });
     });
@@ -308,6 +327,7 @@ describe('todosApiSlice reducer', function () {
             getStubTodo({ id: 2 }),
             getStubTodo({ id: 3 }),
           ],
+          initialLoad: false,
           loading: false,
         },
         {
@@ -321,6 +341,7 @@ describe('todosApiSlice reducer', function () {
           getStubTodo({ id: 3 }),
           completedTodo,
         ],
+        initialLoad: false,
         loading: false,
       });
     });
@@ -329,6 +350,7 @@ describe('todosApiSlice reducer', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [getStubTodo()],
+          initialLoad: false,
           loading: false,
         },
         {
@@ -338,6 +360,7 @@ describe('todosApiSlice reducer', function () {
       );
       expect(result).toEqual({
         entries: [],
+        initialLoad: false,
         loading: false,
       });
     });

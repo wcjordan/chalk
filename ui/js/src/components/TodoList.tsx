@@ -20,6 +20,7 @@ import { useDataLoader } from '../hooks';
 import AddTodo from './AddTodo';
 import LabelFilter from './LabelFilter';
 import LabelPicker from './LabelPicker';
+import LoadingPage from './LoadingPage';
 import TodoItem from './TodoItem';
 import WorkContextFilter from './WorkContextFilter';
 
@@ -47,6 +48,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
   const {
     activeWorkContext,
     createTodo,
+    isLoading,
     labels,
     selectedPickerLabels,
     setEditTodoId,
@@ -66,19 +68,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
   const { editTodoId, filterLabels, labelTodoId } = workspace;
 
   useDataLoader();
-
   const labelNames = useMemo(() => labels.map((label) => label.name), [labels]);
-  const todoViews = _.map(todos, (todo) => (
-    <TodoItem
-      editing={todo.id === editTodoId}
-      key={todo.id || ''}
-      labeling={todo.id === labelTodoId}
-      setEditTodoId={setEditTodoId}
-      setLabelTodoId={setLabelTodoId}
-      todo={todo}
-      updateTodo={updateTodo}
-    />
-  ));
 
   let containerStyle: StyleProp<ViewStyle> =
     Platform.OS === 'web' ? styles.containerWeb : styles.containerMobile;
@@ -90,6 +80,26 @@ const TodoList: React.FC<Props> = function (props: Props) {
     }).top;
     containerStyle = [containerStyle, topStyle];
   }
+
+  if (isLoading) {
+    return (
+      <View style={containerStyle}>
+        <LoadingPage />
+      </View>
+    );
+  }
+
+  const todoViews = _.map(todos, (todo) => (
+    <TodoItem
+      editing={todo.id === editTodoId}
+      key={todo.id || ''}
+      labeling={todo.id === labelTodoId}
+      setEditTodoId={setEditTodoId}
+      setLabelTodoId={setLabelTodoId}
+      todo={todo}
+      updateTodo={updateTodo}
+    />
+  ));
 
   let labelFilter = null;
   let workContextFilter = null;
@@ -142,6 +152,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
 type Props = {
   activeWorkContext: string | undefined;
   createTodo: (description: string) => void;
+  isLoading: boolean;
   labels: Label[];
   selectedPickerLabels: { [label: string]: boolean };
   setEditTodoId: (id: number | null) => void;

@@ -29,6 +29,7 @@ import {
 import {
   selectActiveWorkContext,
   selectFilteredTodos,
+  selectIsLoading,
   selectSelectedPickerLabels,
 } from './selectors';
 import { workContexts } from './redux/workspaceSlice';
@@ -58,11 +59,13 @@ const App: React.FC<ConnectedProps<typeof connector>> = function (
   const selectedPickerLabels = useSelector(selectSelectedPickerLabels);
   const filteredTodos = useSelector(selectFilteredTodos);
   const activeWorkContext = useSelector(selectActiveWorkContext);
+  const isLoading = useSelector(selectIsLoading);
   return (
     <AppLayout
       {...props}
       activeWorkContext={activeWorkContext}
       filteredTodos={filteredTodos}
+      isLoading={isLoading}
       selectedPickerLabels={selectedPickerLabels}
     />
   );
@@ -129,6 +132,7 @@ type LayoutProps = {
   createTodo: (description: string) => void;
   dismissNotification: () => void;
   filteredTodos: Todo[];
+  isLoading: boolean;
   labels: Label[];
   notificationQueue: string[];
   selectedPickerLabels: { [label: string]: boolean };

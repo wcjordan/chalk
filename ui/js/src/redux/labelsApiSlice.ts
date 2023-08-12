@@ -11,6 +11,7 @@ export function getLabelsApi(): string {
 
 const initialState: ApiState<Label> = {
   entries: [],
+  initialLoad: true,
   loading: false,
 };
 
@@ -34,10 +35,12 @@ export default createSlice({
         state.loading = true;
       })
       .addCase(listLabels.fulfilled, (state, action) => {
+        state.initialLoad = false;
         state.loading = false;
         state.entries = action.payload;
       })
       .addCase(listLabels.rejected, (state, action) => {
+        state.initialLoad = false;
         state.loading = false;
         console.warn(`Loading Labels failed. ${action.error.message}`);
       });
