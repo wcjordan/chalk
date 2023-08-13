@@ -7,6 +7,7 @@ interface Style {
   chipActiveStyle: ViewStyle;
   chipInvertedStyle: ViewStyle;
   chipStyle: ViewStyle;
+  chipSlimTextStyle: TextStyle;
   chipTextStyle: TextStyle;
 }
 
@@ -20,20 +21,27 @@ const styles = StyleSheet.create<Style>({
     backgroundColor: '#ffb347ff',
   },
   chipStyle: {
-    margin: 3,
     backgroundColor: '#d9f0ffff',
+    margin: 3,
   },
-  chipTextStyle: {
+  chipSlimTextStyle: {
     fontFamily: 'sans-serif',
     marginBottom: 0,
     marginLeft: 8,
     marginRight: 8,
     marginTop: 0,
   },
+  chipTextStyle: {
+    fontFamily: 'sans-serif',
+    marginBottom: 4,
+    marginLeft: 8,
+    marginRight: 8,
+    marginTop: 4,
+  },
 });
 
 const LabelChip: React.FC<Props> = function (props: Props) {
-  const { display, label, status, onPress } = props;
+  const { display, label, slimStyle, status, onPress } = props;
   const readOnlyDisplay = onPress === undefined;
 
   let style = styles.chipStyle;
@@ -60,7 +68,7 @@ const LabelChip: React.FC<Props> = function (props: Props) {
       }
       style={style}
       testID={testId}
-      textStyle={styles.chipTextStyle}
+      textStyle={slimStyle ? styles.chipSlimTextStyle : styles.chipTextStyle}
     >
       {display || label}
     </Chip>
@@ -71,6 +79,7 @@ type Props = {
   display?: string;
   label: string;
   onPress?: (label: string) => void;
+  slimStyle?: boolean;
   status?: FILTER_STATUS;
 };
 
