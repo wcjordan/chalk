@@ -81,14 +81,6 @@ const TodoList: React.FC<Props> = function (props: Props) {
     containerStyle = [containerStyle, topStyle];
   }
 
-  if (isLoading) {
-    return (
-      <View style={containerStyle}>
-        <LoadingPage />
-      </View>
-    );
-  }
-
   const todoViews = _.map(todos, (todo) => (
     <TodoItem
       editing={todo.id === editTodoId}
@@ -130,6 +122,11 @@ const TodoList: React.FC<Props> = function (props: Props) {
     );
   }
 
+  let loadingPage = null;
+  if (isLoading) {
+    loadingPage = <LoadingPage />;
+  }
+
   return (
     <React.Fragment>
       <View style={containerStyle}>
@@ -137,6 +134,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
         {workContextFilter}
         {labelFilter}
         <ScrollView testID="todo-list">{todoViews}</ScrollView>
+        {loadingPage}
       </View>
       <LabelPicker
         labels={labelNames}

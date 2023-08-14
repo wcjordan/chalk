@@ -18,12 +18,6 @@ export const workContexts: { [key: string]: WorkContext } = {
       urgent: FILTER_STATUS.Active,
     },
   },
-  chores: {
-    displayName: 'Chores',
-    labels: {
-      chore: FILTER_STATUS.Active,
-    },
-  },
   quickFixes: {
     displayName: 'Quick Fixes',
     labels: {

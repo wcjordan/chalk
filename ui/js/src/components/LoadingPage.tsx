@@ -14,6 +14,7 @@ const styles = StyleSheet.create<Style>({
   },
   spacer: {
     flexGrow: 1,
+    minHeight: 20,
   },
   wrapper: {
     display: 'flex',

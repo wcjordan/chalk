@@ -96,3 +96,12 @@ const labelPickerWorkspace = Object.assign({}, defaultProps.workspace, {
 });
 export const LabelPickerOverlay: React.FC = () =>
   wrapper(<TodoList {...defaultProps} workspace={labelPickerWorkspace} />);
+
+export const LoadingIndicator: React.FC = () =>
+  wrapper(
+    <TodoList
+      {...defaultProps}
+      isLoading={true}
+      todos={[stubTodo({ id: 1, description: 'New todo' })]}
+    />,
+  );
