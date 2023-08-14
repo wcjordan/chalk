@@ -22,6 +22,7 @@ pipeline {
                                 dockerHelper.login(GAR_HOST)
                             }
                             sh """
+                                export PATH="/root/google-cloud-sdk/bin:\$PATH"
                                 docker build -t ${GAR_REPO}/gcloud-helm:latest - < jenkins/gcloud_helm.Dockerfile
                                 docker push ${GAR_REPO}/gcloud-helm:latest
                             """

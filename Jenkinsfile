@@ -31,6 +31,7 @@ pipeline {
                                         dockerHelper.login(GAR_HOST)
                                     }
                                     sh """
+                                        export PATH="/root/google-cloud-sdk/bin:\$PATH"
                                         docker buildx create --driver docker-container --name chalk-default
                                         docker buildx use chalk-default
                                         docker buildx build --push \
@@ -105,6 +106,7 @@ pipeline {
                                         dockerHelper.login(GAR_HOST)
                                     }
                                     sh """
+                                        export PATH="/root/google-cloud-sdk/bin:\$PATH"
                                         docker buildx create --driver docker-container --name chalk-default
                                         docker buildx use chalk-default
                                         docker buildx build --push \
