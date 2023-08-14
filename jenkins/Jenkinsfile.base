@@ -1,3 +1,6 @@
+def GAR_HOST = 'us-east4-docker.pkg.dev'
+def GAR_REPO = "${GAR_HOST}/${env.GCP_PROJECT}/default-gar"
+
 pipeline {
     agent none
     stages {
@@ -14,16 +17,15 @@ pipeline {
                 stage('Build Helm') {
                     steps {
                         container('dind') {
-                            withDockerRegistry(credentialsId: "gcr:gke_key", url: "https://gcr.io/${env.GCP_PROJECT}") {
-                                sh """
-                                    while (! docker stats --no-stream ); do
-                                        echo "Waiting for Docker to launch..."
-                                        sleep 1
-                                    done
-                                    docker build -t gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest - < jenkins/gcloud_helm.Dockerfile
-                                    docker push gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest
-                                """
+                            script {
+                                def dockerHelper = load "jenkins/dockerHelper.groovy"
+                                dockerHelper.login(GAR_HOST)
                             }
+                            sh """
+                                export PATH="/root/google-cloud-sdk/bin:\$PATH"
+                                docker build -t ${GAR_REPO}/gcloud-helm:latest - < jenkins/gcloud_helm.Dockerfile
+                                docker push ${GAR_REPO}/gcloud-helm:latest
+                            """
                         }
                     }
                 }

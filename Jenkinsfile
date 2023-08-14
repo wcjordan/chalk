@@ -1,3 +1,6 @@
+def GAR_HOST = 'us-east4-docker.pkg.dev'
+def GAR_REPO = "${GAR_HOST}/${env.GCP_PROJECT}/default-gar"
+
 def SERVER_IP = null
 def HELM_DEPLOY_NAME = null
 
@@ -23,39 +26,27 @@ pipeline {
                             }
                             steps {
                                 container('dind') {
-                                    withCredentials([
-                                        file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
-                                    ]) {
-                                        sh """
-                                            apk --no-cache add bash curl python3
-                                            curl https://sdk.cloud.google.com > install.sh
-                                            bash install.sh --disable-prompts
-                                            export PATH="/root/google-cloud-sdk/bin:\$PATH"
-
-                                            gcloud auth activate-service-account --key-file \$GKE_SA_FILE
-                                            gcloud auth configure-docker us-east4-docker.pkg.dev
-
-                                            while (! docker stats --no-stream ); do
-                                                echo "Waiting for Docker to launch..."
-                                                sleep 1
-                                            done
-
-                                            docker buildx create --driver docker-container --name chalk-default
-                                            docker buildx use chalk-default
-                                            docker buildx build --push \
-                                                --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui,mode=max \
-                                                --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui \
-                                                -t us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui:${env.BUILD_TAG} \
-                                                ui
-
-                                            docker buildx build --push \
-                                                --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui,mode=max \
-                                                --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui \
-                                                -t us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui-base:${env.BUILD_TAG} \
-                                                --target base \
-                                                ui
-                                        """
+                                    script {
+                                        def dockerHelper = load "jenkins/dockerHelper.groovy"
+                                        dockerHelper.login(GAR_HOST)
                                     }
+                                    sh """
+                                        export PATH="/root/google-cloud-sdk/bin:\$PATH"
+                                        docker buildx create --driver docker-container --name chalk-default
+                                        docker buildx use chalk-default
+                                        docker buildx build --push \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui \
+                                            -t ${GAR_REPO}/chalk-ui:${env.BUILD_TAG} \
+                                            ui
+
+                                        docker buildx build --push \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui \
+                                            -t ${GAR_REPO}/chalk-ui-base:${env.BUILD_TAG} \
+                                            --target base \
+                                            ui
+                                    """
                                 }
                             }
                         }
@@ -68,7 +59,7 @@ pipeline {
                                         spec:
                                           containers:
                                           - name: jenkins-worker-ui
-                                            image: us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-ui-base:${env.BUILD_TAG}
+                                            image: ${GAR_REPO}/chalk-ui-base:${env.BUILD_TAG}
                                             command:
                                             - cat
                                             tty: true
@@ -110,32 +101,20 @@ pipeline {
                             }
                             steps {
                                 container('dind') {
-                                    withCredentials([
-                                        file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
-                                    ]) {
-                                        sh """
-                                            apk --no-cache add bash curl python3
-                                            curl https://sdk.cloud.google.com > install.sh
-                                            bash install.sh --disable-prompts
-                                            export PATH="/root/google-cloud-sdk/bin:\$PATH"
-
-                                            gcloud auth activate-service-account --key-file \$GKE_SA_FILE
-                                            gcloud auth configure-docker us-east4-docker.pkg.dev
-
-                                            while (! docker stats --no-stream ); do
-                                                echo "Waiting for Docker to launch..."
-                                                sleep 1
-                                            done
-
-                                            docker buildx create --driver docker-container --name chalk-default
-                                            docker buildx use chalk-default
-                                            docker buildx build --push \
-                                                --cache-to type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server,mode=max \
-                                                --cache-from type=registry,ref=us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server \
-                                                -t us-east4-docker.pkg.dev/${env.GCP_PROJECT}/default-gar/chalk-server:${env.BUILD_TAG} \
-                                                server
-                                        """
+                                    script {
+                                        def dockerHelper = load "jenkins/dockerHelper.groovy"
+                                        dockerHelper.login(GAR_HOST)
                                     }
+                                    sh """
+                                        export PATH="/root/google-cloud-sdk/bin:\$PATH"
+                                        docker buildx create --driver docker-container --name chalk-default
+                                        docker buildx use chalk-default
+                                        docker buildx build --push \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-server,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-server \
+                                            -t ${GAR_REPO}/chalk-server:${env.BUILD_TAG} \
+                                            server
+                                    """
                                 }
                             }
                         }
@@ -170,7 +149,7 @@ pipeline {
                         spec:
                           containers:
                           - name: jenkins-helm
-                            image: gcr.io/${env.GCP_PROJECT}/gcloud-helm:latest
+                            image: ${GAR_REPO}/gcloud-helm:latest
                             command:
                             - cat
                             tty: true
