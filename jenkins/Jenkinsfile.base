@@ -25,7 +25,6 @@ pipeline {
                                 docker build -t ${GAR_REPO}/gcloud-helm:latest - < jenkins/gcloud_helm.Dockerfile
                                 docker push ${GAR_REPO}/gcloud-helm:latest
                             """
-                            }
                         }
                     }
                 }
