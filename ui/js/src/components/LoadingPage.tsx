@@ -5,7 +5,6 @@ import { ActivityIndicator } from 'react-native-paper';
 interface Style {
   loadingIndicator: ViewStyle;
   spacer: ViewStyle;
-  wrapper: ViewStyle;
 }
 
 const styles = StyleSheet.create<Style>({
@@ -16,19 +15,15 @@ const styles = StyleSheet.create<Style>({
     flexGrow: 1,
     minHeight: 20,
   },
-  wrapper: {
-    display: 'flex',
-    height: '100%',
-  },
 });
 
 const LoadingPage: React.FC = function () {
   return (
-    <View style={styles.wrapper}>
+    <React.Fragment>
       <View style={styles.spacer} key="spacer-before" />
       <ActivityIndicator size={'large'} style={styles.loadingIndicator} />
       <View style={styles.spacer} key="spacer-after" />
-    </View>
+    </React.Fragment>
   );
 };
 

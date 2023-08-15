@@ -27,6 +27,7 @@ import WorkContextFilter from './WorkContextFilter';
 interface Style {
   containerMobile: ViewStyle;
   containerWeb: ViewStyle;
+  scrollView: ViewStyle;
 }
 interface TopStyle {
   top: ViewStyle;
@@ -41,6 +42,9 @@ const styles = StyleSheet.create<Style>({
     height: '100%',
     width: '66%',
     marginHorizontal: 'auto',
+  },
+  scrollView: {
+    flexGrow: 1,
   },
 });
 
@@ -133,8 +137,13 @@ const TodoList: React.FC<Props> = function (props: Props) {
         <AddTodo createTodo={createTodo} />
         {workContextFilter}
         {labelFilter}
-        <ScrollView testID="todo-list">{todoViews}</ScrollView>
-        {loadingPage}
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          testID="todo-list"
+        >
+          {todoViews}
+          {loadingPage}
+        </ScrollView>
       </View>
       <LabelPicker
         labels={labelNames}
