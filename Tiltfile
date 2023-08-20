@@ -34,8 +34,9 @@ k8s_resource(objects=[
     '%s-db-backup-bucket-iam-policy:iampolicymember' % RELEASE_NAME,
 ], new_name='GCloud Svc Acct')
 k8s_resource('%s-ui' % RELEASE_NAME, trigger_mode=TRIGGER_MODE_MANUAL)
-k8s_resource('%s-server' % RELEASE_NAME, resource_deps=['GCloud Svc Acct'])
-k8s_resource('%s-db-restorer' % RELEASE_NAME,)
+# Make server depend on DB restorer to avoid foreign key constraint errors when restoring & DB migration conflicts
+k8s_resource('%s-server' % RELEASE_NAME, resource_deps=['%s-db-restorer' % RELEASE_NAME])
+k8s_resource('%s-db-restorer' % RELEASE_NAME)
 k8s_resource(objects=['%s:ingress' % RELEASE_NAME], new_name='Ingress')
 
 expo_env = {

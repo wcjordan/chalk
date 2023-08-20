@@ -1,10 +1,12 @@
 #!/bin/bash
 set -ex
 
+export PGHOST="127.0.0.1"
+
 # Check if we can connect to the DB
 db_connected=0
 for i in {1..3}; do
-    psql --host="127.0.0.1" -c "SELECT 1 FROM pg_catalog.pg_tables limit 1" && \
+    psql -c "SELECT 1 FROM pg_tables LIMIT 1" && \
     db_connected=1 && break || \
     echo "Unable to connect to the DB, retrying in 5 seconds" && sleep 5
 done
@@ -13,20 +15,25 @@ if [[ $db_connected -eq 0 ]]; then
     exit 1
 fi
 
-# Download the backup (w/ retries)
-backup_downloaded=0
-for i in {1..5}; do
-    gsutil cp "gs://default-323301-db-backups/Cloud_SQL_Export_2023-07-26 (21:01:32).sql" ./backup_to_restore.sql && \
-    backup_downloaded=1 && break || \
-    echo "Unable to download backup, retrying in 3 seconds" && sleep 3
-done
-if [[ $backup_downloaded -eq 0 ]]; then
-    echo "Unable to download the backup, exiting"
-    exit 1
-fi
+# Check if the DB schema exists, if it does, skip the restore
+if psql -c "SELECT 1 FROM pg_tables WHERE tablename = 'todos_todomodel'" | grep -q "(1 row)"; then
+    echo "Todo schema already exist, skipping restore"
+else
+    # Download the backup (w/ retries)
+    backup_downloaded=0
+    for i in {1..5}; do
+        gsutil cp "gs://default-323301-db-backups/Cloud_SQL_Export_2023-07-26 (21:01:32).sql" ./backup_to_restore.sql && \
+        backup_downloaded=1 && break || \
+        echo "Unable to download backup, retrying in 3 seconds" && sleep 3
+    done
+    if [[ $backup_downloaded -eq 0 ]]; then
+        echo "Unable to download the backup, exiting"
+        exit 1
+    fi
 
-# Perform the restore
-psql --host="127.0.0.1" < ./backup_to_restore.sql
+    # Perform the restore
+    psql < ./backup_to_restore.sql
+fi
 
 # Kill cloud_sql_proxy so the job will complete
 kill -INT $(pgrep cloud_sql_proxy)
