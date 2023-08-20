@@ -2,7 +2,7 @@
 FROM python:3-bookworm
 WORKDIR /usr/src/app
 
-# Assorted posts recommend setting PYTHONUNBUFFERED but I'm not 100% on the consequences
+# Set log messages to immediately appear in the logs
 ENV PYTHONUNBUFFERED 1
 
 # Install system packages.  We need postgresql-client for database backups

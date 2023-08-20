@@ -16,6 +16,7 @@ docker_build(
     'us-east4-docker.pkg.dev/%s/default-gar/chalk-ui' % GCP_PROJECT,
     'ui',
     build_args={'GCP_PROJECT': GCP_PROJECT})
+docker_build('us-east4-docker.pkg.dev/%s/default-gar/chalk-db-restorer' % GCP_PROJECT, 'misc_containers/db_restorer')
 
 RANDOM_TAG = str(local('cat _env_id.txt || true')).strip()
 if not RANDOM_TAG:
@@ -30,9 +31,12 @@ k8s_resource(objects=[
     '%s:IAMServiceAccount' % RELEASE_NAME,
     '%s:IAMPolicy' % RELEASE_NAME,
     '%s-project-iam-policy:IAMPolicyMember' % RELEASE_NAME,
+    '%s-db-backup-bucket-iam-policy:iampolicymember' % RELEASE_NAME,
 ], new_name='GCloud Svc Acct')
 k8s_resource('%s-ui' % RELEASE_NAME, trigger_mode=TRIGGER_MODE_MANUAL)
-k8s_resource('%s-server' % RELEASE_NAME, resource_deps=['GCloud Svc Acct'])
+# Make server depend on DB restorer to avoid foreign key constraint errors when restoring & DB migration conflicts
+k8s_resource('%s-server' % RELEASE_NAME, resource_deps=['%s-db-restorer' % RELEASE_NAME])
+k8s_resource('%s-db-restorer' % RELEASE_NAME)
 k8s_resource(objects=['%s:ingress' % RELEASE_NAME], new_name='Ingress')
 
 expo_env = {

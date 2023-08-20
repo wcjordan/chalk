@@ -1,4 +1,5 @@
 {{- $fullName := include "..fullname" . -}}
+{{- $accountName := include "..serviceAccountName" . -}}
 apiVersion: sql.cnrm.cloud.google.com/v1beta1
 kind: SQLDatabase
 metadata:
@@ -21,3 +22,49 @@ spec:
       secretKeyRef:
         key: db-password
         name: {{ $fullName }}-server
+
+---
+
+{{- if eq .Values.environment "DEV" -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $fullName }}-db-restorer
+  labels:
+    {{- include "..labels" . | nindent 4 }}
+    app.kubernetes.io/component: db-restorer
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "..selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: db-restorer
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ include "..serviceAccountName" . }}
+      shareProcessNamespace: true
+      containers:
+      - name: cloud-sql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:latest
+        command:
+        - "/cloud_sql_proxy"
+        - {{ printf "-instances=%s:us-east4:%s=tcp:5432" .Values.gcpProject (include "..dbInstanceName" .) | quote }}
+        securityContext:
+          runAsNonRoot: true
+      - name: db-restorer
+        image: {{ printf "us-east4-docker.pkg.dev/%s/default-gar/chalk-db-restorer:%s" .Values.gcpProject .Values.imageTag | quote }}
+        env:
+        - name: PGDATABASE
+          value: {{ $fullName }}
+        - name: PGUSER
+          value: {{ $fullName }}
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ $fullName }}-server
+              key: db-password
+        securityContext:
+          capabilities:
+            add:
+              - SYS_PTRACE
+{{- end }}
