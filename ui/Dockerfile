@@ -8,7 +8,6 @@ ARG sentryDsn
 ENV SENTRY_DSN=$sentryDsn
 
 # Install system packages for dev tooling
-# RUN apk add --no-cache bash g++ make python3
 RUN apt-get update && apt-get install -y \
   bash \
   build-essential \
