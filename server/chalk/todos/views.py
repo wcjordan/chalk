@@ -1,13 +1,16 @@
 """
 Views for todo app
 """
+import math
+
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 from rest_framework import permissions, viewsets
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 
-from chalk.todos.models import LabelModel, TodoModel
+from chalk.todos.consts import RANK_ORDER_DEFAULT_STEP
+from chalk.todos.models import LabelModel, RankOrderMetadata, TodoModel
 from chalk.todos.serializers import LabelSerializer, TodoSerializer
 from chalk.todos.oauth import get_authorization_url
 
@@ -54,6 +57,27 @@ def healthz(request):
     return Response('Healthy!')
 
 
+@api_view(['GET', 'HEAD'])
+@permission_classes([permissions.IsAdminUser])
+def status(request):
+    """
+    API endpoint that returns status info about the server
+    """
+    metadata = RankOrderMetadata.objects.first()
+    todos = TodoModel.objects.filter(archived=False)
+    return Response({
+        'closest_rank_min': metadata.closest_rank_min,
+        'closest_rank_max': metadata.closest_rank_max,
+        'closest_rank_distance': metadata.closest_rank_distance,
+        'closest_rank_steps': metadata.closest_rank_steps,
+        'last_rebalanced_at': metadata.last_rebalanced_at,
+        'last_rebalance_duration': metadata.last_rebalance_duration,
+        'max_rank': metadata.max_rank,
+        'todos_count': todos.count(),
+        'incomplete_todos_count': todos.filter(completed=False).count(),
+    })
+
+
 class TodoViewSet(viewsets.ModelViewSet):  # pylint: disable=R0901
     """
     API endpoint that allows viewing or editing a todo.
@@ -61,6 +85,38 @@ class TodoViewSet(viewsets.ModelViewSet):  # pylint: disable=R0901
     queryset = TodoModel.objects.all()
     serializer_class = TodoSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    @action(detail=True, methods=['post'])
+    # pylint: disable=unused-argument,invalid-name
+    def reorder(self, request, pk=None):
+        """
+        Reorder a todo to be in the middle of 2 todos specified by their IDs.
+
+        """
+        prev_id = request.data.get('prev')
+        next_id = request.data.get('next')
+
+        prev_order_rank = 0
+        if prev_id is not None:
+            prev_order_rank = TodoModel.objects.get(id=prev_id).order_rank
+
+        next_order_rank = prev_order_rank + RANK_ORDER_DEFAULT_STEP
+        if next_id is not None:
+            next_order_rank = TodoModel.objects.get(id=next_id).order_rank
+
+        todo = self.get_object()
+        todo.order_rank = math.floor((next_order_rank + prev_order_rank) / 2)
+        todo.save()
+
+        order_metadata = RankOrderMetadata.objects.first()
+        distance = todo.order_rank - prev_order_rank
+        if distance < order_metadata.closest_rank_distance:
+            order_metadata.closest_rank_min = prev_order_rank
+            order_metadata.closest_rank_max = todo.order_rank
+            order_metadata.save()
+
+        serializer = self.get_serializer(todo)
+        return Response(serializer.data)
 
 
 class LabelViewSet(viewsets.ModelViewSet):  # pylint: disable=R0901

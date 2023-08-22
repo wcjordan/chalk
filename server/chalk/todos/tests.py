@@ -54,6 +54,7 @@ def _stub_todo_matcher(description, labels):
         'completed_at': AnyArg(),
         'created_at': AnyArg(),
         'labels': labels,
+        'order_rank': AnyArg(),
     }
 
 

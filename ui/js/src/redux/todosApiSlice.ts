@@ -51,14 +51,14 @@ export const updateTodo = createAsyncThunk<
 );
 
 /**
- * Filter out archived todos and sort todos by id.
+ * Filter out archived todos.
  * Also sort completed todos to appear at the bottom.
  */
 function processTodos(todos: Array<Todo>) {
-  return _.sortBy(
-    _.filter(todos, (todo) => !todo.archived),
-    ['completed', 'id'],
-  );
+  const unarchived = _.filter(todos, (todo) => !todo.archived);
+  const completed = _.filter(unarchived, (todo) => todo.completed);
+  const incomplete = _.filter(unarchived, (todo) => !todo.completed);
+  return incomplete.concat(completed);
 }
 
 export default createSlice({
