@@ -94,5 +94,9 @@ def update_order_metadata(sender, instance, *args, **kwargs):
     """
     instance.closest_rank_distance = (instance.closest_rank_max -
                                       instance.closest_rank_min)
-    instance.closest_rank_steps = math.floor(
-        math.log2(instance.closest_rank_distance))
+
+    if instance.closest_rank_distance == 0:
+        instance.closest_rank_steps = 0
+    else:
+        instance.closest_rank_steps = math.floor(
+            math.log2(instance.closest_rank_distance))

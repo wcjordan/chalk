@@ -13,5 +13,5 @@ class TodosConfig(AppConfig):
 
     def ready(self):
         # pylint: disable=import-outside-toplevel
-        from chalk.todos.signals import rebalance_rank_order
-        post_migrate.connect(rebalance_rank_order, sender=self)
+        from chalk.todos.signals import evaluate_rank_rebalance
+        post_migrate.connect(evaluate_rank_rebalance, sender=self)

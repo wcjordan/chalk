@@ -2,6 +2,7 @@
 Views for todo app
 """
 import math
+import statistics
 
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
@@ -13,6 +14,7 @@ from chalk.todos.consts import RANK_ORDER_DEFAULT_STEP
 from chalk.todos.models import LabelModel, RankOrderMetadata, TodoModel
 from chalk.todos.serializers import LabelSerializer, TodoSerializer
 from chalk.todos.oauth import get_authorization_url
+from chalk.todos.signals import rebalance_rank_order
 
 
 @api_view(['GET'])
@@ -78,6 +80,16 @@ def status(request):
     })
 
 
+@api_view(['POST', 'HEAD'])
+@permission_classes([permissions.IsAdminUser])
+def rebalance_ranks(request):
+    """
+    API endpoint that manually triggers an order rank rebalance
+    """
+    rebalance_rank_order()
+    return Response('Rebalanced!')
+
+
 class TodoViewSet(viewsets.ModelViewSet):  # pylint: disable=R0901
     """
     API endpoint that allows viewing or editing a todo.
@@ -105,7 +117,8 @@ class TodoViewSet(viewsets.ModelViewSet):  # pylint: disable=R0901
             next_order_rank = TodoModel.objects.get(id=next_id).order_rank
 
         todo = self.get_object()
-        todo.order_rank = math.floor((next_order_rank + prev_order_rank) / 2)
+        todo.order_rank = math.floor(
+            statistics.mean([next_order_rank, prev_order_rank]))
         todo.save()
 
         order_metadata = RankOrderMetadata.objects.first()

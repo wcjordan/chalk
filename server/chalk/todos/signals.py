@@ -36,17 +36,9 @@ def update_max_rank(sender, instance, *args, **kwargs):
 
 @receiver(post_save, sender=RankOrderMetadata)
 # pylint: disable=unused-argument
-def evaluate_rank_order(sender, instance, *args, **kwargs):
+def evaluate_rank_rebalance(**kwargs):
     """
-    Rebalance the rank order if necessary after any RankOrderMetadata is saved
-    """
-    rebalance_rank_order()
-
-
-# pylint: disable=unused-argument
-def rebalance_rank_order(**kwargs):
-    """
-    Rebalance the rank order if necessary after any RankOrderMetadata is saved
+    Rebalance the rank order if necessary after checking the RankOrderMetadata
     Looks to see if the closest 2 items can only support a small number of
     inserts between them
     """
@@ -55,6 +47,13 @@ def rebalance_rank_order(**kwargs):
             order_metadata.closest_rank_steps > 2):
         return
 
+    rebalance_rank_order()
+
+
+def rebalance_rank_order():
+    """
+    Rebalance the rank order and update the RankOrderMetadata
+    """
     start_time = time.time()
     todos = TodoModel.objects.select_for_update().filter(archived=False)
     curr_rank_order = RANK_ORDER_INITIAL_STEP
@@ -65,10 +64,15 @@ def rebalance_rank_order(**kwargs):
         TodoModel.objects.bulk_update(todos, ['order_rank'])
 
         closest_rank_max = RANK_ORDER_INITIAL_STEP + RANK_ORDER_DEFAULT_STEP
-        RankOrderMetadata.objects.update_or_create(defaults={
-            'closest_rank_min': RANK_ORDER_INITIAL_STEP,
-            'closest_rank_max': closest_rank_max,
-            'last_rebalanced_at': timezone.now(),
-            'last_rebalance_duration': time.time() - start_time,
-            'max_rank': curr_rank_order - RANK_ORDER_DEFAULT_STEP,
-        },)
+        order_metadata, _ = RankOrderMetadata.objects.update_or_create(
+            defaults={
+                'closest_rank_min': RANK_ORDER_INITIAL_STEP,
+                'closest_rank_max': closest_rank_max,
+                # Set closest_rank_steps to None to avoid
+                # an infinite loop from re-evaluation
+                'closest_rank_steps': None,
+                'last_rebalanced_at': timezone.now(),
+                'last_rebalance_duration': time.time() - start_time,
+                'max_rank': curr_rank_order - RANK_ORDER_DEFAULT_STEP,
+            },)
+        order_metadata.save()
