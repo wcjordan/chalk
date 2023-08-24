@@ -105,20 +105,41 @@ class TodoViewSet(viewsets.ModelViewSet):  # pylint: disable=R0901
         Reorder a todo to be in the middle of 2 todos specified by their IDs.
 
         """
-        prev_id = request.data.get('prev')
-        next_id = request.data.get('next')
+        relative_id = request.data.get('relative_id')
+        position = request.data.get('position')
+        if not relative_id:
+            return Response(
+                "A 'relative_id' must be provided representing the "
+                "todo to order this todo relative to",
+                status=400)
+        if position not in ['before', 'after']:
+            return Response(
+                "A 'position' must be provided ('before' or 'after')",
+                status=400)
 
-        prev_order_rank = 0
-        if prev_id is not None:
-            prev_order_rank = TodoModel.objects.get(id=prev_id).order_rank
+        relative_order_rank = TodoModel.objects.get(id=relative_id).order_rank
+        if position == 'before':
+            next_order_rank = relative_order_rank
+            prev_todo = TodoModel.objects.all().filter(
+                order_rank__lt=relative_order_rank).order_by(
+                    '-order_rank').first()
 
-        next_order_rank = prev_order_rank + RANK_ORDER_DEFAULT_STEP
-        if next_id is not None:
-            next_order_rank = TodoModel.objects.get(id=next_id).order_rank
+            prev_order_rank = 0
+            if prev_todo is not None:
+                prev_order_rank = prev_todo.order_rank
+        else:
+            prev_order_rank = relative_order_rank
+            next_todo = TodoModel.objects.all().filter(
+                order_rank__gt=relative_order_rank).order_by(
+                    'order_rank').first()
+
+            next_order_rank = prev_order_rank + (2 * RANK_ORDER_DEFAULT_STEP)
+            if next_todo is not None:
+                next_order_rank = next_todo.order_rank
 
         todo = self.get_object()
         todo.order_rank = math.floor(
-            statistics.mean([next_order_rank, prev_order_rank]))
+            statistics.mean([prev_order_rank, next_order_rank]))
         todo.save()
 
         order_metadata = RankOrderMetadata.objects.first()

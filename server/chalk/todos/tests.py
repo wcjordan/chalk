@@ -189,7 +189,7 @@ class ServiceTests(TestCase):
         fetched_ids = [todo['id'] for todo in self._fetch_todos()]
         self.assertCountEqual(fetched_ids, todo_ids)
 
-        self._reorder_todo(todo_ids[2], todo_ids[0], todo_ids[1])
+        self._reorder_todo(todo_ids[2], todo_ids[0], 'after')
         reordered_ids = [todo_ids[0], todo_ids[2], todo_ids[1]]
         fetched_ids = [todo['id'] for todo in self._fetch_todos()]
         self.assertCountEqual(fetched_ids, reordered_ids)
@@ -228,9 +228,9 @@ class ServiceTests(TestCase):
         ]
         for step in range(10):
             move_idx = step % 2
-            prev_idx = 1 - move_idx
-            self._reorder_todo(todo_ids[move_idx], todo_ids[prev_idx],
-                               todo_ids[2])
+            relative_idx = 1 - move_idx
+            self._reorder_todo(todo_ids[move_idx], todo_ids[relative_idx],
+                               'after')
 
         status = self._fetch_entity('status')
         assert status['closest_rank_steps'] == 35
@@ -245,13 +245,14 @@ class ServiceTests(TestCase):
 
         # Reorder until automatic rebalance (45 - 2) steps
         for step in range(43):
-            move_idx = step % 2
-            prev_idx = 1 - move_idx
-            self._reorder_todo(todo_ids[move_idx], todo_ids[prev_idx],
-                               todo_ids[2])
+            move_idx = ((step + 1) % 2) + 1
+            relative_idx = 3 - move_idx
+            self._reorder_todo(todo_ids[move_idx], todo_ids[relative_idx],
+                               'before')
 
         status = self._fetch_entity('status')
-        assert status['closest_rank_steps'] == 45
+        assert status['closest_rank_steps'] == 45, \
+               f"Expected 45, but got {status['closest_rank_steps']}"
 
     def _create_todo(self, data):
         return self._create_entity(data, 'todos')
@@ -265,10 +266,10 @@ class ServiceTests(TestCase):
     def _delete_todo(self, entry_id):
         return self._delete_entity(entry_id, 'todos')
 
-    def _reorder_todo(self, todo_id, prev_id, next_id):
+    def _reorder_todo(self, todo_id, relative_id, position):
         response = self.client.post(f'/api/todos/todos/{todo_id}/reorder/', {
-            'prev': prev_id,
-            'next': next_id,
+            'relative_id': relative_id,
+            'position': position,
         },
                                     content_type='application/json')
         self._assert_status_code(200, response)
