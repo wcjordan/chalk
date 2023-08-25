@@ -73,11 +73,11 @@ def page(request, playwright, todo_prefix, test_name, server_domain):
 
     browser = None
     connect_exception = None
-    for attempt in range(3):
+    for _ in range(3):
         try:
             browser = playwright.chromium.connect(f'wss://cdp.browserstack.com/playwright?caps={urllib.parse.quote(json.dumps(desired_cap, separators=(",", ":")))}')
             break
-        except playwright._impl._api_types.Error as ex:
+        except Exception as ex:
             connect_exception = ex
     if not browser:
         raise connect_exception
