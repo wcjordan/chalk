@@ -1,13 +1,16 @@
-import _ from 'lodash';
 import React, { useMemo } from 'react';
 import {
   Platform,
-  ScrollView,
   StyleProp,
   StyleSheet,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
+import DraggableFlatList, {
+  RenderItemParams,
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist';
 
 import {
   Label,
@@ -44,7 +47,7 @@ const styles = StyleSheet.create<Style>({
     marginHorizontal: 'auto',
   },
   scrollView: {
-    flexGrow: 1,
+    flex: 1,
   },
 });
 
@@ -85,17 +88,23 @@ const TodoList: React.FC<Props> = function (props: Props) {
     containerStyle = [containerStyle, topStyle];
   }
 
-  const todoViews = _.map(todos, (todo) => (
-    <TodoItem
-      editing={todo.id === editTodoId}
-      key={todo.id || ''}
-      labeling={todo.id === labelTodoId}
-      setEditTodoId={setEditTodoId}
-      setLabelTodoId={setLabelTodoId}
-      todo={todo}
-      updateTodo={updateTodo}
-    />
-  ));
+  const renderItem = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
+    return (
+      <ScaleDecorator>
+        <TouchableOpacity onLongPress={drag} disabled={isActive}>
+          <TodoItem
+            editing={item.id === editTodoId}
+            key={item.id || ''}
+            labeling={item.id === labelTodoId}
+            setEditTodoId={setEditTodoId}
+            setLabelTodoId={setLabelTodoId}
+            todo={item}
+            updateTodo={updateTodo}
+          />
+        </TouchableOpacity>
+      </ScaleDecorator>
+    );
+  };
 
   let labelFilter = null;
   let workContextFilter = null;
@@ -137,13 +146,15 @@ const TodoList: React.FC<Props> = function (props: Props) {
         <AddTodo createTodo={createTodo} />
         {workContextFilter}
         {labelFilter}
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
+        <DraggableFlatList
+          containerStyle={styles.scrollView}
           testID="todo-list"
-        >
-          {todoViews}
-          {loadingPage}
-        </ScrollView>
+          data={todos}
+          onDragEnd={(data) => console.log(data)}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+        />
+        {loadingPage}
       </View>
       <LabelPicker
         labels={labelNames}
