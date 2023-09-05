@@ -1,15 +1,8 @@
 import React, { useMemo } from 'react';
-import {
-  Platform,
-  StyleProp,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { Platform, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import DraggableFlatList, {
   RenderItemParams,
-  ScaleDecorator,
+  OpacityDecorator,
 } from 'react-native-draggable-flatlist';
 
 import {
@@ -90,19 +83,19 @@ const TodoList: React.FC<Props> = function (props: Props) {
 
   const renderItem = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
     return (
-      <ScaleDecorator>
-        <TouchableOpacity onLongPress={drag} disabled={isActive}>
-          <TodoItem
-            editing={item.id === editTodoId}
-            key={item.id || ''}
-            labeling={item.id === labelTodoId}
-            setEditTodoId={setEditTodoId}
-            setLabelTodoId={setLabelTodoId}
-            todo={item}
-            updateTodo={updateTodo}
-          />
-        </TouchableOpacity>
-      </ScaleDecorator>
+      <OpacityDecorator activeOpacity={0.65}>
+        <TodoItem
+          editing={item.id === editTodoId}
+          isDragging={isActive}
+          key={item.id || ''}
+          labeling={item.id === labelTodoId}
+          setEditTodoId={setEditTodoId}
+          setLabelTodoId={setLabelTodoId}
+          startDrag={drag}
+          todo={item}
+          updateTodo={updateTodo}
+        />
+      </OpacityDecorator>
     );
   };
 
@@ -147,12 +140,13 @@ const TodoList: React.FC<Props> = function (props: Props) {
         {workContextFilter}
         {labelFilter}
         <DraggableFlatList
+          autoscrollSpeed={150}
           containerStyle={styles.scrollView}
-          testID="todo-list"
           data={todos}
           onDragEnd={(data) => console.log(data)}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => String(item.id || '')}
           renderItem={renderItem}
+          testID="todo-list"
         />
         {loadingPage}
       </View>
