@@ -4,6 +4,7 @@ import { Action } from '@reduxjs/toolkit';
 import { ReduxState, TodoPatch } from './types';
 import labelsApiSlice, { listLabels } from './labelsApiSlice';
 import notificationsSlice from './notificationsSlice';
+import shortcutSlice from './shortcutSlice';
 import todosApiSlice, {
   createTodo,
   listTodos,
@@ -24,6 +25,7 @@ export const updateTodo =
         ),
       ),
       dispatch(workspaceSlice.actions.setEditTodoId(null)),
+      dispatch(shortcutSlice.actions.addEditTodoOperation(todoPatch)),
       dispatch(updateTodoApi(todoPatch)),
     ]);
   };
@@ -106,6 +108,7 @@ export { createTodo, listLabels, listTodos };
 export default {
   labelsApi: labelsApiSlice.reducer,
   notifications: notificationsSlice.reducer,
+  shortcuts: shortcutSlice.reducer,
   todosApi: todosApiSlice.reducer,
   workspace: workspaceSlice.reducer,
 };

@@ -1,13 +1,44 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { FILTER_STATUS, ReduxState, Todo } from './redux/types';
+import { FILTER_STATUS, ReduxState, Todo, TodoPatch } from './redux/types';
 import { workContexts } from './redux/workspaceSlice';
 
 const selectEditTodoId = (state: ReduxState) => state.workspace.editTodoId;
 const selectFilterLabels = (state: ReduxState) => state.workspace.filterLabels;
 const selectLabelTodoId = (state: ReduxState) => state.workspace.labelTodoId;
+const selectShortcutOperations = (state: ReduxState) =>
+  state.shortcuts.operations;
 const selectShowCompletedTodos = (state: ReduxState) =>
   state.workspace.showCompletedTodos;
 const selectTodoApiEntries = (state: ReduxState) => state.todosApi.entries;
+
+const selectShortcuttedTodoEntries = createSelector(
+  [selectShortcutOperations, selectTodoApiEntries],
+  (shortcutOperations, todoApiEntries) => {
+    if (shortcutOperations.length === 0) {
+      return todoApiEntries;
+    }
+
+    const shortcuttedTodoEntries = Array.from(todoApiEntries);
+    for (const op of shortcutOperations) {
+      if (op.type === 'EDIT_TODO') {
+        const patch = op.payload as TodoPatch;
+        const todoIdx = shortcuttedTodoEntries.findIndex(
+          (todo) => todo.id === patch.id,
+        );
+        if (todoIdx !== -1) {
+          const origTodo = shortcuttedTodoEntries[todoIdx];
+          const shortcuttedTodo = Object.assign({}, origTodo, patch);
+          shortcuttedTodoEntries[todoIdx] = shortcuttedTodo;
+        } else {
+          console.warn(`Unable to find todo with shortcut: ${patch}`);
+        }
+      } else {
+        throw new Error(`Unexpected shortcut operation type: ${op.type}`);
+      }
+    }
+    return shortcuttedTodoEntries;
+  },
+);
 
 const performFilter = (
   labeledFlag: boolean,
@@ -39,7 +70,7 @@ const performFilter = (
 
 export const selectFilteredTodos = createSelector(
   [
-    selectTodoApiEntries,
+    selectShortcuttedTodoEntries,
     selectEditTodoId,
     selectFilterLabels,
     selectLabelTodoId,
