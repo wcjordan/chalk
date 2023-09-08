@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Platform, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import DraggableFlatList, {
   RenderItemParams,
@@ -7,6 +7,7 @@ import DraggableFlatList, {
 
 import {
   Label,
+  MoveTodoOperation,
   Todo,
   TodoPatch,
   WorkContext,
@@ -50,6 +51,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
     createTodo,
     isLoading,
     labels,
+    moveTodo,
     selectedPickerLabels,
     setEditTodoId,
     setLabelTodoId,
@@ -69,6 +71,22 @@ const TodoList: React.FC<Props> = function (props: Props) {
 
   useDataLoader();
   const labelNames = useMemo(() => labels.map((label) => label.name), [labels]);
+
+  const handleReorder: (params: {
+    data: Todo[];
+    from: number;
+    to: number;
+  }) => void = useCallback(
+    ({ from, to, data }) => {
+      const todoId = data[to].id;
+      const beforeFlag = from > to;
+      const position = beforeFlag ? 'before' : 'after';
+      const relativeIdx = beforeFlag ? to + 1 : to - 1;
+      const relativeId = data[relativeIdx].id;
+      moveTodo({ todoId, position, relativeId });
+    },
+    [moveTodo],
+  );
 
   let containerStyle: StyleProp<ViewStyle> =
     Platform.OS === 'web' ? styles.containerWeb : styles.containerMobile;
@@ -143,7 +161,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
           autoscrollSpeed={150}
           containerStyle={styles.scrollView}
           data={todos}
-          onDragEnd={(data) => console.log(data)}
+          onDragEnd={handleReorder}
           keyExtractor={(item) => String(item.id || '')}
           renderItem={renderItem}
           testID="todo-list"
@@ -166,6 +184,7 @@ type Props = {
   createTodo: (description: string) => void;
   isLoading: boolean;
   labels: Label[];
+  moveTodo: (operation: MoveTodoOperation) => void;
   selectedPickerLabels: { [label: string]: boolean };
   setEditTodoId: (id: number | null) => void;
   setLabelTodoId: (id: number | null) => void;

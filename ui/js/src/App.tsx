@@ -7,6 +7,7 @@ import Login from './components/Login';
 import TodoList from './components/TodoList';
 import {
   Label,
+  MoveTodoOperation,
   ReduxState,
   Todo,
   TodoPatch,
@@ -17,6 +18,7 @@ import {
   completeAuthentication,
   createTodo,
   dismissNotification,
+  moveTodo,
   setEditTodoId,
   setLabelTodoId,
   setWorkContext,
@@ -134,6 +136,7 @@ type LayoutProps = {
   filteredTodos: Todo[];
   isLoading: boolean;
   labels: Label[];
+  moveTodo: (operation: MoveTodoOperation) => void;
   notificationQueue: string[];
   selectedPickerLabels: { [label: string]: boolean };
   setEditTodoId: (id: number | null) => void;
@@ -159,6 +162,7 @@ const mapDispatchToProps = {
   completeAuthentication,
   createTodo,
   dismissNotification,
+  moveTodo,
   setEditTodoId,
   setLabelTodoId,
   setWorkContext,

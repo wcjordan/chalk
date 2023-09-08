@@ -7,7 +7,7 @@ const initialState: ShortcutState = {
   latestGeneration: 0,
 };
 export default createSlice({
-  name: 'shortcut',
+  name: 'shortcuts',
   initialState,
   reducers: {
     addEditTodoOperation: (state, action) => {
@@ -29,7 +29,7 @@ export default createSlice({
     },
     clearOperationsUpThroughGeneration: (state, action) => {
       state.operations = state.operations.filter(
-        (op) => op.generation <= action.payload,
+        (op) => op.generation > action.payload,
       );
     },
   },

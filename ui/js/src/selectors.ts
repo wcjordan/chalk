@@ -1,5 +1,11 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { FILTER_STATUS, ReduxState, Todo, TodoPatch } from './redux/types';
+import {
+  FILTER_STATUS,
+  ReduxState,
+  MoveTodoOperation,
+  Todo,
+  TodoPatch,
+} from './redux/types';
 import { workContexts } from './redux/workspaceSlice';
 
 const selectEditTodoId = (state: ReduxState) => state.workspace.editTodoId;
@@ -32,6 +38,24 @@ const selectShortcuttedTodoEntries = createSelector(
         } else {
           console.warn(`Unable to find todo with shortcut: ${patch}`);
         }
+      } else if (op.type === 'MOVE_TODO') {
+        const moveOp = op.payload as MoveTodoOperation;
+        const todoIdx = shortcuttedTodoEntries.findIndex(
+          (todo) => todo.id === moveOp.todoId,
+        );
+
+        // Remove the element to move
+        const todo = shortcuttedTodoEntries[todoIdx];
+        shortcuttedTodoEntries.splice(todoIdx, 1);
+
+        // Insert the element at the new position
+        let relativeIdx = shortcuttedTodoEntries.findIndex(
+          (todo) => todo.id === moveOp.relativeId,
+        );
+        if (moveOp.position === 'after') {
+          relativeIdx++;
+        }
+        shortcuttedTodoEntries.splice(relativeIdx, 0, todo);
       } else {
         throw new Error(`Unexpected shortcut operation type: ${op.type}`);
       }
