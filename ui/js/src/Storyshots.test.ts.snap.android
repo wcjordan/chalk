@@ -53111,6 +53111,7 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
       onScrollBeginDrag={[Function]}
       onScrollEndDrag={[Function]}
       onViewableItemsChanged={[Function]}
+      refreshing={true}
       removeClippedSubviews={false}
       renderItem={[Function]}
       renderScrollComponent={[Function]}
