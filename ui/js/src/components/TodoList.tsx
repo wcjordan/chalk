@@ -167,6 +167,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
           data={todos}
           onDragEnd={handleReorder}
           keyExtractor={(item) => String(item.id || '')}
+          refreshing={isLoading}
           renderItem={renderItem}
           testID="todo-list"
         />
