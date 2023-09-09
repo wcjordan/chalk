@@ -41,7 +41,7 @@ const selectShortcuttedTodoEntries = createSelector(
       } else if (op.type === 'MOVE_TODO') {
         const moveOp = op.payload as MoveTodoOperation;
         const todoIdx = shortcuttedTodoEntries.findIndex(
-          (todo) => todo.id === moveOp.todoId,
+          (todo) => todo.id === moveOp.todo_id,
         );
 
         // Remove the element to move
@@ -50,7 +50,7 @@ const selectShortcuttedTodoEntries = createSelector(
 
         // Insert the element at the new position
         let relativeIdx = shortcuttedTodoEntries.findIndex(
-          (todo) => todo.id === moveOp.relativeId,
+          (todo) => todo.id === moveOp.relative_id,
         );
         if (moveOp.position === 'after') {
           relativeIdx++;

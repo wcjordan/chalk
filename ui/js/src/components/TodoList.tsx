@@ -78,12 +78,18 @@ const TodoList: React.FC<Props> = function (props: Props) {
     to: number;
   }) => void = useCallback(
     ({ from, to, data }) => {
-      const todoId = data[to].id;
+      if (from === to) {
+        return;
+      }
+
       const beforeFlag = from > to;
       const position = beforeFlag ? 'before' : 'after';
       const relativeIdx = beforeFlag ? to + 1 : to - 1;
-      const relativeId = data[relativeIdx].id;
-      moveTodo({ todoId, position, relativeId });
+      moveTodo({
+        todo_id: data[to].id,
+        position,
+        relative_id: data[relativeIdx].id,
+      });
     },
     [moveTodo],
   );

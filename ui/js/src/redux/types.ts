@@ -75,8 +75,8 @@ export interface WorkspaceState {
 
 export interface MoveTodoOperation {
   position: 'after' | 'before';
-  relativeId: number;
-  todoId: number;
+  relative_id: number;
+  todo_id: number;
 }
 
 export interface ShortcutOperation {

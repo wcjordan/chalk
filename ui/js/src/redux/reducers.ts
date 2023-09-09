@@ -8,6 +8,7 @@ import shortcutSlice from './shortcutSlice';
 import todosApiSlice, {
   createTodo,
   listTodos as listTodosApi,
+  moveTodo as moveTodoApi,
   updateTodo as updateTodoApi,
 } from './todosApiSlice';
 import workspaceSlice from './workspaceSlice';
@@ -50,7 +51,7 @@ export const moveTodo =
   (operation: MoveTodoOperation): AppThunk =>
   (dispatch, getState) => {
     const todo = getState().todosApi.entries.find(
-      (todo) => todo.id === operation.todoId,
+      (todo) => todo.id === operation.todo_id,
     );
     return Promise.all([
       dispatch(
@@ -59,7 +60,7 @@ export const moveTodo =
         ),
       ),
       dispatch(shortcutSlice.actions.addMoveTodoOperation(operation)),
-      // dispatch(updateTodoApi(todoPatch)),
+      dispatch(moveTodoApi(operation)),
     ]);
   };
 

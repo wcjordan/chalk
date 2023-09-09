@@ -1,7 +1,21 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ApiState, NewTodo, ReduxState, Todo, TodoPatch } from './types';
-import { create, getCsrfToken, getWsRoot, list, patch } from './fetchApi';
+import {
+  ApiState,
+  MoveTodoOperation,
+  NewTodo,
+  ReduxState,
+  Todo,
+  TodoPatch,
+} from './types';
+import {
+  create,
+  getCsrfToken,
+  getWsRoot,
+  list,
+  patch,
+  postRequest,
+} from './fetchApi';
 
 const API_NAME = 'todosApi';
 
@@ -50,6 +64,18 @@ export const updateTodo = createAsyncThunk<
   patch<Todo, TodoPatch>(getTodosApi(), entryPatch, getCsrfToken(getState)),
 );
 
+export const moveTodo = createAsyncThunk<
+  Todo,
+  MoveTodoOperation,
+  { state: ReduxState }
+>(`${API_NAME}/move`, async (moveOp, { getState }) =>
+  postRequest<Todo, MoveTodoOperation>(
+    `${getTodosApi()}${moveOp.todo_id}/reorder/`,
+    moveOp,
+    getCsrfToken(getState),
+  ),
+);
+
 /**
  * Filter out archived todos.
  * Also sort completed todos to appear at the bottom.
@@ -59,6 +85,16 @@ function processTodos(todos: Array<Todo>) {
   const completed = _.filter(unarchived, (todo) => todo.completed);
   const incomplete = _.filter(unarchived, (todo) => !todo.completed);
   return incomplete.concat(completed);
+}
+
+function updateTodoFromResponse(entries: Todo[], updatedTodo: Todo) {
+  const existingEntry = _.find(entries, (entry) => entry.id === updatedTodo.id);
+  if (existingEntry) {
+    Object.assign(existingEntry, updatedTodo);
+    entries = processTodos(entries);
+  } else {
+    console.warn('Unable to find todo by id: ' + updatedTodo.id);
+  }
 }
 
 export default createSlice({
@@ -91,20 +127,17 @@ export default createSlice({
       })
       // update todo
       .addCase(updateTodo.fulfilled, (state, action) => {
-        const updatedEntry = action.payload;
-        const existingEntry = _.find(
-          state.entries,
-          (entry) => entry.id === updatedEntry.id,
-        );
-        if (existingEntry) {
-          Object.assign(existingEntry, updatedEntry);
-          state.entries = processTodos(state.entries);
-        } else {
-          console.warn('Unable to find todo by id: ' + updatedEntry.id);
-        }
+        updateTodoFromResponse(state.entries, action.payload);
       })
       .addCase(updateTodo.rejected, (_, action) => {
         console.warn(`Updating Todo failed. ${action.error.message}`);
+      })
+      // reorder todo
+      .addCase(moveTodo.fulfilled, (state, action) => {
+        updateTodoFromResponse(state.entries, action.payload);
+      })
+      .addCase(moveTodo.rejected, (_, action) => {
+        console.warn(`Moving Todo failed. ${action.error.message}`);
       });
   },
 });
