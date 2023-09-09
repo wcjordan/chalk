@@ -66,8 +66,10 @@ export const moveTodo =
 
 export const listTodos = (): AppThunk => async (dispatch, getState) => {
   const latestGeneration = getState().shortcuts.latestGeneration;
-  await dispatch(shortcutSlice.actions.incrementGenerations());
-  await dispatch(listTodosApi());
+  await Promise.all([
+    dispatch(shortcutSlice.actions.incrementGenerations()),
+    dispatch(listTodosApi()),
+  ]);
   return dispatch(
     shortcutSlice.actions.clearOperationsUpThroughGeneration(latestGeneration),
   );

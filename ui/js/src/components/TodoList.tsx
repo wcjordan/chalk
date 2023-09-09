@@ -105,23 +105,21 @@ const TodoList: React.FC<Props> = function (props: Props) {
     containerStyle = [containerStyle, topStyle];
   }
 
-  const renderItem = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
-    return (
-      <OpacityDecorator activeOpacity={0.65}>
-        <TodoItem
-          editing={item.id === editTodoId}
-          isDragging={isActive}
-          key={item.id || ''}
-          labeling={item.id === labelTodoId}
-          setEditTodoId={setEditTodoId}
-          setLabelTodoId={setLabelTodoId}
-          startDrag={drag}
-          todo={item}
-          updateTodo={updateTodo}
-        />
-      </OpacityDecorator>
-    );
-  };
+  const renderItem = ({ item, drag, isActive }: RenderItemParams<Todo>) => (
+    <OpacityDecorator activeOpacity={0.65}>
+      <TodoItem
+        editing={item.id === editTodoId}
+        isDragging={isActive}
+        key={item.id || ''}
+        labeling={item.id === labelTodoId}
+        setEditTodoId={setEditTodoId}
+        setLabelTodoId={setLabelTodoId}
+        startDrag={drag}
+        todo={item}
+        updateTodo={updateTodo}
+      />
+    </OpacityDecorator>
+  );
 
   let labelFilter = null;
   let workContextFilter = null;

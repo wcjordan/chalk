@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { ShortcutState } from './types';
 
+// Store operations for optimistic updates
 const initialState: ShortcutState = {
   operations: [],
   latestGeneration: 0,

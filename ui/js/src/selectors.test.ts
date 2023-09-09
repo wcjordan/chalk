@@ -28,6 +28,9 @@ function selectFilteredTodosHelper(activeLabels, invertedLabels, todos) {
     workspace: {
       filterLabels,
     },
+    shortcuts: {
+      operations: [],
+    },
     todosApi: {
       entries,
     },

@@ -36,7 +36,7 @@ describe('updateTodo', function () {
     await store.dispatch(updateTodo(stubTodoPatch));
 
     const actions = store.getActions();
-    expect(actions.length).toEqual(4);
+    expect(actions.length).toEqual(5);
 
     // Verify we show a notification
     expect(actions[0]).toEqual({
@@ -50,13 +50,19 @@ describe('updateTodo', function () {
       type: 'workspace/setEditTodoId',
     });
 
+    // Verify we create a shortcut operation for the edit
+    expect(actions[2]).toEqual({
+      payload: stubTodoPatch,
+      type: 'shortcuts/addEditTodoOperation',
+    });
+
     // Verify the pending handler is called based on the patch argument
-    const pendingAction = actions[2];
+    const pendingAction = actions[3];
     expect(pendingAction.meta.arg).toEqual(stubTodoPatch);
     expect(pendingAction.type).toEqual('todosApi/update/pending');
 
     // Verify the fulfilled handler is called with the returned todo
-    const fulfilledAction = actions[3];
+    const fulfilledAction = actions[4];
     expect(fulfilledAction.meta.arg).toEqual(stubTodoPatch);
     expect(fulfilledAction.payload).toEqual(stubTodo);
     expect(fulfilledAction.type).toEqual('todosApi/update/fulfilled');
