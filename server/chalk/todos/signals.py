@@ -15,9 +15,10 @@ from chalk.todos.models import RankOrderMetadata, TodoModel
 
 @receiver(post_save, sender=TodoModel)
 # pylint: disable=unused-argument
-def update_max_rank(sender, instance, *args, **kwargs):
+def update_rank_metadata(sender, instance, *args, **kwargs):
     """
-    Update the max rank if necessary after any Todo is saved
+    Update the max rank and closest rank order metadata if necessary after any
+    Todo is saved.
     """
     order_metadata = RankOrderMetadata.objects.first()
     if (order_metadata is None or
@@ -40,7 +41,7 @@ def evaluate_rank_rebalance(**kwargs):
     """
     Rebalance the rank order if necessary after checking the RankOrderMetadata
     Looks to see if the closest 2 items can only support a small number of
-    inserts between them
+    inserts between them.
     """
     order_metadata = RankOrderMetadata.objects.first()
     if (order_metadata and order_metadata.closest_rank_steps and

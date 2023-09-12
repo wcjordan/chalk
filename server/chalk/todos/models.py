@@ -34,7 +34,7 @@ class TodoModel(models.Model):
 
 @receiver(pre_save, sender=TodoModel)
 # pylint: disable=unused-argument
-def update_derived_feilds(sender, instance, *args, **kwargs):
+def update_derived_fields(sender, instance, *args, **kwargs):
     """
     Before saving, update timestamps if necessary
     Also set the order rank if it is not set
