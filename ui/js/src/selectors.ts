@@ -17,7 +17,7 @@ const selectShowCompletedTodos = (state: ReduxState) =>
   state.workspace.showCompletedTodos;
 const selectTodoApiEntries = (state: ReduxState) => state.todosApi.entries;
 
-const selectShortcuttedTodoEntries = createSelector(
+export const selectShortcuttedTodoEntries = createSelector(
   [selectShortcutOperations, selectTodoApiEntries],
   (shortcutOperations, todoApiEntries) => {
     if (shortcutOperations.length === 0) {

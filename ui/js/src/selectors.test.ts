@@ -2,6 +2,7 @@ import {
   selectActiveWorkContext,
   selectFilteredTodos,
   selectSelectedPickerLabels,
+  selectShortcuttedTodoEntries,
 } from './selectors';
 import { FILTER_STATUS } from './redux/types';
 
@@ -299,6 +300,86 @@ describe('selectActiveWorkContext', function () {
 
     const result = selectActiveWorkContext(state);
     expect(result).toEqual(undefined);
+  });
+});
+
+describe('selectShortcuttedTodoEntries', function () {
+  const todoEntries = [
+    {
+      id: 1,
+      description: 'Todo 1',
+      labels: [],
+    },
+    {
+      id: 2,
+      description: 'Todo 2',
+      labels: [],
+    },
+    {
+      id: 3,
+      description: 'Todo 3',
+      labels: [],
+    },
+  ];
+
+  it('should optimistically update edited todos', function () {
+    const state = {
+      shortcuts: {
+        operations: [
+          {
+            type: 'EDIT_TODO',
+            payload: {
+              id: 1,
+              description: 'Todo 1 (edited)',
+            },
+          },
+          {
+            type: 'EDIT_TODO',
+            payload: {
+              id: 3,
+              description: 'Todo 3 (edited)',
+            },
+          },
+        ],
+      },
+      todosApi: {
+        entries: todoEntries,
+      },
+    };
+
+    const result = selectShortcuttedTodoEntries(state);
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should optimistically move the moved todos', function () {
+    const state = {
+      shortcuts: {
+        operations: [
+          {
+            type: 'MOVE_TODO',
+            payload: {
+              position: 'after',
+              relative_id: 3,
+              todo_id: 1,
+            },
+          },
+          {
+            type: 'MOVE_TODO',
+            payload: {
+              position: 'before',
+              relative_id: 2,
+              todo_id: 3,
+            },
+          },
+        ],
+      },
+      todosApi: {
+        entries: todoEntries,
+      },
+    };
+
+    const result = selectShortcuttedTodoEntries(state);
+    expect(result).toMatchSnapshot();
   });
 });
 
