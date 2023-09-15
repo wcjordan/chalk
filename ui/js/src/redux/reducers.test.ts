@@ -4,6 +4,8 @@ import fetchMock from 'fetch-mock-jest';
 import thunk from 'redux-thunk';
 import {
   completeAuthentication,
+  listTodos,
+  moveTodo,
   updateTodo,
   updateTodoLabels,
 } from './reducers';
@@ -153,6 +155,121 @@ describe('completeAuthentication', function () {
       loggedIn: true,
       csrfToken: 'CSRFToken',
     });
+
+    // Verify we make the server request
+    expect(fetchMock).toBeDone();
+  });
+});
+
+describe('listTodos', function () {
+  afterEach(function () {
+    fetchMock.restore();
+  });
+
+  it('should make a GET request and dispatch actions', async function () {
+    const response = [
+      {
+        description: 'todo1',
+      },
+      {
+        description: 'todo2',
+      },
+    ];
+    fetchMock.getOnce(`${getTodosApi()}`, response);
+
+    const store = mockStore({
+      shortcuts: {
+        latestGeneration: 0,
+      },
+      todosApi: {
+        loading: false,
+      },
+    });
+    await store.dispatch(listTodos());
+
+    const actions = store.getActions();
+    expect(actions.length).toEqual(4);
+
+    // Verify we increment the shortcut generation
+    expect(actions[0]).toEqual({
+      payload: undefined,
+      type: 'shortcuts/incrementGenerations',
+    });
+
+    // Verify the pending handler is called
+    const pendingAction = actions[1];
+    expect(pendingAction.type).toEqual('todosApi/list/pending');
+
+    // Verify the fulfilled handler is called
+    const fulfilledAction = actions[2];
+    expect(fulfilledAction.type).toEqual('todosApi/list/fulfilled');
+    expect(fulfilledAction.payload).toEqual(response);
+
+    expect(actions[3]).toEqual({
+      payload: 0,
+      type: 'shortcuts/clearOperationsUpThroughGeneration',
+    });
+
+    // Verify we made the server request
+    expect(fetchMock).toBeDone();
+  });
+});
+
+describe('moveTodo', function () {
+  afterEach(function () {
+    fetchMock.restore();
+  });
+
+  it('should make a move request and dispatch actions', async function () {
+    const moveOperation = {
+      position: 'after',
+      relative_id: 2,
+      todo_id: 1,
+    };
+    fetchMock.postOnce(`${getTodosApi()}${moveOperation.todo_id}/reorder/`, {
+      id: 1,
+    });
+
+    const store = mockStore({
+      todosApi: {
+        entries: [
+          {
+            id: 1,
+            description: 'moving todo',
+          },
+          {
+            id: 2,
+          },
+        ],
+      },
+      workspace: {},
+    });
+    await store.dispatch(moveTodo(moveOperation));
+
+    const actions = store.getActions();
+    expect(actions.length).toEqual(4);
+
+    // Verify we show a notification
+    expect(actions[0]).toEqual({
+      payload: 'Reordering Todo: moving todo',
+      type: 'notifications/addNotification',
+    });
+
+    // Verify we create a shortcut operation for the move
+    expect(actions[1]).toEqual({
+      payload: moveOperation,
+      type: 'shortcuts/addMoveTodoOperation',
+    });
+
+    // Verify the pending handler is called with the operation
+    const pendingAction = actions[2];
+    expect(pendingAction.meta.arg).toEqual(moveOperation);
+    expect(pendingAction.type).toEqual('todosApi/move/pending');
+
+    // Verify the fulfilled handler is called
+    const fulfilledAction = actions[3];
+    expect(fulfilledAction.meta.arg).toEqual(moveOperation);
+    expect(fulfilledAction.type).toEqual('todosApi/move/fulfilled');
 
     // Verify we make the server request
     expect(fetchMock).toBeDone();
