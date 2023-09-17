@@ -1,3 +1,5 @@
+import time
+
 CHECKED_ICON_TEXT = '󰄲'
 DELETE_ICON_TEXT = '󰧧'
 LABELS_ICON_TEXT = '󰜢'
@@ -59,3 +61,28 @@ def wait_for_todo(page, description):
 
 def wait_for_todo_to_disappear(page, description):
     page.locator(f'text="{description}"').wait_for(state='detached')
+
+
+def drag_todo(page, todo_item, relative_todo_item):
+    if isinstance(todo_item, str):
+        todo_item = find_todo(page, todo_item)
+    if isinstance(relative_todo_item, str):
+        relative_todo_item = find_todo(page, relative_todo_item)
+
+    start_box = todo_item.bounding_box()
+    todo_item.hover()
+    page.mouse.down()
+    time.sleep(0.5)
+
+    # For some reason the Pan Gesture Handler only reacts to the N-1 steps
+    # so we use 10 steps and overshoot the target to land as close as possible to the actual target y
+    target_box = relative_todo_item.bounding_box()
+    target_y = target_box['y'] + target_box['height'] / 2
+    start_y = start_box['y'] + start_box['height'] / 2
+    overshoot_y = (target_y - start_y) * 1 / 11
+    if overshoot_y == 0:
+        overshoot_y = 10
+    page.mouse.move(target_box['x'], target_box['y'] + target_box['height'] / 2 + overshoot_y, steps=10)
+
+    page.mouse.up()
+    time.sleep(1)
