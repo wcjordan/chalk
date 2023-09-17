@@ -1,16 +1,13 @@
-import _ from 'lodash';
-import React, { useMemo } from 'react';
-import {
-  Platform,
-  ScrollView,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { Platform, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import DraggableFlatList, {
+  RenderItemParams,
+  OpacityDecorator,
+} from 'react-native-draggable-flatlist';
 
 import {
   Label,
+  MoveTodoOperation,
   Todo,
   TodoPatch,
   WorkContext,
@@ -44,7 +41,7 @@ const styles = StyleSheet.create<Style>({
     marginHorizontal: 'auto',
   },
   scrollView: {
-    flexGrow: 1,
+    flex: 1,
   },
 });
 
@@ -54,6 +51,7 @@ const TodoList: React.FC<Props> = function (props: Props) {
     createTodo,
     isLoading,
     labels,
+    moveTodo,
     selectedPickerLabels,
     setEditTodoId,
     setLabelTodoId,
@@ -74,6 +72,28 @@ const TodoList: React.FC<Props> = function (props: Props) {
   useDataLoader();
   const labelNames = useMemo(() => labels.map((label) => label.name), [labels]);
 
+  const handleReorder: (params: {
+    data: Todo[];
+    from: number;
+    to: number;
+  }) => void = useCallback(
+    ({ from, to, data }) => {
+      if (from === to) {
+        return;
+      }
+
+      const beforeFlag = from > to;
+      const position = beforeFlag ? 'before' : 'after';
+      const relativeIdx = beforeFlag ? to + 1 : to - 1;
+      moveTodo({
+        todo_id: data[to].id,
+        position,
+        relative_id: data[relativeIdx].id,
+      });
+    },
+    [moveTodo],
+  );
+
   let containerStyle: StyleProp<ViewStyle> =
     Platform.OS === 'web' ? styles.containerWeb : styles.containerMobile;
   if (Platform.OS === 'web') {
@@ -85,17 +105,21 @@ const TodoList: React.FC<Props> = function (props: Props) {
     containerStyle = [containerStyle, topStyle];
   }
 
-  const todoViews = _.map(todos, (todo) => (
-    <TodoItem
-      editing={todo.id === editTodoId}
-      key={todo.id || ''}
-      labeling={todo.id === labelTodoId}
-      setEditTodoId={setEditTodoId}
-      setLabelTodoId={setLabelTodoId}
-      todo={todo}
-      updateTodo={updateTodo}
-    />
-  ));
+  const renderItem = ({ item, drag, isActive }: RenderItemParams<Todo>) => (
+    <OpacityDecorator activeOpacity={0.65}>
+      <TodoItem
+        editing={item.id === editTodoId}
+        isDragging={isActive}
+        key={item.id || ''}
+        labeling={item.id === labelTodoId}
+        setEditTodoId={setEditTodoId}
+        setLabelTodoId={setLabelTodoId}
+        startDrag={drag}
+        todo={item}
+        updateTodo={updateTodo}
+      />
+    </OpacityDecorator>
+  );
 
   let labelFilter = null;
   let workContextFilter = null;
@@ -137,13 +161,17 @@ const TodoList: React.FC<Props> = function (props: Props) {
         <AddTodo createTodo={createTodo} />
         {workContextFilter}
         {labelFilter}
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
+        <DraggableFlatList
+          autoscrollSpeed={150}
+          containerStyle={styles.scrollView}
+          data={todos}
+          onDragEnd={handleReorder}
+          keyExtractor={(item) => String(item.id || '')}
+          refreshing={isLoading}
+          renderItem={renderItem}
           testID="todo-list"
-        >
-          {todoViews}
-          {loadingPage}
-        </ScrollView>
+        />
+        {loadingPage}
       </View>
       <LabelPicker
         labels={labelNames}
@@ -161,6 +189,7 @@ type Props = {
   createTodo: (description: string) => void;
   isLoading: boolean;
   labels: Label[];
+  moveTodo: (operation: MoveTodoOperation) => void;
   selectedPickerLabels: { [label: string]: boolean };
   setEditTodoId: (id: number | null) => void;
   setLabelTodoId: (id: number | null) => void;

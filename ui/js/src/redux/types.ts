@@ -47,6 +47,7 @@ export interface ApiState<T> {
 export interface ReduxState {
   labelsApi: ApiState<Label>;
   notifications: NotificationsState;
+  shortcuts: ShortcutState;
   todosApi: ApiState<Todo>;
   workspace: WorkspaceState;
 }
@@ -70,4 +71,21 @@ export interface WorkspaceState {
   loggedIn: boolean;
   showCompletedTodos: boolean;
   showLabelFilter: boolean;
+}
+
+export interface MoveTodoOperation {
+  position: 'after' | 'before';
+  relative_id: number;
+  todo_id: number;
+}
+
+export interface ShortcutOperation {
+  type: 'EDIT_TODO' | 'MOVE_TODO';
+  payload: TodoPatch | MoveTodoOperation;
+  generation: number;
+}
+
+export interface ShortcutState {
+  operations: ShortcutOperation[];
+  latestGeneration: number;
 }

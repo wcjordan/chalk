@@ -34,6 +34,7 @@ storybook:
 		-v $(PWD)/js/src:/js/src \
 		-v $(PWD)/js/__mocks__:/js/__mocks__ \
 		-v $(PWD)/js/assets:/js/assets \
+		-v $(PWD)/js/babel.config.js:/js/babel.config.js \
 		-v $(PWD)/js/.storybook:/js/.storybook \
 		$(UI_IMAGE_BASE):local-latest \
 		yarn run storybook

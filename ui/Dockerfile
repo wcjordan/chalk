@@ -30,6 +30,7 @@ COPY js/.storybook ./.storybook
 
 COPY js/web ./web
 COPY js/app.config.js ./app.config.js
+COPY js/babel.config.js ./babel.config.js
 COPY js/App.tsx ./App.tsx
 COPY js/assets ./assets
 COPY js/src ./src

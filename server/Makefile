@@ -32,9 +32,12 @@ format:
 # Make migrations for server
 .PHONY: create-migrations
 create-migrations:
-	DJANGO_SETTINGS_MODULE=chalk.settings.testing docker run --rm \
-		--env-file ../.env --env DJANGO_SETTINGS_MODULE \
-		-v $(PWD):/usr/src/app $(SERVER_IMAGE):local-latest \
+	DJANGO_SETTINGS_MODULE=chalk.settings.testing DOMAIN=localhost docker run --rm -t \
+		--env-file ../.env \
+		--env DJANGO_SETTINGS_MODULE \
+		--env DOMAIN \
+		-v $(PWD):/usr/src/app \
+		$(SERVER_IMAGE):local-latest \
 		python manage.py makemigrations --verbosity 3
 
 # Update starter data for server

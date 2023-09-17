@@ -115,7 +115,7 @@ describe('todosApiSlice reducer', function () {
       });
     });
 
-    it('should sort todos by id with completed todos at the end', function () {
+    it('should sort todos with completed todos at the end maintaining the order for the others', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [
@@ -247,7 +247,7 @@ describe('todosApiSlice reducer', function () {
       });
     });
 
-    it('should sort todos by id with completed todos at the end', function () {
+    it('should sort todos with completed todos at the end maintaining the order for the others', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
@@ -265,8 +265,8 @@ describe('todosApiSlice reducer', function () {
       );
       expect(result).toEqual({
         entries: [
-          getStubTodo({ id: 2 }),
           getStubTodo({ id: 3 }),
+          getStubTodo({ id: 2 }),
           getStubTodo({ id: 1, completed: true }),
         ],
         initialLoad: false,
@@ -318,7 +318,7 @@ describe('todosApiSlice reducer', function () {
       });
     });
 
-    it('should sort todos by id with completed todos at the end', function () {
+    it('should sort todos with completed todos at the end maintaining the order for the others', function () {
       const completedTodo = getStubTodo({ id: 1, completed: true });
       const result = todosApiSlice.reducer(
         {

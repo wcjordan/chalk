@@ -84,8 +84,16 @@ const styles = StyleSheet.create<Style>({
 });
 
 const TodoItem: React.FC<Props> = function (props: Props) {
-  const { editing, labeling, todo, setEditTodoId, setLabelTodoId, updateTodo } =
-    props;
+  const {
+    editing,
+    isDragging,
+    labeling,
+    setEditTodoId,
+    setLabelTodoId,
+    startDrag,
+    todo,
+    updateTodo,
+  } = props;
   const [editingValue, setEditingValue] = useState<string | null>(null);
 
   const commitTodo = useCallback(() => {
@@ -230,9 +238,11 @@ const TodoItem: React.FC<Props> = function (props: Props) {
 
   return (
     <Card
+      disabled={isDragging}
+      mode="outlined"
+      onLongPress={startDrag}
       onPress={beginEdit}
       style={labeling ? styles.activeCard : styles.card}
-      mode="outlined"
     >
       <Card.Content style={styles.cardPadding}>
         <View style={styles.cardContent}>
@@ -253,9 +263,11 @@ const TodoItem: React.FC<Props> = function (props: Props) {
 
 type Props = {
   editing: boolean;
+  isDragging: boolean;
   labeling: boolean;
   setEditTodoId: (id: number | null) => void;
   setLabelTodoId: (id: number | null) => void;
+  startDrag: () => void;
   todo: Todo;
   updateTodo: (todoPatch: TodoPatch, commitEdit?: boolean) => void;
 };

@@ -33,9 +33,17 @@ export async function create<T, Q>(
   newEntry: Q,
   csrfToken: string,
 ): Promise<T> {
+  return postRequest<T, Q>(apiUri, newEntry, csrfToken);
+}
+
+export async function postRequest<T, Q>(
+  uri: string,
+  data: Q,
+  csrfToken: string,
+): Promise<T> {
   const requestOpts = getRequestOpts('POST', csrfToken);
-  requestOpts.body = JSON.stringify(newEntry);
-  const response = await fetch(apiUri, requestOpts);
+  requestOpts.body = JSON.stringify(data);
+  const response = await fetch(uri, requestOpts);
   return handleResponse<T>(response);
 }
 

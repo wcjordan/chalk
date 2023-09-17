@@ -83,3 +83,7 @@ def toggle_label_filter_section(page):
     # Show the label filter section
     show_labels_btn = page.locator('[data-testid="show-labels"]')
     show_labels_btn.click()
+
+
+def get_todo_labels(todo_item):
+    return todo_item.locator('[data-testid="todo-labels"] > div').all_text_contents()

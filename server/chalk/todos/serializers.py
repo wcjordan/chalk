@@ -33,6 +33,7 @@ class TodoSerializer(serializers.ModelSerializer):
     Serializer for todos
     """
     labels = LabelStringField(many=True)
+    order_rank = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = TodoModel
@@ -45,4 +46,5 @@ class TodoSerializer(serializers.ModelSerializer):
             'description',
             'id',
             'labels',
+            'order_rank',
         ]

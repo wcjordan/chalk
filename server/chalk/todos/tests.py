@@ -54,6 +54,7 @@ def _stub_todo_matcher(description, labels):
         'completed_at': AnyArg(),
         'created_at': AnyArg(),
         'labels': labels,
+        'order_rank': AnyArg(),
     }
 
 
@@ -74,6 +75,8 @@ class ServiceTests(TestCase):
         test_username = 'tester@localhost'
         user_model = get_user_model()
         user = user_model.objects.create(username=test_username)
+        user.is_staff = True
+        user.save()
         self.client.force_login(user)
 
     def test_todos_api(self):
@@ -170,6 +173,87 @@ class ServiceTests(TestCase):
         fetched_data = self._fetch_labels()
         self.assertCountEqual(fetched_data, expected_data)
 
+    def test_reorder(self):
+        """
+        Test the reorder action for todos and then
+        fetch todos to ensure the order is persisted.
+        """
+        todo_ids = [
+            self._create_todo({
+                'description': _generate_random_string(),
+                'labels': [],
+            })['id'] for _ in range(3)
+        ]
+
+        # Fetch todos and verify they match expectations
+        fetched_ids = [todo['id'] for todo in self._fetch_todos()]
+        self.assertCountEqual(fetched_ids, todo_ids)
+
+        self._reorder_todo(todo_ids[2], todo_ids[0], 'after')
+        reordered_ids = [todo_ids[0], todo_ids[2], todo_ids[1]]
+        fetched_ids = [todo['id'] for todo in self._fetch_todos()]
+        self.assertCountEqual(fetched_ids, reordered_ids)
+
+    def test_order_rank_is_immutable(self):
+        """
+        Test the order rank of todos is immutable
+        Try setting it on create and update calls and verify it is ignored.
+        """
+        todo = self._create_todo({
+            'description': _generate_random_string(),
+            'labels': [],
+            'order_rank': 23,
+        })
+        assert todo['order_rank'] != 23
+
+        todo = self._update_todo(todo['id'], {
+            'order_rank': 23,
+        })
+        assert todo['order_rank'] != 23
+
+    def test_status_endpoint(self):
+        """
+        Test the status endpoint and rebalancing
+        """
+        status = self._fetch_entity('status')
+        assert status['closest_rank_steps'] == 45
+
+        # Create 3 todos and shuffle them 10 times to
+        # narrow the closest rank steps by 10
+        todo_ids = [
+            self._create_todo({
+                'description': _generate_random_string(),
+                'labels': [],
+            })['id'] for _ in range(3)
+        ]
+        for step in range(10):
+            move_idx = step % 2
+            relative_idx = 1 - move_idx
+            self._reorder_todo(todo_ids[move_idx], todo_ids[relative_idx],
+                               'after')
+
+        status = self._fetch_entity('status')
+        assert status['closest_rank_steps'] == 35
+
+        # Manually trigger an order rank rebalance
+        response = self.client.post('/api/todos/rebalance_ranks/')
+        self._assert_status_code(200, response)
+        assert response.json() == 'Rebalanced!'
+
+        status = self._fetch_entity('status')
+        assert status['closest_rank_steps'] == 45
+
+        # Reorder until automatic rebalance (45 - 2) steps
+        for step in range(43):
+            move_idx = ((step + 1) % 2) + 1
+            relative_idx = 3 - move_idx
+            self._reorder_todo(todo_ids[move_idx], todo_ids[relative_idx],
+                               'before')
+
+        status = self._fetch_entity('status')
+        assert status['closest_rank_steps'] == 45, \
+               f"Expected 45, but got {status['closest_rank_steps']}"
+
     def _create_todo(self, data):
         return self._create_entity(data, 'todos')
 
@@ -181,6 +265,15 @@ class ServiceTests(TestCase):
 
     def _delete_todo(self, entry_id):
         return self._delete_entity(entry_id, 'todos')
+
+    def _reorder_todo(self, todo_id, relative_id, position):
+        response = self.client.post(f'/api/todos/todos/{todo_id}/reorder/', {
+            'relative_id': relative_id,
+            'position': position,
+        },
+                                    content_type='application/json')
+        self._assert_status_code(200, response)
+        return response.json()
 
     def _create_label(self, data):
         return self._create_entity(data, 'labels')

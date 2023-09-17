@@ -1,12 +1,14 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action } from '@reduxjs/toolkit';
 
-import { ReduxState, TodoPatch } from './types';
+import { MoveTodoOperation, ReduxState, TodoPatch } from './types';
 import labelsApiSlice, { listLabels } from './labelsApiSlice';
 import notificationsSlice from './notificationsSlice';
+import shortcutSlice from './shortcutSlice';
 import todosApiSlice, {
   createTodo,
-  listTodos,
+  listTodos as listTodosApi,
+  moveTodo as moveTodoApi,
   updateTodo as updateTodoApi,
 } from './todosApiSlice';
 import workspaceSlice from './workspaceSlice';
@@ -24,6 +26,7 @@ export const updateTodo =
         ),
       ),
       dispatch(workspaceSlice.actions.setEditTodoId(null)),
+      dispatch(shortcutSlice.actions.addEditTodoOperation(todoPatch)),
       dispatch(updateTodoApi(todoPatch)),
     ]);
   };
@@ -43,6 +46,34 @@ export const updateTodoLabels =
       }),
     );
   };
+
+export const moveTodo =
+  (operation: MoveTodoOperation): AppThunk =>
+  (dispatch, getState) => {
+    const todo = getState().todosApi.entries.find(
+      (todo) => todo.id === operation.todo_id,
+    );
+    return Promise.all([
+      dispatch(
+        notificationsSlice.actions.addNotification(
+          `Reordering Todo: ${todo?.description}`,
+        ),
+      ),
+      dispatch(shortcutSlice.actions.addMoveTodoOperation(operation)),
+      dispatch(moveTodoApi(operation)),
+    ]);
+  };
+
+export const listTodos = (): AppThunk => async (dispatch, getState) => {
+  const latestGeneration = getState().shortcuts.latestGeneration;
+  await Promise.all([
+    dispatch(shortcutSlice.actions.incrementGenerations()),
+    dispatch(listTodosApi()),
+  ]);
+  return dispatch(
+    shortcutSlice.actions.clearOperationsUpThroughGeneration(latestGeneration),
+  );
+};
 
 // Used to exchange login token for session cookie in mobile login flow
 export const completeAuthentication =
@@ -102,10 +133,11 @@ export const toggleShowCompletedTodos =
   workspaceSlice.actions.toggleShowCompletedTodos;
 export const toggleShowLabelFilter =
   workspaceSlice.actions.toggleShowLabelFilter;
-export { createTodo, listLabels, listTodos };
+export { createTodo, listLabels };
 export default {
   labelsApi: labelsApiSlice.reducer,
   notifications: notificationsSlice.reducer,
+  shortcuts: shortcutSlice.reducer,
   todosApi: todosApiSlice.reducer,
   workspace: workspaceSlice.reducer,
 };

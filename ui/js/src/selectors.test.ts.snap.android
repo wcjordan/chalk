@@ -150,3 +150,43 @@ exports[`selectSelectedPickerLabels should return a map for looking up label pre
   "low-energy": true,
 }
 `;
+
+exports[`selectShortcuttedTodoEntries should optimistically move the moved todos 1`] = `
+[
+  {
+    "description": "Todo 3",
+    "id": 3,
+    "labels": [],
+  },
+  {
+    "description": "Todo 2",
+    "id": 2,
+    "labels": [],
+  },
+  {
+    "description": "Todo 1",
+    "id": 1,
+    "labels": [],
+  },
+]
+`;
+
+exports[`selectShortcuttedTodoEntries should optimistically update edited todos 1`] = `
+[
+  {
+    "description": "Todo 1 (edited)",
+    "id": 1,
+    "labels": [],
+  },
+  {
+    "description": "Todo 2",
+    "id": 2,
+    "labels": [],
+  },
+  {
+    "description": "Todo 3 (edited)",
+    "id": 3,
+    "labels": [],
+  },
+]
+`;
