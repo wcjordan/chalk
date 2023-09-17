@@ -29,7 +29,7 @@ export const selectShortcuttedTodoEntries = createSelector(
       if (op.type === 'EDIT_TODO') {
         const patch = op.payload as TodoPatch;
         const todoIdx = shortcuttedTodoEntries.findIndex(
-          (todo) => todo.id === patch.id,
+          (todo) => todo && todo.id === patch.id,
         );
         if (todoIdx !== -1) {
           const origTodo = shortcuttedTodoEntries[todoIdx];
@@ -41,8 +41,15 @@ export const selectShortcuttedTodoEntries = createSelector(
       } else if (op.type === 'MOVE_TODO') {
         const moveOp = op.payload as MoveTodoOperation;
         const todoIdx = shortcuttedTodoEntries.findIndex(
-          (todo) => todo.id === moveOp.todo_id,
+          (todo) => todo && todo.id === moveOp.todo_id,
         );
+
+        if (todoIdx === -1) {
+          console.warn(
+            `Unable to find todo with shortcut: ${JSON.stringify(moveOp)}`,
+          );
+          continue;
+        }
 
         // Remove the element to move
         const todo = shortcuttedTodoEntries[todoIdx];

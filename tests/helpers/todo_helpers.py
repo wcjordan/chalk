@@ -69,6 +69,7 @@ def drag_todo(page, todo_item, relative_todo_item):
     if isinstance(relative_todo_item, str):
         relative_todo_item = find_todo(page, relative_todo_item)
 
+    # Long press to begin dragging
     start_box = todo_item.bounding_box()
     todo_item.hover()
     page.mouse.down()
@@ -79,10 +80,11 @@ def drag_todo(page, todo_item, relative_todo_item):
     target_box = relative_todo_item.bounding_box()
     target_y = target_box['y'] + target_box['height'] / 2
     start_y = start_box['y'] + start_box['height'] / 2
-    overshoot_y = (target_y - start_y) * 1 / 11
+    overshoot_y = (target_y - start_y) * 1 / 9
     if overshoot_y == 0:
         overshoot_y = 10
     page.mouse.move(target_box['x'], target_box['y'] + target_box['height'] / 2 + overshoot_y, steps=10)
 
+    # Drop
     page.mouse.up()
     time.sleep(1)
