@@ -2,7 +2,7 @@ def get_active_work_context(page):
     active_chip = page.locator('[data-testid="work-context-filter"] [data-testid="chip-active"]')
     if not active_chip:
         return None
-    return active_chip.text()
+    return active_chip.allTextContents()
 
 
 def select_work_context(page, work_context):
