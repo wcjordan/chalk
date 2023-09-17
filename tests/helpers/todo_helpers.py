@@ -80,7 +80,8 @@ def drag_todo(page, todo_item, relative_todo_item):
     target_box = relative_todo_item.bounding_box()
     target_y = target_box['y'] + target_box['height'] / 2
     start_y = start_box['y'] + start_box['height'] / 2
-    overshoot_y = (target_y - start_y) * 1 / 7
+    direction = 1 if target_y > start_y else -1
+    overshoot_y = (target_y - start_y) * 1 / 9 + direction * target_box['height'] / 3
     if overshoot_y == 0:
         overshoot_y = 10
     page.mouse.move(target_box['x'], target_box['y'] + target_box['height'] / 2 + overshoot_y, steps=10)
