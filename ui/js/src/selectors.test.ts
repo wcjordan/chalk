@@ -381,6 +381,36 @@ describe('selectShortcuttedTodoEntries', function () {
     const result = selectShortcuttedTodoEntries(state);
     expect(result).toMatchSnapshot();
   });
+
+  it('should handle shortcuts of deleted todos', function () {
+    const state = {
+      shortcuts: {
+        operations: [
+          {
+            type: 'MOVE_TODO',
+            payload: {
+              position: 'after',
+              relative_id: 3,
+              todo_id: 1,
+            },
+          },
+          {
+            type: 'EDIT_TODO',
+            payload: {
+              id: 3,
+              description: 'Todo 3 (edited)',
+            },
+          },
+        ],
+      },
+      todosApi: {
+        entries: [],
+      },
+    };
+
+    const result = selectShortcuttedTodoEntries(state);
+    expect(result).toStrictEqual([]);
+  });
 });
 
 export {};
