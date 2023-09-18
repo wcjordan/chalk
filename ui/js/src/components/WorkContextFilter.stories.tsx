@@ -16,5 +16,5 @@ export const DefaultWorkContextFilter: React.FC = () => (
 );
 
 export const ActiveWorkContextFilter: React.FC = () => (
-  <WorkContextFilter {...defaultProps} activeWorkContext="chores" />
+  <WorkContextFilter {...defaultProps} activeWorkContext="urgent" />
 );

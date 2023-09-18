@@ -54796,7 +54796,7 @@ exports[`Storyshots Work Context Filter Active Work Context Filter 1`] = `
     collapsable={false}
     style={
       {
-        "backgroundColor": "#d9f0ffff",
+        "backgroundColor": "#a3d5ffff",
         "borderColor": "rgba(121, 116, 126, 1)",
         "borderRadius": 8,
         "borderStyle": "solid",
@@ -54808,7 +54808,7 @@ exports[`Storyshots Work Context Filter Active Work Context Filter 1`] = `
         "transform": undefined,
       }
     }
-    testID="chip-container"
+    testID="chip-active-container"
   >
     <View
       accessibilityRole="button"
@@ -54818,7 +54818,7 @@ exports[`Storyshots Work Context Filter Active Work Context Filter 1`] = `
           "checked": undefined,
           "disabled": false,
           "expanded": undefined,
-          "selected": false,
+          "selected": true,
         }
       }
       accessibilityValue={
@@ -54856,7 +54856,7 @@ exports[`Storyshots Work Context Filter Active Work Context Filter 1`] = `
           ],
         ]
       }
-      testID="chip"
+      testID="chip-active"
     >
       <View
         style={
@@ -54876,6 +54876,23 @@ exports[`Storyshots Work Context Filter Active Work Context Filter 1`] = `
           ]
         }
       >
+        <View
+          style={
+            [
+              {
+                "alignSelf": "center",
+                "padding": 4,
+              },
+              {
+                "paddingLeft": 8,
+                "paddingRight": 0,
+              },
+              null,
+            ]
+          }
+        >
+          <Text />
+        </View>
         <Text
           numberOfLines={1}
           selectable={false}
@@ -54910,7 +54927,7 @@ exports[`Storyshots Work Context Filter Active Work Context Filter 1`] = `
                     "lineHeight": 20,
                   },
                   {
-                    "marginLeft": 16,
+                    "marginLeft": 8,
                     "marginRight": 16,
                   },
                   {
