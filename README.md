@@ -77,6 +77,7 @@ Set the Display Name to `Chalk`
 
 Add source Github  
 Set repository URL to `https://github.com/wcjordan/chalk`  
+Set credentials to GitHub app  
 
 Ensure Behaviors has just Discover Branches  
 
