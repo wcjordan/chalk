@@ -253,7 +253,7 @@ pipeline {
                                     sh 'pip install "playwright==1.37.0" "pytest==7.4.2"'
                                     sh "pytest . --server_domain ${SERVER_IP} --junitxml=playwright_results.xml || true"
 
-                                    junit testResults: 'playwright_results.xml'
+                                    junit testResults: 'playwright_results.xml', skipPublishingChecks: false
                                     browserStackReportPublisher 'automate'
                                 }
                             }
