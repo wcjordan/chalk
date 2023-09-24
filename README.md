@@ -86,7 +86,7 @@ Ensure Behaviors has:
 - `Discover pull requests from origin`: `The current pull request revision`
 
 Build by Jenkinsfile  
-Set Scan Periodically to `1 minute`.  
+Set Scan Periodically to `1 hour`.  The webhook will handle building on pushes & PRs.  
 Discard old builds, keep `60` days of old items.  
 
 ### Chalk Base Build
