@@ -77,12 +77,17 @@ Set the Display Name to `Chalk`
 
 Add source Github  
 Set repository URL to `https://github.com/wcjordan/chalk`  
+Set credentials to Github app.  
+Ensure the Github app has permissions on the repo under its installation configuration.  
 
-Ensure Behaviors has just Discover Branches  
+Delete `Discover pull requests from forks` from the Behaviors  
+Ensure Behaviors has:  
+- `Discover branches`: `Exclude branches that are also filed as PRs`
+- `Discover pull requests from origin`: `The current pull request revision`
 
-Build by Jenkinsfile
-Set Scan Periodically to `1 day`  
-Discard old builds, keep max of 5 old items  
+Build by Jenkinsfile  
+Set Scan Periodically to `1 hour`.  The webhook will handle building on pushes & PRs.  
+Discard old builds, keep `60` days of old items.  
 
 ### Chalk Base Build
 Create a Pipeline build named `chalk_base`
@@ -100,6 +105,12 @@ This means a `jenkins-base` branch can be use to create a new base build in addi
 
 Set script path to `jenkins/Jenkinsfile.base`  
 Enable lightweight checkout  
+
+### Add Github Webhook
+Under the repo settings on Github -> Webhooks, click `Add a webhook``
+Payload URL: `http://jenkins.flipperkid.com/github-webhook/`
+Content type: `application/json`
+Which events...?: `Just the push event`
 
 ## TODO
 Add instructions for other env setup  

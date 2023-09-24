@@ -192,7 +192,7 @@ pipeline {
                                             echo \${parts[0]}-\${parts[1]}-\$branch_part-\${parts[-1]}
                                         """,
                                         returnStdout: true
-                                    ).trim()
+                                    ).trim().toLowerCase()
                                 }
                                 sh """
                                     mkdir helm/secrets;
