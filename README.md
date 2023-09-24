@@ -105,6 +105,12 @@ This means a `jenkins-base` branch can be use to create a new base build in addi
 Set script path to `jenkins/Jenkinsfile.base`  
 Enable lightweight checkout  
 
+### Add Github Webhook
+Under the repo settings on Github -> Webhooks, click `Add a webhook``
+Payload URL: `http://jenkins.flipperkid.com/github-webhook/`
+Content type: `application/json`
+Which events...?: `Just the push event`
+
 ## TODO
 Add instructions for other env setup  
 Add setup instructions for static IP claim  
