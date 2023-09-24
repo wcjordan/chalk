@@ -77,7 +77,8 @@ Set the Display Name to `Chalk`
 
 Add source Github  
 Set repository URL to `https://github.com/wcjordan/chalk`  
-Set credentials to GitHub app  
+Set credentials to Github app.  
+Ensure the Github app has permissions on the repo under its installation configuration.  
 
 Delete `Discover pull requests from forks` from the Behaviors  
 Ensure Behaviors has:  
