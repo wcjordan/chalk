@@ -28,6 +28,10 @@ DEFAULT_LABELS = [
     'Shopping',
     'chore',
     'up next',
+    'Danyi todo',
+    'Test Sheriff',
+    'New Jenkins',
+    'backlog',
 ]
 
 
