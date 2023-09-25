@@ -4,4 +4,4 @@
 
 [flake8]
 max-line-length = 80
-exclude = */migrations/*
+exclude = */migrations,chalk/settings
