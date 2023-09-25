@@ -2,11 +2,35 @@
 
 ## Env Setup
 Copy .env_default to .env & .prod.env  
+
+Set GCP_PROJECT with the project ID from GCP  
+Set ROOT_DOMAIN with a domain such as `mydomain.com`  
+Set PERMITTED_USERS to a list of emails who should be allowed to use the app  
+Commas in PERMITTED_USERS should be double escaped like: bob@home.com\\,bill@home.com  
+
 Set SECRET_KEY & DB_PASSWORD in .env  
   These should be random secure strings  
-  e.g. `python -c "import secrets; print(secrets.token_urlsafe())"`
-  or `head -c 32 /dev/urandom | base64`
-  
+  e.g. `python -c "import secrets; print(secrets.token_urlsafe())"`  
+  or `head -c 32 /dev/urandom | base64`  
+
+Set K8S_CONTEXT to the name of the config from `kubectl config get-contexts` for the cluster that you plan to use.  
+
+### Sentry config
+Set SENTRY_DSN - A Sentry.io DSN.  https://sentry.io/settings/<ORG_ID>/projects/<PROJECT_ID>/keys/  
+Set SENTRY_TOKEN (prod only) - A [Sentry.io auth token](https://sentry.io/settings/account/api/auth-tokens/)  
+
+### Expo config
+EXPO_USERNAME & EXPO_CLI_PASSWORD (prod only) - Set from your expo.dev account  
+OAUTH_CLIENT_ID - See the OAuth Setup section below  
+
+# Browserstack config
+See username & access key under [Automate section of settings](https://www.browserstack.com/accounts/settings)  
+Delete BROWSERSTACK_USERNAME & BROWSERSTACK_ACCESS_KEY in prod.env  
+
+# CI OAuth config
+See the OAuth Setup section below  
+Delete CHALK_OAUTH_REFRESH_TOKEN in prod.env  
+
 Install `nginx`  
 (which the dev env now requires)  
 On Mac: `brew install nginx`
@@ -111,7 +135,3 @@ Under the repo settings on Github -> Webhooks, click `Add a webhook``
 Payload URL: `http://jenkins.flipperkid.com/github-webhook/`
 Content type: `application/json`
 Which events...?: `Just the push event`
-
-## TODO
-Add instructions for other env setup  
-Add setup instructions for static IP claim  

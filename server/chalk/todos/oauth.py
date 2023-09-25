@@ -27,9 +27,9 @@ def get_authorization_url(host):
         CLIENT_SECRETS_FILE, scopes=SCOPES)
     flow.redirect_uri = _get_redirect_uri(host)
 
-    # TODO use offline access to get a refresh token
-    # Needed for integration test auth workflows,
-    # printed below in _get_authorized_session
+    # NOTE using offline access to get a refresh token
+    # is needed for integration test auth workflows.
+    # It's printed below in _get_authorized_session
     # authorization_url, _ = flow.authorization_url(access_type='offline')
     authorization_url, _ = flow.authorization_url()
     return authorization_url
@@ -116,6 +116,7 @@ def _get_authorized_session(token, state, host):
     flow.redirect_uri = _get_redirect_uri(host)
 
     flow.fetch_token(code=token)
+    # NOTE printed for setup of integration test auth workflows
     # print(flow.credentials.refresh_token)
 
     session = flow.authorized_session()

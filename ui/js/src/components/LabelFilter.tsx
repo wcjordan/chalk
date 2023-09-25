@@ -23,7 +23,6 @@ const styles = StyleSheet.create<Style>({
 });
 
 const LabelFilter: React.FC<Props> = function (props: Props) {
-  // TODO (jordan) memoize the conversion
   const {
     labels,
     selectedLabels,
