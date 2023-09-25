@@ -30,6 +30,12 @@ export const workContexts: { [key: string]: WorkContext } = {
       'up next': FILTER_STATUS.Active,
     },
   },
+  work: {
+    displayName: 'Work',
+    labels: {
+      work: FILTER_STATUS.Active,
+    },
+  },
   shopping: {
     displayName: 'Shopping',
     labels: {
