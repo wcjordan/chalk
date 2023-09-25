@@ -17,8 +17,7 @@ PARENT_DIR = $(dir $(PWD))
 # Test w/ PyTest & lint Django app
 .PHONY: test
 test:
-	flake8 chalk/todos  # TODO change to .
-	# TODO (jordan) remove need to hardcode apps
+	flake8 .
 	PYTHONPATH=$(PWD) pylint -j 0 --load-plugins pylint_django chalk
 
 	# Unit tests
