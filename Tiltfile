@@ -24,7 +24,7 @@ if not RANDOM_TAG:
     local('echo %s > _env_id.txt' % RANDOM_TAG)
 
 RELEASE_NAME = 'chalk-dev-%s' % RANDOM_TAG
-helm = helm('helm', name=RELEASE_NAME, namespace=k8s_namespace(), set=env_arr)
+helm = helm('helm', name=RELEASE_NAME, namespace='dev', set=env_arr)
 k8s_yaml(helm)
 k8s_resource(objects=[
     '%s:ServiceAccount' % RELEASE_NAME,
