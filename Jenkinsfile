@@ -198,6 +198,7 @@ pipeline {
                                     mkdir helm/secrets;
                                     cp \$OAUTH_WEB_SECRET helm/secrets/oauth_web_client_secret.json
                                     helm install \
+                                        --namespace test \
                                         --set domain=_ \
                                         --set environment=CI \
                                         --set gcpProject=${env.GCP_PROJECT} \
@@ -213,13 +214,13 @@ pipeline {
                                             until [ ! -z \$ready_replicas ] && [ \$ready_replicas -ge 1 ]
                                             do
                                                 sleep 15
-                                                ready_replicas=\$(kubectl get deployments ${HELM_DEPLOY_NAME}-server -o jsonpath='{.status.readyReplicas}')
+                                                ready_replicas=\$(kubectl --namespace test get deployments ${HELM_DEPLOY_NAME}-server -o jsonpath='{.status.readyReplicas}')
                                             done
 
                                             until [ ! -z \$server_ip ]
                                             do
                                                 sleep 5
-                                                server_ip=\$(kubectl get ingress ${HELM_DEPLOY_NAME} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                                                server_ip=\$(kubectl --namespace test get ingress ${HELM_DEPLOY_NAME} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
                                             done
                                             echo \$server_ip
 
@@ -267,7 +268,7 @@ pipeline {
                         withCredentials([file(credentialsId: 'jenkins-gke-sa', variable: 'FILE')]) {
                             sh 'gcloud auth activate-service-account --key-file $FILE'
                             sh 'gcloud container clusters get-credentials ${GCP_PROJECT_NAME}-gke --project ${GCP_PROJECT} --zone us-east4-c'
-                            sh "helm uninstall ${HELM_DEPLOY_NAME}"
+                            sh "helm uninstall --namespace test ${HELM_DEPLOY_NAME}"
                         }
                     }
                 }
