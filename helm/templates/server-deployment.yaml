@@ -76,6 +76,13 @@ spec:
             - {{ printf "-instances=%s:us-east4:%s=tcp:5432" .Values.gcpProject (include "..dbInstanceName" .) | quote }}
           securityContext:
             runAsNonRoot: true
+          resources:
+            limits:
+              memory: "50Mi"
+              cpu: "1000m"
+            requests:
+              memory: "50Mi"
+              cpu: "100m"
         - name: server-nginx
           image: nginx:stable
           imagePullPolicy: Always
@@ -93,8 +100,12 @@ spec:
               path: /admin_static/rest_framework/css/default.css
               port: nginx-http
           resources:
+            limits:
+              memory: "50Mi"
+              cpu: "1000m"
             requests:
-              cpu: 10m
+              memory: "50Mi"
+              cpu: "100m"
         - name: server
           image: {{ printf "us-east4-docker.pkg.dev/%s/default-gar/chalk-server:%s" .Values.gcpProject .Values.imageTag | quote }}
           imagePullPolicy: Always
@@ -113,3 +124,10 @@ spec:
               path: /api/todos/healthz/
               port: http
             timeoutSeconds: 3
+          resources:
+            limits:
+              memory: "200Mi"
+              cpu: "1000m"
+            requests:
+              memory: "200Mi"
+              cpu: "100m"

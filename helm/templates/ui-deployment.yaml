@@ -34,3 +34,10 @@ spec:
             httpGet:
               path: /healthz/
               port: http
+          resources:
+            limits:
+              memory: "50Mi"
+              cpu: "1000m"
+            requests:
+              memory: "50Mi"
+              cpu: "100m"
