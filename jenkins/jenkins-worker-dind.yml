@@ -16,7 +16,7 @@ spec:
         mountPath: /var/lib/docker
     resources:
       requests:
-        cpu: "1000m"
+        cpu: "600m"
         memory: "3Gi"
       limits:
         cpu: "1000m"
