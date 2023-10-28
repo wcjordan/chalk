@@ -9,6 +9,6 @@ spec:
     tty: true
     resources:
       requests:
-        cpu: "300m"
+        cpu: "1000m"
         memory: "1.5Gi"
 
