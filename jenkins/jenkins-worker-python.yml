@@ -9,7 +9,7 @@ spec:
     tty: true
     resources:
       requests:
-        cpu: "1000m"
+        cpu: "600m"
         memory: "1.5Gi"
       limits:
         cpu: "1000m"
