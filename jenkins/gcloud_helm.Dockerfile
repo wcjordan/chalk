@@ -4,7 +4,7 @@ RUN gcloud components install kubectl -q --no-user-output-enabled
 
 # Install Helm
 RUN mkdir helm_tmp \
-  && curl -o helm_tmp/helm.tar.gz https://get.helm.sh/helm-v3.13.0-linux-amd64.tar.gz \
+  && curl -o helm_tmp/helm.tar.gz https://get.helm.sh/helm-v3.13.1-linux-amd64.tar.gz \
   && tar -zxvf helm_tmp/helm.tar.gz -C helm_tmp \
   && mv helm_tmp/linux-amd64/helm /bin/helm \
   && rm -rf helm_tmp

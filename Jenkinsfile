@@ -261,7 +261,7 @@ pipeline {
                         browserstack(credentialsId: 'browserstack_key') {
                             container('jenkins-worker-python') {
                                 dir('tests') {
-                                    sh 'pip install "playwright==1.38.0" "pytest==7.4.2"'
+                                    sh 'pip install "playwright==1.39.0" "pytest==7.4.3"'
                                     sh "pytest . --server_domain ${SERVER_IP} --junitxml=playwright_results.xml || true"
 
                                     junit testResults: 'playwright_results.xml'
