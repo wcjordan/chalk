@@ -65,8 +65,12 @@ pipeline {
                                             tty: true
                                             resources:
                                               requests:
-                                                cpu: "500m"
-                                                memory: "3.0Gi"
+                                                cpu: "600m"
+                                                memory: "3Gi"
+                                              limits:
+                                                cpu: "1000m"
+                                                memory: "3Gi"
+
 
                                     """
                                 }
@@ -155,7 +159,10 @@ pipeline {
                             tty: true
                             resources:
                               requests:
-                                cpu: "500m"
+                                cpu: "600m"
+                                memory: "1Gi"
+                              limits:
+                                cpu: "1000m"
                                 memory: "1Gi"
                           - name: jenkins-worker-python
                             image: python:3.10
@@ -164,7 +171,10 @@ pipeline {
                             tty: true
                             resources:
                               requests:
-                                cpu: "300m"
+                                cpu: "600m"
+                                memory: "1.5Gi"
+                              limits:
+                                cpu: "1000m"
                                 memory: "1.5Gi"
                     """
                 }
