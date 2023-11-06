@@ -87,7 +87,6 @@
   },
   "scripts": {
     "build": "npx expo export:web",
-    "test": "yarn jest",
     "storybook": "storybook dev -p 9009",
     "prepare": "cd ../../ && husky install ui/js/.husky"
   },
