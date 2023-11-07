@@ -48,11 +48,14 @@ def playwright():
 
 
 @pytest.fixture
-def page(request, playwright, todo_prefix, test_name, server_domain):
+def page(request, playwright, todo_prefix, test_name, server_domain, record_xml_attribute):
     username = os.getenv("BROWSERSTACK_USERNAME")
     access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
     refresh_token = os.getenv("CHALK_OAUTH_REFRESH_TOKEN")
     build_name = os.getenv("BROWSERSTACK_BUILD_NAME", 'Local')
+
+    classname = f"playwright_e2e_tests.{request.node.path.stem}"
+    record_xml_attribute('classname', classname)
 
     desired_cap = {
         'project': 'Chalk',
