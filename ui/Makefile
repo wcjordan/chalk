@@ -20,7 +20,7 @@ test:
 	# Typecheck
 	cd js; yarn tsc
 	# Unit & snapshot tests for UI
-	cd js; yarn test
+	cd js; JEST_JUNIT_CLASSNAME="ui_unit_tests.{classname} {title}" yarn jest
 
 # ESLint & Prettier JS formatting
 .PHONY: format

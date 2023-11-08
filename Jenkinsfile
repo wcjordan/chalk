@@ -85,6 +85,7 @@ pipeline {
                                     }
                                     dir('ui') {
                                         sh 'make test'
+                                        junit testResults: 'js/junit.xml'
                                     }
                                 }
                             }
