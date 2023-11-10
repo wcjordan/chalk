@@ -25,6 +25,7 @@ interface Style {
   containerMobile: ViewStyle;
   containerWeb: ViewStyle;
   scrollView: ViewStyle;
+  spacer: ViewStyle;
 }
 interface TopStyle {
   top: ViewStyle;
@@ -42,6 +43,10 @@ const styles = StyleSheet.create<Style>({
   },
   scrollView: {
     flex: 1,
+    minHeight: 20,
+  },
+  spacer: {
+    flexGrow: 1,
   },
 });
 
@@ -152,7 +157,12 @@ const TodoList: React.FC<Props> = function (props: Props) {
 
   let loadingPage = null;
   if (isLoading) {
-    loadingPage = <LoadingPage />;
+    loadingPage = (
+      <React.Fragment>
+        <LoadingPage />
+        <View style={styles.spacer} key="spacer-after" />
+      </React.Fragment>
+    );
   }
 
   return (
