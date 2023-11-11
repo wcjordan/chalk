@@ -1495,6 +1495,7 @@ exports[`Storyshots App Layout Default Layout 1`] = `
       style={
         {
           "flex": 1,
+          "minHeight": 20,
         }
       }
     >
@@ -1511,6 +1512,7 @@ exports[`Storyshots App Layout Default Layout 1`] = `
         containerStyle={
           {
             "flex": 1,
+            "minHeight": 20,
           }
         }
         data={[]}
@@ -2948,6 +2950,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
       style={
         {
           "flex": 1,
+          "minHeight": 20,
         }
       }
     >
@@ -2964,6 +2967,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
         containerStyle={
           {
             "flex": 1,
+            "minHeight": 20,
           }
         }
         data={
@@ -10932,6 +10936,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
       style={
         {
           "flex": 1,
+          "minHeight": 20,
         }
       }
     >
@@ -10948,6 +10953,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
         containerStyle={
           {
             "flex": 1,
+            "minHeight": 20,
           }
         }
         data={
@@ -16933,6 +16939,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
       style={
         {
           "flex": 1,
+          "minHeight": 20,
         }
       }
     >
@@ -16949,6 +16956,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
         containerStyle={
           {
             "flex": 1,
+            "minHeight": 20,
           }
         }
         data={
@@ -26905,42 +26913,47 @@ exports[`Storyshots Label Picker Default Label Picker 1`] = `
 `;
 
 exports[`Storyshots Loading Page Default Loading Page 1`] = `
-[
+<View
+  accessibilityRole="progressbar"
+  accessibilityState={
+    {
+      "busy": true,
+    }
+  }
+  accessible={true}
+  style={
+    [
+      {
+        "alignItems": "center",
+        "justifyContent": "center",
+      },
+      {
+        "margin": "auto",
+      },
+    ]
+  }
+>
   <View
+    collapsable={false}
     style={
       {
-        "flexGrow": 1,
-        "minHeight": 20,
+        "height": 48,
+        "opacity": 1,
+        "width": 48,
       }
-    }
-  />,
-  <View
-    accessibilityRole="progressbar"
-    accessibilityState={
-      {
-        "busy": true,
-      }
-    }
-    accessible={true}
-    style={
-      [
-        {
-          "alignItems": "center",
-          "justifyContent": "center",
-        },
-        {
-          "margin": "auto",
-        },
-      ]
     }
   >
     <View
       collapsable={false}
       style={
         {
-          "height": 48,
-          "opacity": 1,
-          "width": 48,
+          "alignItems": "center",
+          "bottom": 0,
+          "justifyContent": "center",
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
         }
       }
     >
@@ -26948,13 +26961,13 @@ exports[`Storyshots Loading Page Default Loading Page 1`] = `
         collapsable={false}
         style={
           {
-            "alignItems": "center",
-            "bottom": 0,
-            "justifyContent": "center",
-            "left": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
+            "height": 48,
+            "transform": [
+              {
+                "rotate": "45deg",
+              },
+            ],
+            "width": 48,
           }
         }
       >
@@ -26962,12 +26975,8 @@ exports[`Storyshots Loading Page Default Loading Page 1`] = `
           collapsable={false}
           style={
             {
-              "height": 48,
-              "transform": [
-                {
-                  "rotate": "45deg",
-                },
-              ],
+              "height": 24,
+              "overflow": "hidden",
               "width": 48,
             }
           }
@@ -26976,8 +26985,15 @@ exports[`Storyshots Loading Page Default Loading Page 1`] = `
             collapsable={false}
             style={
               {
-                "height": 24,
-                "overflow": "hidden",
+                "height": 48,
+                "transform": [
+                  {
+                    "translateY": 0,
+                  },
+                  {
+                    "rotate": "-165deg",
+                  },
+                ],
                 "width": 48,
               }
             }
@@ -26986,15 +27002,8 @@ exports[`Storyshots Loading Page Default Loading Page 1`] = `
               collapsable={false}
               style={
                 {
-                  "height": 48,
-                  "transform": [
-                    {
-                      "translateY": 0,
-                    },
-                    {
-                      "rotate": "-165deg",
-                    },
-                  ],
+                  "height": 24,
+                  "overflow": "hidden",
                   "width": 48,
                 }
               }
@@ -27003,123 +27012,104 @@ exports[`Storyshots Loading Page Default Loading Page 1`] = `
                 collapsable={false}
                 style={
                   {
-                    "height": 24,
-                    "overflow": "hidden",
+                    "borderColor": "rgba(103, 80, 164, 1)",
+                    "borderRadius": 24,
+                    "borderWidth": 4.8,
+                    "height": 48,
                     "width": 48,
                   }
                 }
-              >
-                <View
-                  collapsable={false}
-                  style={
-                    {
-                      "borderColor": "rgba(103, 80, 164, 1)",
-                      "borderRadius": 24,
-                      "borderWidth": 4.8,
-                      "height": 48,
-                      "width": 48,
-                    }
-                  }
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-      <View
-        collapsable={false}
-        style={
-          {
-            "alignItems": "center",
-            "bottom": 0,
-            "justifyContent": "center",
-            "left": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-          }
-        }
-      >
-        <View
-          collapsable={false}
-          style={
-            {
-              "height": 48,
-              "transform": [
-                {
-                  "rotate": "45deg",
-                },
-              ],
-              "width": 48,
-            }
-          }
-        >
-          <View
-            collapsable={false}
-            style={
-              {
-                "height": 24,
-                "overflow": "hidden",
-                "top": 24,
-                "width": 48,
-              }
-            }
-          >
-            <View
-              collapsable={false}
-              style={
-                {
-                  "height": 48,
-                  "transform": [
-                    {
-                      "translateY": -24,
-                    },
-                    {
-                      "rotate": "345deg",
-                    },
-                  ],
-                  "width": 48,
-                }
-              }
-            >
-              <View
-                collapsable={false}
-                style={
-                  {
-                    "height": 24,
-                    "overflow": "hidden",
-                    "width": 48,
-                  }
-                }
-              >
-                <View
-                  collapsable={false}
-                  style={
-                    {
-                      "borderColor": "rgba(103, 80, 164, 1)",
-                      "borderRadius": 24,
-                      "borderWidth": 4.8,
-                      "height": 48,
-                      "width": 48,
-                    }
-                  }
-                />
-              </View>
+              />
             </View>
           </View>
         </View>
       </View>
     </View>
-  </View>,
-  <View
-    style={
-      {
-        "flexGrow": 1,
-        "minHeight": 20,
+    <View
+      collapsable={false}
+      style={
+        {
+          "alignItems": "center",
+          "bottom": 0,
+          "justifyContent": "center",
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        }
       }
-    }
-  />,
-]
+    >
+      <View
+        collapsable={false}
+        style={
+          {
+            "height": 48,
+            "transform": [
+              {
+                "rotate": "45deg",
+              },
+            ],
+            "width": 48,
+          }
+        }
+      >
+        <View
+          collapsable={false}
+          style={
+            {
+              "height": 24,
+              "overflow": "hidden",
+              "top": 24,
+              "width": 48,
+            }
+          }
+        >
+          <View
+            collapsable={false}
+            style={
+              {
+                "height": 48,
+                "transform": [
+                  {
+                    "translateY": -24,
+                  },
+                  {
+                    "rotate": "345deg",
+                  },
+                ],
+                "width": 48,
+              }
+            }
+          >
+            <View
+              collapsable={false}
+              style={
+                {
+                  "height": 24,
+                  "overflow": "hidden",
+                  "width": 48,
+                }
+              }
+            >
+              <View
+                collapsable={false}
+                style={
+                  {
+                    "borderColor": "rgba(103, 80, 164, 1)",
+                    "borderRadius": 24,
+                    "borderWidth": 4.8,
+                    "height": 48,
+                    "width": 48,
+                  }
+                }
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
 `;
 
 exports[`Storyshots Todo Item Checked Todo 1`] = `
@@ -33592,6 +33582,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
     style={
       {
         "flex": 1,
+        "minHeight": 20,
       }
     }
   >
@@ -33608,6 +33599,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
       containerStyle={
         {
           "flex": 1,
+          "minHeight": 20,
         }
       }
       data={
@@ -42803,6 +42795,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
       style={
         {
           "flex": 1,
+          "minHeight": 20,
         }
       }
     >
@@ -42819,6 +42812,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
         containerStyle={
           {
             "flex": 1,
+            "minHeight": 20,
           }
         }
         data={
@@ -54028,6 +54022,7 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
     style={
       {
         "flex": 1,
+        "minHeight": 20,
       }
     }
   >
@@ -54044,6 +54039,7 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
       containerStyle={
         {
           "flex": 1,
+          "minHeight": 20,
         }
       }
       data={
@@ -55403,14 +55399,6 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
     </RCTScrollView>
   </View>
   <View
-    style={
-      {
-        "flexGrow": 1,
-        "minHeight": 20,
-      }
-    }
-  />
-  <View
     accessibilityRole="progressbar"
     accessibilityState={
       {
@@ -55611,7 +55599,6 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
     style={
       {
         "flexGrow": 1,
-        "minHeight": 20,
       }
     }
   />
