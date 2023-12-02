@@ -104,6 +104,21 @@ deploy: build
 # Make it so helm to deploy can be used from here and from jenkins for tests
 # Probably use a python script to call Helm to add flexibility
 
+.PHONY: setup-continuous-delivery
+setup-continuous-delivery:
+	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) \
+		$$(grep '^CHALK_OAUTH_REFRESH_TOKEN' .env | xargs) \
+		sh -c ' \
+		helm upgrade --install \
+			--set environment=$(ENVIRONMENT) \
+			--set permittedUsers=$$PERMITTED_USERS \
+			--set sentry_dsn=$$SENTRY_DSN \
+			--set sentry_token=$$SENTRY_TOKEN \
+			--set server.dbPassword=$$DB_PASSWORD \
+			--set server.secretKey=$$SECRET_KEY \
+			--set chalk_oauth_refresh_token=$$CHALK_OAUTH_REFRESH_TOKEN \
+			chalk-prod-cd continuous_delivery_setup'
+
 # Stops the dev env and deletes _env_id.txt
 .PHONY: superclean
 superclean: stop

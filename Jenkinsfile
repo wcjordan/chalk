@@ -188,7 +188,7 @@ pipeline {
                         container('jenkins-helm') {
                             withCredentials([
                                 file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
-                                file(credentialsId: 'chalk-oauth-web-secret', variable: 'OAUTH_WEB_SECRET')
+                                file(credentialsId: 'chalk-prod-cd-oauth-web-client-json', variable: 'OAUTH_WEB_SECRET')
                             ]) {
                                 sh "gcloud auth activate-service-account --key-file \$GKE_SA_FILE"
                                 sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
@@ -260,12 +260,16 @@ pipeline {
                     steps {
                         browserstack(credentialsId: 'browserstack_key') {
                             container('jenkins-worker-python') {
-                                dir('tests') {
-                                    sh 'pip install "playwright==1.39.0" "pytest==7.4.3"'
-                                    sh "pytest . --server_domain ${SERVER_IP} --junitxml=playwright_results.xml || true"
+                                withCredentials([
+                                    string(credentialsId: 'chalk-prod-cd-oauth-refresh-token', variable: 'CHALK_OAUTH_REFRESH_TOKEN'),
+                                ]) {
+                                    dir('tests') {
+                                        sh 'pip install "playwright==1.39.0" "pytest==7.4.3"'
+                                        sh "pytest . --server_domain ${SERVER_IP} --junitxml=playwright_results.xml || true"
 
-                                    junit testResults: 'playwright_results.xml'
-                                    browserStackReportPublisher 'automate'
+                                        junit testResults: 'playwright_results.xml'
+                                        browserStackReportPublisher 'automate'
+                                    }
                                 }
                             }
                         }
