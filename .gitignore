@@ -65,5 +65,5 @@ tilt_modules/
 # File tracking env id
 _env_id.txt
 
-helm/secrets/
-helm/secrets.staging/
+continuous_delivery_setup/secrets/
+continuous_delivery_setup/secrets.staging/
