@@ -342,6 +342,7 @@ pipeline {
                                     mkdir helm/secrets;
                                     cp \$OAUTH_WEB_SECRET helm/secrets/oauth_web_client_secret.json
                                     helm upgrade --install \
+                                        --namespace default \
                                         --set domain=chalk.${env.ROOT_DOMAIN} \
                                         --set environment=PROD \
                                         --set gcpProject=${env.GCP_PROJECT} \
@@ -356,13 +357,13 @@ pipeline {
                                         until [ ! -z \$ready_replicas ] && [ \$ready_replicas -ge 1 ]
                                         do
                                             sleep 15
-                                            ready_replicas=\$(kubectl --namespace test get deployments chalk-prod-server -o jsonpath='{.status.readyReplicas}')
+                                            ready_replicas=\$(kubectl get deployments chalk-prod-server -o jsonpath='{.status.readyReplicas}')
                                         done
 
                                         until [ ! -z \$server_ip ]
                                         do
                                             sleep 5
-                                            server_ip=\$(kubectl --namespace test get ingress chalk-prod -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                                            server_ip=\$(kubectl get ingress chalk-prod -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
                                         done
                                         echo \$server_ip
 
