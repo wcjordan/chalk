@@ -186,7 +186,7 @@ pipeline {
             stages {
                 stage('Deploy Integration Server') {
                     options {
-                        timeout(time: 40, unit: 'MINUTES')
+                        timeout(time: 10, unit: 'MINUTES')
                     }
                     steps {
                         container('jenkins-helm') {
@@ -357,13 +357,13 @@ pipeline {
                                         until [ ! -z \$ready_replicas ] && [ \$ready_replicas -ge 1 ]
                                         do
                                             sleep 15
-                                            ready_replicas=\$(kubectl get deployments chalk-prod-server -o jsonpath='{.status.readyReplicas}')
+                                            ready_replicas=\$(kubectl --namespace default get deployments chalk-prod-server -o jsonpath='{.status.readyReplicas}')
                                         done
 
                                         until [ ! -z \$server_ip ]
                                         do
                                             sleep 5
-                                            server_ip=\$(kubectl get ingress chalk-prod -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                                            server_ip=\$(kubectl --namespace default get ingress chalk-prod -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
                                         done
                                         echo \$server_ip
 
