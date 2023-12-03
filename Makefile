@@ -24,7 +24,6 @@ build:
 			-t $(UI_IMAGE):local-latest ui'
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
-			--build-arg sentryDsn=$$SENTRY_DSN \
 			--target base \
 			-t $(UI_IMAGE_BASE):local-latest ui'
 
@@ -78,14 +77,11 @@ publish:
 
 # Deploy to production
 # To delete: helm delete chalk-prod
-.PHONY: deploy
-deploy: build
+# Note, this shouldn't be needed as we deploy to prod in the Jenkinsfile
+.PHONY: deploy-k8s
+deploy-k8s: build
 	if [ "$$(kubectl config current-context)" != "$(K8S_CONTEXT)" ]; then \
 		exit 1; \
-	fi
-
-	if [ "$(ENVIRONMENT)" = "PROD" ]; then \
-		$(MAKE) -C ui publish; \
 	fi
 
 	docker push $(SERVER_IMAGE):local-latest
@@ -100,12 +96,19 @@ deploy: build
 			--set server.secretKey=$$SECRET_KEY \
 			chalk-prod helm'
 
+.PHONY: deploy-mobile-app
+deploy-mobile-app:
+	if [ "$(ENVIRONMENT)" = "PROD" ]; then \
+		$(MAKE) -C ui publish; \
+	fi
+
 # NOTE deploy from built on Jenkins rather than building & pushing here
 # Make it so helm to deploy can be used from here and from jenkins for tests
 # Probably use a python script to call Helm to add flexibility
 
 .PHONY: setup-continuous-delivery
 setup-continuous-delivery:
+	cd ui/js; npx eas secret:push --force --scope project --env-file ../../$(PROD_ENV_FILE)
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) \
 		$$(grep '^CHALK_OAUTH_REFRESH_TOKEN' .env | xargs) \
 		sh -c ' \

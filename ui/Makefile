@@ -60,15 +60,12 @@ fix-imports:
 # Publish Expo
 .PHONY: publish
 publish:
-	cd js && \
-	npx eas secret:push --force --scope project --env-file ../../$(PROD_ENV_FILE) && \
-	CI=1 npx eas-cli build --platform android --profile preview
+	cd js; CI=1 npx eas-cli build --platform android --profile preview
 
 # Publish Expo Development Build
 .PHONY: publish-dev
 publish-dev:
-	cd js && \
-	npx eas-cli build --platform android --profile development
+	cd js; npx eas-cli build --platform android --profile development
 
 
 # Hard clean which fixes some react-native issues
