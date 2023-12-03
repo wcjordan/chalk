@@ -186,7 +186,7 @@ pipeline {
             stages {
                 stage('Deploy Integration Server') {
                     options {
-                        timeout(time: 15, unit: 'MINUTES')
+                        timeout(time: 40, unit: 'MINUTES')
                     }
                     steps {
                         container('jenkins-helm') {
