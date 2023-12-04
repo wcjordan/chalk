@@ -316,7 +316,7 @@ pipeline {
                 }
             }
             when {
-                branch 'continuous_delivery'
+                branch 'main'
                 beforeAgent true
             }
             stages {
