@@ -24,6 +24,9 @@ pipeline {
                             options {
                                 timeout(time: 15, unit: 'MINUTES')
                             }
+                            environment {
+                                SENTRY_DSN = credentials('chalk-prod-cd-sentry-dsn')
+                            }
                             steps {
                                 container('dind') {
                                     script {
@@ -37,6 +40,7 @@ pipeline {
                                         docker buildx build --push \
                                             --cache-to type=registry,ref=${GAR_REPO}/chalk-ui,mode=max \
                                             --cache-from type=registry,ref=${GAR_REPO}/chalk-ui \
+                                            --build-arg sentryDsn=\$SENTRY_DSN \
                                             -t ${GAR_REPO}/chalk-ui:${env.BUILD_TAG} \
                                             ui
 
@@ -190,7 +194,7 @@ pipeline {
                                 file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
                                 file(credentialsId: 'chalk-prod-cd-oauth-web-client-json', variable: 'OAUTH_WEB_SECRET')
                             ]) {
-                                sh "gcloud auth activate-service-account --key-file \$GKE_SA_FILE"
+                                sh 'gcloud auth activate-service-account --key-file $GKE_SA_FILE'
                                 sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
                                 script {
                                     HELM_DEPLOY_NAME = sh (
@@ -283,6 +287,100 @@ pipeline {
                             sh 'gcloud auth activate-service-account --key-file $FILE'
                             sh 'gcloud container clusters get-credentials ${GCP_PROJECT_NAME}-gke --project ${GCP_PROJECT} --zone us-east4-c'
                             sh "helm uninstall --namespace test ${HELM_DEPLOY_NAME}"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Continuous Deployment') {
+            agent {
+                kubernetes {
+                    yaml """
+                        apiVersion: v1
+                        kind: Pod
+                        spec:
+                          containers:
+                          - name: jenkins-helm
+                            image: ${GAR_REPO}/gcloud-helm:latest
+                            command:
+                            - cat
+                            tty: true
+                            resources:
+                              requests:
+                                cpu: "600m"
+                                memory: "1Gi"
+                              limits:
+                                cpu: "1000m"
+                                memory: "1Gi"
+                    """
+                }
+            }
+            when {
+                branch 'main'
+                beforeAgent true
+            }
+            stages {
+                stage('Deploy K8s') {
+                    options {
+                        timeout(time: 10, unit: 'MINUTES')
+                    }
+                    environment {
+                        DB_PASSWORD = credentials('chalk-prod-cd-server-db-password')
+                        PERMITTED_USERS = credentials('chalk-prod-cd-permitted-users')
+                        SECRET_KEY = credentials('chalk-prod-cd-server-secret-key')
+                    }
+                    steps {
+                        container('jenkins-helm') {
+                            withCredentials([
+                                file(credentialsId: 'jenkins-gke-sa', variable: 'GKE_SA_FILE'),
+                                file(credentialsId: 'chalk-prod-cd-oauth-web-client-json', variable: 'OAUTH_WEB_SECRET')
+                            ]) {
+                                sh 'gcloud auth activate-service-account --key-file $GKE_SA_FILE'
+                                sh "gcloud container clusters get-credentials ${env.GCP_PROJECT_NAME}-gke --project ${env.GCP_PROJECT} --zone us-east4-c"
+
+                                sh """
+                                    mkdir helm/secrets;
+                                    cp \$OAUTH_WEB_SECRET helm/secrets/oauth_web_client_secret.json
+                                    helm upgrade --install \
+                                        --namespace default \
+                                        --set domain=chalk.${env.ROOT_DOMAIN} \
+                                        --set environment=PROD \
+                                        --set gcpProject=${env.GCP_PROJECT} \
+                                        --set imageTag=${env.BUILD_TAG} \
+                                        --set permittedUsers=\$PERMITTED_USERS \
+                                        --set server.dbPassword=\$DB_PASSWORD \
+                                        --set server.secretKey=\$SECRET_KEY \
+                                        chalk-prod helm
+                                    """
+                                script {
+                                    sh """
+                                        until [ ! -z \$ready_replicas ] && [ \$ready_replicas -ge 1 ]
+                                        do
+                                            sleep 15
+                                            ready_replicas=\$(kubectl --namespace default get deployments chalk-prod-server -o jsonpath='{.status.readyReplicas}')
+                                        done
+
+                                        until [ ! -z \$server_ip ]
+                                        do
+                                            sleep 5
+                                            server_ip=\$(kubectl --namespace default get ingress chalk-prod -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                                        done
+                                        echo \$server_ip
+
+                                        until [ ! -z \$todos_ready ] && [ \$todos_ready -eq 200 ]
+                                        do
+                                            sleep 15
+                                            todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/api/todos/healthz/ || true)
+                                        done
+
+                                        until [ ! -z \$html_ready ] && [ \$html_ready -eq 302 ]
+                                        do
+                                            sleep 5
+                                            html_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/ || true)
+                                        done
+                                    """
+                                }
+                            }
                         }
                     }
                 }
