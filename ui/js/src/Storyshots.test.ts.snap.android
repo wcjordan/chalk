@@ -45,6 +45,7 @@ exports[`Storyshots Add Todo Default Add Todo 1`] = `
       testID="text-input-underline"
     />
     <View
+      onLayout={[Function]}
       style={
         [
           {
@@ -178,6 +179,7 @@ exports[`Storyshots App Layout Default Layout 1`] = `
           testID="text-input-underline"
         />
         <View
+          onLayout={[Function]}
           style={
             [
               {
@@ -1633,6 +1635,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
           testID="text-input-underline"
         />
         <View
+          onLayout={[Function]}
           style={
             [
               {
@@ -9619,6 +9622,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
           testID="text-input-underline"
         />
         <View
+          onLayout={[Function]}
           style={
             [
               {
@@ -15622,6 +15626,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
           testID="text-input-underline"
         />
         <View
+          onLayout={[Function]}
           style={
             [
               {
@@ -29011,6 +29016,7 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
             testID="text-input-underline"
           />
           <View
+            onLayout={[Function]}
             style={
               [
                 {
@@ -32265,6 +32271,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
         testID="text-input-underline"
       />
       <View
+        onLayout={[Function]}
         style={
           [
             {
@@ -36577,6 +36584,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
                         testID="text-input-underline"
                       />
                       <View
+                        onLayout={[Function]}
                         style={
                           [
                             {
@@ -41478,6 +41486,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
           testID="text-input-underline"
         />
         <View
+          onLayout={[Function]}
           style={
             [
               {
@@ -52705,6 +52714,7 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
         testID="text-input-underline"
       />
       <View
+        onLayout={[Function]}
         style={
           [
             {
