@@ -72,6 +72,7 @@ Authorized redirect URIs:
 - http://localhost:8080/api/todos/auth_callback/  
 
 Download the client ID / secret as JSON and place at helm/secrets/oauth_web_client_secret.json  
+and continuous_delivery_setup/secrets/oauth_web_client_secret.json  
 Also set OAUTH_CLIENT_ID to the client ID in .env & .prod.env
 
 2) OAuth refresh token for Playwright tests

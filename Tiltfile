@@ -49,7 +49,7 @@ local_resource('expo',
                serve_dir='ui',
                serve_env=expo_env,
                readiness_probe=probe(
-                  http_get=http_get_action(port=19006, path="/")
+                  http_get=http_get_action(port=8081, path="/")
                ))
 local_resource('local_nginx',
                serve_cmd='nginx -c %s/dev_nginx.conf' % os.getcwd(),
