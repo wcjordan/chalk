@@ -28,7 +28,7 @@ exports[`Storyshots Add Todo Default Add Todo 1`] = `
       collapsable={false}
       style={
         {
-          "backgroundColor": "rgba(28, 27, 31, 1)",
+          "backgroundColor": "rgba(73, 69, 79, 1)",
           "bottom": 0,
           "height": 1,
           "left": 0,
@@ -83,12 +83,12 @@ exports[`Storyshots Add Todo Default Add Todo 1`] = `
               "paddingTop": 15,
             },
             {
-              "color": "rgba(73, 69, 79, 1)",
+              "color": "rgba(28, 27, 31, 1)",
               "fontFamily": "sans-serif",
               "fontSize": 16,
               "fontWeight": undefined,
               "letterSpacing": 0.15,
-              "lineHeight": 19.2,
+              "lineHeight": undefined,
               "minWidth": 65,
               "paddingLeft": 16,
               "paddingRight": 16,
@@ -162,7 +162,7 @@ exports[`Storyshots App Layout Default Layout 1`] = `
           collapsable={false}
           style={
             {
-              "backgroundColor": "rgba(28, 27, 31, 1)",
+              "backgroundColor": "rgba(73, 69, 79, 1)",
               "bottom": 0,
               "height": 1,
               "left": 0,
@@ -217,12 +217,12 @@ exports[`Storyshots App Layout Default Layout 1`] = `
                   "paddingTop": 15,
                 },
                 {
-                  "color": "rgba(73, 69, 79, 1)",
+                  "color": "rgba(28, 27, 31, 1)",
                   "fontFamily": "sans-serif",
                   "fontSize": 16,
                   "fontWeight": undefined,
                   "letterSpacing": 0.15,
-                  "lineHeight": 19.2,
+                  "lineHeight": undefined,
                   "minWidth": 65,
                   "paddingLeft": 16,
                   "paddingRight": 16,
@@ -1618,7 +1618,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
           collapsable={false}
           style={
             {
-              "backgroundColor": "rgba(28, 27, 31, 1)",
+              "backgroundColor": "rgba(73, 69, 79, 1)",
               "bottom": 0,
               "height": 1,
               "left": 0,
@@ -1673,12 +1673,12 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   "paddingTop": 15,
                 },
                 {
-                  "color": "rgba(73, 69, 79, 1)",
+                  "color": "rgba(28, 27, 31, 1)",
                   "fontFamily": "sans-serif",
                   "fontSize": 16,
                   "fontWeight": undefined,
                   "letterSpacing": 0.15,
-                  "lineHeight": 19.2,
+                  "lineHeight": undefined,
                   "minWidth": 65,
                   "paddingLeft": 16,
                   "paddingRight": 16,
@@ -9643,7 +9643,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
           collapsable={false}
           style={
             {
-              "backgroundColor": "rgba(28, 27, 31, 1)",
+              "backgroundColor": "rgba(73, 69, 79, 1)",
               "bottom": 0,
               "height": 1,
               "left": 0,
@@ -9698,12 +9698,12 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
                   "paddingTop": 15,
                 },
                 {
-                  "color": "rgba(73, 69, 79, 1)",
+                  "color": "rgba(28, 27, 31, 1)",
                   "fontFamily": "sans-serif",
                   "fontSize": 16,
                   "fontWeight": undefined,
                   "letterSpacing": 0.15,
-                  "lineHeight": 19.2,
+                  "lineHeight": undefined,
                   "minWidth": 65,
                   "paddingLeft": 16,
                   "paddingRight": 16,
@@ -15675,7 +15675,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
           collapsable={false}
           style={
             {
-              "backgroundColor": "rgba(28, 27, 31, 1)",
+              "backgroundColor": "rgba(73, 69, 79, 1)",
               "bottom": 0,
               "height": 1,
               "left": 0,
@@ -15730,12 +15730,12 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
                   "paddingTop": 15,
                 },
                 {
-                  "color": "rgba(73, 69, 79, 1)",
+                  "color": "rgba(28, 27, 31, 1)",
                   "fontFamily": "sans-serif",
                   "fontSize": 16,
                   "fontWeight": undefined,
                   "letterSpacing": 0.15,
-                  "lineHeight": 19.2,
+                  "lineHeight": undefined,
                   "minWidth": 65,
                   "paddingLeft": 16,
                   "paddingRight": 16,
@@ -29144,7 +29144,7 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
               collapsable={false}
               style={
                 {
-                  "backgroundColor": "rgba(28, 27, 31, 1)",
+                  "backgroundColor": "rgba(73, 69, 79, 1)",
                   "bottom": 0,
                   "height": 1,
                   "left": 0,
@@ -29199,12 +29199,12 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
                       "paddingTop": 8,
                     },
                     {
-                      "color": "rgba(73, 69, 79, 1)",
+                      "color": "rgba(28, 27, 31, 1)",
                       "fontFamily": "sans-serif",
                       "fontSize": 16,
                       "fontWeight": undefined,
                       "letterSpacing": 0.15,
-                      "lineHeight": 19.2,
+                      "lineHeight": undefined,
                       "minWidth": 65,
                       "paddingLeft": 16,
                       "paddingRight": 16,
@@ -32428,7 +32428,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
         collapsable={false}
         style={
           {
-            "backgroundColor": "rgba(28, 27, 31, 1)",
+            "backgroundColor": "rgba(73, 69, 79, 1)",
             "bottom": 0,
             "height": 1,
             "left": 0,
@@ -32483,12 +32483,12 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
                 "paddingTop": 15,
               },
               {
-                "color": "rgba(73, 69, 79, 1)",
+                "color": "rgba(28, 27, 31, 1)",
                 "fontFamily": "sans-serif",
                 "fontSize": 16,
                 "fontWeight": undefined,
                 "letterSpacing": 0.15,
-                "lineHeight": 19.2,
+                "lineHeight": undefined,
                 "minWidth": 65,
                 "paddingLeft": 16,
                 "paddingRight": 16,
@@ -36782,7 +36782,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
                           collapsable={false}
                           style={
                             {
-                              "backgroundColor": "rgba(28, 27, 31, 1)",
+                              "backgroundColor": "rgba(73, 69, 79, 1)",
                               "bottom": 0,
                               "height": 1,
                               "left": 0,
@@ -36837,12 +36837,12 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
                                   "paddingTop": 8,
                                 },
                                 {
-                                  "color": "rgba(73, 69, 79, 1)",
+                                  "color": "rgba(28, 27, 31, 1)",
                                   "fontFamily": "sans-serif",
                                   "fontSize": 16,
                                   "fontWeight": undefined,
                                   "letterSpacing": 0.15,
-                                  "lineHeight": 19.2,
+                                  "lineHeight": undefined,
                                   "minWidth": 65,
                                   "paddingLeft": 16,
                                   "paddingRight": 16,
@@ -41727,7 +41727,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
           collapsable={false}
           style={
             {
-              "backgroundColor": "rgba(28, 27, 31, 1)",
+              "backgroundColor": "rgba(73, 69, 79, 1)",
               "bottom": 0,
               "height": 1,
               "left": 0,
@@ -41782,12 +41782,12 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
                   "paddingTop": 15,
                 },
                 {
-                  "color": "rgba(73, 69, 79, 1)",
+                  "color": "rgba(28, 27, 31, 1)",
                   "fontFamily": "sans-serif",
                   "fontSize": 16,
                   "fontWeight": undefined,
                   "letterSpacing": 0.15,
-                  "lineHeight": 19.2,
+                  "lineHeight": undefined,
                   "minWidth": 65,
                   "paddingLeft": 16,
                   "paddingRight": 16,
@@ -53049,7 +53049,7 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
         collapsable={false}
         style={
           {
-            "backgroundColor": "rgba(28, 27, 31, 1)",
+            "backgroundColor": "rgba(73, 69, 79, 1)",
             "bottom": 0,
             "height": 1,
             "left": 0,
@@ -53104,12 +53104,12 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
                 "paddingTop": 15,
               },
               {
-                "color": "rgba(73, 69, 79, 1)",
+                "color": "rgba(28, 27, 31, 1)",
                 "fontFamily": "sans-serif",
                 "fontSize": 16,
                 "fontWeight": undefined,
                 "letterSpacing": 0.15,
-                "lineHeight": 19.2,
+                "lineHeight": undefined,
                 "minWidth": 65,
                 "paddingLeft": 16,
                 "paddingRight": 16,
