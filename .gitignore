@@ -67,3 +67,6 @@ _env_id.txt
 
 continuous_delivery_setup/secrets/
 continuous_delivery_setup/secrets.staging/
+helm/secrets/
+helm/secrets.staging/
+

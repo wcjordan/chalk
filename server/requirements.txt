@@ -1,7 +1,7 @@
-Django==4.2.8
+Django==4.2.9
 djangorestframework==3.14.0
 django-simple-history==3.4.0
-google-auth-oauthlib==1.1.0
+google-auth-oauthlib==1.2.0
 gunicorn==21.2.0
 psycopg2==2.9.9
 requests==2.31.0

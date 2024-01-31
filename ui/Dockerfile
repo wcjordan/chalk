@@ -28,7 +28,6 @@ COPY js/.eslintrc .
 COPY js/tsconfig.json .
 COPY js/.storybook ./.storybook
 
-COPY js/web ./web
 COPY js/app.config.js ./app.config.js
 COPY js/babel.config.js ./babel.config.js
 COPY js/App.tsx ./App.tsx
@@ -42,6 +41,6 @@ RUN yarn build
 FROM nginx:alpine
 
 # Copy over built JS files from React app
-COPY --from=js_app /js/web-build/ /www/client/
+COPY --from=js_app /js/dist/ /www/client/
 
 CMD ["nginx", "-g", "daemon off;"]
