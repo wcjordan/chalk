@@ -4,12 +4,12 @@ import { Platform } from 'react-native';
 import { getEnvFlags } from '../helpers';
 import { ReduxState } from './types';
 
-const webCsrfToken = Cookies.get('csrftoken') as string;
+const webCsrfToken = Cookies.get('csrftoken');
 export function getCsrfToken(getState: () => ReduxState): string {
-  if (Platform.OS === 'web') {
-    return webCsrfToken;
-  }
-  return getState().workspace.csrfToken as string;
+  return Platform.select({
+    native: getState().workspace.csrfToken,
+    default: webCsrfToken,
+  }) as string;
 }
 
 export async function list<T>(apiUri: string): Promise<Array<T>> {
@@ -79,13 +79,13 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export function getWsRoot(): string {
-  if (Platform.OS === 'web') {
-    return '';
-  }
-
   const subdomain =
     getEnvFlags().ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
-  return `http://${subdomain}.flipperkid.com/`
+  const wsroot = Platform.select({
+    native: `http://${subdomain}.flipperkid.com/`,
+    default: '',
+  });
+  return wsroot;
 }
 
 // Used to exchange login token for session cookie in mobile login flow

@@ -62,6 +62,5 @@ export default {
         },
       },
     ],
-    'expo-font',
   ],
 };
