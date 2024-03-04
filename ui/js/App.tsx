@@ -6,7 +6,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { init as sentryInit } from 'sentry-expo';
 
 import App from './src/App';
-import getStore from './src/redux/store';
+import { setupStore } from './src/redux/store';
 import { getEnvFlags } from './src/helpers';
 
 const envFlags = getEnvFlags();
@@ -38,7 +38,7 @@ const theme = {
 const TopApp: React.FC = function () {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ReduxProvider store={getStore()}>
+      <ReduxProvider store={setupStore()}>
         <PaperProvider theme={theme}>
           <App />
         </PaperProvider>

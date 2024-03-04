@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-import getStore from './redux/store';
+import type { RootState, AppDispatch } from './redux/store';
 import { listLabels, listTodos } from './redux/reducers';
 import { getEnvFlags } from './helpers';
 
@@ -9,12 +10,12 @@ export function useDataLoader() {
     return;
   }
 
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    const store = getStore();
-    store.dispatch(listLabels());
+    dispatch(listLabels());
 
     const intervalId = window.setInterval(
-      () => store.dispatch(listTodos()),
+      () => dispatch(listTodos()),
       10000,
     );
 
@@ -23,3 +24,7 @@ export function useDataLoader() {
     };
   }, []);
 }
+
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
