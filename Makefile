@@ -31,18 +31,7 @@ build:
 .PHONY: test
 test: build
 	DOMAIN=localhost docker run --env-file .env --env DOMAIN --rm -t $(SERVER_IMAGE):local-latest make test
-	docker run --rm -t -w / \
-		-v $(PWD)/ui/Makefile:/Makefile \
-		-v $(PWD)/ui/js/src:/js/src \
-		-v $(PWD)/ui/js/assets:/js/assets \
-		-v $(PWD)/ui/js/.eslintrc:/js/.eslintrc \
-		-v $(PWD)/ui/js/babel.config.js:/js/babel.config.js \
-		-v $(PWD)/ui/js/jest.config.js:/js/jest.config.js \
-		-v $(PWD)/ui/js/tsconfig.json:/js/tsconfig.json \
-		-v $(PWD)/ui/js/.storybook:/js/.storybook \
-		-v $(PWD)/ui/js/__mocks__:/js/__mocks__ \
-		$(UI_IMAGE_BASE):local-latest \
-		make test
+	$(MAKE) -C ui containerized-test
 
 # Run integration tests
 # Requires dev env to be running (make start)

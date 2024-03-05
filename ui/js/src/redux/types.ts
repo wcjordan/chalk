@@ -44,14 +44,6 @@ export interface ApiState<T> {
   loading: boolean;
 }
 
-export interface ReduxState {
-  labelsApi: ApiState<Label>;
-  notifications: NotificationsState;
-  shortcuts: ShortcutState;
-  todosApi: ApiState<Todo>;
-  workspace: WorkspaceState;
-}
-
 export interface FilterState {
   [index: string]: FILTER_STATUS;
 }

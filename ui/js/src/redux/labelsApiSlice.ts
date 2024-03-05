@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ApiState, ReduxState, Label } from './types';
+import { ApiState, Label } from './types';
 import { getWsRoot, list } from './fetchApi';
+import { RootState } from './store';
 
 const API_NAME = 'labelsApi';
 
@@ -18,7 +19,7 @@ const initialState: ApiState<Label> = {
 export const listLabels = createAsyncThunk<
   Label[],
   void,
-  { state: ReduxState }
+  { state: RootState }
 >(`${API_NAME}/list`, async () => list<Label>(getLabelsApi()), {
   condition: (_unused, { getState }) => {
     return !getState().labelsApi.loading;

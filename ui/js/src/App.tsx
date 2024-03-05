@@ -9,7 +9,6 @@ import { useAppSelector } from './hooks';
 import {
   Label,
   MoveTodoOperation,
-  ReduxState,
   Todo,
   TodoPatch,
   WorkspaceState,
@@ -29,6 +28,7 @@ import {
   updateTodo,
   updateTodoLabels,
 } from './redux/reducers';
+import { RootState } from './redux/store';
 import {
   selectActiveWorkContext,
   selectFilteredTodos,
@@ -151,7 +151,7 @@ type LayoutProps = {
   workspace: WorkspaceState;
 };
 
-const mapStateToProps = (state: ReduxState) => {
+const mapStateToProps = (state: RootState) => {
   return {
     labels: state.labelsApi.entries,
     workspace: state.workspace,
