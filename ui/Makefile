@@ -25,15 +25,15 @@ test:
 .PHONY: containerized-test
 containerized-test:
 	docker run --rm -t -w / \
-		-v $(PWD)/Makefile:/Makefile \
-		-v $(PWD)/js/src:/js/src \
-		-v $(PWD)/js/assets:/js/assets \
-		-v $(PWD)/js/.eslintrc:/js/.eslintrc \
-		-v $(PWD)/js/babel.config.js:/js/babel.config.js \
-		-v $(PWD)/js/jest.config.js:/js/jest.config.js \
-		-v $(PWD)/js/tsconfig.json:/js/tsconfig.json \
-		-v $(PWD)/js/.storybook:/js/.storybook \
-		-v $(PWD)/js/__mocks__:/js/__mocks__ \
+		-v $(CURDIR)/Makefile:/Makefile \
+		-v $(CURDIR)/js/src:/js/src \
+		-v $(CURDIR)/js/assets:/js/assets \
+		-v $(CURDIR)/js/.eslintrc:/js/.eslintrc \
+		-v $(CURDIR)/js/babel.config.js:/js/babel.config.js \
+		-v $(CURDIR)/js/jest.config.js:/js/jest.config.js \
+		-v $(CURDIR)/js/tsconfig.json:/js/tsconfig.json \
+		-v $(CURDIR)/js/.storybook:/js/.storybook \
+		-v $(CURDIR)/js/__mocks__:/js/__mocks__ \
 		$(UI_IMAGE_BASE):local-latest \
 		make test
 
