@@ -1,10 +1,7 @@
 import '../__mocks__/matchMediaMock';
-import configureMockStore from 'redux-mock-store';
 import fetchMock from 'fetch-mock-jest';
-import thunk from 'redux-thunk';
 import labelsApiSlice, { getLabelsApi, listLabels } from './labelsApiSlice';
-
-const mockStore = configureMockStore([thunk]);
+import { setupStore } from './store';
 
 describe('listLabels', function () {
   afterEach(function () {
@@ -20,20 +17,12 @@ describe('listLabels', function () {
       body: stubLabels,
     });
 
-    const store = mockStore({ labelsApi: { loading: false } });
+    const store = setupStore();
     await store.dispatch(listLabels());
 
-    const actions = store.getActions();
-    expect(actions.length).toEqual(2);
-
-    // Verify the pending handler is called based on the patch argument
-    const pendingAction = actions[0];
-    expect(pendingAction.type).toEqual('labelsApi/list/pending');
-
-    // Verify the fulfilled handler is called with the returned label
-    const fulfilledAction = actions[1];
-    expect(fulfilledAction.payload).toEqual(stubLabels);
-    expect(fulfilledAction.type).toEqual('labelsApi/list/fulfilled');
+    // Verify labels are loaded
+    expect(store.getState().labelsApi.loading).toEqual(false);
+    expect(store.getState().labelsApi.entries).toEqual(stubLabels);
 
     // Verify we make the server request
     expect(fetchMock).toBeDone();
@@ -41,11 +30,9 @@ describe('listLabels', function () {
 
   it('should do nothing if labels are already loading', async function () {
     fetchMock.mock('*', 200);
-    const store = mockStore({ labelsApi: { loading: true } });
-    await store.dispatch(listLabels());
 
-    const actions = store.getActions();
-    expect(actions.length).toEqual(0);
+    const store = setupStore({ labelsApi: { loading: true } });
+    await store.dispatch(listLabels());
 
     // Verify we make the server request
     expect(fetchMock).not.toHaveFetched('*');

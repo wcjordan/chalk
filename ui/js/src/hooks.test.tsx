@@ -34,17 +34,13 @@ describe('useDataLoader', function () {
     });
 
     const firstTodo = {
-      archived: false,
-      archived_at: null,
-      completed: false,
-      completed_at: null,
-      created_at: "2021-05-25T09:17:30.703403-04:00",
-      description: "First Todo",
       id: 256,
-      labels: ["work"],
-      order_rank: 1152921504606847000,
+      description: "First Todo",
     };
-    const secondTodo = Object.assign({}, firstTodo, { id: 257, description: "Second Todo" });
+    const secondTodo = Object.assign({}, firstTodo, {
+      id: 257,
+      description: "Second Todo"
+    });
     const todosRoute = 'http://chalk-dev.flipperkid.com/api/todos/todos/';
     fetchMock.getOnce(todosRoute, {
       body: [firstTodo],
