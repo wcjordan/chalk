@@ -1,10 +1,11 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action } from '@reduxjs/toolkit';
 
-import { MoveTodoOperation, ReduxState, TodoPatch } from './types';
+import { MoveTodoOperation, TodoPatch } from './types';
 import labelsApiSlice, { listLabels } from './labelsApiSlice';
 import notificationsSlice from './notificationsSlice';
 import shortcutSlice from './shortcutSlice';
+import { RootState } from './store';
 import todosApiSlice, {
   createTodo,
   listTodos as listTodosApi,
@@ -14,7 +15,7 @@ import todosApiSlice, {
 import workspaceSlice from './workspaceSlice';
 import { completeAuthCallback } from './fetchApi';
 
-type AppThunk = ThunkAction<void, ReduxState, unknown, Action<string>>;
+type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
 export const updateTodo =
   (todoPatch: TodoPatch): AppThunk =>

@@ -1,14 +1,14 @@
-import { connect, ConnectedProps, useSelector } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import React from 'react';
 import { StatusBar, StyleSheet, View, ViewStyle } from 'react-native';
 
 import ErrorBar from './components/ErrorBar';
 import Login from './components/Login';
 import TodoList from './components/TodoList';
+import { useAppSelector } from './hooks';
 import {
   Label,
   MoveTodoOperation,
-  ReduxState,
   Todo,
   TodoPatch,
   WorkspaceState,
@@ -28,6 +28,7 @@ import {
   updateTodo,
   updateTodoLabels,
 } from './redux/reducers';
+import { RootState } from './redux/store';
 import {
   selectActiveWorkContext,
   selectFilteredTodos,
@@ -58,10 +59,10 @@ const styles = StyleSheet.create<Style>({
 const App: React.FC<ConnectedProps<typeof connector>> = function (
   props: ConnectedProps<typeof connector>,
 ) {
-  const selectedPickerLabels = useSelector(selectSelectedPickerLabels);
-  const filteredTodos = useSelector(selectFilteredTodos);
-  const activeWorkContext = useSelector(selectActiveWorkContext);
-  const isLoading = useSelector(selectIsLoading);
+  const selectedPickerLabels = useAppSelector(selectSelectedPickerLabels);
+  const filteredTodos = useAppSelector(selectFilteredTodos);
+  const activeWorkContext = useAppSelector(selectActiveWorkContext);
+  const isLoading = useAppSelector(selectIsLoading);
   return (
     <AppLayout
       {...props}
@@ -150,7 +151,7 @@ type LayoutProps = {
   workspace: WorkspaceState;
 };
 
-const mapStateToProps = (state: ReduxState) => {
+const mapStateToProps = (state: RootState) => {
   return {
     labels: state.labelsApi.entries,
     workspace: state.workspace,

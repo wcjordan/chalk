@@ -22,6 +22,21 @@ test:
 	# Unit & snapshot tests for UI
 	cd js; JEST_JUNIT_CLASSNAME="ui_unit_tests.{classname} {title}" yarn jest
 
+.PHONY: containerized-test
+containerized-test:
+	docker run --rm -t -w / \
+		-v $(CURDIR)/Makefile:/Makefile \
+		-v $(CURDIR)/js/src:/js/src \
+		-v $(CURDIR)/js/assets:/js/assets \
+		-v $(CURDIR)/js/.eslintrc:/js/.eslintrc \
+		-v $(CURDIR)/js/babel.config.js:/js/babel.config.js \
+		-v $(CURDIR)/js/jest.config.js:/js/jest.config.js \
+		-v $(CURDIR)/js/tsconfig.json:/js/tsconfig.json \
+		-v $(CURDIR)/js/.storybook:/js/.storybook \
+		-v $(CURDIR)/js/__mocks__:/js/__mocks__ \
+		$(UI_IMAGE_BASE):local-latest \
+		make test
+
 # ESLint & Prettier JS formatting
 .PHONY: format
 format:

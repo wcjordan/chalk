@@ -2,10 +2,10 @@ import Cookies from 'js-cookie';
 import { Platform } from 'react-native';
 
 import { getEnvFlags } from '../helpers';
-import { ReduxState } from './types';
+import { RootState } from './store';
 
 const webCsrfToken = Cookies.get('csrftoken') as string;
-export function getCsrfToken(getState: () => ReduxState): string {
+export function getCsrfToken(getState: () => RootState): string {
   if (Platform.OS === 'web') {
     return webCsrfToken;
   }

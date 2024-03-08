@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { RootState } from './store';
 import {
   ApiState,
   MoveTodoOperation,
   NewTodo,
-  ReduxState,
   Todo,
   TodoPatch,
 } from './types';
@@ -30,7 +30,7 @@ const initialState: ApiState<Todo> = {
   initialLoad: true,
 };
 
-export const createTodo = createAsyncThunk<Todo, string, { state: ReduxState }>(
+export const createTodo = createAsyncThunk<Todo, string, { state: RootState }>(
   `${API_NAME}/create`,
   async (todoTitle: string, { getState }) => {
     const newTodo = {
@@ -46,7 +46,7 @@ export const createTodo = createAsyncThunk<Todo, string, { state: ReduxState }>(
   },
 );
 
-export const listTodos = createAsyncThunk<Todo[], void, { state: ReduxState }>(
+export const listTodos = createAsyncThunk<Todo[], void, { state: RootState }>(
   `${API_NAME}/list`,
   async () => list<Todo>(getTodosApi()),
   {
@@ -59,7 +59,7 @@ export const listTodos = createAsyncThunk<Todo[], void, { state: ReduxState }>(
 export const updateTodo = createAsyncThunk<
   Todo,
   TodoPatch,
-  { state: ReduxState }
+  { state: RootState }
 >(`${API_NAME}/update`, async (entryPatch, { getState }) =>
   patch<Todo, TodoPatch>(getTodosApi(), entryPatch, getCsrfToken(getState)),
 );
@@ -67,7 +67,7 @@ export const updateTodo = createAsyncThunk<
 export const moveTodo = createAsyncThunk<
   Todo,
   MoveTodoOperation,
-  { state: ReduxState }
+  { state: RootState }
 >(`${API_NAME}/move`, async (moveOp, { getState }) =>
   postRequest<Todo, MoveTodoOperation>(
     `${getTodosApi()}${moveOp.todo_id}/reorder/`,

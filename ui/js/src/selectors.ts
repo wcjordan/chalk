@@ -1,21 +1,21 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { RootState } from './redux/store';
 import {
   FILTER_STATUS,
-  ReduxState,
   MoveTodoOperation,
   Todo,
   TodoPatch,
 } from './redux/types';
 import { workContexts } from './redux/workspaceSlice';
 
-const selectEditTodoId = (state: ReduxState) => state.workspace.editTodoId;
-const selectFilterLabels = (state: ReduxState) => state.workspace.filterLabels;
-const selectLabelTodoId = (state: ReduxState) => state.workspace.labelTodoId;
-const selectShortcutOperations = (state: ReduxState) =>
+const selectEditTodoId = (state: RootState) => state.workspace.editTodoId;
+const selectFilterLabels = (state: RootState) => state.workspace.filterLabels;
+const selectLabelTodoId = (state: RootState) => state.workspace.labelTodoId;
+const selectShortcutOperations = (state: RootState) =>
   state.shortcuts.operations;
-const selectShowCompletedTodos = (state: ReduxState) =>
+const selectShowCompletedTodos = (state: RootState) =>
   state.workspace.showCompletedTodos;
-const selectTodoApiEntries = (state: ReduxState) => state.todosApi.entries;
+const selectTodoApiEntries = (state: RootState) => state.todosApi.entries;
 
 export const selectShortcuttedTodoEntries = createSelector(
   [selectShortcutOperations, selectTodoApiEntries],
@@ -193,6 +193,6 @@ export const selectActiveWorkContext = createSelector(
   },
 );
 
-export const selectIsLoading = (state: ReduxState) => {
+export const selectIsLoading = (state: RootState) => {
   return state.labelsApi.initialLoad || state.todosApi.initialLoad;
 };

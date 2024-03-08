@@ -1,7 +1,5 @@
 import '../__mocks__/matchMediaMock';
-import configureMockStore from 'redux-mock-store';
 import fetchMock from 'fetch-mock-jest';
-import thunk from 'redux-thunk';
 import {
   completeAuthentication,
   listTodos,
@@ -11,8 +9,7 @@ import {
 } from './reducers';
 import { getTodosApi } from './todosApiSlice';
 import { getWsRoot } from './fetchApi';
-
-const mockStore = configureMockStore([thunk]);
+import { setupStore } from './store';
 
 describe('updateTodo', function () {
   afterEach(function () {
@@ -34,40 +31,44 @@ describe('updateTodo', function () {
       body: stubTodo,
     });
 
-    const store = mockStore({ workspace: {} });
+    const store = setupStore({
+      todosApi: {
+        entries: [{
+          id: 1,
+          completed: false,
+          description: 'old desc',
+        }]
+      },
+      workspace: {
+        editTodoId: 1
+      },
+    });
     await store.dispatch(updateTodo(stubTodoPatch));
 
-    const actions = store.getActions();
-    expect(actions.length).toEqual(5);
-
     // Verify we show a notification
-    expect(actions[0]).toEqual({
-      payload: 'Saving Todo: test todo',
-      type: 'notifications/addNotification',
-    });
+    expect(store.getState().notifications.notificationQueue.length).toEqual(1);
+    expect(store.getState().notifications.notificationQueue[0]).toEqual('Saving Todo: test todo');
 
     // Verify we stop editing the todo
-    expect(actions[1]).toEqual({
-      payload: null,
-      type: 'workspace/setEditTodoId',
-    });
+    expect(store.getState().workspace.editTodoId).toEqual(null);
 
     // Verify we create a shortcut operation for the edit
-    expect(actions[2]).toEqual({
-      payload: stubTodoPatch,
-      type: 'shortcuts/addEditTodoOperation',
+    expect(store.getState().shortcuts.operations.length).toEqual(1);
+    expect(store.getState().shortcuts.operations[0]).toEqual({
+      type: 'EDIT_TODO',
+      payload: {
+        id: 1,
+        description: 'test todo',
+      },
+      generation: 0,
     });
 
-    // Verify the pending handler is called based on the patch argument
-    const pendingAction = actions[3];
-    expect(pendingAction.meta.arg).toEqual(stubTodoPatch);
-    expect(pendingAction.type).toEqual('todosApi/update/pending');
-
-    // Verify the fulfilled handler is called with the returned todo
-    const fulfilledAction = actions[4];
-    expect(fulfilledAction.meta.arg).toEqual(stubTodoPatch);
-    expect(fulfilledAction.payload).toEqual(stubTodo);
-    expect(fulfilledAction.type).toEqual('todosApi/update/fulfilled');
+    // Verify the todo is updated in the entries
+    expect(store.getState().todosApi.entries).toEqual([{
+      id: 1,
+      completed: false,
+      description: 'test todo',
+    }]);
 
     // Verify we make the server request
     expect(fetchMock).toBeDone();
@@ -90,26 +91,26 @@ describe('updateTodoLabels', function () {
       body: payload,
     });
 
-    const store = mockStore({
+    const store = setupStore({
+      todosApi: {
+        entries: [{
+          id: todoId,
+          description: 'test todo',
+          labels: newLabels,
+        }]
+      },
       workspace: {
         labelTodoId: todoId,
       },
     });
     await store.dispatch(updateTodoLabels(newLabels));
 
-    const actions = store.getActions();
-    expect(actions.length).toEqual(2);
-
-    // Verify the pending handler is called based on the patch argument
-    const pendingAction = actions[0];
-    expect(pendingAction.meta.arg).toEqual(payload);
-    expect(pendingAction.type).toEqual('todosApi/update/pending');
-
-    // Verify the fulfilled handler is called with the returned todo
-    const fulfilledAction = actions[1];
-    expect(fulfilledAction.meta.arg).toEqual(payload);
-    expect(fulfilledAction.payload).toEqual(payload);
-    expect(fulfilledAction.type).toEqual('todosApi/update/fulfilled');
+    // Verify the todo is updated in the entries
+    expect(store.getState().todosApi.entries).toEqual([{
+      id: todoId,
+      description: 'test todo',
+      labels: newLabels,
+    }]);
 
     // Verify we make the server request
     expect(fetchMock).toBeDone();
@@ -118,7 +119,7 @@ describe('updateTodoLabels', function () {
   it('should error if no Todo is being labeled', async function () {
     expect.assertions(1);
 
-    const store = mockStore({
+    const store = setupStore({
       workspace: {
         labelTodoId: null,
       },
@@ -138,23 +139,16 @@ describe('completeAuthentication', function () {
       status: 200,
       headers: {
         'set-cookie':
-          'csrftoken=CSRFToken; Max-Age=31449600; Path=/; SameSite=Lax',
+          'csrftoken=sampleCSRFToken; Max-Age=31449600; Path=/; SameSite=Lax',
       },
     });
 
-    const store = mockStore();
+    const store = setupStore();
     await store.dispatch(completeAuthentication(token));
 
-    const actions = store.getActions();
-    expect(actions.length).toEqual(1);
-
-    // Verify the pending handler is called based on the patch argument
-    const pendingAction = actions[0];
-    expect(pendingAction.type).toEqual('workspace/logIn');
-    expect(pendingAction.payload).toEqual({
-      loggedIn: true,
-      csrfToken: 'CSRFToken',
-    });
+    // Verify the login info is stored
+    expect(store.getState().workspace.loggedIn).toEqual(true);
+    expect(store.getState().workspace.csrfToken).toEqual('sampleCSRFToken');
 
     // Verify we make the server request
     expect(fetchMock).toBeDone();
@@ -177,38 +171,26 @@ describe('listTodos', function () {
     ];
     fetchMock.getOnce(`${getTodosApi()}`, response);
 
-    const store = mockStore({
+    const store = setupStore({
       shortcuts: {
         latestGeneration: 0,
-      },
-      todosApi: {
-        loading: false,
-      },
+        operations: [{
+          type: 'EDIT_TODO',
+          payload: { id: 1, description: 'old desc' },
+          generation: 0,
+        }],
+      }
     });
     await store.dispatch(listTodos());
 
-    const actions = store.getActions();
-    expect(actions.length).toEqual(4);
-
     // Verify we increment the shortcut generation
-    expect(actions[0]).toEqual({
-      payload: undefined,
-      type: 'shortcuts/incrementGenerations',
-    });
+    expect(store.getState().shortcuts.latestGeneration).toEqual(1);
 
-    // Verify the pending handler is called
-    const pendingAction = actions[1];
-    expect(pendingAction.type).toEqual('todosApi/list/pending');
+    // Verify the todo entries are updated
+    expect(store.getState().todosApi.entries).toEqual(response);
 
-    // Verify the fulfilled handler is called
-    const fulfilledAction = actions[2];
-    expect(fulfilledAction.type).toEqual('todosApi/list/fulfilled');
-    expect(fulfilledAction.payload).toEqual(response);
-
-    expect(actions[3]).toEqual({
-      payload: 0,
-      type: 'shortcuts/clearOperationsUpThroughGeneration',
-    });
+    // Verify older shortcuts are cleared
+    expect(store.getState().shortcuts.operations.length).toEqual(0);
 
     // Verify we made the server request
     expect(fetchMock).toBeDone();
@@ -230,7 +212,8 @@ describe('moveTodo', function () {
       id: 1,
     });
 
-    const store = mockStore({
+    const store = setupStore({
+      workspace: {},
       todosApi: {
         entries: [
           {
@@ -242,34 +225,20 @@ describe('moveTodo', function () {
           },
         ],
       },
-      workspace: {},
     });
     await store.dispatch(moveTodo(moveOperation));
 
-    const actions = store.getActions();
-    expect(actions.length).toEqual(4);
-
     // Verify we show a notification
-    expect(actions[0]).toEqual({
-      payload: 'Reordering Todo: moving todo',
-      type: 'notifications/addNotification',
-    });
+    expect(store.getState().notifications.notificationQueue.length).toEqual(1);
+    expect(store.getState().notifications.notificationQueue[0]).toEqual('Reordering Todo: moving todo');
 
     // Verify we create a shortcut operation for the move
-    expect(actions[1]).toEqual({
+    expect(store.getState().shortcuts.operations.length).toEqual(1);
+    expect(store.getState().shortcuts.operations[0]).toEqual({
+      type: 'MOVE_TODO',
       payload: moveOperation,
-      type: 'shortcuts/addMoveTodoOperation',
+      generation: 0,
     });
-
-    // Verify the pending handler is called with the operation
-    const pendingAction = actions[2];
-    expect(pendingAction.meta.arg).toEqual(moveOperation);
-    expect(pendingAction.type).toEqual('todosApi/move/pending');
-
-    // Verify the fulfilled handler is called
-    const fulfilledAction = actions[3];
-    expect(fulfilledAction.meta.arg).toEqual(moveOperation);
-    expect(fulfilledAction.type).toEqual('todosApi/move/fulfilled');
 
     // Verify we make the server request
     expect(fetchMock).toBeDone();
