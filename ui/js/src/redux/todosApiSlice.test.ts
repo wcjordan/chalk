@@ -1,16 +1,13 @@
 import '../__mocks__/matchMediaMock';
-import configureMockStore from 'redux-mock-store';
 import fetchMock from 'fetch-mock-jest';
-import thunk from 'redux-thunk';
 import todosApiSlice, {
   createTodo,
   getTodosApi,
   listTodos,
 } from './todosApiSlice';
+import { setupStore } from './store';
 
 // NOTE (jordan) updateTodo tested in reducers.test.ts
-const mockStore = configureMockStore([thunk]);
-
 describe('createTodo', function () {
   afterEach(function () {
     fetchMock.restore();
@@ -23,22 +20,11 @@ describe('createTodo', function () {
       body: stubTodo,
     });
 
-    const store = mockStore({ workspace: {} });
+    const store = setupStore();
     await store.dispatch(createTodo(stubDescription));
 
-    const actions = store.getActions();
-    expect(actions.length).toEqual(2);
-
-    // Verify the pending handler is called based on the patch argument
-    const pendingAction = actions[0];
-    expect(pendingAction.meta.arg).toEqual(stubDescription);
-    expect(pendingAction.type).toEqual('todosApi/create/pending');
-
-    // Verify the fulfilled handler is called with the returned todo
-    const fulfilledAction = actions[1];
-    expect(fulfilledAction.meta.arg).toEqual(stubDescription);
-    expect(fulfilledAction.payload).toEqual(stubTodo);
-    expect(fulfilledAction.type).toEqual('todosApi/create/fulfilled');
+    // Verify todo is created and in the store
+    expect(store.getState().todosApi.entries).toEqual([stubTodo]);
 
     // Verify we make the server request
     expect(fetchMock).toBeDone();
@@ -59,20 +45,12 @@ describe('listTodos', function () {
       body: stubTodos,
     });
 
-    const store = mockStore({ todosApi: { loading: false } });
+    const store = setupStore();
     await store.dispatch(listTodos());
 
-    const actions = store.getActions();
-    expect(actions.length).toEqual(2);
-
-    // Verify the pending handler is called based on the patch argument
-    const pendingAction = actions[0];
-    expect(pendingAction.type).toEqual('todosApi/list/pending');
-
-    // Verify the fulfilled handler is called with the returned todo
-    const fulfilledAction = actions[1];
-    expect(fulfilledAction.payload).toEqual(stubTodos);
-    expect(fulfilledAction.type).toEqual('todosApi/list/fulfilled');
+    // Verify todos are loaded
+    expect(store.getState().todosApi.loading).toEqual(false);
+    expect(store.getState().todosApi.entries).toEqual(stubTodos);
 
     // Verify we make the server request
     expect(fetchMock).toBeDone();
@@ -80,11 +58,8 @@ describe('listTodos', function () {
 
   it('should do nothing if todos are already loading', async function () {
     fetchMock.mock('*', 200);
-    const store = mockStore({ todosApi: { loading: true } });
+    const store = setupStore({ todosApi: { loading: true } });
     await store.dispatch(listTodos());
-
-    const actions = store.getActions();
-    expect(actions.length).toEqual(0);
 
     // Verify we make the server request
     expect(fetchMock).not.toHaveFetched('*');
