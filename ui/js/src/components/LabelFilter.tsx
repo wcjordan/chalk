@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import { FilterState } from '../redux/types';
+import { useAppSelector, useAppDispatch } from '../hooks';
+import { selectLabelNames } from '../selectors';
+import { toggleLabel } from '../redux/reducers';
 import FilterViewControls from './FilterViewControls';
 import LabelChip from './LabelChip';
 
@@ -22,22 +24,20 @@ const styles = StyleSheet.create<Style>({
   },
 });
 
-const LabelFilter: React.FC<Props> = function (props: Props) {
+const LabelFilter: React.FC = function () {
+  const dispatch = useAppDispatch();
+  const labels = useAppSelector(selectLabelNames);
   const {
-    labels,
-    selectedLabels,
+    filterLabels: selectedLabels,
     showCompletedTodos,
     showLabelFilter,
-    toggleLabel,
-    toggleShowCompletedTodos,
-    toggleShowLabelFilter,
-  } = props;
+  } = useAppSelector((state) => state.workspace);
 
   const filterByLabelCb = useCallback(
     (label: string) => {
-      toggleLabel(label);
+      dispatch(toggleLabel(label));
     },
-    [toggleLabel],
+    [],
   );
 
   const chips = labels.map((label) => (
@@ -62,21 +62,9 @@ const LabelFilter: React.FC<Props> = function (props: Props) {
         isFiltered={Object.keys(selectedLabels).length > 0}
         showCompletedTodos={showCompletedTodos}
         showLabelFilter={showLabelFilter}
-        toggleShowCompletedTodos={toggleShowCompletedTodos}
-        toggleShowLabelFilter={toggleShowLabelFilter}
       />
     </View>
   );
-};
-
-type Props = {
-  labels: string[];
-  selectedLabels: FilterState;
-  showCompletedTodos: boolean;
-  showLabelFilter: boolean;
-  toggleLabel: (label: string) => void;
-  toggleShowCompletedTodos: () => void;
-  toggleShowLabelFilter: () => void;
 };
 
 export default LabelFilter;

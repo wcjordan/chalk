@@ -5,8 +5,12 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-
+import {
+  addNotification,
+  completeAuthentication,
+} from '../redux/reducers';
 import { getEnvFlags } from '../helpers';
+import { useAppDispatch } from '../hooks';
 
 GoogleSignin.configure({
   webClientId: getEnvFlags().OAUTH_CLIENT_ID,
@@ -27,8 +31,8 @@ const styles = StyleSheet.create<Style>({
 });
 
 // Used to login w/ Google OAuth for mobile workflows
-const Login: React.FC<Props> = function (props: Props) {
-  const { addNotification, completeAuthentication } = props;
+const Login: React.FC = function () {
+  const dispatch = useAppDispatch();
   const [inProgress, setInProgress] = useState(false);
 
   const signIn = useCallback(async () => {
@@ -39,12 +43,12 @@ const Login: React.FC<Props> = function (props: Props) {
 
       setInProgress(false);
       if (userInfo.idToken) {
-        completeAuthentication(userInfo.idToken);
+        dispatch(completeAuthentication(userInfo.idToken));
       } else {
         const message =
           'Login Error: ID token unexpectedly not found after login';
         console.error(message);
-        addNotification(message);
+        dispatch(addNotification(message));
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -59,10 +63,10 @@ const Login: React.FC<Props> = function (props: Props) {
 
       console.error(message);
       console.error(error);
-      addNotification(message);
+      dispatch(addNotification(message));
       setInProgress(false);
     }
-  }, [completeAuthentication, addNotification, setInProgress]);
+  }, [setInProgress]);
 
   useEffect(() => {
     async function autoSignIn() {
@@ -83,11 +87,6 @@ const Login: React.FC<Props> = function (props: Props) {
       />
     </View>
   );
-};
-
-type Props = {
-  addNotification: (text: string) => void;
-  completeAuthentication: (token: string) => void;
 };
 
 export default Login;

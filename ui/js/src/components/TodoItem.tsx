@@ -14,7 +14,9 @@ import {
   Text,
   TextInput,
 } from 'react-native-paper';
-import { Todo, TodoPatch } from '../redux/types';
+import { setEditTodoId, setLabelTodoId, updateTodo } from '../redux/reducers';
+import { Todo } from '../redux/types';
+import { useAppDispatch } from '../hooks';
 import LabelChip from './LabelChip';
 
 interface Style {
@@ -88,12 +90,10 @@ const TodoItem: React.FC<Props> = function (props: Props) {
     editing,
     isDragging,
     labeling,
-    setEditTodoId,
-    setLabelTodoId,
     startDrag,
     todo,
-    updateTodo,
   } = props;
+  const dispatch = useAppDispatch();
   const [editingValue, setEditingValue] = useState<string | null>(null);
 
   const commitTodo = useCallback(() => {
@@ -101,37 +101,37 @@ const TodoItem: React.FC<Props> = function (props: Props) {
       return;
     }
 
-    updateTodo({
+    dispatch(updateTodo({
       id: todo.id,
       description: editingValue,
-    });
+    }));
     setEditingValue(null);
-  }, [updateTodo, todo.id, editingValue]);
+  }, [todo.id, editingValue]);
 
   const toggleTodo = useCallback(() => {
-    updateTodo({
+    dispatch(updateTodo({
       id: todo.id,
       completed: !todo.completed,
-    });
-  }, [updateTodo, todo.id, todo.completed]);
+    }));
+  }, [todo.id, todo.completed]);
 
   const archiveTodo = useCallback(
     (event: GestureResponderEvent) => {
       event.stopPropagation();
-      updateTodo({
+      dispatch(updateTodo({
         id: todo.id,
         archived: true,
-      });
+      }));
     },
-    [updateTodo, todo.id],
+    [todo.id],
   );
 
   const labelTodo = useCallback(
     (event: GestureResponderEvent) => {
       event.stopPropagation();
-      setLabelTodoId(todo.id);
+      dispatch(setLabelTodoId(todo.id));
     },
-    [setLabelTodoId, todo.id],
+    [todo.id],
   );
 
   const beginEdit = useCallback(() => {
@@ -139,8 +139,8 @@ const TodoItem: React.FC<Props> = function (props: Props) {
       return;
     }
 
-    setEditTodoId(todo.id);
-  }, [setEditTodoId, todo.id, editing]);
+    dispatch(setEditTodoId(todo.id));
+  }, [todo.id, editing]);
 
   const cancelEdit = useCallback(() => {
     if (!editing) {
@@ -148,8 +148,8 @@ const TodoItem: React.FC<Props> = function (props: Props) {
     }
 
     setEditingValue(null);
-    setEditTodoId(null);
-  }, [setEditTodoId, editing]);
+    dispatch(setEditTodoId(null));
+  }, [editing]);
 
   let content;
   if (editing) {
@@ -265,11 +265,8 @@ type Props = {
   editing: boolean;
   isDragging: boolean;
   labeling: boolean;
-  setEditTodoId: (id: number | null) => void;
-  setLabelTodoId: (id: number | null) => void;
   startDrag: () => void;
   todo: Todo;
-  updateTodo: (todoPatch: TodoPatch, commitEdit?: boolean) => void;
 };
 
 export default TodoItem;

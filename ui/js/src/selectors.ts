@@ -16,6 +16,7 @@ const selectShortcutOperations = (state: RootState) =>
 const selectShowCompletedTodos = (state: RootState) =>
   state.workspace.showCompletedTodos;
 const selectTodoApiEntries = (state: RootState) => state.todosApi.entries;
+const selectLabelApiEntries = (state: RootState) => state.labelsApi.entries;
 
 export const selectShortcuttedTodoEntries = createSelector(
   [selectShortcutOperations, selectTodoApiEntries],
@@ -196,3 +197,8 @@ export const selectActiveWorkContext = createSelector(
 export const selectIsLoading = (state: RootState) => {
   return state.labelsApi.initialLoad || state.todosApi.initialLoad;
 };
+
+export const selectLabelNames = createSelector(
+  [selectLabelApiEntries],
+  (labels) => labels.map((label) => label.name),
+);

@@ -1,8 +1,11 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import { FILTER_STATUS, WorkContext } from '../redux/types';
-import FilterViewControls from './FilterViewControls';
+import { FILTER_STATUS } from '../redux/types';
+import { setWorkContext } from '../redux/reducers';
+import { useAppDispatch } from '../hooks';
+import { workContexts } from '../redux/workspaceSlice';
 import LabelChip from './LabelChip';
+import FilterViewControls from './FilterViewControls';
 
 interface Style {
   filterView: ViewStyle;
@@ -22,22 +25,18 @@ const styles = StyleSheet.create<Style>({
 });
 
 const WorkContextFilter: React.FC<Props> = function (props: Props) {
+  const dispatch = useAppDispatch();
   const {
     activeWorkContext,
     isFiltered,
-    setWorkContext,
     showCompletedTodos,
-    showLabelFilter,
-    toggleShowCompletedTodos,
-    toggleShowLabelFilter,
-    workContexts,
   } = props;
 
   const setWorkContextCb = useCallback(
     (workContext: string) => {
-      setWorkContext(workContext);
+      dispatch(setWorkContext(workContext));
     },
-    [setWorkContext],
+    [],
   );
 
   const chips = Object.keys(workContexts).map((workContext) => (
@@ -58,9 +57,7 @@ const WorkContextFilter: React.FC<Props> = function (props: Props) {
       <FilterViewControls
         isFiltered={isFiltered}
         showCompletedTodos={showCompletedTodos}
-        showLabelFilter={showLabelFilter}
-        toggleShowCompletedTodos={toggleShowCompletedTodos}
-        toggleShowLabelFilter={toggleShowLabelFilter}
+        showLabelFilter={false}
       />
     </View>
   );
@@ -69,12 +66,7 @@ const WorkContextFilter: React.FC<Props> = function (props: Props) {
 type Props = {
   activeWorkContext: string | undefined;
   isFiltered: boolean;
-  setWorkContext: (workContext: string) => void;
   showCompletedTodos: boolean;
-  showLabelFilter: boolean;
-  toggleShowCompletedTodos: () => void;
-  toggleShowLabelFilter: () => void;
-  workContexts: { [key: string]: WorkContext };
 };
 
 export default WorkContextFilter;

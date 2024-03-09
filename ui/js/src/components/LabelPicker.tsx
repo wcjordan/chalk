@@ -2,6 +2,8 @@ import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Modal } from 'react-native-paper';
 import { FILTER_STATUS } from '../redux/types';
+import { setLabelTodoId, updateTodoLabels } from '../redux/reducers';
+import { useAppDispatch } from '../hooks';
 import LabelChip from './LabelChip';
 
 interface Style {
@@ -23,8 +25,8 @@ const styles = StyleSheet.create<Style>({
 });
 
 const LabelPicker: React.FC<Props> = function (props: Props) {
-  const { labels, selectedLabels, setLabelTodoId, updateTodoLabels, visible } =
-    props;
+  const { labels, selectedLabels, visible } = props;
+  const dispatch = useAppDispatch();
 
   const updateTodoLabelCb = useCallback(
     (label: string) => {
@@ -40,14 +42,14 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
         },
         [],
       );
-      updateTodoLabels(todoLabels);
+      dispatch(updateTodoLabels(todoLabels));
     },
-    [updateTodoLabels, selectedLabels],
+    [selectedLabels],
   );
 
   const dismissLabeling = useCallback(() => {
-    setLabelTodoId(null);
-  }, [setLabelTodoId]);
+    dispatch(setLabelTodoId(null));
+  }, []);
 
   const chips = labels.map((label) => (
     <LabelChip
@@ -73,8 +75,6 @@ const LabelPicker: React.FC<Props> = function (props: Props) {
 type Props = {
   labels: string[];
   selectedLabels: { [label: string]: boolean };
-  setLabelTodoId: (id: number | null) => void;
-  updateTodoLabels: (labels: string[]) => void;
   visible: boolean;
 };
 

@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-
 import type { RootState, AppDispatch } from './redux/store';
 import { listLabels, listTodos } from './redux/reducers';
 import { getEnvFlags } from './helpers';
