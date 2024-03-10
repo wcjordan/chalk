@@ -7871,7 +7871,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             collapsable={false}
             style={
               {
-                "backgroundColor": "#d9f0ffff",
+                "backgroundColor": "#a3d5ffff",
                 "borderColor": "rgba(121, 116, 126, 1)",
                 "borderRadius": 8,
                 "borderStyle": "solid",
@@ -7883,7 +7883,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                 "transform": undefined,
               }
             }
-            testID="chip-container"
+            testID="chip-active-container"
           >
             <View
               accessibilityRole="button"
@@ -7893,7 +7893,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   "checked": undefined,
                   "disabled": false,
                   "expanded": undefined,
-                  "selected": false,
+                  "selected": true,
                 }
               }
               accessibilityValue={
@@ -7931,7 +7931,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ],
                 ]
               }
-              testID="chip"
+              testID="chip-active"
             >
               <View
                 style={
@@ -7951,6 +7951,23 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ]
                 }
               >
+                <View
+                  style={
+                    [
+                      {
+                        "alignSelf": "center",
+                        "padding": 4,
+                      },
+                      {
+                        "paddingLeft": 8,
+                        "paddingRight": 0,
+                      },
+                      null,
+                    ]
+                  }
+                >
+                  <Text />
+                </View>
                 <Text
                   numberOfLines={1}
                   selectable={false}
@@ -7985,7 +8002,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                             "lineHeight": 20,
                           },
                           {
-                            "marginLeft": 16,
+                            "marginLeft": 8,
                             "marginRight": 16,
                           },
                           {
@@ -8009,7 +8026,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             collapsable={false}
             style={
               {
-                "backgroundColor": "#d9f0ffff",
+                "backgroundColor": "#a3d5ffff",
                 "borderColor": "rgba(121, 116, 126, 1)",
                 "borderRadius": 8,
                 "borderStyle": "solid",
@@ -8021,7 +8038,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                 "transform": undefined,
               }
             }
-            testID="chip-container"
+            testID="chip-active-container"
           >
             <View
               accessibilityRole="button"
@@ -8031,7 +8048,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   "checked": undefined,
                   "disabled": false,
                   "expanded": undefined,
-                  "selected": false,
+                  "selected": true,
                 }
               }
               accessibilityValue={
@@ -8069,7 +8086,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ],
                 ]
               }
-              testID="chip"
+              testID="chip-active"
             >
               <View
                 style={
@@ -8089,6 +8106,23 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ]
                 }
               >
+                <View
+                  style={
+                    [
+                      {
+                        "alignSelf": "center",
+                        "padding": 4,
+                      },
+                      {
+                        "paddingLeft": 8,
+                        "paddingRight": 0,
+                      },
+                      null,
+                    ]
+                  }
+                >
+                  <Text />
+                </View>
                 <Text
                   numberOfLines={1}
                   selectable={false}
@@ -8123,7 +8157,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                             "lineHeight": 20,
                           },
                           {
-                            "marginLeft": 16,
+                            "marginLeft": 8,
                             "marginRight": 16,
                           },
                           {
@@ -8457,7 +8491,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             collapsable={false}
             style={
               {
-                "backgroundColor": "#d9f0ffff",
+                "backgroundColor": "#a3d5ffff",
                 "borderColor": "rgba(121, 116, 126, 1)",
                 "borderRadius": 8,
                 "borderStyle": "solid",
@@ -8469,7 +8503,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                 "transform": undefined,
               }
             }
-            testID="chip-container"
+            testID="chip-active-container"
           >
             <View
               accessibilityRole="button"
@@ -8479,7 +8513,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   "checked": undefined,
                   "disabled": false,
                   "expanded": undefined,
-                  "selected": false,
+                  "selected": true,
                 }
               }
               accessibilityValue={
@@ -8517,7 +8551,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ],
                 ]
               }
-              testID="chip"
+              testID="chip-active"
             >
               <View
                 style={
@@ -8537,6 +8571,23 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ]
                 }
               >
+                <View
+                  style={
+                    [
+                      {
+                        "alignSelf": "center",
+                        "padding": 4,
+                      },
+                      {
+                        "paddingLeft": 8,
+                        "paddingRight": 0,
+                      },
+                      null,
+                    ]
+                  }
+                >
+                  <Text />
+                </View>
                 <Text
                   numberOfLines={1}
                   selectable={false}
@@ -8571,7 +8622,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                             "lineHeight": 20,
                           },
                           {
-                            "marginLeft": 16,
+                            "marginLeft": 8,
                             "marginRight": 16,
                           },
                           {
@@ -8750,7 +8801,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             collapsable={false}
             style={
               {
-                "backgroundColor": "#d9f0ffff",
+                "backgroundColor": "#a3d5ffff",
                 "borderColor": "rgba(121, 116, 126, 1)",
                 "borderRadius": 8,
                 "borderStyle": "solid",
@@ -8762,7 +8813,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                 "transform": undefined,
               }
             }
-            testID="chip-container"
+            testID="chip-active-container"
           >
             <View
               accessibilityRole="button"
@@ -8772,7 +8823,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   "checked": undefined,
                   "disabled": false,
                   "expanded": undefined,
-                  "selected": false,
+                  "selected": true,
                 }
               }
               accessibilityValue={
@@ -8810,7 +8861,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ],
                 ]
               }
-              testID="chip"
+              testID="chip-active"
             >
               <View
                 style={
@@ -8830,6 +8881,23 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ]
                 }
               >
+                <View
+                  style={
+                    [
+                      {
+                        "alignSelf": "center",
+                        "padding": 4,
+                      },
+                      {
+                        "paddingLeft": 8,
+                        "paddingRight": 0,
+                      },
+                      null,
+                    ]
+                  }
+                >
+                  <Text />
+                </View>
                 <Text
                   numberOfLines={1}
                   selectable={false}
@@ -8864,7 +8932,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                             "lineHeight": 20,
                           },
                           {
-                            "marginLeft": 16,
+                            "marginLeft": 8,
                             "marginRight": 16,
                           },
                           {
@@ -8888,7 +8956,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             collapsable={false}
             style={
               {
-                "backgroundColor": "#d9f0ffff",
+                "backgroundColor": "#a3d5ffff",
                 "borderColor": "rgba(121, 116, 126, 1)",
                 "borderRadius": 8,
                 "borderStyle": "solid",
@@ -8900,7 +8968,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                 "transform": undefined,
               }
             }
-            testID="chip-container"
+            testID="chip-active-container"
           >
             <View
               accessibilityRole="button"
@@ -8910,7 +8978,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   "checked": undefined,
                   "disabled": false,
                   "expanded": undefined,
-                  "selected": false,
+                  "selected": true,
                 }
               }
               accessibilityValue={
@@ -8948,7 +9016,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ],
                 ]
               }
-              testID="chip"
+              testID="chip-active"
             >
               <View
                 style={
@@ -8968,6 +9036,23 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ]
                 }
               >
+                <View
+                  style={
+                    [
+                      {
+                        "alignSelf": "center",
+                        "padding": 4,
+                      },
+                      {
+                        "paddingLeft": 8,
+                        "paddingRight": 0,
+                      },
+                      null,
+                    ]
+                  }
+                >
+                  <Text />
+                </View>
                 <Text
                   numberOfLines={1}
                   selectable={false}
@@ -9002,7 +9087,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                             "lineHeight": 20,
                           },
                           {
-                            "marginLeft": 16,
+                            "marginLeft": 8,
                             "marginRight": 16,
                           },
                           {
@@ -9026,7 +9111,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             collapsable={false}
             style={
               {
-                "backgroundColor": "#d9f0ffff",
+                "backgroundColor": "#a3d5ffff",
                 "borderColor": "rgba(121, 116, 126, 1)",
                 "borderRadius": 8,
                 "borderStyle": "solid",
@@ -9038,7 +9123,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                 "transform": undefined,
               }
             }
-            testID="chip-container"
+            testID="chip-active-container"
           >
             <View
               accessibilityRole="button"
@@ -9048,7 +9133,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   "checked": undefined,
                   "disabled": false,
                   "expanded": undefined,
-                  "selected": false,
+                  "selected": true,
                 }
               }
               accessibilityValue={
@@ -9086,7 +9171,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ],
                 ]
               }
-              testID="chip"
+              testID="chip-active"
             >
               <View
                 style={
@@ -9106,6 +9191,23 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ]
                 }
               >
+                <View
+                  style={
+                    [
+                      {
+                        "alignSelf": "center",
+                        "padding": 4,
+                      },
+                      {
+                        "paddingLeft": 8,
+                        "paddingRight": 0,
+                      },
+                      null,
+                    ]
+                  }
+                >
+                  <Text />
+                </View>
                 <Text
                   numberOfLines={1}
                   selectable={false}
@@ -9140,7 +9242,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                             "lineHeight": 20,
                           },
                           {
-                            "marginLeft": 16,
+                            "marginLeft": 8,
                             "marginRight": 16,
                           },
                           {
@@ -9319,7 +9421,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             collapsable={false}
             style={
               {
-                "backgroundColor": "#d9f0ffff",
+                "backgroundColor": "#a3d5ffff",
                 "borderColor": "rgba(121, 116, 126, 1)",
                 "borderRadius": 8,
                 "borderStyle": "solid",
@@ -9331,7 +9433,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                 "transform": undefined,
               }
             }
-            testID="chip-container"
+            testID="chip-active-container"
           >
             <View
               accessibilityRole="button"
@@ -9341,7 +9443,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   "checked": undefined,
                   "disabled": false,
                   "expanded": undefined,
-                  "selected": false,
+                  "selected": true,
                 }
               }
               accessibilityValue={
@@ -9379,7 +9481,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ],
                 ]
               }
-              testID="chip"
+              testID="chip-active"
             >
               <View
                 style={
@@ -9399,6 +9501,23 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ]
                 }
               >
+                <View
+                  style={
+                    [
+                      {
+                        "alignSelf": "center",
+                        "padding": 4,
+                      },
+                      {
+                        "paddingLeft": 8,
+                        "paddingRight": 0,
+                      },
+                      null,
+                    ]
+                  }
+                >
+                  <Text />
+                </View>
                 <Text
                   numberOfLines={1}
                   selectable={false}
@@ -9433,7 +9552,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                             "lineHeight": 20,
                           },
                           {
-                            "marginLeft": 16,
+                            "marginLeft": 8,
                             "marginRight": 16,
                           },
                           {
@@ -9457,7 +9576,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             collapsable={false}
             style={
               {
-                "backgroundColor": "#d9f0ffff",
+                "backgroundColor": "#a3d5ffff",
                 "borderColor": "rgba(121, 116, 126, 1)",
                 "borderRadius": 8,
                 "borderStyle": "solid",
@@ -9469,7 +9588,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                 "transform": undefined,
               }
             }
-            testID="chip-container"
+            testID="chip-active-container"
           >
             <View
               accessibilityRole="button"
@@ -9479,7 +9598,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   "checked": undefined,
                   "disabled": false,
                   "expanded": undefined,
-                  "selected": false,
+                  "selected": true,
                 }
               }
               accessibilityValue={
@@ -9517,7 +9636,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ],
                 ]
               }
-              testID="chip"
+              testID="chip-active"
             >
               <View
                 style={
@@ -9537,6 +9656,23 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                   ]
                 }
               >
+                <View
+                  style={
+                    [
+                      {
+                        "alignSelf": "center",
+                        "padding": 4,
+                      },
+                      {
+                        "paddingLeft": 8,
+                        "paddingRight": 0,
+                      },
+                      null,
+                    ]
+                  }
+                >
+                  <Text />
+                </View>
                 <Text
                   numberOfLines={1}
                   selectable={false}
@@ -9571,7 +9707,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
                             "lineHeight": 20,
                           },
                           {
-                            "marginLeft": 16,
+                            "marginLeft": 8,
                             "marginRight": 16,
                           },
                           {
@@ -51424,7 +51560,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
             collapsable={false}
             style={
               {
-                "backgroundColor": "#d9f0ffff",
+                "backgroundColor": "#a3d5ffff",
                 "borderColor": "rgba(121, 116, 126, 1)",
                 "borderRadius": 8,
                 "borderStyle": "solid",
@@ -51436,7 +51572,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
                 "transform": undefined,
               }
             }
-            testID="chip-container"
+            testID="chip-active-container"
           >
             <View
               accessibilityRole="button"
@@ -51446,7 +51582,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
                   "checked": undefined,
                   "disabled": false,
                   "expanded": undefined,
-                  "selected": false,
+                  "selected": true,
                 }
               }
               accessibilityValue={
@@ -51484,7 +51620,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
                   ],
                 ]
               }
-              testID="chip"
+              testID="chip-active"
             >
               <View
                 style={
@@ -51504,6 +51640,23 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
                   ]
                 }
               >
+                <View
+                  style={
+                    [
+                      {
+                        "alignSelf": "center",
+                        "padding": 4,
+                      },
+                      {
+                        "paddingLeft": 8,
+                        "paddingRight": 0,
+                      },
+                      null,
+                    ]
+                  }
+                >
+                  <Text />
+                </View>
                 <Text
                   numberOfLines={1}
                   selectable={false}
@@ -51538,7 +51691,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
                             "lineHeight": 20,
                           },
                           {
-                            "marginLeft": 16,
+                            "marginLeft": 8,
                             "marginRight": 16,
                           },
                           {

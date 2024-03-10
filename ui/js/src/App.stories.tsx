@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -32,45 +33,44 @@ function stubTodo(patch: TodoPatch): Todo {
   );
 }
 
-const defaultProps = {
-  labels: [
-    { name: 'low-energy' },
-    { name: 'high-energy' },
-    { name: 'vague' },
-    { name: 'work' },
-    { name: 'home' },
-    { name: 'errand' },
-    { name: 'mobile' },
-    { name: 'desktop' },
-    { name: 'email' },
-    { name: 'urgent' },
-    { name: '5 minutes' },
-    { name: '25 minutes' },
-    { name: '60 minutes' },
-  ],
-  notificationQueue: [],
-  selectedPickerLabels: {
-    '5 minutes': true,
-    work: true,
-    home: true,
-    'low-energy': true,
-    mobile: true,
+const defaultState = {
+  labelsApi: {
+    entries: [
+      { name: 'low-energy' },
+      { name: 'high-energy' },
+      { name: 'vague' },
+      { name: 'work' },
+      { name: 'home' },
+      { name: 'errand' },
+      { name: 'mobile' },
+      { name: 'desktop' },
+      { name: 'email' },
+      { name: 'urgent' },
+      { name: '5 minutes' },
+      { name: '25 minutes' },
+      { name: '60 minutes' },
+    ],
   },
-  todos: [
-    stubTodo({
-      id: 1,
-      description: 'First todo',
-    }),
-    stubTodo({
-      id: 2,
-      description: '2nd todo',
-    }),
-  ],
+  notifications: {
+    notificationQueue: [],
+  },
+  todosApi: {
+    entries: [
+      stubTodo({
+        id: 1,
+        description: 'First todo',
+      }),
+      stubTodo({
+        id: 2,
+        description: '2nd todo',
+      }),
+    ],
+  },
   workspace: {
     csrfToken: null,
     filterLabels: {
       '5 minutes': FILTER_STATUS.Active,
-      work: FILTER_STATUS.Inverted,
+      work: FILTER_STATUS.Active,
       home: FILTER_STATUS.Active,
       'low-energy': FILTER_STATUS.Active,
       mobile: FILTER_STATUS.Active,
@@ -80,31 +80,47 @@ const defaultProps = {
   },
 };
 
-const wrapper = (component) => (
-  <SafeAreaProvider>
-    <Provider store={setupStore()}>
-      {component}
-    </Provider>
-  </SafeAreaProvider>
-);
+const wrapper = (component, stateOverrides={}) => {
+  const initialState = _.mergeWith({}, defaultState, stateOverrides, (objValue, srcValue) => {
+    if (_.isArray(objValue)) {
+      return srcValue;
+    }
+    return undefined;
+  });
+  return (
+    <SafeAreaProvider>
+      <Provider store={setupStore(initialState)}>
+        {component}
+      </Provider>
+    </SafeAreaProvider>
+  );
+};
 
 export default {
   title: 'App Layout',
   component: App,
 };
 export const DefaultLayout: React.FC = () =>
-  wrapper(<App {...defaultProps} todos={[]} />);
+  wrapper(<App />, {
+    todosApi: {
+      entries: []
+    }
+  });
 
 export const ListTodosLayout: React.FC = () =>
-  wrapper(<App {...defaultProps} />);
+  wrapper(<App />);
 
-const labelPickerWorkspace = Object.assign({}, defaultProps.workspace, {
-  labelTodoId: 1,
-});
 export const LabelPickerLayout: React.FC = () =>
-  wrapper(<App {...defaultProps} workspace={labelPickerWorkspace} />);
+  wrapper(<App />, {
+    workspace: {
+      labelTodoId: 1,
+    },
+  });
 
 export const NotificationLayout: React.FC = () =>
   wrapper(
-    <App {...defaultProps} notificationQueue={['Error logging in...']} />,
-  );
+    <App />, {
+      notifications: {
+        notificationQueue: ['Error logging in...']
+      }
+    });
