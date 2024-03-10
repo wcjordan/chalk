@@ -1,7 +1,9 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Todo, TodoPatch } from '../redux/types';
 import { FILTER_STATUS } from '../redux/types';
+import { setupStore } from '../redux/store';
 import { workContexts } from '../redux/workspaceSlice';
 import TodoList from './TodoList';
 
@@ -81,7 +83,13 @@ const defaultProps = {
   },
 };
 
-const wrapper = (component) => <SafeAreaProvider>{component}</SafeAreaProvider>;
+const wrapper = (component) => (
+  <SafeAreaProvider>
+    <Provider store={setupStore()}>
+      {component}
+    </Provider>
+  </SafeAreaProvider>
+);
 
 export default {
   title: 'Todo List',

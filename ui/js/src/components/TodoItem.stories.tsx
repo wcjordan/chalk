@@ -1,5 +1,13 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { setupStore } from '../redux/store';
 import TodoItem from './TodoItem';
+
+const wrapper = (component) => (
+  <Provider store={setupStore()}>
+    {component}
+  </Provider>
+);
 
 const defaultTodo = {
   archived: false,
@@ -17,9 +25,9 @@ export default {
   title: 'Todo Item',
   component: TodoItem,
 };
-export const DefaultTodo: React.FC = () => <TodoItem {...defaultProps} />;
+export const DefaultTodo: React.FC = () => wrapper(<TodoItem {...defaultProps} />);
 
-export const CheckedTodo: React.FC = () => (
+export const CheckedTodo: React.FC = () => (wrapper(
   <TodoItem
     {...defaultProps}
     todo={Object.assign({}, defaultTodo, {
@@ -27,9 +35,9 @@ export const CheckedTodo: React.FC = () => (
       description: 'Checked Todo',
     })}
   />
-);
+));
 
-export const EditingTodo: React.FC = () => (
+export const EditingTodo: React.FC = () => (wrapper(
   <TodoItem
     {...defaultProps}
     editing={true}
@@ -37,9 +45,9 @@ export const EditingTodo: React.FC = () => (
       description: 'Editing Todo',
     })}
   />
-);
+));
 
-export const NoLabelsTodo: React.FC = () => (
+export const NoLabelsTodo: React.FC = () => (wrapper(
   <TodoItem
     {...defaultProps}
     todo={Object.assign({}, defaultTodo, {
@@ -47,9 +55,9 @@ export const NoLabelsTodo: React.FC = () => (
       labels: [],
     })}
   />
-);
+));
 
-export const WrappedLabelsTodo: React.FC = () => (
+export const WrappedLabelsTodo: React.FC = () => (wrapper(
   <TodoItem
     {...defaultProps}
     todo={Object.assign({}, defaultTodo, {
@@ -71,4 +79,4 @@ export const WrappedLabelsTodo: React.FC = () => (
       ],
     })}
   />
-);
+));

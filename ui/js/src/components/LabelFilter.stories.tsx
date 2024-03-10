@@ -1,6 +1,14 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { FILTER_STATUS } from '../redux/types';
+import { setupStore } from '../redux/store';
 import LabelFilter from './LabelFilter';
+
+const wrapper = (component) => (
+  <Provider store={setupStore()}>
+    {component}
+  </Provider>
+);
 
 const labels = [
   'low-energy',
@@ -29,6 +37,6 @@ export default {
   title: 'Label Filter',
   component: LabelFilter,
 };
-export const DefaultLabelFilter: React.FC = () => (
+export const DefaultLabelFilter: React.FC = () => (wrapper(
   <LabelFilter labels={labels} selectedLabels={selectedLabels} />
-);
+));

@@ -74,6 +74,10 @@ const Login: React.FC = function () {
         signIn();
       }
     }
+    if (getEnvFlags().ENVIRONMENT === 'test') {
+      return;
+    }
+
     autoSignIn();
   }, [signIn]);
 
