@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
+import { setupStore } from '../redux/store';
 import ErrorBar from './ErrorBar';
 
 const styles = StyleSheet.create({
@@ -12,9 +14,11 @@ const styles = StyleSheet.create({
     padddingBottom: '40px',
   },
 });
-const wrapper = (snackbar) => (
+const wrapper = (component) => (
   <SafeAreaProvider>
-    <View style={styles.wrapper}>{snackbar}</View>
+    <Provider store={setupStore()}>
+      <View style={styles.wrapper}>{component}</View>
+    </Provider>
   </SafeAreaProvider>
 );
 
@@ -22,8 +26,7 @@ export default {
   title: 'Error Bar',
   component: ErrorBar,
 };
-export const DefaultErrorBar: React.FC = () =>
-  wrapper(<ErrorBar dismissNotification={() => null} text="Snacks!" />);
+export const DefaultErrorBar: React.FC = () => wrapper(<ErrorBar text="Snacks!" />);
 
 export const HiddenErrorBar: React.FC = () => wrapper(<ErrorBar text={null} />);
 

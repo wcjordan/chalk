@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import { createTodo } from '../redux/reducers';
+import { useAppDispatch } from '../hooks';
 
 interface Style {
   addTodoView: ViewStyle;
@@ -26,14 +28,14 @@ const styles = StyleSheet.create<Style>({
   },
 });
 
-const AddTodo: React.FC<Props> = function (props: Props) {
-  const { createTodo } = props;
+const AddTodo: React.FC = function () {
+  const dispatch = useAppDispatch();
   const [textValue, setTextValue] = useState('');
 
   const addTodo = useCallback(() => {
-    createTodo(textValue);
+    dispatch(createTodo(textValue));
     setTextValue('');
-  }, [createTodo, textValue]);
+  }, [textValue]);
 
   return (
     <View style={styles.addTodoView}>
@@ -51,10 +53,6 @@ const AddTodo: React.FC<Props> = function (props: Props) {
       />
     </View>
   );
-};
-
-type Props = {
-  createTodo: (description: string) => void;
 };
 
 export default AddTodo;

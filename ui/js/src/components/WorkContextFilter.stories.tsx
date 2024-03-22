@@ -1,20 +1,26 @@
 import React from 'react';
-import { workContexts } from '../redux/workspaceSlice';
+import { Provider } from 'react-redux';
+import { setupStore } from '../redux/store';
 import WorkContextFilter from './WorkContextFilter';
+
+const wrapper = (component) => (
+    <Provider store={setupStore()}>
+      {component}
+    </Provider>
+);
 
 const defaultProps = {
   activeWorkContext: undefined,
-  workContexts: workContexts,
 };
 
 export default {
   title: 'Work Context Filter',
   component: WorkContextFilter,
 };
-export const DefaultWorkContextFilter: React.FC = () => (
+export const DefaultWorkContextFilter: React.FC = () => (wrapper(
   <WorkContextFilter {...defaultProps} />
-);
+));
 
-export const ActiveWorkContextFilter: React.FC = () => (
+export const ActiveWorkContextFilter: React.FC = () => (wrapper(
   <WorkContextFilter {...defaultProps} activeWorkContext="urgent" />
-);
+));

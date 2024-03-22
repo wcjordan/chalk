@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, TextStyle, ViewStyle } from 'react-native';
 import { IconButton } from 'react-native-paper';
+import { toggleShowCompletedTodos, toggleShowLabelFilter } from '../redux/reducers';
+import { useAppDispatch } from '../hooks';
 
 interface Style {
   iconButton: ViewStyle;
@@ -17,12 +19,11 @@ const styles = StyleSheet.create<Style>({
 });
 
 const FilterViewControls: React.FC<Props> = function (props: Props) {
+  const dispatch = useAppDispatch();
   const {
     isFiltered,
     showCompletedTodos,
     showLabelFilter,
-    toggleShowCompletedTodos,
-    toggleShowLabelFilter,
   } = props;
 
   let filterIcon = null;
@@ -39,11 +40,11 @@ const FilterViewControls: React.FC<Props> = function (props: Props) {
   }
 
   const toggleShowLabelFilterCb = useCallback(() => {
-    toggleShowLabelFilter();
-  }, [toggleShowLabelFilter]);
+    dispatch(toggleShowLabelFilter());
+  }, []);
   const toggleShowCompletedTodosCb = useCallback(() => {
-    toggleShowCompletedTodos();
-  }, [toggleShowCompletedTodos]);
+    dispatch(toggleShowCompletedTodos());
+  }, []);
 
   return (
     <Text style={styles.toggles}>
@@ -80,8 +81,6 @@ type Props = {
   isFiltered: boolean;
   showCompletedTodos: boolean;
   showLabelFilter: boolean;
-  toggleShowCompletedTodos: () => void;
-  toggleShowLabelFilter: () => void;
 };
 
 export default FilterViewControls;
