@@ -5,7 +5,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Todo, TodoPatch } from '../redux/types';
 import { FILTER_STATUS } from '../redux/types';
 import { setupStore } from '../redux/store';
-import { workContexts } from '../redux/workspaceSlice';
 import TodoList from './TodoList';
 
 function stubTodo(patch: TodoPatch): Todo {
