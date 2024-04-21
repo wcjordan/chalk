@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
+import { setupStore } from '../redux/store';
 import LabelPicker from './LabelPicker';
 
 const labels = [
@@ -32,9 +34,11 @@ const styles = StyleSheet.create({
     padddingBottom: '100px',
   },
 });
-const wrapper = (labelPicker) => (
+const wrapper = (component) => (
   <SafeAreaProvider>
-    <View style={styles.wrapper}>{labelPicker}</View>
+    <Provider store={setupStore()}>
+      <View style={styles.wrapper}>{component}</View>
+    </Provider>
   </SafeAreaProvider>
 );
 
