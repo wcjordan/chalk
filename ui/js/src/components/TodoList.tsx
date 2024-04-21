@@ -11,7 +11,7 @@ import {
   selectLabelNames,
   selectSelectedPickerLabels,
 } from '../selectors';
-import { useAppSelector, useDataLoader } from '../hooks';
+import { useAppDispatch, useAppSelector, useDataLoader } from '../hooks';
 import { Todo } from '../redux/types';
 import { moveTodo } from '../redux/reducers';
 import AddTodo from './AddTodo';
@@ -51,6 +51,7 @@ const styles = StyleSheet.create<Style>({
 });
 
 const TodoList: React.FC = function () {
+  const dispatch = useAppDispatch()
   useDataLoader();
   const {
     editTodoId,
@@ -78,11 +79,11 @@ const TodoList: React.FC = function () {
       const beforeFlag = from > to;
       const position = beforeFlag ? 'before' : 'after';
       const relativeIdx = beforeFlag ? to + 1 : to - 1;
-      moveTodo({
+      dispatch(moveTodo({
         todo_id: data[to].id,
         position,
         relative_id: data[relativeIdx].id,
-      });
+      }));
     },
     [],
   );
@@ -135,22 +136,28 @@ const TodoList: React.FC = function () {
     );
   }
 
+  let draggableList = null;
+  if (filteredTodos.length > 0) {
+    draggableList = (
+      <DraggableFlatList
+        autoscrollSpeed={150}
+        containerStyle={styles.scrollView}
+        data={filteredTodos}
+        onDragEnd={handleReorder}
+        keyExtractor={(item) => String(item.id || '')}
+        refreshing={isLoading}
+        renderItem={renderItem}
+        testID="todo-list"
+      />
+    );
+  }
   return (
     <React.Fragment>
       <View style={containerStyle}>
         <AddTodo />
         {workContextFilter}
         {labelFilter}
-        <DraggableFlatList
-          autoscrollSpeed={150}
-          containerStyle={styles.scrollView}
-          data={filteredTodos}
-          onDragEnd={handleReorder}
-          keyExtractor={(item) => String(item.id || '')}
-          refreshing={isLoading}
-          renderItem={renderItem}
-          testID="todo-list"
-        />
+        {draggableList}
         {loadingPage}
       </View>
       <LabelPicker

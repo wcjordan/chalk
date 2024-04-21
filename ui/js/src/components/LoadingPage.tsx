@@ -8,6 +8,7 @@ interface Style {
 
 const styles = StyleSheet.create<Style>({
   loadingIndicator: {
+    flex: 1,
     margin: 'auto',
   },
 });
