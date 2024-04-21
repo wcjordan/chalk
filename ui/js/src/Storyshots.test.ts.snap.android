@@ -1491,84 +1491,6 @@ exports[`Storyshots App Layout Default Layout 1`] = `
         </View>
       </Text>
     </View>
-    <View
-      collapsable={false}
-      onLayout={[Function]}
-      style={
-        {
-          "flex": 1,
-          "minHeight": 20,
-        }
-      }
-    >
-      <RCTScrollView
-        CellRendererComponent={
-          {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          }
-        }
-        autoscrollSpeed={150}
-        collapsable={false}
-        containerStyle={
-          {
-            "flex": 1,
-            "minHeight": 20,
-          }
-        }
-        data={[]}
-        extraData={
-          {
-            "activeKey": null,
-            "extraData": undefined,
-          }
-        }
-        getItem={[Function]}
-        getItemCount={[Function]}
-        handlerTag={2}
-        handlerType="NativeViewGestureHandler"
-        keyExtractor={[Function]}
-        onContentSizeChange={[Function]}
-        onDragEnd={[Function]}
-        onGestureHandlerEvent={[Function]}
-        onGestureHandlerStateChange={[Function]}
-        onLayout={[Function]}
-        onMomentumScrollBegin={[Function]}
-        onMomentumScrollEnd={[Function]}
-        onScroll={[Function]}
-        onScrollBeginDrag={[Function]}
-        onScrollEndDrag={[Function]}
-        onViewableItemsChanged={[Function]}
-        removeClippedSubviews={false}
-        renderItem={[Function]}
-        renderScrollComponent={[Function]}
-        scrollEnabled={true}
-        scrollEventThrottle={16}
-        stickyHeaderIndices={[]}
-        testID="todo-list"
-        viewabilityConfigCallbackPairs={
-          [
-            {
-              "onViewableItemsChanged": [Function],
-              "viewabilityConfig": undefined,
-            },
-          ]
-        }
-        waitFor={
-          [
-            {
-              "current": null,
-            },
-            {
-              "current": null,
-            },
-          ]
-        }
-      >
-        <View />
-      </RCTScrollView>
-    </View>
   </View>
 </View>
 `;
@@ -3029,7 +2951,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
         }
         getItem={[Function]}
         getItemCount={[Function]}
-        handlerTag={4}
+        handlerTag={2}
         handlerType="NativeViewGestureHandler"
         keyExtractor={[Function]}
         onContentSizeChange={[Function]}
@@ -11190,7 +11112,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
         }
         getItem={[Function]}
         getItemCount={[Function]}
-        handlerTag={6}
+        handlerTag={4}
         handlerType="NativeViewGestureHandler"
         keyExtractor={[Function]}
         onContentSizeChange={[Function]}
@@ -17222,7 +17144,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
         }
         getItem={[Function]}
         getItemCount={[Function]}
-        handlerTag={8}
+        handlerTag={6}
         handlerType="NativeViewGestureHandler"
         keyExtractor={[Function]}
         onContentSizeChange={[Function]}
@@ -27173,6 +27095,7 @@ exports[`Storyshots Loading Page Default Loading Page 1`] = `
         "justifyContent": "center",
       },
       {
+        "flex": 1,
         "margin": "auto",
       },
     ]
@@ -34021,7 +33944,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
       }
       getItem={[Function]}
       getItemCount={[Function]}
-      handlerTag={10}
+      handlerTag={8}
       handlerType="NativeViewGestureHandler"
       keyExtractor={[Function]}
       onContentSizeChange={[Function]}
@@ -43320,7 +43243,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
         }
         getItem={[Function]}
         getItemCount={[Function]}
-        handlerTag={12}
+        handlerTag={10}
         handlerType="NativeViewGestureHandler"
         keyExtractor={[Function]}
         onContentSizeChange={[Function]}
@@ -54584,7 +54507,7 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
       }
       getItem={[Function]}
       getItemCount={[Function]}
-      handlerTag={14}
+      handlerTag={12}
       handlerType="NativeViewGestureHandler"
       keyExtractor={[Function]}
       onContentSizeChange={[Function]}
@@ -55942,6 +55865,7 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
           "justifyContent": "center",
         },
         {
+          "flex": 1,
           "margin": "auto",
         },
       ]
