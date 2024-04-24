@@ -70,10 +70,11 @@ spec:
             {{- include "..serverEnv" . | nindent 12 }}
       containers:
         - name: server-cloud-sql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:latest
-          command:
-            - "/cloud_sql_proxy"
-            - {{ printf "-instances=%s:us-east4:%s=tcp:5432" .Values.gcpProject (include "..dbInstanceName" .) | quote }}
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest
+          args:
+          - "--structured-logs"
+          - "--port=5432"
+          - {{ printf "%s:us-east4:%s" .Values.gcpProject (include "..dbInstanceName" .) | quote }}
           securityContext:
             runAsNonRoot: true
           resources:
