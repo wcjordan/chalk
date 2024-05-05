@@ -265,6 +265,7 @@ describe('selectActiveWorkContext', function () {
       workspace: {
         filterLabels: {
           Chalk: FILTER_STATUS.Active,
+          backlog: FILTER_STATUS.Inverted,
           vague: FILTER_STATUS.Active,
         },
       },
@@ -279,6 +280,7 @@ describe('selectActiveWorkContext', function () {
       workspace: {
         filterLabels: {
           Chalk: FILTER_STATUS.Active,
+          backlog: FILTER_STATUS.Inverted,
           vague: FILTER_STATUS.Active,
           Home: FILTER_STATUS.Active,
         },
@@ -294,6 +296,7 @@ describe('selectActiveWorkContext', function () {
       workspace: {
         filterLabels: {
           Chalk: FILTER_STATUS.Active,
+          backlog: FILTER_STATUS.Inverted,
         },
       },
     };
