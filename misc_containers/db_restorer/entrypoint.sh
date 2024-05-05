@@ -35,5 +35,5 @@ else
     psql < ./backup_to_restore.sql
 fi
 
-# Kill cloud_sql_proxy so the job will complete
-kill -INT $(pgrep cloud_sql_proxy)
+# Kill cloud-sql-proxy so the job will complete
+kill -SIGTERM -INT $(pgrep cloud-sql-proxy)

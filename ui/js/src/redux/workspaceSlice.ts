@@ -16,29 +16,34 @@ export const workContexts: { [key: string]: WorkContext } = {
     displayName: 'Urgent',
     labels: {
       urgent: FILTER_STATUS.Active,
+      backlog: FILTER_STATUS.Inverted,
     },
   },
   quickFixes: {
     displayName: 'Quick Fixes',
     labels: {
       '5 minutes': FILTER_STATUS.Active,
+      backlog: FILTER_STATUS.Inverted,
     },
   },
   upNext: {
     displayName: 'Up Next',
     labels: {
+      backlog: FILTER_STATUS.Inverted,
       'up next': FILTER_STATUS.Active,
     },
   },
   work: {
     displayName: 'Work',
     labels: {
+      backlog: FILTER_STATUS.Inverted,
       work: FILTER_STATUS.Active,
     },
   },
   shopping: {
     displayName: 'Shopping',
     labels: {
+      backlog: FILTER_STATUS.Inverted,
       Shopping: FILTER_STATUS.Active,
     },
   },
@@ -86,6 +91,10 @@ export default createSlice({
       const newLabels = Object.assign({}, state.filterLabels);
 
       const toggledLabel = action.payload;
+      if (toggledLabel !== 'Unlabeled') {
+        delete newLabels['Unlabeled'];
+      }
+
       const prevStatus = newLabels[toggledLabel];
       if (prevStatus === FILTER_STATUS.Active) {
         // Invert existing item
