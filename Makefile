@@ -60,10 +60,6 @@ format:
 	$(MAKE) -C server format
 
 
-.PHONY: publish
-publish:
-	$(MAKE) -C ui publish
-
 # Deploy to production
 # To delete: helm delete chalk-prod
 # Note, this shouldn't be needed as we deploy to prod in the Jenkinsfile
