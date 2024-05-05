@@ -1,7 +1,6 @@
 import pytest
 
-from helpers.label_helpers import (add_todo_w_labels, clear_label_filters,
-                                   get_label_filter_status, toggle_label_filter,
+from helpers.label_helpers import (add_todo_w_labels, get_label_filter_status, toggle_label_filter,
                                    toggle_label_filter_section)
 from helpers.todo_helpers import (list_todo_descriptions, wait_for_todo,
                                   wait_for_todo_to_disappear)
@@ -9,9 +8,6 @@ from helpers.todo_helpers import (list_todo_descriptions, wait_for_todo,
 
 @pytest.mark.parametrize('test_name', ['Label: Label Filtering'])
 def test_label_filtering(page, todo_prefix):
-    # Remove default filter
-    clear_label_filters(page)
-
     # Add todos w/ labels
     todo_5min_low_desc = f'{todo_prefix} test todo - 5min low energy'
     add_todo_w_labels(page, todo_5min_low_desc, ['low-energy', '5 minutes'])

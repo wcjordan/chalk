@@ -1,7 +1,6 @@
 import pytest
 
-from helpers.label_helpers import (clear_label_filters, toggle_label_filter,
-                                   toggle_label_filter_section)
+from helpers.label_helpers import (toggle_label_filter, toggle_label_filter_section)
 from helpers.todo_helpers import (add_todo, cancel_edit, edit_todo, find_todo,
                                   find_todos, wait_for_todo,
                                   wait_for_todo_to_disappear)
@@ -9,9 +8,6 @@ from helpers.todo_helpers import (add_todo, cancel_edit, edit_todo, find_todo,
 
 @pytest.mark.parametrize('test_name', ['Todo: Don\'t Filter During Edit'])
 def test_dont_filter_edit(page, todo_prefix):
-    # Remove default filter
-    clear_label_filters(page)
-
     # Add todos
     todo1_description = f'{todo_prefix} todo to edit'
     add_todo(page, todo1_description)
