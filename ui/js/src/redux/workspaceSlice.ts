@@ -51,6 +51,7 @@ export const workContexts: { [key: string]: WorkContext } = {
     displayName: 'Chalk Planning',
     labels: {
       Chalk: FILTER_STATUS.Active,
+      backlog: FILTER_STATUS.Inverted,
       vague: FILTER_STATUS.Active,
     },
   },
