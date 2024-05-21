@@ -4,4 +4,4 @@ django-simple-history==3.5.0
 google-auth-oauthlib==1.2.0
 gunicorn==22.0.0
 psycopg2==2.9.9
-requests==2.31.0
+requests==2.32.0
