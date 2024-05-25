@@ -53,13 +53,13 @@ pipeline {
                                             --cache-to type=registry,ref=${GAR_REPO}/chalk-ui,mode=max \
                                             --cache-from type=registry,ref=${GAR_REPO}/chalk-ui \
                                             --build-arg sentryDsn=\$SENTRY_DSN \
-                                            -t ${GAR_REPO}/chalk-ui:${env.BUILD_TAG} \
+                                            -t ${GAR_REPO}/chalk-ui:${SANITIZED_BUILD_TAG} \
                                             ui
 
                                         docker buildx build --push \
                                             --cache-to type=registry,ref=${GAR_REPO}/chalk-ui,mode=max \
                                             --cache-from type=registry,ref=${GAR_REPO}/chalk-ui \
-                                            -t ${GAR_REPO}/chalk-ui-base:${env.BUILD_TAG} \
+                                            -t ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG} \
                                             --target base \
                                             ui
                                     """
@@ -75,7 +75,7 @@ pipeline {
                                         spec:
                                           containers:
                                           - name: jenkins-worker-ui
-                                            image: ${GAR_REPO}/chalk-ui-base:${env.BUILD_TAG}
+                                            image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
                                             command:
                                             - cat
                                             tty: true
@@ -132,7 +132,7 @@ pipeline {
                                         docker buildx build --push \
                                             --cache-to type=registry,ref=${GAR_REPO}/chalk-server,mode=max \
                                             --cache-from type=registry,ref=${GAR_REPO}/chalk-server \
-                                            -t ${GAR_REPO}/chalk-server:${env.BUILD_TAG} \
+                                            -t ${GAR_REPO}/chalk-server:${SANITIZED_BUILD_TAG} \
                                             server
                                     """
                                 }
@@ -212,7 +212,7 @@ pipeline {
                                     HELM_DEPLOY_NAME = sh (
                                         script: """#!/bin/bash
                                             set -x
-                                            parts=(\$(echo ${env.BUILD_TAG} | tr _- "\n"))
+                                            parts=(\$(echo ${SANITIZED_BUILD_TAG} | tr _- "\n"))
                                             part_len=\$(echo \${#parts[@]})
                                             branch_part=\$(echo "\${parts[@]:2:\$part_len-3}" | tr " " - | head -c 12)
                                             echo \${parts[0]}-\${parts[1]}-\$branch_part-\${parts[-1]}
@@ -228,7 +228,7 @@ pipeline {
                                         --set domain=_ \
                                         --set environment=CI \
                                         --set gcpProject=${env.GCP_PROJECT} \
-                                        --set imageTag=${env.BUILD_TAG} \
+                                        --set imageTag=${SANITIZED_BUILD_TAG} \
                                         --set permittedUsers=flipperkid.tester@gmail.com \
                                         --set server.dbPassword=\$(head -c 32 /dev/urandom | base64) \
                                         --set server.secretKey=\$(head -c 32 /dev/urandom | base64) \
@@ -358,7 +358,7 @@ pipeline {
                                         --set domain=chalk.${env.ROOT_DOMAIN} \
                                         --set environment=PROD \
                                         --set gcpProject=${env.GCP_PROJECT} \
-                                        --set imageTag=${env.BUILD_TAG} \
+                                        --set imageTag=${SANITIZED_BUILD_TAG} \
                                         --set permittedUsers=\$PERMITTED_USERS \
                                         --set server.dbPassword=\$DB_PASSWORD \
                                         --set server.secretKey=\$SECRET_KEY \
