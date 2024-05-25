@@ -11,6 +11,18 @@ pipeline {
         disableConcurrentBuilds()
     }
     stages {
+        stage('Init') {
+            agent {
+                kubernetes {
+                    yamlFile 'jenkins/jenkins-worker-python.yml'
+                }
+            }
+            steps {
+                script {
+                    SANITIZED_BUILD_TAG = env.BUILD_TAG.replaceAll(/[^a-zA-Z0-9_\-]/, '_')
+                }
+            }
+        }
         stage('Build') {
             parallel {
                 stage('UI') {
