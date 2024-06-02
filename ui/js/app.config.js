@@ -30,18 +30,6 @@ export default {
   web: {
     favicon: './assets/favicon.png',
   },
-  hooks: {
-    postPublish: [
-      {
-        file: 'sentry-expo/upload-sourcemaps',
-        config: {
-          organization: 'flipperkid',
-          project: 'chalk-react-native',
-          authToken: process.env.SENTRY_TOKEN,
-        },
-      },
-    ],
-  },
   extra: {
     DEBUG: process.env.DEBUG,
     ENVIRONMENT: process.env.ENVIRONMENT,
@@ -53,7 +41,13 @@ export default {
   },
   plugins: [
     '@react-native-google-signin/google-signin',
-    'sentry-expo',
+    [
+      '@sentry/react-native/expo',
+      {
+        organization: 'flipperkid',
+        project: 'chalk-react-native',
+      }
+    ],
     [
       'expo-build-properties',
       {

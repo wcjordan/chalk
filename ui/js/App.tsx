@@ -3,14 +3,15 @@ import color from 'color';
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
-import { init as sentryInit } from 'sentry-expo';
+import * as Sentry from '@sentry/react-native';
+
 
 import App from './src/App';
 import { setupStore } from './src/redux/store';
 import { getEnvFlags } from './src/helpers';
 
 const envFlags = getEnvFlags();
-sentryInit({
+Sentry.init({
   dsn: envFlags.SENTRY_DSN,
   environment: envFlags.ENVIRONMENT,
   debug: envFlags.DEBUG == 'true',
@@ -46,4 +47,4 @@ const TopApp: React.FC = function () {
     </GestureHandlerRootView>
   );
 };
-export default TopApp;
+export default Sentry.wrap(TopApp);
