@@ -140,6 +140,7 @@ const TodoList: React.FC = function () {
   if (filteredTodos.length > 0) {
     draggableList = (
       <DraggableFlatList
+        activationDistance={1}
         autoscrollSpeed={150}
         containerStyle={styles.scrollView}
         data={filteredTodos}
