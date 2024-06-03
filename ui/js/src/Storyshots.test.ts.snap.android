@@ -2887,6 +2887,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             "type": [Function],
           }
         }
+        activationDistance={1}
         autoscrollSpeed={150}
         collapsable={false}
         containerStyle={
@@ -11048,6 +11049,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
             "type": [Function],
           }
         }
+        activationDistance={1}
         autoscrollSpeed={150}
         collapsable={false}
         containerStyle={
@@ -17080,6 +17082,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
             "type": [Function],
           }
         }
+        activationDistance={1}
         autoscrollSpeed={150}
         collapsable={false}
         containerStyle={
@@ -33834,6 +33837,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
           "type": [Function],
         }
       }
+      activationDistance={1}
       autoscrollSpeed={150}
       collapsable={false}
       containerStyle={
@@ -43133,6 +43137,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
             "type": [Function],
           }
         }
+        activationDistance={1}
         autoscrollSpeed={150}
         collapsable={false}
         containerStyle={
@@ -54472,6 +54477,7 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
           "type": [Function],
         }
       }
+      activationDistance={1}
       autoscrollSpeed={150}
       collapsable={false}
       containerStyle={
