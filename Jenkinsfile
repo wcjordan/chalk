@@ -29,7 +29,7 @@ pipeline {
                     stages {
                         stage('Build UI') {
                             agent {
-                                kubernetes {π
+                                kubernetes {
                                     yamlFile 'jenkins/jenkins-worker-dind.yml'
                                 }
                             }
