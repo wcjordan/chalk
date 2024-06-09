@@ -34,7 +34,7 @@ pipeline {
                                 }
                             }
                             options {
-                                timeout(time: 15, unit: 'MINUTES')
+                                timeout(time: 20, unit: 'MINUTES')
                             }
                             environment {
                                 SENTRY_DSN = credentials('chalk-prod-cd-sentry-dsn')
@@ -280,7 +280,7 @@ pipeline {
                                     string(credentialsId: 'chalk-prod-cd-oauth-refresh-token', variable: 'CHALK_OAUTH_REFRESH_TOKEN'),
                                 ]) {
                                     dir('tests') {
-                                        sh 'pip install "playwright==1.43.0" "pytest==8.2.0"'
+                                        sh 'pip install "playwright==1.44.0" "pytest==8.2.2"'
                                         sh "pytest . --server_domain ${SERVER_IP} --junitxml=playwright_results.xml || true"
 
                                         junit testResults: 'playwright_results.xml'
