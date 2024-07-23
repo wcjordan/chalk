@@ -1,5 +1,5 @@
 # Multistage build for JS artifacts
-FROM node:20 as base
+FROM node:20 AS base
 WORKDIR /js
 
 ENV ENVIRONMENT=prod
@@ -20,7 +20,7 @@ COPY js/package.json .
 RUN yarn --silent install --immutable && yarn cache clean
 
 # Multistage - built app
-FROM base as js_app
+FROM base AS js_app
 
 # Install React app
 COPY js/.prettierrc .
