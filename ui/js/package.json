@@ -91,5 +91,6 @@
   },
   "browserslist": [
     "last 1 chrome version"
-  ]
+  ],
+  "packageManager": "yarn@4.4.0"
 }
