@@ -15,9 +15,9 @@ RUN apt-get update && apt-get install -y \
 RUN npm install -g sharp-cli
 
 # Install React dependencies
-COPY js/yarn.lock .
-COPY js/package.json .
-RUN yarn --silent install --immutable && yarn cache clean
+COPY js/yarn.lock js/package.json js/.yarnrc.yml ./
+COPY js/.yarn/ ./.yarn/
+RUN corepack enable && yarn install --immutable && yarn cache clean
 
 # Multistage - built app
 FROM base AS js_app

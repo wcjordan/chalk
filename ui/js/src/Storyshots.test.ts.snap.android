@@ -49,6 +49,7 @@ exports[`Storyshots Add Todo Default Add Todo 1`] = `
       style={
         [
           {
+            "flexGrow": 1,
             "paddingBottom": 0,
             "paddingTop": 0,
           },
@@ -75,6 +76,7 @@ exports[`Storyshots Add Todo Default Add Todo 1`] = `
         style={
           [
             {
+              "flexGrow": 1,
               "margin": 0,
             },
             {},
@@ -183,6 +185,7 @@ exports[`Storyshots App Layout Default Layout 1`] = `
           style={
             [
               {
+                "flexGrow": 1,
                 "paddingBottom": 0,
                 "paddingTop": 0,
               },
@@ -209,6 +212,7 @@ exports[`Storyshots App Layout Default Layout 1`] = `
             style={
               [
                 {
+                  "flexGrow": 1,
                   "margin": 0,
                 },
                 {},
@@ -1561,6 +1565,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
           style={
             [
               {
+                "flexGrow": 1,
                 "paddingBottom": 0,
                 "paddingTop": 0,
               },
@@ -1587,6 +1592,7 @@ exports[`Storyshots App Layout Label Picker Layout 1`] = `
             style={
               [
                 {
+                  "flexGrow": 1,
                   "margin": 0,
                 },
                 {},
@@ -9723,6 +9729,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
           style={
             [
               {
+                "flexGrow": 1,
                 "paddingBottom": 0,
                 "paddingTop": 0,
               },
@@ -9749,6 +9756,7 @@ exports[`Storyshots App Layout List Todos Layout 1`] = `
             style={
               [
                 {
+                  "flexGrow": 1,
                   "margin": 0,
                 },
                 {},
@@ -15756,6 +15764,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
           style={
             [
               {
+                "flexGrow": 1,
                 "paddingBottom": 0,
                 "paddingTop": 0,
               },
@@ -15782,6 +15791,7 @@ exports[`Storyshots App Layout Notification Layout 1`] = `
             style={
               [
                 {
+                  "flexGrow": 1,
                   "margin": 0,
                 },
                 {},
@@ -29227,6 +29237,7 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
               style={
                 [
                   {
+                    "flexGrow": 1,
                     "paddingBottom": 0,
                     "paddingTop": 0,
                   },
@@ -29253,6 +29264,7 @@ exports[`Storyshots Todo Item Editing Todo 1`] = `
                 style={
                   [
                     {
+                      "flexGrow": 1,
                       "margin": 0,
                     },
                     {},
@@ -32511,6 +32523,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
         style={
           [
             {
+              "flexGrow": 1,
               "paddingBottom": 0,
               "paddingTop": 0,
             },
@@ -32537,6 +32550,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
           style={
             [
               {
+                "flexGrow": 1,
                 "margin": 0,
               },
               {},
@@ -36866,6 +36880,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
                           style={
                             [
                               {
+                                "flexGrow": 1,
                                 "paddingBottom": 0,
                                 "paddingTop": 0,
                               },
@@ -36892,6 +36907,7 @@ exports[`Storyshots Todo List Default Todo List 1`] = `
                             style={
                               [
                                 {
+                                  "flexGrow": 1,
                                   "margin": 0,
                                 },
                                 {},
@@ -41811,6 +41827,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
           style={
             [
               {
+                "flexGrow": 1,
                 "paddingBottom": 0,
                 "paddingTop": 0,
               },
@@ -41837,6 +41854,7 @@ exports[`Storyshots Todo List Label Picker Overlay 1`] = `
             style={
               [
                 {
+                  "flexGrow": 1,
                   "margin": 0,
                 },
                 {},
@@ -53151,6 +53169,7 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
         style={
           [
             {
+              "flexGrow": 1,
               "paddingBottom": 0,
               "paddingTop": 0,
             },
@@ -53177,6 +53196,7 @@ exports[`Storyshots Todo List Loading Indicator 1`] = `
           style={
             [
               {
+                "flexGrow": 1,
                 "margin": 0,
               },
               {},
