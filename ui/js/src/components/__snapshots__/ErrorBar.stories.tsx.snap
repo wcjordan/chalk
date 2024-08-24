@@ -1,18 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Error Bar DefaultErrorBar smoke-test 1`] = `
-<div class="css-view-175oi2r r-flex-13awgt0">
-  <div class="css-view-175oi2r r-flexDirection-18u37iz r-flexWrap-1w6e6rj r-height-1pi2tsx r-padddingBottom-10q4ly9 r-paddingTop-u04ygo">
-    <div class="css-view-175oi2r r-bottom-1p0dtai r-position-u8s1d r-width-13qz1uu r-pointerEvents-12vffkv"
+<div class="css-175oi2r r-13awgt0">
+  <div class="css-175oi2r r-18u37iz r-1w6e6rj r-1pi2tsx r-10q4ly9 r-u04ygo">
+    <div class="css-175oi2r r-1p0dtai r-u8s1d r-13qz1uu r-12vffkv"
          style="padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"
     >
       <div aria-live="polite"
-           class="css-view-175oi2r r-flexDirection-18u37iz r-justifyContent-1wtj0ep r-margin-hwh8t1 r-minHeight-1pl7oy7 r-pointerEvents-12vffkv"
+           class="css-175oi2r r-18u37iz r-1wtj0ep r-hwh8t1 r-1pl7oy7 r-12vffkv"
            data-testid="surface"
-           style="box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px; background-color: rgb(49, 48, 51); border-radius: 4px; opacity: 0.191037; transform: scale(0.919104);"
+           style="box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px; background-color: rgb(49, 48, 51); border-radius: 4px; opacity: 1; transform: scale(1);"
       >
         <div dir="auto"
-             class="css-text-146c3p1 r-textAlign-fdjqy7 r-flex-13awgt0 r-marginBlock-1apnidv r-marginInline-1xpp3t0"
+             class="css-146c3p1 r-fdjqy7 r-13awgt0 r-1apnidv r-1xpp3t0"
              style="direction: ltr; font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0.25px; font-weight: 400; line-height: 20px; font-size: 14px; color: rgb(244, 239, 244);"
         >
           Snacks!
@@ -24,25 +24,25 @@ exports[`Error Bar DefaultErrorBar smoke-test 1`] = `
 `;
 
 exports[`Error Bar HiddenErrorBar smoke-test 1`] = `
-<div class="css-view-175oi2r r-flex-13awgt0">
-  <div class="css-view-175oi2r r-flexDirection-18u37iz r-flexWrap-1w6e6rj r-height-1pi2tsx r-padddingBottom-10q4ly9 r-paddingTop-u04ygo">
+<div class="css-175oi2r r-13awgt0">
+  <div class="css-175oi2r r-18u37iz r-1w6e6rj r-1pi2tsx r-10q4ly9 r-u04ygo">
   </div>
 </div>
 `;
 
 exports[`Error Bar PermanentErrorBar smoke-test 1`] = `
-<div class="css-view-175oi2r r-flex-13awgt0">
-  <div class="css-view-175oi2r r-flexDirection-18u37iz r-flexWrap-1w6e6rj r-height-1pi2tsx r-padddingBottom-10q4ly9 r-paddingTop-u04ygo">
-    <div class="css-view-175oi2r r-bottom-1p0dtai r-position-u8s1d r-width-13qz1uu r-pointerEvents-12vffkv"
+<div class="css-175oi2r r-13awgt0">
+  <div class="css-175oi2r r-18u37iz r-1w6e6rj r-1pi2tsx r-10q4ly9 r-u04ygo">
+    <div class="css-175oi2r r-1p0dtai r-u8s1d r-13qz1uu r-12vffkv"
          style="padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"
     >
       <div aria-live="polite"
-           class="css-view-175oi2r r-flexDirection-18u37iz r-justifyContent-1wtj0ep r-margin-hwh8t1 r-minHeight-1pl7oy7 r-pointerEvents-12vffkv"
+           class="css-175oi2r r-18u37iz r-1wtj0ep r-hwh8t1 r-1pl7oy7 r-12vffkv"
            data-testid="surface"
            style="box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px; background-color: rgb(49, 48, 51); border-radius: 4px; opacity: 1; transform: scale(1);"
       >
         <div dir="auto"
-             class="css-text-146c3p1 r-textAlign-fdjqy7 r-flex-13awgt0 r-marginBlock-1apnidv r-marginInline-1xpp3t0"
+             class="css-146c3p1 r-fdjqy7 r-13awgt0 r-1apnidv r-1xpp3t0"
              style="direction: ltr; font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0.25px; font-weight: 400; line-height: 20px; font-size: 14px; color: rgb(244, 239, 244);"
         >
           Permanent snacks!

@@ -21,10 +21,12 @@ build:
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
 			--build-arg sentryDsn=$$SENTRY_DSN \
+			--target js_app_prod \
 			-t $(UI_IMAGE):local-latest ui'
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
 		DOCKER_BUILDKIT=1 docker build \
-			--target base \
+			--build-arg sentryDsn=$$SENTRY_DSN \
+			--target js_test_env \
 			-t $(UI_IMAGE_BASE):local-latest ui'
 
 # Test & lint

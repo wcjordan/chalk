@@ -2,25 +2,25 @@
 
 exports[`Loading Page DefaultLoadingPage smoke-test 1`] = `
 <div role="progressbar"
-     class="css-view-175oi2r r-alignItems-1awozwy r-justifyContent-1777fci r-flex-13awgt0 r-margin-ywje51"
+     class="css-175oi2r r-1awozwy r-1777fci r-13awgt0 r-ywje51"
 >
-  <div class="css-view-175oi2r"
+  <div class="css-175oi2r"
        style="width: 48px; height: 48px; opacity: 1;"
   >
-    <div class="css-view-175oi2r r-alignItems-1awozwy r-bottom-1p0dtai r-justifyContent-1777fci r-left-1d2f490 r-position-u8s1d r-right-zchlnj r-top-ipm5af">
-      <div class="css-view-175oi2r"
-           style="width: 48px; height: 48px; transform: rotate(55.2deg);"
+    <div class="css-175oi2r r-1awozwy r-1p0dtai r-1777fci r-1d2f490 r-u8s1d r-zchlnj r-ipm5af">
+      <div class="css-175oi2r"
+           style="width: 48px; height: 48px; transform: rotate(mocked_deg);"
       >
-        <div class="css-view-175oi2r"
+        <div class="css-175oi2r"
              style="width: 48px; height: 24px; overflow: hidden;"
         >
-          <div class="css-view-175oi2r"
-               style="width: 48px; height: 48px; transform: translateY(0px) rotate(-164.749deg);"
+          <div class="css-175oi2r"
+               style="width: 48px; height: 48px; transform: translateY(0px) rotate(mocked_deg);"
           >
-            <div class="css-view-175oi2r"
+            <div class="css-175oi2r"
                  style="width: 48px; height: 24px; overflow: hidden;"
             >
-              <div class="css-view-175oi2r"
+              <div class="css-175oi2r"
                    style="width: 48px; height: 48px; border-color: rgb(103, 80, 164); border-width: 4.8px; border-radius: 24px;"
               >
               </div>
@@ -29,20 +29,20 @@ exports[`Loading Page DefaultLoadingPage smoke-test 1`] = `
         </div>
       </div>
     </div>
-    <div class="css-view-175oi2r r-alignItems-1awozwy r-bottom-1p0dtai r-justifyContent-1777fci r-left-1d2f490 r-position-u8s1d r-right-zchlnj r-top-ipm5af">
-      <div class="css-view-175oi2r"
-           style="width: 48px; height: 48px; transform: rotate(55.2deg);"
+    <div class="css-175oi2r r-1awozwy r-1p0dtai r-1777fci r-1d2f490 r-u8s1d r-zchlnj r-ipm5af">
+      <div class="css-175oi2r"
+           style="width: 48px; height: 48px; transform: rotate(mocked_deg);"
       >
-        <div class="css-view-175oi2r"
+        <div class="css-175oi2r"
              style="width: 48px; height: 24px; overflow: hidden; top: 24px;"
         >
-          <div class="css-view-175oi2r"
-               style="width: 48px; height: 48px; transform: translateY(-24px) rotate(344.749deg);"
+          <div class="css-175oi2r"
+               style="width: 48px; height: 48px; transform: translateY(-24px) rotate(mocked_deg);"
           >
-            <div class="css-view-175oi2r"
+            <div class="css-175oi2r"
                  style="width: 48px; height: 24px; overflow: hidden;"
             >
-              <div class="css-view-175oi2r"
+              <div class="css-175oi2r"
                    style="width: 48px; height: 48px; border-color: rgb(103, 80, 164); border-width: 4.8px; border-radius: 24px;"
               >
               </div>

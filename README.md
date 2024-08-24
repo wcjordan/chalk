@@ -1,5 +1,10 @@
 # Chalk - Todo app
 
+## Install tools for dev env
+On Mac:  
+`brew install nginx`  
+`brew install coreutils`  
+
 ## Env Setup
 Copy .env_default to .env & .prod.env  
 
@@ -30,10 +35,6 @@ Delete BROWSERSTACK_USERNAME & BROWSERSTACK_ACCESS_KEY in prod.env
 # CI OAuth config
 See the OAuth Setup section below  
 Delete CHALK_OAUTH_REFRESH_TOKEN in prod.env  
-
-Install `nginx`  
-(which the dev env now requires)  
-On Mac: `brew install nginx`
 
 ## Allocate static IPs & create DNS entries
 Explore doing this w/ Config Connector once [#101](https://github.com/GoogleCloudPlatform/k8s-config-connector/issues/101) is resolved.

@@ -12,60 +12,80 @@ endif
 IMAGE_REPO = us-east4-docker.pkg.dev/$(GCP_PROJECT)/default-gar
 UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
 
-# Test w/ Jest
+.PHONY: run-test-container
+run-test-container:
+	echo $(TEST_ARGS)
+	docker run --rm -t \
+		$(DOCKER_ARGS) \
+		-v $(CURDIR)/Makefile:/Makefile \
+		-v $(CURDIR)/js/__mocks__:/js/__mocks__ \
+		-v $(CURDIR)/js/.eslintrc:/js/.eslintrc \
+		-v $(CURDIR)/js/.storybook:/js/.storybook \
+		-v $(CURDIR)/js/assets:/js/assets \
+		-v $(CURDIR)/js/babel.config.js:/js/babel.config.js \
+		-v $(CURDIR)/js/jest.config.js:/js/jest.config.js \
+		-v $(CURDIR)/js/src:/js/src \
+		-v $(CURDIR)/js/tsconfig.json:/js/tsconfig.json \
+		$(UI_IMAGE_BASE):local-latest \
+		$(TEST_CMD) TEST_ARGS="$(TEST_ARGS)"
+
+.PHONY: containerized-test
+containerized-test:
+	make run-test-container TEST_CMD="make test" TEST_ARGS="" DOCKER_ARGS="-w /"
+	make test-storybook
+
+# Targets to be run instide the test container
 .PHONY: test
 test:
 	# Lint
 	cd js; yarn eslint --max-warnings=0 --ext='js,jsx,ts,tsx' .
 	# Typecheck
 	cd js; yarn tsc
-	# Unit & snapshot tests for UI
-	cd js; JEST_JUNIT_CLASSNAME="ui_unit_tests.{classname} {title}" yarn jest
+	# Unit tests
+	make test-jest TEST_ARGS=""
 
-.PHONY: containerized-test
-containerized-test:
-	docker run --rm -t -w / \
-		-v $(CURDIR)/Makefile:/Makefile \
-		-v $(CURDIR)/js/src:/js/src \
-		-v $(CURDIR)/js/assets:/js/assets \
-		-v $(CURDIR)/js/.eslintrc:/js/.eslintrc \
-		-v $(CURDIR)/js/babel.config.js:/js/babel.config.js \
-		-v $(CURDIR)/js/jest.config.js:/js/jest.config.js \
-		-v $(CURDIR)/js/tsconfig.json:/js/tsconfig.json \
-		-v $(CURDIR)/js/.storybook:/js/.storybook \
-		-v $(CURDIR)/js/__mocks__:/js/__mocks__ \
-		$(UI_IMAGE_BASE):local-latest \
-		make test
+.PHONY: test-jest
+test-jest:
+	cd js; JEST_JUNIT_CLASSNAME="ui_unit_tests.{classname} {title}" yarn jest $(TEST_ARGS)
+
+.PHONY: test-storybook-inner
+test-storybook-inner:
+	cd js; npx test-storybook --no-index-json --url http://storybook-test-instance:9009 $(TEST_ARGS)
+
+# Storybook tests
+.PHONY: test-storybook
+test-storybook:
+	# Create network
+	docker network create storybook-network
+
+	# NOTE stderr is suppressed here to avoid confusing messages from SIGKILL when finished.  Remove if debugging
+	timeout 180 make run-test-container TEST_CMD="npx http-server --silent -p 9009 /js/storybook-static" TEST_ARGS="" \
+		DOCKER_ARGS="-p 9009 --network storybook-network --name storybook-test-instance" 2> /dev/null &
+	sleep 10
+
+	# Capture output, but stop the storybook container before exiting with the result
+	make run-test-container TEST_CMD="make test-storybook-inner" TEST_ARGS="$(TEST_ARGS)" \
+		DOCKER_ARGS="-w / --network storybook-network" || \
+		RESULT=`echo $$?`; \
+		docker container stop --signal SIGKILL storybook-test-instance; \
+		docker network rm storybook-network; \
+		exit $$RESULT
+
+.PHONY: storybook
+storybook:
+	make run-test-container TEST_CMD="yarn run storybook" TEST_ARGS="" \
+		DOCKER_ARGS="-p 127.0.0.1:9009:9009 -a stdin -a stdout -i"
+
+# Update snapshot tests
+.PHONY: update-snapshots
+update-snapshots:
+	make run-test-container TEST_CMD="make test-jest" TEST_ARGS="--updateSnapshot" DOCKER_ARGS="-w /"
+	make test-storybook TEST_ARGS="--updateSnapshot"
 
 # ESLint & Prettier JS formatting
 .PHONY: format
 format:
 	cd js; npx lint-staged
-
-.PHONY: storybook
-storybook:
-	docker run --rm -p 127.0.0.1:9009:9009 \
-		-a stdin -a stdout -i -t \
-		-v $(PWD)/js/src:/js/src \
-		-v $(PWD)/js/__mocks__:/js/__mocks__ \
-		-v $(PWD)/js/assets:/js/assets \
-		-v $(PWD)/js/babel.config.js:/js/babel.config.js \
-		-v $(PWD)/js/.storybook:/js/.storybook \
-		$(UI_IMAGE_BASE):local-latest \
-		yarn run storybook
-
-# Update snapshot tests
-.PHONY: update-snapshots
-update-snapshots:
-	docker run --rm -t \
-		-v $(PWD)/js/src:/js/src \
-		-v $(PWD)/js/assets:/js/assets \
-		-v $(PWD)/js/babel.config.js:/js/babel.config.js \
-		-v $(PWD)/js/jest.config.js:/js/jest.config.js \
-		-v $(PWD)/js/.storybook:/js/.storybook \
-		-v $(PWD)/js/__mocks__:/js/__mocks__ \
-		$(UI_IMAGE_BASE):local-latest \
-		yarn jest -u
 
 # Fix import ordering
 .PHONY: fix-imports

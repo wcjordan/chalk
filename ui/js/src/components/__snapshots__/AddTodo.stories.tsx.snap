@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Add Todo DefaultAddTodo smoke-test 1`] = `
-<div class="css-view-175oi2r r-maxHeight-1kly57o r-width-13qz1uu">
-  <div class="css-view-175oi2r"
+<div class="css-175oi2r r-1kly57o r-13qz1uu">
+  <div class="css-175oi2r"
        style="background-color: rgb(231, 224, 236); border-top-left-radius: 4px; border-top-right-radius: 4px;"
   >
-    <div class="css-view-175oi2r r-bottom-1p0dtai r-left-1d2f490 r-position-u8s1d r-right-zchlnj r-zIndex-184en5c r-height-109y4c4"
+    <div class="css-175oi2r r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-184en5c r-109y4c4"
          data-testid="text-input-underline"
          style="background-color: rgb(73, 69, 79); transform: scaleY(0.5);"
     >
     </div>
-    <div class="css-view-175oi2r r-flexGrow-16y2uox r-paddingBottom-1mdbw0j r-paddingTop-wk8lta"
+    <div class="css-175oi2r r-16y2uox r-1mdbw0j r-wk8lta"
          style="min-height: 56px;"
     >
       <textarea placeholder="Add a new todo..."
@@ -21,7 +21,7 @@ exports[`Add Todo DefaultAddTodo smoke-test 1`] = `
                 rows="3"
                 spellcheck="true"
                 virtualkeyboardpolicy="auto"
-                class="css-textinput-11aywtz r-placeholderTextColor-6taxm2 r-flexGrow-16y2uox r-margin-crgep1 r-fontFamily-1x2decy r-paddingBottom-xd6kpl r-paddingLeft-1m04atk r-paddingRight-1pyaxff r-paddingTop-tskmnb"
+                class="css-11aywtz r-6taxm2 r-16y2uox r-crgep1 r-1x2decy r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb"
                 data-testid="add-todo-input"
                 style="--placeholderTextColor: rgba(73, 69, 79, 1); letter-spacing: 0.15px; line-height: 19.2px; font-size: 16px; color: rgb(28, 27, 31); vertical-align: top; text-align: left; min-width: 65px; outline: none;"
       >

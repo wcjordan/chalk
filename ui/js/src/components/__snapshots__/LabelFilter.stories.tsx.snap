@@ -1,31 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
-<div class="css-view-175oi2r r-backgroundColor-78d8zt r-flexDirection-18u37iz r-flexWrap-1w6e6rj r-width-13qz1uu"
+<div class="css-175oi2r r-78d8zt r-18u37iz r-1w6e6rj r-13qz1uu"
      data-testid="label-filter"
 >
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-1iizze8 r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
        data-testid="chip-active-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip-active"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
-        <div class="css-view-175oi2r r-alignSelf-1kihuf0 r-padding-tuq35u r-paddingLeft-1m04atk r-paddingRight-9aemit">
+        <div class="css-175oi2r r-1kihuf0 r-tuq35u r-1m04atk r-9aemit">
           <div dir="auto"
-               class="css-text-146c3p1"
+               role="img"
+               tabindex="-1"
+               class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+               style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
           >
+            󰄬
           </div>
         </div>
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           low-energy
@@ -33,22 +37,22 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-78d8zt r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           high-energy
@@ -56,22 +60,22 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-78d8zt r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           vague
@@ -79,28 +83,32 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-11oht4w r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-11oht4w r-1bq2mok r-105ug2t"
        data-testid="chip-inverted-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip-inverted"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
-        <div class="css-view-175oi2r r-alignSelf-1kihuf0 r-padding-tuq35u r-paddingLeft-1m04atk r-paddingRight-9aemit">
+        <div class="css-175oi2r r-1kihuf0 r-tuq35u r-1m04atk r-9aemit">
           <div dir="auto"
-               class="css-text-146c3p1"
+               role="img"
+               tabindex="-1"
+               class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+               style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
           >
+            󰄬
           </div>
         </div>
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           work
@@ -108,28 +116,32 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-1iizze8 r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
        data-testid="chip-active-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip-active"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
-        <div class="css-view-175oi2r r-alignSelf-1kihuf0 r-padding-tuq35u r-paddingLeft-1m04atk r-paddingRight-9aemit">
+        <div class="css-175oi2r r-1kihuf0 r-tuq35u r-1m04atk r-9aemit">
           <div dir="auto"
-               class="css-text-146c3p1"
+               role="img"
+               tabindex="-1"
+               class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+               style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
           >
+            󰄬
           </div>
         </div>
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           home
@@ -137,22 +149,22 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-78d8zt r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           errand
@@ -160,28 +172,32 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-1iizze8 r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
        data-testid="chip-active-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip-active"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
-        <div class="css-view-175oi2r r-alignSelf-1kihuf0 r-padding-tuq35u r-paddingLeft-1m04atk r-paddingRight-9aemit">
+        <div class="css-175oi2r r-1kihuf0 r-tuq35u r-1m04atk r-9aemit">
           <div dir="auto"
-               class="css-text-146c3p1"
+               role="img"
+               tabindex="-1"
+               class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+               style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
           >
+            󰄬
           </div>
         </div>
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           mobile
@@ -189,22 +205,22 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-78d8zt r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           desktop
@@ -212,22 +228,22 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-78d8zt r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           email
@@ -235,22 +251,22 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-78d8zt r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           urgent
@@ -258,28 +274,32 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-1iizze8 r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
        data-testid="chip-active-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip-active"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
-        <div class="css-view-175oi2r r-alignSelf-1kihuf0 r-padding-tuq35u r-paddingLeft-1m04atk r-paddingRight-9aemit">
+        <div class="css-175oi2r r-1kihuf0 r-tuq35u r-1m04atk r-9aemit">
           <div dir="auto"
-               class="css-text-146c3p1"
+               role="img"
+               tabindex="-1"
+               class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+               style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
           >
+            󰄬
           </div>
         </div>
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           5 minutes
@@ -287,22 +307,22 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-78d8zt r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           25 minutes
@@ -310,22 +330,22 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-78d8zt r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           60 minutes
@@ -333,22 +353,22 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-borderStyle-1phboty r-flexDirection-18u37iz r-borderWidth-1yadl64 r-backgroundColor-78d8zt r-margin-1bq2mok r-pointerEvents-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-view-175oi2r r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-width-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-view-175oi2r r-alignItems-1awozwy r-flexDirection-18u37iz r-position-bnwqim r-paddingLeft-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
-             class="css-text-146c3p1 r-maxWidth-dnmrzs r-overflow-1udh08x r-textOverflow-1udbk01 r-whiteSpace-3s2u2q r-wordWrap-1iln25a r-textAlign-fdjqy7 r-marginBlock-ws14 r-verticalAlign-9iso6 r-fontFamily-1x2decy r-marginBottom-15zivkp r-marginLeft-1jkjb r-marginRight-1kb76zh r-marginTop-14gqq1x r-userSelect-lrvibr"
+             class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
              style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
         >
           Unlabeled
@@ -356,12 +376,12 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-view-175oi2r r-flexGrow-16y2uox">
+  <div class="css-175oi2r r-16y2uox">
   </div>
   <div dir="auto"
-       class="css-text-146c3p1 r-paddingRight-1pyaxff"
+       class="css-146c3p1 r-1pyaxff"
   >
-    <div class="css-view-175oi2r r-display-xoduu5 r-overflow-1udh08x r-margin-crgep1 r-pointerEvents-105ug2t"
+    <div class="css-175oi2r r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
          data-testid="icon-button-container"
          style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
     >
@@ -369,42 +389,57 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
               disabled
               role="button"
               tabindex="-1"
-              class="css-view-175oi2r r-display-xoduu5 r-pointerEvents-12vffkv r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-alignItems-1awozwy r-flexGrow-16y2uox r-justifyContent-1777fci"
+              class="css-175oi2r r-xoduu5 r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
               data-testid="icon-button"
               type="button"
               style="border-radius: 18px;"
       >
-        <span class="css-textHasAncestor-1jxf684">
+        <span role="img"
+              tabindex="-1"
+              class="css-1jxf684 r-1niwhzg r-lrvibr r-633pao"
+              style="font-size: 20px; color: rgb(0, 0, 0); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+        >
+          󰈲
         </span>
       </button>
     </div>
-    <div class="css-view-175oi2r r-display-xoduu5 r-overflow-1udh08x r-margin-crgep1 r-pointerEvents-105ug2t"
+    <div class="css-175oi2r r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
          data-testid="show-labels-container"
          style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
     >
       <button role="button"
               tabindex="0"
-              class="css-view-175oi2r r-display-xoduu5 r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-alignItems-1awozwy r-flexGrow-16y2uox r-justifyContent-1777fci"
+              class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
               data-testid="show-labels"
               type="button"
               style="border-radius: 18px;"
       >
-        <span class="css-textHasAncestor-1jxf684">
+        <span role="img"
+              tabindex="-1"
+              class="css-1jxf684 r-1niwhzg r-lrvibr r-633pao"
+              style="font-size: 20px; color: rgb(0, 0, 0); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+        >
+          󱋷
         </span>
       </button>
     </div>
-    <div class="css-view-175oi2r r-display-xoduu5 r-overflow-1udh08x r-margin-crgep1 r-pointerEvents-105ug2t"
+    <div class="css-175oi2r r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
          data-testid="show-completed-todos-container"
          style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
     >
       <button role="button"
               tabindex="0"
-              class="css-view-175oi2r r-display-xoduu5 r-touchAction-1otgn73 r-cursor-1loqt21 r-position-bnwqim r-transition-ctqt5z r-overflow-1udh08x r-alignItems-1awozwy r-flexGrow-16y2uox r-justifyContent-1777fci"
+              class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
               data-testid="show-completed-todos"
               type="button"
               style="border-radius: 18px;"
       >
-        <span class="css-textHasAncestor-1jxf684">
+        <span role="img"
+              tabindex="-1"
+              class="css-1jxf684 r-1niwhzg r-lrvibr r-633pao"
+              style="font-size: 20px; color: rgb(0, 0, 0); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+        >
+          󰄱
         </span>
       </button>
     </div>
