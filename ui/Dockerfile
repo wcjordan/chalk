@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
   build-essential \
   && rm -rf /var/lib/apt/lists/*
 RUN npm install -g sharp-cli
+# RUN npx playwright install
 
 # Install React dependencies
 COPY js/yarn.lock js/package.json js/.yarnrc.yml ./
