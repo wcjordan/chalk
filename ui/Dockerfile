@@ -26,6 +26,7 @@ RUN npx playwright install && npx playwright install-deps
 RUN groupadd jenkins && \
   useradd -m -s /bin/bash jenkins -g jenkins
 RUN chown jenkins:jenkins /workspace
+RUN chown jenkins:jenkins /workspace/js
 USER jenkins
 WORKDIR /workspace/js
 
@@ -35,8 +36,8 @@ COPY js/.storybook/ ./.storybook/
 COPY js/assets/ ./assets/
 COPY js/__mocks__/ ./__mocks__/
 COPY js/src/ ./src/
-WORKDIR /workspace
 RUN npx storybook build --test --quiet
+WORKDIR /workspace
 
 # Multistage - built app
 FROM base AS js_app_build
