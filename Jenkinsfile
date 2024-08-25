@@ -111,10 +111,6 @@ pipeline {
                                         apiVersion: v1
                                         kind: Pod
                                         spec:
-                                          securityContext:
-                                            # Use UID 1000 to match jenkins user in inbound-agent image
-                                            # https://plugins.jenkins.io/kubernetes/#plugin-content-pipeline-sh-step-hangs-when-multiple-containers-are-used
-                                            runAsUser: 1000
                                           containers:
                                           - name: jenkins-worker-storybook
                                             image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
@@ -152,6 +148,8 @@ pipeline {
                             steps {
                                 container('jenkins-worker-storybook-snapshots') {
                                     dir('/workspace/') {
+                                        sh 'id'
+                                        sh 'id -u jenkins'
                                         sh 'pwd'
                                         sh 'ls -la'
                                         sh 'ls -la js'
