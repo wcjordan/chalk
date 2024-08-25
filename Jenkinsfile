@@ -153,11 +153,11 @@ pipeline {
                                     sh 'ls -la /workspace'
                                     sh 'ls -la /workspace/js'
 
+                                    sh 'cd /workspace && ls -la'
+                                    sh 'cd /workspace && ls -la js'
+                                    sh 'cd /workspace && make test-storybook-inner TEST_ARGS="--url http://127.0.0.1:9009"'
                                     dir('/workspace/') {
-                                        sh 'ls -la'
-                                        sh 'ls -la js'
-                                        sh 'make test-storybook-inner TEST_ARGS="--url http://127.0.0.1:9009"'
-                                        sh 'ls -la js'
+                                        sh 'cd /workspace && ls -la js'
                                         junit testResults: 'js/junit.xml'
                                     }
                                 }
