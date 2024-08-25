@@ -50,7 +50,7 @@ test-jest:
 
 .PHONY: test-storybook-inner
 test-storybook-inner:
-	cd js; JEST_JUNIT_CLASSNAME="ui_storybook_tests.{classname} {title}" npx test-storybook --no-index-json $(TEST_ARGS)
+	cd js; npx test-storybook $(TEST_ARGS)
 
 # Storybook tests
 .PHONY: test-storybook
