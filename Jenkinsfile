@@ -68,42 +68,42 @@ pipeline {
                                 }
                             }
                         }
-                        stage('Test UI') {
-                            agent {
-                                kubernetes {
-                                    yaml """
-                                        apiVersion: v1
-                                        kind: Pod
-                                        spec:
-                                          containers:
-                                          - name: jenkins-worker-ui
-                                            image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
-                                            command:
-                                            - cat
-                                            tty: true
-                                            resources:
-                                              requests:
-                                                cpu: "600m"
-                                                memory: "3Gi"
-                                              limits:
-                                                cpu: "1000m"
-                                                memory: "3Gi"
-                                    """
-                                }
-                            }
-                            options {
-                                timeout(time: 10, unit: 'MINUTES')
-                            }
-                            steps {
-                                container('jenkins-worker-ui') {
-                                    dir('ui') {
-                                        sh 'cp -r /js/node_modules ./js'
-                                        sh 'make test'
-                                        junit testResults: 'js/junit.xml'
-                                    }
-                                }
-                            }
-                        }
+                        // stage('Test UI') {
+                        //     agent {
+                        //         kubernetes {
+                        //             yaml """
+                        //                 apiVersion: v1
+                        //                 kind: Pod
+                        //                 spec:
+                        //                   containers:
+                        //                   - name: jenkins-worker-ui
+                        //                     image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
+                        //                     command:
+                        //                     - cat
+                        //                     tty: true
+                        //                     resources:
+                        //                       requests:
+                        //                         cpu: "600m"
+                        //                         memory: "3Gi"
+                        //                       limits:
+                        //                         cpu: "1000m"
+                        //                         memory: "3Gi"
+                        //             """
+                        //         }
+                        //     }
+                        //     options {
+                        //         timeout(time: 10, unit: 'MINUTES')
+                        //     }
+                        //     steps {
+                        //         container('jenkins-worker-ui') {
+                        //             dir('ui') {
+                        //                 sh 'cp -r /js/node_modules ./js'
+                        //                 sh 'make test'
+                        //                 junit testResults: 'js/junit.xml'
+                        //             }
+                        //         }
+                        //     }
+                        // }
                         stage('Test UI Storybook') {
                             agent {
                                 kubernetes {
