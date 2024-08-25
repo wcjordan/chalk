@@ -114,8 +114,14 @@ pipeline {
                                           containers:
                                           - name: jenkins-worker-storybook
                                             image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
-                                            command:
-                                            - cat
+                                            command: ["/bin/sh", "-c"]
+                                            args:
+                                            - echo starting;
+                                              ls -la;
+                                              ls -la /js;
+                                              echo here;
+                                              npx http-server -p 9009 /js/storybook-static;
+                                              echo done;
                                             tty: true
                                             ports:
                                             - containerPort: 9009
