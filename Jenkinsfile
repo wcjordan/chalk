@@ -147,7 +147,7 @@ pipeline {
                             }
                             steps {
                                 container('jenkins-worker-storybook-snapshots') {
-                                    dir('/') {
+                                    dir('/js') {
                                         sh 'pwd'
                                         sh 'ls -la'
                                         sh 'ls -la js'
