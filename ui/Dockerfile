@@ -21,12 +21,13 @@ RUN corepack enable && yarn install --immutable && yarn cache clean
 
 # Multistage - test container
 FROM base AS js_test_env
+RUN npx playwright install && npx playwright install-deps
+
 RUN groupadd jenkins && \
   useradd -m -s /bin/bash jenkins -g jenkins
 RUN chown jenkins:jenkins -R /workspace
 USER jenkins
 
-RUN npx playwright install && npx playwright install-deps
 
 # Build storybook for testing
 COPY js/babel.config.js js/App.tsx ./
