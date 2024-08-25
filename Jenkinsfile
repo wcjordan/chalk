@@ -147,10 +147,11 @@ pipeline {
                             }
                             steps {
                                 container('jenkins-worker-storybook-snapshots') {
+                                    sh 'id'
+                                    sh 'id -u jenkins'
+                                    sh 'pwd'
+
                                     dir('/workspace/') {
-                                        sh 'id'
-                                        sh 'id -u jenkins'
-                                        sh 'pwd'
                                         sh 'ls -la'
                                         sh 'ls -la js'
                                         sh 'make test-storybook-inner TEST_ARGS="--url http://127.0.0.1:9009"'
