@@ -1,6 +1,6 @@
 # Multistage build for JS artifacts
 FROM node:20 AS base
-WORKDIR /js
+WORKDIR /workspace/js
 
 ENV ENVIRONMENT=prod
 ENV DEBUG=false
@@ -21,9 +21,9 @@ RUN corepack enable && yarn install --immutable && yarn cache clean
 
 # Multistage - test container
 FROM base AS js_test_env
-RUN groupadd jenkins \
-        && useradd -m -s /bin/bash jenkins -g jenkins
-RUN chown jenkins:jenkins -R /
+RUN groupadd jenkins && \
+  useradd -m -s /bin/bash jenkins -g jenkins
+RUN chown jenkins:jenkins -R /workspace
 USER jenkins
 
 RUN npx playwright install && npx playwright install-deps
@@ -35,6 +35,7 @@ COPY js/assets/ ./assets/
 COPY js/__mocks__/ ./__mocks__/
 COPY js/src/ ./src/
 RUN npx storybook build --test --quiet
+WORKDIR /workspace
 
 # Multistage - built app
 FROM base AS js_app_build
@@ -52,6 +53,6 @@ RUN yarn build
 FROM nginx:alpine AS js_app_prod
 
 # Copy over built JS files from React app
-COPY --from=js_app_build /js/dist/ /www/client/
+COPY --from=js_app_build /workspace/js/dist/ /www/client/
 
 CMD ["nginx", "-g", "daemon off;"]

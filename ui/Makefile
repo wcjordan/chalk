@@ -17,21 +17,21 @@ run-test-container:
 	echo $(TEST_ARGS)
 	docker run --rm -t \
 		$(DOCKER_ARGS) \
-		-v $(CURDIR)/Makefile:/Makefile \
-		-v $(CURDIR)/js/__mocks__:/js/__mocks__ \
-		-v $(CURDIR)/js/.eslintrc:/js/.eslintrc \
-		-v $(CURDIR)/js/.storybook:/js/.storybook \
-		-v $(CURDIR)/js/assets:/js/assets \
-		-v $(CURDIR)/js/babel.config.js:/js/babel.config.js \
-		-v $(CURDIR)/js/jest.config.js:/js/jest.config.js \
-		-v $(CURDIR)/js/src:/js/src \
-		-v $(CURDIR)/js/tsconfig.json:/js/tsconfig.json \
+		-v $(CURDIR)/Makefile:/workspace/Makefile \
+		-v $(CURDIR)/js/__mocks__:/workspace/js/__mocks__ \
+		-v $(CURDIR)/js/.eslintrc:/workspace/js/.eslintrc \
+		-v $(CURDIR)/js/.storybook:/workspace/js/.storybook \
+		-v $(CURDIR)/js/assets:/workspace/js/assets \
+		-v $(CURDIR)/js/babel.config.js:/jworkspace/s/babel.config.js \
+		-v $(CURDIR)/js/jest.config.js:/workspace/js/jest.config.js \
+		-v $(CURDIR)/js/src:/workspace/js/src \
+		-v $(CURDIR)/js/tsconfig.json:/workspace/js/tsconfig.json \
 		$(UI_IMAGE_BASE):local-latest \
 		$(TEST_CMD) TEST_ARGS="$(TEST_ARGS)"
 
 .PHONY: containerized-test
 containerized-test:
-	make run-test-container TEST_CMD="make test" TEST_ARGS="" DOCKER_ARGS="-w /"
+	make run-test-container TEST_CMD="make test" TEST_ARGS="" DOCKER_ARGS=""
 	make test-storybook
 
 # Targets to be run instide the test container
@@ -59,14 +59,14 @@ test-storybook:
 	docker network create storybook-network
 
 	# NOTE stderr is suppressed here to avoid confusing messages from SIGKILL when finished.  Remove if debugging
-	timeout 180 make run-test-container TEST_CMD="npx http-server --silent -p 9009 /js/storybook-static" TEST_ARGS="" \
-		DOCKER_ARGS="-w / -p 9009 --network storybook-network --name storybook-test-instance" 2> /dev/null &
+	timeout 180 make run-test-container TEST_CMD="npx http-server --silent -p 9009 /workspace/js/storybook-static" TEST_ARGS="" \
+		DOCKER_ARGS="-p 9009 --network storybook-network --name storybook-test-instance" 2> /dev/null &
 	sleep 10
 
 	# Capture output, but stop the storybook container before exiting with the result
 	make run-test-container TEST_CMD="make test-storybook-inner" \
 		TEST_ARGS="--url http://storybook-test-instance:9009 $(TEST_ARGS)" \
-		DOCKER_ARGS="-w / --network storybook-network" || \
+		DOCKER_ARGS="--network storybook-network" || \
 		RESULT=`echo $$?`; \
 		docker container stop --signal SIGKILL storybook-test-instance; \
 		docker network rm storybook-network; \
@@ -75,12 +75,12 @@ test-storybook:
 .PHONY: storybook
 storybook:
 	make run-test-container TEST_CMD="yarn run storybook" TEST_ARGS="" \
-		DOCKER_ARGS="-p 127.0.0.1:9009:9009 -a stdin -a stdout -i"
+		DOCKER_ARGS="-w /workspace/js -p 127.0.0.1:9009:9009 -a stdin -a stdout -i"
 
 # Update snapshot tests
 .PHONY: update-snapshots
 update-snapshots:
-	make run-test-container TEST_CMD="make test-jest" TEST_ARGS="--updateSnapshot" DOCKER_ARGS="-w /"
+	make run-test-container TEST_CMD="make test-jest" TEST_ARGS="--updateSnapshot" DOCKER_ARGS=""
 	make test-storybook TEST_ARGS="--updateSnapshot"
 
 # ESLint & Prettier JS formatting
