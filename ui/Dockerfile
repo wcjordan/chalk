@@ -22,7 +22,7 @@ RUN corepack enable && yarn install --immutable && yarn cache clean
 # Multistage - test container
 FROM base AS js_test_env
 RUN groupadd jenkins \
-        && useradd -m -s /bin/bash jenkins --uid 1000 -g jenkins
+        && useradd -m -s /bin/bash jenkins -g jenkins
 RUN chown jenkins:jenkins -R /
 USER jenkins
 
