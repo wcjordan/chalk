@@ -27,6 +27,7 @@ RUN groupadd jenkins && \
   useradd -m -s /bin/bash jenkins -g jenkins
 RUN chown jenkins:jenkins /workspace
 USER jenkins
+WORKDIR /workspace/js
 
 # Build storybook for testing
 COPY js/babel.config.js js/App.tsx ./
@@ -34,8 +35,8 @@ COPY js/.storybook/ ./.storybook/
 COPY js/assets/ ./assets/
 COPY js/__mocks__/ ./__mocks__/
 COPY js/src/ ./src/
-RUN npx storybook build --test --quiet
 WORKDIR /workspace
+RUN npx storybook build --test --quiet
 
 # Multistage - built app
 FROM base AS js_app_build
