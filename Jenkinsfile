@@ -148,8 +148,10 @@ pipeline {
                             steps {
                                 container('jenkins-worker-storybook-snapshots') {
                                     sh 'id'
-                                    sh 'id -u jenkins'
+                                    // sh 'id -u jenkins'
                                     sh 'pwd'
+                                    sh 'ls -la /workspace'
+                                    sh 'ls -la /workspace/js'
 
                                     dir('/workspace/') {
                                         sh 'ls -la'
