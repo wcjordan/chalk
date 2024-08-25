@@ -97,7 +97,7 @@ pipeline {
                             steps {
                                 container('jenkins-worker-ui') {
                                     sh '''
-                                        cp Makefile /workspace/
+                                        cp ui/Makefile /workspace/
                                         cd /workspace
                                         make test
                                     '''
@@ -149,7 +149,7 @@ pipeline {
                             steps {
                                 container('jenkins-worker-storybook-snapshots') {
                                     sh '''
-                                        cp Makefile /workspace/
+                                        cp ui/Makefile /workspace/
                                         cd /workspace
                                         make test-storybook-inner TEST_ARGS="--url http://127.0.0.1:9009"
                                     '''
