@@ -115,7 +115,7 @@ pipeline {
                                           - name: jenkins-worker-storybook
                                             image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
                                             command:
-                                            - npx http-server --silent -p 9009 /js/storybook-static
+                                            - cat
                                             tty: true
                                             ports:
                                             - containerPort: 9009
