@@ -25,9 +25,8 @@ RUN npx playwright install && npx playwright install-deps
 
 RUN groupadd jenkins && \
   useradd -m -s /bin/bash jenkins -g jenkins
-RUN chown jenkins:jenkins -R /workspace
+RUN chown jenkins:jenkins /workspace
 USER jenkins
-
 
 # Build storybook for testing
 COPY js/babel.config.js js/App.tsx ./
