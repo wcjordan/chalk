@@ -50,16 +50,16 @@ pipeline {
                                         docker buildx create --driver docker-container --name chalk-default
                                         docker buildx use chalk-default
                                         docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:js_app_prod,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:js_app_prod \
                                             --build-arg sentryDsn=\$SENTRY_DSN \
                                             -t ${GAR_REPO}/chalk-ui:${SANITIZED_BUILD_TAG} \
                                             --target js_app_prod \
                                             ui
 
                                         docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:js_test_env,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:js_test_env \
                                             --build-arg sentryDsn=\$SENTRY_DSN \
                                             -t ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG} \
                                             --target js_test_env \
