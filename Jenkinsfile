@@ -147,10 +147,12 @@ pipeline {
                             }
                             steps {
                                 container('jenkins-worker-storybook-snapshots') {
-                                    dir('/js') {
+                                    dir('ui') {
+                                        sh 'cp -r /js/node_modules ./js'
                                         sh 'pwd'
                                         sh 'ls -la'
                                         sh 'ls -la js'
+                                        sh 'rm -rf /js/.storybook'
                                         sh 'make test-storybook-inner TEST_ARGS="--url http://127.0.0.1:9009"'
                                         sh 'ls -la js'
                                         junit testResults: 'js/junit.xml'
