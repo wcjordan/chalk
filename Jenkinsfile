@@ -116,12 +116,7 @@ pipeline {
                                             image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
                                             command: ["/bin/sh", "-c"]
                                             args:
-                                            - echo starting;
-                                              ls -la;
-                                              ls -la /js;
-                                              echo here;
-                                              npx http-server -p 9009 /js/storybook-static;
-                                              echo done;
+                                            - npx http-server -p 9009 /js/storybook-static
                                             tty: true
                                             ports:
                                             - containerPort: 9009
@@ -154,6 +149,7 @@ pipeline {
                                 container('jenkins-worker-storybook-snapshots') {
                                     dir('ui') {
                                         sh 'cp -r /js/node_modules ./js'
+                                        sh 'ls -la js'
                                         sh 'make test-storybook-inner TEST_ARGS="--url http://127.0.0.1:9009"'
                                         sh 'ls -la js'
                                         junit testResults: 'js/junit.xml'
