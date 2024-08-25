@@ -149,6 +149,8 @@ pipeline {
                                 container('jenkins-worker-storybook-snapshots') {
                                     dir('ui') {
                                         sh 'cp -r /js/node_modules ./js'
+                                        sh 'pwd'
+                                        sh 'ls -la'
                                         sh 'ls -la js'
                                         sh 'make test-storybook-inner TEST_ARGS="--url http://127.0.0.1:9009"'
                                         sh 'ls -la js'
