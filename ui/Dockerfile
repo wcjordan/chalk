@@ -26,11 +26,12 @@ FROM base AS js_test_env
 RUN npx playwright install && npx playwright install-deps
 
 # Build storybook for testing
-COPY js/babel.config.js js/App.tsx ./
+COPY js/.eslintrc js/babel.config.js jest.config.js js/tsconfig.json js/App.tsx ./
 COPY js/.storybook/ ./.storybook/
 COPY js/assets/ ./assets/
 COPY js/__mocks__/ ./__mocks__/
 COPY js/src/ ./src/
+
 RUN npx storybook build --test --quiet
 WORKDIR /workspace
 
@@ -38,7 +39,7 @@ WORKDIR /workspace
 FROM base AS js_app_build
 
 # Install React app
-COPY js/.prettierrc js/.eslintrc js/tsconfig.json js/app.config.js js/babel.config.js js/App.tsx ./
+COPY js/.eslintrc js/.prettierrc js/app.config.js js/babel.config.js js/tsconfig.json js/App.tsx ./
 COPY js/.storybook/ ./.storybook/
 COPY js/assets/ ./assets/
 COPY js/src/ ./src/
