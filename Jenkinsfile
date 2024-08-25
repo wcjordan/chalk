@@ -147,19 +147,10 @@ pipeline {
                             }
                             steps {
                                 container('jenkins-worker-storybook-snapshots') {
-                                    sh 'id'
-                                    // sh 'id -u jenkins'
-                                    sh 'pwd'
-                                    sh 'ls -la /workspace'
-                                    sh 'ls -la /workspace/js'
-
-                                    sh 'cd /workspace && ls -la'
-                                    sh 'cd /workspace && ls -la js'
+                                    sh 'cp Makefile /workspace/'
                                     sh 'cd /workspace && make test-storybook-inner TEST_ARGS="--url http://127.0.0.1:9009"'
-                                    dir('/workspace/') {
-                                        sh 'cd /workspace && ls -la js'
-                                        junit testResults: 'js/junit.xml'
-                                    }
+                                    sh 'cd /workspace && ls -la js'
+                                    junit testResults: '/workspace/js/junit.xml'
                                 }
                             }
                         }
