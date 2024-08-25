@@ -12,7 +12,9 @@ RUN apt-get update && apt-get install -y \
   bash \
   build-essential \
   && rm -rf /var/lib/apt/lists/*
-RUN npm install -g sharp-cli
+
+# Install sharp-cli for expo / metro bundler
+RUN npm install -g sharp-cli@^2.1.0
 
 # Install React dependencies
 COPY js/yarn.lock js/package.json js/.yarnrc.yml ./
