@@ -50,16 +50,16 @@ pipeline {
                                         docker buildx create --driver docker-container --name chalk-default
                                         docker buildx use chalk-default
                                         docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache \
                                             --build-arg sentryDsn=\$SENTRY_DSN \
                                             -t ${GAR_REPO}/chalk-ui:${SANITIZED_BUILD_TAG} \
                                             --target js_app_prod \
                                             ui
 
                                         docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache \
                                             --build-arg sentryDsn=\$SENTRY_DSN \
                                             -t ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG} \
                                             --target js_test_env \
@@ -182,8 +182,8 @@ pipeline {
                                         docker buildx create --driver docker-container --name chalk-default
                                         docker buildx use chalk-default
                                         docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-server,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-server \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-server-cache,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-server-cache \
                                             -t ${GAR_REPO}/chalk-server:${SANITIZED_BUILD_TAG} \
                                             server
                                     """
