@@ -50,7 +50,7 @@ test-jest:
 
 .PHONY: test-storybook-inner
 test-storybook-inner:
-	cd js; npx test-storybook --no-index-json --url http://storybook-test-instance:9009 $(TEST_ARGS)
+	cd js; npx test-storybook --no-index-json JEST_JUNIT_CLASSNAME="ui_storybook_tests.{classname} {title}" $(TEST_ARGS)
 
 # Storybook tests
 .PHONY: test-storybook
@@ -60,11 +60,12 @@ test-storybook:
 
 	# NOTE stderr is suppressed here to avoid confusing messages from SIGKILL when finished.  Remove if debugging
 	timeout 180 make run-test-container TEST_CMD="npx http-server --silent -p 9009 /js/storybook-static" TEST_ARGS="" \
-		DOCKER_ARGS="-p 9009 --network storybook-network --name storybook-test-instance" 2> /dev/null &
+		DOCKER_ARGS="-w / -p 9009 --network storybook-network --name storybook-test-instance" 2> /dev/null &
 	sleep 10
 
 	# Capture output, but stop the storybook container before exiting with the result
-	make run-test-container TEST_CMD="make test-storybook-inner" TEST_ARGS="$(TEST_ARGS)" \
+	make run-test-container TEST_CMD="make test-storybook-inner" \
+		TEST_ARGS="--url http://storybook-test-instance:9009 $(TEST_ARGS)" \
 		DOCKER_ARGS="-w / --network storybook-network" || \
 		RESULT=`echo $$?`; \
 		docker container stop --signal SIGKILL storybook-test-instance; \

@@ -1,7 +1,7 @@
 // The jest-serializer-html package is available as a dependency of the test-runner
 const jestSerializerHtml = require('jest-serializer-html');
 
-const LOADING_INDICATOR_PATTER = /rotate\(-?\d+\.?\d*deg\)/g;
+const LOADING_INDICATOR_PATTERN = /rotate\(-?\d+\.?\d*deg\)/g;
 
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
    * For instance, the loading indicator rotate css style will be replaced with 'rotate(mocked_deg)'.
    */
   serialize(val) {
-    const cleanedHtml = val.replace(LOADING_INDICATOR_PATTER, 'rotate(mocked_deg)');
+    const cleanedHtml = val.replace(LOADING_INDICATOR_PATTERN, 'rotate(mocked_deg)');
     return jestSerializerHtml.print(cleanedHtml);
   },
   test(val) {

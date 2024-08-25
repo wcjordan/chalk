@@ -54,13 +54,15 @@ pipeline {
                                             --cache-from type=registry,ref=${GAR_REPO}/chalk-ui \
                                             --build-arg sentryDsn=\$SENTRY_DSN \
                                             -t ${GAR_REPO}/chalk-ui:${SANITIZED_BUILD_TAG} \
+                                            --target js_app_prod \
                                             ui
 
                                         docker buildx build --push \
                                             --cache-to type=registry,ref=${GAR_REPO}/chalk-ui,mode=max \
                                             --cache-from type=registry,ref=${GAR_REPO}/chalk-ui \
+                                            --build-arg sentryDsn=\$SENTRY_DSN \
                                             -t ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG} \
-                                            --target base \
+                                            --target js_test_env \
                                             ui
                                     """
                                 }
@@ -86,8 +88,6 @@ pipeline {
                                               limits:
                                                 cpu: "1000m"
                                                 memory: "3Gi"
-
-
                                     """
                                 }
                             }
@@ -96,11 +96,60 @@ pipeline {
                             }
                             steps {
                                 container('jenkins-worker-ui') {
-                                    dir('ui/js') {
-                                        sh 'cp -r /js/node_modules .'
-                                    }
                                     dir('ui') {
+                                        sh 'cp -r /js/node_modules ./js'
                                         sh 'make test'
+                                        junit testResults: 'js/junit.xml'
+                                    }
+                                }
+                            }
+                        }
+                        stage('Test UI Storybook') {
+                            agent {
+                                kubernetes {
+                                    yaml """
+                                        apiVersion: v1
+                                        kind: Pod
+                                        spec:
+                                          containers:
+                                          - name: jenkins-worker-storybook
+                                            image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
+                                            command:
+                                            - npx http-server --silent -p 9009 /js/storybook-static
+                                            tty: true
+                                            ports:
+                                            - containerPort: 9009
+                                            resources:
+                                              requests:
+                                                cpu: "200m"
+                                                memory: "500Mi"
+                                              limits:
+                                                cpu: "500m"
+                                                memory: "500Mi"
+                                          - name: jenkins-worker-storybook-snapshots
+                                            image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
+                                            command:
+                                            - cat
+                                            tty: true
+                                            resources:
+                                              requests:
+                                                cpu: "400m"
+                                                memory: "2Gi"
+                                              limits:
+                                                cpu: "1000m"
+                                                memory: "2Gi"
+                                    """
+                                }
+                            }
+                            options {
+                                timeout(time: 10, unit: 'MINUTES')
+                            }
+                            steps {
+                                container('jenkins-worker-storybook-snapshots') {
+                                    dir('ui') {
+                                        sh 'cp -r /js/node_modules ./js'
+                                        sh 'make test-storybook-inner TEST_ARGS="--url http://127.0.0.1:9009"'
+                                        sh 'ls -la js'
                                         junit testResults: 'js/junit.xml'
                                     }
                                 }
