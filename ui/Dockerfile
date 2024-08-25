@@ -21,6 +21,11 @@ RUN corepack enable && yarn install --immutable && yarn cache clean
 
 # Multistage - test container
 FROM base AS js_test_env
+RUN groupadd jenkins \
+        && useradd -m -s /bin/bash jenkins --uid 1000
+RUN chown jenkins:jenkins -R /
+USER jenkins
+
 RUN npx playwright install && npx playwright install-deps
 
 # Build storybook for testing
