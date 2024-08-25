@@ -26,7 +26,7 @@ FROM base AS js_test_env
 RUN npx playwright install && npx playwright install-deps
 
 # Build storybook for testing
-COPY js/.eslintrc js/babel.config.js jest.config.js js/tsconfig.json js/App.tsx ./
+COPY js/.eslintrc js/babel.config.js js/jest.config.js js/tsconfig.json js/App.tsx ./
 COPY js/.storybook/ ./.storybook/
 COPY js/assets/ ./assets/
 COPY js/__mocks__/ ./__mocks__/
