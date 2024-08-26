@@ -100,6 +100,8 @@ pipeline {
                                         cp ui/Makefile /workspace/
                                         cd /workspace
                                         make test
+                                        ls -la
+                                        ls -la js
                                     '''
                                     junit testResults: '/workspace/js/junit.xml'
                                 }
@@ -152,6 +154,8 @@ pipeline {
                                         cp ui/Makefile /workspace/
                                         cd /workspace
                                         make test-storybook-inner TEST_ARGS="--url http://127.0.0.1:9009"
+                                        ls -la
+                                        ls -la js
                                     '''
                                     junit testResults: '/workspace/js/junit.xml'
                                 }
