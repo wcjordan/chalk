@@ -33,7 +33,6 @@ COPY js/__mocks__/ ./__mocks__/
 COPY js/src/ ./src/
 
 RUN npx storybook build --test --quiet
-RUN rm -rf node_modules
 WORKDIR /workspace
 
 # Multistage - built app
