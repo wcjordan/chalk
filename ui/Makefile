@@ -14,7 +14,7 @@ UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
 
 .PHONY: run-test-container
 run-test-container:
-	echo $(TEST_ARGS)
+	docker pull $(UI_IMAGE_BASE):local-latest
 	docker run --rm -t \
 		$(DOCKER_ARGS) \
 		-v $(CURDIR)/Makefile:/workspace/Makefile \

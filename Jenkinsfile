@@ -47,19 +47,20 @@ pipeline {
                                     }
                                     sh """
                                         export PATH="/root/google-cloud-sdk/bin:\$PATH"
-                                        docker buildx create --driver docker-container --name chalk-default
-                                        docker buildx use chalk-default
+                                        docker buildx create --driver docker-container --name chalk-default --use
                                         docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:js_app_prod,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:js_app_prod \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test \
                                             --build-arg sentryDsn=\$SENTRY_DSN \
                                             -t ${GAR_REPO}/chalk-ui:${SANITIZED_BUILD_TAG} \
                                             --target js_app_prod \
                                             ui
 
                                         docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:js_test_env,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:js_test_env \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test \
                                             --build-arg sentryDsn=\$SENTRY_DSN \
                                             -t ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG} \
                                             --target js_test_env \
@@ -97,13 +98,15 @@ pipeline {
                             steps {
                                 container('jenkins-worker-ui') {
                                     sh '''
+                                        JENKINS_WORKSPACE=$(pwd)
                                         cp ui/Makefile /workspace/
                                         cd /workspace
                                         make test
-                                        ls -la
-                                        ls -la js
+
+                                        cd $JENKINS_WORKSPACE
+                                        cp /workspace/js/junit.xml .
                                     '''
-                                    junit testResults: '/workspace/js/junit.xml'
+                                    junit testResults: 'junit.xml'
                                 }
                             }
                         }
@@ -156,8 +159,11 @@ pipeline {
                                         make test-storybook-inner TEST_ARGS="--url http://127.0.0.1:9009"
                                         ls -la
                                         ls -la js
+
+                                        cd $JENKINS_WORKSPACE
+                                        cp /workspace/js/junit.xml .
                                     '''
-                                    junit testResults: '/workspace/js/junit.xml'
+                                    junit testResults: 'junit.xml'
                                 }
                             }
                         }
@@ -182,11 +188,10 @@ pipeline {
                                     }
                                     sh """
                                         export PATH="/root/google-cloud-sdk/bin:\$PATH"
-                                        docker buildx create --driver docker-container --name chalk-default
-                                        docker buildx use chalk-default
+                                        docker buildx create --driver docker-container --name chalk-default --use
                                         docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-server-cache,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-server-cache \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-server-cache:ci_server,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-server-cache:ci_server \
                                             -t ${GAR_REPO}/chalk-server:${SANITIZED_BUILD_TAG} \
                                             server
                                     """

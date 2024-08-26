@@ -17,21 +17,35 @@ UI_IMAGE_BASE = $(IMAGE_REPO)/chalk-ui-base
 # Build containers
 .PHONY: build
 build:
-	DOCKER_BUILDKIT=1 docker build -t $(SERVER_IMAGE):local-latest server
+	docker buildx create --driver docker-container --name chalk-default --use || true
+	docker buildx build --push \
+		--cache-to type=registry,ref=${IMAGE_REPO}/chalk-server-cache:dev_server,mode=max \
+		--cache-from type=registry,ref=${IMAGE_REPO}/chalk-server-cache:dev_server \
+		-t ${SERVER_IMAGE}:local-latest \
+		server
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
-		DOCKER_BUILDKIT=1 docker build \
+		docker buildx build --push \
+			--cache-to type=registry,ref=${IMAGE_REPO}/chalk-ui-cache:dev_app,mode=max \
+			--cache-from type=registry,ref=${IMAGE_REPO}/chalk-ui-cache:dev_app \
+			--cache-from type=registry,ref=${IMAGE_REPO}/chalk-ui-cache:dev_test \
 			--build-arg sentryDsn=$$SENTRY_DSN \
+			-t ${UI_IMAGE}:local-latest \
 			--target js_app_prod \
-			-t $(UI_IMAGE):local-latest ui'
+			ui'
 	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
-		DOCKER_BUILDKIT=1 docker build \
+		docker buildx build --push \
+			--cache-to type=registry,ref=${IMAGE_REPO}/chalk-ui-cache:dev_test,mode=max \
+			--cache-from type=registry,ref=${IMAGE_REPO}/chalk-ui-cache:dev_app \
+			--cache-from type=registry,ref=${IMAGE_REPO}/chalk-ui-cache:dev_test \
 			--build-arg sentryDsn=$$SENTRY_DSN \
+			-t ${UI_IMAGE_BASE}:local-latest \
 			--target js_test_env \
-			-t $(UI_IMAGE_BASE):local-latest ui'
+			ui'
 
 # Test & lint
 .PHONY: test
 test: build
+	docker pull $(SERVER_IMAGE):local-latest
 	DOMAIN=localhost docker run --env-file .env --env DOMAIN --rm -t $(SERVER_IMAGE):local-latest make test
 	$(MAKE) -C ui containerized-test
 
@@ -60,28 +74,6 @@ stop:
 format:
 	$(MAKE) -C ui format
 	$(MAKE) -C server format
-
-
-# Deploy to production
-# To delete: helm delete chalk-prod
-# Note, this shouldn't be needed as we deploy to prod in the Jenkinsfile
-.PHONY: deploy-k8s
-deploy-k8s: build
-	if [ "$$(kubectl config current-context)" != "$(K8S_CONTEXT)" ]; then \
-		exit 1; \
-	fi
-
-	docker push $(SERVER_IMAGE):local-latest
-	docker push $(UI_IMAGE):local-latest
-	env $$(grep -v '^#' $(PROD_ENV_FILE) | xargs) sh -c ' \
-		helm upgrade --install \
-			--set domain=chalk.$$ROOT_DOMAIN \
-			--set environment=$(ENVIRONMENT) \
-			--set gcpProject=$$GCP_PROJECT \
-			--set permittedUsers=$$PERMITTED_USERS \
-			--set server.dbPassword=$$DB_PASSWORD \
-			--set server.secretKey=$$SECRET_KEY \
-			chalk-prod helm'
 
 .PHONY: deploy-mobile-app
 deploy-mobile-app:
