@@ -154,11 +154,10 @@ pipeline {
                             steps {
                                 container('jenkins-worker-storybook-snapshots') {
                                     sh '''
+                                        JENKINS_WORKSPACE=$(pwd)
                                         cp ui/Makefile /workspace/
                                         cd /workspace
                                         make test-storybook-inner TEST_ARGS="--junit --url http://127.0.0.1:9009"
-                                        ls -la
-                                        ls -la js
 
                                         cd $JENKINS_WORKSPACE
                                         cp /workspace/js/junit.xml .
