@@ -122,7 +122,7 @@ pipeline {
                                             image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
                                             command: ["/bin/sh", "-c"]
                                             args:
-                                            - npx http-server -p 9009 /js/storybook-static
+                                            - npx http-server -p 9009 /workspace/js/storybook-static
                                             tty: true
                                             ports:
                                             - containerPort: 9009

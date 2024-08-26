@@ -60,7 +60,7 @@ test-storybook:
 
 	# NOTE stderr is suppressed here to avoid confusing messages from SIGKILL when finished.  Remove if debugging
 	timeout 180 make run-test-container TEST_CMD="npx http-server --silent -p 9009 /workspace/js/storybook-static" TEST_ARGS="" \
-		DOCKER_ARGS="-p 9009 --network storybook-network --name storybook-test-instance" 2> /dev/null &
+		DOCKER_ARGS="-w /workspace/js -p 9009 --network storybook-network --name storybook-test-instance" 2> /dev/null &
 	sleep 10
 
 	# Capture output, but stop the storybook container before exiting with the result
