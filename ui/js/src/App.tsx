@@ -37,7 +37,6 @@ const App: React.FC = function () {
     content = (
       <TodoList />
     );
-    // content = (<Button title="Press me" onPress={() => { throw new Error('Hello, again, Sentry!'); }}/>);
   }
 
   const notificationText =

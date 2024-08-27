@@ -5,7 +5,6 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 import * as Sentry from '@sentry/react-native';
 
-
 import App from './src/App';
 import { setupStore } from './src/redux/store';
 import { getEnvFlags } from './src/helpers';
