@@ -3,7 +3,7 @@ FROM python:3-bookworm
 WORKDIR /usr/src/app
 
 # Set log messages to immediately appear in the logs
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
 # Install system packages.  We need postgresql-client for database backups
 RUN wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | gpg --dearmor | tee /usr/share/keyrings/postgresql.gpg && \

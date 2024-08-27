@@ -47,20 +47,23 @@ pipeline {
                                     }
                                     sh """
                                         export PATH="/root/google-cloud-sdk/bin:\$PATH"
-                                        docker buildx create --driver docker-container --name chalk-default
-                                        docker buildx use chalk-default
+                                        docker buildx create --driver docker-container --name chalk-default --use
                                         docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test \
                                             --build-arg sentryDsn=\$SENTRY_DSN \
                                             -t ${GAR_REPO}/chalk-ui:${SANITIZED_BUILD_TAG} \
+                                            --target js_app_prod \
                                             ui
 
                                         docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test \
+                                            --build-arg sentryDsn=\$SENTRY_DSN \
                                             -t ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG} \
-                                            --target base \
+                                            --target js_test_env \
                                             ui
                                     """
                                 }
@@ -86,8 +89,6 @@ pipeline {
                                               limits:
                                                 cpu: "1000m"
                                                 memory: "3Gi"
-
-
                                     """
                                 }
                             }
@@ -96,13 +97,72 @@ pipeline {
                             }
                             steps {
                                 container('jenkins-worker-ui') {
-                                    dir('ui/js') {
-                                        sh 'cp -r /js/node_modules .'
-                                    }
-                                    dir('ui') {
-                                        sh 'make test'
-                                        junit testResults: 'js/junit.xml'
-                                    }
+                                    sh '''
+                                        JENKINS_WORKSPACE=$(pwd)
+                                        cp ui/Makefile /workspace/
+                                        cd /workspace
+                                        make test
+
+                                        cd $JENKINS_WORKSPACE
+                                        cp /workspace/js/junit.xml .
+                                    '''
+                                    junit testResults: 'junit.xml'
+                                }
+                            }
+                        }
+                        stage('Test UI Storybook') {
+                            agent {
+                                kubernetes {
+                                    yaml """
+                                        apiVersion: v1
+                                        kind: Pod
+                                        spec:
+                                          containers:
+                                          - name: jenkins-worker-storybook
+                                            image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
+                                            command: ["/bin/sh", "-c"]
+                                            args:
+                                            - cd js && npx http-server -p 9009 /workspace/js/storybook-static
+                                            tty: true
+                                            ports:
+                                            - containerPort: 9009
+                                            resources:
+                                              requests:
+                                                cpu: "200m"
+                                                memory: "500Mi"
+                                              limits:
+                                                cpu: "500m"
+                                                memory: "500Mi"
+                                          - name: jenkins-worker-storybook-snapshots
+                                            image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
+                                            command:
+                                            - cat
+                                            tty: true
+                                            resources:
+                                              requests:
+                                                cpu: "400m"
+                                                memory: "2Gi"
+                                              limits:
+                                                cpu: "1000m"
+                                                memory: "2Gi"
+                                    """
+                                }
+                            }
+                            options {
+                                timeout(time: 10, unit: 'MINUTES')
+                            }
+                            steps {
+                                container('jenkins-worker-storybook-snapshots') {
+                                    sh '''
+                                        JENKINS_WORKSPACE=$(pwd)
+                                        cp ui/Makefile /workspace/
+                                        cd /workspace
+                                        make test-storybook-inner TEST_ARGS="--junit --url http://127.0.0.1:9009"
+
+                                        cd $JENKINS_WORKSPACE
+                                        cp /workspace/js/junit.xml .
+                                    '''
+                                    junit testResults: 'junit.xml'
                                 }
                             }
                         }
@@ -127,11 +187,10 @@ pipeline {
                                     }
                                     sh """
                                         export PATH="/root/google-cloud-sdk/bin:\$PATH"
-                                        docker buildx create --driver docker-container --name chalk-default
-                                        docker buildx use chalk-default
+                                        docker buildx create --driver docker-container --name chalk-default --use
                                         docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-server,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-server \
+                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-server-cache:ci_server,mode=max \
+                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-server-cache:ci_server \
                                             -t ${GAR_REPO}/chalk-server:${SANITIZED_BUILD_TAG} \
                                             server
                                     """
@@ -280,7 +339,7 @@ pipeline {
                                     string(credentialsId: 'chalk-prod-cd-oauth-refresh-token', variable: 'CHALK_OAUTH_REFRESH_TOKEN'),
                                 ]) {
                                     dir('tests') {
-                                        sh 'pip install "playwright==1.44.0" "pytest==8.2.2"'
+                                        sh 'pip install "playwright==1.46.0" "pytest==8.3.2"'
                                         sh "pytest . --server_domain ${SERVER_IP} --junitxml=playwright_results.xml || true"
 
                                         junit testResults: 'playwright_results.xml'

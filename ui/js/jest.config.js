@@ -6,4 +6,8 @@ module.exports = {
   setupFiles: [
     './node_modules/@react-native-google-signin/google-signin/jest/build/setup.js',
   ],
+  testPathIgnorePatterns: [
+    '<rootDir>/src/__snapshots__/',
+    '<rootDir>/src/components/__snapshots__/',
+  ],
 };
