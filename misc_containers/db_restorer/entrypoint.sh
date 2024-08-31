@@ -5,7 +5,7 @@ export PGHOST="127.0.0.1"
 
 # Check if we can connect to the DB
 db_connected=0
-for i in {1..3}; do
+for i in {1.12}; do
     psql -c "SELECT 1 FROM pg_tables LIMIT 1" && \
     db_connected=1 && break || \
     echo "Unable to connect to the DB, retrying in 5 seconds" && sleep 5

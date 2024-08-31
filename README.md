@@ -22,7 +22,8 @@ Set K8S_CONTEXT to the name of the config from `kubectl config get-contexts` for
 
 ### Sentry config
 Set SENTRY_DSN - A Sentry.io DSN.  https://sentry.io/settings/<ORG_ID>/projects/<PROJECT_ID>/keys/  
-Set SENTRY_TOKEN (prod only) - A [Sentry.io auth token](https://sentry.io/settings/account/api/auth-tokens/)  
+Set SENTRY_TOKEN & SENTRY_AUTH_TOKEN (prod only) - A [Sentry.io auth token](https://sentry.io/settings/account/api/auth-tokens/)  
+(look into merging these 2 since they have identical content)
 
 ### Expo config
 EXPO_USERNAME & EXPO_CLI_PASSWORD (prod only) - Set from your expo.dev account  
