@@ -35,3 +35,4 @@ yarn-error.log*
 # !.yarn/cache
 
 *storybook.log
+junit.xml
