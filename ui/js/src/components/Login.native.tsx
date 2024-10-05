@@ -39,7 +39,8 @@ const Login: React.FC = function () {
     setInProgress(true);
     try {
       await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
+      const signinData = await GoogleSignin.signIn();
+      const userInfo = signinData.data;
 
       setInProgress(false);
       if (userInfo.idToken) {
@@ -70,7 +71,7 @@ const Login: React.FC = function () {
 
   useEffect(() => {
     async function autoSignIn() {
-      if (await GoogleSignin.isSignedIn()) {
+      if (await GoogleSignin.hasPreviousSignIn()) {
         signIn();
       }
     }
