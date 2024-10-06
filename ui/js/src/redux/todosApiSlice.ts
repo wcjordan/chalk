@@ -95,8 +95,8 @@ function updateTodosFromResponse(entries: Todo[], updatedTodos: Todo[]) {
       // Extract the unproxied Immer value to compare against
       const currEntry = current(existingEntry);
       for (const key of Object.keys(updatedTodo)) {
-        if (!_.isEqual(currEntry[key], updatedTodo[key])) {
-          existingEntry[key] = updatedTodo[key];
+        if (!_.isEqual(currEntry[key as keyof Todo], updatedTodo[key as keyof Todo])) {
+          existingEntry[key as keyof Todo] = updatedTodo[key as keyof Todo];
         }
       }
     } else {

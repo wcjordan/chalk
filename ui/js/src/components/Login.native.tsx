@@ -39,7 +39,7 @@ const Login: React.FC = function () {
     setInProgress(true);
     try {
       await GoogleSignin.hasPlayServices();
-      const signinData = await GoogleSignin.signIn();
+      const signinData = await GoogleSignin.signIn() as { data: { idToken: string } };
       const userInfo = signinData.data;
 
       setInProgress(false);

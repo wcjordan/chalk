@@ -140,7 +140,7 @@ const TodoList: React.FC = memo(function () {
   if (filteredTodos.length > 0) {
     draggableList = (
       <DraggableFlatList
-        activationDistance={Platform.OS === 'web' ? 10 : null}
+        activationDistance={Platform.OS === 'web' ? 10 : undefined}
         autoscrollSpeed={Platform.OS === 'web' ? 50 : 150}
         containerStyle={styles.scrollView}
         data={filteredTodos}
@@ -149,7 +149,7 @@ const TodoList: React.FC = memo(function () {
         refreshing={isLoading}
         renderItem={renderItem}
         testID="todo-list"
-        windowSize={Platform.OS === 'web' ? 3 : null}
+        windowSize={Platform.OS === 'web' ? 3 : undefined}
       />
     );
   }
