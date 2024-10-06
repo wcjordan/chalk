@@ -260,6 +260,7 @@ const TodoItem: React.FC<Props> = memo(function (props: Props) {
     </Card>
   );
 });
+TodoItem.displayName = 'TodoItem';
 
 type Props = {
   editing: boolean;

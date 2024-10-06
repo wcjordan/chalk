@@ -170,5 +170,6 @@ const TodoList: React.FC = memo(function () {
     </React.Fragment>
   );
 });
+TodoList.displayName = 'TodoList';
 
 export default TodoList;
