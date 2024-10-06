@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import {
   ApiState,
@@ -87,15 +87,24 @@ function processTodos(todos: Todo[]) {
   return incomplete.concat(completed);
 }
 
-function updateTodoFromResponse(entries: Todo[], updatedTodo: Todo) {
-  const existingEntry = _.find(entries, (entry) => entry.id === updatedTodo.id);
-  if (existingEntry) {
-    Object.assign(existingEntry, updatedTodo);
-    entries = processTodos(entries);
-  } else {
-    console.warn('Unable to find todo by id: ' + updatedTodo.id);
+function updateTodosFromResponse(entries: Todo[], updatedTodos: Todo[]) {
+  const entryMap = _.keyBy(entries, (entry: Todo) => entry.id);
+  for (const updatedTodo of updatedTodos) {
+    const existingEntry = entryMap[updatedTodo.id];
+    if (existingEntry) {
+      // Extract the unproxied Immer value to compare against
+      const currEntry = current(existingEntry);
+      for (const key of Object.keys(updatedTodo)) {
+        if (!_.isEqual(currEntry[key], updatedTodo[key])) {
+          existingEntry[key] = updatedTodo[key];
+        }
+      }
+    } else {
+      entries.push(updatedTodo);
+    }
   }
-  return entries;
+
+  return processTodos(entries);
 }
 
 export default createSlice({
@@ -119,7 +128,7 @@ export default createSlice({
       .addCase(listTodos.fulfilled, (state, action) => {
         state.initialLoad = false;
         state.loading = false;
-        state.entries = processTodos(action.payload);
+        state.entries = updateTodosFromResponse(state.entries, action.payload);
       })
       .addCase(listTodos.rejected, (state, action) => {
         state.initialLoad = false;
@@ -128,14 +137,14 @@ export default createSlice({
       })
       // update todo
       .addCase(updateTodo.fulfilled, (state, action) => {
-        state.entries = updateTodoFromResponse(state.entries, action.payload);
+        state.entries = updateTodosFromResponse(state.entries, [action.payload]);
       })
       .addCase(updateTodo.rejected, (_, action) => {
         console.warn(`Updating Todo failed. ${action.error.message}`);
       })
       // reorder todo
       .addCase(moveTodo.fulfilled, (state, action) => {
-        state.entries = updateTodoFromResponse(state.entries, action.payload);
+        state.entries = updateTodosFromResponse(state.entries, [action.payload]);
       })
       .addCase(moveTodo.rejected, (_, action) => {
         console.warn(`Moving Todo failed. ${action.error.message}`);

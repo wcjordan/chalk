@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar, StyleSheet, View, ViewStyle } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, ViewStyle } from 'react-native';
 import ErrorBar from './components/ErrorBar';
 import Login from './components/Login';
 import TodoList from './components/TodoList';
@@ -42,7 +42,7 @@ const App: React.FC = function () {
   const notificationText =
     notificationQueue.length > 0 ? notificationQueue[0] : null;
   return (
-    <View style={styles.root}>
+    <SafeAreaView style={styles.root}>
       <StatusBar
         animated={true}
         backgroundColor={BG_COLOR}
@@ -53,7 +53,7 @@ const App: React.FC = function () {
         key={notificationText}
         text={notificationText}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

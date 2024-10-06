@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Platform, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import DraggableFlatList, {
   RenderItemParams,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create<Style>({
   },
 });
 
-const TodoList: React.FC = function () {
+const TodoList: React.FC = memo(function () {
   const dispatch = useAppDispatch()
   useDataLoader();
   const {
@@ -99,7 +99,7 @@ const TodoList: React.FC = function () {
     containerStyle = [containerStyle, topStyle];
   }
 
-  const renderItem = ({ item, drag, isActive }: RenderItemParams<Todo>) => (
+  const renderItem = useCallback(({ item, drag, isActive }: RenderItemParams<Todo>) => (
     <OpacityDecorator activeOpacity={0.65}>
       <TodoItem
         editing={item.id === editTodoId}
@@ -110,7 +110,7 @@ const TodoList: React.FC = function () {
         todo={item}
       />
     </OpacityDecorator>
-  );
+  ), [editTodoId, labelTodoId]);
 
   let labelFilter = null;
   let workContextFilter = null;
@@ -149,6 +149,7 @@ const TodoList: React.FC = function () {
         refreshing={isLoading}
         renderItem={renderItem}
         testID="todo-list"
+        windowSize={Platform.OS === 'web' ? 3 : null}
       />
     );
   }
@@ -168,6 +169,6 @@ const TodoList: React.FC = function () {
       />
     </React.Fragment>
   );
-};
+});
 
 export default TodoList;
