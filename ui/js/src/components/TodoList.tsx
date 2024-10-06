@@ -140,8 +140,8 @@ const TodoList: React.FC = memo(function () {
   if (filteredTodos.length > 0) {
     draggableList = (
       <DraggableFlatList
-        activationDistance={1}
-        autoscrollSpeed={150}
+        activationDistance={Platform.OS === 'web' ? 10 : null}
+        autoscrollSpeed={Platform.OS === 'web' ? 50 : 150}
         containerStyle={styles.scrollView}
         data={filteredTodos}
         onDragEnd={handleReorder}
