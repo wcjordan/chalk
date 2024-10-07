@@ -23,4 +23,14 @@ declare module "@react-native-google-signin/google-signin" {
         export const Size: nativeSizes;
         export const Color: Color;
     }
+
+    namespace GoogleSignin {
+        export function signIn(): Promise<{ data: { idToken: string } }>;
+        export function hasPlayServices(): Promise<void>;
+        export function hasPreviousSignIn(): Promise<boolean>;
+        export function configure(params: {
+            webClientId: string,
+            offlineAccess: boolean,
+        }): void;
+    }
 }

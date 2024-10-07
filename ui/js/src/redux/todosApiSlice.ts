@@ -87,16 +87,22 @@ function processTodos(todos: Todo[]) {
   return incomplete.concat(completed);
 }
 
-function updateTodosFromResponse(entries: Todo[], updatedTodos: Todo[]) {
+function updateTodosFromResponse(entries: Todo[], updatedTodos: Todo[], deleteMissing: boolean = false) {
+  if (deleteMissing) {
+    const updatedIds = new Set(updatedTodos.map((todo) => todo.id));
+    entries = entries.filter((entry) => updatedIds.has(entry.id));
+  }
+
   const entryMap = _.keyBy(entries, (entry: Todo) => entry.id);
   for (const updatedTodo of updatedTodos) {
     const existingEntry = entryMap[updatedTodo.id];
     if (existingEntry) {
       // Extract the unproxied Immer value to compare against
       const currEntry = current(existingEntry);
-      for (const key of Object.keys(updatedTodo)) {
-        if (!_.isEqual(currEntry[key as keyof Todo], updatedTodo[key as keyof Todo])) {
-          existingEntry[key as keyof Todo] = updatedTodo[key as keyof Todo];
+      const todoKeys = Object.keys(updatedTodo) as (keyof Todo)[];
+      for (const key of todoKeys) {
+        if (!_.isEqual(currEntry[key], updatedTodo[key])) {
+          existingEntry[key] = updatedTodo[key];
         }
       }
     } else {
@@ -128,7 +134,7 @@ export default createSlice({
       .addCase(listTodos.fulfilled, (state, action) => {
         state.initialLoad = false;
         state.loading = false;
-        state.entries = updateTodosFromResponse(state.entries, action.payload);
+        state.entries = updateTodosFromResponse(state.entries, action.payload, true);
       })
       .addCase(listTodos.rejected, (state, action) => {
         state.initialLoad = false;
