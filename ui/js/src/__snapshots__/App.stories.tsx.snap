@@ -2,7 +2,7 @@
 
 exports[`App Layout DefaultLayout smoke-test 1`] = `
 <div class="css-175oi2r r-13awgt0">
-  <div class="css-175oi2r r-173lkiy r-1pi2tsx r-13qz1uu">
+  <div class="css-175oi2r r-97e31f r-bv2aro r-hxflta r-10xqauy r-173lkiy r-1pi2tsx r-13qz1uu">
     <div class="css-175oi2r r-1pi2tsx r-f8sm7e r-1skwq7n r-1knelpx">
       <div class="css-175oi2r r-1kly57o r-13qz1uu">
         <div class="css-175oi2r"
@@ -272,7 +272,7 @@ exports[`App Layout DefaultLayout smoke-test 1`] = `
 
 exports[`App Layout LabelPickerLayout smoke-test 1`] = `
 <div class="css-175oi2r r-13awgt0">
-  <div class="css-175oi2r r-173lkiy r-1pi2tsx r-13qz1uu">
+  <div class="css-175oi2r r-97e31f r-bv2aro r-hxflta r-10xqauy r-173lkiy r-1pi2tsx r-13qz1uu">
     <div class="css-175oi2r r-1pi2tsx r-f8sm7e r-1skwq7n r-1knelpx">
       <div class="css-175oi2r r-1kly57o r-13qz1uu">
         <div class="css-175oi2r"
@@ -1892,7 +1892,7 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
 
 exports[`App Layout ListTodosLayout smoke-test 1`] = `
 <div class="css-175oi2r r-13awgt0">
-  <div class="css-175oi2r r-173lkiy r-1pi2tsx r-13qz1uu">
+  <div class="css-175oi2r r-97e31f r-bv2aro r-hxflta r-10xqauy r-173lkiy r-1pi2tsx r-13qz1uu">
     <div class="css-175oi2r r-1pi2tsx r-f8sm7e r-1skwq7n r-1knelpx">
       <div class="css-175oi2r r-1kly57o r-13qz1uu">
         <div class="css-175oi2r"
@@ -3055,7 +3055,7 @@ exports[`App Layout ListTodosLayout smoke-test 1`] = `
 
 exports[`App Layout NotificationLayout smoke-test 1`] = `
 <div class="css-175oi2r r-13awgt0">
-  <div class="css-175oi2r r-173lkiy r-1pi2tsx r-13qz1uu">
+  <div class="css-175oi2r r-97e31f r-bv2aro r-hxflta r-10xqauy r-173lkiy r-1pi2tsx r-13qz1uu">
     <div class="css-175oi2r r-1pi2tsx r-f8sm7e r-1skwq7n r-1knelpx">
       <div class="css-175oi2r r-1kly57o r-13qz1uu">
         <div class="css-175oi2r"
