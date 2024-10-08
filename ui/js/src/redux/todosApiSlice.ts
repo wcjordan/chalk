@@ -87,26 +87,35 @@ function processTodos(todos: Todo[]) {
   return incomplete.concat(completed);
 }
 
-function updateTodosFromResponse(entries: Todo[], updatedTodos: Todo[], deleteMissing: boolean = false) {
-  if (deleteMissing) {
-    const updatedIds = new Set(updatedTodos.map((todo) => todo.id));
-    entries = entries.filter((entry) => updatedIds.has(entry.id));
+function updateTodoInPlace(existingEntry: Todo, updatedTodo: Todo) {
+  // Extract the unproxied Immer value to compare against
+  const currEntry = current(existingEntry);
+  const todoKeys = Object.keys(updatedTodo) as (keyof Todo)[];
+  for (const key of todoKeys) {
+    if (!_.isEqual(currEntry[key], updatedTodo[key])) {
+      existingEntry[key] = updatedTodo[key];
+    }
   }
+}
 
+function updateTodoFromResponse(entries: Todo[], updatedTodo: Todo) {
+  const existingEntry = _.find(entries, (entry: Todo) => entry.id === updatedTodo.id);
+  if (existingEntry) {
+    updateTodoInPlace(existingEntry, updatedTodo);
+    entries = processTodos(entries);
+  } else {
+    console.warn('Unable to find todo by id: ' + updatedTodo.id);
+  }
+  return entries;
+}
+
+function handleListResponse(entries: Todo[], updatedTodos: Todo[]) {
   const entryMap = _.keyBy(entries, (entry: Todo) => entry.id);
-  for (const updatedTodo of updatedTodos) {
+  for (const [index, updatedTodo] of updatedTodos.entries()) {
     const existingEntry = entryMap[updatedTodo.id];
     if (existingEntry) {
-      // Extract the unproxied Immer value to compare against
-      const currEntry = current(existingEntry);
-      const todoKeys = Object.keys(updatedTodo) as (keyof Todo)[];
-      for (const key of todoKeys) {
-        if (!_.isEqual(currEntry[key], updatedTodo[key])) {
-          existingEntry[key] = updatedTodo[key];
-        }
-      }
-    } else {
-      entries.push(updatedTodo);
+      updateTodoInPlace(existingEntry, updatedTodo);
+      updatedTodos[index] = existingEntry;
     }
   }
 
@@ -134,7 +143,7 @@ export default createSlice({
       .addCase(listTodos.fulfilled, (state, action) => {
         state.initialLoad = false;
         state.loading = false;
-        state.entries = updateTodosFromResponse(state.entries, action.payload, true);
+        state.entries = handleListResponse(state.entries, action.payload);
       })
       .addCase(listTodos.rejected, (state, action) => {
         state.initialLoad = false;
@@ -143,14 +152,14 @@ export default createSlice({
       })
       // update todo
       .addCase(updateTodo.fulfilled, (state, action) => {
-        state.entries = updateTodosFromResponse(state.entries, [action.payload]);
+        state.entries = updateTodoFromResponse(state.entries, action.payload);
       })
       .addCase(updateTodo.rejected, (_, action) => {
         console.warn(`Updating Todo failed. ${action.error.message}`);
       })
       // reorder todo
       .addCase(moveTodo.fulfilled, (state, action) => {
-        state.entries = updateTodosFromResponse(state.entries, [action.payload]);
+        state.entries = updateTodoFromResponse(state.entries, action.payload);
       })
       .addCase(moveTodo.rejected, (_, action) => {
         console.warn(`Moving Todo failed. ${action.error.message}`);
