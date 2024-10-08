@@ -119,7 +119,7 @@ function handleListResponse(entries: Todo[], updatedTodos: Todo[]) {
     }
   }
 
-  return processTodos(entries);
+  return processTodos(updatedTodos);
 }
 
 export default createSlice({
