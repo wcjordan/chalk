@@ -143,7 +143,7 @@ export default createSlice({
       .addCase(listTodos.fulfilled, (state, action) => {
         state.initialLoad = false;
         state.loading = false;
-        state.entries = handleListResponse(state.entries, action.payload);
+        state.entries = handleListResponse(state.entries, Array.from(action.payload));
       })
       .addCase(listTodos.rejected, (state, action) => {
         state.initialLoad = false;
