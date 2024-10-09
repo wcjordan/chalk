@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import {
   GestureResponderEvent,
   Platform,
@@ -85,7 +85,7 @@ const styles = StyleSheet.create<Style>({
   },
 });
 
-const TodoItem: React.FC<Props> = function (props: Props) {
+const TodoItem: React.FC<Props> = memo(function (props: Props) {
   const {
     editing,
     isDragging,
@@ -259,7 +259,8 @@ const TodoItem: React.FC<Props> = function (props: Props) {
       </Card.Content>
     </Card>
   );
-};
+});
+TodoItem.displayName = 'TodoItem';
 
 type Props = {
   editing: boolean;

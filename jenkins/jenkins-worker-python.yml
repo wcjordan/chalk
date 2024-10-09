@@ -3,7 +3,7 @@ kind: Pod
 spec:
   containers:
   - name: jenkins-worker-python
-    image: python:3
+    image: python:3.12-bookworm
     command:
     - cat
     tty: true

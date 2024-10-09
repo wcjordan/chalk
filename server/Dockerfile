@@ -1,5 +1,5 @@
 # Django container
-FROM python:3-bookworm
+FROM python:3.12-bookworm
 WORKDIR /usr/src/app
 
 # Set log messages to immediately appear in the logs

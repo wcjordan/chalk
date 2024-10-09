@@ -19,6 +19,7 @@ export interface Todo {
   created_at: number;
   description: string;
   labels: string[];
+  [key: string]: boolean | number | string | string[]; // Index signature to allow updates in todosApiSlice#updateTodosFromResponse
 }
 
 export interface TodoPatch {

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import {
   ApiState,
@@ -87,15 +87,39 @@ function processTodos(todos: Todo[]) {
   return incomplete.concat(completed);
 }
 
+function updateTodoInPlace(existingEntry: Todo, updatedTodo: Todo) {
+  // Extract the unproxied Immer value to compare against
+  const currEntry = current(existingEntry);
+  const todoKeys = Object.keys(updatedTodo) as (keyof Todo)[];
+  for (const key of todoKeys) {
+    if (!_.isEqual(currEntry[key], updatedTodo[key])) {
+      existingEntry[key] = updatedTodo[key];
+    }
+  }
+}
+
 function updateTodoFromResponse(entries: Todo[], updatedTodo: Todo) {
-  const existingEntry = _.find(entries, (entry) => entry.id === updatedTodo.id);
+  const existingEntry = _.find(entries, (entry: Todo) => entry.id === updatedTodo.id);
   if (existingEntry) {
-    Object.assign(existingEntry, updatedTodo);
+    updateTodoInPlace(existingEntry, updatedTodo);
     entries = processTodos(entries);
   } else {
     console.warn('Unable to find todo by id: ' + updatedTodo.id);
   }
   return entries;
+}
+
+function handleListResponse(entries: Todo[], updatedTodos: Todo[]) {
+  const entryMap = _.keyBy(entries, (entry: Todo) => entry.id);
+  for (const [index, updatedTodo] of updatedTodos.entries()) {
+    const existingEntry = entryMap[updatedTodo.id];
+    if (existingEntry) {
+      updateTodoInPlace(existingEntry, updatedTodo);
+      updatedTodos[index] = existingEntry;
+    }
+  }
+
+  return processTodos(updatedTodos);
 }
 
 export default createSlice({
@@ -119,7 +143,7 @@ export default createSlice({
       .addCase(listTodos.fulfilled, (state, action) => {
         state.initialLoad = false;
         state.loading = false;
-        state.entries = processTodos(action.payload);
+        state.entries = handleListResponse(state.entries, Array.from(action.payload));
       })
       .addCase(listTodos.rejected, (state, action) => {
         state.initialLoad = false;

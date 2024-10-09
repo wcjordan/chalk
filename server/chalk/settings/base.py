@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'chalk.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME', 'chalk'),
         'USER': os.getenv('DB_USER', 'chalk'),
         'PASSWORD': os.environ['DB_PASSWORD'],
