@@ -1,11 +1,14 @@
 """
 Views for todo app
 """
+from datetime import datetime, timezone
 import math
+import random
 import statistics
 
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
+from google.cloud import storage
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
@@ -15,6 +18,8 @@ from chalk.todos.models import LabelModel, RankOrderMetadata, TodoModel
 from chalk.todos.serializers import LabelSerializer, TodoSerializer
 from chalk.todos.oauth import get_authorization_url
 from chalk.todos.signals import rebalance_rank_order
+
+SESSION_BUCKET_ID = 'flipperkid-chalk-web-session-data'
 
 
 @api_view(['GET'])
@@ -57,6 +62,21 @@ def healthz(request):
     API endpoint that indicates the server is healthy
     """
     return Response('Healthy!')
+
+
+@api_view(['GET', 'HEAD'])
+@permission_classes([permissions.IsAdminUser])
+def log_session_data(request):
+    """
+    API endpoint used to log session data to an object storage bucket
+    """
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(SESSION_BUCKET_ID)
+    filetname = f"{datetime.now(timezone.utc).strftime('%Y-%m-%d_%H:%M:%S.%f%z')}_{random.randint(0, 9999):3}"
+    blob = bucket.blob(filetname)
+    blob.upload_from_string('test log a session')
+
+    return Response('Session data logged!')
 
 
 @api_view(['GET', 'HEAD'])
