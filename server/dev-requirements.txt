@@ -2,7 +2,7 @@
 
 # These are used for development or linting
 flake8==7.1.1
-pylint==3.3.1
+pylint==3.3.2
 pylint-django==2.6.1
-pytest==8.3.3
-yapf==0.40.2
+pytest==8.3.4
+yapf==0.43.0
