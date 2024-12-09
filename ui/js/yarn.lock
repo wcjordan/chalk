@@ -5629,11 +5629,9 @@ __metadata:
   linkType: hard
 
 "agent-base@npm:^7.1.0, agent-base@npm:^7.1.2":
-  version: 7.1.2
-  resolution: "agent-base@npm:7.1.2"
-  dependencies:
-    debug: "npm:^4.3.4"
-  checksum: 10c0/a1e8b43f53452b0ebd84792bbb2443ab7aff84e2602f92ce1ee703628962823c5efee38bc4f78ff6500b9df93b6260b451ae882ef248fcd3a740caa849f1b9c7
+  version: 7.1.3
+  resolution: "agent-base@npm:7.1.3"
+  checksum: 10c0/6192b580c5b1d8fb399b9c62bf8343d76654c2dd62afcb9a52b2cf44a8b6ace1e3b704d3fe3547d91555c857d3df02603341ff2cb961b9cfe2b12f9f3c38ee11
   languageName: node
   linkType: hard
 
@@ -6780,7 +6778,7 @@ __metadata:
     react-dom: "npm:~18.3.1"
     react-native: "npm:0.74.6"
     react-native-draggable-flatlist: "npm:4.0.1"
-    react-native-gesture-handler: "npm:~2.20.2"
+    react-native-gesture-handler: "npm:~2.21.2"
     react-native-paper: "npm:~5.12.5"
     react-native-reanimated: "npm:~3.16.3"
     react-native-safe-area-context: "npm:4.14.1"
@@ -15276,9 +15274,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:~2.20.2":
-  version: 2.20.2
-  resolution: "react-native-gesture-handler@npm:2.20.2"
+"react-native-gesture-handler@npm:~2.21.2":
+  version: 2.21.2
+  resolution: "react-native-gesture-handler@npm:2.21.2"
   dependencies:
     "@egjs/hammerjs": "npm:^2.0.17"
     hoist-non-react-statics: "npm:^3.3.0"
@@ -15287,7 +15285,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10c0/94c16a40370adfaaff8af6aec5938a8d5c5704afaf7ec569d9e11c66ecc3b5c763314c091a76573885636c04d9e6084de3696d59595c56aac9eb17b2f28e5c6c
+  checksum: 10c0/4eca796efe9e55f312f332c07eee76adf0b29971945b72856d375f7e9a6f21a7ef5363d707b71d030c5ebccc0a3cf085713ee0365c14bc538f2f918a87986e36
   languageName: node
   linkType: hard
 
