@@ -5,6 +5,9 @@ On Mac:
 `brew install nginx`  
 `brew install coreutils`  
 
+Once GCloud is setup  
+`gcloud auth configure-docker us-east4-docker.pkg.dev`  
+
 ## Env Setup
 Copy .env_default to .env & .prod.env  
 
