@@ -97,12 +97,12 @@ export async function completeAuthCallback(token: string) {
 }
 
 export async function logSessionData(
-  sessionData: any[],
+  dataString: string,
   csrfToken: string,
 ): Promise<string> {
   
   const requestOpts = getRequestOpts('POST', csrfToken);
-  requestOpts.body = JSON.stringify({ session_data: sessionData });
+  requestOpts.body = dataString;
   const response = await fetch(
     `${getWsRoot()}api/todos/log_session_data/`,
     requestOpts,
