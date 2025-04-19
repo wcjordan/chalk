@@ -29,7 +29,10 @@ export function initRecorder() {
 
 // this function will send events to the backend and reset the events array
 function save() {
-    
+  if (events.length === 0) {
+    return;
+  }
+
   const data = JSON.stringify({ 
     session_guid: sessionGuid,
     session_data: events,
