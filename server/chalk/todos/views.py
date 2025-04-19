@@ -65,7 +65,7 @@ def healthz(request):
 
 
 @api_view(['GET', 'HEAD'])
-@permission_classes([permissions.IsAdminUser])
+@permission_classes([permissions.IsAuthenticated])
 def log_session_data(request):
     """
     API endpoint used to log session data to an object storage bucket
