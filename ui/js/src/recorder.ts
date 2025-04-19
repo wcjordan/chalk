@@ -6,8 +6,8 @@ import { logSessionData } from './redux/fetchApi';
 import { getEnvFlags } from './helpers';
 
 
-let events: any[] = [];
-let sessionGuid: string = crypto.randomUUID();
+let events: object[] = [];
+const sessionGuid: string = crypto.randomUUID();
 const environment = getEnvFlags().ENVIRONMENT;
 
 export function initRecorder() {
