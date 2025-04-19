@@ -72,8 +72,8 @@ def log_session_data(request):
     """
     storage_client = storage.Client()
     bucket = storage_client.bucket(SESSION_BUCKET_ID)
-    filetname = f"{datetime.now(timezone.utc).strftime('%Y-%m-%d_%H:%M:%S.%f%z')}_{random.randint(0, 9999):04}"
-    blob = bucket.blob(filetname)
+    filename = f"{datetime.now(timezone.utc).strftime('%Y-%m-%d_%H:%M:%S.%f%z')}_{random.randint(0, 9999):04}"
+    blob = bucket.blob(filename)
     blob.upload_from_string('test log a session')
 
     return Response('Session data logged!')
