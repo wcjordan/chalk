@@ -2,6 +2,7 @@
 Views for todo app
 """
 from datetime import datetime, timezone
+import json
 import math
 import random
 import statistics
@@ -74,7 +75,7 @@ def log_session_data(request):
     bucket = storage_client.bucket(SESSION_BUCKET_ID)
     filename = f"{datetime.now(timezone.utc).strftime('%Y-%m-%d_%H:%M:%S.%f%z')}_{random.randint(0, 9999):04}"
     blob = bucket.blob(filename)
-    blob.upload_from_string(request.data.get('session_data'))
+    blob.upload_from_string(json.dumps(request.data.get('session_data')))
 
     return Response('Session data logged!')
 

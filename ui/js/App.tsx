@@ -5,6 +5,7 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 import * as Sentry from '@sentry/react-native';
 
+import { initRecorder } from './src/recorder';
 import App from './src/App';
 import { setupStore } from './src/redux/store';
 import { getEnvFlags } from './src/helpers';
@@ -15,6 +16,7 @@ Sentry.init({
   environment: envFlags.ENVIRONMENT,
   debug: envFlags.DEBUG == 'true',
 });
+initRecorder();
 
 // https://callstack.github.io/react-native-paper/theming.html
 const theme = {
