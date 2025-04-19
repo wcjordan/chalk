@@ -339,7 +339,7 @@ pipeline {
                                     string(credentialsId: 'chalk-prod-cd-oauth-refresh-token', variable: 'CHALK_OAUTH_REFRESH_TOKEN'),
                                 ]) {
                                     dir('tests') {
-                                        sh 'pip install "playwright==1.48.0" "pytest==8.3.3"'
+                                        sh 'pip install "playwright==1.50.0" "pytest==8.3.5"'
                                         sh "pytest . --server_domain ${SERVER_IP} --junitxml=playwright_results.xml || true"
 
                                         junit testResults: 'playwright_results.xml'
