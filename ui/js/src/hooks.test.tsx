@@ -29,7 +29,7 @@ describe('useDataLoader', function () {
       id: 2,
       name: "work"
     }];
-    fetchMock.getOnce('https://chalk-dev.flipperkid.com/api/todos/labels/', {
+    fetchMock.getOnce('https://chalk.flipperkid.com/api/todos/labels/', {
       body: labelEntries,
     });
 
@@ -41,7 +41,7 @@ describe('useDataLoader', function () {
       id: 257,
       description: "Second Todo"
     });
-    const todosRoute = 'https://chalk-dev.flipperkid.com/api/todos/todos/';
+    const todosRoute = 'https://chalk.flipperkid.com/api/todos/todos/';
     fetchMock.getOnce(todosRoute, {
       body: [firstTodo],
     });
