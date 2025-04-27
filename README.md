@@ -68,12 +68,12 @@ See [instructions](https://docs.expo.dev/guides/authentication/#google)
 1) for Web  
 Name: chalk-dev-web  
 Authorized URIs:  
-- http://chalk.flipperkid.com  
-- http://chalk-dev.flipperkid.com  
+- https://chalk.flipperkid.com  
+- https://chalk-dev.flipperkid.com  
 - http://localhost:8080  
 Authorized redirect URIs:   
-- http://chalk.flipperkid.com/api/todos/auth_callback/  
-- http://chalk-dev.flipperkid.com/api/todos/auth_callback/  
+- https://chalk.flipperkid.com/api/todos/auth_callback/  
+- https://chalk-dev.flipperkid.com/api/todos/auth_callback/  
 - http://localhost:8080/api/todos/auth_callback/  
 
 Download the client ID / secret as JSON and place at helm/secrets/oauth_web_client_secret.json  

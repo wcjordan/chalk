@@ -128,5 +128,6 @@ def _get_redirect_uri(host):
         return REDIRECT_URI
 
     if host == 'localhost:8080':
-        return REDIRECT_URI.replace(f'https://{os.environ["DOMAIN"]}', 'http://localhost:8080')
+        return REDIRECT_URI.replace(f'https://{os.environ["DOMAIN"]}',
+                                    'http://localhost:8080')
     return REDIRECT_URI
