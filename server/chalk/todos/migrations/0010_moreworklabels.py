@@ -18,7 +18,8 @@ def insert_labels(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('todos', '0009_rankordermetadata_alter_historicaltodomodel_options_and_more'),
+        ('todos',
+         '0009_rankordermetadata_alter_historicaltodomodel_options_and_more'),
     ]
 
     operations = [

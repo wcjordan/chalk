@@ -254,6 +254,9 @@ pipeline {
                     """
                 }
             }
+            options {
+                throttle(['chalk-ci'])
+            }
             stages {
                 stage('Deploy Integration Server') {
                     options {
@@ -284,7 +287,7 @@ pipeline {
                                     cp \$OAUTH_WEB_SECRET helm/secrets/oauth_web_client_secret.json
                                     helm install \
                                         --namespace test \
-                                        --set domain=_ \
+                                        --set domain=chalk-ci.${env.ROOT_DOMAIN} \
                                         --set environment=CI \
                                         --set gcpProject=${env.GCP_PROJECT} \
                                         --set imageTag=${SANITIZED_BUILD_TAG} \
@@ -293,37 +296,25 @@ pipeline {
                                         --set server.secretKey=\$(head -c 32 /dev/urandom | base64) \
                                         ${HELM_DEPLOY_NAME} helm
                                     """
-                                script {
-                                    SERVER_IP = sh (
-                                        script: """
-                                            until [ ! -z \$ready_replicas ] && [ \$ready_replicas -ge 1 ]
-                                            do
-                                                sleep 15
-                                                ready_replicas=\$(kubectl --namespace test get deployments ${HELM_DEPLOY_NAME}-server -o jsonpath='{.status.readyReplicas}')
-                                            done
+                                sh """
+                                    until [ ! -z \$ready_replicas ] && [ \$ready_replicas -ge 1 ]
+                                    do
+                                        sleep 15
+                                        ready_replicas=\$(kubectl --namespace test get deployments ${HELM_DEPLOY_NAME}-server -o jsonpath='{.status.readyReplicas}')
+                                    done
 
-                                            until [ ! -z \$server_ip ]
-                                            do
-                                                sleep 5
-                                                server_ip=\$(kubectl --namespace test get ingress ${HELM_DEPLOY_NAME} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-                                            done
-                                            echo \$server_ip
+                                    until [ ! -z \$todos_ready ] && [ \$todos_ready -eq 200 ]
+                                    do
+                                        sleep 15
+                                        todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' https://chalk-ci.${env.ROOT_DOMAIN}/api/todos/healthz/ || true)
+                                    done
 
-                                            until [ ! -z \$todos_ready ] && [ \$todos_ready -eq 200 ]
-                                            do
-                                                sleep 15
-                                                todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/api/todos/healthz/ || true)
-                                            done
-
-                                            until [ ! -z \$html_ready ] && [ \$html_ready -eq 302 ]
-                                            do
-                                                sleep 5
-                                                html_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/ || true)
-                                            done
-                                        """,
-                                        returnStdout: true
-                                    ).trim()
-                                }
+                                    until [ ! -z \$html_ready ] && [ \$html_ready -eq 302 ]
+                                    do
+                                        sleep 5
+                                        html_ready=\$(curl -o /dev/null -Isw '%{http_code}' https://chalk-ci.${env.ROOT_DOMAIN}/ || true)
+                                    done
+                                """
                             }
                         }
                     }
@@ -340,7 +331,7 @@ pipeline {
                                 ]) {
                                     dir('tests') {
                                         sh 'pip install "playwright==1.50.0" "pytest==8.3.5"'
-                                        sh "pytest . --server_domain ${SERVER_IP} --junitxml=playwright_results.xml || true"
+                                        sh "pytest . --server_domain chalk-ci.${env.ROOT_DOMAIN} --junitxml=playwright_results.xml || true"
 
                                         junit testResults: 'playwright_results.xml'
                                         browserStackReportPublisher 'automate'
@@ -423,34 +414,25 @@ pipeline {
                                         --set server.secretKey=\$SECRET_KEY \
                                         chalk-prod helm
                                     """
-                                script {
-                                    sh """
-                                        until [ ! -z \$ready_replicas ] && [ \$ready_replicas -ge 1 ]
-                                        do
-                                            sleep 15
-                                            ready_replicas=\$(kubectl --namespace default get deployments chalk-prod-server -o jsonpath='{.status.readyReplicas}')
-                                        done
+                                sh """
+                                    until [ ! -z \$ready_replicas ] && [ \$ready_replicas -ge 1 ]
+                                    do
+                                        sleep 15
+                                        ready_replicas=\$(kubectl --namespace default get deployments chalk-prod-server -o jsonpath='{.status.readyReplicas}')
+                                    done
 
-                                        until [ ! -z \$server_ip ]
-                                        do
-                                            sleep 5
-                                            server_ip=\$(kubectl --namespace default get ingress chalk-prod -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-                                        done
-                                        echo \$server_ip
+                                    until [ ! -z \$todos_ready ] && [ \$todos_ready -eq 200 ]
+                                    do
+                                        sleep 15
+                                        todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://chalk.${env.ROOT_DOMAIN}/api/todos/healthz/ || true)
+                                    done
 
-                                        until [ ! -z \$todos_ready ] && [ \$todos_ready -eq 200 ]
-                                        do
-                                            sleep 15
-                                            todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/api/todos/healthz/ || true)
-                                        done
-
-                                        until [ ! -z \$html_ready ] && [ \$html_ready -eq 302 ]
-                                        do
-                                            sleep 5
-                                            html_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://\${server_ip}/ || true)
-                                        done
-                                    """
-                                }
+                                    until [ ! -z \$html_ready ] && [ \$html_ready -eq 302 ]
+                                    do
+                                        sleep 5
+                                        html_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://chalk.${env.ROOT_DOMAIN}/ || true)
+                                    done
+                                """
                             }
                         }
                     }

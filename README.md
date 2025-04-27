@@ -50,13 +50,16 @@ DOMAIN_NAME=<DOMAIN_NAME>
 
 gcloud compute addresses create chalk-ip --global
 gcloud compute addresses create chalk-dev-ip --global
+gcloud compute addresses create chalk-ci-ip --global
 
-DEV_IP=$(gcloud compute addresses describe chalk-dev-ip --global --format json | jq .address | tr -d '"')
 PROD_IP=$(gcloud compute addresses describe chalk-ip --global --format json | jq .address | tr -d '"')
+DEV_IP=$(gcloud compute addresses describe chalk-dev-ip --global --format json | jq .address | tr -d '"')
+CI_IP=$(gcloud compute addresses describe chalk-ci-ip --global --format json | jq .address | tr -d '"')
 
 gcloud beta dns record-sets transaction start --zone=$ZONE_NAME
-gcloud beta dns record-sets transaction add $DEV_IP --name=chalk-dev.$DOMAIN_NAME. --ttl=300 --type=A --zone=$ZONE_NAME
 gcloud beta dns record-sets transaction add $PROD_IP --name=chalk.$DOMAIN_NAME. --ttl=1800 --type=A --zone=$ZONE_NAME
+gcloud beta dns record-sets transaction add $DEV_IP --name=chalk-dev.$DOMAIN_NAME. --ttl=300 --type=A --zone=$ZONE_NAME
+gcloud beta dns record-sets transaction add $CI_IP --name=chalk-ci.$DOMAIN_NAME. --ttl=300 --type=A --zone=$ZONE_NAME
 gcloud beta dns record-sets transaction execute --zone=$ZONE_NAME
 
 ```
@@ -68,12 +71,14 @@ See [instructions](https://docs.expo.dev/guides/authentication/#google)
 1) for Web  
 Name: chalk-dev-web  
 Authorized URIs:  
-- http://chalk.flipperkid.com  
-- http://chalk-dev.flipperkid.com  
+- https://chalk.flipperkid.com  
+- https://chalk-dev.flipperkid.com  
+- https://chalk-ci.flipperkid.com  
 - http://localhost:8080  
 Authorized redirect URIs:   
-- http://chalk.flipperkid.com/api/todos/auth_callback/  
-- http://chalk-dev.flipperkid.com/api/todos/auth_callback/  
+- https://chalk.flipperkid.com/api/todos/auth_callback/  
+- https://chalk-dev.flipperkid.com/api/todos/auth_callback/  
+- https://chalk-ci.flipperkid.com/api/todos/auth_callback/  
 - http://localhost:8080/api/todos/auth_callback/  
 
 Download the client ID / secret as JSON and place at helm/secrets/oauth_web_client_secret.json  
