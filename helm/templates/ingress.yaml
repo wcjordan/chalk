@@ -20,6 +20,8 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: "chalk-ip"
     {{- else if eq .Values.environment "DEV" }}
     kubernetes.io/ingress.global-static-ip-name: "chalk-dev-ip"
+    {{- else if eq .Values.environment "CI" }}
+    kubernetes.io/ingress.global-static-ip-name: "chalk-ci-ip"
     {{- end }}
     cert-manager.io/cluster-issuer: "letsencrypt-cluster-cert-issuer"
     acme.cert-manager.io/http01-edit-in-place: "true"
@@ -57,5 +59,7 @@ spec:
     - chalk.flipperkid.com
     {{- else if eq .Values.environment "DEV" }}
     - chalk-dev.flipperkid.com
+    {{- else if eq .Values.environment "CI" }}
+    - chalk-ci.flipperkid.com
     {{- end }}
     secretName: tls-cert

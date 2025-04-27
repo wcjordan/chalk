@@ -284,7 +284,7 @@ pipeline {
                                     cp \$OAUTH_WEB_SECRET helm/secrets/oauth_web_client_secret.json
                                     helm install \
                                         --namespace test \
-                                        --set domain=_ \
+                                        --set domain=chalk-ci.${env.ROOT_DOMAIN} \
                                         --set environment=CI \
                                         --set gcpProject=${env.GCP_PROJECT} \
                                         --set imageTag=${SANITIZED_BUILD_TAG} \

@@ -83,8 +83,13 @@ export function getWsRoot(): string {
     return '';
   }
 
-  const subdomain =
-    getEnvFlags().ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
+  let subdomain = 'chalk';
+  if (getEnvFlags().ENVIRONMENT === 'ci') {
+    subdomain = 'chalk-ci';
+  }
+  if (getEnvFlags().ENVIRONMENT === 'dev') {
+    subdomain = 'chalk-dev';
+  }
   return `https://${subdomain}.flipperkid.com/`
 }
 

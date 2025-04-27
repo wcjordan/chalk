@@ -176,6 +176,7 @@ AUTHENTICATION_BACKENDS = ['chalk.todos.oauth.OAuthBackend']
 
 # Support load balancer terminated HTTPS
 CSRF_TRUSTED_ORIGINS = [
-    'https://chalk-dev.flipperkid.com',
     'https://chalk.flipperkid.com',
+    'https://chalk-ci.flipperkid.com',
+    'https://chalk-dev.flipperkid.com',
 ]
