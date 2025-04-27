@@ -173,3 +173,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Auth Backend
 AUTHENTICATION_BACKENDS = ['chalk.todos.oauth.OAuthBackend']
+
+# Support load balancer terminated HTTPS
+CSRF_TRUSTED_ORIGINS = [
+    'https://chalk-dev.flipperkid.com',
+    'https://chalk.flipperkid.com',
+]

@@ -1,4 +1,14 @@
 {{- $fullName := include "..fullname" . -}}
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: https-redirect
+spec:
+  redirectToHttps:
+    enabled: true
+
+---
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -13,6 +23,9 @@ metadata:
     {{- end }}
     cert-manager.io/cluster-issuer: "letsencrypt-cluster-cert-issuer"
     acme.cert-manager.io/http01-edit-in-place: "true"
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.allow-http: "true"
+    networking.gke.io/v1beta1.FrontendConfig: "https-redirect"
 spec:
   rules:
     - http:

@@ -14,7 +14,7 @@ from google.oauth2 import id_token
 from google.oauth2.credentials import Credentials
 
 CLIENT_SECRETS_FILE = "/mnt/oauth_web_client_secret.json"
-REDIRECT_URI = f'http://{os.environ["DOMAIN"]}/api/todos/auth_callback/'
+REDIRECT_URI = f'https://{os.environ["DOMAIN"]}/api/todos/auth_callback/'
 SCOPES = ['openid', 'https://www.googleapis.com/auth/userinfo.email']
 logger = logging.getLogger(__name__)
 
@@ -128,5 +128,5 @@ def _get_redirect_uri(host):
         return REDIRECT_URI
 
     if host == 'localhost:8080':
-        return REDIRECT_URI.replace(os.environ["DOMAIN"], 'localhost:8080')
+        return REDIRECT_URI.replace(f'https://{os.environ["DOMAIN"]}', 'http://localhost:8080')
     return REDIRECT_URI

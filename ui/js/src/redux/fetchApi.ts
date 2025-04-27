@@ -85,7 +85,7 @@ export function getWsRoot(): string {
 
   const subdomain =
     getEnvFlags().ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
-  return `http://${subdomain}.flipperkid.com/`
+  return `https://${subdomain}.flipperkid.com/`
 }
 
 // Used to exchange login token for session cookie in mobile login flow
