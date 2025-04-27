@@ -254,6 +254,9 @@ pipeline {
                     """
                 }
             }
+            options {
+                throttle(['chalk-ci'])
+            }
             stages {
                 stage('Deploy Integration Server') {
                     options {
