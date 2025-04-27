@@ -3,6 +3,11 @@ set -ex
 
 export PGHOST="127.0.0.1"
 
+exit_w_code() {
+  kill -SIGTERM -INT $(pgrep cloud-sql-proxy)
+  exit $1
+}
+
 # Check if we can connect to the DB
 db_connected=0
 for i in {1..12}; do
@@ -12,7 +17,7 @@ for i in {1..12}; do
 done
 if [[ $db_connected -eq 0 ]]; then
     echo "Unable to connect to the DB, exiting"
-    exit 1
+    exit_w_code 1
 fi
 
 # Check if the DB schema exists, if it does, skip the restore
@@ -28,7 +33,7 @@ else
     done
     if [[ $backup_downloaded -eq 0 ]]; then
         echo "Unable to download the backup, exiting"
-        exit 1
+        exit_w_code 1
     fi
 
     # Perform the restore
@@ -36,4 +41,4 @@ else
 fi
 
 # Kill cloud-sql-proxy so the job will complete
-kill -SIGTERM -INT $(pgrep cloud-sql-proxy)
+exit_w_code 0

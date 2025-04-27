@@ -83,9 +83,14 @@ export function getWsRoot(): string {
     return '';
   }
 
-  const subdomain =
-    getEnvFlags().ENVIRONMENT === 'prod' ? 'chalk' : 'chalk-dev';
-  return `http://${subdomain}.flipperkid.com/`
+  let subdomain = 'chalk';
+  if (getEnvFlags().ENVIRONMENT === 'ci') {
+    subdomain = 'chalk-ci';
+  }
+  if (getEnvFlags().ENVIRONMENT === 'dev') {
+    subdomain = 'chalk-dev';
+  }
+  return `https://${subdomain}.flipperkid.com/`
 }
 
 // Used to exchange login token for session cookie in mobile login flow

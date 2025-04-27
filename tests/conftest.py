@@ -88,9 +88,9 @@ def page(request, playwright, todo_prefix, test_name, server_domain, record_xml_
     page = browser.new_page()
     try:
         # Load page
-        page.goto(f'http://{server_domain}/')
+        page.goto(f'https://{server_domain}/')
         if "accounts.google.com" in page.url:
-            page.goto(f'http://{server_domain}/api/todos/auth_callback/?ci_refresh=true&code={refresh_token}')
+            page.goto(f'https://{server_domain}/api/todos/auth_callback/?ci_refresh=true&code={refresh_token}')
 
         if not "chalk" in page.title():
             raise Exception("Unable to load page.")
