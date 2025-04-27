@@ -11,6 +11,8 @@ metadata:
     {{- else if eq .Values.environment "DEV" }}
     kubernetes.io/ingress.global-static-ip-name: "chalk-dev-ip"
     {{- end }}
+    cert-manager.io/cluster-issuer: "letsencrypt-cluster-cert-issuer"
+    acme.cert-manager.io/http01-edit-in-place: "true"
 spec:
   rules:
     - http:
@@ -36,3 +38,11 @@ spec:
               name: {{ $fullName }}-ui
               port:
                 name: http
+  tls:
+  - hosts:
+    {{- if or (eq .Values.environment "PROD") (eq .Values.environment "STAGING") }}
+    - chalk.flipperkid.com
+    {{- else if eq .Values.environment "DEV" }}
+    - chalk-dev.flipperkid.com
+    {{- end }}
+    secretName: tls-cert
