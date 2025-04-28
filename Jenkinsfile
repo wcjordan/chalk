@@ -314,6 +314,7 @@ pipeline {
                                         sleep 5
                                         html_ready=\$(curl -o /dev/null -Isw '%{http_code}' https://chalk-ci.${env.ROOT_DOMAIN}/ || true)
                                     done
+                                    sleep 3000
                                 """
                             }
                         }
