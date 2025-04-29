@@ -260,7 +260,7 @@ pipeline {
             stages {
                 stage('Deploy Integration Server') {
                     options {
-                        timeout(time: 90, unit: 'MINUTES')
+                        timeout(time: 10, unit: 'MINUTES')
                     }
                     steps {
                         container('jenkins-helm') {
@@ -314,7 +314,6 @@ pipeline {
                                         sleep 5
                                         html_ready=\$(curl -o /dev/null -Isw '%{http_code}' https://chalk-ci.${env.ROOT_DOMAIN}/ || true)
                                     done
-                                    sleep 3000
                                 """
                             }
                         }
