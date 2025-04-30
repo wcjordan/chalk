@@ -101,7 +101,7 @@ export async function completeAuthCallback(token: string) {
   );
 }
 
-export async function logSessionData(
+export async function recordSessionData(
   dataString: string,
   csrfToken: string,
 ): Promise<string> {

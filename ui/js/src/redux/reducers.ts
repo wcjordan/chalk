@@ -13,7 +13,8 @@ import todosApiSlice, {
   updateTodo as updateTodoApi,
 } from './todosApiSlice';
 import workspaceSlice from './workspaceSlice';
-import { completeAuthCallback } from './fetchApi';
+import { completeAuthCallback, getCsrfToken, recordSessionData } from './fetchApi';
+import { getEnvFlags } from '../helpers';
 
 type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
@@ -121,6 +122,29 @@ export const completeAuthentication =
       );
       throw ex;
     }
+  };
+
+export const recordSessionEvents =
+  (sessionGuid: string, events: object[]): AppThunk =>
+  async (_, getState) => {
+    if (events.length === 0) {
+      return;
+    }
+
+    // send events to the backend
+    const data = JSON.stringify({
+      session_guid: sessionGuid,
+      session_data: events,
+      environment: getEnvFlags().ENVIRONMENT,
+    });
+    const result = recordSessionData(data, getCsrfToken(getState));
+    result.then((response: string) => {
+      console.error('Events saved successfully');
+      console.error(response);
+    }).catch((error: string) => {
+      console.error('Failed to save events');
+      console.error(error);
+    });
   };
 
 export const addNotification = notificationsSlice.actions.addNotification;
