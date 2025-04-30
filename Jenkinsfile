@@ -424,13 +424,13 @@ pipeline {
                                     until [ ! -z \$todos_ready ] && [ \$todos_ready -eq 200 ]
                                     do
                                         sleep 15
-                                        todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://chalk.${env.ROOT_DOMAIN}/api/todos/healthz/ || true)
+                                        todos_ready=\$(curl -o /dev/null -Isw '%{http_code}' https://chalk.${env.ROOT_DOMAIN}/api/todos/healthz/ || true)
                                     done
 
                                     until [ ! -z \$html_ready ] && [ \$html_ready -eq 302 ]
                                     do
                                         sleep 5
-                                        html_ready=\$(curl -o /dev/null -Isw '%{http_code}' http://chalk.${env.ROOT_DOMAIN}/ || true)
+                                        html_ready=\$(curl -o /dev/null -Isw '%{http_code}' https://chalk.${env.ROOT_DOMAIN}/ || true)
                                     done
                                 """
                             }
