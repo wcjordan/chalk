@@ -6361,13 +6361,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"base-64@npm:0.1.0":
-  version: 0.1.0
-  resolution: "base-64@npm:0.1.0"
-  checksum: 10c0/fe0dcf076e823f04db7ee9b02495be08a91c445fbc6db03cb9913be9680e2fcc0af8b74459041fe08ad16800b1f65a549501d8f08696a8a6d32880789b7de69d
-  languageName: node
-  linkType: hard
-
 "base64-arraybuffer@npm:^1.0.1":
   version: 1.0.2
   resolution: "base64-arraybuffer@npm:1.0.2"
@@ -6839,7 +6832,6 @@ __metadata:
     react: "npm:~18.3.1"
     react-dom: "npm:~18.3.1"
     react-native: "npm:0.74.7"
-    react-native-blob-util: "npm:0.21.2"
     react-native-draggable-flatlist: "npm:4.0.1"
     react-native-gesture-handler: "npm:~2.24.0"
     react-native-paper: "npm:~5.13.1"
@@ -10246,7 +10238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^10.2.2, glob@npm:^10.3.10, glob@npm:^10.4.2":
+"glob@npm:^10.2.2, glob@npm:^10.4.2":
   version: 10.4.5
   resolution: "glob@npm:10.4.5"
   dependencies:
@@ -15393,19 +15385,6 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 10c0/2bdb6b93fbb1820b024b496042cce405c57e2f85e777c9aabd55f9b26d145408f9f74f5934676ffdc46f3dcff656d78413a6e43968e7b3f92eea35b3052e9053
-  languageName: node
-  linkType: hard
-
-"react-native-blob-util@npm:0.21.2":
-  version: 0.21.2
-  resolution: "react-native-blob-util@npm:0.21.2"
-  dependencies:
-    base-64: "npm:0.1.0"
-    glob: "npm:^10.3.10"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10c0/7d7ca9abd02d2af4b9606813258047ad7748984d1ca5970ee2bc77ca3272690ca102d0cbccbc5e2d8193b3da73b453a03f918ff0f5269e1fe8b759df3dfd6ed0
   languageName: node
   linkType: hard
 
