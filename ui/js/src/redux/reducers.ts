@@ -1,7 +1,12 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action } from '@reduxjs/toolkit';
 
-import { MoveTodoOperation, TodoPatch } from './types';
+import { getEnvFlags } from '../helpers';
+import {
+  completeAuthCallback,
+  getCsrfToken,
+  recordSessionData,
+} from './fetchApi';
 import labelsApiSlice, { listLabels } from './labelsApiSlice';
 import notificationsSlice from './notificationsSlice';
 import shortcutSlice from './shortcutSlice';
@@ -12,9 +17,8 @@ import todosApiSlice, {
   moveTodo as moveTodoApi,
   updateTodo as updateTodoApi,
 } from './todosApiSlice';
+import { MoveTodoOperation, TodoPatch } from './types';
 import workspaceSlice from './workspaceSlice';
-import { completeAuthCallback, getCsrfToken, recordSessionData } from './fetchApi';
-import { getEnvFlags } from '../helpers';
 
 type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
@@ -138,13 +142,15 @@ export const recordSessionEvents =
       environment: getEnvFlags().ENVIRONMENT,
     });
     const result = recordSessionData(data, getCsrfToken(getState));
-    result.then((response: string) => {
-      console.error('Events saved successfully');
-      console.error(response);
-    }).catch((error: string) => {
-      console.error('Failed to save events');
-      console.error(error);
-    });
+    result
+      .then((response: string) => {
+        console.error('Events saved successfully');
+        console.error(response);
+      })
+      .catch((error: string) => {
+        console.error('Failed to save events');
+        console.error(error);
+      });
   };
 
 export const addNotification = notificationsSlice.actions.addNotification;

@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { record } from 'rrweb';
 import { recordSessionEvents } from '../redux/reducers';
-import { useAppDispatch } from './hooks';
 import { getEnvFlags } from '../helpers';
+import { useAppDispatch } from './hooks';
 
 export function useSessionRecorder() {
   // Don't record on mobile or when running unit tests
@@ -24,13 +24,11 @@ export function useSessionRecorder() {
     });
 
     // save events every 10 seconds
-    const intervalId = setInterval(
-      () => {
-        dispatch(recordSessionEvents(sessionGuid, events))
-        // reset the events array
-        events = [];
-      },
-    10 * 1000);
+    const intervalId = setInterval(() => {
+      dispatch(recordSessionEvents(sessionGuid, events));
+      // reset the events array
+      events = [];
+    }, 10 * 1000);
 
     return () => {
       clearInterval(intervalId);
