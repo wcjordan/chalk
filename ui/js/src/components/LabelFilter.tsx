@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import { useAppSelector, useAppDispatch } from '../hooks';
+import { useAppSelector, useAppDispatch } from '../hooks/hooks';
 import { selectLabelNames } from '../selectors';
 import { toggleLabel } from '../redux/reducers';
 import FilterViewControls from './FilterViewControls';

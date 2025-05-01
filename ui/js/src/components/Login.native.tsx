@@ -10,7 +10,7 @@ import {
   completeAuthentication,
 } from '../redux/reducers';
 import { getEnvFlags } from '../helpers';
-import { useAppDispatch } from '../hooks';
+import { useAppDispatch } from '../hooks/hooks';
 
 GoogleSignin.configure({
   webClientId: getEnvFlags().OAUTH_CLIENT_ID,

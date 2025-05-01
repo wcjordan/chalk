@@ -16,7 +16,7 @@ import {
 } from 'react-native-paper';
 import { setEditTodoId, setLabelTodoId, updateTodo } from '../redux/reducers';
 import { Todo } from '../redux/types';
-import { useAppDispatch } from '../hooks';
+import { useAppDispatch } from '../hooks/hooks';
 import LabelChip from './LabelChip';
 
 interface Style {

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Snackbar } from 'react-native-paper';
 import { dismissNotification } from '../redux/reducers';
-import { useAppDispatch } from '../hooks';
+import { useAppDispatch } from '../hooks/hooks';
 
 const ErrorBar: React.FC<Props> = function (props: Props) {
   const { permanent, text } = props;

@@ -3,7 +3,7 @@ import { SafeAreaView, StatusBar, StyleSheet, ViewStyle } from 'react-native';
 import ErrorBar from './components/ErrorBar';
 import Login from './components/Login';
 import TodoList from './components/TodoList';
-import { useAppSelector } from './hooks';
+import { useAppSelector } from './hooks/hooks';
 
 interface Style {
   root: ViewStyle;
