@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import React, { PropsWithChildren } from 'react';
 
 import { useDataLoader } from './hooks';
-import { setupStore } from './redux/store';
+import { setupStore } from '../redux/store';
 
 // Pretend not a test so useDataLoader doesn't bail on requests
 jest.mock('expo-constants', () => ({
