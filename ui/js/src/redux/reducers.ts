@@ -142,15 +142,10 @@ export const recordSessionEvents =
       environment: getEnvFlags().ENVIRONMENT,
     });
     const result = recordSessionData(data, getCsrfToken(getState));
-    result
-      .then((response: string) => {
-        console.error('Events saved successfully');
-        console.error(response);
-      })
-      .catch((error: string) => {
-        console.error('Failed to save events');
-        console.error(error);
-      });
+    result.catch((error: string) => {
+      console.error('Failed to save events');
+      console.error(error);
+    });
   };
 
 export const addNotification = notificationsSlice.actions.addNotification;
