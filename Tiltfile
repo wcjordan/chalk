@@ -15,7 +15,7 @@ docker_build('us-east4-docker.pkg.dev/%s/default-gar/chalk-server' % GCP_PROJECT
 docker_build(
     'us-east4-docker.pkg.dev/%s/default-gar/chalk-ui' % GCP_PROJECT,
     'ui',
-    build_args={'environment': 'DEV', 'sentryDsn': os.environ.get('SENTRY_DSN')})
+    build_args={'sentryDsn': os.environ.get('SENTRY_DSN')})
 docker_build('us-east4-docker.pkg.dev/%s/default-gar/chalk-db-restorer' % GCP_PROJECT, 'misc_containers/db_restorer')
 
 RANDOM_TAG = str(local('cat _env_id.txt || true')).strip()

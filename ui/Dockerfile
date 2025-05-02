@@ -2,8 +2,7 @@
 FROM node:20 AS base
 WORKDIR /workspace/js
 
-ARG environment=prod
-ENV ENVIRONMENT=$environment
+ENV ENVIRONMENT=prod
 ENV DEBUG=false
 ARG sentryDsn
 ENV SENTRY_DSN=$sentryDsn
