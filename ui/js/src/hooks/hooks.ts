@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import type { RootState, AppDispatch } from './redux/store';
-import { listLabels, listTodos } from './redux/reducers';
-import { getEnvFlags } from './helpers';
+
+import type { RootState, AppDispatch } from '../redux/store';
+import { listLabels, listTodos } from '../redux/reducers';
+import { getEnvFlags } from '../helpers';
 
 export function useDataLoader() {
   if (getEnvFlags().ENVIRONMENT === 'test') {
@@ -12,6 +13,7 @@ export function useDataLoader() {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(listLabels());
+    dispatch(listTodos());
 
     const intervalId = window.setInterval(
       () => dispatch(listTodos()),

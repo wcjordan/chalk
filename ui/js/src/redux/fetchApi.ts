@@ -100,3 +100,17 @@ export async function completeAuthCallback(token: string) {
     getRequestOpts('GET'),
   );
 }
+
+export async function recordSessionData(
+  dataString: string,
+  csrfToken: string,
+): Promise<string> {
+  
+  const requestOpts = getRequestOpts('POST', csrfToken);
+  requestOpts.body = dataString;
+  const response = await fetch(
+    `${getWsRoot()}api/todos/log_session_data/`,
+    requestOpts,
+  );
+  return handleResponse<string>(response);
+}

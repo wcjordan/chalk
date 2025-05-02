@@ -11,7 +11,8 @@ import {
   selectLabelNames,
   selectSelectedPickerLabels,
 } from '../selectors';
-import { useAppDispatch, useAppSelector, useDataLoader } from '../hooks';
+import { useAppDispatch, useAppSelector, useDataLoader } from '../hooks/hooks';
+import { useSessionRecorder } from '../hooks/useSessionRecorder';
 import { Todo } from '../redux/types';
 import { moveTodo } from '../redux/reducers';
 import AddTodo from './AddTodo';
@@ -53,6 +54,10 @@ const styles = StyleSheet.create<Style>({
 const TodoList: React.FC = memo(function () {
   const dispatch = useAppDispatch()
   useDataLoader();
+  if (Platform.OS === 'web') {
+    useSessionRecorder();
+  }
+
   const {
     editTodoId,
     filterLabels,

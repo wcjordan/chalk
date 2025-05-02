@@ -3,7 +3,7 @@ import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Modal } from 'react-native-paper';
 import { FILTER_STATUS } from '../redux/types';
 import { setLabelTodoId, updateTodoLabels } from '../redux/reducers';
-import { useAppDispatch } from '../hooks';
+import { useAppDispatch } from '../hooks/hooks';
 import LabelChip from './LabelChip';
 
 interface Style {

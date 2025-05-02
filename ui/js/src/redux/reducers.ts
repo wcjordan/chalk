@@ -1,7 +1,12 @@
 import { ThunkAction } from 'redux-thunk';
 import { Action } from '@reduxjs/toolkit';
 
-import { MoveTodoOperation, TodoPatch } from './types';
+import { getEnvFlags } from '../helpers';
+import {
+  completeAuthCallback,
+  getCsrfToken,
+  recordSessionData,
+} from './fetchApi';
 import labelsApiSlice, { listLabels } from './labelsApiSlice';
 import notificationsSlice from './notificationsSlice';
 import shortcutSlice from './shortcutSlice';
@@ -12,8 +17,8 @@ import todosApiSlice, {
   moveTodo as moveTodoApi,
   updateTodo as updateTodoApi,
 } from './todosApiSlice';
+import { MoveTodoOperation, TodoPatch } from './types';
 import workspaceSlice from './workspaceSlice';
-import { completeAuthCallback } from './fetchApi';
 
 type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
@@ -121,6 +126,26 @@ export const completeAuthentication =
       );
       throw ex;
     }
+  };
+
+export const recordSessionEvents =
+  (sessionGuid: string, events: object[]): AppThunk =>
+  async (_, getState) => {
+    if (events.length === 0) {
+      return;
+    }
+
+    // send events to the backend
+    const data = JSON.stringify({
+      session_guid: sessionGuid,
+      session_data: events,
+      environment: getEnvFlags().ENVIRONMENT,
+    });
+    const result = recordSessionData(data, getCsrfToken(getState));
+    result.catch((error: string) => {
+      console.error('Failed to save events');
+      console.error(error);
+    });
   };
 
 export const addNotification = notificationsSlice.actions.addNotification;

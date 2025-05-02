@@ -1,5 +1,19 @@
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
 export const getEnvFlags = () => {
-  return Constants.expoConfig?.extra || {};
+  const flags = Constants.expoConfig?.extra || {};
+
+  // If running in a browser, set the environment based on the hostname
+  // This is because we wan't to build a single container w/ prod artifacts
+  // and use it for the dev & ci use cases that don't use the Expo web server
+  if (Platform.OS === 'web' && flags.ENVIRONMENT !== 'test') {
+    const hostname = document.location.hostname;
+    if (hostname.startsWith('localhost') || hostname.startsWith('chalk-dev')) {
+      flags.ENVIRONMENT = 'dev';
+    } else if (hostname.startsWith('chalk-ci')) {
+      flags.ENVIRONMENT = 'ci';
+    }
+  }
+  return flags;
 };

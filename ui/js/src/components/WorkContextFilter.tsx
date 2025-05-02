@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { FILTER_STATUS } from '../redux/types';
 import { setWorkContext } from '../redux/reducers';
-import { useAppDispatch } from '../hooks';
+import { useAppDispatch } from '../hooks/hooks';
 import { workContexts } from '../redux/workspaceSlice';
 import LabelChip from './LabelChip';
 import FilterViewControls from './FilterViewControls';

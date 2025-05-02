@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { createTodo } from '../redux/reducers';
-import { useAppDispatch } from '../hooks';
+import { useAppDispatch } from '../hooks/hooks';
 
 interface Style {
   addTodoView: ViewStyle;

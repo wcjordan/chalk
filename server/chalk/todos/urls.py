@@ -15,6 +15,7 @@ urlpatterns = [
     path('auth_callback/', views.auth_callback),
     path('auth_test/', views.auth_test),
     path('healthz/', views.healthz),
+    path('log_session_data/', views.log_session_data),
     path('rebalance_ranks/', views.rebalance_ranks),
     path('status/', views.status),
     path('', include(router.urls)),
