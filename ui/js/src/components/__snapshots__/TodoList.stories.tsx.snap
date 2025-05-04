@@ -34,9 +34,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
     <div class="css-175oi2r r-78d8zt r-18u37iz r-1w6e6rj r-13qz1uu"
          data-testid="work-context-filter"
     >
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -57,9 +57,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -80,9 +80,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -103,9 +103,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -126,9 +126,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -149,9 +149,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -172,9 +172,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -208,10 +208,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                   disabled
                   role="button"
                   tabindex="-1"
-                  class="css-175oi2r r-xoduu5 r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                  class="css-175oi2r r-xoduu5 r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-1awozwy r-16y2uox r-1777fci"
                   data-testid="icon-button"
                   type="button"
-                  style="border-radius: 18px;"
           >
             <span role="img"
                   tabindex="-1"
@@ -231,7 +230,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                   class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                   data-testid="show-labels"
                   type="button"
-                  style="border-radius: 18px;"
           >
             <span role="img"
                   tabindex="-1"
@@ -251,7 +249,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                   class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                   data-testid="show-completed-todos"
                   type="button"
-                  style="border-radius: 18px;"
           >
             <span role="img"
                   tabindex="-1"
@@ -345,7 +342,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -366,7 +362,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -382,15 +377,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -407,15 +402,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -432,15 +427,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -457,15 +452,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -482,15 +477,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -507,15 +502,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -611,7 +606,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -632,7 +626,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -648,15 +641,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -673,15 +666,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -698,15 +691,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -723,15 +716,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -748,15 +741,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -773,15 +766,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -890,7 +883,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="cancel-edit"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -906,15 +898,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -931,15 +923,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -956,15 +948,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -981,15 +973,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1006,15 +998,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1031,15 +1023,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1135,7 +1127,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -1156,7 +1147,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -1172,15 +1162,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1197,15 +1187,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1222,15 +1212,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1247,15 +1237,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1272,15 +1262,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1297,15 +1287,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1401,7 +1391,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -1422,7 +1411,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -1438,15 +1426,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1463,15 +1451,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1488,15 +1476,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1513,15 +1501,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1538,15 +1526,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1563,15 +1551,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1667,7 +1655,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -1688,7 +1675,6 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -1704,15 +1690,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1729,15 +1715,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1754,15 +1740,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1779,15 +1765,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1804,15 +1790,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1829,15 +1815,15 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -1903,9 +1889,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
     <div class="css-175oi2r r-78d8zt r-18u37iz r-1w6e6rj r-13qz1uu"
          data-testid="work-context-filter"
     >
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -1926,9 +1912,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -1949,9 +1935,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -1972,9 +1958,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -1995,9 +1981,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -2018,9 +2004,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -2041,9 +2027,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -2077,10 +2063,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                   disabled
                   role="button"
                   tabindex="-1"
-                  class="css-175oi2r r-xoduu5 r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                  class="css-175oi2r r-xoduu5 r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-1awozwy r-16y2uox r-1777fci"
                   data-testid="icon-button"
                   type="button"
-                  style="border-radius: 18px;"
           >
             <span role="img"
                   tabindex="-1"
@@ -2100,7 +2085,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                   class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                   data-testid="show-labels"
                   type="button"
-                  style="border-radius: 18px;"
           >
             <span role="img"
                   tabindex="-1"
@@ -2120,7 +2104,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                   class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                   data-testid="show-completed-todos"
                   type="button"
-                  style="border-radius: 18px;"
           >
             <span role="img"
                   tabindex="-1"
@@ -2214,7 +2197,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -2235,7 +2217,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -2251,15 +2232,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2276,15 +2257,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2301,15 +2282,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2326,15 +2307,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2351,15 +2332,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2376,15 +2357,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2480,7 +2461,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -2501,7 +2481,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -2517,15 +2496,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2542,15 +2521,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2567,15 +2546,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2592,15 +2571,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2617,15 +2596,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2642,15 +2621,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2746,7 +2725,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -2767,7 +2745,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -2783,15 +2760,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2808,15 +2785,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2833,15 +2810,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2858,15 +2835,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2883,15 +2860,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -2908,15 +2885,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3012,7 +2989,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -3033,7 +3009,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -3049,15 +3024,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3074,15 +3049,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3099,15 +3074,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3124,15 +3099,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3149,15 +3124,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3174,15 +3149,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3278,7 +3253,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -3299,7 +3273,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -3315,15 +3288,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3340,15 +3313,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3365,15 +3338,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3390,15 +3363,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3415,15 +3388,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3440,15 +3413,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3544,7 +3517,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -3565,7 +3537,6 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -3581,15 +3552,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3606,15 +3577,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3631,15 +3602,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3656,15 +3627,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3681,15 +3652,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3706,15 +3677,15 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -3767,9 +3738,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
         <div class="css-175oi2r r-hr69ez r-18u37iz r-1w6e6rj"
              data-testid="label-picker"
         >
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -3800,9 +3771,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
                data-testid="chip-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -3823,9 +3794,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -3856,9 +3827,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -3889,9 +3860,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -3922,9 +3893,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
                data-testid="chip-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -3945,9 +3916,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -3978,9 +3949,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
                data-testid="chip-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -4001,9 +3972,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
                data-testid="chip-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -4024,9 +3995,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
                data-testid="chip-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -4047,9 +4018,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -4080,9 +4051,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
                data-testid="chip-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -4103,9 +4074,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
                data-testid="chip-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button role="button"
                     tabindex="0"
@@ -4167,9 +4138,9 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
     <div class="css-175oi2r r-78d8zt r-18u37iz r-1w6e6rj r-13qz1uu"
          data-testid="work-context-filter"
     >
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -4190,9 +4161,9 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -4213,9 +4184,9 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -4236,9 +4207,9 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -4259,9 +4230,9 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -4282,9 +4253,9 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -4305,9 +4276,9 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
           </div>
         </button>
       </div>
-      <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-78d8zt r-1bq2mok r-105ug2t"
+      <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
            data-testid="chip-container"
-           style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+           style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
       >
         <button role="button"
                 tabindex="0"
@@ -4341,10 +4312,9 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                   disabled
                   role="button"
                   tabindex="-1"
-                  class="css-175oi2r r-xoduu5 r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                  class="css-175oi2r r-xoduu5 r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-1awozwy r-16y2uox r-1777fci"
                   data-testid="icon-button"
                   type="button"
-                  style="border-radius: 18px;"
           >
             <span role="img"
                   tabindex="-1"
@@ -4364,7 +4334,6 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                   class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                   data-testid="show-labels"
                   type="button"
-                  style="border-radius: 18px;"
           >
             <span role="img"
                   tabindex="-1"
@@ -4384,7 +4353,6 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                   class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                   data-testid="show-completed-todos"
                   type="button"
-                  style="border-radius: 18px;"
           >
             <span role="img"
                   tabindex="-1"
@@ -4478,7 +4446,6 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="label-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -4499,7 +4466,6 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                                     class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                                     data-testid="delete-todo"
                                     type="button"
-                                    style="border-radius: 18px;"
                             >
                               <div dir="auto"
                                    role="img"
@@ -4515,15 +4481,15 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                         <div class="css-175oi2r r-18u37iz r-1w6e6rj"
                              data-testid="todo-labels"
                         >
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -4540,15 +4506,15 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -4565,15 +4531,15 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -4590,15 +4556,15 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -4615,15 +4581,15 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
@@ -4640,15 +4606,15 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                               </div>
                             </button>
                           </div>
-                          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+                          <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                                data-testid="chip-active-container"
-                               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+                               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
                           >
                             <button aria-disabled="true"
                                     disabled
                                     role="button"
                                     tabindex="-1"
-                                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                                    class="css-175oi2r r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                                     data-testid="chip-active"
                                     type="button"
                                     style="border-radius: 8px;"
