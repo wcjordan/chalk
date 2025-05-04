@@ -48,14 +48,6 @@ export default {
         project: 'chalk-react-native',
       }
     ],
-    [
-      'expo-build-properties',
-      {
-        android: {
-          usesCleartextTraffic: true,
-        },
-      },
-    ],
     'expo-font',
   ],
 };
