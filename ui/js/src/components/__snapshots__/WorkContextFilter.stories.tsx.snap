@@ -1,21 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Work Context Filter ActiveWorkContextFilter smoke-test 1`] = `
-<div class="css-g5y9jx r-78d8zt r-18u37iz r-1w6e6rj r-13qz1uu"
+<div class="css-175oi2r r-78d8zt r-18u37iz r-1w6e6rj r-13qz1uu"
      data-testid="work-context-filter"
 >
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -27,21 +27,21 @@ exports[`Work Context Filter ActiveWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
        data-testid="chip-active-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip-active"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
-        <div class="css-g5y9jx r-1kihuf0 r-tuq35u r-1m04atk r-9aemit">
+        <div class="css-175oi2r r-1kihuf0 r-tuq35u r-1m04atk r-9aemit">
           <div dir="auto"
                role="img"
                tabindex="-1"
@@ -60,18 +60,18 @@ exports[`Work Context Filter ActiveWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -83,18 +83,18 @@ exports[`Work Context Filter ActiveWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -106,18 +106,18 @@ exports[`Work Context Filter ActiveWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -129,18 +129,18 @@ exports[`Work Context Filter ActiveWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -152,18 +152,18 @@ exports[`Work Context Filter ActiveWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -175,18 +175,18 @@ exports[`Work Context Filter ActiveWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-16y2uox">
+  <div class="css-175oi2r r-16y2uox">
   </div>
   <div dir="auto"
        class="css-146c3p1 r-1pyaxff"
   >
-    <div class="css-g5y9jx r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
+    <div class="css-175oi2r r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
          data-testid="show-labels-container"
          style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
     >
       <button role="button"
               tabindex="0"
-              class="css-g5y9jx r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+              class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
               data-testid="show-labels"
               type="button"
       >
@@ -199,13 +199,13 @@ exports[`Work Context Filter ActiveWorkContextFilter smoke-test 1`] = `
         </span>
       </button>
     </div>
-    <div class="css-g5y9jx r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
+    <div class="css-175oi2r r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
          data-testid="show-completed-todos-container"
          style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
     >
       <button role="button"
               tabindex="0"
-              class="css-g5y9jx r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+              class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
               data-testid="show-completed-todos"
               type="button"
       >
@@ -223,21 +223,21 @@ exports[`Work Context Filter ActiveWorkContextFilter smoke-test 1`] = `
 `;
 
 exports[`Work Context Filter DefaultWorkContextFilter smoke-test 1`] = `
-<div class="css-g5y9jx r-78d8zt r-18u37iz r-1w6e6rj r-13qz1uu"
+<div class="css-175oi2r r-78d8zt r-18u37iz r-1w6e6rj r-13qz1uu"
      data-testid="work-context-filter"
 >
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -249,18 +249,18 @@ exports[`Work Context Filter DefaultWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -272,18 +272,18 @@ exports[`Work Context Filter DefaultWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -295,18 +295,18 @@ exports[`Work Context Filter DefaultWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -318,18 +318,18 @@ exports[`Work Context Filter DefaultWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -341,18 +341,18 @@ exports[`Work Context Filter DefaultWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -364,18 +364,18 @@ exports[`Work Context Filter DefaultWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+  <div class="css-175oi2r r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
        data-testid="chip-container"
        style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
   >
     <button role="button"
             tabindex="0"
-            class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+            class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
             data-testid="chip"
             type="button"
             style="border-radius: 8px;"
     >
-      <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+      <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
            style="padding-right: 0px;"
       >
         <div dir="auto"
@@ -387,18 +387,18 @@ exports[`Work Context Filter DefaultWorkContextFilter smoke-test 1`] = `
       </div>
     </button>
   </div>
-  <div class="css-g5y9jx r-16y2uox">
+  <div class="css-175oi2r r-16y2uox">
   </div>
   <div dir="auto"
        class="css-146c3p1 r-1pyaxff"
   >
-    <div class="css-g5y9jx r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
+    <div class="css-175oi2r r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
          data-testid="show-labels-container"
          style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
     >
       <button role="button"
               tabindex="0"
-              class="css-g5y9jx r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+              class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
               data-testid="show-labels"
               type="button"
       >
@@ -411,13 +411,13 @@ exports[`Work Context Filter DefaultWorkContextFilter smoke-test 1`] = `
         </span>
       </button>
     </div>
-    <div class="css-g5y9jx r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
+    <div class="css-175oi2r r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
          data-testid="show-completed-todos-container"
          style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
     >
       <button role="button"
               tabindex="0"
-              class="css-g5y9jx r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+              class="css-175oi2r r-xoduu5 r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
               data-testid="show-completed-todos"
               type="button"
       >

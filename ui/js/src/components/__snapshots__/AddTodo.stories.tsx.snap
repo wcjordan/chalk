@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Add Todo DefaultAddTodo smoke-test 1`] = `
-<div class="css-g5y9jx r-1kly57o r-13qz1uu">
-  <div class="css-g5y9jx"
+<div class="css-175oi2r r-1kly57o r-13qz1uu">
+  <div class="css-175oi2r"
        style="background-color: rgb(231, 224, 236); border-top-left-radius: 4px; border-top-right-radius: 4px;"
   >
-    <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-184en5c r-109y4c4"
+    <div class="css-175oi2r r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-184en5c r-109y4c4"
          data-testid="text-input-underline"
          style="background-color: rgb(73, 69, 79); transform: scaleY(0.5);"
     >
     </div>
-    <div class="css-g5y9jx r-16y2uox r-1mdbw0j r-wk8lta"
+    <div class="css-175oi2r r-16y2uox r-1mdbw0j r-wk8lta"
          style="min-height: 56px;"
     >
       <textarea placeholder="Add a new todo..."
