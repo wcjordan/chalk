@@ -1,6 +1,7 @@
 const IS_DEV = process.env.ENVIRONMENT === 'dev';
 
-export default {
+export default ({ config }) => ({
+  ...config,
   name: IS_DEV ? 'chalk (dev)' : 'chalk',
   slug: 'chalk',
   version: '0.1.3',
@@ -58,4 +59,4 @@ export default {
     ],
     'expo-font',
   ],
-};
+});
