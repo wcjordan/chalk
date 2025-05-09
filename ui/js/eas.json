@@ -7,20 +7,20 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "ENVIRONMENT": "dev",
+        "UI_ENVIRONMENT": "dev",
         "DEBUG": "true"
       }
     },
     "preview": {
       "distribution": "internal",
       "env": {
-        "ENVIRONMENT": "prod",
+        "UI_ENVIRONMENT": "prod",
         "DEBUG": "false"
       }
     },
     "production": {
       "env": {
-        "ENVIRONMENT": "prod",
+        "UI_ENVIRONMENT": "prod",
         "DEBUG": "false"
       }
     }

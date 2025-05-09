@@ -41,13 +41,15 @@ k8s_resource(objects=['%s:ingress' % RELEASE_NAME], new_name='Ingress')
 
 expo_env = {
     'DEBUG': 'true',
-    'ENVIRONMENT': 'DEV',
+    'UI_ENVIRONMENT': 'DEV',
     'SENTRY_DSN': os.environ.get('SENTRY_DSN'),
 }
 local_resource('expo',
                serve_cmd='bash start.sh',
                serve_dir='ui',
                serve_env=expo_env,
+               auto_init=False,
+               trigger_mode=TRIGGER_MODE_MANUAL,
                readiness_probe=probe(
                   http_get=http_get_action(port=8081, path="/")
                ))
