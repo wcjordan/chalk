@@ -1,4 +1,4 @@
-const IS_DEV = process.env.ENVIRONMENT === 'dev';
+const IS_DEV = process.env.UI_ENVIRONMENT == 'dev';
 
 export default {
   name: IS_DEV ? 'chalk (dev)' : 'chalk',
@@ -32,7 +32,7 @@ export default {
   },
   extra: {
     DEBUG: process.env.DEBUG,
-    ENVIRONMENT: process.env.ENVIRONMENT,
+    ENVIRONMENT: process.env.UI_ENVIRONMENT,
     OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
     SENTRY_DSN: process.env.SENTRY_DSN,
     eas: {

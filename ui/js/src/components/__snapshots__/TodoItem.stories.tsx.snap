@@ -1,31 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Todo Item CheckedTodo smoke-test 1`] = `
-<div class="css-175oi2r r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
+<div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
      data-testid="card-container"
      style="background-color: rgb(255, 251, 254);"
 >
-  <div class="css-175oi2r r-rs99b7 r-1pi2tsx r-u8s1d r-13qz1uu r-136ojw6 r-633pao"
+  <div class="css-g5y9jx r-rs99b7 r-1pi2tsx r-u8s1d r-13qz1uu r-136ojw6 r-633pao"
        data-testid="card-outline"
        style="border-color: rgba(0, 0, 0, 0.12); border-radius: 0px;"
   >
   </div>
   <div tabindex="0"
-       class="css-175oi2r r-1loqt21 r-1otgn73"
+       class="css-g5y9jx r-1loqt21 r-1otgn73"
   >
-    <div class="css-175oi2r r-1wbh5a2"
+    <div class="css-g5y9jx r-1wbh5a2"
          data-testid="card"
     >
-      <div class="css-175oi2r r-3pj75a r-w7s2jr r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb">
-        <div class="css-175oi2r r-18u37iz r-13qz1uu">
-          <div class="css-175oi2r">
+      <div class="css-g5y9jx r-3pj75a r-w7s2jr r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb">
+        <div class="css-g5y9jx r-18u37iz r-13qz1uu">
+          <div class="css-g5y9jx">
             <div aria-live="polite"
                  role="checkbox"
                  tabindex="0"
-                 class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-6ncur5 r-1r8g8re r-qpntkw r-1acpoxo"
+                 class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-6ncur5 r-1r8g8re r-qpntkw r-1acpoxo"
                  data-testid="complete-todo"
             >
-              <div class="css-175oi2r"
+              <div class="css-g5y9jx"
                    style="transform: scale(1);"
               >
                 <div dir="auto"
@@ -36,8 +36,8 @@ exports[`Todo Item CheckedTodo smoke-test 1`] = `
                 >
                   󰄲
                 </div>
-                <div class="css-175oi2r r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
-                  <div class="css-175oi2r r-1pexk7n r-1mcorv5"
+                <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
+                  <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
                        style="border-color: rgb(103, 80, 164); border-width: 0px;"
                   >
                   </div>
@@ -45,8 +45,8 @@ exports[`Todo Item CheckedTodo smoke-test 1`] = `
               </div>
             </div>
           </div>
-          <div class="css-175oi2r r-1iusvr4 r-16y2uox r-1un7vkp">
-            <div class="css-175oi2r r-16y2uox">
+          <div class="css-g5y9jx r-1iusvr4 r-16y2uox r-1un7vkp">
+            <div class="css-g5y9jx r-16y2uox">
             </div>
             <div dir="auto"
                  class="css-146c3p1 r-fdjqy7 r-1x2decy r-ubezar"
@@ -55,19 +55,18 @@ exports[`Todo Item CheckedTodo smoke-test 1`] = `
             >
               Checked Todo
             </div>
-            <div class="css-175oi2r r-16y2uox">
+            <div class="css-g5y9jx r-16y2uox">
             </div>
           </div>
-          <div class="css-175oi2r r-1udh08x r-crgep1 r-105ug2t"
+          <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                data-testid="label-todo-container"
                style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
           >
             <button role="button"
                     tabindex="0"
-                    class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                    class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                     data-testid="label-todo"
                     type="button"
-                    style="border-radius: 18px;"
             >
               <div dir="auto"
                    role="img"
@@ -79,16 +78,15 @@ exports[`Todo Item CheckedTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1udh08x r-crgep1 r-105ug2t"
+          <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                data-testid="delete-todo-container"
                style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
           >
             <button role="button"
                     tabindex="0"
-                    class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                    class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                     data-testid="delete-todo"
                     type="button"
-                    style="border-radius: 18px;"
             >
               <div dir="auto"
                    role="img"
@@ -101,23 +99,23 @@ exports[`Todo Item CheckedTodo smoke-test 1`] = `
             </button>
           </div>
         </div>
-        <div class="css-175oi2r r-18u37iz r-1w6e6rj"
+        <div class="css-g5y9jx r-18u37iz r-1w6e6rj"
              data-testid="todo-labels"
         >
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -129,20 +127,20 @@ exports[`Todo Item CheckedTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -154,20 +152,20 @@ exports[`Todo Item CheckedTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -187,31 +185,31 @@ exports[`Todo Item CheckedTodo smoke-test 1`] = `
 `;
 
 exports[`Todo Item DefaultTodo smoke-test 1`] = `
-<div class="css-175oi2r r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
+<div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
      data-testid="card-container"
      style="background-color: rgb(255, 251, 254);"
 >
-  <div class="css-175oi2r r-rs99b7 r-1pi2tsx r-u8s1d r-13qz1uu r-136ojw6 r-633pao"
+  <div class="css-g5y9jx r-rs99b7 r-1pi2tsx r-u8s1d r-13qz1uu r-136ojw6 r-633pao"
        data-testid="card-outline"
        style="border-color: rgba(0, 0, 0, 0.12); border-radius: 0px;"
   >
   </div>
   <div tabindex="0"
-       class="css-175oi2r r-1loqt21 r-1otgn73"
+       class="css-g5y9jx r-1loqt21 r-1otgn73"
   >
-    <div class="css-175oi2r r-1wbh5a2"
+    <div class="css-g5y9jx r-1wbh5a2"
          data-testid="card"
     >
-      <div class="css-175oi2r r-3pj75a r-w7s2jr r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb">
-        <div class="css-175oi2r r-18u37iz r-13qz1uu">
-          <div class="css-175oi2r">
+      <div class="css-g5y9jx r-3pj75a r-w7s2jr r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb">
+        <div class="css-g5y9jx r-18u37iz r-13qz1uu">
+          <div class="css-g5y9jx">
             <div aria-live="polite"
                  role="checkbox"
                  tabindex="0"
-                 class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-6ncur5 r-1r8g8re r-qpntkw r-1acpoxo"
+                 class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-6ncur5 r-1r8g8re r-qpntkw r-1acpoxo"
                  data-testid="complete-todo"
             >
-              <div class="css-175oi2r"
+              <div class="css-g5y9jx"
                    style="transform: scale(1);"
               >
                 <div dir="auto"
@@ -222,8 +220,8 @@ exports[`Todo Item DefaultTodo smoke-test 1`] = `
                 >
                   󰄱
                 </div>
-                <div class="css-175oi2r r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
-                  <div class="css-175oi2r r-1pexk7n r-1mcorv5"
+                <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
+                  <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
                        style="border-color: rgb(73, 69, 79); border-width: 0px;"
                   >
                   </div>
@@ -231,8 +229,8 @@ exports[`Todo Item DefaultTodo smoke-test 1`] = `
               </div>
             </div>
           </div>
-          <div class="css-175oi2r r-1iusvr4 r-16y2uox r-1un7vkp">
-            <div class="css-175oi2r r-16y2uox">
+          <div class="css-g5y9jx r-1iusvr4 r-16y2uox r-1un7vkp">
+            <div class="css-g5y9jx r-16y2uox">
             </div>
             <div dir="auto"
                  class="css-146c3p1 r-fdjqy7 r-1x2decy r-ubezar"
@@ -241,19 +239,18 @@ exports[`Todo Item DefaultTodo smoke-test 1`] = `
             >
               Default Todo
             </div>
-            <div class="css-175oi2r r-16y2uox">
+            <div class="css-g5y9jx r-16y2uox">
             </div>
           </div>
-          <div class="css-175oi2r r-1udh08x r-crgep1 r-105ug2t"
+          <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                data-testid="label-todo-container"
                style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
           >
             <button role="button"
                     tabindex="0"
-                    class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                    class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                     data-testid="label-todo"
                     type="button"
-                    style="border-radius: 18px;"
             >
               <div dir="auto"
                    role="img"
@@ -265,16 +262,15 @@ exports[`Todo Item DefaultTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1udh08x r-crgep1 r-105ug2t"
+          <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                data-testid="delete-todo-container"
                style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
           >
             <button role="button"
                     tabindex="0"
-                    class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                    class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                     data-testid="delete-todo"
                     type="button"
-                    style="border-radius: 18px;"
             >
               <div dir="auto"
                    role="img"
@@ -287,23 +283,23 @@ exports[`Todo Item DefaultTodo smoke-test 1`] = `
             </button>
           </div>
         </div>
-        <div class="css-175oi2r r-18u37iz r-1w6e6rj"
+        <div class="css-g5y9jx r-18u37iz r-1w6e6rj"
              data-testid="todo-labels"
         >
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -315,20 +311,20 @@ exports[`Todo Item DefaultTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -340,20 +336,20 @@ exports[`Todo Item DefaultTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -373,31 +369,31 @@ exports[`Todo Item DefaultTodo smoke-test 1`] = `
 `;
 
 exports[`Todo Item EditingTodo smoke-test 1`] = `
-<div class="css-175oi2r r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
+<div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
      data-testid="card-container"
      style="background-color: rgb(255, 251, 254);"
 >
-  <div class="css-175oi2r r-rs99b7 r-1pi2tsx r-u8s1d r-13qz1uu r-136ojw6 r-633pao"
+  <div class="css-g5y9jx r-rs99b7 r-1pi2tsx r-u8s1d r-13qz1uu r-136ojw6 r-633pao"
        data-testid="card-outline"
        style="border-color: rgba(0, 0, 0, 0.12); border-radius: 0px;"
   >
   </div>
   <div tabindex="0"
-       class="css-175oi2r r-1loqt21 r-1otgn73"
+       class="css-g5y9jx r-1loqt21 r-1otgn73"
   >
-    <div class="css-175oi2r r-1wbh5a2"
+    <div class="css-g5y9jx r-1wbh5a2"
          data-testid="card"
     >
-      <div class="css-175oi2r r-3pj75a r-w7s2jr r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb">
-        <div class="css-175oi2r r-18u37iz r-13qz1uu">
-          <div class="css-175oi2r">
+      <div class="css-g5y9jx r-3pj75a r-w7s2jr r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb">
+        <div class="css-g5y9jx r-18u37iz r-13qz1uu">
+          <div class="css-g5y9jx">
             <div aria-live="polite"
                  role="checkbox"
                  tabindex="0"
-                 class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-6ncur5 r-1r8g8re r-qpntkw r-1acpoxo"
+                 class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-6ncur5 r-1r8g8re r-qpntkw r-1acpoxo"
                  data-testid="complete-todo"
             >
-              <div class="css-175oi2r"
+              <div class="css-g5y9jx"
                    style="transform: scale(1);"
               >
                 <div dir="auto"
@@ -408,8 +404,8 @@ exports[`Todo Item EditingTodo smoke-test 1`] = `
                 >
                   󰄱
                 </div>
-                <div class="css-175oi2r r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
-                  <div class="css-175oi2r r-1pexk7n r-1mcorv5"
+                <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
+                  <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
                        style="border-color: rgb(73, 69, 79); border-width: 0px;"
                   >
                   </div>
@@ -417,15 +413,15 @@ exports[`Todo Item EditingTodo smoke-test 1`] = `
               </div>
             </div>
           </div>
-          <div class="css-175oi2r"
+          <div class="css-g5y9jx"
                style="background-color: rgb(231, 224, 236); border-top-left-radius: 4px; border-top-right-radius: 4px; border-width: 0px; flex-shrink: 1; margin-left: 9px; padding: 0px; width: 100%;"
           >
-            <div class="css-175oi2r r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-184en5c r-109y4c4"
+            <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-184en5c r-109y4c4"
                  data-testid="text-input-underline"
                  style="background-color: rgb(73, 69, 79); transform: scaleY(0.5);"
             >
             </div>
-            <div class="css-175oi2r r-16y2uox r-1mdbw0j r-wk8lta"
+            <div class="css-g5y9jx r-16y2uox r-1mdbw0j r-wk8lta"
                  style="min-height: 40px;"
             >
               <textarea autocapitalize="sentences"
@@ -443,16 +439,15 @@ exports[`Todo Item EditingTodo smoke-test 1`] = `
               </textarea>
             </div>
           </div>
-          <div class="css-175oi2r r-1udh08x r-crgep1 r-105ug2t"
+          <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                data-testid="cancel-edit-container"
                style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
           >
             <button role="button"
                     tabindex="0"
-                    class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                    class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                     data-testid="cancel-edit"
                     type="button"
-                    style="border-radius: 18px;"
             >
               <div dir="auto"
                    role="img"
@@ -465,23 +460,23 @@ exports[`Todo Item EditingTodo smoke-test 1`] = `
             </button>
           </div>
         </div>
-        <div class="css-175oi2r r-18u37iz r-1w6e6rj"
+        <div class="css-g5y9jx r-18u37iz r-1w6e6rj"
              data-testid="todo-labels"
         >
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -493,20 +488,20 @@ exports[`Todo Item EditingTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -518,20 +513,20 @@ exports[`Todo Item EditingTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -551,31 +546,31 @@ exports[`Todo Item EditingTodo smoke-test 1`] = `
 `;
 
 exports[`Todo Item NoLabelsTodo smoke-test 1`] = `
-<div class="css-175oi2r r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
+<div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
      data-testid="card-container"
      style="background-color: rgb(255, 251, 254);"
 >
-  <div class="css-175oi2r r-rs99b7 r-1pi2tsx r-u8s1d r-13qz1uu r-136ojw6 r-633pao"
+  <div class="css-g5y9jx r-rs99b7 r-1pi2tsx r-u8s1d r-13qz1uu r-136ojw6 r-633pao"
        data-testid="card-outline"
        style="border-color: rgba(0, 0, 0, 0.12); border-radius: 0px;"
   >
   </div>
   <div tabindex="0"
-       class="css-175oi2r r-1loqt21 r-1otgn73"
+       class="css-g5y9jx r-1loqt21 r-1otgn73"
   >
-    <div class="css-175oi2r r-1wbh5a2"
+    <div class="css-g5y9jx r-1wbh5a2"
          data-testid="card"
     >
-      <div class="css-175oi2r r-3pj75a r-w7s2jr r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb">
-        <div class="css-175oi2r r-18u37iz r-13qz1uu">
-          <div class="css-175oi2r">
+      <div class="css-g5y9jx r-3pj75a r-w7s2jr r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb">
+        <div class="css-g5y9jx r-18u37iz r-13qz1uu">
+          <div class="css-g5y9jx">
             <div aria-live="polite"
                  role="checkbox"
                  tabindex="0"
-                 class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-6ncur5 r-1r8g8re r-qpntkw r-1acpoxo"
+                 class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-6ncur5 r-1r8g8re r-qpntkw r-1acpoxo"
                  data-testid="complete-todo"
             >
-              <div class="css-175oi2r"
+              <div class="css-g5y9jx"
                    style="transform: scale(1);"
               >
                 <div dir="auto"
@@ -586,8 +581,8 @@ exports[`Todo Item NoLabelsTodo smoke-test 1`] = `
                 >
                   󰄱
                 </div>
-                <div class="css-175oi2r r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
-                  <div class="css-175oi2r r-1pexk7n r-1mcorv5"
+                <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
+                  <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
                        style="border-color: rgb(73, 69, 79); border-width: 0px;"
                   >
                   </div>
@@ -595,8 +590,8 @@ exports[`Todo Item NoLabelsTodo smoke-test 1`] = `
               </div>
             </div>
           </div>
-          <div class="css-175oi2r r-1iusvr4 r-16y2uox r-1un7vkp">
-            <div class="css-175oi2r r-16y2uox">
+          <div class="css-g5y9jx r-1iusvr4 r-16y2uox r-1un7vkp">
+            <div class="css-g5y9jx r-16y2uox">
             </div>
             <div dir="auto"
                  class="css-146c3p1 r-fdjqy7 r-1x2decy r-ubezar"
@@ -605,19 +600,18 @@ exports[`Todo Item NoLabelsTodo smoke-test 1`] = `
             >
               No Labels Todo
             </div>
-            <div class="css-175oi2r r-16y2uox">
+            <div class="css-g5y9jx r-16y2uox">
             </div>
           </div>
-          <div class="css-175oi2r r-1udh08x r-crgep1 r-105ug2t"
+          <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                data-testid="label-todo-container"
                style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
           >
             <button role="button"
                     tabindex="0"
-                    class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                    class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                     data-testid="label-todo"
                     type="button"
-                    style="border-radius: 18px;"
             >
               <div dir="auto"
                    role="img"
@@ -629,16 +623,15 @@ exports[`Todo Item NoLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1udh08x r-crgep1 r-105ug2t"
+          <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                data-testid="delete-todo-container"
                style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
           >
             <button role="button"
                     tabindex="0"
-                    class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                    class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                     data-testid="delete-todo"
                     type="button"
-                    style="border-radius: 18px;"
             >
               <div dir="auto"
                    role="img"
@@ -658,31 +651,31 @@ exports[`Todo Item NoLabelsTodo smoke-test 1`] = `
 `;
 
 exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
-<div class="css-175oi2r r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
+<div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
      data-testid="card-container"
      style="background-color: rgb(255, 251, 254);"
 >
-  <div class="css-175oi2r r-rs99b7 r-1pi2tsx r-u8s1d r-13qz1uu r-136ojw6 r-633pao"
+  <div class="css-g5y9jx r-rs99b7 r-1pi2tsx r-u8s1d r-13qz1uu r-136ojw6 r-633pao"
        data-testid="card-outline"
        style="border-color: rgba(0, 0, 0, 0.12); border-radius: 0px;"
   >
   </div>
   <div tabindex="0"
-       class="css-175oi2r r-1loqt21 r-1otgn73"
+       class="css-g5y9jx r-1loqt21 r-1otgn73"
   >
-    <div class="css-175oi2r r-1wbh5a2"
+    <div class="css-g5y9jx r-1wbh5a2"
          data-testid="card"
     >
-      <div class="css-175oi2r r-3pj75a r-w7s2jr r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb">
-        <div class="css-175oi2r r-18u37iz r-13qz1uu">
-          <div class="css-175oi2r">
+      <div class="css-g5y9jx r-3pj75a r-w7s2jr r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb">
+        <div class="css-g5y9jx r-18u37iz r-13qz1uu">
+          <div class="css-g5y9jx">
             <div aria-live="polite"
                  role="checkbox"
                  tabindex="0"
-                 class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-6ncur5 r-1r8g8re r-qpntkw r-1acpoxo"
+                 class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-6ncur5 r-1r8g8re r-qpntkw r-1acpoxo"
                  data-testid="complete-todo"
             >
-              <div class="css-175oi2r"
+              <div class="css-g5y9jx"
                    style="transform: scale(1);"
               >
                 <div dir="auto"
@@ -693,8 +686,8 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
                 >
                   󰄱
                 </div>
-                <div class="css-175oi2r r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
-                  <div class="css-175oi2r r-1pexk7n r-1mcorv5"
+                <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
+                  <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
                        style="border-color: rgb(73, 69, 79); border-width: 0px;"
                   >
                   </div>
@@ -702,8 +695,8 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </div>
           </div>
-          <div class="css-175oi2r r-1iusvr4 r-16y2uox r-1un7vkp">
-            <div class="css-175oi2r r-16y2uox">
+          <div class="css-g5y9jx r-1iusvr4 r-16y2uox r-1un7vkp">
+            <div class="css-g5y9jx r-16y2uox">
             </div>
             <div dir="auto"
                  class="css-146c3p1 r-fdjqy7 r-1x2decy r-ubezar"
@@ -712,19 +705,18 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
             >
               Wrapped Labels Todo
             </div>
-            <div class="css-175oi2r r-16y2uox">
+            <div class="css-g5y9jx r-16y2uox">
             </div>
           </div>
-          <div class="css-175oi2r r-1udh08x r-crgep1 r-105ug2t"
+          <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                data-testid="label-todo-container"
                style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
           >
             <button role="button"
                     tabindex="0"
-                    class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                    class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                     data-testid="label-todo"
                     type="button"
-                    style="border-radius: 18px;"
             >
               <div dir="auto"
                    role="img"
@@ -736,16 +728,15 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1udh08x r-crgep1 r-105ug2t"
+          <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                data-testid="delete-todo-container"
                style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
           >
             <button role="button"
                     tabindex="0"
-                    class="css-175oi2r r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                    class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
                     data-testid="delete-todo"
                     type="button"
-                    style="border-radius: 18px;"
             >
               <div dir="auto"
                    role="img"
@@ -758,23 +749,23 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
             </button>
           </div>
         </div>
-        <div class="css-175oi2r r-18u37iz r-1w6e6rj"
+        <div class="css-g5y9jx r-18u37iz r-1w6e6rj"
              data-testid="todo-labels"
         >
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -786,20 +777,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -811,20 +802,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -836,20 +827,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -861,20 +852,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -886,20 +877,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -911,20 +902,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -936,20 +927,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -961,20 +952,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -986,20 +977,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -1011,20 +1002,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -1036,20 +1027,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"
@@ -1061,20 +1052,20 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
               </div>
             </button>
           </div>
-          <div class="css-175oi2r r-1phboty r-18u37iz r-1yadl64 r-1iizze8 r-1bq2mok r-105ug2t"
+          <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-1iizze8 r-1bq2mok r-105ug2t"
                data-testid="chip-active-container"
-               style="border-color: rgb(121, 116, 126); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+               style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
           >
             <button aria-disabled="true"
                     disabled
                     role="button"
                     tabindex="-1"
-                    class="css-175oi2r r-12vffkv r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                    class="css-g5y9jx r-12vffkv r-bnwqim r-ctqt5z r-1udh08x r-113qch9 r-13qz1uu"
                     data-testid="chip-active"
                     type="button"
                     style="border-radius: 8px;"
             >
-              <div class="css-175oi2r r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+              <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
                    style="padding-right: 0px;"
               >
                 <div dir="auto"

@@ -10,9 +10,9 @@ export const getEnvFlags = () => {
   if (Platform.OS === 'web' && flags.ENVIRONMENT !== 'test') {
     const hostname = document.location.hostname;
     if (hostname.startsWith('localhost') || hostname.startsWith('chalk-dev')) {
-      flags.ENVIRONMENT = 'dev';
+      flags.ENVIRONMENT = 'DEV';
     } else if (hostname.startsWith('chalk-ci')) {
-      flags.ENVIRONMENT = 'ci';
+      flags.ENVIRONMENT = 'CI';
     }
   }
   return flags;
