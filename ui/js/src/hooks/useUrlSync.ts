@@ -21,26 +21,21 @@ export function useUrlSync() {
     const hasFilters = params.has('labels') || params.has('inverted') || params.has('showCompleted');
 
     if (hasFilters) {
-      // Apply active filters from URL
-      const activeLabels = params.get('labels')?.split(',') || [];
-      activeLabels.forEach(label => {
-        if (label) dispatch(toggleLabel(label));
-      });
-
-      // Apply inverted filters from URL
-      const invertedLabels = params.get('inverted')?.split(',') || [];
-      invertedLabels.forEach(label => {
-        if (label) {
-          dispatch(toggleLabel(label)); // First make it active
-          dispatch(toggleLabel(label)); // Then make it inverted
-        }
-      });
+      // Get active and inverted labels from URL
+      const activeLabels = params.get('labels')?.split(',').filter(Boolean) || [];
+      const invertedLabels = params.get('inverted')?.split(',').filter(Boolean) || [];
+      
+      // Apply filters in a single batch operation
+      dispatch(setFilters({ activeLabels, invertedLabels }));
 
       // Apply completed todos visibility
       const showCompleted = params.get('showCompleted') === 'true';
       if (showCompleted !== showCompletedTodos) {
         dispatch(toggleShowCompletedTodos());
       }
+    } else {
+      // Default to Unlabeled filter if no filters in URL
+      dispatch(setFilters({ activeLabels: ['Unlabeled'] }));
     }
   }, []);
 

@@ -88,6 +88,22 @@ export default createSlice({
         state.filterLabels = Object.assign({}, workContext.labels);
       }
     },
+    setFilters: (state, action) => {
+      const { activeLabels = [], invertedLabels = [] } = action.payload;
+      const newLabels = {};
+      
+      // Set active labels
+      activeLabels.forEach(label => {
+        newLabels[label] = FILTER_STATUS.Active;
+      });
+      
+      // Set inverted labels
+      invertedLabels.forEach(label => {
+        newLabels[label] = FILTER_STATUS.Inverted;
+      });
+      
+      state.filterLabels = newLabels;
+    },
     toggleLabel: (state, action) => {
       const newLabels = Object.assign({}, state.filterLabels);
 
