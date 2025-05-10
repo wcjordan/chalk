@@ -27,9 +27,13 @@ else
     # Download the backup (w/ retries)
     backup_downloaded=0
     for i in {1..5}; do
-        gsutil cp "gs://default-323301-db-backups/Cloud_SQL_Export_2023-07-26 (21:01:32).sql" ./backup_to_restore.sql && \
-        backup_downloaded=1 && break || \
-        echo "Unable to download backup, retrying in 3 seconds" && sleep 3
+        if [[ $USE_STARTER_DATA == "true" ]]; then
+            gsutil cp "gs://default-323301-db-backups/Cloud_SQL_Export_2023-07-26 (21:01:32).sql" ./backup_to_restore.sql && \
+            backup_downloaded=1 && break || \
+            echo "Unable to download backup, retrying in 3 seconds" && sleep 3
+        else
+            backup_downloaded=1 && break
+        fi
     done
     if [[ $backup_downloaded -eq 0 ]]; then
         echo "Unable to download the backup, exiting"
@@ -37,7 +41,9 @@ else
     fi
 
     # Perform the restore
-    psql < ./backup_to_restore.sql
+    if [[ $USE_STARTER_DATA == "true" ]]; then
+        psql < ./backup_to_restore.sql
+    fi
 fi
 
 # Kill cloud-sql-proxy so the job will complete

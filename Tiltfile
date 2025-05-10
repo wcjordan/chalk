@@ -9,6 +9,7 @@ env_arr = [
     'permittedUsers=%s' % os.environ.get('PERMITTED_USERS'),
     'server.dbPassword=%s' % os.environ.get('DB_PASSWORD'),
     'server.secretKey=%s' % os.environ.get('SECRET_KEY'),
+    'useStarterData=true',
 ]
 
 docker_build('us-east4-docker.pkg.dev/%s/default-gar/chalk-server' % GCP_PROJECT, 'server')
