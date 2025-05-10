@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { useAppDispatch, useAppSelector } from './hooks';
@@ -17,15 +18,7 @@ export function useUrlSync() {
   // Read from URL on mount
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const hasFilters = params.has('labels') || params.has('inverted');
-
-    // Clear existing filters first
-    const currentFilters = Object.keys(filterLabels);
-    currentFilters.forEach(label => {
-      if (filterLabels[label] !== undefined) {
-        dispatch(toggleLabel(label));
-      }
-    });
+    const hasFilters = params.has('labels') || params.has('inverted') || params.has('showCompleted');
 
     if (hasFilters) {
       // Apply active filters from URL
@@ -42,15 +35,12 @@ export function useUrlSync() {
           dispatch(toggleLabel(label)); // Then make it inverted
         }
       });
-    } else {
-      // Default to Unlabeled filter if no filters in URL
-      dispatch(toggleLabel('Unlabeled'));
-    }
 
-    // Apply completed todos visibility
-    const showCompleted = params.get('showCompleted') === 'true';
-    if (showCompleted !== showCompletedTodos) {
-      dispatch(toggleShowCompletedTodos());
+      // Apply completed todos visibility
+      const showCompleted = params.get('showCompleted') === 'true';
+      if (showCompleted !== showCompletedTodos) {
+        dispatch(toggleShowCompletedTodos());
+      }
     }
   }, []);
 
@@ -65,6 +55,12 @@ export function useUrlSync() {
     const invertedLabels = Object.keys(filterLabels).filter(
       label => filterLabels[label] === FILTER_STATUS.Inverted
     );
+
+    // If Inbox filters, then drop query params from URL
+    if (_.isEqual(activeLabels, ['Unlabeled']) && invertedLabels.length === 0 && !showCompletedTodos) {
+      window.history.replaceState({}, '', window.location.pathname);
+      return;
+    }
 
     if (activeLabels.length > 0) {
       params.set('labels', activeLabels.join(','));
