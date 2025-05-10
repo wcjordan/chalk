@@ -1,4 +1,3 @@
-import '../__mocks__/matchMediaMock';
 import { renderHook } from '@testing-library/react-hooks';
 import { setFilters, toggleShowCompletedTodos } from '../redux/reducers';
 import { FILTER_STATUS } from '../redux/types';
@@ -39,10 +38,9 @@ describe('useUrlSync', () => {
     delete window.location;
     window.location = {
       ...originalLocation,
-      pathname: '/todos',
+      pathname: '/',
       search: '',
-      href: 'https://chalk.flipperkid.com/todos',
-    } as unknown as Location;
+    };
 
     window.history.replaceState = jest.fn();
   });
@@ -97,7 +95,7 @@ describe('useUrlSync', () => {
     expect(window.history.replaceState).toHaveBeenCalledWith(
       {},
       '',
-      '/todos?labels=work&inverted=urgent&showCompleted=true'
+      '/?labels=work&inverted=urgent&showCompleted=true'
     );
 
     // Verify switching back to the default Inbox filters (just Unlabeled active)
@@ -111,7 +109,7 @@ describe('useUrlSync', () => {
     expect(window.history.replaceState).toHaveBeenCalledWith(
       {},
       '',
-      '/todos'
+      '/'
     );
   });
 });
