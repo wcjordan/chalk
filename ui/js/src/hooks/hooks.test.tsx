@@ -57,21 +57,14 @@ describe('useDataLoader', function () {
     );
     renderHook(useDataLoader, { wrapper });
 
-    // Verify loading labels started
+    // Verify loading labels & todos started
     expect(store.getState().labelsApi.loading).toEqual(true);
+    expect(store.getState().todosApi.loading).toEqual(true);
 
-    // Verify loading labels completed
+    // Verify loading labels & todos completed
     await waitFor(() => {
       expect(store.getState().labelsApi.loading).toEqual(false);
       expect(store.getState().labelsApi.entries).toEqual(labelEntries);
-    });
-
-    // Move forward long enough to load Todos
-    jest.advanceTimersByTime(10000);
-
-    // Verify loading todos completed
-    expect(store.getState().todosApi.loading).toEqual(true);
-    await waitFor(() => {
       expect(store.getState().todosApi.loading).toEqual(false);
       expect(store.getState().todosApi.entries).toEqual([firstTodo]);
     });

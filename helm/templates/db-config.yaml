@@ -65,6 +65,8 @@ spec:
             secretKeyRef:
               name: {{ $fullName }}-server
               key: db-password
+        - name: USE_STARTER_DATA
+          value: {{ .Values.useStarterData | quote }}
         securityContext:
           capabilities:
             add:

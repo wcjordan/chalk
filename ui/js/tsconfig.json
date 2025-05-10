@@ -20,7 +20,7 @@
     "typeRoots": ["node_modules/@types", "src/types"],
     "moduleSuffixes": [".native", ".web", ""]
   },
-  "exclude": ["node_modules", "**/*.stories.tsx", "**/*.test.ts"],
+  "exclude": ["node_modules", "**/*.stories.*", "**/*.test.*"],
   "include": ["src/**/*"],
   "extends": "expo/tsconfig.base"
 }
