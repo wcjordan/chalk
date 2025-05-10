@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { FILTER_STATUS, WorkContext, WorkspaceState } from './types';
+import { FILTER_STATUS, FilterState, WorkContext, WorkspaceState } from './types';
 
 // TODO (jordan) Improve to support or'd label groups
 // Will be useful for adding Chalk + vague to Chalk Planning
@@ -90,24 +90,26 @@ export default createSlice({
     },
     setFilters: (state, action) => {
       const { activeLabels = [], invertedLabels = [] } = action.payload;
-      const newLabels = {};
-      
+      const newLabels : FilterState = {};
+
       // Set active labels
-      activeLabels.forEach(label => {
+      activeLabels.forEach((label: string) => {
         newLabels[label] = FILTER_STATUS.Active;
       });
-      
+
       // Set inverted labels
-      invertedLabels.forEach(label => {
+      invertedLabels.forEach((label: string) => {
         newLabels[label] = FILTER_STATUS.Inverted;
       });
-      
+
       state.filterLabels = newLabels;
     },
     toggleLabel: (state, action) => {
       const newLabels = Object.assign({}, state.filterLabels);
-
       const toggledLabel = action.payload;
+
+      // Remove the Unlabeled label when enabling another label
+      // This is because no todo can be both Unlabeled and match a label
       if (toggledLabel !== 'Unlabeled') {
         delete newLabels['Unlabeled'];
       }

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { FILTER_STATUS } from '../redux/types';
-import { toggleLabel, toggleShowCompletedTodos } from '../redux/reducers';
+import { setFilters, toggleShowCompletedTodos } from '../redux/reducers';
 
 export function useUrlSync() {
   const dispatch = useAppDispatch();
@@ -24,7 +24,7 @@ export function useUrlSync() {
       // Get active and inverted labels from URL
       const activeLabels = params.get('labels')?.split(',').filter(Boolean) || [];
       const invertedLabels = params.get('inverted')?.split(',').filter(Boolean) || [];
-      
+
       // Apply filters in a single batch operation
       dispatch(setFilters({ activeLabels, invertedLabels }));
 
@@ -33,9 +33,6 @@ export function useUrlSync() {
       if (showCompleted !== showCompletedTodos) {
         dispatch(toggleShowCompletedTodos());
       }
-    } else {
-      // Default to Unlabeled filter if no filters in URL
-      dispatch(setFilters({ activeLabels: ['Unlabeled'] }));
     }
   }, []);
 
