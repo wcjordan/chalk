@@ -17,6 +17,7 @@ export function useUrlSync() {
   // Read from URL on mount
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const hasFilters = params.has('labels') || params.has('inverted');
 
     // Clear existing filters first
     const currentFilters = Object.keys(filterLabels);
@@ -26,20 +27,25 @@ export function useUrlSync() {
       }
     });
 
-    // Apply active filters from URL
-    const activeLabels = params.get('labels')?.split(',') || [];
-    activeLabels.forEach(label => {
-      if (label) dispatch(toggleLabel(label));
-    });
+    if (hasFilters) {
+      // Apply active filters from URL
+      const activeLabels = params.get('labels')?.split(',') || [];
+      activeLabels.forEach(label => {
+        if (label) dispatch(toggleLabel(label));
+      });
 
-    // Apply inverted filters from URL
-    const invertedLabels = params.get('inverted')?.split(',') || [];
-    invertedLabels.forEach(label => {
-      if (label) {
-        dispatch(toggleLabel(label)); // First make it active
-        dispatch(toggleLabel(label)); // Then make it inverted
-      }
-    });
+      // Apply inverted filters from URL
+      const invertedLabels = params.get('inverted')?.split(',') || [];
+      invertedLabels.forEach(label => {
+        if (label) {
+          dispatch(toggleLabel(label)); // First make it active
+          dispatch(toggleLabel(label)); // Then make it inverted
+        }
+      });
+    } else {
+      // Default to Unlabeled filter if no filters in URL
+      dispatch(toggleLabel('Unlabeled'));
+    }
 
     // Apply completed todos visibility
     const showCompleted = params.get('showCompleted') === 'true';
