@@ -1,8 +1,8 @@
 import '../__mocks__/matchMediaMock';
 import { renderHook } from '@testing-library/react-hooks';
-import { useUrlSync } from './useUrlSync';
 import { setFilters, toggleShowCompletedTodos } from '../redux/reducers';
 import { FILTER_STATUS } from '../redux/types';
+import { useUrlSync } from './useUrlSync';
 
 // Mock the necessary dependencies
 jest.mock('react-native', () => ({
@@ -11,12 +11,15 @@ jest.mock('react-native', () => ({
   },
 }));
 
+// Initial state for the filters on the workspace
+const mockWorkspaceState = {
+  filterLabels: { Unlabeled: FILTER_STATUS.Active },
+  showCompletedTodos: false,
+}
 jest.mock('./hooks', () => ({
   useAppDispatch: jest.fn().mockReturnValue(jest.fn()),
   useAppSelector: jest.fn().mockImplementation((selector) => {
-    if (selector.name === 'filterLabels') return { Unlabeled: FILTER_STATUS.Active };
-    if (selector.name === 'showCompletedTodos') return false;
-    return selector();
+    return selector({ workspace: mockWorkspaceState })
   }),
 }));
 
@@ -27,12 +30,11 @@ jest.mock('../redux/reducers', () => ({
 
 describe('useUrlSync', () => {
   let originalLocation: Location;
-  let mockDispatch: jest.Mock;
-  
+
   beforeEach(() => {
     // Save original location
     originalLocation = window.location;
-    
+
     // Mock window.location and history
     delete window.location;
     window.location = {
@@ -41,90 +43,70 @@ describe('useUrlSync', () => {
       search: '',
       href: 'https://chalk.flipperkid.com/todos',
     } as unknown as Location;
-    
+
     window.history.replaceState = jest.fn();
-    
-    // Reset mocks
-    mockDispatch = require('./hooks').useAppDispatch();
-    mockDispatch.mockClear();
-    setFilters.mockClear();
-    toggleShowCompletedTodos.mockClear();
   });
-  
+
   afterEach(() => {
     // Restore original location
     window.location = originalLocation;
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
-  
+
   it('should read filters from URL on mount', () => {
     // Set up URL with filters
     window.location.search = '?labels=work,home&inverted=urgent&showCompleted=true';
-    
+
     renderHook(() => useUrlSync());
-    
+
     // Verify setFilters was called with correct parameters
     expect(setFilters).toHaveBeenCalledWith({
       activeLabels: ['work', 'home'],
       invertedLabels: ['urgent'],
     });
-    
+
     // Verify toggleShowCompletedTodos was called
     expect(toggleShowCompletedTodos).toHaveBeenCalled();
   });
-  
+
   it('should default to Unlabeled filter when no filters in URL', () => {
     // Empty URL search
     window.location.search = '';
-    
+
     renderHook(() => useUrlSync());
-    
+
     // Verify no actions were dispatched (default state is already Unlabeled)
     expect(setFilters).not.toHaveBeenCalled();
     expect(toggleShowCompletedTodos).not.toHaveBeenCalled();
   });
-  
+
   it('should update URL when filters change', () => {
+    // Initial render with default filters
+    const { rerender } = renderHook(() => useUrlSync());
+
     // Mock filter state
-    const { useAppSelector } = require('./hooks');
-    useAppSelector.mockImplementation((selector) => {
-      if (selector === selectFilterLabels) {
-        return {
-          work: FILTER_STATUS.Active,
-          urgent: FILTER_STATUS.Inverted,
-        };
-      }
-      if (selector === selectShowCompletedTodos) {
-        return true;
-      }
-      return selector();
-    });
-    
-    renderHook(() => useUrlSync());
-    
+    mockWorkspaceState.filterLabels = {
+      work: FILTER_STATUS.Active,
+      urgent: FILTER_STATUS.Inverted,
+    };
+    mockWorkspaceState.showCompletedTodos = true;
+
+    rerender();
+
     // Verify history.replaceState was called with the correct URL
     expect(window.history.replaceState).toHaveBeenCalledWith(
       {},
       '',
       '/todos?labels=work&inverted=urgent&showCompleted=true'
     );
-  });
-  
-  it('should remove query params when default Inbox filters are set', () => {
-    // Mock filter state to be the default Inbox (just Unlabeled active)
-    const { useAppSelector } = require('./hooks');
-    useAppSelector.mockImplementation((selector) => {
-      if (selector === selectFilterLabels) {
-        return { Unlabeled: FILTER_STATUS.Active };
-      }
-      if (selector === selectShowCompletedTodos) {
-        return false;
-      }
-      return selector();
-    });
-    
-    renderHook(() => useUrlSync());
-    
+
+    // Verify switching back to the default Inbox filters (just Unlabeled active)
+    // removes the query params
+    mockWorkspaceState.filterLabels = { Unlabeled: FILTER_STATUS.Active };
+    mockWorkspaceState.showCompletedTodos = false;
+
+    rerender();
+
     // Verify history.replaceState was called with URL without query params
     expect(window.history.replaceState).toHaveBeenCalledWith(
       {},
@@ -133,12 +115,3 @@ describe('useUrlSync', () => {
     );
   });
 });
-
-// Helper functions to match the selectors in the hook
-function selectFilterLabels(state: any) {
-  return state.workspace.filterLabels;
-}
-
-function selectShowCompletedTodos(state: any) {
-  return state.workspace.showCompletedTodos;
-}

@@ -1,19 +1,19 @@
 import _ from 'lodash';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
-import { useAppDispatch, useAppSelector } from './hooks';
 import { FILTER_STATUS } from '../redux/types';
 import { setFilters, toggleShowCompletedTodos } from '../redux/reducers';
+import { useAppDispatch, useAppSelector } from './hooks';
 
 export function useUrlSync() {
-  const dispatch = useAppDispatch();
-  const filterLabels = useAppSelector(state => state.workspace.filterLabels);
-  const showCompletedTodos = useAppSelector(state => state.workspace.showCompletedTodos);
-
   // Only run on web platform
   if (Platform.OS !== 'web') {
     return;
   }
+
+  const dispatch = useAppDispatch();
+  const filterLabels = useAppSelector(state => state.workspace.filterLabels);
+  const showCompletedTodos = useAppSelector(state => state.workspace.showCompletedTodos);
 
   // Read from URL on mount
   useEffect(() => {
