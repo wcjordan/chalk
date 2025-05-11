@@ -33,21 +33,25 @@ describe('updateTodo', function () {
 
     const store = setupStore({
       todosApi: {
-        entries: [{
-          id: 1,
-          completed: false,
-          description: 'old desc',
-        }]
+        entries: [
+          {
+            id: 1,
+            completed: false,
+            description: 'old desc',
+          },
+        ],
       },
       workspace: {
-        editTodoId: 1
+        editTodoId: 1,
       },
     });
     await store.dispatch(updateTodo(stubTodoPatch));
 
     // Verify we show a notification
     expect(store.getState().notifications.notificationQueue.length).toEqual(1);
-    expect(store.getState().notifications.notificationQueue[0]).toEqual('Saving Todo: test todo');
+    expect(store.getState().notifications.notificationQueue[0]).toEqual(
+      'Saving Todo: test todo',
+    );
 
     // Verify we stop editing the todo
     expect(store.getState().workspace.editTodoId).toEqual(null);
@@ -64,11 +68,13 @@ describe('updateTodo', function () {
     });
 
     // Verify the todo is updated in the entries
-    expect(store.getState().todosApi.entries).toEqual([{
-      id: 1,
-      completed: false,
-      description: 'test todo',
-    }]);
+    expect(store.getState().todosApi.entries).toEqual([
+      {
+        id: 1,
+        completed: false,
+        description: 'test todo',
+      },
+    ]);
 
     // Verify we make the server request
     expect(fetchMock).toBeDone();
@@ -93,11 +99,13 @@ describe('updateTodoLabels', function () {
 
     const store = setupStore({
       todosApi: {
-        entries: [{
-          id: todoId,
-          description: 'test todo',
-          labels: newLabels,
-        }]
+        entries: [
+          {
+            id: todoId,
+            description: 'test todo',
+            labels: newLabels,
+          },
+        ],
       },
       workspace: {
         labelTodoId: todoId,
@@ -106,11 +114,13 @@ describe('updateTodoLabels', function () {
     await store.dispatch(updateTodoLabels(newLabels));
 
     // Verify the todo is updated in the entries
-    expect(store.getState().todosApi.entries).toEqual([{
-      id: todoId,
-      description: 'test todo',
-      labels: newLabels,
-    }]);
+    expect(store.getState().todosApi.entries).toEqual([
+      {
+        id: todoId,
+        description: 'test todo',
+        labels: newLabels,
+      },
+    ]);
 
     // Verify we make the server request
     expect(fetchMock).toBeDone();
@@ -174,12 +184,14 @@ describe('listTodos', function () {
     const store = setupStore({
       shortcuts: {
         latestGeneration: 0,
-        operations: [{
-          type: 'EDIT_TODO',
-          payload: { id: 1, description: 'old desc' },
-          generation: 0,
-        }],
-      }
+        operations: [
+          {
+            type: 'EDIT_TODO',
+            payload: { id: 1, description: 'old desc' },
+            generation: 0,
+          },
+        ],
+      },
     });
     await store.dispatch(listTodos());
 
@@ -230,7 +242,9 @@ describe('moveTodo', function () {
 
     // Verify we show a notification
     expect(store.getState().notifications.notificationQueue.length).toEqual(1);
-    expect(store.getState().notifications.notificationQueue[0]).toEqual('Reordering Todo: moving todo');
+    expect(store.getState().notifications.notificationQueue[0]).toEqual(
+      'Reordering Todo: moving todo',
+    );
 
     // Verify we create a shortcut operation for the move
     expect(store.getState().shortcuts.operations.length).toEqual(1);

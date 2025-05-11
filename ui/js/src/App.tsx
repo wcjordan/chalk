@@ -25,18 +25,16 @@ const styles = StyleSheet.create<Style>({
 });
 
 const App: React.FC = function () {
-  const loggedIn = useAppSelector(state => state.workspace.loggedIn);
-  const notificationQueue = useAppSelector(state => state.notifications.notificationQueue);
+  const loggedIn = useAppSelector((state) => state.workspace.loggedIn);
+  const notificationQueue = useAppSelector(
+    (state) => state.notifications.notificationQueue,
+  );
 
   let content: JSX.Element | null = null;
   if (!loggedIn) {
-    content = (
-      <Login />
-    );
+    content = <Login />;
   } else {
-    content = (
-      <TodoList />
-    );
+    content = <TodoList />;
   }
 
   const notificationText =
@@ -49,10 +47,7 @@ const App: React.FC = function () {
         barStyle={'light-content'}
       />
       {content}
-      <ErrorBar
-        key={notificationText}
-        text={notificationText}
-      />
+      <ErrorBar key={notificationText} text={notificationText} />
     </SafeAreaView>
   );
 };

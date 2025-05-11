@@ -79,18 +79,21 @@ const defaultState = {
   },
 };
 
-const wrapper = (component, stateOverrides={}) => {
-  const initialState = _.mergeWith({}, defaultState, stateOverrides, (objValue, srcValue) => {
-    if (_.isArray(objValue)) {
-      return srcValue;
-    }
-    return undefined;
-  });
+const wrapper = (component, stateOverrides = {}) => {
+  const initialState = _.mergeWith(
+    {},
+    defaultState,
+    stateOverrides,
+    (objValue, srcValue) => {
+      if (_.isArray(objValue)) {
+        return srcValue;
+      }
+      return undefined;
+    },
+  );
   return (
     <SafeAreaProvider>
-      <Provider store={setupStore(initialState)}>
-        {component}
-      </Provider>
+      <Provider store={setupStore(initialState)}>{component}</Provider>
     </SafeAreaProvider>
   );
 };
@@ -99,8 +102,7 @@ export default {
   title: 'Todo List',
   component: TodoList,
 };
-export const DefaultTodoList: React.FC = () =>
-  wrapper(<TodoList />);
+export const DefaultTodoList: React.FC = () => wrapper(<TodoList />);
 
 export const LabelPickerOverlay: React.FC = () =>
   wrapper(<TodoList />, {
@@ -111,11 +113,9 @@ export const LabelPickerOverlay: React.FC = () =>
   });
 
 export const LoadingIndicator: React.FC = () =>
-  wrapper(
-    <TodoList />, {
-      todosApi: {
-        initialLoad: true,
-        entries: [stubTodo({ id: 1, description: 'New todo' })],
-      },
-    }
-  );
+  wrapper(<TodoList />, {
+    todosApi: {
+      initialLoad: true,
+      entries: [stubTodo({ id: 1, description: 'New todo' })],
+    },
+  });

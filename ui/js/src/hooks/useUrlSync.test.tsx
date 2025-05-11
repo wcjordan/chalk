@@ -13,11 +13,11 @@ jest.mock('react-native', () => ({
 const mockWorkspaceState = {
   filterLabels: {},
   showCompletedTodos: false,
-}
+};
 jest.mock('./hooks', () => ({
   useAppDispatch: jest.fn().mockReturnValue(jest.fn()),
   useAppSelector: jest.fn().mockImplementation((selector) => {
-    return selector({ workspace: mockWorkspaceState })
+    return selector({ workspace: mockWorkspaceState });
   }),
 }));
 
@@ -54,7 +54,8 @@ describe('useUrlSync', () => {
 
   it('should read filters from URL on mount', () => {
     // Set up URL with filters
-    window.location.search = '?labels=work,home&inverted=urgent&showCompleted=true';
+    window.location.search =
+      '?labels=work,home&inverted=urgent&showCompleted=true';
 
     renderHook(() => useUrlSync());
 
@@ -86,7 +87,7 @@ describe('useUrlSync', () => {
     // Change filter state & rerender
     mockWorkspaceState.filterLabels = {
       work: FILTER_STATUS.Active,
-      "5 minutes": FILTER_STATUS.Active,
+      '5 minutes': FILTER_STATUS.Active,
       urgent: FILTER_STATUS.Inverted,
     };
     mockWorkspaceState.showCompletedTodos = true;
@@ -97,7 +98,7 @@ describe('useUrlSync', () => {
     expect(window.history.replaceState).toHaveBeenCalledWith(
       {},
       '',
-      '/?labels=5+minutes%2Cwork&inverted=urgent&showCompleted=true'
+      '/?labels=5+minutes%2Cwork&inverted=urgent&showCompleted=true',
     );
 
     // Verify switching back to the default Inbox filters removes the query params
@@ -105,11 +106,7 @@ describe('useUrlSync', () => {
     rerender();
 
     // Verify history.replaceState was called with URL without query params
-    expect(window.history.replaceState).toHaveBeenCalledWith(
-      {},
-      '',
-      '/'
-    );
+    expect(window.history.replaceState).toHaveBeenCalledWith({}, '', '/');
   });
 });
 
@@ -117,4 +114,4 @@ describe('useUrlSync', () => {
 const resetMockWorkspaceState = () => {
   mockWorkspaceState.filterLabels = {};
   mockWorkspaceState.showCompletedTodos = false;
-}
+};

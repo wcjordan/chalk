@@ -34,15 +34,11 @@ const defaultState = {
 };
 
 const wrapper = (component) => (
-  <Provider store={setupStore(defaultState)}>
-    {component}
-  </Provider>
+  <Provider store={setupStore(defaultState)}>{component}</Provider>
 );
 
 export default {
   title: 'Label Filter',
   component: LabelFilter,
 };
-export const DefaultLabelFilter: React.FC = () => (wrapper(
-  <LabelFilter />
-));
+export const DefaultLabelFilter: React.FC = () => wrapper(<LabelFilter />);

@@ -16,15 +16,15 @@ const initialState: ApiState<Label> = {
   loading: false,
 };
 
-export const listLabels = createAsyncThunk<
-  Label[],
-  void,
-  { state: RootState }
->(`${API_NAME}/list`, async () => list<Label>(getLabelsApi()), {
-  condition: (_unused, { getState }) => {
-    return !getState().labelsApi.loading;
+export const listLabels = createAsyncThunk<Label[], void, { state: RootState }>(
+  `${API_NAME}/list`,
+  async () => list<Label>(getLabelsApi()),
+  {
+    condition: (_unused, { getState }) => {
+      return !getState().labelsApi.loading;
+    },
   },
-});
+);
 
 export default createSlice({
   name: API_NAME,

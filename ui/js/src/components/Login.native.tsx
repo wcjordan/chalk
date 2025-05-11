@@ -5,10 +5,7 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {
-  addNotification,
-  completeAuthentication,
-} from '../redux/reducers';
+import { addNotification, completeAuthentication } from '../redux/reducers';
 import { getEnvFlags } from '../helpers';
 import { useAppDispatch } from '../hooks/hooks';
 

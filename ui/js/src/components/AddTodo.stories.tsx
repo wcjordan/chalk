@@ -4,9 +4,7 @@ import { setupStore } from '../redux/store';
 import AddTodo from './AddTodo';
 
 const wrapper = (component) => (
-  <Provider store={setupStore()}>
-    {component}
-  </Provider>
+  <Provider store={setupStore()}>{component}</Provider>
 );
 
 export default {

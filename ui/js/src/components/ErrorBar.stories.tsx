@@ -26,7 +26,8 @@ export default {
   title: 'Error Bar',
   component: ErrorBar,
 };
-export const DefaultErrorBar: React.FC = () => wrapper(<ErrorBar text="Snacks!" />);
+export const DefaultErrorBar: React.FC = () =>
+  wrapper(<ErrorBar text="Snacks!" />);
 
 export const HiddenErrorBar: React.FC = () => wrapper(<ErrorBar text={null} />);
 

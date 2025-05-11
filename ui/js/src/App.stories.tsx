@@ -80,18 +80,21 @@ const defaultState = {
   },
 };
 
-const wrapper = (component, stateOverrides={}) => {
-  const initialState = _.mergeWith({}, defaultState, stateOverrides, (objValue, srcValue) => {
-    if (_.isArray(objValue)) {
-      return srcValue;
-    }
-    return undefined;
-  });
+const wrapper = (component, stateOverrides = {}) => {
+  const initialState = _.mergeWith(
+    {},
+    defaultState,
+    stateOverrides,
+    (objValue, srcValue) => {
+      if (_.isArray(objValue)) {
+        return srcValue;
+      }
+      return undefined;
+    },
+  );
   return (
     <SafeAreaProvider>
-      <Provider store={setupStore(initialState)}>
-        {component}
-      </Provider>
+      <Provider store={setupStore(initialState)}>{component}</Provider>
     </SafeAreaProvider>
   );
 };
@@ -103,12 +106,11 @@ export default {
 export const DefaultLayout: React.FC = () =>
   wrapper(<App />, {
     todosApi: {
-      entries: []
-    }
+      entries: [],
+    },
   });
 
-export const ListTodosLayout: React.FC = () =>
-  wrapper(<App />);
+export const ListTodosLayout: React.FC = () => wrapper(<App />);
 
 export const LabelPickerLayout: React.FC = () =>
   wrapper(<App />, {
@@ -118,9 +120,8 @@ export const LabelPickerLayout: React.FC = () =>
   });
 
 export const NotificationLayout: React.FC = () =>
-  wrapper(
-    <App />, {
-      notifications: {
-        notificationQueue: ['Error logging in...']
-      }
-    });
+  wrapper(<App />, {
+    notifications: {
+      notificationQueue: ['Error logging in...'],
+    },
+  });

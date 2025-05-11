@@ -86,13 +86,7 @@ const styles = StyleSheet.create<Style>({
 });
 
 const TodoItem: React.FC<Props> = memo(function (props: Props) {
-  const {
-    editing,
-    isDragging,
-    labeling,
-    startDrag,
-    todo,
-  } = props;
+  const { editing, isDragging, labeling, startDrag, todo } = props;
   const dispatch = useAppDispatch();
   const [editingValue, setEditingValue] = useState<string | null>(null);
 
@@ -101,27 +95,33 @@ const TodoItem: React.FC<Props> = memo(function (props: Props) {
       return;
     }
 
-    dispatch(updateTodo({
-      id: todo.id,
-      description: editingValue,
-    }));
+    dispatch(
+      updateTodo({
+        id: todo.id,
+        description: editingValue,
+      }),
+    );
     setEditingValue(null);
   }, [todo.id, editingValue]);
 
   const toggleTodo = useCallback(() => {
-    dispatch(updateTodo({
-      id: todo.id,
-      completed: !todo.completed,
-    }));
+    dispatch(
+      updateTodo({
+        id: todo.id,
+        completed: !todo.completed,
+      }),
+    );
   }, [todo.id, todo.completed]);
 
   const archiveTodo = useCallback(
     (event: GestureResponderEvent) => {
       event.stopPropagation();
-      dispatch(updateTodo({
-        id: todo.id,
-        archived: true,
-      }));
+      dispatch(
+        updateTodo({
+          id: todo.id,
+          archived: true,
+        }),
+      );
     },
     [todo.id],
   );
