@@ -19,7 +19,7 @@ def test_url_updates_with_filters(page, todo_prefix):
 
     # Add another filter and verify URL updates
     toggle_label_filter(page, '5 minutes')
-    assert page.url == f'{base_url}?labels=work%2C5+minutes'
+    assert page.url == f'{base_url}?labels=5+minutes%2Cwork'
 
     # Toggle a filter to inverted and verify URL updates
     toggle_label_filter(page, 'work')
