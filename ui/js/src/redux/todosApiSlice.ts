@@ -1,13 +1,7 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import { RootState } from './store';
-import {
-  ApiState,
-  MoveTodoOperation,
-  NewTodo,
-  Todo,
-  TodoPatch,
-} from './types';
+import { ApiState, MoveTodoOperation, NewTodo, Todo, TodoPatch } from './types';
 import {
   create,
   getCsrfToken,
@@ -99,7 +93,10 @@ function updateTodoInPlace(existingEntry: Todo, updatedTodo: Todo) {
 }
 
 function updateTodoFromResponse(entries: Todo[], updatedTodo: Todo) {
-  const existingEntry = _.find(entries, (entry: Todo) => entry.id === updatedTodo.id);
+  const existingEntry = _.find(
+    entries,
+    (entry: Todo) => entry.id === updatedTodo.id,
+  );
   if (existingEntry) {
     updateTodoInPlace(existingEntry, updatedTodo);
     entries = processTodos(entries);
@@ -143,7 +140,10 @@ export default createSlice({
       .addCase(listTodos.fulfilled, (state, action) => {
         state.initialLoad = false;
         state.loading = false;
-        state.entries = handleListResponse(state.entries, Array.from(action.payload));
+        state.entries = handleListResponse(
+          state.entries,
+          Array.from(action.payload),
+        );
       })
       .addCase(listTodos.rejected, (state, action) => {
         state.initialLoad = false;

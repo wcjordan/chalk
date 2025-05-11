@@ -4,9 +4,7 @@ import { setupStore } from '../redux/store';
 import WorkContextFilter from './WorkContextFilter';
 
 const wrapper = (component) => (
-    <Provider store={setupStore()}>
-      {component}
-    </Provider>
+  <Provider store={setupStore()}>{component}</Provider>
 );
 
 const defaultProps = {
@@ -17,10 +15,8 @@ export default {
   title: 'Work Context Filter',
   component: WorkContextFilter,
 };
-export const DefaultWorkContextFilter: React.FC = () => (wrapper(
-  <WorkContextFilter {...defaultProps} />
-));
+export const DefaultWorkContextFilter: React.FC = () =>
+  wrapper(<WorkContextFilter {...defaultProps} />);
 
-export const ActiveWorkContextFilter: React.FC = () => (wrapper(
-  <WorkContextFilter {...defaultProps} activeWorkContext="urgent" />
-));
+export const ActiveWorkContextFilter: React.FC = () =>
+  wrapper(<WorkContextFilter {...defaultProps} activeWorkContext="urgent" />);

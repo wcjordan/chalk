@@ -90,7 +90,7 @@ export function getWsRoot(): string {
   if (getEnvFlags().ENVIRONMENT === 'DEV') {
     subdomain = 'chalk-dev';
   }
-  return `https://${subdomain}.flipperkid.com/`
+  return `https://${subdomain}.flipperkid.com/`;
 }
 
 // Used to exchange login token for session cookie in mobile login flow
@@ -105,7 +105,6 @@ export async function recordSessionData(
   dataString: string,
   csrfToken: string,
 ): Promise<string> {
-  
   const requestOpts = getRequestOpts('POST', csrfToken);
   requestOpts.body = dataString;
   const response = await fetch(

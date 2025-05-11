@@ -46,7 +46,7 @@ export default {
       {
         organization: 'flipperkid',
         project: 'chalk-react-native',
-      }
+      },
     ],
     'expo-font',
   ],

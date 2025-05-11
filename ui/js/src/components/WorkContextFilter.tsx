@@ -26,18 +26,11 @@ const styles = StyleSheet.create<Style>({
 
 const WorkContextFilter: React.FC<Props> = function (props: Props) {
   const dispatch = useAppDispatch();
-  const {
-    activeWorkContext,
-    isFiltered,
-    showCompletedTodos,
-  } = props;
+  const { activeWorkContext, isFiltered, showCompletedTodos } = props;
 
-  const setWorkContextCb = useCallback(
-    (workContext: string) => {
-      dispatch(setWorkContext(workContext));
-    },
-    [],
-  );
+  const setWorkContextCb = useCallback((workContext: string) => {
+    dispatch(setWorkContext(workContext));
+  }, []);
 
   const chips = Object.keys(workContexts).map((workContext) => (
     <LabelChip

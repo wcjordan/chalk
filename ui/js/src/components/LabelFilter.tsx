@@ -33,12 +33,9 @@ const LabelFilter: React.FC = function () {
     showLabelFilter,
   } = useAppSelector((state) => state.workspace);
 
-  const filterByLabelCb = useCallback(
-    (label: string) => {
-      dispatch(toggleLabel(label));
-    },
-    [],
-  );
+  const filterByLabelCb = useCallback((label: string) => {
+    dispatch(toggleLabel(label));
+  }, []);
 
   const chips = labels.map((label) => (
     <LabelChip

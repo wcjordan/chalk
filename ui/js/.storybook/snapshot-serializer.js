@@ -3,7 +3,6 @@ const jestSerializerHtml = require('jest-serializer-html');
 
 const LOADING_INDICATOR_PATTERN = /rotate\(-?\d+\.?\d*deg\)/g;
 
-
 module.exports = {
   /*
    * The test-runner calls the serialize function when the test reaches the expect(SomeHTMLElement).toMatchSnapshot().
@@ -11,7 +10,10 @@ module.exports = {
    * For instance, the loading indicator rotate css style will be replaced with 'rotate(mocked_deg)'.
    */
   serialize(val) {
-    const cleanedHtml = val.replace(LOADING_INDICATOR_PATTERN, 'rotate(mocked_deg)');
+    const cleanedHtml = val.replace(
+      LOADING_INDICATOR_PATTERN,
+      'rotate(mocked_deg)',
+    );
     return jestSerializerHtml.print(cleanedHtml);
   },
   test(val) {

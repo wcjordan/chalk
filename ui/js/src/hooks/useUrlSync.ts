@@ -12,18 +12,25 @@ export function useUrlSync() {
   }
 
   const dispatch = useAppDispatch();
-  const filterLabels = useAppSelector(state => state.workspace.filterLabels);
-  const showCompletedTodos = useAppSelector(state => state.workspace.showCompletedTodos);
+  const filterLabels = useAppSelector((state) => state.workspace.filterLabels);
+  const showCompletedTodos = useAppSelector(
+    (state) => state.workspace.showCompletedTodos,
+  );
 
   // Read from URL on mount
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const hasFilters = params.has('labels') || params.has('inverted') || params.has('showCompleted');
+    const hasFilters =
+      params.has('labels') ||
+      params.has('inverted') ||
+      params.has('showCompleted');
 
     if (hasFilters) {
       // Get active and inverted labels from URL
-      const activeLabels = params.get('labels')?.split(',').filter(Boolean) || [];
-      const invertedLabels = params.get('inverted')?.split(',').filter(Boolean) || [];
+      const activeLabels =
+        params.get('labels')?.split(',').filter(Boolean) || [];
+      const invertedLabels =
+        params.get('inverted')?.split(',').filter(Boolean) || [];
 
       // Apply filters in a single batch operation
       dispatch(setFilters({ activeLabels, invertedLabels }));
@@ -40,17 +47,21 @@ export function useUrlSync() {
   useEffect(() => {
     const params = new URLSearchParams();
 
-    const activeLabels = Object.keys(filterLabels).filter(
-      label => filterLabels[label] === FILTER_STATUS.Active
-    ).sort();
+    const activeLabels = Object.keys(filterLabels)
+      .filter((label) => filterLabels[label] === FILTER_STATUS.Active)
+      .sort();
 
-    const invertedLabels = Object.keys(filterLabels).filter(
-      label => filterLabels[label] === FILTER_STATUS.Inverted
-    ).sort();
+    const invertedLabels = Object.keys(filterLabels)
+      .filter((label) => filterLabels[label] === FILTER_STATUS.Inverted)
+      .sort();
 
     // If Inbox filters, then drop query params from URL
     // Note this assumes that the Inbox is the default state and should be updated if that ever changes
-    if (_.isEqual(activeLabels, ['Unlabeled']) && invertedLabels.length === 0 && !showCompletedTodos) {
+    if (
+      _.isEqual(activeLabels, ['Unlabeled']) &&
+      invertedLabels.length === 0 &&
+      !showCompletedTodos
+    ) {
       window.history.replaceState({}, '', window.location.pathname);
       return;
     }

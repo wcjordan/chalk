@@ -15,10 +15,7 @@ export function useDataLoader() {
     dispatch(listLabels());
     dispatch(listTodos());
 
-    const intervalId = window.setInterval(
-      () => dispatch(listTodos()),
-      10000,
-    );
+    const intervalId = window.setInterval(() => dispatch(listTodos()), 10000);
 
     return () => {
       window.clearInterval(intervalId);

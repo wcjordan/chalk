@@ -53,7 +53,7 @@ const styles = StyleSheet.create<Style>({
 });
 
 const TodoList: React.FC = memo(function () {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   useDataLoader();
   useUrlSync();
   if (Platform.OS === 'web') {
@@ -77,23 +77,22 @@ const TodoList: React.FC = memo(function () {
     data: Todo[];
     from: number;
     to: number;
-  }) => void = useCallback(
-    ({ from, to, data }) => {
-      if (from === to) {
-        return;
-      }
+  }) => void = useCallback(({ from, to, data }) => {
+    if (from === to) {
+      return;
+    }
 
-      const beforeFlag = from > to;
-      const position = beforeFlag ? 'before' : 'after';
-      const relativeIdx = beforeFlag ? to + 1 : to - 1;
-      dispatch(moveTodo({
+    const beforeFlag = from > to;
+    const position = beforeFlag ? 'before' : 'after';
+    const relativeIdx = beforeFlag ? to + 1 : to - 1;
+    dispatch(
+      moveTodo({
         todo_id: data[to].id,
         position,
         relative_id: data[relativeIdx].id,
-      }));
-    },
-    [],
-  );
+      }),
+    );
+  }, []);
 
   let containerStyle: StyleProp<ViewStyle> =
     Platform.OS === 'web' ? styles.containerWeb : styles.containerMobile;
@@ -106,18 +105,21 @@ const TodoList: React.FC = memo(function () {
     containerStyle = [containerStyle, topStyle];
   }
 
-  const renderItem = useCallback(({ item, drag, isActive }: RenderItemParams<Todo>) => (
-    <OpacityDecorator activeOpacity={0.65}>
-      <TodoItem
-        editing={item.id === editTodoId}
-        isDragging={isActive}
-        key={item.id || ''}
-        labeling={item.id === labelTodoId}
-        startDrag={drag}
-        todo={item}
-      />
-    </OpacityDecorator>
-  ), [editTodoId, labelTodoId]);
+  const renderItem = useCallback(
+    ({ item, drag, isActive }: RenderItemParams<Todo>) => (
+      <OpacityDecorator activeOpacity={0.65}>
+        <TodoItem
+          editing={item.id === editTodoId}
+          isDragging={isActive}
+          key={item.id || ''}
+          labeling={item.id === labelTodoId}
+          startDrag={drag}
+          todo={item}
+        />
+      </OpacityDecorator>
+    ),
+    [editTodoId, labelTodoId],
+  );
 
   let labelFilter = null;
   let workContextFilter = null;

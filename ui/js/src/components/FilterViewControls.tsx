@@ -1,7 +1,10 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, TextStyle, ViewStyle } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import { toggleShowCompletedTodos, toggleShowLabelFilter } from '../redux/reducers';
+import {
+  toggleShowCompletedTodos,
+  toggleShowLabelFilter,
+} from '../redux/reducers';
 import { useAppDispatch } from '../hooks/hooks';
 
 interface Style {
@@ -20,11 +23,7 @@ const styles = StyleSheet.create<Style>({
 
 const FilterViewControls: React.FC<Props> = function (props: Props) {
   const dispatch = useAppDispatch();
-  const {
-    isFiltered,
-    showCompletedTodos,
-    showLabelFilter,
-  } = props;
+  const { isFiltered, showCompletedTodos, showLabelFilter } = props;
 
   let filterIcon = null;
   if (isFiltered) {
