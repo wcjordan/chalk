@@ -42,13 +42,14 @@ export function useUrlSync() {
 
     const activeLabels = Object.keys(filterLabels).filter(
       label => filterLabels[label] === FILTER_STATUS.Active
-    );
+    ).sort();
 
     const invertedLabels = Object.keys(filterLabels).filter(
       label => filterLabels[label] === FILTER_STATUS.Inverted
-    );
+    ).sort();
 
     // If Inbox filters, then drop query params from URL
+    // Note this assumes that the Inbox is the default state and should be updated if that ever changes
     if (_.isEqual(activeLabels, ['Unlabeled']) && invertedLabels.length === 0 && !showCompletedTodos) {
       window.history.replaceState({}, '', window.location.pathname);
       return;

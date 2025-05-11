@@ -12,7 +12,7 @@ jest.mock('react-native', () => ({
 
 // Initial state for the filters on the workspace
 const mockWorkspaceState = {
-  filterLabels: { Unlabeled: FILTER_STATUS.Active },
+  filterLabels: {},
   showCompletedTodos: false,
 }
 jest.mock('./hooks', () => ({
@@ -43,6 +43,9 @@ describe('useUrlSync', () => {
     };
 
     window.history.replaceState = jest.fn();
+
+    // Set mockWorkspaceState to default state
+    resetMockWorkspaceState();
   });
 
   afterEach(() => {
@@ -85,6 +88,7 @@ describe('useUrlSync', () => {
     // Mock filter state
     mockWorkspaceState.filterLabels = {
       work: FILTER_STATUS.Active,
+      "5 minutes": FILTER_STATUS.Active,
       urgent: FILTER_STATUS.Inverted,
     };
     mockWorkspaceState.showCompletedTodos = true;
@@ -95,14 +99,12 @@ describe('useUrlSync', () => {
     expect(window.history.replaceState).toHaveBeenCalledWith(
       {},
       '',
-      '/?labels=work&inverted=urgent&showCompleted=true'
+      '/?labels=5+minutes%2Cwork&inverted=urgent&showCompleted=true'
     );
 
     // Verify switching back to the default Inbox filters (just Unlabeled active)
     // removes the query params
-    mockWorkspaceState.filterLabels = { Unlabeled: FILTER_STATUS.Active };
-    mockWorkspaceState.showCompletedTodos = false;
-
+    resetMockWorkspaceState();
     rerender();
 
     // Verify history.replaceState was called with URL without query params
@@ -113,3 +115,9 @@ describe('useUrlSync', () => {
     );
   });
 });
+
+// Reset the mock workspace state to default values
+const resetMockWorkspaceState = () => {
+  mockWorkspaceState.filterLabels = {};
+  mockWorkspaceState.showCompletedTodos = false;
+}
