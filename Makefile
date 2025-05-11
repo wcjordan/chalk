@@ -105,3 +105,7 @@ setup-continuous-delivery:
 .PHONY: superclean
 superclean: stop
 	rm _env_id.txt
+
+.PHONY: aider
+aider:
+	aider --model sonnet --api-key anthropic=$(ANTHROPIC_API_KEY)
