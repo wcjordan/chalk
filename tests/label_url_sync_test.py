@@ -67,7 +67,7 @@ def test_load_filters_from_url(page, todo_prefix):
     # Navigate to default URL
     page.goto(base_url)
 
-    # Verify only the home todo is visible
+    # Verify navigating to the default URL uses the Inbox work context
     todo_descriptions = list_todo_descriptions(page, todo_prefix)
     assert todo_descriptions == []
     assert get_active_work_context(page) == 'Inbox'

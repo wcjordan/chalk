@@ -109,7 +109,7 @@ export default createSlice({
       const toggledLabel = action.payload;
 
       // Remove the Unlabeled label when enabling another label
-      // This is because no todo can be both Unlabeled and match a label
+      // This is a small feature because no todo can be both Unlabeled and match a label
       if (toggledLabel !== 'Unlabeled') {
         delete newLabels['Unlabeled'];
       }

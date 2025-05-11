@@ -3,14 +3,13 @@ import { setFilters, toggleShowCompletedTodos } from '../redux/reducers';
 import { FILTER_STATUS } from '../redux/types';
 import { useUrlSync } from './useUrlSync';
 
-// Mock the necessary dependencies
 jest.mock('react-native', () => ({
   Platform: {
     OS: 'web',
   },
 }));
 
-// Initial state for the filters on the workspace
+// Stubbed state object for the filters on the workspace
 const mockWorkspaceState = {
   filterLabels: {},
   showCompletedTodos: false,
@@ -41,7 +40,6 @@ describe('useUrlSync', () => {
       pathname: '/',
       search: '',
     };
-
     window.history.replaceState = jest.fn();
 
     // Set mockWorkspaceState to default state
@@ -49,7 +47,7 @@ describe('useUrlSync', () => {
   });
 
   afterEach(() => {
-    // Restore original location
+    // Restore original location & clear mocks
     window.location = originalLocation;
     jest.clearAllMocks();
   });
@@ -85,7 +83,7 @@ describe('useUrlSync', () => {
     // Initial render with default filters
     const { rerender } = renderHook(() => useUrlSync());
 
-    // Mock filter state
+    // Change filter state & rerender
     mockWorkspaceState.filterLabels = {
       work: FILTER_STATUS.Active,
       "5 minutes": FILTER_STATUS.Active,
@@ -102,8 +100,7 @@ describe('useUrlSync', () => {
       '/?labels=5+minutes%2Cwork&inverted=urgent&showCompleted=true'
     );
 
-    // Verify switching back to the default Inbox filters (just Unlabeled active)
-    // removes the query params
+    // Verify switching back to the default Inbox filters removes the query params
     resetMockWorkspaceState();
     rerender();
 
