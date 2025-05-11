@@ -1,6 +1,26 @@
 # Chalk - Todo app
+A basic app for more managing todos.  
 
-## Install tools for dev env
+The application consists of:  
+
+ 1 A Django backend (in the server directory) that provides a REST API for todo management  
+ 2 A React/Redux frontend (in the ui directory) that provides mobile and web UIs via Expo  
+ 3 End-to-end tests using Playwright (in the tests directory)  
+
+The application allows users to:  
+
+ • Create, read, update, and delete todos  
+ • Add labels to todos  
+ • Filter todos by labels  
+ • Mark todos as complete  
+ • Reorder todos by dragging  
+ • Use different "work contexts" for common todo filtering settings  
+
+The app uses Google OAuth for authentication and has both web and mobile (React Native) versions.  
+
+## Contributing
+### Getting Started
+#### Install tools for dev env
 On Mac:  
 `brew install nginx`  
 `brew install coreutils`  
@@ -8,7 +28,7 @@ On Mac:
 Once GCloud is setup  
 `gcloud auth configure-docker us-east4-docker.pkg.dev`  
 
-## Env Setup
+#### Env Setup
 Copy .env_default to .env & .prod.env  
 
 Set GCP_PROJECT with the project ID from GCP  
@@ -23,24 +43,25 @@ Set SECRET_KEY & DB_PASSWORD in .env
 
 Set K8S_CONTEXT to the name of the config from `kubectl config get-contexts` for the cluster that you plan to use.  
 
-### Sentry config
+#### Sentry config
 Set SENTRY_DSN - A Sentry.io DSN.  https://sentry.io/settings/<ORG_ID>/projects/<PROJECT_ID>/keys/  
 Set SENTRY_TOKEN & SENTRY_AUTH_TOKEN (prod only) - A [Sentry.io auth token](https://sentry.io/settings/account/api/auth-tokens/)  
 (look into merging these 2 since they have identical content)
 
-### Expo config
+#### Expo config
 EXPO_USERNAME & EXPO_CLI_PASSWORD (prod only) - Set from your expo.dev account  
 OAUTH_CLIENT_ID - See the OAuth Setup section below  
 
-# Browserstack config
+#### Browserstack config
 See username & access key under [Automate section of settings](https://www.browserstack.com/accounts/settings)  
 Delete BROWSERSTACK_USERNAME & BROWSERSTACK_ACCESS_KEY in prod.env  
 
-# CI OAuth config
+#### CI OAuth config
 See the OAuth Setup section below  
 Delete CHALK_OAUTH_REFRESH_TOKEN in prod.env  
 
-## Allocate static IPs & create DNS entries
+### One time setup
+#### Allocate static IPs & create DNS entries
 Explore doing this w/ Config Connector once [#101](https://github.com/GoogleCloudPlatform/k8s-config-connector/issues/101) is resolved.
 
 ```
@@ -64,7 +85,7 @@ gcloud beta dns record-sets transaction execute --zone=$ZONE_NAME
 
 ```
 
-## Secrets: OAuth Setup
+#### Secrets: OAuth Setup
 Create 2 [OAuth client IDs](https://console.cloud.google.com/apis/credentials)  
 See [instructions](https://docs.expo.dev/guides/authentication/#google)  
 
@@ -104,11 +125,11 @@ Name: chalk-dev-android
 Package Name: com.<DOMAIN_NAME w/o .com>.chalk.dev  
 SHA-1 Certificate Fingerprint: get from running `npx eas credentials` in ui/js directory  
 
-## Setup Jenkins Builds
+### Setup Jenkins Builds
 Run `make setup-continuous-delivery` to add the secrets needed for builds and continuous delivery  
 to Jenkins.
 
-### Chalk Build
+#### Chalk Build
 Create a Multibranch Pipeline build named `chalk`  
 Set the Display Name to `Chalk`
 
@@ -126,7 +147,7 @@ Build by Jenkinsfile
 Set Scan Periodically to `1 hour`.  The webhook will handle building on pushes & PRs.  
 Discard old builds, keep `60` days of old items.  
 
-### Chalk Base Build
+#### Chalk Base Build
 Create a Pipeline build named `chalk_base`
 Set the Display Name to `Chalk Base` (under Advanced)
 
@@ -143,7 +164,7 @@ This means a `jenkins-base` branch can be use to create a new base build in addi
 Set script path to `jenkins/Jenkinsfile.base`  
 Enable lightweight checkout  
 
-### Add Github Webhook
+#### Add Github Webhook
 Under the repo settings on Github -> Webhooks, click `Add a webhook``
 Payload URL: `http://jenkins.flipperkid.com/github-webhook/`
 Content type: `application/json`
