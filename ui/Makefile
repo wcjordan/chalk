@@ -84,9 +84,10 @@ update-snapshots:
 	make test-storybook TEST_ARGS="--updateSnapshot"
 
 # ESLint & Prettier JS formatting
+# was cd js; npx lint-staged
 .PHONY: format
 format:
-	cd js; npx lint-staged
+	cd js; npx prettier --write "**/*.{ts,tsx,js,jsx,json,css,scss}" && npx eslint "**/*.{ts,tsx,js,jsx}"
 
 # Fix import ordering
 .PHONY: fix-imports
