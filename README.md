@@ -1,5 +1,5 @@
 # Chalk - Todo app
-A basic app for more managing todos.  
+A basic app for managing todos.  
 
 The application consists of:  
 
