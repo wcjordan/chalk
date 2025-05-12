@@ -109,3 +109,7 @@ superclean: stop
 .PHONY: aider
 aider:
 	env $$(grep 'ANTHROPIC_API_KEY' .env | xargs) bash -c 'aider --model sonnet --api-key anthropic=$$ANTHROPIC_API_KEY'
+
+.PHONY: update-repomix
+update-repomix:
+	repomix --ignore "ui/js/src/**/__snapshots__/**/*,db/starter_db/starter_db.sql"
