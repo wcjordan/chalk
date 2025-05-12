@@ -225,7 +225,7 @@ const TodoItem: React.FC<Props> = memo(function (props: Props) {
   }
 
   let labelContent = null;
-  if (todo.labels.length) {
+  if (todo.labels && todo.labels.length) {
     const chips = todo.labels.map((label) => (
       <LabelChip key={label} label={label} slimStyle={true} />
     ));

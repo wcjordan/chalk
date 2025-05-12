@@ -2,7 +2,7 @@
 
 exports[`Error Bar DefaultErrorBar smoke-test 1`] = `
 <div class="css-g5y9jx r-13awgt0">
-  <div class="css-g5y9jx r-18u37iz r-1w6e6rj r-1pi2tsx r-10q4ly9 r-u04ygo">
+  <div class="css-g5y9jx r-18u37iz r-1w6e6rj r-1pi2tsx r-1uwte3a r-u04ygo">
     <div class="css-g5y9jx r-1p0dtai r-u8s1d r-13qz1uu r-12vffkv"
          style="padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"
     >
@@ -25,14 +25,14 @@ exports[`Error Bar DefaultErrorBar smoke-test 1`] = `
 
 exports[`Error Bar HiddenErrorBar smoke-test 1`] = `
 <div class="css-g5y9jx r-13awgt0">
-  <div class="css-g5y9jx r-18u37iz r-1w6e6rj r-1pi2tsx r-10q4ly9 r-u04ygo">
+  <div class="css-g5y9jx r-18u37iz r-1w6e6rj r-1pi2tsx r-1uwte3a r-u04ygo">
   </div>
 </div>
 `;
 
 exports[`Error Bar PermanentErrorBar smoke-test 1`] = `
 <div class="css-g5y9jx r-13awgt0">
-  <div class="css-g5y9jx r-18u37iz r-1w6e6rj r-1pi2tsx r-10q4ly9 r-u04ygo">
+  <div class="css-g5y9jx r-18u37iz r-1w6e6rj r-1pi2tsx r-1uwte3a r-u04ygo">
     <div class="css-g5y9jx r-1p0dtai r-u8s1d r-13qz1uu r-12vffkv"
          style="padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"
     >

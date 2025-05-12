@@ -130,7 +130,7 @@ export const completeAuthentication =
 
 export const recordSessionEvents =
   (sessionGuid: string, events: object[]): AppThunk =>
-  async (_, getState) => {
+  async (dispatch, getState) => {
     if (events.length === 0) {
       return;
     }
@@ -141,11 +141,16 @@ export const recordSessionEvents =
       session_data: events,
       environment: getEnvFlags().ENVIRONMENT,
     });
-    const result = recordSessionData(data, getCsrfToken(getState));
-    result.catch((error: string) => {
-      console.error('Failed to save events');
-      console.error(error);
-    });
+
+    try {
+      await recordSessionData(data, getCsrfToken(getState));
+    } catch (error) {
+      console.error('Failed to save events', error);
+      // Only notify in development to avoid user-facing errors
+      if (getEnvFlags().ENVIRONMENT === 'DEV') {
+        dispatch(notificationsSlice.actions.addNotification('Failed to record session data'));
+      }
+    }
   };
 
 export const addNotification = notificationsSlice.actions.addNotification;
