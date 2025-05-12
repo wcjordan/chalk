@@ -69,4 +69,7 @@ continuous_delivery_setup/secrets/
 continuous_delivery_setup/secrets.staging/
 helm/secrets/
 helm/secrets.staging/
+
+# AI tools
 .aider*
+repomix-output.xml
