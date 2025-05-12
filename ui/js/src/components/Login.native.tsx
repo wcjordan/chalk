@@ -52,7 +52,7 @@ const Login: React.FC = function () {
     } catch (error: any) {
       let message = 'Login Error: unknown error';
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        message = 'Login Error: us cancelled the login';
+        message = 'Login Error: user cancelled the login';
       } else if (error.code === statusCodes.IN_PROGRESS) {
         message = 'Login Error: a login is already in progress';
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {

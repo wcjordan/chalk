@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     height: '100%',
     paddingTop: '60px',
-    padddingBottom: '40px',
+    paddingBottom: '40px',
   },
 });
 const wrapper = (component) => (

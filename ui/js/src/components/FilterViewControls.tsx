@@ -40,10 +40,10 @@ const FilterViewControls: React.FC<Props> = function (props: Props) {
 
   const toggleShowLabelFilterCb = useCallback(() => {
     dispatch(toggleShowLabelFilter());
-  }, []);
+  }, [dispatch]);
   const toggleShowCompletedTodosCb = useCallback(() => {
     dispatch(toggleShowCompletedTodos());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Text style={styles.toggles}>

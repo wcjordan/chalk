@@ -31,7 +31,7 @@ const selectedLabels = {
 const styles = StyleSheet.create({
   wrapper: {
     paddingTop: '100px',
-    padddingBottom: '100px',
+    paddingBottom: '100px',
   },
 });
 const wrapper = (component) => (

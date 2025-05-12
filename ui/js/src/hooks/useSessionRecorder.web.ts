@@ -32,6 +32,8 @@ export function useSessionRecorder() {
 
     return () => {
       clearInterval(intervalId);
+      // Clear any remaining events to prevent memory leaks
+      events = [];
     };
   }, []);
 }
