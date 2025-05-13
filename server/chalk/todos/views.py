@@ -102,8 +102,6 @@ def log_session_data(request):
         return Response({'error': str(e)}, status=400)
     except (ValueError, TypeError):
         return Response({'error': 'Invalid JSON data format'}, status=400)
-    except Exception:
-        return Response({'error': 'Failed to log session data'}, status=500)
 
 
 @api_view(['GET', 'HEAD'])
