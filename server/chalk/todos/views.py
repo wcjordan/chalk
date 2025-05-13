@@ -9,6 +9,8 @@ import statistics
 
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
+from django.core.validators import MaxLengthValidator
+from django.core.exceptions import ValidationError
 from google.cloud import storage
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
@@ -21,6 +23,40 @@ from chalk.todos.oauth import get_authorization_url
 from chalk.todos.signals import rebalance_rank_order
 
 SESSION_BUCKET_ID = 'flipperkid-chalk-web-session-data'
+MAX_SESSION_DATA_SIZE = 1024 * 50  # 50KB limit
+MAX_SESSION_KEYS = 100  # Maximum number of keys in the session data
+
+def validate_session_data(data):
+    """
+    Validates session data to ensure it meets security requirements
+    
+    Args:
+        data: The session data to validate
+        
+    Raises:
+        ValidationError: If the data fails validation
+    """
+    # Check overall data size
+    data_str = json.dumps(data)
+    if len(data_str) > MAX_SESSION_DATA_SIZE:
+        raise ValidationError(f"Session data exceeds maximum size of {MAX_SESSION_DATA_SIZE} bytes")
+    
+    # Check number of keys to prevent DoS attacks
+    if isinstance(data, dict) and len(data) > MAX_SESSION_KEYS:
+        raise ValidationError(f"Session data contains too many keys (max: {MAX_SESSION_KEYS})")
+    
+    # Sanitize and validate nested structures
+    if isinstance(data, dict):
+        for key, value in data.items():
+            # Validate keys
+            if not isinstance(key, str):
+                raise ValidationError("All keys must be strings")
+            if len(key) > 100:
+                raise ValidationError("Key length exceeds maximum of 100 characters")
+            
+            # Recursively validate nested structures
+            if isinstance(value, (dict, list)):
+                validate_session_data(value)
 
 
 @api_view(['GET'])
@@ -70,15 +106,34 @@ def healthz(request):
 def log_session_data(request):
     """
     API endpoint used to log session data to an object storage bucket
+    
+    Validates and sanitizes data before storing:
+    - Enforces size limits (50KB max)
+    - Limits number of keys
+    - Validates data structure
     """
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(SESSION_BUCKET_ID)
-    timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d_%H:%M:%S.%f%z')
-    filename = f"{timestamp}_{random.randint(0, 9999):04}"
-    blob = bucket.blob(filename)
-    blob.upload_from_string(json.dumps(request.data))
+    try:
+        # Validate the session data
+        validate_session_data(request.data)
+        
+        # Sanitize data by re-encoding through JSON
+        sanitized_data = json.loads(json.dumps(request.data))
+        
+        # Store the sanitized data
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(SESSION_BUCKET_ID)
+        timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d_%H:%M:%S.%f%z')
+        filename = f"{timestamp}_{random.randint(0, 9999):04}"
+        blob = bucket.blob(filename)
+        blob.upload_from_string(json.dumps(sanitized_data))
 
-    return Response('Session data logged!')
+        return Response('Session data logged!')
+    except ValidationError as e:
+        return Response({'error': str(e)}, status=400)
+    except (ValueError, TypeError) as e:
+        return Response({'error': 'Invalid JSON data format'}, status=400)
+    except Exception as e:
+        return Response({'error': 'Failed to log session data'}, status=500)
 
 
 @api_view(['GET', 'HEAD'])
