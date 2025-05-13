@@ -20,6 +20,7 @@ from chalk.todos.models import LabelModel, RankOrderMetadata, TodoModel
 from chalk.todos.serializers import LabelSerializer, TodoSerializer
 from chalk.todos.oauth import get_authorization_url
 from chalk.todos.signals import rebalance_rank_order
+from chalk.todos.views import _validate_session_data, MAX_SESSION_DATA_SIZE, MAX_SESSION_KEYS
 
 SESSION_BUCKET_ID = 'flipperkid-chalk-web-session-data'
 MAX_SESSION_DATA_SIZE = 1024 * 1024  # 1 MiB limit

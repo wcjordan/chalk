@@ -1,11 +1,13 @@
 """
 Tests for todos module
 """
+import json
 import random
 import string
 
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
 DEFAULT_LABELS = [
     'low-energy',
@@ -67,6 +69,102 @@ def _stub_label_matcher(name):
         'id': AnyArg(),
         'name': name,
     }
+
+
+class SessionDataValidationTests(TestCase):
+    """
+    Tests for session data validation
+    """
+    def test_valid_session_data(self):
+        """Test that valid session data passes validation"""
+        valid_data = {
+            'environment': 'test',
+            'session_guid': '123456',
+            'session_data': {'key': 'value'}
+        }
+        data_str = json.dumps(valid_data)
+        
+        # Should not raise any exceptions
+        _validate_session_data(valid_data, data_str)
+    
+    def test_invalid_data_type(self):
+        """Test that non-dict data fails validation"""
+        invalid_data = ['not', 'a', 'dict']
+        data_str = json.dumps(invalid_data)
+        
+        with self.assertRaises(ValidationError) as context:
+            _validate_session_data(invalid_data, data_str)
+        
+        self.assertIn("must be a dictionary", str(context.exception))
+    
+    def test_missing_required_keys(self):
+        """Test that missing required keys fail validation"""
+        # Missing environment
+        missing_env = {
+            'session_guid': '123456',
+            'session_data': {'key': 'value'}
+        }
+        data_str = json.dumps(missing_env)
+        
+        with self.assertRaises(ValidationError) as context:
+            _validate_session_data(missing_env, data_str)
+        
+        self.assertIn("environment", str(context.exception))
+        
+        # Missing session_guid
+        missing_guid = {
+            'environment': 'test',
+            'session_data': {'key': 'value'}
+        }
+        data_str = json.dumps(missing_guid)
+        
+        with self.assertRaises(ValidationError) as context:
+            _validate_session_data(missing_guid, data_str)
+        
+        self.assertIn("session_guid", str(context.exception))
+        
+        # Missing session_data
+        missing_data = {
+            'environment': 'test',
+            'session_guid': '123456'
+        }
+        data_str = json.dumps(missing_data)
+        
+        with self.assertRaises(ValidationError) as context:
+            _validate_session_data(missing_data, data_str)
+        
+        self.assertIn("session_data", str(context.exception))
+    
+    def test_too_many_keys(self):
+        """Test that too many keys fail validation"""
+        too_many_keys = {
+            'environment': 'test',
+            'session_guid': '123456',
+            'session_data': {'key': 'value'},
+            'extra_key': 'value'  # This exceeds MAX_SESSION_KEYS if it's set to 3
+        }
+        data_str = json.dumps(too_many_keys)
+        
+        with self.assertRaises(ValidationError) as context:
+            _validate_session_data(too_many_keys, data_str)
+        
+        self.assertIn(f"too many keys (max: {MAX_SESSION_KEYS})", str(context.exception))
+    
+    def test_data_too_large(self):
+        """Test that data exceeding size limit fails validation"""
+        # Create a large string that will exceed the size limit
+        large_string = "x" * (MAX_SESSION_DATA_SIZE + 1)
+        large_data = {
+            'environment': 'test',
+            'session_guid': '123456',
+            'session_data': large_string
+        }
+        data_str = json.dumps(large_data)
+        
+        with self.assertRaises(ValidationError) as context:
+            _validate_session_data(large_data, data_str)
+        
+        self.assertIn(f"exceeds maximum size of {MAX_SESSION_DATA_SIZE}", str(context.exception))
 
 
 class ServiceTests(TestCase):
