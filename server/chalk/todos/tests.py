@@ -9,6 +9,8 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
+from chalk.todos.views import _validate_session_data, MAX_SESSION_DATA_SIZE, MAX_SESSION_KEYS
+
 DEFAULT_LABELS = [
     'low-energy',
     'high-energy',
