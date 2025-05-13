@@ -223,8 +223,8 @@ def _validate_session_data(data, data_str):
     # Check overall data size
     if len(data_str) > MAX_SESSION_DATA_SIZE:
         raise ValidationError(
-            f"Session data exceeds maximum size of {MAX_SESSION_DATA_SIZE} bytes"
-        )
+            (f"Session data exceeds maximum size of {MAX_SESSION_DATA_SIZE} "
+             "bytes"))
 
     # Check the structure of the session data
     if not isinstance(data, dict):
