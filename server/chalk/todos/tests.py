@@ -144,7 +144,7 @@ class SessionDataValidationTests(TestCase):
             'session_data': {
                 'key': 'value'
             },
-            'extra_key': 'value'  # This exceeds MAX_SESSION_KEYS if it's set to 3
+            'extra_key': 'value'
         }
         data_str = json.dumps(too_many_keys)
 
