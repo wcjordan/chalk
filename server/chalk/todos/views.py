@@ -9,6 +9,7 @@ import statistics
 
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
+from django.core.exceptions import ValidationError
 from google.cloud import storage
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
@@ -21,6 +22,8 @@ from chalk.todos.oauth import get_authorization_url
 from chalk.todos.signals import rebalance_rank_order
 
 SESSION_BUCKET_ID = 'flipperkid-chalk-web-session-data'
+MAX_SESSION_DATA_SIZE = 1024 * 1024  # 1 MiB limit
+MAX_SESSION_KEYS = 3  # Maximum number of keys in the session data
 
 
 @api_view(['GET'])
@@ -70,15 +73,35 @@ def healthz(request):
 def log_session_data(request):
     """
     API endpoint used to log session data to an object storage bucket
-    """
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(SESSION_BUCKET_ID)
-    timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d_%H:%M:%S.%f%z')
-    filename = f"{timestamp}_{random.randint(0, 9999):04}"
-    blob = bucket.blob(filename)
-    blob.upload_from_string(json.dumps(request.data))
 
-    return Response('Session data logged!')
+    Validates and sanitizes data before storing:
+    - Enforces size limits (1 MiB max)
+    - Limits number of keys
+    - Validates data structure
+    """
+    try:
+        data_str = json.dumps(request.data)
+
+        # Validate the session data
+        _validate_session_data(request.data, data_str)
+
+        # Sanitize data by re-encoding through JSON
+        sanitized_data = json.loads(data_str)
+
+        # Store the sanitized data
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(SESSION_BUCKET_ID)
+        timestamp = datetime.now(
+            timezone.utc).strftime('%Y-%m-%d_%H:%M:%S.%f%z')
+        filename = f"{timestamp}_{random.randint(0, 9999):04}"
+        blob = bucket.blob(filename)
+        blob.upload_from_string(json.dumps(sanitized_data))
+
+        return Response('Session data logged!')
+    except ValidationError as e:
+        return Response({'error': str(e)}, status=400)
+    except (ValueError, TypeError):
+        return Response({'error': 'Invalid JSON data format'}, status=400)
 
 
 @api_view(['GET', 'HEAD'])
@@ -182,3 +205,36 @@ class LabelViewSet(viewsets.ModelViewSet):  # pylint: disable=R0901
     queryset = LabelModel.objects.all()
     serializer_class = LabelSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+def _validate_session_data(data, data_str):
+    """
+    Validates session data to ensure it meets security requirements
+
+    Args:
+        data: The session data to validate
+        data_str: The string representation of the session data
+
+    Raises:
+        ValidationError: If the data fails validation
+    """
+    # Check overall data size
+    if len(data_str) > MAX_SESSION_DATA_SIZE:
+        raise ValidationError(
+            (f"Session data exceeds maximum size of {MAX_SESSION_DATA_SIZE} "
+             "bytes"))
+
+    # Check the structure of the session data
+    if not isinstance(data, dict):
+        raise ValidationError("Session data must be a dictionary")
+    if 'environment' not in data:
+        raise ValidationError("Session data must contain an 'environment' key")
+    if 'session_guid' not in data:
+        raise ValidationError("Session data must contain a 'session_guid' key")
+    if 'session_data' not in data:
+        raise ValidationError("Session data must contain a 'session_data' key")
+
+    # Check number of keys to prevent DoS attacks
+    if isinstance(data, dict) and len(data) > MAX_SESSION_KEYS:
+        raise ValidationError(
+            f"Session data contains too many keys (max: {MAX_SESSION_KEYS})")
