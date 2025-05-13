@@ -148,7 +148,11 @@ export const recordSessionEvents =
       console.error('Failed to save events', error);
       // Only notify in development to avoid user-facing errors
       if (getEnvFlags().ENVIRONMENT === 'DEV') {
-        dispatch(notificationsSlice.actions.addNotification('Failed to record session data'));
+        dispatch(
+          notificationsSlice.actions.addNotification(
+            'Failed to record session data',
+          ),
+        );
       }
     }
   };

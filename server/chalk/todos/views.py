@@ -91,7 +91,8 @@ def log_session_data(request):
         # Store the sanitized data
         storage_client = storage.Client()
         bucket = storage_client.bucket(SESSION_BUCKET_ID)
-        timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d_%H:%M:%S.%f%z')
+        timestamp = datetime.now(
+            timezone.utc).strftime('%Y-%m-%d_%H:%M:%S.%f%z')
         filename = f"{timestamp}_{random.randint(0, 9999):04}"
         blob = bucket.blob(filename)
         blob.upload_from_string(json.dumps(sanitized_data))
@@ -99,9 +100,9 @@ def log_session_data(request):
         return Response('Session data logged!')
     except ValidationError as e:
         return Response({'error': str(e)}, status=400)
-    except (ValueError, TypeError) as e:
+    except (ValueError, TypeError):
         return Response({'error': 'Invalid JSON data format'}, status=400)
-    except Exception as e:
+    except Exception:
         return Response({'error': 'Failed to log session data'}, status=500)
 
 
@@ -221,18 +222,21 @@ def _validate_session_data(data, data_str):
     """
     # Check overall data size
     if len(data_str) > MAX_SESSION_DATA_SIZE:
-        raise ValidationError(f"Session data exceeds maximum size of {MAX_SESSION_DATA_SIZE} bytes")
+        raise ValidationError(
+            f"Session data exceeds maximum size of {MAX_SESSION_DATA_SIZE} bytes"
+        )
 
     # Check the structure of the session data
     if not isinstance(data, dict):
         raise ValidationError("Session data must be a dictionary")
-    if not 'environment' in data:
+    if 'environment' not in data:
         raise ValidationError("Session data must contain an 'environment' key")
-    if not 'session_guid' in data:
+    if 'session_guid' not in data:
         raise ValidationError("Session data must contain a 'session_guid' key")
-    if not 'session_data' in data:
+    if 'session_data' not in data:
         raise ValidationError("Session data must contain a 'session_data' key")
 
     # Check number of keys to prevent DoS attacks
     if isinstance(data, dict) and len(data) > MAX_SESSION_KEYS:
-        raise ValidationError(f"Session data contains too many keys (max: {MAX_SESSION_KEYS})")
+        raise ValidationError(
+            f"Session data contains too many keys (max: {MAX_SESSION_KEYS})")
