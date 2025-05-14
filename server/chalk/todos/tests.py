@@ -173,6 +173,150 @@ class SessionDataValidationTests(TestCase):
                       str(context.exception))
 
 
+class SignalsTests(TestCase):
+    """
+    Tests for signal handlers and rank order rebalancing
+    """
+    def setUp(self):
+        from chalk.todos.models import RankOrderMetadata, TodoModel
+        from chalk.todos.signals import rebalance_rank_order
+        self.TodoModel = TodoModel
+        self.RankOrderMetadata = RankOrderMetadata
+        self.rebalance_rank_order = rebalance_rank_order
+        
+        # Create a test user
+        test_username = 'tester@localhost'
+        user_model = get_user_model()
+        user = user_model.objects.create(username=test_username)
+        user.is_staff = True
+        user.save()
+        self.client.force_login(user)
+        
+    def test_evaluate_rank_rebalance_no_trigger(self):
+        """
+        Test that evaluate_rank_rebalance does not trigger rebalance when closest_rank_steps > 2
+        """
+        from chalk.todos.signals import evaluate_rank_rebalance
+        
+        # Create metadata with closest_rank_steps > 2
+        metadata = self.RankOrderMetadata.objects.create(
+            closest_rank_steps=3,
+            closest_rank_min=100,
+            closest_rank_max=400,
+            max_rank=1000
+        )
+        
+        # Mock rebalance_rank_order to check if it's called
+        original_rebalance = self.rebalance_rank_order
+        called = [False]
+        
+        def mock_rebalance():
+            called[0] = True
+            
+        try:
+            # Replace with mock
+            from chalk.todos import signals
+            signals.rebalance_rank_order = mock_rebalance
+            
+            # Save metadata to trigger evaluate_rank_rebalance
+            metadata.save()
+            
+            # Verify rebalance was not called
+            self.assertFalse(called[0], "rebalance_rank_order should not be called when closest_rank_steps > 2")
+            
+        finally:
+            # Restore original function
+            signals.rebalance_rank_order = original_rebalance
+    
+    def test_evaluate_rank_rebalance_trigger(self):
+        """
+        Test that evaluate_rank_rebalance triggers rebalance when closest_rank_steps ≤ 2
+        """
+        from chalk.todos.signals import evaluate_rank_rebalance
+        
+        # Test cases: closest_rank_steps = 2, 1, 0, None
+        test_cases = [2, 1, 0, None]
+        
+        for steps in test_cases:
+            # Create metadata with test case value
+            metadata = self.RankOrderMetadata.objects.create(
+                closest_rank_steps=steps,
+                closest_rank_min=100,
+                closest_rank_max=100 + (steps or 0) * 10,
+                max_rank=1000
+            )
+            
+            # Mock rebalance_rank_order to check if it's called
+            original_rebalance = self.rebalance_rank_order
+            called = [False]
+            
+            def mock_rebalance():
+                called[0] = True
+                
+            try:
+                # Replace with mock
+                from chalk.todos import signals
+                signals.rebalance_rank_order = mock_rebalance
+                
+                # Save metadata to trigger evaluate_rank_rebalance
+                metadata.save()
+                
+                # Verify rebalance was called
+                self.assertTrue(called[0], f"rebalance_rank_order should be called when closest_rank_steps={steps}")
+                
+            finally:
+                # Restore original function
+                signals.rebalance_rank_order = original_rebalance
+                # Clean up for next test case
+                metadata.delete()
+    
+    def test_rebalance_rank_order(self):
+        """
+        Test that rebalance_rank_order correctly rebalances todos and updates metadata
+        """
+        from chalk.todos.consts import RANK_ORDER_DEFAULT_STEP, RANK_ORDER_INITIAL_STEP
+        import time
+        
+        # Create some todos with different order_ranks
+        todos = []
+        for i in range(5):
+            todos.append(self.TodoModel.objects.create(
+                description=f"Todo {i}",
+                order_rank=i * 100
+            ))
+        
+        # Create an archived todo that should be excluded from rebalancing
+        archived_todo = self.TodoModel.objects.create(
+            description="Archived Todo",
+            order_rank=999,
+            archived=True
+        )
+        
+        # Call rebalance_rank_order
+        self.rebalance_rank_order()
+        
+        # Verify todos were rebalanced
+        expected_rank = RANK_ORDER_INITIAL_STEP
+        for todo in self.TodoModel.objects.filter(archived=False).order_by('id'):
+            self.assertEqual(todo.order_rank, expected_rank, 
+                            f"Todo {todo.description} should have order_rank {expected_rank}")
+            expected_rank += RANK_ORDER_DEFAULT_STEP
+        
+        # Verify archived todo was not rebalanced
+        archived_todo.refresh_from_db()
+        self.assertEqual(archived_todo.order_rank, 999, "Archived todo should not be rebalanced")
+        
+        # Verify metadata was updated correctly
+        metadata = self.RankOrderMetadata.objects.first()
+        self.assertIsNotNone(metadata, "RankOrderMetadata should be created")
+        self.assertEqual(metadata.closest_rank_min, RANK_ORDER_INITIAL_STEP)
+        self.assertEqual(metadata.closest_rank_max, RANK_ORDER_INITIAL_STEP + RANK_ORDER_DEFAULT_STEP)
+        self.assertIsNone(metadata.closest_rank_steps, "closest_rank_steps should be None to avoid infinite loop")
+        self.assertIsNotNone(metadata.last_rebalanced_at, "last_rebalanced_at should be set")
+        self.assertIsNotNone(metadata.last_rebalance_duration, "last_rebalance_duration should be set")
+        self.assertEqual(metadata.max_rank, expected_rank - RANK_ORDER_DEFAULT_STEP)
+
+
 class ServiceTests(TestCase):
     """
     Tests for todo view
