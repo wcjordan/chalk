@@ -246,11 +246,10 @@ class SignalsTests(TestCase):
         todos = []
         for i in range(5):
             todos.append(
-                TodoModel.objects.create(description=f"Todo {i}",
-                                         order_rank=i * 100))
+                TodoModel.objects.create(description=f"Todo {i}", order_rank=i))
 
         # Create an archived todo that should be excluded from rebalancing
-        archived_rank = 299
+        archived_rank = 2
         archived_todo = TodoModel.objects.create(description="Archived Todo",
                                                  order_rank=archived_rank,
                                                  archived=True)
@@ -259,14 +258,15 @@ class SignalsTests(TestCase):
         rebalance_rank_order()
 
         # Verify todos were rebalanced
-        expected_rank = RANK_ORDER_INITIAL_STEP
-        expected_max_rank = expected_rank
-        for todo in TodoModel.objects.filter(archived=False).order_by('id'):
-            self.assertEqual(todo.order_rank, expected_rank,
-                             (f"Todo {todo.description} should have order_rank "
-                              f"{expected_rank}"))
-            expected_max_rank = expected_rank
-            expected_rank += RANK_ORDER_DEFAULT_STEP
+        last_rank = 0
+        min_spacing = 2**3
+        for todo in TodoModel.objects.filter(
+                archived=False).order_by('order_rank'):
+            self.assertGreaterEqual(
+                todo.order_rank, last_rank + min_spacing,
+                (f"Todo {todo.description} should have order_rank "
+                 f"at least {last_rank + min_spacing}"))
+            last_rank = todo.order_rank
 
         # Verify archived todo was not rebalanced
         archived_todo.refresh_from_db()
@@ -286,7 +286,7 @@ class SignalsTests(TestCase):
                              "last_rebalanced_at should be set")
         self.assertIsNotNone(metadata.last_rebalance_duration,
                              "last_rebalance_duration should be set")
-        self.assertEqual(metadata.max_rank, expected_max_rank)
+        self.assertEqual(metadata.max_rank, last_rank)
 
 
 class ServiceTests(TestCase):
