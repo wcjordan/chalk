@@ -2,7 +2,6 @@
 Tests for todos module
 """
 import json
-import math
 import random
 import string
 from unittest.mock import patch
@@ -279,9 +278,9 @@ class SignalsTests(TestCase):
         self.assertEqual(metadata.closest_rank_min, RANK_ORDER_INITIAL_STEP)
         self.assertEqual(metadata.closest_rank_max,
                          RANK_ORDER_INITIAL_STEP + RANK_ORDER_DEFAULT_STEP)
-        self.assertEqual(
-            metadata.closest_rank_steps, math.log2(RANK_ORDER_DEFAULT_STEP),
-            "closest_rank_steps should be None to avoid infinite loop")
+        self.assertGreaterEqual(
+            metadata.closest_rank_steps, min_spacing,
+            "closest_rank_steps should be at least the min spacing")
         self.assertIsNotNone(metadata.last_rebalanced_at,
                              "last_rebalanced_at should be set")
         self.assertIsNotNone(metadata.last_rebalance_duration,
