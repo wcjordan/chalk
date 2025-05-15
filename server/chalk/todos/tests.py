@@ -4,11 +4,15 @@ Tests for todos module
 import json
 import random
 import string
+from unittest.mock import patch
 
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
+from chalk.todos.consts import RANK_ORDER_DEFAULT_STEP, RANK_ORDER_INITIAL_STEP
+from chalk.todos.models import RankOrderMetadata, TodoModel
+from chalk.todos.signals import rebalance_rank_order
 from chalk.todos.views import (_validate_session_data, MAX_SESSION_DATA_SIZE,
                                MAX_SESSION_KEYS)
 
@@ -173,6 +177,117 @@ class SessionDataValidationTests(TestCase):
                       str(context.exception))
 
 
+class SignalsTests(TestCase):
+    """
+    Tests for signal handlers and rank order rebalancing
+    """
+
+    def setUp(self):
+        # Delete all RandOrderMetadata objects to ensure a clean state
+        RankOrderMetadata.objects.all().delete()
+
+    def test_evaluate_rank_rebalance_no_trigger(self):
+        """
+        Test that evaluate_rank_rebalance does not trigger rebalance when
+        closest_rank_steps > 2
+        """
+        # Create metadata with closest_rank_steps > 2
+        closest_rank_steps = 3
+        metadata = RankOrderMetadata.objects.create(
+            closest_rank_min=0,
+            closest_rank_max=2**closest_rank_steps,
+            max_rank=1000)
+
+        # Mock rebalance_rank_order to check if it's called
+        with patch('chalk.todos.signals.rebalance_rank_order',
+                   autospec=True) as mock_rebalance:
+            # Save metadata to trigger evaluate_rank_rebalance
+            metadata.save()
+
+            # Verify rebalance was not called
+            mock_rebalance.assert_not_called()
+
+    def test_evaluate_rank_rebalance_trigger(self):
+        """
+        Test that evaluate_rank_rebalance triggers rebalance when
+        closest_rank_steps ≤ 2
+        """
+        # Test cases: closest_rank_steps values
+        test_cases = [2, 1, 0, None]
+        for closest_rank_steps in test_cases:
+            with self.subTest(closest_rank_steps=closest_rank_steps):
+                # Create metadata with test case value
+                metadata = RankOrderMetadata.objects.create(
+                    closest_rank_min=0,
+                    closest_rank_max=2**(closest_rank_steps or 0),
+                    max_rank=1000)
+
+                try:
+                    # Mock rebalance_rank_order to check if it's called
+                    with patch('chalk.todos.signals.rebalance_rank_order',
+                               autospec=True) as mock_rebalance:
+                        # Save metadata to trigger evaluate_rank_rebalance
+                        metadata.save()
+
+                        # Verify rebalance was called
+                        mock_rebalance.assert_called()
+
+                finally:
+                    # Clean up for next test case
+                    metadata.delete()
+
+    def test_rebalance_rank_order(self):
+        """
+        Test that rebalance_rank_order correctly rebalances todos and updates
+        metadata
+        """
+        # Create some todos with different order_ranks
+        todos = []
+        for i in range(5):
+            todos.append(
+                TodoModel.objects.create(description=f"Todo {i}", order_rank=i))
+
+        # Create an archived todo that should be excluded from rebalancing
+        archived_rank = 2
+        archived_todo = TodoModel.objects.create(description="Archived Todo",
+                                                 order_rank=archived_rank,
+                                                 archived=True)
+
+        # Call rebalance_rank_order
+        rebalance_rank_order()
+
+        # Verify todos were rebalanced
+        last_rank = 0
+        min_spacing = 2**3
+        for todo in TodoModel.objects.filter(
+                archived=False).order_by('order_rank'):
+            self.assertGreaterEqual(
+                todo.order_rank, last_rank + min_spacing,
+                (f"Todo {todo.description} should have order_rank "
+                 f"at least {last_rank + min_spacing}"))
+            last_rank = todo.order_rank
+
+        # Verify archived todo was not rebalanced
+        archived_todo.refresh_from_db()
+        self.assertEqual(archived_todo.order_rank, archived_rank,
+                         "Archived todo should not be rebalanced")
+
+        # Verify metadata was updated correctly
+        metadata = RankOrderMetadata.objects.first()
+        self.assertIsNotNone(metadata, "RankOrderMetadata should be created")
+        self.assertEqual(metadata.closest_rank_min, RANK_ORDER_INITIAL_STEP)
+        self.assertEqual(metadata.closest_rank_max,
+                         RANK_ORDER_INITIAL_STEP + RANK_ORDER_DEFAULT_STEP)
+        self.assertGreaterEqual(
+            metadata.closest_rank_steps, min_spacing,
+            "closest_rank_steps should be at least the min spacing")
+        self.assertIsNotNone(metadata.last_rebalanced_at,
+                             "last_rebalanced_at should be set")
+        self.assertIsNotNone(metadata.last_rebalance_duration,
+                             "last_rebalance_duration should be set")
+        self.assertEqual(metadata.max_rank, last_rank)
+
+
 class ServiceTests(TestCase):
     """
     Tests for todo view
@@ -218,17 +333,17 @@ class ServiceTests(TestCase):
         self.assertCountEqual(fetched_data, expected_data)
 
         # Update first todo
-        patch = {
+        todo_patch = {
             'description': _generate_random_string(),
             'labels': ['urgent'],
         }
-        self._update_todo(todo1_id, patch)
+        self._update_todo(todo1_id, todo_patch)
 
         # Fetch todos and verify they match expectations
         # Expect created_at to be unchanged
         expected_data[0]['created_at'] = fetched_data[0]['created_at']
         expected_data[1]['created_at'] = fetched_data[1]['created_at']
-        expected_data[0].update(patch)
+        expected_data[0].update(todo_patch)
         fetched_data = self._fetch_todos()
         self.assertCountEqual(fetched_data, expected_data)
 
@@ -263,13 +378,13 @@ class ServiceTests(TestCase):
         self.assertCountEqual(fetched_data, expected_data)
 
         # Update label
-        patch = {
+        todo_patch = {
             'name': _generate_random_string(),
         }
-        self._update_label(label_id, patch)
+        self._update_label(label_id, todo_patch)
 
         # Fetch and verify expectations
-        expected_data[-1].update(patch)
+        expected_data[-1].update(todo_patch)
         fetched_data = self._fetch_labels()
         self.assertCountEqual(fetched_data, expected_data)
 
@@ -368,8 +483,8 @@ class ServiceTests(TestCase):
     def _fetch_todos(self):
         return self._fetch_entity('todos')
 
-    def _update_todo(self, entry_id, patch):
-        return self._update_entity(entry_id, patch, 'todos')
+    def _update_todo(self, entry_id, todo_patch):
+        return self._update_entity(entry_id, todo_patch, 'todos')
 
     def _delete_todo(self, entry_id):
         return self._delete_entity(entry_id, 'todos')
@@ -389,8 +504,8 @@ class ServiceTests(TestCase):
     def _fetch_labels(self):
         return self._fetch_entity('labels')
 
-    def _update_label(self, entry_id, patch):
-        return self._update_entity(entry_id, patch, 'labels')
+    def _update_label(self, entry_id, label_patch):
+        return self._update_entity(entry_id, label_patch, 'labels')
 
     def _delete_label(self, entry_id):
         return self._delete_entity(entry_id, 'labels')
@@ -407,9 +522,9 @@ class ServiceTests(TestCase):
         self._assert_status_code(200, response)
         return response.json()
 
-    def _update_entity(self, entry_id, patch, route):
+    def _update_entity(self, entry_id, entity_patch, route):
         response = self.client.patch(f'/api/todos/{route}/{entry_id}/',
-                                     patch,
+                                     entity_patch,
                                      content_type='application/json')
         self._assert_status_code(200, response)
         return response.json()
