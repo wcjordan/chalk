@@ -31,14 +31,14 @@
 ## Step 3: Group Valid Files by `session_guid`
 
 ### Tasks:
-- [ ] Create data structure (dictionary) to group files by `session_guid`
-- [ ] Extract `session_guid` from validated file content
+- [x] Create data structure (dictionary) to group files by `session_guid`
+- [x] Extract `session_guid` from validated file content
 - [ ] Use filename as timestamp key for sorting within each session group
-- [ ] Store successfully validated files in memory grouped by session
-- [ ] Add logging for number of files per session
-- [ ] Test with sample files spanning multiple sessions
-- [ ] Verify all valid entries are grouped correctly
-- [ ] Write unit tests for grouping logic with mocked file data
+- [x] Store successfully validated files in memory grouped by session
+- [x] Add logging for number of files per session
+- [x] Test with sample files spanning multiple sessions
+- [x] Verify all valid entries are grouped correctly
+- [x] Write unit tests for grouping logic with mocked file data
 
 ## Step 4: Sort Session Entries and Collect Timestamps
 

@@ -17,6 +17,7 @@ from process_rrweb_sessions import (
     _download_file_content,
     download_json_files,
     _parse_and_validate_session_file,
+    group_by_session_guid,
 )
 
 
@@ -481,3 +482,175 @@ class TestParseAndValidateSessionFile:
         assert (
             len(result) == 4
         )  # Only filename, session_guid, session_data, environment
+
+
+class TestGroupBySessionGuid:
+    """Tests for group_by_session_guid function."""
+
+    def test_group_single_session(self):
+        """Test grouping records from a single session."""
+        records = [
+            {
+                "filename": "file1.json",
+                "session_guid": "abc-123",
+                "session_data": [{"type": 1}],
+                "environment": "production"
+            },
+            {
+                "filename": "file2.json",
+                "session_guid": "abc-123",
+                "session_data": [{"type": 2}],
+                "environment": "production"
+            }
+        ]
+
+        result = group_by_session_guid(records)
+
+        assert len(result) == 1
+        assert "abc-123" in result
+        assert len(result["abc-123"]) == 2
+        assert result["abc-123"][0]["filename"] == "file1.json"
+        assert result["abc-123"][1]["filename"] == "file2.json"
+
+    def test_group_multiple_sessions(self):
+        """Test grouping records from multiple sessions."""
+        records = [
+            {
+                "filename": "file1.json",
+                "session_guid": "abc-123",
+                "session_data": [{"type": 1}],
+                "environment": "production"
+            },
+            {
+                "filename": "file2.json",
+                "session_guid": "def-456",
+                "session_data": [{"type": 2}],
+                "environment": "staging"
+            },
+            {
+                "filename": "file3.json",
+                "session_guid": "abc-123",
+                "session_data": [{"type": 3}],
+                "environment": "production"
+            }
+        ]
+
+        result = group_by_session_guid(records)
+
+        assert len(result) == 2
+        assert "abc-123" in result
+        assert "def-456" in result
+        assert len(result["abc-123"]) == 2
+        assert len(result["def-456"]) == 1
+
+    def test_group_empty_list(self):
+        """Test grouping empty list of records."""
+        records = []
+
+        result = group_by_session_guid(records)
+
+        assert len(result) == 0
+        assert result == {}
+
+    def test_group_preserves_record_structure(self):
+        """Test that grouping preserves the complete record structure."""
+        records = [
+            {
+                "filename": "file1.json",
+                "session_guid": "abc-123",
+                "session_data": [{"type": 1, "data": {"complex": "structure"}}],
+                "environment": "production"
+            }
+        ]
+
+        result = group_by_session_guid(records)
+
+        grouped_record = result["abc-123"][0]
+        assert grouped_record["filename"] == "file1.json"
+        assert grouped_record["session_guid"] == "abc-123"
+        assert grouped_record["session_data"] == [{"type": 1, "data": {"complex": "structure"}}]
+        assert grouped_record["environment"] == "production"
+
+    def test_group_maintains_insertion_order(self):
+        """Test that grouping maintains insertion order within each session."""
+        records = [
+            {
+                "filename": "file1.json",
+                "session_guid": "abc-123",
+                "session_data": [{"type": 1}],
+                "environment": "production"
+            },
+            {
+                "filename": "file2.json",
+                "session_guid": "def-456",
+                "session_data": [{"type": 2}],
+                "environment": "staging"
+            },
+            {
+                "filename": "file3.json",
+                "session_guid": "abc-123",
+                "session_data": [{"type": 3}],
+                "environment": "production"
+            },
+            {
+                "filename": "file4.json",
+                "session_guid": "abc-123",
+                "session_data": [{"type": 4}],
+                "environment": "production"
+            }
+        ]
+
+        result = group_by_session_guid(records)
+
+        # Check that records for abc-123 are in insertion order
+        abc_records = result["abc-123"]
+        assert abc_records[0]["filename"] == "file1.json"
+        assert abc_records[1]["filename"] == "file3.json"
+        assert abc_records[2]["filename"] == "file4.json"
+
+    def test_group_with_unicode_session_guids(self):
+        """Test grouping with unicode session_guid values."""
+        records = [
+            {
+                "filename": "file1.json",
+                "session_guid": "测试-123",
+                "session_data": [{"type": 1}],
+                "environment": "production"
+            },
+            {
+                "filename": "file2.json",
+                "session_guid": "测试-123",
+                "session_data": [{"type": 2}],
+                "environment": "production"
+            }
+        ]
+
+        result = group_by_session_guid(records)
+
+        assert len(result) == 1
+        assert "测试-123" in result
+        assert len(result["测试-123"]) == 2
+
+    def test_group_large_number_of_sessions(self):
+        """Test grouping with a large number of different sessions."""
+        records = []
+        num_sessions = 100
+        files_per_session = 3
+
+        for i in range(num_sessions):
+            session_guid = f"session-{i:03d}"
+            for j in range(files_per_session):
+                records.append({
+                    "filename": f"file_{i}_{j}.json",
+                    "session_guid": session_guid,
+                    "session_data": [{"type": j}],
+                    "environment": "production"
+                })
+
+        result = group_by_session_guid(records)
+
+        assert len(result) == num_sessions
+        for i in range(num_sessions):
+            session_guid = f"session-{i:03d}"
+            assert session_guid in result
+            assert len(result[session_guid]) == files_per_session
