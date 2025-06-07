@@ -77,7 +77,9 @@ def _download_file_content(
     return content
 
 
-def parse_and_validate_session_file(filename: str, content: str) -> Optional[Dict[str, Any]]:
+def _parse_and_validate_session_file(
+    filename: str, content: str
+) -> Optional[Dict[str, Any]]:
     """
     Parse and validate a single session JSON file.
 
@@ -86,8 +88,8 @@ def parse_and_validate_session_file(filename: str, content: str) -> Optional[Dic
         content: String content of the JSON file
 
     Returns:
-        Optional[Dict[str, Any]]: Dictionary with filename, session_guid, session_data, 
-                                 and environment if valid, None if invalid
+        Optional[Dict[str, Any]]: Dictionary with filename, session_guid, session_data,
+                                  and environment if valid, None if invalid
     """
     try:
         # Attempt to parse JSON content
@@ -98,17 +100,36 @@ def parse_and_validate_session_file(filename: str, content: str) -> Optional[Dic
 
     # Validate that parsed object is a dictionary
     if not isinstance(data, dict):
-        logger.warning("File '%s' does not contain a JSON object (found %s)", 
-                      filename, type(data).__name__)
+        logger.warning(
+            "File '%s' does not contain a JSON object (found %s)",
+            filename,
+            type(data).__name__,
+        )
         return None
 
+    return _parse_and_validate_session_file_content(filename, data)
+
+
+def _parse_and_validate_session_file_content(
+    filename: str, data: Dict[str, Any]
+) -> Optional[Dict[str, Any]]:
+    """
+    Validate the content of a session file.
+    Args:
+        filename: Name of the file being validated
+        data: Parsed JSON data as a dictionary
+    Returns:
+        Optional[Dict[str, Any]]: Dictionary with filename, session_guid, session_data,
+                                  and environment if valid, None if invalid
+    """
     # Check for required fields
     required_fields = ["session_guid", "session_data", "environment"]
     missing_fields = [field for field in required_fields if field not in data]
-    
+
     if missing_fields:
-        logger.warning("File '%s' missing required fields: %s", 
-                      filename, ", ".join(missing_fields))
+        logger.warning(
+            "File '%s' missing required fields: %s", filename, ", ".join(missing_fields)
+        )
         return None
 
     # Validate field types
@@ -118,19 +139,27 @@ def parse_and_validate_session_file(filename: str, content: str) -> Optional[Dic
 
     # session_guid must be a non-empty string
     if not isinstance(session_guid, str) or not session_guid.strip():
-        logger.warning("File '%s' has invalid session_guid: must be non-empty string", filename)
+        logger.warning(
+            "File '%s' has invalid session_guid: must be non-empty string", filename
+        )
         return None
 
     # session_data must be a list
     if not isinstance(session_data, list):
-        logger.warning("File '%s' has invalid session_data: must be a list (found %s)", 
-                      filename, type(session_data).__name__)
+        logger.warning(
+            "File '%s' has invalid session_data: must be a list (found %s)",
+            filename,
+            type(session_data).__name__,
+        )
         return None
 
-    # environment must be a string
-    if not isinstance(environment, str):
-        logger.warning("File '%s' has invalid environment: must be a string (found %s)", 
-                      filename, type(environment).__name__)
+    # environment must be a non-empty string
+    if not isinstance(environment, str) or not environment.strip():
+        logger.warning(
+            "File '%s' has invalid environment: must be non-empty string (found %s)",
+            filename,
+            type(environment).__name__,
+        )
         return None
 
     # Return validated data
@@ -138,7 +167,7 @@ def parse_and_validate_session_file(filename: str, content: str) -> Optional[Dic
         "filename": filename,
         "session_guid": session_guid,
         "session_data": session_data,
-        "environment": environment
+        "environment": environment,
     }
 
 
@@ -181,11 +210,13 @@ def main():
         first_filename, first_content = files[0]
         print(f"First file: {first_filename}")
         print(f"First 100 characters: {first_content[:100]}")
-        
+
         # Demonstrate parsing and validation
-        parsed_result = parse_and_validate_session_file(first_filename, first_content)
+        parsed_result = _parse_and_validate_session_file(first_filename, first_content)
         if parsed_result:
-            print(f"Successfully parsed file with session_guid: {parsed_result['session_guid']}")
+            print(
+                f"Successfully parsed file with session_guid: {parsed_result['session_guid']}"
+            )
         else:
             print("Failed to parse first file")
     else:
