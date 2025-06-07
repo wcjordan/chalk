@@ -11,6 +11,7 @@ Adds the ability to connect to a specified GCS bucket, list all JSON files in a 
 * Include unit tests for GCS interaction using mocks.
 
 **Detailed Prompt**
+
 You are writing the first part of a Python script that processes session JSON files stored in a Google Cloud Storage (GCS) bucket.
 
 #### 🛠️ Task
@@ -53,6 +54,7 @@ Implements logic to read a file and validate that it contains the expected field
 * Include unit tests for edge cases.
 
 **Detailed Prompt**
+
 You are continuing work on a Python script that processes session JSON files downloaded from GCS. Each file is expected to contain session information captured by `rrweb`.
 
 #### 🛠️ Task
@@ -103,6 +105,49 @@ Builds a data structure that groups successfully validated files in memory by `s
 * Log the number of files per session.
 * Confirm all valid entries are grouped as expected.
 * Add unit tests for grouping logic with mocked file data.
+
+Absolutely! Here's a clear and testable prompt you could give to a coding agent for **Step 3: Group Valid Files by `session_guid`**.
+
+**Detailed Prompt**
+
+You are continuing to build a script that processes session data files. At this point, you have a list of validated session records.
+
+### 🛠️ Task
+
+Implement a function that takes a list of validated session records and groups them by `session_guid`.
+
+Each input record is a dictionary in this form:
+
+```python
+{
+  "filename": "2025-05-02T12:10:50.644423+0000_2374",
+  "session_guid": "abc-123",
+  "session_data": [...],
+  "environment": "production"
+}
+```
+
+Your function should:
+
+```python
+def group_by_session_guid(records: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+```
+
+* Return a dictionary where:
+
+  * Keys are `session_guid` strings.
+  * Values are **lists of records** (each with the full original structure) for that session.
+* Maintain insertion order (or sort later based on filename in a future step).
+
+### 🧪 Verification
+
+Add test code that:
+
+* Groups a list of at least 5 fake records with 2 different `session_guid` values.
+* Prints the number of sessions and the number of files in each group.
+* Confirms that all records are present and grouped correctly.
+
+Do not implement timestamp sorting or merging yet — this step only organizes validated records into buckets by `session_guid`.
 
 ---
 
