@@ -18,15 +18,15 @@
 ## Step 2: Parse and Validate a Single JSON File
 
 ### Tasks:
-- [ ] Create function to parse JSON content from file data
-- [ ] Add validation for required fields: `session_guid`, `session_data`, `environment`
-- [ ] Handle malformed JSON gracefully with try/catch
-- [ ] Handle missing required fields with appropriate error messages
-- [ ] Add logging for validation failures
-- [ ] Create test files: valid JSON, missing fields, corrupt format
-- [ ] Test parsing function on each test file type
-- [ ] Verify error handling works as expected
-- [ ] Write unit tests for edge cases (empty files, wrong data types, etc.)
+- [x] Create function to parse JSON content from file data
+- [x] Add validation for required fields: `session_guid`, `session_data`, `environment`
+- [x] Handle malformed JSON gracefully with try/catch
+- [x] Handle missing required fields with appropriate error messages
+- [x] Add logging for validation failures
+- [x] Create test files: valid JSON, missing fields, corrupt format
+- [x] Test parsing function on each test file type
+- [x] Verify error handling works as expected
+- [x] Write unit tests for edge cases (empty files, wrong data types, etc.)
 
 ## Step 3: Group Valid Files by `session_guid`
 

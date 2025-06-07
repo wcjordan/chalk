@@ -6,8 +6,9 @@ This script downloads JSON files from a GCS bucket, groups them by session_guid,
 merges the session data, and outputs consolidated session files.
 """
 
+import json
 import logging
-from typing import List, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 
 from google.cloud import storage
 
@@ -76,6 +77,71 @@ def _download_file_content(
     return content
 
 
+def parse_and_validate_session_file(filename: str, content: str) -> Optional[Dict[str, Any]]:
+    """
+    Parse and validate a single session JSON file.
+
+    Args:
+        filename: Name of the file being parsed
+        content: String content of the JSON file
+
+    Returns:
+        Optional[Dict[str, Any]]: Dictionary with filename, session_guid, session_data, 
+                                 and environment if valid, None if invalid
+    """
+    try:
+        # Attempt to parse JSON content
+        data = json.loads(content)
+    except json.JSONDecodeError as e:
+        logger.warning("Failed to parse JSON in file '%s': %s", filename, str(e))
+        return None
+
+    # Validate that parsed object is a dictionary
+    if not isinstance(data, dict):
+        logger.warning("File '%s' does not contain a JSON object (found %s)", 
+                      filename, type(data).__name__)
+        return None
+
+    # Check for required fields
+    required_fields = ["session_guid", "session_data", "environment"]
+    missing_fields = [field for field in required_fields if field not in data]
+    
+    if missing_fields:
+        logger.warning("File '%s' missing required fields: %s", 
+                      filename, ", ".join(missing_fields))
+        return None
+
+    # Validate field types
+    session_guid = data["session_guid"]
+    session_data = data["session_data"]
+    environment = data["environment"]
+
+    # session_guid must be a non-empty string
+    if not isinstance(session_guid, str) or not session_guid.strip():
+        logger.warning("File '%s' has invalid session_guid: must be non-empty string", filename)
+        return None
+
+    # session_data must be a list
+    if not isinstance(session_data, list):
+        logger.warning("File '%s' has invalid session_data: must be a list (found %s)", 
+                      filename, type(session_data).__name__)
+        return None
+
+    # environment must be a string
+    if not isinstance(environment, str):
+        logger.warning("File '%s' has invalid environment: must be a string (found %s)", 
+                      filename, type(environment).__name__)
+        return None
+
+    # Return validated data
+    return {
+        "filename": filename,
+        "session_guid": session_guid,
+        "session_data": session_data,
+        "environment": environment
+    }
+
+
 def download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
     """
     Download all JSON files from the specified GCS bucket.
@@ -115,6 +181,13 @@ def main():
         first_filename, first_content = files[0]
         print(f"First file: {first_filename}")
         print(f"First 100 characters: {first_content[:100]}")
+        
+        # Demonstrate parsing and validation
+        parsed_result = parse_and_validate_session_file(first_filename, first_content)
+        if parsed_result:
+            print(f"Successfully parsed file with session_guid: {parsed_result['session_guid']}")
+        else:
+            print("Failed to parse first file")
     else:
         print("No files found")
 
