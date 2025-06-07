@@ -13,7 +13,7 @@
 - [x] Create main function demonstrating usage with `example-bucket`
 - [x] Add verification: print number of JSON files found
 - [x] Add verification: print first 100 characters of first file content
-- [ ] Write unit tests using mocks for GCS interaction
+- [x] Write unit tests using mocks for GCS interaction
 
 ## Step 2: Parse and Validate a Single JSON File
 

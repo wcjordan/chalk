@@ -7,7 +7,6 @@ merges the session data, and outputs consolidated session files.
 """
 
 import logging
-import sys
 from typing import List, Tuple
 
 from google.cloud import storage
@@ -48,8 +47,8 @@ def _list_json_files(client: storage.Client, bucket_name: str) -> List[str]:
 
     json_files = []
     for blob in blobs:
-        # Only include files in root (no subdirectories) that end with .json
-        if "/" not in blob.name and blob.name.endswith(".json"):
+        # Only include files in root (no subdirectories)
+        if "/" not in blob.name:
             json_files.append(blob.name)
 
     logger.info("Found %d JSON files in bucket '%s'", len(json_files), bucket_name)
@@ -105,27 +104,20 @@ def main():
     """
     bucket_name = "example-bucket"
 
-    try:
-        # Download all JSON files
-        files = download_json_files(bucket_name)
+    # Download all JSON files
+    files = download_json_files(bucket_name)
 
-        # Verification: print number of JSON files found
-        print(f"Number of JSON files found: {len(files)}")
+    # Verification: print number of JSON files found
+    print(f"Number of JSON files found: {len(files)}")
 
-        # Verification: print first 100 characters of first file content
-        if files:
-            first_filename, first_content = files[0]
-            print(f"First file: {first_filename}")
-            print(f"First 100 characters: {first_content[:100]}")
-        else:
-            print("No files found")
-
-    except Exception as e:
-        logger.error("Script execution failed: %s", e)
-        return 1
-
-    return 0
+    # Verification: print first 100 characters of first file content
+    if files:
+        first_filename, first_content = files[0]
+        print(f"First file: {first_filename}")
+        print(f"First 100 characters: {first_content[:100]}")
+    else:
+        print("No files found")
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
