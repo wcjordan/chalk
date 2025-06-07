@@ -3,16 +3,16 @@
 ## Step 1: List and Download JSON Files from GCS
 
 ### Tasks:
-- [ ] Install and import `google-cloud-storage` library
-- [ ] Create function to initialize GCS client using Application Default Credentials
-- [ ] Implement function to list all `.json` files in specified bucket (flat structure only)
-- [ ] Add function to download file contents into memory as bytes/strings
-- [ ] Return list of `(filename, file_content)` pairs
-- [ ] Add basic error handling for connection and file read errors
-- [ ] Add logging for operations and errors
-- [ ] Create main function demonstrating usage with `example-bucket`
-- [ ] Add verification: print number of JSON files found
-- [ ] Add verification: print first 100 characters of first file content
+- [x] Install and import `google-cloud-storage` library
+- [x] Create function to initialize GCS client using Application Default Credentials
+- [x] Implement function to list all `.json` files in specified bucket (flat structure only)
+- [x] Add function to download file contents into memory as bytes/strings
+- [x] Return list of `(filename, file_content)` pairs
+- [x] Add basic error handling for connection and file read errors
+- [x] Add logging for operations and errors
+- [x] Create main function demonstrating usage with `example-bucket`
+- [x] Add verification: print number of JSON files found
+- [x] Add verification: print first 100 characters of first file content
 - [ ] Write unit tests using mocks for GCS interaction
 
 ## Step 2: Parse and Validate a Single JSON File

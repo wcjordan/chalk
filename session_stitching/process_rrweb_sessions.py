@@ -1,0 +1,156 @@
+#!/usr/bin/env python3
+"""
+Process rrweb session data from Google Cloud Storage.
+
+This script downloads JSON files from a GCS bucket, groups them by session_guid,
+merges the session data, and outputs consolidated session files.
+"""
+
+import logging
+import os
+from typing import List, Tuple
+from google.cloud import storage
+
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+
+def initialize_gcs_client() -> storage.Client:
+    """
+    Initialize GCS client using Application Default Credentials.
+    
+    Returns:
+        storage.Client: Authenticated GCS client
+        
+    Raises:
+        Exception: If authentication fails
+    """
+    try:
+        client = storage.Client()
+        logger.info("Successfully initialized GCS client")
+        return client
+    except Exception as e:
+        logger.error(f"Failed to initialize GCS client: {e}")
+        raise
+
+
+def list_json_files(client: storage.Client, bucket_name: str) -> List[str]:
+    """
+    List all .json files in the specified GCS bucket (flat structure only).
+    
+    Args:
+        client: Authenticated GCS client
+        bucket_name: Name of the GCS bucket
+        
+    Returns:
+        List[str]: List of JSON filenames
+        
+    Raises:
+        Exception: If bucket access fails
+    """
+    try:
+        bucket = client.bucket(bucket_name)
+        blobs = bucket.list_blobs()
+        
+        json_files = []
+        for blob in blobs:
+            # Only include files in root (no subdirectories) that end with .json
+            if '/' not in blob.name and blob.name.endswith('.json'):
+                json_files.append(blob.name)
+        
+        logger.info(f"Found {len(json_files)} JSON files in bucket '{bucket_name}'")
+        return json_files
+        
+    except Exception as e:
+        logger.error(f"Failed to list files from bucket '{bucket_name}': {e}")
+        raise
+
+
+def download_file_content(client: storage.Client, bucket_name: str, filename: str) -> str:
+    """
+    Download the content of a single file from GCS.
+    
+    Args:
+        client: Authenticated GCS client
+        bucket_name: Name of the GCS bucket
+        filename: Name of the file to download
+        
+    Returns:
+        str: File content as string
+        
+    Raises:
+        Exception: If file download fails
+    """
+    try:
+        bucket = client.bucket(bucket_name)
+        blob = bucket.blob(filename)
+        content = blob.download_as_text()
+        logger.debug(f"Successfully downloaded file: {filename}")
+        return content
+        
+    except Exception as e:
+        logger.error(f"Failed to download file '{filename}': {e}")
+        raise
+
+
+def download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
+    """
+    Download all JSON files from the specified GCS bucket.
+    
+    Args:
+        bucket_name: Name of the GCS bucket
+        
+    Returns:
+        List[Tuple[str, str]]: List of (filename, file_content) pairs
+    """
+    client = initialize_gcs_client()
+    json_files = list_json_files(client, bucket_name)
+    
+    file_contents = []
+    for filename in json_files:
+        try:
+            content = download_file_content(client, bucket_name, filename)
+            file_contents.append((filename, content))
+        except Exception as e:
+            logger.warning(f"Skipping file '{filename}' due to error: {e}")
+            continue
+    
+    logger.info(f"Successfully downloaded {len(file_contents)} files")
+    return file_contents
+
+
+def main():
+    """
+    Main function demonstrating usage with example-bucket.
+    """
+    bucket_name = "example-bucket"
+    
+    try:
+        # Download all JSON files
+        files = download_json_files(bucket_name)
+        
+        # Verification: print number of JSON files found
+        print(f"Number of JSON files found: {len(files)}")
+        
+        # Verification: print first 100 characters of first file content
+        if files:
+            first_filename, first_content = files[0]
+            print(f"First file: {first_filename}")
+            print(f"First 100 characters: {first_content[:100]}")
+        else:
+            print("No files found")
+            
+    except Exception as e:
+        logger.error(f"Script execution failed: {e}")
+        return 1
+    
+    return 0
+
+
+if __name__ == "__main__":
+    exit(main())
