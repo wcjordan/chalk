@@ -52,6 +52,44 @@ Implements logic to read a file and validate that it contains the expected field
 * Confirm logging or exception capture works as expected.
 * Include unit tests for edge cases.
 
+**Detailed Prompt**
+You are continuing work on a Python script that processes session JSON files downloaded from GCS. Each file is expected to contain session information captured by `rrweb`.
+
+#### 🛠️ Task
+
+Implement a function called `parse_and_validate_session_file` that takes a single argument:
+
+```python
+def parse_and_validate_session_file(filename: str, content: str) -> Optional[Dict[str, Any]]:
+```
+
+The function should:
+
+* Attempt to parse the `content` (a string containing JSON).
+* Validate that the parsed object is a dictionary and contains the following fields:
+
+  * `"session_guid"` (non-empty string)
+  * `"session_data"` (a list)
+  * `"environment"` (string)
+* If the file is valid:
+
+  * Return a dictionary with keys: `filename`, `session_guid`, `session_data`, `environment`.
+* If the file is invalid or malformed:
+
+  * Log a warning using Python's `logging` module, including the filename and reason.
+  * Return `None`.
+
+#### 🧪 Verification
+
+Create a short test suite or inline test cases to demonstrate the following:
+
+* A valid JSON input returns the expected dictionary.
+* A malformed JSON input logs a warning and returns `None`.
+* A JSON input missing required fields logs a warning and returns `None`.
+* A JSON input with incorrect types for the required fields logs a warning and returns `None`.
+
+You do not need to implement batch processing or file I/O in this step — focus solely on validating one file at a time.
+
 ---
 
 ### **Step 3: Group Valid Files by `session_guid`**
