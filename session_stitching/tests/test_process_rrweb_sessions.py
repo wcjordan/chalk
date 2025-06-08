@@ -18,7 +18,7 @@ from process_rrweb_sessions import (
     _group_by_session_guid,
     _sort_and_collect_timestamps,
     _validate_and_extract_environment,
-    merge_session_data,
+    _merge_session_data,
     process_rrweb_sessions,
 )
 
@@ -192,16 +192,19 @@ class TestSessionProcessingPipeline:
 
         # Check merged rrweb_data ordering
         rrweb_data = session_1["rrweb_data"]
-        
+
         # Should contain events from both files in chronological order
         # First file (earlier timestamp) events should come first
         expected_first_events = sample_rrweb_data["session_1_file_2"]
         expected_second_events = sample_rrweb_data["session_1_file_1"]
-        
+
         # Verify the merged data contains all events in correct order
-        assert rrweb_data[:len(expected_first_events)] == expected_first_events
-        assert rrweb_data[len(expected_first_events):] == expected_second_events
-        assert len(rrweb_data) == len(expected_first_events) + len(expected_second_events)
+        file_split = len(expected_first_events)
+        assert rrweb_data[:file_split] == expected_first_events
+        assert rrweb_data[file_split:] == expected_second_events
+        assert len(rrweb_data) == len(expected_first_events) + len(
+            expected_second_events
+        )
 
     def test_handles_malformed_files_gracefully(self, caplog):
         """Test pipeline skips invalid files and continues processing."""
@@ -254,7 +257,10 @@ class TestSessionProcessingPipeline:
         final_sessions = process_rrweb_sessions("mock_bucket_name")
 
         # Should use first environment value
-        assert final_sessions["conflict-session"]["metadata"]["environment"] == "production"
+        assert (
+            final_sessions["conflict-session"]["metadata"]["environment"]
+            == "production"
+        )
 
         # Should log warning
         assert "conflicting environment values" in caplog.text
@@ -443,186 +449,6 @@ class TestTimestampOrdering:
         )
 
 
-class TestMergeSessionData:
-    """Test session data merging functionality."""
-
-    def test_merge_session_data_preserves_event_order(self):
-        """Test that merged rrweb_data preserves order of events from sorted entries."""
-        sessions = {
-            "test-session": {
-                "sorted_entries": [
-                    {
-                        "filename": "2025-05-02T12:10:00.000000+0000",
-                        "session_data": [{"type": 1, "order": 1}, {"type": 2, "order": 2}],
-                        "environment": "production",
-                    },
-                    {
-                        "filename": "2025-05-02T12:11:00.000000+0000",
-                        "session_data": [{"type": 3, "order": 3}, {"type": 4, "order": 4}],
-                        "environment": "production",
-                    },
-                ],
-                "timestamp_list": [
-                    "2025-05-02T12:10:00.000000+0000",
-                    "2025-05-02T12:11:00.000000+0000",
-                ],
-                "environment": "production",
-            }
-        }
-
-        result = merge_session_data(sessions)
-
-        # Verify structure
-        assert "test-session" in result
-        session = result["test-session"]
-        assert session["session_guid"] == "test-session"
-        assert "rrweb_data" in session
-        assert "metadata" in session
-
-        # Verify event order preservation
-        rrweb_data = session["rrweb_data"]
-        assert len(rrweb_data) == 4
-        assert rrweb_data[0]["order"] == 1
-        assert rrweb_data[1]["order"] == 2
-        assert rrweb_data[2]["order"] == 3
-        assert rrweb_data[3]["order"] == 4
-
-    def test_merge_session_data_metadata_construction(self):
-        """Test that metadata block is correctly constructed and unmodified."""
-        sessions = {
-            "metadata-test": {
-                "sorted_entries": [
-                    {
-                        "filename": "2025-05-02T12:10:00.000000+0000",
-                        "session_data": [{"type": 1}],
-                        "environment": "staging",
-                    }
-                ],
-                "timestamp_list": ["2025-05-02T12:10:00.000000+0000"],
-                "environment": "staging",
-            }
-        }
-
-        result = merge_session_data(sessions)
-
-        # Verify metadata structure
-        metadata = result["metadata-test"]["metadata"]
-        assert metadata["environment"] == "staging"
-        assert metadata["timestamp_list"] == ["2025-05-02T12:10:00.000000+0000"]
-
-    def test_merge_session_data_handles_empty_session_data(self):
-        """Test edge case of empty session_data lists gracefully."""
-        sessions = {
-            "empty-session": {
-                "sorted_entries": [
-                    {
-                        "filename": "2025-05-02T12:10:00.000000+0000",
-                        "session_data": [],  # Empty session data
-                        "environment": "test",
-                    },
-                    {
-                        "filename": "2025-05-02T12:11:00.000000+0000",
-                        "session_data": [{"type": 1}],  # Non-empty session data
-                        "environment": "test",
-                    },
-                ],
-                "timestamp_list": [
-                    "2025-05-02T12:10:00.000000+0000",
-                    "2025-05-02T12:11:00.000000+0000",
-                ],
-                "environment": "test",
-            }
-        }
-
-        result = merge_session_data(sessions)
-
-        # Should handle empty lists gracefully
-        rrweb_data = result["empty-session"]["rrweb_data"]
-        assert len(rrweb_data) == 1  # Only the non-empty entry
-        assert rrweb_data[0]["type"] == 1
-
-    def test_merge_session_data_event_count_verification(self):
-        """Test that total event count equals sum of all session_data lengths."""
-        sessions = {
-            "count-test": {
-                "sorted_entries": [
-                    {
-                        "filename": "file1",
-                        "session_data": [{"event": 1}, {"event": 2}, {"event": 3}],
-                        "environment": "test",
-                    },
-                    {
-                        "filename": "file2",
-                        "session_data": [{"event": 4}, {"event": 5}],
-                        "environment": "test",
-                    },
-                    {
-                        "filename": "file3",
-                        "session_data": [{"event": 6}],
-                        "environment": "test",
-                    },
-                ],
-                "timestamp_list": ["file1", "file2", "file3"],
-                "environment": "test",
-            }
-        }
-
-        result = merge_session_data(sessions)
-
-        # Calculate expected total
-        expected_total = sum(
-            len(entry["session_data"]) for entry in sessions["count-test"]["sorted_entries"]
-        )
-        actual_total = len(result["count-test"]["rrweb_data"])
-
-        assert actual_total == expected_total == 6
-
-    def test_merge_session_data_handles_multiple_sessions(self):
-        """Test merging multiple sessions simultaneously."""
-        sessions = {
-            "session-1": {
-                "sorted_entries": [
-                    {
-                        "filename": "s1-file1",
-                        "session_data": [{"session": 1, "event": 1}],
-                        "environment": "prod",
-                    }
-                ],
-                "timestamp_list": ["s1-file1"],
-                "environment": "prod",
-            },
-            "session-2": {
-                "sorted_entries": [
-                    {
-                        "filename": "s2-file1",
-                        "session_data": [{"session": 2, "event": 1}],
-                        "environment": "dev",
-                    }
-                ],
-                "timestamp_list": ["s2-file1"],
-                "environment": "dev",
-            },
-        }
-
-        result = merge_session_data(sessions)
-
-        # Verify both sessions processed
-        assert len(result) == 2
-        assert "session-1" in result
-        assert "session-2" in result
-
-        # Verify session isolation
-        assert result["session-1"]["rrweb_data"][0]["session"] == 1
-        assert result["session-2"]["rrweb_data"][0]["session"] == 2
-        assert result["session-1"]["metadata"]["environment"] == "prod"
-        assert result["session-2"]["metadata"]["environment"] == "dev"
-
-    def test_merge_session_data_handles_empty_input(self):
-        """Test merge handles empty sessions dictionary."""
-        result = merge_session_data({})
-        assert result == {}
-
-
 class TestPrivateMethodEdgeCases:
     """Edge case tests for private methods that handle empty/malformed data."""
 
@@ -651,6 +477,42 @@ class TestPrivateMethodEdgeCases:
         assert result == {}
 
         result = _validate_and_extract_environment({})
+        assert result == {}
+
+    def test_merge_session_data_handles_empty_session_data(self):
+        """Test edge case of empty session_data lists gracefully."""
+        sessions = {
+            "empty-session": {
+                "sorted_entries": [
+                    {
+                        "filename": "2025-05-02T12:10:00.000000+0000",
+                        "session_data": [],  # Empty session data
+                        "environment": "test",
+                    },
+                    {
+                        "filename": "2025-05-02T12:11:00.000000+0000",
+                        "session_data": [{"type": 1}],  # Non-empty session data
+                        "environment": "test",
+                    },
+                ],
+                "timestamp_list": [
+                    "2025-05-02T12:10:00.000000+0000",
+                    "2025-05-02T12:11:00.000000+0000",
+                ],
+                "environment": "test",
+            }
+        }
+
+        result = _merge_session_data(sessions)
+
+        # Should handle empty lists gracefully
+        rrweb_data = result["empty-session"]["rrweb_data"]
+        assert len(rrweb_data) == 1  # Only the non-empty entry
+        assert rrweb_data[0]["type"] == 1
+
+    def test_merge_session_data_handles_empty_input(self):
+        """Test merge handles empty sessions dictionary."""
+        result = _merge_session_data({})
         assert result == {}
 
 

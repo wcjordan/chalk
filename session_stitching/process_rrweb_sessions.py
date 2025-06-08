@@ -323,7 +323,9 @@ def _download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
     return file_contents
 
 
-def merge_session_data(sessions: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+def _merge_session_data(
+    sessions: Dict[str, Dict[str, Any]],
+) -> Dict[str, Dict[str, Any]]:
     """
     Merge session_data arrays from sorted session entries into final output format.
 
@@ -417,7 +419,7 @@ def process_rrweb_sessions(bucket_name: str) -> Dict[str, Dict[str, Any]]:
     logger.info("Number of validated sessions: %d", len(validated_sessions))
 
     # Merge session data arrays
-    final_sessions = merge_session_data(validated_sessions)
+    final_sessions = _merge_session_data(validated_sessions)
     logger.info("Number of final sessions: %d", len(final_sessions))
 
     return final_sessions
