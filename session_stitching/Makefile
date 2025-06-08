@@ -24,4 +24,4 @@ format:
 .PHONY: test
 test:
 	$(ACTIVATE_VENV)
-	python -m pytest tests -v
+	python -m pytest --cov=. --cov-report=html tests -v
