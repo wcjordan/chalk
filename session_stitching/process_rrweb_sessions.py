@@ -240,6 +240,7 @@ def main():
     print(f"Number of JSON files found: {len(files)}")
 
     # Verification: print first 100 characters of first file content
+    parsed_files = []
     if files:
         first_filename, first_content = files[0]
         print(f"First file: {first_filename}")
@@ -251,13 +252,14 @@ def main():
             print(
                 f"Successfully parsed file with session_guid: {parsed_result['session_guid']}"
             )
+            parsed_files.append(parsed_result)
         else:
             print("Failed to parse first file")
-
-        grouped_sessions = _group_by_session_guid(files)
-        print(f"Number of grouped sessions: {len(grouped_sessions)}")
     else:
         print("No files found")
+
+    grouped_sessions = _group_by_session_guid(parsed_files)
+    print(f"Number of grouped sessions: {len(grouped_sessions)}")
 
 
 if __name__ == "__main__":
