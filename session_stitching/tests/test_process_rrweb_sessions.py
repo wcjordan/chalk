@@ -18,6 +18,7 @@ from process_rrweb_sessions import (
     _download_json_files,
     _parse_and_validate_session_file,
     _group_by_session_guid,
+    sort_and_collect_timestamps,
 )
 
 
@@ -583,3 +584,313 @@ class TestGroupBySessionGuid:
             session_guid = f"session-{i:03d}"
             assert session_guid in result
             assert len(result[session_guid]) == files_per_session
+
+
+class TestSortAndCollectTimestamps:
+    """Tests for sort_and_collect_timestamps function."""
+
+    def test_sort_single_session_in_order(self):
+        """Test sorting a single session with files already in order."""
+        grouped_sessions = {
+            "abc-123": [
+                {
+                    "filename": "2025-05-02T12:10:50.644423+0000",
+                    "session_guid": "abc-123",
+                    "session_data": [{"type": 1}],
+                    "environment": "production",
+                },
+                {
+                    "filename": "2025-05-02T12:11:30.991832+0000",
+                    "session_guid": "abc-123",
+                    "session_data": [{"type": 2}],
+                    "environment": "production",
+                },
+            ]
+        }
+
+        result = sort_and_collect_timestamps(grouped_sessions)
+
+        assert len(result) == 1
+        assert "abc-123" in result
+
+        session_data = result["abc-123"]
+        assert "sorted_entries" in session_data
+        assert "timestamp_list" in session_data
+
+        # Check sorted entries
+        sorted_entries = session_data["sorted_entries"]
+        assert len(sorted_entries) == 2
+        assert sorted_entries[0]["filename"] == "2025-05-02T12:10:50.644423+0000"
+        assert sorted_entries[1]["filename"] == "2025-05-02T12:11:30.991832+0000"
+
+        # Check timestamp list
+        timestamp_list = session_data["timestamp_list"]
+        assert timestamp_list == [
+            "2025-05-02T12:10:50.644423+0000",
+            "2025-05-02T12:11:30.991832+0000",
+        ]
+
+    def test_sort_single_session_out_of_order(self):
+        """Test sorting a single session with files out of order."""
+        grouped_sessions = {
+            "abc-123": [
+                {
+                    "filename": "2025-05-02T12:15:00.123456+0000",
+                    "session_guid": "abc-123",
+                    "session_data": [{"type": 3}],
+                    "environment": "production",
+                },
+                {
+                    "filename": "2025-05-02T12:10:50.644423+0000",
+                    "session_guid": "abc-123",
+                    "session_data": [{"type": 1}],
+                    "environment": "production",
+                },
+                {
+                    "filename": "2025-05-02T12:11:30.991832+0000",
+                    "session_guid": "abc-123",
+                    "session_data": [{"type": 2}],
+                    "environment": "production",
+                },
+            ]
+        }
+
+        result = sort_and_collect_timestamps(grouped_sessions)
+
+        session_data = result["abc-123"]
+        sorted_entries = session_data["sorted_entries"]
+        timestamp_list = session_data["timestamp_list"]
+
+        # Verify correct sorting order
+        expected_order = [
+            "2025-05-02T12:10:50.644423+0000",
+            "2025-05-02T12:11:30.991832+0000",
+            "2025-05-02T12:15:00.123456+0000",
+        ]
+
+        assert len(sorted_entries) == 3
+        for i, expected_filename in enumerate(expected_order):
+            assert sorted_entries[i]["filename"] == expected_filename
+
+        assert timestamp_list == expected_order
+
+    def test_sort_multiple_sessions(self):
+        """Test sorting multiple sessions."""
+        grouped_sessions = {
+            "abc-123": [
+                {
+                    "filename": "2025-05-02T12:15:00.123456+0000",
+                    "session_guid": "abc-123",
+                    "session_data": [{"type": 2}],
+                    "environment": "production",
+                },
+                {
+                    "filename": "2025-05-02T12:10:50.644423+0000",
+                    "session_guid": "abc-123",
+                    "session_data": [{"type": 1}],
+                    "environment": "production",
+                },
+            ],
+            "def-456": [
+                {
+                    "filename": "2025-05-02T13:20:00.000000+0000",
+                    "session_guid": "def-456",
+                    "session_data": [{"type": 4}],
+                    "environment": "staging",
+                },
+                {
+                    "filename": "2025-05-02T13:10:00.000000+0000",
+                    "session_guid": "def-456",
+                    "session_data": [{"type": 3}],
+                    "environment": "staging",
+                },
+            ],
+        }
+
+        result = sort_and_collect_timestamps(grouped_sessions)
+
+        assert len(result) == 2
+        assert "abc-123" in result
+        assert "def-456" in result
+
+        # Check abc-123 session
+        abc_session = result["abc-123"]
+        assert abc_session["timestamp_list"] == [
+            "2025-05-02T12:10:50.644423+0000",
+            "2025-05-02T12:15:00.123456+0000",
+        ]
+
+        # Check def-456 session
+        def_session = result["def-456"]
+        assert def_session["timestamp_list"] == [
+            "2025-05-02T13:10:00.000000+0000",
+            "2025-05-02T13:20:00.000000+0000",
+        ]
+
+    def test_sort_single_entry_session(self):
+        """Test sorting a session with only one entry (edge case)."""
+        grouped_sessions = {
+            "single-entry": [
+                {
+                    "filename": "2025-05-02T12:10:50.644423+0000",
+                    "session_guid": "single-entry",
+                    "session_data": [{"type": 1}],
+                    "environment": "production",
+                }
+            ]
+        }
+
+        result = sort_and_collect_timestamps(grouped_sessions)
+
+        assert len(result) == 1
+        assert "single-entry" in result
+
+        session_data = result["single-entry"]
+        assert len(session_data["sorted_entries"]) == 1
+        assert len(session_data["timestamp_list"]) == 1
+        assert session_data["timestamp_list"] == ["2025-05-02T12:10:50.644423+0000"]
+
+    def test_sort_empty_sessions_dict(self):
+        """Test sorting with empty sessions dictionary."""
+        grouped_sessions = {}
+
+        result = sort_and_collect_timestamps(grouped_sessions)
+
+        assert len(result) == 0
+        assert result == {}
+
+    def test_sort_preserves_record_structure(self):
+        """Test that sorting preserves the complete record structure."""
+        grouped_sessions = {
+            "abc-123": [
+                {
+                    "filename": "2025-05-02T12:15:00.123456+0000",
+                    "session_guid": "abc-123",
+                    "session_data": [{"type": 2, "data": {"complex": "structure"}}],
+                    "environment": "production",
+                },
+                {
+                    "filename": "2025-05-02T12:10:50.644423+0000",
+                    "session_guid": "abc-123",
+                    "session_data": [{"type": 1, "data": {"another": "value"}}],
+                    "environment": "production",
+                },
+            ]
+        }
+
+        result = sort_and_collect_timestamps(grouped_sessions)
+
+        sorted_entries = result["abc-123"]["sorted_entries"]
+
+        # Check that first entry (after sorting) has all original fields
+        first_entry = sorted_entries[0]
+        assert first_entry["filename"] == "2025-05-02T12:10:50.644423+0000"
+        assert first_entry["session_guid"] == "abc-123"
+        assert first_entry["session_data"] == [{"type": 1, "data": {"another": "value"}}]
+        assert first_entry["environment"] == "production"
+
+        # Check that second entry (after sorting) has all original fields
+        second_entry = sorted_entries[1]
+        assert second_entry["filename"] == "2025-05-02T12:15:00.123456+0000"
+        assert second_entry["session_guid"] == "abc-123"
+        assert second_entry["session_data"] == [{"type": 2, "data": {"complex": "structure"}}]
+        assert second_entry["environment"] == "production"
+
+    def test_sort_with_different_timestamp_formats(self):
+        """Test sorting with various timestamp formats that should sort lexicographically."""
+        grouped_sessions = {
+            "mixed-formats": [
+                {
+                    "filename": "2025-05-02T12:15:00.123456+0000",
+                    "session_guid": "mixed-formats",
+                    "session_data": [{"type": 3}],
+                    "environment": "production",
+                },
+                {
+                    "filename": "2025-05-02T12:10:50.644423+0000",
+                    "session_guid": "mixed-formats",
+                    "session_data": [{"type": 1}],
+                    "environment": "production",
+                },
+                {
+                    "filename": "2025-05-02T12:10:50.644424+0000",
+                    "session_guid": "mixed-formats",
+                    "session_data": [{"type": 2}],
+                    "environment": "production",
+                },
+            ]
+        }
+
+        result = sort_and_collect_timestamps(grouped_sessions)
+
+        timestamp_list = result["mixed-formats"]["timestamp_list"]
+        expected_order = [
+            "2025-05-02T12:10:50.644423+0000",
+            "2025-05-02T12:10:50.644424+0000",
+            "2025-05-02T12:15:00.123456+0000",
+        ]
+
+        assert timestamp_list == expected_order
+
+    def test_sort_with_unicode_session_guid(self):
+        """Test sorting sessions with unicode session_guid values."""
+        grouped_sessions = {
+            "测试-session": [
+                {
+                    "filename": "2025-05-02T12:15:00.123456+0000",
+                    "session_guid": "测试-session",
+                    "session_data": [{"type": 2}],
+                    "environment": "测试环境",
+                },
+                {
+                    "filename": "2025-05-02T12:10:50.644423+0000",
+                    "session_guid": "测试-session",
+                    "session_data": [{"type": 1}],
+                    "environment": "测试环境",
+                },
+            ]
+        }
+
+        result = sort_and_collect_timestamps(grouped_sessions)
+
+        assert "测试-session" in result
+        timestamp_list = result["测试-session"]["timestamp_list"]
+        assert timestamp_list == [
+            "2025-05-02T12:10:50.644423+0000",
+            "2025-05-02T12:15:00.123456+0000",
+        ]
+
+    def test_sort_large_number_of_entries(self):
+        """Test sorting with a large number of entries in a single session."""
+        entries = []
+        num_entries = 100
+
+        # Create entries with timestamps in reverse order
+        for i in range(num_entries - 1, -1, -1):
+            timestamp = f"2025-05-02T12:{i:02d}:00.000000+0000"
+            entries.append(
+                {
+                    "filename": timestamp,
+                    "session_guid": "large-session",
+                    "session_data": [{"type": i}],
+                    "environment": "production",
+                }
+            )
+
+        grouped_sessions = {"large-session": entries}
+
+        result = sort_and_collect_timestamps(grouped_sessions)
+
+        timestamp_list = result["large-session"]["timestamp_list"]
+        sorted_entries = result["large-session"]["sorted_entries"]
+
+        # Verify correct number of entries
+        assert len(timestamp_list) == num_entries
+        assert len(sorted_entries) == num_entries
+
+        # Verify entries are sorted correctly
+        for i in range(num_entries):
+            expected_timestamp = f"2025-05-02T12:{i:02d}:00.000000+0000"
+            assert timestamp_list[i] == expected_timestamp
+            assert sorted_entries[i]["filename"] == expected_timestamp
+            assert sorted_entries[i]["session_data"] == [{"type": i}]
