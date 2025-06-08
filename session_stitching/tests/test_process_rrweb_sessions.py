@@ -18,6 +18,7 @@ from process_rrweb_sessions import (
     _download_json_files,
     _parse_and_validate_session_file,
     _group_by_session_guid,
+    _sort_and_collect_timestamps,
 )
 
 
@@ -60,8 +61,8 @@ def fixture_mock_blob(sample_json_files, sample_file_contents):
 def fixture_sample_json_files():
     """Sample JSON filenames for testing."""
     return [
-        "2025-05-02T12:10:50.644423+0000",
         "2025-05-02T12:11:30.991832+0000",
+        "2025-05-02T12:10:50.644423+0000",
         "2025-05-02T12:12:15.123456+0000",
     ]
 
@@ -99,6 +100,12 @@ def fixture_sample_validated_records(sample_json_files, sample_file_contents):
         record["filename"] = filename
         records.append(record)
     return records
+
+
+@pytest.fixture(name="sample_grouped_sessions")
+def fixture_sample_grouped_sessions(sample_validated_records):
+    """Sample grouped sessions for testing."""
+    return _group_by_session_guid(sample_validated_records)
 
 
 class TestInitializeGcsClient:
@@ -513,8 +520,8 @@ class TestGroupBySessionGuid:
         assert len(result["abc-123"]) == 2
 
         # Check that grouping maintains order and filenames.
-        assert result["abc-123"][0]["filename"] == "2025-05-02T12:10:50.644423+0000"
-        assert result["abc-123"][1]["filename"] == "2025-05-02T12:11:30.991832+0000"
+        assert result["abc-123"][0]["filename"] == "2025-05-02T12:11:30.991832+0000"
+        assert result["abc-123"][1]["filename"] == "2025-05-02T12:10:50.644423+0000"
 
     def test_group_multiple_sessions(self, sample_validated_records):
         """Test grouping records from multiple sessions."""
@@ -542,7 +549,7 @@ class TestGroupBySessionGuid:
         result = _group_by_session_guid(records)
 
         grouped_record = result["abc-123"][0]
-        assert grouped_record["filename"] == "2025-05-02T12:10:50.644423+0000"
+        assert grouped_record["filename"] == "2025-05-02T12:11:30.991832+0000"
         assert grouped_record["session_guid"] == "abc-123"
         assert grouped_record["session_data"] == [{"type": 1}]
         assert grouped_record["environment"] == "production"
@@ -583,3 +590,88 @@ class TestGroupBySessionGuid:
             session_guid = f"session-{i:03d}"
             assert session_guid in result
             assert len(result[session_guid]) == files_per_session
+
+
+class TestSortAndCollectTimestamps:
+    """Tests for _sort_and_collect_timestamps function."""
+
+    def test_sort_single_session_in_order(self, sample_grouped_sessions):
+        """Test sorting a single session with files already in order."""
+        result = _sort_and_collect_timestamps(sample_grouped_sessions)
+
+        assert len(result) == 2
+        assert "abc-123" in result
+        assert "def-456" in result
+
+        session_data = result["abc-123"]
+        assert "sorted_entries" in session_data
+        assert "timestamp_list" in session_data
+
+        # Check sorted entries
+        sorted_entries = session_data["sorted_entries"]
+        assert len(sorted_entries) == 2
+
+        # Check that first entry (after sorting) has all original fields
+        first_entry = sorted_entries[0]
+        assert first_entry["filename"] == "2025-05-02T12:10:50.644423+0000"
+        assert first_entry["session_guid"] == "abc-123"
+        assert first_entry["session_data"] == [{"type": 2}]
+        assert first_entry["environment"] == "production"
+
+        # Check that second entry (after sorting) has all original fields
+        second_entry = sorted_entries[1]
+        assert second_entry["filename"] == "2025-05-02T12:11:30.991832+0000"
+        assert second_entry["session_guid"] == "abc-123"
+        assert second_entry["session_data"] == [{"type": 1}]
+        assert second_entry["environment"] == "production"
+
+        # Check timestamp list
+        timestamp_list = session_data["timestamp_list"]
+        assert timestamp_list == [
+            "2025-05-02T12:10:50.644423+0000",
+            "2025-05-02T12:11:30.991832+0000",
+        ]
+
+    def test_sort_empty_sessions_dict(self):
+        """Test sorting with empty sessions dictionary."""
+        grouped_sessions = {}
+
+        result = _sort_and_collect_timestamps(grouped_sessions)
+
+        assert len(result) == 0
+        assert result == {}
+
+    def test_sort_large_number_of_entries(self):
+        """Test sorting with a large number of entries in a single session."""
+        entries = []
+        num_entries = 100
+
+        # Create entries with timestamps in reverse order
+        for i in range(num_entries - 1, -1, -1):
+            timestamp = f"2025-05-02T12:{i:02d}:00.000000+0000"
+            entries.append(
+                {
+                    "filename": timestamp,
+                    "session_guid": "large-session",
+                    "session_data": [{"type": i}],
+                    "environment": "production",
+                }
+            )
+
+        grouped_sessions = {"large-session": entries}
+
+        result = _sort_and_collect_timestamps(grouped_sessions)
+
+        timestamp_list = result["large-session"]["timestamp_list"]
+        sorted_entries = result["large-session"]["sorted_entries"]
+
+        # Verify correct number of entries
+        assert len(timestamp_list) == num_entries
+        assert len(sorted_entries) == num_entries
+
+        # Verify entries are sorted correctly
+        for i in range(num_entries):
+            expected_timestamp = f"2025-05-02T12:{i:02d}:00.000000+0000"
+            assert timestamp_list[i] == expected_timestamp
+            assert sorted_entries[i]["filename"] == expected_timestamp
+            assert sorted_entries[i]["session_data"] == [{"type": i}]

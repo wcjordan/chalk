@@ -43,13 +43,13 @@
 ## Step 4: Sort Session Entries and Collect Timestamps
 
 ### Tasks:
-- [ ] Sort each session's grouped files by timestamp (from filename)
-- [ ] Extract timestamp from filename format
-- [ ] Create ordered list of timestamps for each session
-- [ ] Prepare timestamp list for metadata inclusion
-- [ ] Verify output order matches timestamp order from filenames
-- [ ] Test that `timestamp_list` contains expected values
-- [ ] Write unit tests using mock filenames to confirm sort stability
+- [x] Sort each session's grouped files by timestamp (from filename)
+- [x] Extract timestamp from filename format
+- [x] Create ordered list of timestamps for each session
+- [x] Prepare timestamp list for metadata inclusion
+- [x] Verify output order matches timestamp order from filenames
+- [x] Test that `timestamp_list` contains expected values
+- [x] Write unit tests using mock filenames to confirm sort stability
 
 ## Step 5: Validate and Deduplicate `environment` per Session
 

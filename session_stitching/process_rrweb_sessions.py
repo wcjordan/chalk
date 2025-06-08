@@ -205,6 +205,44 @@ def _group_by_session_guid(
     return grouped_sessions
 
 
+def _sort_and_collect_timestamps(
+    grouped_sessions: Dict[str, List[Dict[str, Any]]],
+) -> Dict[str, Dict[str, Any]]:
+    """
+    Sort session entries by filename and collect timestamps.
+
+    Args:
+        grouped_sessions: Dictionary mapping session_guid to list of session records
+
+    Returns:
+        Dict[str, Dict[str, Any]]: Dictionary with session_guid as keys and values containing:
+                                   - sorted_entries: list of records sorted by filename
+                                   - timestamp_list: list of timestamps extracted from filenames
+    """
+    sorted_sessions = {}
+
+    for session_guid, session_records in grouped_sessions.items():
+        # Sort entries by filename (lexicographically, assuming timestamp-based filenames)
+        sorted_entries = sorted(session_records, key=lambda record: record["filename"])
+
+        # Extract timestamps from sorted filenames
+        timestamp_list = [record["filename"] for record in sorted_entries]
+
+        sorted_sessions[session_guid] = {
+            "sorted_entries": sorted_entries,
+            "timestamp_list": timestamp_list,
+        }
+
+        logger.info(
+            "Session '%s': sorted %d entries by timestamp",
+            session_guid,
+            len(sorted_entries),
+        )
+
+    logger.info("Sorted and collected timestamps for %d sessions", len(sorted_sessions))
+    return sorted_sessions
+
+
 def _download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
     """
     Download all JSON files from the specified GCS bucket.
