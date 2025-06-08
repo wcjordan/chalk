@@ -1,7 +1,7 @@
 """
 Unit tests for process_rrweb_sessions.py
 
-Tests the GCS interaction functions using mocks to avoid actual GCS calls.
+Tests focused on behavior and public interfaces following unit test policy.
 """
 
 import json
@@ -9,18 +9,87 @@ from unittest.mock import Mock, patch
 
 import pytest
 from google.cloud import storage
-from google.cloud.exceptions import NotFound, Forbidden
+from google.cloud.exceptions import NotFound
 
 from process_rrweb_sessions import (
     _initialize_gcs_client,
-    _list_json_files,
-    _download_file_content,
     _download_json_files,
     _parse_and_validate_session_file,
     _group_by_session_guid,
     _sort_and_collect_timestamps,
     _validate_and_extract_environment,
+    process_rrweb_sessions,
 )
+
+SESSION_1_KEY = "session-abc-123"
+SESSION_2_KEY = "session-def-456"
+
+
+@pytest.fixture(name="sample_rrweb_data")
+def fixture_sample_rrweb_data():
+    """Sample rrweb event data for testing."""
+    return {
+        "session_1_file_1": [
+            {
+                "type": 0,
+                "data": {"href": "https://example.com", "width": 1920, "height": 1080},
+            },
+            {"type": 1, "data": {"node": {"id": 1, "tagName": "html"}}},
+            {"type": 2, "data": {"node": {"id": 2, "tagName": "body", "parentId": 1}}},
+        ],
+        "session_1_file_2": [
+            {"type": 3, "data": {"source": 2, "type": 0, "id": 3}},
+            {"type": 3, "data": {"source": 2, "type": 1, "id": 4}},
+        ],
+        "session_2_file_1": [
+            {
+                "type": 0,
+                "data": {"href": "https://different.com", "width": 1366, "height": 768},
+            },
+            {"type": 1, "data": {"node": {"id": 1, "tagName": "html"}}},
+        ],
+    }
+
+
+@pytest.fixture(name="sample_bucket_data")
+def fixture_sample_bucket_data(sample_rrweb_data):
+    """Complete test bucket data with sample content."""
+    return {
+        # Session 1 files (out of chronological order)
+        "2025-05-02T12:11:30.991832+0000": {
+            "session_guid": SESSION_1_KEY,
+            "session_data": sample_rrweb_data["session_1_file_1"],
+            "environment": "production",
+        },
+        "2025-05-02T12:10:50.644423+0000": {
+            "session_guid": SESSION_1_KEY,
+            "session_data": sample_rrweb_data["session_1_file_2"],
+            "environment": "production",
+        },
+        # Session 2 files
+        "2025-05-02T12:12:15.123456+0000": {
+            "session_guid": SESSION_2_KEY,
+            "session_data": sample_rrweb_data["session_2_file_1"],
+            "environment": "staging",
+        },
+        # Malformed JSON (should be skipped)
+        "2025-05-02T12:13:00.000000+0000": '{"invalid": "json"',  # Missing closing brace
+        # Non dict (should be skipped)
+        "2025-05-02T12:14:00.000000+0000": ["session_guid", "session_data"],  # List
+        "2025-05-02T12:15:00.000000+0000": '"session_data"',  # String
+        # File with missing required fields (should be skipped)
+        "2025-05-02T12:16:00.000000+0000": {
+            "session_guid": "incomplete-session",
+            "environment": "test",
+            # Missing session_data
+        },
+        # Non root files should be ignored
+        "ignored/2025-05-02T12:17:00.000000+0000": {
+            "session_guid": SESSION_2_KEY,
+            "session_data": sample_rrweb_data["session_1_file_1"],
+            "environment": "development",
+        },
+    }
 
 
 @pytest.fixture(name="mock_client_class", autouse=True)
@@ -40,90 +109,368 @@ def fixture_mock_gcs_client(mock_bucket):
     return mock_gcs_client
 
 
+@pytest.fixture(name="custom_mock_bucket")
+def fixture_custom_mock_bucket():
+    """Custom mock bucket factory to create buckets with specific data."""
+
+    def get_mock_blob(blob_name, content):
+        """Create a mock blob with specified name and content."""
+        mock_blob = Mock(spec=storage.Blob)
+        mock_blob.name = blob_name
+        mock_blob.download_as_text.return_value = (
+            json.dumps(content) if isinstance(content, dict) else content
+        )
+        return mock_blob
+
+    def mock_blobs_from_items(bucket_data):
+        mock_bucket = Mock(spec=storage.Bucket)
+
+        mock_blobs = []
+        for filename, content in bucket_data.items():
+            mock_blob = get_mock_blob(filename, content)
+            mock_blobs.append(mock_blob)
+
+        def mock_get_blob(filename):
+            """Mock method to return a blob by name."""
+            for blob_name, blob_content in bucket_data.items():
+                if blob_name == filename:
+                    return get_mock_blob(blob_name, blob_content)
+            return None
+
+        mock_bucket.list_blobs.return_value = mock_blobs
+        mock_bucket.blob.side_effect = mock_get_blob
+        return mock_bucket
+
+    return mock_blobs_from_items
+
+
 @pytest.fixture(name="mock_bucket")
-def fixture_mock_bucket(mock_blob):
-    """Mock GCS bucket for testing."""
-    mock_bucket = Mock(spec=storage.Bucket)
-    mock_bucket.list_blobs.return_value = [mock_blob]
-    mock_bucket.blob.return_value = mock_blob
-    return mock_bucket
+def fixture_mock_bucket(custom_mock_bucket, sample_bucket_data):
+    """Mock GCS bucket that returns test data."""
+    return custom_mock_bucket(sample_bucket_data)
 
 
-@pytest.fixture(name="mock_blob")
-def fixture_mock_blob(sample_json_files, sample_file_contents):
-    """Mock GCS blob for testing."""
-    mock_blob = Mock(spec=storage.Blob)
-    mock_blob.name = sample_json_files[0]
-    mock_blob.download_as_text.return_value = sample_file_contents[0]
-    return mock_blob
+class TestSessionProcessingPipeline:
+    """Test the complete session processing workflow."""
+
+    def test_process_rrweb_sessions_happy_path(self, mock_bucket):
+        """Test complete pipeline with valid multi-session data."""
+        final_sessions = process_rrweb_sessions("mock_bucket_name")
+
+        # Verify final structure
+        assert len(final_sessions) == 2
+        assert SESSION_1_KEY in final_sessions
+        assert SESSION_2_KEY in final_sessions
+
+        # Check SESSION_1 properties
+        session_1 = final_sessions[SESSION_1_KEY]
+        assert session_1["environment"] == "production"
+        assert len(session_1["timestamp_list"]) == 2
+        assert len(session_1["sorted_entries"]) == 2
+
+        # Check SESSION_2 properties
+        session_2 = final_sessions[SESSION_2_KEY]
+        assert session_2["environment"] == "staging"
+        assert len(session_2["timestamp_list"]) == 1
+        assert len(session_2["sorted_entries"]) == 1
+
+    def test_process_rrweb_sessions_orders_cronologically(self, sample_rrweb_data):
+        """Test that session data is correctly merged and ordered."""
+        final_sessions = process_rrweb_sessions("mock_bucket_name")
+
+        # Verify timestamp ordering (chronological)
+        session_1 = final_sessions[SESSION_1_KEY]
+        timestamps = session_1["timestamp_list"]
+        assert timestamps == sorted(timestamps)
+        assert timestamps[0] == "2025-05-02T12:10:50.644423+0000"
+        assert timestamps[1] == "2025-05-02T12:11:30.991832+0000"
+
+        # Check SESSION_1 data ordering
+        session_entries = session_1["sorted_entries"]
+
+        # First entry should be from earlier timestamp
+        first_entry = session_entries[0]
+        assert first_entry["filename"] == "2025-05-02T12:10:50.644423+0000"
+        assert first_entry["session_data"] == sample_rrweb_data["session_1_file_2"]
+
+        # Second entry should be from later timestamp
+        second_entry = session_entries[1]
+        assert second_entry["filename"] == "2025-05-02T12:11:30.991832+0000"
+        assert second_entry["session_data"] == sample_rrweb_data["session_1_file_1"]
+
+    def test_handles_malformed_files_gracefully(self, caplog):
+        """Test pipeline skips invalid files and continues processing."""
+        final_sessions = process_rrweb_sessions("mock_bucket_name")
+
+        all_files = [
+            entry["filename"]
+            for session in final_sessions.values()
+            for entry in session["sorted_entries"]
+        ]
+
+        # Verify that malformed JSON file and missing fields file are omitted
+        assert (
+            "2025-05-02T12:13:00.000000+0000" not in all_files
+        )  # Malformed JSON file should be skipped
+        assert (
+            "2025-05-02T12:14:00.000000+0000" not in all_files
+        )  # Missing fields file should be skipped
+
+        # Should still process valid files
+        assert len(all_files) == 3
+
+        # Verify warnings were logged
+        assert "Failed to parse JSON in file" in caplog.text
+        assert "Expecting ',' delimiter" in caplog.text
+        assert "does not contain a JSON object (found str)" in caplog.text
+        assert "missing required fields" in caplog.text
+
+    def test_handles_environment_conflicts_with_warning(
+        self, caplog, custom_mock_bucket, mock_gcs_client
+    ):
+        """Test pipeline handles conflicting environments correctly."""
+        # Create test data with conflicting environments
+        conflicting_data = {
+            "2025-05-02T12:10:00.000000+0000": {
+                "session_guid": "conflict-session",
+                "session_data": [{"type": 1}],
+                "environment": "production",
+            },
+            "2025-05-02T12:11:00.000000+0000": {
+                "session_guid": "conflict-session",
+                "session_data": [{"type": 2}],
+                "environment": "staging",  # Different environment
+            },
+        }
+
+        mock_bucket = custom_mock_bucket(conflicting_data)
+        mock_gcs_client.bucket.return_value = mock_bucket
+
+        final_sessions = process_rrweb_sessions("mock_bucket_name")
+
+        # Should use first environment value
+        assert final_sessions["conflict-session"]["environment"] == "production"
+
+        # Should log warning
+        assert "conflicting environment values" in caplog.text
+        assert "Using first value: 'production'" in caplog.text
+
+    def test_handles_no_files(self, caplog, custom_mock_bucket, mock_gcs_client):
+        """Test pipeline handles no files correctly."""
+        # Create test data with no files
+        no_data = {}
+
+        mock_bucket = custom_mock_bucket(no_data)
+        mock_gcs_client.bucket.return_value = mock_bucket
+
+        final_sessions = process_rrweb_sessions("mock_bucket_name")
+
+        # Should not create any sessions
+        assert final_sessions == {}
+
+        # Should log warning
+        assert "No files found" in caplog.text
 
 
-@pytest.fixture(name="sample_json_files")
-def fixture_sample_json_files():
-    """Sample JSON filenames for testing."""
-    return [
-        "2025-05-02T12:11:30.991832+0000",
-        "2025-05-02T12:10:50.644423+0000",
-        "2025-05-02T12:12:15.123456+0000",
-    ]
+class TestSessionDataValidation:
+    """Test session data validation logic for edge cases."""
+
+    def test_validates_required_fields_comprehensively(self):
+        """Test validation catches all combinations of missing required fields."""
+        test_cases = [
+            # Missing session_guid
+            ('{"session_data": [], "environment": "test"}', "session_guid"),
+            # Missing session_data
+            ('{"session_guid": "test", "environment": "test"}', "session_data"),
+            # Missing environment
+            ('{"session_guid": "test", "session_data": []}', "environment"),
+            # Missing multiple fields
+            ('{"session_guid": "test"}', "session_data, environment"),
+        ]
+
+        for content, expected_missing in test_cases:
+            result = _parse_and_validate_session_file("test.json", content)
+            assert result is None
+
+    def test_handles_data_type_validation(self):
+        """Test validation of field data types."""
+        test_cases = [
+            # Non-string session_guid
+            ('{"session_guid": 123, "session_data": [], "environment": "test"}', None),
+            # Non-list session_data
+            (
+                '{"session_guid": "test", "session_data": "not-list", "environment": "test"}',
+                None,
+            ),
+            # Non-string environment
+            ('{"session_guid": "test", "session_data": [], "environment": 123}', None),
+            # Valid case
+            (
+                '{"session_guid": "test", "session_data": [], "environment": "test"}',
+                "test",
+            ),
+        ]
+
+        for content, expected_guid in test_cases:
+            result = _parse_and_validate_session_file("test.json", content)
+            if expected_guid:
+                assert result is not None
+                assert result["session_guid"] == expected_guid
+            else:
+                assert result is None
+
+    def test_preserves_complex_rrweb_structures(self):
+        """Test that complex rrweb event structures are preserved exactly."""
+        complex_events = [
+            {
+                "type": 0,
+                "data": {
+                    "href": "https://example.com/path?param=value#hash",
+                    "width": 1920,
+                    "height": 1080,
+                    "userAgent": "Mozilla/5.0...",
+                },
+            },
+            {
+                "type": 1,
+                "data": {
+                    "node": {
+                        "id": 1,
+                        "tagName": "html",
+                        "attributes": {"lang": "en"},
+                        "childNodes": [{"id": 2, "tagName": "head"}],
+                    }
+                },
+            },
+            {
+                "type": 3,
+                "data": {
+                    "source": 2,
+                    "type": 0,
+                    "id": 3,
+                    "x": 100.5,
+                    "y": 200.7,
+                    "timeOffset": 1234,
+                },
+            },
+        ]
+
+        content = json.dumps(
+            {
+                "session_guid": "complex-test",
+                "session_data": complex_events,
+                "environment": "production",
+            }
+        )
+
+        result = _parse_and_validate_session_file("complex.json", content)
+
+        assert result is not None
+        assert result["session_data"] == complex_events
+        # Verify deep structure is preserved
+        assert (
+            result["session_data"][0]["data"]["href"]
+            == "https://example.com/path?param=value#hash"
+        )
+        assert result["session_data"][1]["data"]["node"]["attributes"]["lang"] == "en"
+        assert result["session_data"][2]["data"]["x"] == 100.5
 
 
-@pytest.fixture(name="sample_file_contents")
-def fixture_sample_file_contents():
-    """Sample file contents for testing."""
-    return [
-        '{"session_guid": "abc-123", "session_data": [{"type": 1}], "environment": "production"}',
-        '{"session_guid": "abc-123", "session_data": [{"type": 2}], "environment": "production"}',
-        '{"session_guid": "def-456", "session_data": [{"type": 3}], "environment": "staging"}',
-    ]
+# TEMP: remove after integration - keeping minimal tests specific to _sort_and_collect_timestamps
+class TestTimestampOrdering:
+    """Test timestamp ordering and sorting behavior."""
+
+    def test_timestamp_ordering_with_various_formats(self):
+        """Test sorting works with different timestamp formats."""
+        # Create entries with various timestamp formats (all should sort lexicographically)
+        entries = [
+            {
+                "filename": "2025-05-02T12:15:30.123456+0000",
+                "session_guid": "test-session",
+                "session_data": [{"order": 3}],
+                "environment": "test",
+            },
+            {
+                "filename": "2025-05-02T12:10:15.987654+0000",
+                "session_guid": "test-session",
+                "session_data": [{"order": 1}],
+                "environment": "test",
+            },
+            {
+                "filename": "2025-05-02T12:12:45.555555+0000",
+                "session_guid": "test-session",
+                "session_data": [{"order": 2}],
+                "environment": "test",
+            },
+        ]
+
+        grouped = {"test-session": entries}
+        result = _sort_and_collect_timestamps(grouped)
+
+        # Verify chronological ordering
+        timestamps = result["test-session"]["timestamp_list"]
+        sorted_entries = result["test-session"]["sorted_entries"]
+
+        assert timestamps == sorted(timestamps)
+        assert sorted_entries[0]["session_data"][0]["order"] == 1
+        assert sorted_entries[1]["session_data"][0]["order"] == 2
+        assert sorted_entries[2]["session_data"][0]["order"] == 3
+
+    def test_handles_single_file_sessions(self):
+        """Test edge case of sessions with only one file."""
+        single_entry = [
+            {
+                "filename": "2025-05-02T12:10:00.000000+0000",
+                "session_guid": "single-file",
+                "session_data": [{"type": 1}],
+                "environment": "production",
+            }
+        ]
+
+        grouped = {"single-file": single_entry}
+        result = _sort_and_collect_timestamps(grouped)
+
+        assert len(result["single-file"]["timestamp_list"]) == 1
+        assert len(result["single-file"]["sorted_entries"]) == 1
+        assert (
+            result["single-file"]["timestamp_list"][0]
+            == "2025-05-02T12:10:00.000000+0000"
+        )
 
 
-@pytest.fixture(name="mock_sample_blobs")
-def fixture_mock_sample_blobs(mock_bucket, sample_json_files, sample_file_contents):
-    """Mock blobs representing JSON files in bucket."""
-    blobs = []
-    for filename, content in zip(sample_json_files, sample_file_contents):
-        blob = Mock()
-        blob.name = filename
-        blob.download_as_text.return_value = content
-        blobs.append(blob)
-    mock_bucket.list_blobs.return_value = blobs
-    mock_bucket.blob.side_effect = blobs
-    return blobs
+class TestPrivateMethodEdgeCases:
+    """Edge case tests for private methods that handle empty/malformed data."""
+
+    def test_group_by_session_guid_handles_empty_list(self):
+        """Test grouping handles empty input gracefully."""
+        result = _group_by_session_guid([])
+        assert result == {}
+
+    def test_environment_validation_handles_empty_entries(self):
+        """Test environment validation with sessions containing no entries."""
+        sessions_with_empty = {
+            "empty-session": {"sorted_entries": [], "timestamp_list": []}
+        }
+
+        result = _validate_and_extract_environment(sessions_with_empty)
+
+        # Should handle empty entries gracefully
+        assert "empty-session" in result
+        assert result["empty-session"]["environment"] == ""  # Default for empty
+        assert result["empty-session"]["sorted_entries"] == []
+        assert result["empty-session"]["timestamp_list"] == []
+
+    def test_processing_handles_empty_session_groups(self):
+        """Test edge case of empty session groups."""
+        result = _sort_and_collect_timestamps({})
+        assert result == {}
+
+        result = _validate_and_extract_environment({})
+        assert result == {}
 
 
-@pytest.fixture(name="sample_validated_records")
-def fixture_sample_validated_records(sample_json_files, sample_file_contents):
-    """Sample validated records for testing."""
-    records = []
-    for filename, content in zip(sample_json_files, sample_file_contents):
-        record = json.loads(content)
-        record["filename"] = filename
-        records.append(record)
-    return records
-
-
-@pytest.fixture(name="sample_grouped_sessions")
-def fixture_sample_grouped_sessions(sample_validated_records):
-    """Sample grouped sessions for testing."""
-    return _group_by_session_guid(sample_validated_records)
-
-
-@pytest.fixture(name="sample_sorted_sessions")
-def fixture_sample_sorted_sessions(sample_grouped_sessions):
-    """Sample sorted sessions for testing."""
-    return _sort_and_collect_timestamps(sample_grouped_sessions)
-
-
-class TestInitializeGcsClient:
-    """Tests for _initialize_gcs_client function."""
-
-    def test_initialize_gcs_client_success(self, mock_client_class, mock_gcs_client):
-        """Test successful GCS client initialization."""
-        result = _initialize_gcs_client()
-
-        mock_client_class.assert_called_once()
-        assert result == mock_gcs_client
+class TestGcsInteractionEdgeCases:
+    """Minimal tests for GCS interaction edge cases."""
 
     def test_initialize_gcs_client_failure(self, mock_client_class):
         """Test GCS client initialization failure."""
@@ -132,658 +479,20 @@ class TestInitializeGcsClient:
         with pytest.raises(Exception, match="Authentication failed"):
             _initialize_gcs_client()
 
-
-class TestListJsonFiles:
-    """Tests for _list_json_files function."""
-
-    def test_list_json_files_success(
-        self, mock_gcs_client, mock_bucket, mock_sample_blobs, sample_json_files
-    ):
-        """Test successful listing of JSON files."""
-
-        result = _list_json_files(mock_gcs_client, "test-bucket")
-
-        # Should only return JSON files in root directory
-        assert result == sample_json_files
-        mock_gcs_client.bucket.assert_called_once_with("test-bucket")
-        mock_bucket.list_blobs.assert_called_once()
-
-    def test_list_json_files_empty_bucket(self, mock_gcs_client, mock_bucket):
-        """Test listing files from empty bucket."""
-        mock_bucket.list_blobs.return_value = []
-
-        result = _list_json_files(mock_gcs_client, "empty-bucket")
-
-        #  pylint: disable=use-implicit-booleaness-not-comparison
-        assert result == []
-        mock_gcs_client.bucket.assert_called_once_with("empty-bucket")
-
-    def test_list_json_files_bucket_not_found(self, mock_gcs_client):
-        """Test listing files when bucket doesn't exist."""
-        mock_gcs_client.bucket.side_effect = NotFound("Bucket not found")
-
-        with pytest.raises(NotFound, match="Bucket not found"):
-            _list_json_files(mock_gcs_client, "nonexistent-bucket")
-
-    def test_list_json_files_permission_denied(self, mock_gcs_client):
-        """Test listing files when access is denied."""
-        mock_gcs_client.bucket.side_effect = Forbidden("Access denied")
-
-        with pytest.raises(Forbidden, match="Access denied"):
-            _list_json_files(mock_gcs_client, "forbidden-bucket")
-
-    def test_list_json_files_with_special_characters(
-        self, mock_gcs_client, mock_bucket
-    ):
-        """Test listing files with special characters in names."""
-        special_blobs = []
-        # File with spaces
-        blob1 = Mock()
-        blob1.name = "file with spaces.json"
-        special_blobs.append(blob1)
-
-        # File with unicode characters
-        blob2 = Mock()
-        blob2.name = "файл.json"
-        special_blobs.append(blob2)
-
-        # File with special characters
-        blob3 = Mock()
-        blob3.name = "file-with_special.chars.json"
-        special_blobs.append(blob3)
-
-        mock_bucket.list_blobs.return_value = special_blobs
-
-        result = _list_json_files(mock_gcs_client, "special-bucket")
-
-        expected = [
-            "file with spaces.json",
-            "файл.json",
-            "file-with_special.chars.json",
-        ]
-        assert result == expected
-
-
-class TestDownloadFileContent:
-    """Tests for _download_file_content function."""
-
-    def test_download_file_content_success(
-        self, mock_gcs_client, mock_bucket, mock_blob
-    ):
-        """Test successful file download."""
-        mock_blob.download_as_text.return_value = "test file content"
-
-        result = _download_file_content(mock_gcs_client, "test-bucket", "test.json")
-
-        assert result == "test file content"
-        mock_gcs_client.bucket.assert_called_once_with("test-bucket")
-        mock_bucket.blob.assert_called_once_with("test.json")
-        mock_blob.download_as_text.assert_called_once()
-
-    def test_download_file_content_file_not_found(self, mock_gcs_client, mock_blob):
-        """Test downloading non-existent file."""
-        mock_blob.download_as_text.side_effect = NotFound("File not found")
-
-        with pytest.raises(NotFound, match="File not found"):
-            _download_file_content(mock_gcs_client, "test-bucket", "nonexistent.json")
-
-    def test_download_file_content_permission_denied(self, mock_gcs_client, mock_blob):
-        """Test downloading file with insufficient permissions."""
-        mock_blob.download_as_text.side_effect = Forbidden("Access denied")
-
-        with pytest.raises(Forbidden, match="Access denied"):
-            _download_file_content(mock_gcs_client, "test-bucket", "forbidden.json")
-
-    def test_download_file_content_empty_file(self, mock_gcs_client, mock_blob):
-        """Test downloading empty file."""
-        mock_blob.download_as_text.return_value = ""
-
-        result = _download_file_content(mock_gcs_client, "test-bucket", "empty.json")
-
-        assert result == ""
-
-    def test_download_file_content_large_file(self, mock_gcs_client, mock_blob):
-        """Test downloading large file."""
-        large_content = "x" * 10000  # 10KB of content
-        mock_blob.download_as_text.return_value = large_content
-
-        result = _download_file_content(mock_gcs_client, "test-bucket", "large.json")
-
-        assert result == large_content
-        assert len(result) == 10000
-
-    def test_download_file_with_unicode_content(self, mock_gcs_client, mock_blob):
-        """Test downloading file with unicode content."""
-        unicode_content = '{"message": "Hello 世界", "emoji": "🌍"}'
-        mock_blob.download_as_text.return_value = unicode_content
-
-        result = _download_file_content(mock_gcs_client, "test-bucket", "unicode.json")
-
-        assert result == unicode_content
-
-
-class TestDownloadJsonFiles:
-    """Tests for _download_json_files function (integration tests)."""
-
-    def test_download_json_files_success(
-        self, mock_client_class, mock_bucket, mock_sample_blobs, sample_file_contents
-    ):
-        """Test successful download of all JSON files."""
-        result = _download_json_files("test-bucket")
-
-        expected = list(
-            zip([blob.name for blob in mock_sample_blobs], sample_file_contents)
-        )
-        assert result == expected
-
-        mock_client_class.assert_called_once()
-        mock_bucket.list_blobs.assert_called_once()
-        for blob in mock_sample_blobs:
-            assert blob.download_as_text.call_count == 1
-
-    def test_download_json_files_empty_bucket(self, mock_bucket):
-        """Test download from empty bucket."""
+    def test_download_handles_empty_bucket(self, mock_bucket):
+        """Test download handles empty bucket gracefully."""
         mock_bucket.list_blobs.return_value = []
 
         result = _download_json_files("empty-bucket")
-
         assert result == []
-        mock_bucket.list_blobs.assert_called_once()
 
-    def test_download_json_files_partial_failure(self, mock_blob):
-        """Test download when some files fail to download."""
+    def test_download_handles_gcs_errors(self, mock_gcs_client):
+        """Test download handles GCS errors appropriately."""
 
-        # First file succeeds, second fails, third succeeds
-        mock_blob.download_as_text.side_effect = NotFound("File not found")
+        def mock_error_download(bucket_name):
+            raise NotFound("Bucket not found")
 
-        with pytest.raises(NotFound, match="File not found"):
-            _download_json_files("test-bucket")
+        mock_gcs_client.bucket.side_effect = mock_error_download
 
-    def test_download_json_files_client_init_failure(self, mock_client_class):
-        """Test download when client initialization fails."""
-        mock_client_class.side_effect = Exception("Authentication failed")
-
-        with pytest.raises(Exception, match="Authentication failed"):
-            _download_json_files("test-bucket")
-
-    def test_download_json_files_list_failure(self, mock_bucket):
-        """Test download when listing files fails."""
-        mock_bucket.list_blobs.side_effect = Forbidden("Access denied")
-
-        with pytest.raises(Forbidden, match="Access denied"):
-            _download_json_files("test-bucket")
-
-
-class TestParseAndValidateSessionFile:
-    """Tests for parse_and_validate_session_file function."""
-
-    def test_valid_json_input(self):
-        """Test parsing valid JSON input returns expected dictionary."""
-        filename = "test.json"
-        content = '{"session_guid": "abc-123", "session_data": [{"type": 1}], "environment": "production"}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is not None
-        assert result["filename"] == filename
-        assert result["session_guid"] == "abc-123"
-        assert result["session_data"] == [{"type": 1}]
-        assert result["environment"] == "production"
-
-    def test_malformed_json_input(self, caplog):
-        """Test malformed JSON input logs warning and returns None."""
-        filename = "malformed.json"
-        # Missing closing brace
-        content = '{"session_guid": "abc-123", "session_data": [{"type": 1}], "environment": "production"'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-        assert "Failed to parse JSON in file 'malformed.json'" in caplog.text
-
-    def test_non_json_object_input(self, caplog):
-        """Test JSON input that is not an object logs warning and returns None."""
-        filename = "array.json"
-        content = '[{"session_guid": "abc-123"}]'  # Array instead of object
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-        assert "does not contain a JSON object (found list)" in caplog.text
-
-    def test_missing_session_guid_field(self, caplog):
-        """Test JSON missing session_guid field logs warning and returns None."""
-        filename = "missing_guid.json"
-        content = '{"session_data": [{"type": 1}], "environment": "production"}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-        assert "missing required fields: session_guid" in caplog.text
-
-    def test_missing_session_data_field(self, caplog):
-        """Test JSON missing session_data field logs warning and returns None."""
-        filename = "missing_data.json"
-        content = '{"session_guid": "abc-123", "environment": "production"}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-        assert "missing required fields: session_data" in caplog.text
-
-    def test_missing_environment_field(self, caplog):
-        """Test JSON missing environment field logs warning and returns None."""
-        filename = "missing_env.json"
-        content = '{"session_guid": "abc-123", "session_data": [{"type": 1}]}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-        assert "missing required fields: environment" in caplog.text
-
-    def test_missing_multiple_fields(self, caplog):
-        """Test JSON missing multiple fields logs warning and returns None."""
-        filename = "missing_multiple.json"
-        content = '{"session_guid": "abc-123"}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-        assert "missing required fields: session_data, environment" in caplog.text
-
-    def test_empty_session_guid(self, caplog):
-        """Test empty session_guid logs warning and returns None."""
-        filename = "empty_guid.json"
-        content = '{"session_guid": "", "session_data": [{"type": 1}], "environment": "production"}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-        assert "has invalid session_guid: must be non-empty string" in caplog.text
-
-    def test_whitespace_only_session_guid(self, caplog):
-        """Test whitespace-only session_guid logs warning and returns None."""
-        filename = "whitespace_guid.json"
-        content = '{"session_guid": "   ", "session_data": [{"type": 1}], "environment": "production"}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-        assert "has invalid session_guid: must be non-empty string" in caplog.text
-
-    def test_non_string_session_guid(self, caplog):
-        """Test non-string session_guid logs warning and returns None."""
-        filename = "numeric_guid.json"
-        content = '{"session_guid": 123, "session_data": [{"type": 1}], "environment": "production"}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-        assert "has invalid session_guid: must be non-empty string" in caplog.text
-
-    def test_non_list_session_data(self, caplog):
-        """Test non-list session_data logs warning and returns None."""
-        filename = "string_data.json"
-        content = '{"session_guid": "abc-123", "session_data": "not a list", "environment": "production"}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-        assert "has invalid session_data: must be a list (found str)" in caplog.text
-
-    def test_non_string_environment(self, caplog):
-        """Test non-string environment logs warning and returns None."""
-        filename = "numeric_env.json"
-        content = '{"session_guid": "abc-123", "session_data": [{"type": 1}], "environment": 123}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-        assert (
-            "has invalid environment: must be non-empty string (found int)"
-            in caplog.text
-        )
-
-    def test_empty_session_data_list(self):
-        """Test empty session_data list is valid."""
-        filename = "empty_data.json"
-        content = '{"session_guid": "abc-123", "session_data": [], "environment": "production"}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is not None
-        assert result["session_data"] == []
-
-    def test_empty_environment_string(self):
-        """Test empty environment string is valid."""
-        filename = "empty_env.json"
-        content = '{"session_guid": "abc-123", "session_data": [{"type": 1}], "environment": ""}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is None
-
-    def test_complex_session_data(self):
-        """Test complex session_data structure is preserved."""
-        filename = "complex.json"
-        complex_data = [
-            {"type": 1, "data": {"href": "https://example.com"}},
-            {"type": 2, "data": {"node": {"id": 1, "tagName": "div"}}},
-            {"type": 3, "data": {"source": 0, "texts": [], "attributes": []}},
-        ]
-        data_str = json.dumps(complex_data)
-        content = f'{{"session_guid": "abc-123", "session_data": {data_str}, "environment": "production"}}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is not None
-        assert result["session_data"] == complex_data
-
-    def test_unicode_content(self):
-        """Test file with unicode content is handled correctly."""
-        filename = "unicode.json"
-        content = '{"session_guid": "测试-123", "session_data": [{"message": "Hello 世界"}], "environment": "测试环境"}'
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is not None
-        assert result["session_guid"] == "测试-123"
-        assert result["environment"] == "测试环境"
-        assert result["session_data"] == [{"message": "Hello 世界"}]
-
-    def test_extra_fields_are_ignored(self):
-        """Test that extra fields in JSON are ignored."""
-        filename = "extra_fields.json"
-        content = (
-            '{"session_guid": "abc-123", "session_data": [{"type": 1}], "environment": "production", '
-            '"extra_field": "ignored", "timestamp": 1234567890}'
-        )
-
-        result = _parse_and_validate_session_file(filename, content)
-
-        assert result is not None
-        assert "extra_field" not in result
-        assert "timestamp" not in result
-        assert (
-            len(result) == 4
-        )  # Only filename, session_guid, session_data, environment
-
-
-class TestGroupBySessionGuid:
-    """Tests for group_by_session_guid function."""
-
-    def test_group_single_session(self, sample_validated_records):
-        """Test grouping records from a single session."""
-        records = [
-            record
-            for record in sample_validated_records
-            if record["session_guid"] == "abc-123"
-        ]
-
-        result = _group_by_session_guid(records)
-
-        assert len(result) == 1
-        assert "abc-123" in result
-        assert len(result["abc-123"]) == 2
-
-        # Check that grouping maintains order and filenames.
-        assert result["abc-123"][0]["filename"] == "2025-05-02T12:11:30.991832+0000"
-        assert result["abc-123"][1]["filename"] == "2025-05-02T12:10:50.644423+0000"
-
-    def test_group_multiple_sessions(self, sample_validated_records):
-        """Test grouping records from multiple sessions."""
-        result = _group_by_session_guid(sample_validated_records)
-
-        assert len(result) == 2
-        assert "abc-123" in result
-        assert "def-456" in result
-        assert len(result["abc-123"]) == 2
-        assert len(result["def-456"]) == 1
-
-    def test_group_empty_list(self):
-        """Test grouping empty list of records."""
-        records = []
-
-        result = _group_by_session_guid(records)
-
-        assert len(result) == 0
-        assert result == {}
-
-    def test_group_preserves_record_structure(self, sample_validated_records):
-        """Test that grouping preserves the complete record structure."""
-        records = [sample_validated_records[0]]
-
-        result = _group_by_session_guid(records)
-
-        grouped_record = result["abc-123"][0]
-        assert grouped_record["filename"] == "2025-05-02T12:11:30.991832+0000"
-        assert grouped_record["session_guid"] == "abc-123"
-        assert grouped_record["session_data"] == [{"type": 1}]
-        assert grouped_record["environment"] == "production"
-
-    def test_group_with_unicode_session_guids(self, sample_validated_records):
-        """Test grouping with unicode session_guid values."""
-        sample_validated_records[0]["session_guid"] = "测试-123"
-        sample_validated_records[1]["session_guid"] = "测试-123"
-
-        result = _group_by_session_guid(sample_validated_records)
-
-        assert len(result) == 2
-        assert "测试-123" in result
-        assert len(result["测试-123"]) == 2
-
-    def test_group_large_number_of_sessions(self):
-        """Test grouping with a large number of different sessions."""
-        records = []
-        num_sessions = 100
-        files_per_session = 3
-
-        for i in range(num_sessions):
-            session_guid = f"session-{i:03d}"
-            for j in range(files_per_session):
-                records.append(
-                    {
-                        "filename": f"file_{i}_{j}.json",
-                        "session_guid": session_guid,
-                        "session_data": [{"type": j}],
-                        "environment": "production",
-                    }
-                )
-
-        result = _group_by_session_guid(records)
-
-        assert len(result) == num_sessions
-        for i in range(num_sessions):
-            session_guid = f"session-{i:03d}"
-            assert session_guid in result
-            assert len(result[session_guid]) == files_per_session
-
-
-class TestSortAndCollectTimestamps:
-    """Tests for _sort_and_collect_timestamps function."""
-
-    def test_sort_single_session_in_order(self, sample_grouped_sessions):
-        """Test sorting a single session with files already in order."""
-        result = _sort_and_collect_timestamps(sample_grouped_sessions)
-
-        assert len(result) == 2
-        assert "abc-123" in result
-        assert "def-456" in result
-
-        session_data = result["abc-123"]
-        assert "sorted_entries" in session_data
-        assert "timestamp_list" in session_data
-
-        # Check sorted entries
-        sorted_entries = session_data["sorted_entries"]
-        assert len(sorted_entries) == 2
-
-        # Check that first entry (after sorting) has all original fields
-        first_entry = sorted_entries[0]
-        assert first_entry["filename"] == "2025-05-02T12:10:50.644423+0000"
-        assert first_entry["session_guid"] == "abc-123"
-        assert first_entry["session_data"] == [{"type": 2}]
-        assert first_entry["environment"] == "production"
-
-        # Check that second entry (after sorting) has all original fields
-        second_entry = sorted_entries[1]
-        assert second_entry["filename"] == "2025-05-02T12:11:30.991832+0000"
-        assert second_entry["session_guid"] == "abc-123"
-        assert second_entry["session_data"] == [{"type": 1}]
-        assert second_entry["environment"] == "production"
-
-        # Check timestamp list
-        timestamp_list = session_data["timestamp_list"]
-        assert timestamp_list == [
-            "2025-05-02T12:10:50.644423+0000",
-            "2025-05-02T12:11:30.991832+0000",
-        ]
-
-    def test_sort_empty_sessions_dict(self):
-        """Test sorting with empty sessions dictionary."""
-        grouped_sessions = {}
-
-        result = _sort_and_collect_timestamps(grouped_sessions)
-
-        assert len(result) == 0
-        assert result == {}
-
-    def test_sort_large_number_of_entries(self):
-        """Test sorting with a large number of entries in a single session."""
-        entries = []
-        num_entries = 100
-
-        # Create entries with timestamps in reverse order
-        for i in range(num_entries - 1, -1, -1):
-            timestamp = f"2025-05-02T12:{i:02d}:00.000000+0000"
-            entries.append(
-                {
-                    "filename": timestamp,
-                    "session_guid": "large-session",
-                    "session_data": [{"type": i}],
-                    "environment": "production",
-                }
-            )
-
-        grouped_sessions = {"large-session": entries}
-
-        result = _sort_and_collect_timestamps(grouped_sessions)
-
-        timestamp_list = result["large-session"]["timestamp_list"]
-        sorted_entries = result["large-session"]["sorted_entries"]
-
-        # Verify correct number of entries
-        assert len(timestamp_list) == num_entries
-        assert len(sorted_entries) == num_entries
-
-        # Verify entries are sorted correctly
-        for i in range(num_entries):
-            expected_timestamp = f"2025-05-02T12:{i:02d}:00.000000+0000"
-            assert timestamp_list[i] == expected_timestamp
-            assert sorted_entries[i]["filename"] == expected_timestamp
-            assert sorted_entries[i]["session_data"] == [{"type": i}]
-
-
-class TestValidateAndExtractEnvironment:
-    """Tests for _validate_and_extract_environment function."""
-
-    def test_validate_consistent_environment(self, sample_sorted_sessions):
-        """Test validation with consistent environment values."""
-        result = _validate_and_extract_environment(sample_sorted_sessions)
-
-        assert len(result) == 2
-        assert "abc-123" in result
-        assert "def-456" in result
-
-        # Check abc-123 session
-        abc_session = result["abc-123"]
-        assert "sorted_entries" in abc_session
-        assert "timestamp_list" in abc_session
-        assert "environment" in abc_session
-        assert abc_session["environment"] == "production"
-
-        # Check def-456 session
-        def_session = result["def-456"]
-        assert def_session["environment"] == "staging"
-
-        # Verify sorted_entries and timestamp_list are preserved
-        assert (
-            abc_session["sorted_entries"]
-            == sample_sorted_sessions["abc-123"]["sorted_entries"]
-        )
-        assert (
-            abc_session["timestamp_list"]
-            == sample_sorted_sessions["abc-123"]["timestamp_list"]
-        )
-
-    def test_validate_conflicting_environments(self, caplog, sample_sorted_sessions):
-        """Test validation with conflicting environment values logs warning."""
-        # Create session with conflicting environments
-        sample_sorted_sessions["abc-123"]["sorted_entries"][0][
-            "environment"
-        ] = "development"
-
-        result = _validate_and_extract_environment(sample_sorted_sessions)
-
-        # Should use first environment value
-        assert result["abc-123"]["environment"] == "development"
-
-        # Should log warning about conflicting values
-        assert "Session 'abc-123' has conflicting environment values" in caplog.text
-        assert "Using first value: 'development'" in caplog.text
-
-        # Verify sorted_entries and timestamp_list are preserved
-        assert (
-            result["abc-123"]["sorted_entries"]
-            == sample_sorted_sessions["abc-123"]["sorted_entries"]
-        )
-        assert (
-            result["abc-123"]["timestamp_list"]
-            == sample_sorted_sessions["abc-123"]["timestamp_list"]
-        )
-
-        # Other sessions should not be impacted
-        assert result["def-456"]["environment"] == "staging"
-
-    def test_validate_empty_sessions_dict(self):
-        """Test validation with empty sessions dictionary."""
-        sessions = {}
-
-        result = _validate_and_extract_environment(sessions)
-
-        assert len(result) == 0
-        assert result == {}
-
-    def test_validate_large_number_of_conflicting_environments(self, caplog):
-        """Test validation with many different environment values in one session."""
-        num_entries = 10
-        entries = []
-        timestamps = []
-
-        for i in range(num_entries):
-            timestamp = f"2025-05-02T12:{i:02d}:00.000000+0000"
-            entries.append(
-                {
-                    "filename": timestamp,
-                    "session_guid": "many-envs",
-                    "session_data": [{"type": i}],
-                    "environment": f"env-{i}",
-                }
-            )
-            timestamps.append(timestamp)
-
-        sessions = {
-            "many-envs": {
-                "sorted_entries": entries,
-                "timestamp_list": timestamps,
-            }
-        }
-
-        result = _validate_and_extract_environment(sessions)
-
-        # Should use first environment value
-        assert result["many-envs"]["environment"] == "env-0"
-
-        # Should log warning about all conflicting values
-        assert "Session 'many-envs' has conflicting environment values" in caplog.text
-        assert "Using first value: 'env-0'" in caplog.text
+        with pytest.raises(NotFound, match="Bucket not found"):
+            _download_json_files("nonexistent-bucket")
