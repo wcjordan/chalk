@@ -66,13 +66,13 @@
 ## Step 6: Merge `session_data` Arrays
 
 ### Tasks:
-- [ ] For each session, concatenate all `session_data` arrays in timestamp order
-- [ ] Create single merged rrweb event stream per session
-- [ ] Preserve order of events within each file and across files
-- [ ] Store merged data as `rrweb_data` field
-- [ ] Test against sessions with known event counts
-- [ ] Verify merged `rrweb_data` matches total expected event count
-- [ ] Write unit tests with assertions for combined arrays
+- [x] For each session, concatenate all `session_data` arrays in timestamp order
+- [x] Create single merged rrweb event stream per session
+- [x] Preserve order of events within each file and across files
+- [x] Store merged data as `rrweb_data` field
+- [x] Test against sessions with known event counts
+- [x] Verify merged `rrweb_data` matches total expected event count
+- [x] Write unit tests with assertions for combined arrays
 
 ## Step 7: Save Final Session Objects to Compact JSON
 

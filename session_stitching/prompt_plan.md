@@ -277,6 +277,55 @@ For each session, merges all ordered `session_data` arrays into a single rrweb e
 * Confirm that merged `rrweb_data` matches total event count.
 * Add assertions in unit tests for combined arrays.
 
+**Detailed Prompt**
+
+You are now ready to merge the actual rrweb event data from sorted session entries.
+
+### 🛠️ Task
+
+Implement a function that:
+
+1. Takes as input a dictionary where each key is a `session_guid` and the value is a dictionary containing:
+
+   * `sorted_entries`: list of validated and chronologically ordered records, each with a `session_data` list
+   * `timestamp_list`: list of timestamps for the session
+   * `environment`: canonical environment string for the session
+
+2. Merges all `session_data` arrays (in order) into a single list per session.
+
+3. Returns a new dictionary in this format:
+
+```python
+{
+  "abc-123": {
+    "session_guid": "abc-123",
+    "rrweb_data": [...],          # merged list of rrweb events
+    "metadata": {
+      "environment": "production",
+      "timestamp_list": [...]
+    }
+  },
+  ...
+}
+```
+
+Use this function signature:
+
+```python
+def merge_session_data(sessions: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+```
+
+### 🧪 Verification
+
+Add tests that:
+
+* Confirm merged `rrweb_data` preserves the order of events from the sorted entries.
+* Validate that the `metadata` block is correctly constructed and unmodified.
+* Handle edge cases like empty `session_data` lists gracefully.
+* Confirm that the total event count equals the sum of all `session_data` lengths for the session.
+
+Do not write any files to disk in this step — this step only prepares the final structured output per session.
+
 ---
 
 ### **Step 7: Save Final Session Objects to Compact JSON**

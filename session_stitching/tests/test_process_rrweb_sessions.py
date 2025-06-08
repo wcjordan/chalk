@@ -18,6 +18,7 @@ from process_rrweb_sessions import (
     _group_by_session_guid,
     _sort_and_collect_timestamps,
     _validate_and_extract_environment,
+    _merge_session_data,
     process_rrweb_sessions,
 )
 
@@ -164,15 +165,19 @@ class TestSessionProcessingPipeline:
 
         # Check SESSION_1 properties
         session_1 = final_sessions[SESSION_1_KEY]
-        assert session_1["environment"] == "production"
-        assert len(session_1["timestamp_list"]) == 2
-        assert len(session_1["sorted_entries"]) == 2
+        assert session_1["session_guid"] == SESSION_1_KEY
+        assert "rrweb_data" in session_1
+        assert "metadata" in session_1
+        assert session_1["metadata"]["environment"] == "production"
+        assert len(session_1["metadata"]["timestamp_list"]) == 2
 
         # Check SESSION_2 properties
         session_2 = final_sessions[SESSION_2_KEY]
-        assert session_2["environment"] == "staging"
-        assert len(session_2["timestamp_list"]) == 1
-        assert len(session_2["sorted_entries"]) == 1
+        assert session_2["session_guid"] == SESSION_2_KEY
+        assert "rrweb_data" in session_2
+        assert "metadata" in session_2
+        assert session_2["metadata"]["environment"] == "staging"
+        assert len(session_2["metadata"]["timestamp_list"]) == 1
 
     def test_process_rrweb_sessions_orders_cronologically(self, sample_rrweb_data):
         """Test that session data is correctly merged and ordered."""
@@ -180,44 +185,47 @@ class TestSessionProcessingPipeline:
 
         # Verify timestamp ordering (chronological)
         session_1 = final_sessions[SESSION_1_KEY]
-        timestamps = session_1["timestamp_list"]
+        timestamps = session_1["metadata"]["timestamp_list"]
         assert timestamps == sorted(timestamps)
         assert timestamps[0] == "2025-05-02T12:10:50.644423+0000"
         assert timestamps[1] == "2025-05-02T12:11:30.991832+0000"
 
-        # Check SESSION_1 data ordering
-        session_entries = session_1["sorted_entries"]
+        # Check merged rrweb_data ordering
+        rrweb_data = session_1["rrweb_data"]
 
-        # First entry should be from earlier timestamp
-        first_entry = session_entries[0]
-        assert first_entry["filename"] == "2025-05-02T12:10:50.644423+0000"
-        assert first_entry["session_data"] == sample_rrweb_data["session_1_file_2"]
+        # Should contain events from both files in chronological order
+        # First file (earlier timestamp) events should come first
+        expected_first_events = sample_rrweb_data["session_1_file_2"]
+        expected_second_events = sample_rrweb_data["session_1_file_1"]
 
-        # Second entry should be from later timestamp
-        second_entry = session_entries[1]
-        assert second_entry["filename"] == "2025-05-02T12:11:30.991832+0000"
-        assert second_entry["session_data"] == sample_rrweb_data["session_1_file_1"]
+        # Verify the merged data contains all events in correct order
+        file_split = len(expected_first_events)
+        assert rrweb_data[:file_split] == expected_first_events
+        assert rrweb_data[file_split:] == expected_second_events
+        assert len(rrweb_data) == len(expected_first_events) + len(
+            expected_second_events
+        )
 
     def test_handles_malformed_files_gracefully(self, caplog):
         """Test pipeline skips invalid files and continues processing."""
         final_sessions = process_rrweb_sessions("mock_bucket_name")
 
-        all_files = [
-            entry["filename"]
+        all_timestamps = [
+            timestamp
             for session in final_sessions.values()
-            for entry in session["sorted_entries"]
+            for timestamp in session["metadata"]["timestamp_list"]
         ]
 
         # Verify that malformed JSON file and missing fields file are omitted
         assert (
-            "2025-05-02T12:13:00.000000+0000" not in all_files
+            "2025-05-02T12:13:00.000000+0000" not in all_timestamps
         )  # Malformed JSON file should be skipped
         assert (
-            "2025-05-02T12:14:00.000000+0000" not in all_files
+            "2025-05-02T12:14:00.000000+0000" not in all_timestamps
         )  # Missing fields file should be skipped
 
         # Should still process valid files
-        assert len(all_files) == 3
+        assert len(all_timestamps) == 3
 
         # Verify warnings were logged
         assert "Failed to parse JSON in file" in caplog.text
@@ -249,7 +257,10 @@ class TestSessionProcessingPipeline:
         final_sessions = process_rrweb_sessions("mock_bucket_name")
 
         # Should use first environment value
-        assert final_sessions["conflict-session"]["environment"] == "production"
+        assert (
+            final_sessions["conflict-session"]["metadata"]["environment"]
+            == "production"
+        )
 
         # Should log warning
         assert "conflicting environment values" in caplog.text
@@ -466,6 +477,42 @@ class TestPrivateMethodEdgeCases:
         assert result == {}
 
         result = _validate_and_extract_environment({})
+        assert result == {}
+
+    def test_merge_session_data_handles_empty_session_data(self):
+        """Test edge case of empty session_data lists gracefully."""
+        sessions = {
+            "empty-session": {
+                "sorted_entries": [
+                    {
+                        "filename": "2025-05-02T12:10:00.000000+0000",
+                        "session_data": [],  # Empty session data
+                        "environment": "test",
+                    },
+                    {
+                        "filename": "2025-05-02T12:11:00.000000+0000",
+                        "session_data": [{"type": 1}],  # Non-empty session data
+                        "environment": "test",
+                    },
+                ],
+                "timestamp_list": [
+                    "2025-05-02T12:10:00.000000+0000",
+                    "2025-05-02T12:11:00.000000+0000",
+                ],
+                "environment": "test",
+            }
+        }
+
+        result = _merge_session_data(sessions)
+
+        # Should handle empty lists gracefully
+        rrweb_data = result["empty-session"]["rrweb_data"]
+        assert len(rrweb_data) == 1  # Only the non-empty entry
+        assert rrweb_data[0]["type"] == 1
+
+    def test_merge_session_data_handles_empty_input(self):
+        """Test merge handles empty sessions dictionary."""
+        result = _merge_session_data({})
         assert result == {}
 
 

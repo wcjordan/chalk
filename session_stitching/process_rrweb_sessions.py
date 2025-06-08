@@ -323,17 +323,68 @@ def _download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
     return file_contents
 
 
-def process_rrweb_sessions(bucket_name: str) -> List[Dict[str, Any]]:
+def _merge_session_data(
+    sessions: Dict[str, Dict[str, Any]],
+) -> Dict[str, Dict[str, Any]]:
+    """
+    Merge session_data arrays from sorted session entries into final output format.
+
+    Args:
+        sessions: Dictionary mapping session_guid to session data containing:
+                 - sorted_entries: list of validated and chronologically ordered records
+                 - timestamp_list: list of timestamps for the session
+                 - environment: canonical environment string for the session
+
+    Returns:
+        Dict[str, Dict[str, Any]]: Dictionary with session_guid as keys and values containing:
+                                   - session_guid: the session identifier
+                                   - rrweb_data: merged list of rrweb events
+                                   - metadata: dict with environment and timestamp_list
+    """
+    merged_sessions = {}
+
+    for session_guid, session_data in sessions.items():
+        sorted_entries = session_data["sorted_entries"]
+        timestamp_list = session_data["timestamp_list"]
+        environment = session_data["environment"]
+
+        # Merge all session_data arrays in chronological order
+        rrweb_data = []
+        for entry in sorted_entries:
+            rrweb_data.extend(entry["session_data"])
+
+        # Create final session structure
+        merged_sessions[session_guid] = {
+            "session_guid": session_guid,
+            "rrweb_data": rrweb_data,
+            "metadata": {
+                "environment": environment,
+                "timestamp_list": timestamp_list,
+            },
+        }
+
+        logger.info(
+            "Session '%s': merged %d events from %d files",
+            session_guid,
+            len(rrweb_data),
+            len(sorted_entries),
+        )
+
+    logger.info("Merged session data for %d sessions", len(merged_sessions))
+    return merged_sessions
+
+
+def process_rrweb_sessions(bucket_name: str) -> Dict[str, Dict[str, Any]]:
     """
     Main function for processing rrweb session data.
     This function orchestrates the downloading, parsing, grouping, sorting,
-    and validating of session files from a GCS bucket.
+    validating, and merging of session files from a GCS bucket.
 
     Args:
         bucket_name: Name of the GCS bucket containing rrweb session JSON files
 
     Returns:
-        List[Dict[str, Any]]: List of validated session data dictionaries
+        Dict[str, Dict[str, Any]]: Dictionary mapping session_guid to final session objects
     """
     # Download all JSON files
     files = _download_json_files(bucket_name)
@@ -367,7 +418,11 @@ def process_rrweb_sessions(bucket_name: str) -> List[Dict[str, Any]]:
     validated_sessions = _validate_and_extract_environment(sorted_sessions)
     logger.info("Number of validated sessions: %d", len(validated_sessions))
 
-    return validated_sessions
+    # Merge session data arrays
+    final_sessions = _merge_session_data(validated_sessions)
+    logger.info("Number of final sessions: %d", len(final_sessions))
+
+    return final_sessions
 
 
 if __name__ == "__main__":
