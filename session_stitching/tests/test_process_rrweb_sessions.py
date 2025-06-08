@@ -15,8 +15,9 @@ from process_rrweb_sessions import (
     _initialize_gcs_client,
     _list_json_files,
     _download_file_content,
-    download_json_files,
+    _download_json_files,
     _parse_and_validate_session_file,
+    _group_by_session_guid,
 )
 
 
@@ -87,6 +88,17 @@ def fixture_mock_sample_blobs(mock_bucket, sample_json_files, sample_file_conten
     mock_bucket.list_blobs.return_value = blobs
     mock_bucket.blob.side_effect = blobs
     return blobs
+
+
+@pytest.fixture(name="sample_validated_records")
+def fixture_sample_validated_records(sample_json_files, sample_file_contents):
+    """Sample validated records for testing."""
+    records = []
+    for filename, content in zip(sample_json_files, sample_file_contents):
+        record = json.loads(content)
+        record["filename"] = filename
+        records.append(record)
+    return records
 
 
 class TestInitializeGcsClient:
@@ -237,13 +249,13 @@ class TestDownloadFileContent:
 
 
 class TestDownloadJsonFiles:
-    """Tests for download_json_files function (integration tests)."""
+    """Tests for _download_json_files function (integration tests)."""
 
     def test_download_json_files_success(
         self, mock_client_class, mock_bucket, mock_sample_blobs, sample_file_contents
     ):
         """Test successful download of all JSON files."""
-        result = download_json_files("test-bucket")
+        result = _download_json_files("test-bucket")
 
         expected = list(
             zip([blob.name for blob in mock_sample_blobs], sample_file_contents)
@@ -259,7 +271,7 @@ class TestDownloadJsonFiles:
         """Test download from empty bucket."""
         mock_bucket.list_blobs.return_value = []
 
-        result = download_json_files("empty-bucket")
+        result = _download_json_files("empty-bucket")
 
         assert result == []
         mock_bucket.list_blobs.assert_called_once()
@@ -271,21 +283,21 @@ class TestDownloadJsonFiles:
         mock_blob.download_as_text.side_effect = NotFound("File not found")
 
         with pytest.raises(NotFound, match="File not found"):
-            download_json_files("test-bucket")
+            _download_json_files("test-bucket")
 
     def test_download_json_files_client_init_failure(self, mock_client_class):
         """Test download when client initialization fails."""
         mock_client_class.side_effect = Exception("Authentication failed")
 
         with pytest.raises(Exception, match="Authentication failed"):
-            download_json_files("test-bucket")
+            _download_json_files("test-bucket")
 
     def test_download_json_files_list_failure(self, mock_bucket):
         """Test download when listing files fails."""
         mock_bucket.list_blobs.side_effect = Forbidden("Access denied")
 
         with pytest.raises(Forbidden, match="Access denied"):
-            download_json_files("test-bucket")
+            _download_json_files("test-bucket")
 
 
 class TestParseAndValidateSessionFile:
@@ -481,3 +493,93 @@ class TestParseAndValidateSessionFile:
         assert (
             len(result) == 4
         )  # Only filename, session_guid, session_data, environment
+
+
+class TestGroupBySessionGuid:
+    """Tests for group_by_session_guid function."""
+
+    def test_group_single_session(self, sample_validated_records):
+        """Test grouping records from a single session."""
+        records = [
+            record
+            for record in sample_validated_records
+            if record["session_guid"] == "abc-123"
+        ]
+
+        result = _group_by_session_guid(records)
+
+        assert len(result) == 1
+        assert "abc-123" in result
+        assert len(result["abc-123"]) == 2
+
+        # Check that grouping maintains order and filenames.
+        assert result["abc-123"][0]["filename"] == "2025-05-02T12:10:50.644423+0000"
+        assert result["abc-123"][1]["filename"] == "2025-05-02T12:11:30.991832+0000"
+
+    def test_group_multiple_sessions(self, sample_validated_records):
+        """Test grouping records from multiple sessions."""
+        result = _group_by_session_guid(sample_validated_records)
+
+        assert len(result) == 2
+        assert "abc-123" in result
+        assert "def-456" in result
+        assert len(result["abc-123"]) == 2
+        assert len(result["def-456"]) == 1
+
+    def test_group_empty_list(self):
+        """Test grouping empty list of records."""
+        records = []
+
+        result = _group_by_session_guid(records)
+
+        assert len(result) == 0
+        assert result == {}
+
+    def test_group_preserves_record_structure(self, sample_validated_records):
+        """Test that grouping preserves the complete record structure."""
+        records = [sample_validated_records[0]]
+
+        result = _group_by_session_guid(records)
+
+        grouped_record = result["abc-123"][0]
+        assert grouped_record["filename"] == "2025-05-02T12:10:50.644423+0000"
+        assert grouped_record["session_guid"] == "abc-123"
+        assert grouped_record["session_data"] == [{"type": 1}]
+        assert grouped_record["environment"] == "production"
+
+    def test_group_with_unicode_session_guids(self, sample_validated_records):
+        """Test grouping with unicode session_guid values."""
+        sample_validated_records[0]["session_guid"] = "测试-123"
+        sample_validated_records[1]["session_guid"] = "测试-123"
+
+        result = _group_by_session_guid(sample_validated_records)
+
+        assert len(result) == 2
+        assert "测试-123" in result
+        assert len(result["测试-123"]) == 2
+
+    def test_group_large_number_of_sessions(self):
+        """Test grouping with a large number of different sessions."""
+        records = []
+        num_sessions = 100
+        files_per_session = 3
+
+        for i in range(num_sessions):
+            session_guid = f"session-{i:03d}"
+            for j in range(files_per_session):
+                records.append(
+                    {
+                        "filename": f"file_{i}_{j}.json",
+                        "session_guid": session_guid,
+                        "session_data": [{"type": j}],
+                        "environment": "production",
+                    }
+                )
+
+        result = _group_by_session_guid(records)
+
+        assert len(result) == num_sessions
+        for i in range(num_sessions):
+            session_guid = f"session-{i:03d}"
+            assert session_guid in result
+            assert len(result[session_guid]) == files_per_session

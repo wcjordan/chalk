@@ -171,7 +171,41 @@ def _parse_and_validate_session_file_content(
     }
 
 
-def download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
+def _group_by_session_guid(
+    records: List[Dict[str, Any]],
+) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    Group validated session records by session_guid.
+
+    Args:
+        records: List of validated session record dictionaries
+
+    Returns:
+        Dict[str, List[Dict[str, Any]]]: Dictionary where keys are session_guid strings
+                                         and values are lists of records for that session
+    """
+    grouped_sessions = {}
+
+    for record in records:
+        session_guid = record["session_guid"]
+
+        if session_guid not in grouped_sessions:
+            grouped_sessions[session_guid] = []
+
+        grouped_sessions[session_guid].append(record)
+
+    logger.info(
+        "Grouped %d records into %d sessions", len(records), len(grouped_sessions)
+    )
+
+    # Log number of files per session
+    for session_guid, session_records in grouped_sessions.items():
+        logger.info("Session '%s': %d files", session_guid, len(session_records))
+
+    return grouped_sessions
+
+
+def _download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
     """
     Download all JSON files from the specified GCS bucket.
 
@@ -200,12 +234,13 @@ def main():
     bucket_name = "example-bucket"
 
     # Download all JSON files
-    files = download_json_files(bucket_name)
+    files = _download_json_files(bucket_name)
 
     # Verification: print number of JSON files found
     print(f"Number of JSON files found: {len(files)}")
 
     # Verification: print first 100 characters of first file content
+    parsed_files = []
     if files:
         first_filename, first_content = files[0]
         print(f"First file: {first_filename}")
@@ -217,10 +252,14 @@ def main():
             print(
                 f"Successfully parsed file with session_guid: {parsed_result['session_guid']}"
             )
+            parsed_files.append(parsed_result)
         else:
             print("Failed to parse first file")
     else:
         print("No files found")
+
+    grouped_sessions = _group_by_session_guid(parsed_files)
+    print(f"Number of grouped sessions: {len(grouped_sessions)}")
 
 
 if __name__ == "__main__":
