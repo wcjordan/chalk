@@ -171,7 +171,9 @@ def _parse_and_validate_session_file_content(
     }
 
 
-def group_by_session_guid(records: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+def _group_by_session_guid(
+    records: List[Dict[str, Any]],
+) -> Dict[str, List[Dict[str, Any]]]:
     """
     Group validated session records by session_guid.
 
@@ -183,25 +185,27 @@ def group_by_session_guid(records: List[Dict[str, Any]]) -> Dict[str, List[Dict[
                                          and values are lists of records for that session
     """
     grouped_sessions = {}
-    
+
     for record in records:
         session_guid = record["session_guid"]
-        
+
         if session_guid not in grouped_sessions:
             grouped_sessions[session_guid] = []
-        
+
         grouped_sessions[session_guid].append(record)
-    
-    logger.info("Grouped %d records into %d sessions", len(records), len(grouped_sessions))
-    
+
+    logger.info(
+        "Grouped %d records into %d sessions", len(records), len(grouped_sessions)
+    )
+
     # Log number of files per session
     for session_guid, session_records in grouped_sessions.items():
         logger.info("Session '%s': %d files", session_guid, len(session_records))
-    
+
     return grouped_sessions
 
 
-def download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
+def _download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
     """
     Download all JSON files from the specified GCS bucket.
 
@@ -223,76 +227,6 @@ def download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
     return file_contents
 
 
-def _test_group_by_session_guid():
-    """
-    Test function for group_by_session_guid with sample data.
-    """
-    # Create test records with 2 different session_guid values
-    test_records = [
-        {
-            "filename": "2025-05-02T12:10:50.644423+0000_2374",
-            "session_guid": "abc-123",
-            "session_data": [{"type": 1, "data": "event1"}],
-            "environment": "production"
-        },
-        {
-            "filename": "2025-05-02T12:11:30.991832+0000_2375",
-            "session_guid": "abc-123",
-            "session_data": [{"type": 2, "data": "event2"}],
-            "environment": "production"
-        },
-        {
-            "filename": "2025-05-02T12:12:15.123456+0000_2376",
-            "session_guid": "def-456",
-            "session_data": [{"type": 3, "data": "event3"}],
-            "environment": "staging"
-        },
-        {
-            "filename": "2025-05-02T12:13:45.789012+0000_2377",
-            "session_guid": "abc-123",
-            "session_data": [{"type": 4, "data": "event4"}],
-            "environment": "production"
-        },
-        {
-            "filename": "2025-05-02T12:14:20.456789+0000_2378",
-            "session_guid": "def-456",
-            "session_data": [{"type": 5, "data": "event5"}],
-            "environment": "staging"
-        }
-    ]
-    
-    # Group the records
-    grouped = group_by_session_guid(test_records)
-    
-    # Verification: print number of sessions and files in each group
-    print(f"Number of sessions: {len(grouped)}")
-    
-    for session_guid, records in grouped.items():
-        print(f"Session '{session_guid}': {len(records)} files")
-        for record in records:
-            print(f"  - {record['filename']}")
-    
-    # Verify all records are present and grouped correctly
-    total_records = sum(len(records) for records in grouped.values())
-    assert total_records == len(test_records), f"Expected {len(test_records)} records, got {total_records}"
-    
-    # Verify specific groupings
-    assert len(grouped["abc-123"]) == 3, f"Expected 3 records for abc-123, got {len(grouped['abc-123'])}"
-    assert len(grouped["def-456"]) == 2, f"Expected 2 records for def-456, got {len(grouped['def-456'])}"
-    
-    # Verify record structure is preserved
-    for session_guid, records in grouped.items():
-        for record in records:
-            assert "filename" in record
-            assert "session_guid" in record
-            assert "session_data" in record
-            assert "environment" in record
-            assert record["session_guid"] == session_guid
-    
-    print("✓ All grouping tests passed!")
-    return grouped
-
-
 def main():
     """
     Main function demonstrating usage with example-bucket.
@@ -300,7 +234,7 @@ def main():
     bucket_name = "example-bucket"
 
     # Download all JSON files
-    files = download_json_files(bucket_name)
+    files = _download_json_files(bucket_name)
 
     # Verification: print number of JSON files found
     print(f"Number of JSON files found: {len(files)}")
@@ -319,13 +253,11 @@ def main():
             )
         else:
             print("Failed to parse first file")
+
+        grouped_sessions = _group_by_session_guid(files)
+        print(f"Number of grouped sessions: {len(grouped_sessions)}")
     else:
         print("No files found")
-    
-    print("\n" + "="*50)
-    print("Testing group_by_session_guid function:")
-    print("="*50)
-    _test_group_by_session_guid()
 
 
 if __name__ == "__main__":
