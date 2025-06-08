@@ -205,8 +205,8 @@ def _group_by_session_guid(
     return grouped_sessions
 
 
-def sort_and_collect_timestamps(
-    grouped_sessions: Dict[str, List[Dict[str, Any]]]
+def _sort_and_collect_timestamps(
+    grouped_sessions: Dict[str, List[Dict[str, Any]]],
 ) -> Dict[str, Dict[str, Any]]:
     """
     Sort session entries by filename and collect timestamps.
