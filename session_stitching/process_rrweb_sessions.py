@@ -94,7 +94,7 @@ def _parse_and_validate_session_file(
     try:
         # Attempt to parse JSON content
         data = json.loads(content)
-    except json.JSONDecodeError as e:
+    except (json.JSONDecodeError, TypeError) as e:
         logger.warning("Failed to parse JSON in file '%s': %s", filename, str(e))
         return None
 
@@ -323,54 +323,46 @@ def _download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
     return file_contents
 
 
-def main():
+def process_rrweb_sessions(bucket_name: str) -> None:
     """
-    Main function demonstrating usage with example-bucket.
+    Main function for processing rrweb session data.
     """
-    bucket_name = "example-bucket"
-
     # Download all JSON files
     files = _download_json_files(bucket_name)
-
-    # Verification: print number of JSON files found
-    print(f"Number of JSON files found: {len(files)}")
+    logger.info("Number of JSON files found: %d", len(files))
 
     # Verification: print first 100 characters of first file content
     parsed_files = []
     if files:
         first_filename, first_content = files[0]
-        print(f"First file: {first_filename}")
-        print(f"First 100 characters: {first_content[:100]}")
-
-        # Demonstrate parsing and validation
-        parsed_result = _parse_and_validate_session_file(first_filename, first_content)
-        if parsed_result:
-            print(
-                f"Successfully parsed file with session_guid: {parsed_result['session_guid']}"
-            )
-            parsed_files.append(parsed_result)
-        else:
-            print("Failed to parse first file")
+        logger.info("First file: %s", first_filename)
+        logger.info("First 100 characters: %s", first_content[:100])
     else:
-        print("No files found")
+        logger.warning("No files found")
 
+    # Parse and validate each session file
+    parsed_files = [
+        _parse_and_validate_session_file(filename, content)
+        for filename, content in files
+    ]
+    parsed_files = [entry for entry in parsed_files if entry is not None]
+
+    # Group by session_guid
     grouped_sessions = _group_by_session_guid(parsed_files)
-    print(f"Number of grouped sessions: {len(grouped_sessions)}")
+    logger.info("Number of grouped sessions: %d", len(grouped_sessions))
 
-    # Demonstrate sorting and timestamp collection
+    # Sort by timestamp
     sorted_sessions = _sort_and_collect_timestamps(grouped_sessions)
-    print(f"Number of sorted sessions: {len(sorted_sessions)}")
+    logger.info("Number of sorted sessions: %d", len(sorted_sessions))
 
-    # Demonstrate environment validation
+    # Validate each session has the same environment
     validated_sessions = _validate_and_extract_environment(sorted_sessions)
-    print(f"Number of validated sessions: {len(validated_sessions)}")
+    logger.info("Number of validated sessions: %d", len(validated_sessions))
 
-    # Show environment values for each session
-    for session_guid, session_data in validated_sessions.items():
-        print(
-            f"Session '{session_guid}': environment = '{session_data['environment']}'"
-        )
+    return validated_sessions
 
 
 if __name__ == "__main__":
-    main()
+    EXAMPLE_BUCKET = "example-bucket-name"
+    session_output = process_rrweb_sessions(EXAMPLE_BUCKET)
+    logger.info("Output: %s", session_output)
