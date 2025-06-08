@@ -244,7 +244,7 @@ def _sort_and_collect_timestamps(
 
 
 def _validate_and_extract_environment(
-    sessions: Dict[str, Dict[str, Any]]
+    sessions: Dict[str, Dict[str, Any]],
 ) -> Dict[str, Dict[str, Any]]:
     """
     Validate and deduplicate environment values per session.
@@ -364,10 +364,12 @@ def main():
     # Demonstrate environment validation
     validated_sessions = _validate_and_extract_environment(sorted_sessions)
     print(f"Number of validated sessions: {len(validated_sessions)}")
-    
+
     # Show environment values for each session
     for session_guid, session_data in validated_sessions.items():
-        print(f"Session '{session_guid}': environment = '{session_data['environment']}'")
+        print(
+            f"Session '{session_guid}': environment = '{session_data['environment']}'"
+        )
 
 
 if __name__ == "__main__":
