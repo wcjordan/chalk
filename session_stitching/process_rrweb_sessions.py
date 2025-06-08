@@ -243,6 +243,64 @@ def _sort_and_collect_timestamps(
     return sorted_sessions
 
 
+def _validate_and_extract_environment(
+    sessions: Dict[str, Dict[str, Any]]
+) -> Dict[str, Dict[str, Any]]:
+    """
+    Validate and deduplicate environment values per session.
+
+    Args:
+        sessions: Dictionary mapping session_guid to session data containing
+                 sorted_entries and timestamp_list
+
+    Returns:
+        Dict[str, Dict[str, Any]]: Dictionary with session_guid as keys and values containing:
+                                   - sorted_entries: preserved from input
+                                   - timestamp_list: preserved from input
+                                   - environment: deduplicated and validated environment value
+    """
+    validated_sessions = {}
+
+    for session_guid, session_data in sessions.items():
+        sorted_entries = session_data["sorted_entries"]
+        timestamp_list = session_data["timestamp_list"]
+
+        # Extract all environment values from entries
+        environment_values = [entry["environment"] for entry in sorted_entries]
+
+        # Get unique environment values
+        unique_environments = list(set(environment_values))
+
+        # Use the first environment value as canonical
+        canonical_environment = environment_values[0] if environment_values else ""
+
+        # Log warning if multiple distinct environment values found
+        if len(unique_environments) > 1:
+            logger.warning(
+                "Session '%s' has conflicting environment values: %s. Using first value: '%s'",
+                session_guid,
+                unique_environments,
+                canonical_environment,
+            )
+
+        validated_sessions[session_guid] = {
+            "sorted_entries": sorted_entries,
+            "timestamp_list": timestamp_list,
+            "environment": canonical_environment,
+        }
+
+        logger.debug(
+            "Session '%s': validated environment as '%s'",
+            session_guid,
+            canonical_environment,
+        )
+
+    logger.info(
+        "Validated and extracted environment for %d sessions", len(validated_sessions)
+    )
+    return validated_sessions
+
+
 def _download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
     """
     Download all JSON files from the specified GCS bucket.
@@ -298,6 +356,18 @@ def main():
 
     grouped_sessions = _group_by_session_guid(parsed_files)
     print(f"Number of grouped sessions: {len(grouped_sessions)}")
+
+    # Demonstrate sorting and timestamp collection
+    sorted_sessions = _sort_and_collect_timestamps(grouped_sessions)
+    print(f"Number of sorted sessions: {len(sorted_sessions)}")
+
+    # Demonstrate environment validation
+    validated_sessions = _validate_and_extract_environment(sorted_sessions)
+    print(f"Number of validated sessions: {len(validated_sessions)}")
+    
+    # Show environment values for each session
+    for session_guid, session_data in validated_sessions.items():
+        print(f"Session '{session_guid}': environment = '{session_data['environment']}'")
 
 
 if __name__ == "__main__":
