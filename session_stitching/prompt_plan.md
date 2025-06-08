@@ -160,6 +160,47 @@ Sorts each session’s grouped files by timestamp (from the filename) and prepar
 * Check that `timestamp_list` matches expected values.
 * Add tests using mock filenames to confirm sort stability.
 
+**Detailed Prompt**
+
+You are working on a script that processes grouped session data. At this point, you have a dictionary mapping `session_guid` to a list of validated file records.
+
+### 🛠️ Task
+
+Implement a function to process each session group as follows:
+
+1. Sort the list of entries for each session by their `filename`, assuming filenames are timestamp-based and sortable lexicographically.
+2. For each session, extract a `timestamp_list` from the sorted filenames.
+3. Return a new dictionary in this format:
+
+```python
+{
+  "abc-123": {
+    "sorted_entries": [ ... ],  # original record dicts, sorted by filename
+    "timestamp_list": ["2025-05-02T12:10:50.644423+0000", ...]
+  },
+  ...
+}
+```
+
+Use this function signature:
+
+```python
+def sort_and_collect_timestamps(grouped_sessions: Dict[str, List[Dict[str, Any]]]) -> Dict[str, Dict[str, Any]]:
+```
+
+### 🧪 Verification
+
+Write a test that:
+
+* Uses mock session groups with out-of-order filenames.
+* Verifies that:
+
+  * Entries are sorted correctly.
+  * The `timestamp_list` values are correct and in the expected order.
+* Handles at least one session with a single entry as an edge case.
+
+Do not merge `session_data` or validate environment values yet — this step only sorts and collects timestamps.
+
 ---
 
 ### **Step 5: Validate and Deduplicate `environment` per Session**
