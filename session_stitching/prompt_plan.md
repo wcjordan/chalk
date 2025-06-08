@@ -106,8 +106,6 @@ Builds a data structure that groups successfully validated files in memory by `s
 * Confirm all valid entries are grouped as expected.
 * Add unit tests for grouping logic with mocked file data.
 
-Absolutely! Here's a clear and testable prompt you could give to a coding agent for **Step 3: Group Valid Files by `session_guid`**.
-
 **Detailed Prompt**
 
 You are continuing to build a script that processes session data files. At this point, you have a list of validated session records.
