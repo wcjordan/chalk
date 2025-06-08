@@ -19,6 +19,7 @@ from process_rrweb_sessions import (
     _parse_and_validate_session_file,
     _group_by_session_guid,
     _sort_and_collect_timestamps,
+    _validate_and_extract_environment,
 )
 
 
@@ -106,6 +107,12 @@ def fixture_sample_validated_records(sample_json_files, sample_file_contents):
 def fixture_sample_grouped_sessions(sample_validated_records):
     """Sample grouped sessions for testing."""
     return _group_by_session_guid(sample_validated_records)
+
+
+@pytest.fixture(name="sample_sorted_sessions")
+def fixture_sample_sorted_sessions(sample_grouped_sessions):
+    """Sample sorted sessions for testing."""
+    return _sort_and_collect_timestamps(sample_grouped_sessions)
 
 
 class TestInitializeGcsClient:
@@ -675,3 +682,108 @@ class TestSortAndCollectTimestamps:
             assert timestamp_list[i] == expected_timestamp
             assert sorted_entries[i]["filename"] == expected_timestamp
             assert sorted_entries[i]["session_data"] == [{"type": i}]
+
+
+class TestValidateAndExtractEnvironment:
+    """Tests for _validate_and_extract_environment function."""
+
+    def test_validate_consistent_environment(self, sample_sorted_sessions):
+        """Test validation with consistent environment values."""
+        result = _validate_and_extract_environment(sample_sorted_sessions)
+
+        assert len(result) == 2
+        assert "abc-123" in result
+        assert "def-456" in result
+
+        # Check abc-123 session
+        abc_session = result["abc-123"]
+        assert "sorted_entries" in abc_session
+        assert "timestamp_list" in abc_session
+        assert "environment" in abc_session
+        assert abc_session["environment"] == "production"
+
+        # Check def-456 session
+        def_session = result["def-456"]
+        assert def_session["environment"] == "staging"
+
+        # Verify sorted_entries and timestamp_list are preserved
+        assert (
+            abc_session["sorted_entries"]
+            == sample_sorted_sessions["abc-123"]["sorted_entries"]
+        )
+        assert (
+            abc_session["timestamp_list"]
+            == sample_sorted_sessions["abc-123"]["timestamp_list"]
+        )
+
+    def test_validate_conflicting_environments(self, caplog, sample_sorted_sessions):
+        """Test validation with conflicting environment values logs warning."""
+        # Create session with conflicting environments
+        sample_sorted_sessions["abc-123"]["sorted_entries"][0][
+            "environment"
+        ] = "development"
+
+        result = _validate_and_extract_environment(sample_sorted_sessions)
+
+        # Should use first environment value
+        assert result["abc-123"]["environment"] == "development"
+
+        # Should log warning about conflicting values
+        assert "Session 'abc-123' has conflicting environment values" in caplog.text
+        assert "Using first value: 'development'" in caplog.text
+
+        # Verify sorted_entries and timestamp_list are preserved
+        assert (
+            result["abc-123"]["sorted_entries"]
+            == sample_sorted_sessions["abc-123"]["sorted_entries"]
+        )
+        assert (
+            result["abc-123"]["timestamp_list"]
+            == sample_sorted_sessions["abc-123"]["timestamp_list"]
+        )
+
+        # Other sessions should not be impacted
+        assert result["def-456"]["environment"] == "staging"
+
+    def test_validate_empty_sessions_dict(self):
+        """Test validation with empty sessions dictionary."""
+        sessions = {}
+
+        result = _validate_and_extract_environment(sessions)
+
+        assert len(result) == 0
+        assert result == {}
+
+    def test_validate_large_number_of_conflicting_environments(self, caplog):
+        """Test validation with many different environment values in one session."""
+        num_entries = 10
+        entries = []
+        timestamps = []
+
+        for i in range(num_entries):
+            timestamp = f"2025-05-02T12:{i:02d}:00.000000+0000"
+            entries.append(
+                {
+                    "filename": timestamp,
+                    "session_guid": "many-envs",
+                    "session_data": [{"type": i}],
+                    "environment": f"env-{i}",
+                }
+            )
+            timestamps.append(timestamp)
+
+        sessions = {
+            "many-envs": {
+                "sorted_entries": entries,
+                "timestamp_list": timestamps,
+            }
+        }
+
+        result = _validate_and_extract_environment(sessions)
+
+        # Should use first environment value
+        assert result["many-envs"]["environment"] == "env-0"
+
+        # Should log warning about all conflicting values
+        assert "Session 'many-envs' has conflicting environment values" in caplog.text
+        assert "Using first value: 'env-0'" in caplog.text

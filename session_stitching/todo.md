@@ -54,14 +54,14 @@
 ## Step 5: Validate and Deduplicate `environment` per Session
 
 ### Tasks:
-- [ ] Check that all entries in a session have same `environment` value
-- [ ] Log warning when environment values differ within a session
-- [ ] Use first encountered `environment` value when conflicts exist
-- [ ] Store single `environment` value in session metadata
-- [ ] Create test data with consistent environments
-- [ ] Create test data with inconsistent environments
-- [ ] Verify warning is logged for inconsistent values
-- [ ] Confirm only one `environment` value is retained
+- [x] Check that all entries in a session have same `environment` value
+- [x] Log warning when environment values differ within a session
+- [x] Use first encountered `environment` value when conflicts exist
+- [x] Store single `environment` value in session metadata
+- [x] Create test data with consistent environments
+- [x] Create test data with inconsistent environments
+- [x] Verify warning is logged for inconsistent values
+- [x] Confirm only one `environment` value is retained
 
 ## Step 6: Merge `session_data` Arrays
 
