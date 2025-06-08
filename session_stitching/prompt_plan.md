@@ -110,7 +110,7 @@ Builds a data structure that groups successfully validated files in memory by `s
 
 You are continuing to build a script that processes session data files. At this point, you have a list of validated session records.
 
-### 🛠️ Task
+#### 🛠️ Task
 
 Implement a function that takes a list of validated session records and groups them by `session_guid`.
 
@@ -137,7 +137,7 @@ def group_by_session_guid(records: List[Dict[str, Any]]) -> Dict[str, List[Dict[
   * Values are **lists of records** (each with the full original structure) for that session.
 * Maintain insertion order (or sort later based on filename in a future step).
 
-### 🧪 Verification
+#### 🧪 Verification
 
 Add test code that:
 
@@ -164,7 +164,7 @@ Sorts each session’s grouped files by timestamp (from the filename) and prepar
 
 You are working on a script that processes grouped session data. At this point, you have a dictionary mapping `session_guid` to a list of validated file records.
 
-### 🛠️ Task
+#### 🛠️ Task
 
 Implement a function to process each session group as follows:
 
@@ -188,7 +188,7 @@ Use this function signature:
 def sort_and_collect_timestamps(grouped_sessions: Dict[str, List[Dict[str, Any]]]) -> Dict[str, Dict[str, Any]]:
 ```
 
-### 🧪 Verification
+#### 🧪 Verification
 
 Write a test that:
 
@@ -215,6 +215,56 @@ Checks that all entries in a session have the same `environment` value, warns if
 * Confirm only one `environment` value is retained in metadata.
 
 ---
+
+**Detailed Prompt**
+
+You’re continuing to build a script that processes grouped session data. At this stage, you’ve already sorted each session’s entries and collected their `timestamp_list`.
+
+#### 🛠️ Task
+
+Implement a function that:
+
+1. Takes the output from the previous step — a dictionary mapping `session_guid` to:
+
+   * A list of `sorted_entries` (each entry includes `environment`)
+   * A `timestamp_list`
+
+2. Verifies that all `environment` values in a session are the same.
+
+   * If multiple distinct `environment` values are found:
+
+     * Log a warning including the `session_guid` and the conflicting values.
+     * Use the **first** environment value as the canonical one.
+
+3. Returns a new dictionary in this format:
+
+```python
+{
+  "abc-123": {
+    "sorted_entries": [ ... ],       # from earlier step
+    "timestamp_list": [...],         # from earlier step
+    "environment": "production"      # deduplicated and validated
+  },
+  ...
+}
+```
+
+Use this function signature:
+
+```python
+def validate_and_extract_environment(sessions: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+```
+
+#### 🧪 Verification
+
+Create test cases that:
+
+* Use session entries with consistent `environment` values.
+* Use session entries with multiple conflicting `environment` values.
+* Confirm the first environment is used and that a warning is logged for mismatches.
+* Ensure `timestamp_list` and `sorted_entries` are preserved unmodified.
+
+Do **not** merge `session_data` or write output files yet — this step focuses only on `environment` validation.
 
 ### **Step 6: Merge `session_data` Arrays**
 
