@@ -323,9 +323,17 @@ def _download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
     return file_contents
 
 
-def process_rrweb_sessions(bucket_name: str) -> None:
+def process_rrweb_sessions(bucket_name: str) -> List[Dict[str, Any]]:
     """
     Main function for processing rrweb session data.
+    This function orchestrates the downloading, parsing, grouping, sorting,
+    and validating of session files from a GCS bucket.
+
+    Args:
+        bucket_name: Name of the GCS bucket containing rrweb session JSON files
+
+    Returns:
+        List[Dict[str, Any]]: List of validated session data dictionaries
     """
     # Download all JSON files
     files = _download_json_files(bucket_name)
