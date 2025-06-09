@@ -504,7 +504,7 @@ Use this CLI structure as a starting point:
 ```bash
 python process_rrweb_sessions.py \
   --bucket my-rrweb-bucket \
-  --output_dir ./stitched_sessions \
+  --output_dir ./output_sessions \
   --log_level DEBUG
 ```
 

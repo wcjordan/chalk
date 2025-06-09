@@ -442,7 +442,7 @@ def _write_sessions_to_disk(
 
 
 def process_rrweb_sessions(
-    bucket_name: str, output_dir: str = "./stitched_sessions"
+    bucket_name: str, output_dir: str = "./output_sessions"
 ) -> None:
     """
     Main function for processing rrweb session data.
@@ -536,8 +536,8 @@ Examples:
     # Optional arguments
     parser.add_argument(
         "--output_dir",
-        default="./stitched_sessions",
-        help="Local directory where session files will be saved (default: ./stitched_sessions)",
+        default="./output_sessions",
+        help="Local directory where session files will be saved (default: ./output_sessions)",
     )
 
     parser.add_argument(
@@ -583,7 +583,6 @@ def main() -> None:
         _setup_logging(args.log_level)
 
         # Log the configuration being used
-        logger = logging.getLogger(__name__)
         logger.info("Starting rrweb session processing")
         logger.info("Bucket: %s", args.bucket)
         logger.info("Output directory: %s", args.output_dir)
@@ -597,7 +596,7 @@ def main() -> None:
     except KeyboardInterrupt:
         print("\nOperation cancelled by user", file=sys.stderr)
         sys.exit(1)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
