@@ -475,8 +475,6 @@ Adds user-facing command-line arguments to set GCS bucket name, output directory
 * Add a help message and test with `--help`.
 
 **Detailed Prompt**
-Certainly! Here's a clean and comprehensive prompt for **Step 9: Add CLI Interface (bucket name, output dir, verbosity)**.
-
 You’ve implemented a multi-stage Python script to process rrweb session files from a GCS bucket. Now you’ll expose it via a command-line interface.
 
 ### 🛠️ Task
