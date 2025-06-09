@@ -5,6 +5,8 @@ Tests focused on behavior and public interfaces following unit test policy.
 """
 
 import json
+import os
+import tempfile
 from unittest.mock import Mock, patch
 
 import pytest
@@ -19,6 +21,7 @@ from process_rrweb_sessions import (
     _sort_and_collect_timestamps,
     _validate_and_extract_environment,
     _merge_session_data,
+    _write_sessions_to_disk,
     process_rrweb_sessions,
 )
 
@@ -151,70 +154,93 @@ def fixture_mock_bucket(custom_mock_bucket, sample_bucket_data):
     return custom_mock_bucket(sample_bucket_data)
 
 
+@pytest.fixture(name="temp_output_dir")
+def fixture_temp_output_dir():
+    """Temporary output directory for testing."""
+    with tempfile.TemporaryDirectory() as temp_dir:
+        yield temp_dir
+
+
 class TestSessionProcessingPipeline:
     """Test the complete session processing workflow."""
 
-    def test_process_rrweb_sessions_happy_path(self, mock_bucket):
+    def test_process_rrweb_sessions_happy_path(self, temp_output_dir):
         """Test complete pipeline with valid multi-session data."""
-        final_sessions = process_rrweb_sessions("mock_bucket_name")
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
-        # Verify final structure
-        assert len(final_sessions) == 2
-        assert SESSION_1_KEY in final_sessions
-        assert SESSION_2_KEY in final_sessions
+        # Verify files were created with correct names
+        sessions = [SESSION_1_KEY, SESSION_2_KEY]
+        expected_filenames = [f"{session}.json" for session in sessions]
+        actual_files = os.listdir(temp_output_dir)
+        assert sorted(actual_files) == expected_filenames
 
-        # Check SESSION_1 properties
-        session_1 = final_sessions[SESSION_1_KEY]
-        assert session_1["session_guid"] == SESSION_1_KEY
-        assert "rrweb_data" in session_1
-        assert "metadata" in session_1
-        assert session_1["metadata"]["environment"] == "production"
-        assert len(session_1["metadata"]["timestamp_list"]) == 2
+        # Verify file contents
+        for filename in expected_filenames:
+            filepath = os.path.join(temp_output_dir, filename)
+            assert os.path.exists(filepath)
 
-        # Check SESSION_2 properties
-        session_2 = final_sessions[SESSION_2_KEY]
-        assert session_2["session_guid"] == SESSION_2_KEY
-        assert "rrweb_data" in session_2
-        assert "metadata" in session_2
-        assert session_2["metadata"]["environment"] == "staging"
-        assert len(session_2["metadata"]["timestamp_list"]) == 1
+            with open(filepath, "r", encoding="utf-8") as f:
+                loaded_data = json.load(f)
 
-    def test_process_rrweb_sessions_orders_cronologically(self, sample_rrweb_data):
+                assert "rrweb_data" in loaded_data
+                assert "metadata" in loaded_data
+
+                if filename == f"{SESSION_1_KEY}.json":
+                    # Check SESSION_1 properties
+                    assert loaded_data["session_guid"] == SESSION_1_KEY
+                    assert loaded_data["metadata"]["environment"] == "production"
+                    assert len(loaded_data["metadata"]["timestamp_list"]) == 2
+                elif filename == f"{SESSION_2_KEY}.json":
+                    # Check SESSION_2 properties
+                    assert loaded_data["session_guid"] == SESSION_2_KEY
+                    assert loaded_data["metadata"]["environment"] == "staging"
+                    assert len(loaded_data["metadata"]["timestamp_list"]) == 1
+
+    def test_process_rrweb_sessions_orders_cronologically(
+        self, temp_output_dir, sample_rrweb_data
+    ):
         """Test that session data is correctly merged and ordered."""
-        final_sessions = process_rrweb_sessions("mock_bucket_name")
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
-        # Verify timestamp ordering (chronological)
-        session_1 = final_sessions[SESSION_1_KEY]
-        timestamps = session_1["metadata"]["timestamp_list"]
-        assert timestamps == sorted(timestamps)
-        assert timestamps[0] == "2025-05-02T12:10:50.644423+0000"
-        assert timestamps[1] == "2025-05-02T12:11:30.991832+0000"
+        filepath = os.path.join(temp_output_dir, f"{SESSION_1_KEY}.json")
+        with open(filepath, "r", encoding="utf-8") as f:
+            loaded_data = json.load(f)
 
-        # Check merged rrweb_data ordering
-        rrweb_data = session_1["rrweb_data"]
+            # Verify timestamp ordering (chronological)
+            timestamps = loaded_data["metadata"]["timestamp_list"]
+            assert timestamps == sorted(timestamps)
+            assert timestamps[0] == "2025-05-02T12:10:50.644423+0000"
+            assert timestamps[1] == "2025-05-02T12:11:30.991832+0000"
 
-        # Should contain events from both files in chronological order
-        # First file (earlier timestamp) events should come first
-        expected_first_events = sample_rrweb_data["session_1_file_2"]
-        expected_second_events = sample_rrweb_data["session_1_file_1"]
+            # Check merged rrweb_data ordering
+            rrweb_data = loaded_data["rrweb_data"]
 
-        # Verify the merged data contains all events in correct order
-        file_split = len(expected_first_events)
-        assert rrweb_data[:file_split] == expected_first_events
-        assert rrweb_data[file_split:] == expected_second_events
-        assert len(rrweb_data) == len(expected_first_events) + len(
-            expected_second_events
-        )
+            # Should contain events from both files in chronological order
+            # First file (earlier timestamp) events should come first
+            expected_first_events = sample_rrweb_data["session_1_file_2"]
+            expected_second_events = sample_rrweb_data["session_1_file_1"]
 
-    def test_handles_malformed_files_gracefully(self, caplog):
+            # Verify the merged data contains all events in correct order
+            file_split = len(expected_first_events)
+            assert rrweb_data[:file_split] == expected_first_events
+            assert rrweb_data[file_split:] == expected_second_events
+            assert len(rrweb_data) == len(expected_first_events) + len(
+                expected_second_events
+            )
+
+    def test_handles_malformed_files_gracefully(self, caplog, temp_output_dir):
         """Test pipeline skips invalid files and continues processing."""
-        final_sessions = process_rrweb_sessions("mock_bucket_name")
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
-        all_timestamps = [
-            timestamp
-            for session in final_sessions.values()
-            for timestamp in session["metadata"]["timestamp_list"]
-        ]
+        sessions = [SESSION_1_KEY, SESSION_2_KEY]
+        expected_filenames = [f"{session}.json" for session in sessions]
+
+        all_timestamps = []
+        for filename in expected_filenames:
+            filepath = os.path.join(temp_output_dir, filename)
+            with open(filepath, "r", encoding="utf-8") as f:
+                loaded_data = json.load(f)
+                all_timestamps.extend(loaded_data["metadata"]["timestamp_list"])
 
         # Verify that malformed JSON file and missing fields file are omitted
         assert (
@@ -234,7 +260,7 @@ class TestSessionProcessingPipeline:
         assert "missing required fields" in caplog.text
 
     def test_handles_environment_conflicts_with_warning(
-        self, caplog, custom_mock_bucket, mock_gcs_client
+        self, caplog, custom_mock_bucket, mock_gcs_client, temp_output_dir
     ):
         """Test pipeline handles conflicting environments correctly."""
         # Create test data with conflicting environments
@@ -254,19 +280,22 @@ class TestSessionProcessingPipeline:
         mock_bucket = custom_mock_bucket(conflicting_data)
         mock_gcs_client.bucket.return_value = mock_bucket
 
-        final_sessions = process_rrweb_sessions("mock_bucket_name")
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
         # Should use first environment value
-        assert (
-            final_sessions["conflict-session"]["metadata"]["environment"]
-            == "production"
-        )
+        filepath = os.path.join(temp_output_dir, "conflict-session.json")
+        with open(filepath, "r", encoding="utf-8") as f:
+            final_sessions = json.load(f)
+
+            assert final_sessions["metadata"]["environment"] == "production"
 
         # Should log warning
         assert "conflicting environment values" in caplog.text
         assert "Using first value: 'production'" in caplog.text
 
-    def test_handles_no_files(self, caplog, custom_mock_bucket, mock_gcs_client):
+    def test_handles_no_files(
+        self, caplog, custom_mock_bucket, mock_gcs_client, temp_output_dir
+    ):
         """Test pipeline handles no files correctly."""
         # Create test data with no files
         no_data = {}
@@ -274,13 +303,33 @@ class TestSessionProcessingPipeline:
         mock_bucket = custom_mock_bucket(no_data)
         mock_gcs_client.bucket.return_value = mock_bucket
 
-        final_sessions = process_rrweb_sessions("mock_bucket_name")
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
         # Should not create any sessions
-        assert final_sessions == {}
+        assert os.listdir(temp_output_dir) == []
 
         # Should log warning
         assert "No files found" in caplog.text
+
+    def test_writes_compact_json_format(self, temp_output_dir):
+        """Test that JSON is written in compact format (no extra whitespace)."""
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
+
+        sessions = [SESSION_1_KEY, SESSION_2_KEY]
+        expected_filenames = [f"{session}.json" for session in sessions]
+
+        # Verify file contents
+        for filename in expected_filenames:
+            filepath = os.path.join(temp_output_dir, filename)
+
+            with open(filepath, "r", encoding="utf-8") as f:
+                content = f.read()
+
+                # Verify compact format (no extra whitespace or newlines)
+                assert "\n" not in content
+                assert "  " not in content  # No double spaces
+                assert ": " not in content  # No space after colons
+                assert ", " not in content  # No space after commas
 
 
 class TestSessionDataValidation:
@@ -514,6 +563,51 @@ class TestPrivateMethodEdgeCases:
         """Test merge handles empty sessions dictionary."""
         result = _merge_session_data({})
         assert result == {}
+
+    def test_write_sessions_to_disk_handles_empty_sessions_dict(self, temp_output_dir):
+        """Test that empty sessions dictionary is handled gracefully."""
+        _write_sessions_to_disk({}, temp_output_dir)
+
+        # Directory should exist but be empty
+        assert os.path.exists(temp_output_dir)
+        assert os.listdir(temp_output_dir) == []
+
+    def test_write_sessions_to_disk_works_if_directory_exists_or_doesnt(
+        self, temp_output_dir, sample_rrweb_data
+    ):
+        """Test that output directory is created if it doesn't exist and reused if it does."""
+        sessions = {
+            "test-session": {
+                "session_guid": "test-session",
+                "rrweb_data": sample_rrweb_data["session_1_file_1"],
+                "metadata": {
+                    "environment": "test",
+                    "timestamp_list": ["2025-05-02T12:10:50.644423+0000"],
+                },
+            }
+        }
+
+        assert os.path.exists(temp_output_dir)
+
+        _write_sessions_to_disk(sessions, temp_output_dir)
+
+        # Verify file was written
+        filepath = os.path.join(temp_output_dir, "test-session.json")
+        assert os.path.exists(filepath)
+
+        # Create a nested directory path that doesn't exist
+        nested_output_dir = os.path.join(temp_output_dir, "nested", "output", "dir")
+        assert not os.path.exists(nested_output_dir)
+
+        _write_sessions_to_disk(sessions, nested_output_dir)
+
+        # Verify directory was created
+        assert os.path.exists(nested_output_dir)
+        assert os.path.isdir(nested_output_dir)
+
+        # Verify file was written
+        filepath = os.path.join(nested_output_dir, "test-session.json")
+        assert os.path.exists(filepath)
 
 
 class TestGcsInteractionEdgeCases:

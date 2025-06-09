@@ -8,6 +8,7 @@ merges the session data, and outputs consolidated session files.
 
 import json
 import logging
+import os
 from typing import Dict, List, Optional, Tuple, Any
 
 from google.cloud import storage
@@ -15,7 +16,8 @@ from google.cloud import storage
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
 
@@ -374,7 +376,43 @@ def _merge_session_data(
     return merged_sessions
 
 
-def process_rrweb_sessions(bucket_name: str) -> Dict[str, Dict[str, Any]]:
+def _write_sessions_to_disk(
+    sessions: Dict[str, Dict[str, Any]], output_dir: str
+) -> None:
+    """
+    Write session objects to disk as compact JSON files.
+
+    Args:
+        sessions: Dictionary mapping session_guid to session objects containing:
+                 - session_guid: the session identifier
+                 - rrweb_data: merged list of rrweb events
+                 - metadata: dict with environment and timestamp_list
+        output_dir: Directory path where session files should be written
+
+    Each session is written to <output_dir>/<session_guid>.json in compact format.
+    The output directory is created if it doesn't exist.
+    """
+    # Create output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+    logger.info("Created output directory: %s", output_dir)
+
+    for session_guid, session_data in sessions.items():
+        # Create filename from session_guid
+        filename = f"{session_guid}.json"
+        filepath = os.path.join(output_dir, filename)
+
+        # Write session data as compact JSON (no whitespace, no indentation)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(session_data, f, separators=(",", ":"), ensure_ascii=False)
+
+        logger.info("Wrote session '%s' to %s", session_guid, filepath)
+
+    logger.info("Successfully wrote %d sessions to %s", len(sessions), output_dir)
+
+
+def process_rrweb_sessions(
+    bucket_name: str, output_dir: str = "output_sessions"
+) -> None:
     """
     Main function for processing rrweb session data.
     This function orchestrates the downloading, parsing, grouping, sorting,
@@ -382,9 +420,6 @@ def process_rrweb_sessions(bucket_name: str) -> Dict[str, Dict[str, Any]]:
 
     Args:
         bucket_name: Name of the GCS bucket containing rrweb session JSON files
-
-    Returns:
-        Dict[str, Dict[str, Any]]: Dictionary mapping session_guid to final session objects
     """
     # Download all JSON files
     files = _download_json_files(bucket_name)
@@ -392,11 +427,7 @@ def process_rrweb_sessions(bucket_name: str) -> Dict[str, Dict[str, Any]]:
 
     # Verification: print first 100 characters of first file content
     parsed_files = []
-    if files:
-        first_filename, first_content = files[0]
-        logger.info("First file: %s", first_filename)
-        logger.info("First 100 characters: %s", first_content[:100])
-    else:
+    if not files:
         logger.warning("No files found")
 
     # Parse and validate each session file
@@ -422,10 +453,9 @@ def process_rrweb_sessions(bucket_name: str) -> Dict[str, Dict[str, Any]]:
     final_sessions = _merge_session_data(validated_sessions)
     logger.info("Number of final sessions: %d", len(final_sessions))
 
-    return final_sessions
+    _write_sessions_to_disk(final_sessions, output_dir)
 
 
 if __name__ == "__main__":
     EXAMPLE_BUCKET = "example-bucket-name"
-    session_output = process_rrweb_sessions(EXAMPLE_BUCKET)
-    logger.info("Output: %s", session_output)
+    process_rrweb_sessions(EXAMPLE_BUCKET)

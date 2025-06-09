@@ -281,7 +281,7 @@ For each session, merges all ordered `session_data` arrays into a single rrweb e
 
 You are now ready to merge the actual rrweb event data from sorted session entries.
 
-### 🛠️ Task
+#### 🛠️ Task
 
 Implement a function that:
 
@@ -315,7 +315,7 @@ Use this function signature:
 def merge_session_data(sessions: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
 ```
 
-### 🧪 Verification
+#### 🧪 Verification
 
 Add tests that:
 
@@ -339,6 +339,60 @@ Writes each processed session to a compact JSON file named `<session_guid>.json`
 * Check JSON format is compact (e.g., no extra whitespace).
 * Verify contents against expected structure with a test case.
 
+**Detailed Prompt**
+
+You now have a dictionary of fully processed sessions, each containing `session_guid`, merged `rrweb_data`, and `metadata`. Your goal is to write each session to a separate JSON file on disk.
+
+#### 🛠️ Task
+
+Implement a function that:
+
+1. Takes two arguments:
+
+   * A dictionary of session objects in the format:
+
+     ```python
+     {
+       "abc-123": {
+         "session_guid": "abc-123",
+         "rrweb_data": [...],
+         "metadata": {
+           "environment": "production",
+           "timestamp_list": [...]
+         }
+       },
+       ...
+     }
+     ```
+
+   * An output directory path as a string (e.g., `"./stitched_sessions"`)
+
+2. For each session:
+
+   * Write the session object to `<output_dir>/<session_guid>.json`
+   * Use **compact JSON formatting** (no whitespace, no indentation)
+   * Ensure the output directory exists (create if needed)
+
+Use this function signature:
+
+```python
+def write_sessions_to_disk(sessions: Dict[str, Dict[str, Any]], output_dir: str) -> None:
+```
+
+#### 🧪 Verification
+
+Create a test that:
+
+* Writes 2–3 sample sessions to a temporary directory.
+* Confirms that:
+
+  * Files are created with correct names.
+  * Each file is valid JSON.
+  * Contents are compact (no extra whitespace or newlines).
+* Handles edge cases like an empty session list or an existing output directory.
+
+You don’t need to implement CLI or logging in this step — just focus on writing compact JSON output to disk.
+
 ---
 
 ### **Step 8: Add Summary Logging**
@@ -355,7 +409,7 @@ At the end of the run, prints/logs a summary of:
 
 * Review log output after sample run.
 * Confirm numbers match expectations.
-* Add a small integration test with a few files.
+* Reuse the `test_process_rrweb_sessions_happy_path` test.
 
 ---
 
