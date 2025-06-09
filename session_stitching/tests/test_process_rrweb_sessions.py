@@ -5,6 +5,8 @@ Tests focused on behavior and public interfaces following unit test policy.
 """
 
 import json
+import os
+import tempfile
 from unittest.mock import Mock, patch
 
 import pytest
@@ -19,6 +21,7 @@ from process_rrweb_sessions import (
     _sort_and_collect_timestamps,
     _validate_and_extract_environment,
     _merge_session_data,
+    write_sessions_to_disk,
     process_rrweb_sessions,
 )
 
@@ -514,6 +517,243 @@ class TestPrivateMethodEdgeCases:
         """Test merge handles empty sessions dictionary."""
         result = _merge_session_data({})
         assert result == {}
+
+
+class TestWriteSessionsToDisk:
+    """Test writing session objects to disk as compact JSON files."""
+
+    def test_writes_sessions_to_correct_files(self, sample_rrweb_data):
+        """Test that sessions are written to correctly named files."""
+        # Create sample session data
+        sessions = {
+            "session-abc-123": {
+                "session_guid": "session-abc-123",
+                "rrweb_data": sample_rrweb_data["session_1_file_1"],
+                "metadata": {
+                    "environment": "production",
+                    "timestamp_list": ["2025-05-02T12:10:50.644423+0000"],
+                },
+            },
+            "session-def-456": {
+                "session_guid": "session-def-456",
+                "rrweb_data": sample_rrweb_data["session_2_file_1"],
+                "metadata": {
+                    "environment": "staging",
+                    "timestamp_list": ["2025-05-02T12:12:15.123456+0000"],
+                },
+            },
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            write_sessions_to_disk(sessions, temp_dir)
+
+            # Verify files were created with correct names
+            expected_files = ["session-abc-123.json", "session-def-456.json"]
+            actual_files = os.listdir(temp_dir)
+            assert sorted(actual_files) == sorted(expected_files)
+
+            # Verify file contents
+            for session_guid, session_data in sessions.items():
+                filepath = os.path.join(temp_dir, f"{session_guid}.json")
+                assert os.path.exists(filepath)
+
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    loaded_data = json.load(f)
+
+                assert loaded_data == session_data
+
+    def test_writes_compact_json_format(self, sample_rrweb_data):
+        """Test that JSON is written in compact format (no extra whitespace)."""
+        sessions = {
+            "compact-test": {
+                "session_guid": "compact-test",
+                "rrweb_data": sample_rrweb_data["session_1_file_1"],
+                "metadata": {
+                    "environment": "production",
+                    "timestamp_list": ["2025-05-02T12:10:50.644423+0000"],
+                },
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            write_sessions_to_disk(sessions, temp_dir)
+
+            filepath = os.path.join(temp_dir, "compact-test.json")
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
+
+            # Verify compact format (no extra whitespace or newlines)
+            assert '\n' not in content
+            assert '  ' not in content  # No double spaces
+            assert ': ' not in content  # No space after colons
+            assert ', ' not in content  # No space after commas
+
+            # Verify it's still valid JSON
+            parsed = json.loads(content)
+            assert parsed == sessions["compact-test"]
+
+    def test_creates_output_directory_if_not_exists(self, sample_rrweb_data):
+        """Test that output directory is created if it doesn't exist."""
+        sessions = {
+            "test-session": {
+                "session_guid": "test-session",
+                "rrweb_data": sample_rrweb_data["session_1_file_1"],
+                "metadata": {
+                    "environment": "test",
+                    "timestamp_list": ["2025-05-02T12:10:50.644423+0000"],
+                },
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Create a nested directory path that doesn't exist
+            nested_output_dir = os.path.join(temp_dir, "nested", "output", "dir")
+            assert not os.path.exists(nested_output_dir)
+
+            write_sessions_to_disk(sessions, nested_output_dir)
+
+            # Verify directory was created
+            assert os.path.exists(nested_output_dir)
+            assert os.path.isdir(nested_output_dir)
+
+            # Verify file was written
+            filepath = os.path.join(nested_output_dir, "test-session.json")
+            assert os.path.exists(filepath)
+
+    def test_handles_existing_output_directory(self, sample_rrweb_data):
+        """Test that existing output directory is handled correctly."""
+        sessions = {
+            "existing-dir-test": {
+                "session_guid": "existing-dir-test",
+                "rrweb_data": sample_rrweb_data["session_1_file_1"],
+                "metadata": {
+                    "environment": "test",
+                    "timestamp_list": ["2025-05-02T12:10:50.644423+0000"],
+                },
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Directory already exists
+            assert os.path.exists(temp_dir)
+
+            write_sessions_to_disk(sessions, temp_dir)
+
+            # Verify file was written successfully
+            filepath = os.path.join(temp_dir, "existing-dir-test.json")
+            assert os.path.exists(filepath)
+
+    def test_handles_empty_sessions_dict(self):
+        """Test that empty sessions dictionary is handled gracefully."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            write_sessions_to_disk({}, temp_dir)
+
+            # Directory should exist but be empty
+            assert os.path.exists(temp_dir)
+            assert os.listdir(temp_dir) == []
+
+    def test_preserves_complex_rrweb_data_structures(self):
+        """Test that complex rrweb data structures are preserved exactly."""
+        complex_rrweb_data = [
+            {
+                "type": 0,
+                "data": {
+                    "href": "https://example.com/path?param=value#hash",
+                    "width": 1920,
+                    "height": 1080,
+                    "userAgent": "Mozilla/5.0 (complex user agent string)",
+                },
+                "timestamp": 1651234567890,
+            },
+            {
+                "type": 1,
+                "data": {
+                    "node": {
+                        "id": 1,
+                        "tagName": "html",
+                        "attributes": {"lang": "en", "class": "no-js"},
+                        "childNodes": [
+                            {"id": 2, "tagName": "head"},
+                            {"id": 3, "tagName": "body", "attributes": {"class": "main"}},
+                        ],
+                    }
+                },
+                "timestamp": 1651234567891,
+            },
+            {
+                "type": 3,
+                "data": {
+                    "source": 2,
+                    "type": 0,
+                    "id": 4,
+                    "x": 100.5,
+                    "y": 200.7,
+                    "timeOffset": 1234,
+                    "target": {"id": 3, "selector": "body.main"},
+                },
+                "timestamp": 1651234567892,
+            },
+        ]
+
+        sessions = {
+            "complex-data-test": {
+                "session_guid": "complex-data-test",
+                "rrweb_data": complex_rrweb_data,
+                "metadata": {
+                    "environment": "production",
+                    "timestamp_list": [
+                        "2025-05-02T12:10:50.644423+0000",
+                        "2025-05-02T12:11:30.991832+0000",
+                    ],
+                },
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            write_sessions_to_disk(sessions, temp_dir)
+
+            filepath = os.path.join(temp_dir, "complex-data-test.json")
+            with open(filepath, 'r', encoding='utf-8') as f:
+                loaded_data = json.load(f)
+
+            # Verify complex structure is preserved exactly
+            assert loaded_data["rrweb_data"] == complex_rrweb_data
+            assert (
+                loaded_data["rrweb_data"][0]["data"]["href"]
+                == "https://example.com/path?param=value#hash"
+            )
+            assert (
+                loaded_data["rrweb_data"][1]["data"]["node"]["attributes"]["class"]
+                == "no-js"
+            )
+            assert loaded_data["rrweb_data"][2]["data"]["x"] == 100.5
+
+    def test_handles_special_characters_in_session_guid(self):
+        """Test that special characters in session_guid are handled correctly."""
+        sessions = {
+            "session-with-special-chars_123": {
+                "session_guid": "session-with-special-chars_123",
+                "rrweb_data": [{"type": 1, "data": {"test": "value"}}],
+                "metadata": {
+                    "environment": "test",
+                    "timestamp_list": ["2025-05-02T12:10:50.644423+0000"],
+                },
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            write_sessions_to_disk(sessions, temp_dir)
+
+            # Verify file was created with correct name
+            expected_filename = "session-with-special-chars_123.json"
+            filepath = os.path.join(temp_dir, expected_filename)
+            assert os.path.exists(filepath)
+
+            # Verify content is correct
+            with open(filepath, 'r', encoding='utf-8') as f:
+                loaded_data = json.load(f)
+
+            assert loaded_data == sessions["session-with-special-chars_123"]
 
 
 class TestGcsInteractionEdgeCases:

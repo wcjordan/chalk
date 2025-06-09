@@ -77,15 +77,15 @@
 ## Step 7: Save Final Session Objects to Compact JSON
 
 ### Tasks:
-- [ ] Create final session object structure with `session_guid`, `rrweb_data`, and `metadata`
-- [ ] Include `environment` and `timestamp_list` in metadata
-- [ ] Write each session to compact JSON file (no extra whitespace)
-- [ ] Name output files as `<session_guid>.json`
-- [ ] Save to specified target output directory
-- [ ] Create output directory if it doesn't exist
-- [ ] Verify output files are created with correct names
-- [ ] Check JSON format is compact
-- [ ] Test contents against expected structure
+- [x] Create final session object structure with `session_guid`, `rrweb_data`, and `metadata`
+- [x] Include `environment` and `timestamp_list` in metadata
+- [x] Write each session to compact JSON file (no extra whitespace)
+- [x] Name output files as `<session_guid>.json`
+- [x] Save to specified target output directory
+- [x] Create output directory if it doesn't exist
+- [x] Verify output files are created with correct names
+- [x] Check JSON format is compact
+- [x] Test contents against expected structure
 
 ## Step 8: Add Summary Logging
 

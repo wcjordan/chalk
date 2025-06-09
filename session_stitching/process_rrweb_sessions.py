@@ -8,6 +8,7 @@ merges the session data, and outputs consolidated session files.
 
 import json
 import logging
+import os
 from typing import Dict, List, Optional, Tuple, Any
 
 from google.cloud import storage
@@ -372,6 +373,38 @@ def _merge_session_data(
 
     logger.info("Merged session data for %d sessions", len(merged_sessions))
     return merged_sessions
+
+
+def write_sessions_to_disk(sessions: Dict[str, Dict[str, Any]], output_dir: str) -> None:
+    """
+    Write session objects to disk as compact JSON files.
+
+    Args:
+        sessions: Dictionary mapping session_guid to session objects containing:
+                 - session_guid: the session identifier
+                 - rrweb_data: merged list of rrweb events
+                 - metadata: dict with environment and timestamp_list
+        output_dir: Directory path where session files should be written
+
+    Each session is written to <output_dir>/<session_guid>.json in compact format.
+    The output directory is created if it doesn't exist.
+    """
+    # Create output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+    logger.info("Created output directory: %s", output_dir)
+
+    for session_guid, session_data in sessions.items():
+        # Create filename from session_guid
+        filename = f"{session_guid}.json"
+        filepath = os.path.join(output_dir, filename)
+
+        # Write session data as compact JSON (no whitespace, no indentation)
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(session_data, f, separators=(',', ':'), ensure_ascii=False)
+
+        logger.info("Wrote session '%s' to %s", session_guid, filepath)
+
+    logger.info("Successfully wrote %d sessions to %s", len(sessions), output_dir)
 
 
 def process_rrweb_sessions(bucket_name: str) -> Dict[str, Dict[str, Any]]:
