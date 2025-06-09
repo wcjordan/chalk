@@ -15,7 +15,7 @@ from google.cloud import storage
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
 
@@ -392,11 +392,7 @@ def process_rrweb_sessions(bucket_name: str) -> Dict[str, Dict[str, Any]]:
 
     # Verification: print first 100 characters of first file content
     parsed_files = []
-    if files:
-        first_filename, first_content = files[0]
-        logger.info("First file: %s", first_filename)
-        logger.info("First 100 characters: %s", first_content[:100])
-    else:
+    if not files:
         logger.warning("No files found")
 
     # Parse and validate each session file
