@@ -557,7 +557,7 @@ class TestWriteSessionsToDisk:
                 filepath = os.path.join(temp_dir, f"{session_guid}.json")
                 assert os.path.exists(filepath)
 
-                with open(filepath, 'r', encoding='utf-8') as f:
+                with open(filepath, "r", encoding="utf-8") as f:
                     loaded_data = json.load(f)
 
                 assert loaded_data == session_data
@@ -579,14 +579,14 @@ class TestWriteSessionsToDisk:
             write_sessions_to_disk(sessions, temp_dir)
 
             filepath = os.path.join(temp_dir, "compact-test.json")
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # Verify compact format (no extra whitespace or newlines)
-            assert '\n' not in content
-            assert '  ' not in content  # No double spaces
-            assert ': ' not in content  # No space after colons
-            assert ', ' not in content  # No space after commas
+            assert "\n" not in content
+            assert "  " not in content  # No double spaces
+            assert ": " not in content  # No space after colons
+            assert ", " not in content  # No space after commas
 
             # Verify it's still valid JSON
             parsed = json.loads(content)
@@ -674,7 +674,11 @@ class TestWriteSessionsToDisk:
                         "attributes": {"lang": "en", "class": "no-js"},
                         "childNodes": [
                             {"id": 2, "tagName": "head"},
-                            {"id": 3, "tagName": "body", "attributes": {"class": "main"}},
+                            {
+                                "id": 3,
+                                "tagName": "body",
+                                "attributes": {"class": "main"},
+                            },
                         ],
                     }
                 },
@@ -713,7 +717,7 @@ class TestWriteSessionsToDisk:
             write_sessions_to_disk(sessions, temp_dir)
 
             filepath = os.path.join(temp_dir, "complex-data-test.json")
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, "r", encoding="utf-8") as f:
                 loaded_data = json.load(f)
 
             # Verify complex structure is preserved exactly
@@ -750,7 +754,7 @@ class TestWriteSessionsToDisk:
             assert os.path.exists(filepath)
 
             # Verify content is correct
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, "r", encoding="utf-8") as f:
                 loaded_data = json.load(f)
 
             assert loaded_data == sessions["session-with-special-chars_123"]

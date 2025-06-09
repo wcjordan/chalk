@@ -16,7 +16,8 @@ from google.cloud import storage
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
 
@@ -375,7 +376,9 @@ def _merge_session_data(
     return merged_sessions
 
 
-def write_sessions_to_disk(sessions: Dict[str, Dict[str, Any]], output_dir: str) -> None:
+def write_sessions_to_disk(
+    sessions: Dict[str, Dict[str, Any]], output_dir: str
+) -> None:
     """
     Write session objects to disk as compact JSON files.
 
@@ -399,8 +402,8 @@ def write_sessions_to_disk(sessions: Dict[str, Dict[str, Any]], output_dir: str)
         filepath = os.path.join(output_dir, filename)
 
         # Write session data as compact JSON (no whitespace, no indentation)
-        with open(filepath, 'w', encoding='utf-8') as f:
-            json.dump(session_data, f, separators=(',', ':'), ensure_ascii=False)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(session_data, f, separators=(",", ":"), ensure_ascii=False)
 
         logger.info("Wrote session '%s' to %s", session_guid, filepath)
 
