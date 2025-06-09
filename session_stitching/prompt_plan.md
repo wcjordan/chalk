@@ -411,6 +411,56 @@ At the end of the run, prints/logs a summary of:
 * Confirm numbers match expectations.
 * Reuse the `test_process_rrweb_sessions_happy_path` test.
 
+**Detailed Prompt**
+
+You’ve built a multi-stage script that downloads, validates, merges, and writes session data from JSON files stored in GCS. Now, you will add summary-level logging at the end of the run to provide visibility into what was processed.
+
+#### 🛠️ Task
+
+Add summary logging that reports:
+
+* Total number of files retrieved from GCS
+* Number of files successfully parsed and validated
+* Number of files skipped due to errors
+* Total number of unique sessions processed
+* Number of sessions with environment inconsistencies (already logged during processing)
+* Number of session files successfully written to disk
+
+Use Python’s built-in `logging` module at the `INFO` level. Assume you have access to these data points from earlier steps.
+
+Requirements:
+
+* Include a `_print_summary(stats: Dict[str, int])` function that logs the above information in a clean, readable format.
+* Accept a dictionary of summary stats such as:
+
+```python
+{
+  "files_downloaded": 661,
+  "files_valid": 645,
+  "files_skipped": 16,
+  "sessions_total": 58,
+  "sessions_written": 58,
+  "sessions_with_env_conflicts": 2
+}
+```
+
+* Log each line separately at `INFO` level.
+
+Use this function signature:
+
+```python
+def _print_summary(stats: Dict[str, int]) -> None:
+```
+
+#### 🧪 Verification
+
+Add a test or script block that:
+
+* Calls `_print_summary()` with a representative stats dictionary.
+* Confirms logs appear correctly with no formatting errors.
+
+Do not change core logic or processing functions in this step — only add the summary reporting at the end of the workflow.
+
 ---
 
 ### **Step 9: Add CLI Interface (bucket name, output dir, verbosity)**

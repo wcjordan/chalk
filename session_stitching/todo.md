@@ -90,15 +90,15 @@
 ## Step 8: Add Summary Logging
 
 ### Tasks:
-- [ ] Track total files processed during execution
-- [ ] Count files skipped due to errors
-- [ ] Count sessions successfully written
-- [ ] Count warnings raised during processing
-- [ ] Print/log summary at end of execution
-- [ ] Include all counts in final summary
-- [ ] Review log output after sample run
-- [ ] Verify numbers match expectations
-- [ ] Add small integration test with known file counts
+- [x] Track total files processed during execution
+- [x] Count files skipped due to errors
+- [x] Count sessions successfully written
+- [x] Count warnings raised during processing
+- [x] Print/log summary at end of execution
+- [x] Include all counts in final summary
+- [x] Review log output after sample run
+- [x] Verify numbers match expectations
+- [x] Add small integration test with known file counts
 
 ## Step 9: Add CLI Interface (bucket name, output dir, verbosity)
 

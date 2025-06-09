@@ -164,9 +164,10 @@ def fixture_temp_output_dir():
 class TestSessionProcessingPipeline:
     """Test the complete session processing workflow."""
 
-    def test_process_rrweb_sessions_happy_path(self, temp_output_dir):
+    def test_process_rrweb_sessions_happy_path(self, caplog, temp_output_dir):
         """Test complete pipeline with valid multi-session data."""
-        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
+        with caplog.at_level("INFO"):
+            process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
         # Verify files were created with correct names
         sessions = [SESSION_1_KEY, SESSION_2_KEY]
@@ -195,6 +196,15 @@ class TestSessionProcessingPipeline:
                     assert loaded_data["session_guid"] == SESSION_2_KEY
                     assert loaded_data["metadata"]["environment"] == "staging"
                     assert len(loaded_data["metadata"]["timestamp_list"]) == 1
+
+        # Verify all statistics are logged
+        assert "Total files downloaded from GCS: 7" in caplog.text
+        assert "Files successfully parsed and validated: 3" in caplog.text
+        assert "Files skipped due to errors: 4" in caplog.text
+        assert "Total unique sessions processed: 2" in caplog.text
+        assert "Sessions with environment conflicts: 0" in caplog.text
+        assert "Session files successfully written to disk: 2" in caplog.text
+        assert "SESSION PROCESSING SUMMARY" in caplog.text
 
     def test_process_rrweb_sessions_orders_cronologically(
         self, temp_output_dir, sample_rrweb_data
@@ -512,21 +522,23 @@ class TestPrivateMethodEdgeCases:
             "empty-session": {"sorted_entries": [], "timestamp_list": []}
         }
 
-        result = _validate_and_extract_environment(sessions_with_empty)
+        result, conflicts = _validate_and_extract_environment(sessions_with_empty)
 
         # Should handle empty entries gracefully
         assert "empty-session" in result
         assert result["empty-session"]["environment"] == ""  # Default for empty
         assert result["empty-session"]["sorted_entries"] == []
         assert result["empty-session"]["timestamp_list"] == []
+        assert conflicts == 0
 
     def test_processing_handles_empty_session_groups(self):
         """Test edge case of empty session groups."""
         result = _sort_and_collect_timestamps({})
         assert result == {}
 
-        result = _validate_and_extract_environment({})
+        result, conflicts = _validate_and_extract_environment({})
         assert result == {}
+        assert conflicts == 0
 
     def test_merge_session_data_handles_empty_session_data(self):
         """Test edge case of empty session_data lists gracefully."""
