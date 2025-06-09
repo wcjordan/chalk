@@ -409,7 +409,7 @@ At the end of the run, prints/logs a summary of:
 
 * Review log output after sample run.
 * Confirm numbers match expectations.
-* Add a small integration test with a few files.
+* Reuse the `test_process_rrweb_sessions_happy_path` test.
 
 ---
 
