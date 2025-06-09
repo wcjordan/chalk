@@ -6,19 +6,17 @@ This script downloads JSON files from a GCS bucket, groups them by session_guid,
 merges the session data, and outputs consolidated session files.
 """
 
+import argparse
 import json
 import logging
 import os
+import sys
 from typing import Dict, List, Optional, Tuple, Any
 
 from google.cloud import storage
 
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-)
+# Default logger - will be reconfigured by CLI setup
 logger = logging.getLogger(__name__)
 
 
@@ -444,7 +442,7 @@ def _write_sessions_to_disk(
 
 
 def process_rrweb_sessions(
-    bucket_name: str, output_dir: str = "output_sessions"
+    bucket_name: str, output_dir: str = "./stitched_sessions"
 ) -> None:
     """
     Main function for processing rrweb session data.
@@ -511,6 +509,98 @@ def process_rrweb_sessions(
     _print_summary(summary_stats)
 
 
+def _parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments for the session processing script.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments
+    """
+    parser = argparse.ArgumentParser(
+        description="Process rrweb session data from Google Cloud Storage",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python process_rrweb_sessions.py --bucket my-rrweb-bucket
+  python process_rrweb_sessions.py --bucket my-bucket --output_dir ./sessions --log_level DEBUG
+        """,
+    )
+
+    # Required arguments
+    parser.add_argument(
+        "--bucket",
+        required=True,
+        help="Name of the GCS bucket containing rrweb session JSON files",
+    )
+
+    # Optional arguments
+    parser.add_argument(
+        "--output_dir",
+        default="./stitched_sessions",
+        help="Local directory where session files will be saved (default: ./stitched_sessions)",
+    )
+
+    parser.add_argument(
+        "--log_level",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        default="INFO",
+        help="Set the logging level (default: INFO)",
+    )
+
+    return parser.parse_args()
+
+
+def _setup_logging(log_level: str) -> None:
+    """
+    Configure logging based on the specified log level.
+
+    Args:
+        log_level: Logging level as a string (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    """
+    # Convert string to logging level constant
+    numeric_level = getattr(logging, log_level.upper(), None)
+    if not isinstance(numeric_level, int):
+        raise ValueError(f"Invalid log level: {log_level}")
+
+    # Configure logging with the specified level
+    logging.basicConfig(
+        level=numeric_level,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        force=True,  # Override any existing logging configuration
+    )
+
+
+def main() -> None:
+    """
+    Main entry point for the CLI application.
+    Parses arguments, sets up logging, and runs the session processing pipeline.
+    """
+    try:
+        # Parse command-line arguments
+        args = _parse_arguments()
+
+        # Set up logging based on the specified level
+        _setup_logging(args.log_level)
+
+        # Log the configuration being used
+        logger = logging.getLogger(__name__)
+        logger.info("Starting rrweb session processing")
+        logger.info("Bucket: %s", args.bucket)
+        logger.info("Output directory: %s", args.output_dir)
+        logger.info("Log level: %s", args.log_level)
+
+        # Run the main processing pipeline
+        process_rrweb_sessions(args.bucket, args.output_dir)
+
+        logger.info("Session processing completed successfully")
+
+    except KeyboardInterrupt:
+        print("\nOperation cancelled by user", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
 if __name__ == "__main__":
-    EXAMPLE_BUCKET = "example-bucket-name"
-    process_rrweb_sessions(EXAMPLE_BUCKET)
+    main()

@@ -103,13 +103,13 @@
 ## Step 9: Add CLI Interface (bucket name, output dir, verbosity)
 
 ### Tasks:
-- [ ] Add command-line argument parsing using `argparse`
-- [ ] Add `--bucket` argument for GCS bucket name
-- [ ] Add `--output_dir` argument for output directory path
-- [ ] Add `--verbose` or logging level arguments
-- [ ] Set up logging configuration based on verbosity level
-- [ ] Add `--help` message with usage instructions
-- [ ] Test script with different CLI flags
-- [ ] Verify behavior matches input arguments
-- [ ] Test help message with `--help` flag
-- [ ] Add validation for required arguments
+- [x] Add command-line argument parsing using `argparse`
+- [x] Add `--bucket` argument for GCS bucket name
+- [x] Add `--output_dir` argument for output directory path
+- [x] Add `--verbose` or logging level arguments
+- [x] Set up logging configuration based on verbosity level
+- [x] Add `--help` message with usage instructions
+- [x] Test script with different CLI flags
+- [x] Verify behavior matches input arguments
+- [x] Test help message with `--help` flag
+- [x] Add validation for required arguments
