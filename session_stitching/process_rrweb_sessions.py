@@ -380,7 +380,7 @@ def _merge_session_data(
     return merged_sessions
 
 
-def print_summary(stats: Dict[str, int]) -> None:
+def _print_summary(stats: Dict[str, int]) -> None:
     """
     Print summary statistics of the session processing run.
 
@@ -400,8 +400,12 @@ def print_summary(stats: Dict[str, int]) -> None:
     logger.info("Files successfully parsed and validated: %d", stats["files_valid"])
     logger.info("Files skipped due to errors: %d", stats["files_skipped"])
     logger.info("Total unique sessions processed: %d", stats["sessions_total"])
-    logger.info("Sessions with environment conflicts: %d", stats["sessions_with_env_conflicts"])
-    logger.info("Session files successfully written to disk: %d", stats["sessions_written"])
+    logger.info(
+        "Sessions with environment conflicts: %d", stats["sessions_with_env_conflicts"]
+    )
+    logger.info(
+        "Session files successfully written to disk: %d", stats["sessions_written"]
+    )
     logger.info("=" * 60)
 
 
@@ -457,8 +461,7 @@ def process_rrweb_sessions(
 
     # Track statistics for summary
     files_downloaded = len(files)
-    
-    # Verification: print first 100 characters of first file content
+
     parsed_files = []
     if not files:
         logger.warning("No files found")
@@ -482,7 +485,9 @@ def process_rrweb_sessions(
     logger.info("Number of sorted sessions: %d", len(sorted_sessions))
 
     # Validate each session has the same environment
-    validated_sessions, sessions_with_env_conflicts = _validate_and_extract_environment(sorted_sessions)
+    validated_sessions, sessions_with_env_conflicts = _validate_and_extract_environment(
+        sorted_sessions
+    )
     logger.info("Number of validated sessions: %d", len(validated_sessions))
 
     sessions_total = len(validated_sessions)
@@ -503,7 +508,7 @@ def process_rrweb_sessions(
         "sessions_written": sessions_written,
         "sessions_with_env_conflicts": sessions_with_env_conflicts,
     }
-    print_summary(summary_stats)
+    _print_summary(summary_stats)
 
 
 if __name__ == "__main__":

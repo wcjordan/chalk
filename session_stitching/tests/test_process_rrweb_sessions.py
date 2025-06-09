@@ -22,7 +22,6 @@ from process_rrweb_sessions import (
     _validate_and_extract_environment,
     _merge_session_data,
     _write_sessions_to_disk,
-    print_summary,
     process_rrweb_sessions,
 )
 
@@ -165,9 +164,10 @@ def fixture_temp_output_dir():
 class TestSessionProcessingPipeline:
     """Test the complete session processing workflow."""
 
-    def test_process_rrweb_sessions_happy_path(self, temp_output_dir):
+    def test_process_rrweb_sessions_happy_path(self, caplog, temp_output_dir):
         """Test complete pipeline with valid multi-session data."""
-        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
+        with caplog.at_level("INFO"):
+            process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
         # Verify files were created with correct names
         sessions = [SESSION_1_KEY, SESSION_2_KEY]
@@ -196,6 +196,15 @@ class TestSessionProcessingPipeline:
                     assert loaded_data["session_guid"] == SESSION_2_KEY
                     assert loaded_data["metadata"]["environment"] == "staging"
                     assert len(loaded_data["metadata"]["timestamp_list"]) == 1
+
+        # Verify all statistics are logged
+        assert "Total files downloaded from GCS: 7" in caplog.text
+        assert "Files successfully parsed and validated: 3" in caplog.text
+        assert "Files skipped due to errors: 4" in caplog.text
+        assert "Total unique sessions processed: 2" in caplog.text
+        assert "Sessions with environment conflicts: 0" in caplog.text
+        assert "Session files successfully written to disk: 2" in caplog.text
+        assert "SESSION PROCESSING SUMMARY" in caplog.text
 
     def test_process_rrweb_sessions_orders_cronologically(
         self, temp_output_dir, sample_rrweb_data
@@ -611,53 +620,6 @@ class TestPrivateMethodEdgeCases:
         # Verify file was written
         filepath = os.path.join(nested_output_dir, "test-session.json")
         assert os.path.exists(filepath)
-
-
-class TestSummaryLogging:
-    """Test summary logging functionality."""
-
-    def test_print_summary_logs_all_statistics(self, caplog):
-        """Test that print_summary logs all required statistics correctly."""
-        test_stats = {
-            "files_downloaded": 661,
-            "files_valid": 645,
-            "files_skipped": 16,
-            "sessions_total": 58,
-            "sessions_written": 58,
-            "sessions_with_env_conflicts": 2,
-        }
-
-        print_summary(test_stats)
-
-        # Verify all statistics are logged
-        assert "Total files downloaded from GCS: 661" in caplog.text
-        assert "Files successfully parsed and validated: 645" in caplog.text
-        assert "Files skipped due to errors: 16" in caplog.text
-        assert "Total unique sessions processed: 58" in caplog.text
-        assert "Sessions with environment conflicts: 2" in caplog.text
-        assert "Session files successfully written to disk: 58" in caplog.text
-        assert "SESSION PROCESSING SUMMARY" in caplog.text
-
-    def test_print_summary_handles_zero_values(self, caplog):
-        """Test that print_summary handles zero values correctly."""
-        test_stats = {
-            "files_downloaded": 0,
-            "files_valid": 0,
-            "files_skipped": 0,
-            "sessions_total": 0,
-            "sessions_written": 0,
-            "sessions_with_env_conflicts": 0,
-        }
-
-        print_summary(test_stats)
-
-        # Verify zero values are logged correctly
-        assert "Total files downloaded from GCS: 0" in caplog.text
-        assert "Files successfully parsed and validated: 0" in caplog.text
-        assert "Files skipped due to errors: 0" in caplog.text
-        assert "Total unique sessions processed: 0" in caplog.text
-        assert "Sessions with environment conflicts: 0" in caplog.text
-        assert "Session files successfully written to disk: 0" in caplog.text
 
 
 class TestGcsInteractionEdgeCases:
