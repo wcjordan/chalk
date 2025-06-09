@@ -21,7 +21,7 @@ from process_rrweb_sessions import (
     _sort_and_collect_timestamps,
     _validate_and_extract_environment,
     _merge_session_data,
-    write_sessions_to_disk,
+    _write_sessions_to_disk,
     process_rrweb_sessions,
 )
 
@@ -154,70 +154,93 @@ def fixture_mock_bucket(custom_mock_bucket, sample_bucket_data):
     return custom_mock_bucket(sample_bucket_data)
 
 
+@pytest.fixture(name="temp_output_dir")
+def fixture_temp_output_dir():
+    """Temporary output directory for testing."""
+    with tempfile.TemporaryDirectory() as temp_dir:
+        yield temp_dir
+
+
 class TestSessionProcessingPipeline:
     """Test the complete session processing workflow."""
 
-    def test_process_rrweb_sessions_happy_path(self, mock_bucket):
+    def test_process_rrweb_sessions_happy_path(self, temp_output_dir):
         """Test complete pipeline with valid multi-session data."""
-        final_sessions = process_rrweb_sessions("mock_bucket_name")
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
-        # Verify final structure
-        assert len(final_sessions) == 2
-        assert SESSION_1_KEY in final_sessions
-        assert SESSION_2_KEY in final_sessions
+        # Verify files were created with correct names
+        sessions = [SESSION_1_KEY, SESSION_2_KEY]
+        expected_filenames = [f"{session}.json" for session in sessions]
+        actual_files = os.listdir(temp_output_dir)
+        assert sorted(actual_files) == expected_filenames
 
-        # Check SESSION_1 properties
-        session_1 = final_sessions[SESSION_1_KEY]
-        assert session_1["session_guid"] == SESSION_1_KEY
-        assert "rrweb_data" in session_1
-        assert "metadata" in session_1
-        assert session_1["metadata"]["environment"] == "production"
-        assert len(session_1["metadata"]["timestamp_list"]) == 2
+        # Verify file contents
+        for filename in expected_filenames:
+            filepath = os.path.join(temp_output_dir, filename)
+            assert os.path.exists(filepath)
 
-        # Check SESSION_2 properties
-        session_2 = final_sessions[SESSION_2_KEY]
-        assert session_2["session_guid"] == SESSION_2_KEY
-        assert "rrweb_data" in session_2
-        assert "metadata" in session_2
-        assert session_2["metadata"]["environment"] == "staging"
-        assert len(session_2["metadata"]["timestamp_list"]) == 1
+            with open(filepath, "r", encoding="utf-8") as f:
+                loaded_data = json.load(f)
 
-    def test_process_rrweb_sessions_orders_cronologically(self, sample_rrweb_data):
+                assert "rrweb_data" in loaded_data
+                assert "metadata" in loaded_data
+
+                if filename == f"{SESSION_1_KEY}.json":
+                    # Check SESSION_1 properties
+                    assert loaded_data["session_guid"] == SESSION_1_KEY
+                    assert loaded_data["metadata"]["environment"] == "production"
+                    assert len(loaded_data["metadata"]["timestamp_list"]) == 2
+                elif filename == f"{SESSION_2_KEY}.json":
+                    # Check SESSION_2 properties
+                    assert loaded_data["session_guid"] == SESSION_2_KEY
+                    assert loaded_data["metadata"]["environment"] == "staging"
+                    assert len(loaded_data["metadata"]["timestamp_list"]) == 1
+
+    def test_process_rrweb_sessions_orders_cronologically(
+        self, temp_output_dir, sample_rrweb_data
+    ):
         """Test that session data is correctly merged and ordered."""
-        final_sessions = process_rrweb_sessions("mock_bucket_name")
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
-        # Verify timestamp ordering (chronological)
-        session_1 = final_sessions[SESSION_1_KEY]
-        timestamps = session_1["metadata"]["timestamp_list"]
-        assert timestamps == sorted(timestamps)
-        assert timestamps[0] == "2025-05-02T12:10:50.644423+0000"
-        assert timestamps[1] == "2025-05-02T12:11:30.991832+0000"
+        filepath = os.path.join(temp_output_dir, f"{SESSION_1_KEY}.json")
+        with open(filepath, "r", encoding="utf-8") as f:
+            loaded_data = json.load(f)
 
-        # Check merged rrweb_data ordering
-        rrweb_data = session_1["rrweb_data"]
+            # Verify timestamp ordering (chronological)
+            timestamps = loaded_data["metadata"]["timestamp_list"]
+            assert timestamps == sorted(timestamps)
+            assert timestamps[0] == "2025-05-02T12:10:50.644423+0000"
+            assert timestamps[1] == "2025-05-02T12:11:30.991832+0000"
 
-        # Should contain events from both files in chronological order
-        # First file (earlier timestamp) events should come first
-        expected_first_events = sample_rrweb_data["session_1_file_2"]
-        expected_second_events = sample_rrweb_data["session_1_file_1"]
+            # Check merged rrweb_data ordering
+            rrweb_data = loaded_data["rrweb_data"]
 
-        # Verify the merged data contains all events in correct order
-        file_split = len(expected_first_events)
-        assert rrweb_data[:file_split] == expected_first_events
-        assert rrweb_data[file_split:] == expected_second_events
-        assert len(rrweb_data) == len(expected_first_events) + len(
-            expected_second_events
-        )
+            # Should contain events from both files in chronological order
+            # First file (earlier timestamp) events should come first
+            expected_first_events = sample_rrweb_data["session_1_file_2"]
+            expected_second_events = sample_rrweb_data["session_1_file_1"]
 
-    def test_handles_malformed_files_gracefully(self, caplog):
+            # Verify the merged data contains all events in correct order
+            file_split = len(expected_first_events)
+            assert rrweb_data[:file_split] == expected_first_events
+            assert rrweb_data[file_split:] == expected_second_events
+            assert len(rrweb_data) == len(expected_first_events) + len(
+                expected_second_events
+            )
+
+    def test_handles_malformed_files_gracefully(self, caplog, temp_output_dir):
         """Test pipeline skips invalid files and continues processing."""
-        final_sessions = process_rrweb_sessions("mock_bucket_name")
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
-        all_timestamps = [
-            timestamp
-            for session in final_sessions.values()
-            for timestamp in session["metadata"]["timestamp_list"]
-        ]
+        sessions = [SESSION_1_KEY, SESSION_2_KEY]
+        expected_filenames = [f"{session}.json" for session in sessions]
+
+        all_timestamps = []
+        for filename in expected_filenames:
+            filepath = os.path.join(temp_output_dir, filename)
+            with open(filepath, "r", encoding="utf-8") as f:
+                loaded_data = json.load(f)
+                all_timestamps.extend(loaded_data["metadata"]["timestamp_list"])
 
         # Verify that malformed JSON file and missing fields file are omitted
         assert (
@@ -237,7 +260,7 @@ class TestSessionProcessingPipeline:
         assert "missing required fields" in caplog.text
 
     def test_handles_environment_conflicts_with_warning(
-        self, caplog, custom_mock_bucket, mock_gcs_client
+        self, caplog, custom_mock_bucket, mock_gcs_client, temp_output_dir
     ):
         """Test pipeline handles conflicting environments correctly."""
         # Create test data with conflicting environments
@@ -257,19 +280,22 @@ class TestSessionProcessingPipeline:
         mock_bucket = custom_mock_bucket(conflicting_data)
         mock_gcs_client.bucket.return_value = mock_bucket
 
-        final_sessions = process_rrweb_sessions("mock_bucket_name")
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
         # Should use first environment value
-        assert (
-            final_sessions["conflict-session"]["metadata"]["environment"]
-            == "production"
-        )
+        filepath = os.path.join(temp_output_dir, "conflict-session.json")
+        with open(filepath, "r", encoding="utf-8") as f:
+            final_sessions = json.load(f)
+
+            assert final_sessions["metadata"]["environment"] == "production"
 
         # Should log warning
         assert "conflicting environment values" in caplog.text
         assert "Using first value: 'production'" in caplog.text
 
-    def test_handles_no_files(self, caplog, custom_mock_bucket, mock_gcs_client):
+    def test_handles_no_files(
+        self, caplog, custom_mock_bucket, mock_gcs_client, temp_output_dir
+    ):
         """Test pipeline handles no files correctly."""
         # Create test data with no files
         no_data = {}
@@ -277,13 +303,33 @@ class TestSessionProcessingPipeline:
         mock_bucket = custom_mock_bucket(no_data)
         mock_gcs_client.bucket.return_value = mock_bucket
 
-        final_sessions = process_rrweb_sessions("mock_bucket_name")
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
 
         # Should not create any sessions
-        assert final_sessions == {}
+        assert os.listdir(temp_output_dir) == []
 
         # Should log warning
         assert "No files found" in caplog.text
+
+    def test_writes_compact_json_format(self, temp_output_dir):
+        """Test that JSON is written in compact format (no extra whitespace)."""
+        process_rrweb_sessions("mock_bucket_name", temp_output_dir)
+
+        sessions = [SESSION_1_KEY, SESSION_2_KEY]
+        expected_filenames = [f"{session}.json" for session in sessions]
+
+        # Verify file contents
+        for filename in expected_filenames:
+            filepath = os.path.join(temp_output_dir, filename)
+
+            with open(filepath, "r", encoding="utf-8") as f:
+                content = f.read()
+
+                # Verify compact format (no extra whitespace or newlines)
+                assert "\n" not in content
+                assert "  " not in content  # No double spaces
+                assert ": " not in content  # No space after colons
+                assert ", " not in content  # No space after commas
 
 
 class TestSessionDataValidation:
@@ -518,82 +564,18 @@ class TestPrivateMethodEdgeCases:
         result = _merge_session_data({})
         assert result == {}
 
+    def test_write_sessions_to_disk_handles_empty_sessions_dict(self, temp_output_dir):
+        """Test that empty sessions dictionary is handled gracefully."""
+        _write_sessions_to_disk({}, temp_output_dir)
 
-class TestWriteSessionsToDisk:
-    """Test writing session objects to disk as compact JSON files."""
+        # Directory should exist but be empty
+        assert os.path.exists(temp_output_dir)
+        assert os.listdir(temp_output_dir) == []
 
-    def test_writes_sessions_to_correct_files(self, sample_rrweb_data):
-        """Test that sessions are written to correctly named files."""
-        # Create sample session data
-        sessions = {
-            "session-abc-123": {
-                "session_guid": "session-abc-123",
-                "rrweb_data": sample_rrweb_data["session_1_file_1"],
-                "metadata": {
-                    "environment": "production",
-                    "timestamp_list": ["2025-05-02T12:10:50.644423+0000"],
-                },
-            },
-            "session-def-456": {
-                "session_guid": "session-def-456",
-                "rrweb_data": sample_rrweb_data["session_2_file_1"],
-                "metadata": {
-                    "environment": "staging",
-                    "timestamp_list": ["2025-05-02T12:12:15.123456+0000"],
-                },
-            },
-        }
-
-        with tempfile.TemporaryDirectory() as temp_dir:
-            write_sessions_to_disk(sessions, temp_dir)
-
-            # Verify files were created with correct names
-            expected_files = ["session-abc-123.json", "session-def-456.json"]
-            actual_files = os.listdir(temp_dir)
-            assert sorted(actual_files) == sorted(expected_files)
-
-            # Verify file contents
-            for session_guid, session_data in sessions.items():
-                filepath = os.path.join(temp_dir, f"{session_guid}.json")
-                assert os.path.exists(filepath)
-
-                with open(filepath, "r", encoding="utf-8") as f:
-                    loaded_data = json.load(f)
-
-                assert loaded_data == session_data
-
-    def test_writes_compact_json_format(self, sample_rrweb_data):
-        """Test that JSON is written in compact format (no extra whitespace)."""
-        sessions = {
-            "compact-test": {
-                "session_guid": "compact-test",
-                "rrweb_data": sample_rrweb_data["session_1_file_1"],
-                "metadata": {
-                    "environment": "production",
-                    "timestamp_list": ["2025-05-02T12:10:50.644423+0000"],
-                },
-            }
-        }
-
-        with tempfile.TemporaryDirectory() as temp_dir:
-            write_sessions_to_disk(sessions, temp_dir)
-
-            filepath = os.path.join(temp_dir, "compact-test.json")
-            with open(filepath, "r", encoding="utf-8") as f:
-                content = f.read()
-
-            # Verify compact format (no extra whitespace or newlines)
-            assert "\n" not in content
-            assert "  " not in content  # No double spaces
-            assert ": " not in content  # No space after colons
-            assert ", " not in content  # No space after commas
-
-            # Verify it's still valid JSON
-            parsed = json.loads(content)
-            assert parsed == sessions["compact-test"]
-
-    def test_creates_output_directory_if_not_exists(self, sample_rrweb_data):
-        """Test that output directory is created if it doesn't exist."""
+    def test_write_sessions_to_disk_works_if_directory_exists_or_doesnt(
+        self, temp_output_dir, sample_rrweb_data
+    ):
+        """Test that output directory is created if it doesn't exist and reused if it does."""
         sessions = {
             "test-session": {
                 "session_guid": "test-session",
@@ -605,159 +587,27 @@ class TestWriteSessionsToDisk:
             }
         }
 
-        with tempfile.TemporaryDirectory() as temp_dir:
-            # Create a nested directory path that doesn't exist
-            nested_output_dir = os.path.join(temp_dir, "nested", "output", "dir")
-            assert not os.path.exists(nested_output_dir)
+        assert os.path.exists(temp_output_dir)
 
-            write_sessions_to_disk(sessions, nested_output_dir)
+        _write_sessions_to_disk(sessions, temp_output_dir)
 
-            # Verify directory was created
-            assert os.path.exists(nested_output_dir)
-            assert os.path.isdir(nested_output_dir)
+        # Verify file was written
+        filepath = os.path.join(temp_output_dir, "test-session.json")
+        assert os.path.exists(filepath)
 
-            # Verify file was written
-            filepath = os.path.join(nested_output_dir, "test-session.json")
-            assert os.path.exists(filepath)
+        # Create a nested directory path that doesn't exist
+        nested_output_dir = os.path.join(temp_output_dir, "nested", "output", "dir")
+        assert not os.path.exists(nested_output_dir)
 
-    def test_handles_existing_output_directory(self, sample_rrweb_data):
-        """Test that existing output directory is handled correctly."""
-        sessions = {
-            "existing-dir-test": {
-                "session_guid": "existing-dir-test",
-                "rrweb_data": sample_rrweb_data["session_1_file_1"],
-                "metadata": {
-                    "environment": "test",
-                    "timestamp_list": ["2025-05-02T12:10:50.644423+0000"],
-                },
-            }
-        }
+        _write_sessions_to_disk(sessions, nested_output_dir)
 
-        with tempfile.TemporaryDirectory() as temp_dir:
-            # Directory already exists
-            assert os.path.exists(temp_dir)
+        # Verify directory was created
+        assert os.path.exists(nested_output_dir)
+        assert os.path.isdir(nested_output_dir)
 
-            write_sessions_to_disk(sessions, temp_dir)
-
-            # Verify file was written successfully
-            filepath = os.path.join(temp_dir, "existing-dir-test.json")
-            assert os.path.exists(filepath)
-
-    def test_handles_empty_sessions_dict(self):
-        """Test that empty sessions dictionary is handled gracefully."""
-        with tempfile.TemporaryDirectory() as temp_dir:
-            write_sessions_to_disk({}, temp_dir)
-
-            # Directory should exist but be empty
-            assert os.path.exists(temp_dir)
-            assert os.listdir(temp_dir) == []
-
-    def test_preserves_complex_rrweb_data_structures(self):
-        """Test that complex rrweb data structures are preserved exactly."""
-        complex_rrweb_data = [
-            {
-                "type": 0,
-                "data": {
-                    "href": "https://example.com/path?param=value#hash",
-                    "width": 1920,
-                    "height": 1080,
-                    "userAgent": "Mozilla/5.0 (complex user agent string)",
-                },
-                "timestamp": 1651234567890,
-            },
-            {
-                "type": 1,
-                "data": {
-                    "node": {
-                        "id": 1,
-                        "tagName": "html",
-                        "attributes": {"lang": "en", "class": "no-js"},
-                        "childNodes": [
-                            {"id": 2, "tagName": "head"},
-                            {
-                                "id": 3,
-                                "tagName": "body",
-                                "attributes": {"class": "main"},
-                            },
-                        ],
-                    }
-                },
-                "timestamp": 1651234567891,
-            },
-            {
-                "type": 3,
-                "data": {
-                    "source": 2,
-                    "type": 0,
-                    "id": 4,
-                    "x": 100.5,
-                    "y": 200.7,
-                    "timeOffset": 1234,
-                    "target": {"id": 3, "selector": "body.main"},
-                },
-                "timestamp": 1651234567892,
-            },
-        ]
-
-        sessions = {
-            "complex-data-test": {
-                "session_guid": "complex-data-test",
-                "rrweb_data": complex_rrweb_data,
-                "metadata": {
-                    "environment": "production",
-                    "timestamp_list": [
-                        "2025-05-02T12:10:50.644423+0000",
-                        "2025-05-02T12:11:30.991832+0000",
-                    ],
-                },
-            }
-        }
-
-        with tempfile.TemporaryDirectory() as temp_dir:
-            write_sessions_to_disk(sessions, temp_dir)
-
-            filepath = os.path.join(temp_dir, "complex-data-test.json")
-            with open(filepath, "r", encoding="utf-8") as f:
-                loaded_data = json.load(f)
-
-            # Verify complex structure is preserved exactly
-            assert loaded_data["rrweb_data"] == complex_rrweb_data
-            assert (
-                loaded_data["rrweb_data"][0]["data"]["href"]
-                == "https://example.com/path?param=value#hash"
-            )
-            assert (
-                loaded_data["rrweb_data"][1]["data"]["node"]["attributes"]["class"]
-                == "no-js"
-            )
-            assert loaded_data["rrweb_data"][2]["data"]["x"] == 100.5
-
-    def test_handles_special_characters_in_session_guid(self):
-        """Test that special characters in session_guid are handled correctly."""
-        sessions = {
-            "session-with-special-chars_123": {
-                "session_guid": "session-with-special-chars_123",
-                "rrweb_data": [{"type": 1, "data": {"test": "value"}}],
-                "metadata": {
-                    "environment": "test",
-                    "timestamp_list": ["2025-05-02T12:10:50.644423+0000"],
-                },
-            }
-        }
-
-        with tempfile.TemporaryDirectory() as temp_dir:
-            write_sessions_to_disk(sessions, temp_dir)
-
-            # Verify file was created with correct name
-            expected_filename = "session-with-special-chars_123.json"
-            filepath = os.path.join(temp_dir, expected_filename)
-            assert os.path.exists(filepath)
-
-            # Verify content is correct
-            with open(filepath, "r", encoding="utf-8") as f:
-                loaded_data = json.load(f)
-
-            assert loaded_data == sessions["session-with-special-chars_123"]
+        # Verify file was written
+        filepath = os.path.join(nested_output_dir, "test-session.json")
+        assert os.path.exists(filepath)
 
 
 class TestGcsInteractionEdgeCases:

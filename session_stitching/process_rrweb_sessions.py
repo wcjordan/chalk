@@ -376,7 +376,7 @@ def _merge_session_data(
     return merged_sessions
 
 
-def write_sessions_to_disk(
+def _write_sessions_to_disk(
     sessions: Dict[str, Dict[str, Any]], output_dir: str
 ) -> None:
     """
@@ -410,7 +410,9 @@ def write_sessions_to_disk(
     logger.info("Successfully wrote %d sessions to %s", len(sessions), output_dir)
 
 
-def process_rrweb_sessions(bucket_name: str) -> Dict[str, Dict[str, Any]]:
+def process_rrweb_sessions(
+    bucket_name: str, output_dir: str = "output_sessions"
+) -> None:
     """
     Main function for processing rrweb session data.
     This function orchestrates the downloading, parsing, grouping, sorting,
@@ -418,9 +420,6 @@ def process_rrweb_sessions(bucket_name: str) -> Dict[str, Dict[str, Any]]:
 
     Args:
         bucket_name: Name of the GCS bucket containing rrweb session JSON files
-
-    Returns:
-        Dict[str, Dict[str, Any]]: Dictionary mapping session_guid to final session objects
     """
     # Download all JSON files
     files = _download_json_files(bucket_name)
@@ -454,10 +453,9 @@ def process_rrweb_sessions(bucket_name: str) -> Dict[str, Dict[str, Any]]:
     final_sessions = _merge_session_data(validated_sessions)
     logger.info("Number of final sessions: %d", len(final_sessions))
 
-    return final_sessions
+    _write_sessions_to_disk(final_sessions, output_dir)
 
 
 if __name__ == "__main__":
     EXAMPLE_BUCKET = "example-bucket-name"
-    session_output = process_rrweb_sessions(EXAMPLE_BUCKET)
-    logger.info("Output: %s", session_output)
+    process_rrweb_sessions(EXAMPLE_BUCKET)
