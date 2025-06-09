@@ -22,6 +22,7 @@ from process_rrweb_sessions import (
     _validate_and_extract_environment,
     _merge_session_data,
     _write_sessions_to_disk,
+    print_summary,
     process_rrweb_sessions,
 )
 
@@ -512,21 +513,23 @@ class TestPrivateMethodEdgeCases:
             "empty-session": {"sorted_entries": [], "timestamp_list": []}
         }
 
-        result = _validate_and_extract_environment(sessions_with_empty)
+        result, conflicts = _validate_and_extract_environment(sessions_with_empty)
 
         # Should handle empty entries gracefully
         assert "empty-session" in result
         assert result["empty-session"]["environment"] == ""  # Default for empty
         assert result["empty-session"]["sorted_entries"] == []
         assert result["empty-session"]["timestamp_list"] == []
+        assert conflicts == 0
 
     def test_processing_handles_empty_session_groups(self):
         """Test edge case of empty session groups."""
         result = _sort_and_collect_timestamps({})
         assert result == {}
 
-        result = _validate_and_extract_environment({})
+        result, conflicts = _validate_and_extract_environment({})
         assert result == {}
+        assert conflicts == 0
 
     def test_merge_session_data_handles_empty_session_data(self):
         """Test edge case of empty session_data lists gracefully."""
@@ -608,6 +611,53 @@ class TestPrivateMethodEdgeCases:
         # Verify file was written
         filepath = os.path.join(nested_output_dir, "test-session.json")
         assert os.path.exists(filepath)
+
+
+class TestSummaryLogging:
+    """Test summary logging functionality."""
+
+    def test_print_summary_logs_all_statistics(self, caplog):
+        """Test that print_summary logs all required statistics correctly."""
+        test_stats = {
+            "files_downloaded": 661,
+            "files_valid": 645,
+            "files_skipped": 16,
+            "sessions_total": 58,
+            "sessions_written": 58,
+            "sessions_with_env_conflicts": 2,
+        }
+
+        print_summary(test_stats)
+
+        # Verify all statistics are logged
+        assert "Total files downloaded from GCS: 661" in caplog.text
+        assert "Files successfully parsed and validated: 645" in caplog.text
+        assert "Files skipped due to errors: 16" in caplog.text
+        assert "Total unique sessions processed: 58" in caplog.text
+        assert "Sessions with environment conflicts: 2" in caplog.text
+        assert "Session files successfully written to disk: 58" in caplog.text
+        assert "SESSION PROCESSING SUMMARY" in caplog.text
+
+    def test_print_summary_handles_zero_values(self, caplog):
+        """Test that print_summary handles zero values correctly."""
+        test_stats = {
+            "files_downloaded": 0,
+            "files_valid": 0,
+            "files_skipped": 0,
+            "sessions_total": 0,
+            "sessions_written": 0,
+            "sessions_with_env_conflicts": 0,
+        }
+
+        print_summary(test_stats)
+
+        # Verify zero values are logged correctly
+        assert "Total files downloaded from GCS: 0" in caplog.text
+        assert "Files successfully parsed and validated: 0" in caplog.text
+        assert "Files skipped due to errors: 0" in caplog.text
+        assert "Total unique sessions processed: 0" in caplog.text
+        assert "Sessions with environment conflicts: 0" in caplog.text
+        assert "Session files successfully written to disk: 0" in caplog.text
 
 
 class TestGcsInteractionEdgeCases:

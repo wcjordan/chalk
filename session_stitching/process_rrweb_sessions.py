@@ -247,7 +247,7 @@ def _sort_and_collect_timestamps(
 
 def _validate_and_extract_environment(
     sessions: Dict[str, Dict[str, Any]],
-) -> Dict[str, Dict[str, Any]]:
+) -> Tuple[Dict[str, Dict[str, Any]], int]:
     """
     Validate and deduplicate environment values per session.
 
@@ -256,12 +256,15 @@ def _validate_and_extract_environment(
                  sorted_entries and timestamp_list
 
     Returns:
-        Dict[str, Dict[str, Any]]: Dictionary with session_guid as keys and values containing:
-                                   - sorted_entries: preserved from input
-                                   - timestamp_list: preserved from input
-                                   - environment: deduplicated and validated environment value
+        Tuple[Dict[str, Dict[str, Any]], int]: Tuple containing:
+            - Dictionary with session_guid as keys and values containing:
+              - sorted_entries: preserved from input
+              - timestamp_list: preserved from input
+              - environment: deduplicated and validated environment value
+            - Number of sessions with environment conflicts
     """
     validated_sessions = {}
+    sessions_with_env_conflicts = 0
 
     for session_guid, session_data in sessions.items():
         sorted_entries = session_data["sorted_entries"]
@@ -278,6 +281,7 @@ def _validate_and_extract_environment(
 
         # Log warning if multiple distinct environment values found
         if len(unique_environments) > 1:
+            sessions_with_env_conflicts += 1
             logger.warning(
                 "Session '%s' has conflicting environment values: %s. Using first value: '%s'",
                 session_guid,
@@ -300,7 +304,7 @@ def _validate_and_extract_environment(
     logger.info(
         "Validated and extracted environment for %d sessions", len(validated_sessions)
     )
-    return validated_sessions
+    return validated_sessions, sessions_with_env_conflicts
 
 
 def _download_json_files(bucket_name: str) -> List[Tuple[str, str]]:
@@ -376,6 +380,31 @@ def _merge_session_data(
     return merged_sessions
 
 
+def print_summary(stats: Dict[str, int]) -> None:
+    """
+    Print summary statistics of the session processing run.
+
+    Args:
+        stats: Dictionary containing processing statistics with keys:
+               - files_downloaded: Total number of files retrieved from GCS
+               - files_valid: Number of files successfully parsed and validated
+               - files_skipped: Number of files skipped due to errors
+               - sessions_total: Total number of unique sessions processed
+               - sessions_written: Number of session files successfully written to disk
+               - sessions_with_env_conflicts: Number of sessions with environment inconsistencies
+    """
+    logger.info("=" * 60)
+    logger.info("SESSION PROCESSING SUMMARY")
+    logger.info("=" * 60)
+    logger.info("Total files downloaded from GCS: %d", stats["files_downloaded"])
+    logger.info("Files successfully parsed and validated: %d", stats["files_valid"])
+    logger.info("Files skipped due to errors: %d", stats["files_skipped"])
+    logger.info("Total unique sessions processed: %d", stats["sessions_total"])
+    logger.info("Sessions with environment conflicts: %d", stats["sessions_with_env_conflicts"])
+    logger.info("Session files successfully written to disk: %d", stats["sessions_written"])
+    logger.info("=" * 60)
+
+
 def _write_sessions_to_disk(
     sessions: Dict[str, Dict[str, Any]], output_dir: str
 ) -> None:
@@ -420,11 +449,15 @@ def process_rrweb_sessions(
 
     Args:
         bucket_name: Name of the GCS bucket containing rrweb session JSON files
+        output_dir: Directory where processed session files will be written
     """
     # Download all JSON files
     files = _download_json_files(bucket_name)
     logger.info("Number of JSON files found: %d", len(files))
 
+    # Track statistics for summary
+    files_downloaded = len(files)
+    
     # Verification: print first 100 characters of first file content
     parsed_files = []
     if not files:
@@ -437,6 +470,9 @@ def process_rrweb_sessions(
     ]
     parsed_files = [entry for entry in parsed_files if entry is not None]
 
+    files_valid = len(parsed_files)
+    files_skipped = files_downloaded - files_valid
+
     # Group by session_guid
     grouped_sessions = _group_by_session_guid(parsed_files)
     logger.info("Number of grouped sessions: %d", len(grouped_sessions))
@@ -446,14 +482,28 @@ def process_rrweb_sessions(
     logger.info("Number of sorted sessions: %d", len(sorted_sessions))
 
     # Validate each session has the same environment
-    validated_sessions = _validate_and_extract_environment(sorted_sessions)
+    validated_sessions, sessions_with_env_conflicts = _validate_and_extract_environment(sorted_sessions)
     logger.info("Number of validated sessions: %d", len(validated_sessions))
+
+    sessions_total = len(validated_sessions)
 
     # Merge session data arrays
     final_sessions = _merge_session_data(validated_sessions)
     logger.info("Number of final sessions: %d", len(final_sessions))
 
     _write_sessions_to_disk(final_sessions, output_dir)
+    sessions_written = len(final_sessions)
+
+    # Print summary statistics
+    summary_stats = {
+        "files_downloaded": files_downloaded,
+        "files_valid": files_valid,
+        "files_skipped": files_skipped,
+        "sessions_total": sessions_total,
+        "sessions_written": sessions_written,
+        "sessions_with_env_conflicts": sessions_with_env_conflicts,
+    }
+    print_summary(summary_stats)
 
 
 if __name__ == "__main__":
