@@ -430,7 +430,7 @@ Use Python’s built-in `logging` module at the `INFO` level. Assume you have ac
 
 Requirements:
 
-* Include a `print_summary(stats: Dict[str, int])` function that logs the above information in a clean, readable format.
+* Include a `_print_summary(stats: Dict[str, int])` function that logs the above information in a clean, readable format.
 * Accept a dictionary of summary stats such as:
 
 ```python
@@ -449,14 +449,14 @@ Requirements:
 Use this function signature:
 
 ```python
-def print_summary(stats: Dict[str, int]) -> None:
+def _print_summary(stats: Dict[str, int]) -> None:
 ```
 
 #### 🧪 Verification
 
 Add a test or script block that:
 
-* Calls `print_summary()` with a representative stats dictionary.
+* Calls `_print_summary()` with a representative stats dictionary.
 * Confirms logs appear correctly with no formatting errors.
 
 Do not change core logic or processing functions in this step — only add the summary reporting at the end of the workflow.
