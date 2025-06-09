@@ -200,7 +200,7 @@ def _group_by_session_guid(
 
     # Log number of files per session
     for session_guid, session_records in grouped_sessions.items():
-        logger.info("Session '%s': %d files", session_guid, len(session_records))
+        logger.debug("Session '%s': %d files", session_guid, len(session_records))
 
     return grouped_sessions
 
@@ -233,7 +233,7 @@ def _sort_and_collect_timestamps(
             "timestamp_list": timestamp_list,
         }
 
-        logger.info(
+        logger.debug(
             "Session '%s': sorted %d entries by timestamp",
             session_guid,
             len(sorted_entries),
@@ -367,7 +367,7 @@ def _merge_session_data(
             },
         }
 
-        logger.info(
+        logger.debug(
             "Session '%s': merged %d events from %d files",
             session_guid,
             len(rrweb_data),
@@ -436,7 +436,7 @@ def _write_sessions_to_disk(
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(session_data, f, separators=(",", ":"), ensure_ascii=False)
 
-        logger.info("Wrote session '%s' to %s", session_guid, filepath)
+        logger.debug("Wrote session '%s' to %s", session_guid, filepath)
 
     logger.info("Successfully wrote %d sessions to %s", len(sessions), output_dir)
 
