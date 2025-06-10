@@ -474,3 +474,49 @@ Adds user-facing command-line arguments to set GCS bucket name, output directory
 * Confirm that behavior (paths, verbosity) matches input.
 * Add a help message and test with `--help`.
 
+**Detailed Prompt**
+
+You’ve implemented a multi-stage Python script to process rrweb session files from a GCS bucket. Now you’ll expose it via a command-line interface.
+
+### 🛠️ Task
+
+Add a CLI interface using Python’s `argparse` module that allows the user to configure the following:
+
+#### Required arguments:
+
+* `--bucket`: the name of the GCS bucket to read from
+
+#### Optional arguments:
+
+* `--output_dir`: local directory where session files will be saved (default: `"./stitched_sessions"`)
+* `--log_level`: controls verbosity of logging (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`; default: `INFO`)
+
+### Requirements:
+
+1. Configure logging level using `logging.basicConfig(level=...)` based on the `--log_level` flag.
+2. Validate that `--bucket` is provided; exit with a clear error if not.
+3. Use the parsed CLI arguments to invoke your main session processing function(s).
+
+You may assume all the processing steps (from downloading to writing files) are composed in a `main()` function that accepts the bucket name and output directory.
+
+Use this CLI structure as a starting point:
+
+```bash
+python process_rrweb_sessions.py \
+  --bucket my-rrweb-bucket \
+  --output_dir ./output_sessions \
+  --log_level DEBUG
+```
+
+### 🧪 Verification
+
+Add a `main()` block that:
+
+* Parses CLI arguments.
+* Sets up logging.
+* Calls your pipeline entry point with the configured values.
+* Allows the script to be run standalone with `python process_rrweb_sessions.py`.
+
+Test by running the script with different flags and confirming behavior matches expectations.
+
+Do not change processing logic or add new features — this step is only about creating a clean, user-friendly CLI interface.
