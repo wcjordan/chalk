@@ -594,10 +594,10 @@ def main() -> None:
         logger.info("Session processing completed successfully")
 
     except KeyboardInterrupt:
-        print("\nOperation cancelled by user", file=sys.stderr)
+        logger.error("Operation cancelled by user")
         sys.exit(1)
     except Exception as e:  # pylint: disable=broad-except
-        print(f"Error: {e}", file=sys.stderr)
+        logger.error("Error: %s", e)
         sys.exit(1)
 
 
