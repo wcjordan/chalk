@@ -41,6 +41,8 @@ def load_events(filepath: str) -> List[dict]:
             f"Invalid JSON in file {filepath}: {exc.msg}", exc.doc, exc.pos
         ) from exc
 
+    if "rrweb_data" not in raw_data:
+        raise ValueError("Missing 'rrweb_data' field in session file")
     rrweb_data = raw_data.get("rrweb_data", None)
 
     # Validate that the top-level structure is a list
