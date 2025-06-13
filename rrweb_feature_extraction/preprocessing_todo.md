@@ -3,14 +3,14 @@
 ## Step 1: Project & Test Harness Setup
 
 ### Tasks:
-- [ ] Create `rrweb_ingest/` package directory structure
-- [ ] Add `__init__.py` to make it a proper Python package
-- [ ] Initialize Git repository or ensure folder is version control ready
-- [ ] Add pytest to project dependencies (`requirements.txt` or `pyproject.toml`)
-- [ ] Create `tests/` directory for test files
-- [ ] Write basic smoke test in `tests/test_smoke.py` that imports `rrweb_ingest`
-- [ ] Create CI configuration file (`.github/workflows/ci.yml` or equivalent)
-- [ ] Configure CI to install dependencies and run pytest
+- [x] Create `rrweb_ingest/` package directory structure
+- [x] Add `__init__.py` to make it a proper Python package
+- [x] Initialize Git repository or ensure folder is version control ready
+- [x] Add pytest to project dependencies (`requirements.txt` or `pyproject.toml`)
+- [x] Create `tests/` directory for test files
+- [x] Write basic smoke test in `tests/test_smoke.py` that imports `rrweb_ingest`
+- [x] Create CI configuration file (`.github/workflows/ci.yml` or equivalent)
+- [x] Configure CI to install dependencies and run pytest
 - [ ] Verify pytest runs successfully with smoke test
 - [ ] Test CI pipeline locally or in CI environment
 - [ ] Add basic project documentation structure

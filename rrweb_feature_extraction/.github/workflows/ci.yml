@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, "3.10", "3.11"]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r rrweb_feature_extraction/requirements.txt
+    
+    - name: Run tests with pytest
+      run: |
+        cd rrweb_feature_extraction
+        python -m pytest tests/ -v
+    
+    - name: Check import works
+      run: |
+        cd rrweb_feature_extraction
+        python -c "import rrweb_ingest; print(f'Successfully imported rrweb_ingest v{rrweb_ingest.__version__}')"
