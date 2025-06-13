@@ -34,12 +34,12 @@ def load_events(filepath: str) -> List[dict]:
     try:
         with open(filepath, "r", encoding="utf-8") as f:
             raw_data = json.load(f)
-    except FileNotFoundError:
-        raise FileNotFoundError(f"Session file not found: {filepath}")
-    except json.JSONDecodeError as e:
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(f"Session file not found: {filepath}") from exc
+    except json.JSONDecodeError as exc:
         raise json.JSONDecodeError(
-            f"Invalid JSON in file {filepath}: {e.msg}", e.doc, e.pos
-        )
+            f"Invalid JSON in file {filepath}: {exc.msg}", exc.doc, exc.pos
+        ) from exc
 
     rrweb_data = raw_data.get("rrweb_data", None)
 
@@ -66,8 +66,8 @@ def load_events(filepath: str) -> List[dict]:
 
 
 if __name__ == "__main__":
-    filepath = (
+    EXAMPLE_PATH = (
         "../session_stitching/output_sessions/4b458001-0e2c-483e-b013-a3410e3d8b1f.json"
     )
-    events = load_events(filepath)
-    print(f"Loaded {len(events)} events from {filepath}")
+    events = load_events(EXAMPLE_PATH)
+    print(f"Loaded {len(events)} events from {EXAMPLE_PATH}")

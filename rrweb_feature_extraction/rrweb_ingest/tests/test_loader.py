@@ -6,9 +6,10 @@ rrweb session data from JSON files.
 """
 
 import json
-import pytest
 import tempfile
-import os
+
+import pytest
+
 from rrweb_ingest.loader import load_events
 
 
