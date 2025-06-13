@@ -17,13 +17,14 @@ def fixture_create_input_file():
     """Helper function to create a temporary JSON file with the given data."""
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json") as f:
+
         def _create_input_file(events, raw_string=None):
             data = {
                 "session_guid": "12345",
                 "rrweb_data": events,
                 "metadata": {
                     "environment": "ci",
-                }
+                },
             }
 
             if raw_string:
@@ -34,6 +35,7 @@ def fixture_create_input_file():
             return f.name
 
         yield _create_input_file
+
 
 class TestLoadEvents:
     """Test cases for the load_events function."""
@@ -64,7 +66,6 @@ class TestLoadEvents:
         assert result[2]["type"] == 2  # timestamp 1000
         assert result[3]["type"] == 3  # timestamp 1500
 
-
     def test_file_not_found(self):
         """Test that FileNotFoundError is raised for non-existent files."""
         with pytest.raises(FileNotFoundError, match="Session file not found"):
@@ -72,7 +73,9 @@ class TestLoadEvents:
 
     def test_malformed_json(self, create_input_file):
         """Test that JSONDecodeError is raised for invalid JSON syntax."""
-        temp_path = create_input_file([], raw_string='{"invalid": json syntax}')  # Invalid JSON
+        temp_path = create_input_file(
+            [], raw_string='{"invalid": json syntax}'
+        )  # Invalid JSON
 
         with pytest.raises(json.JSONDecodeError, match="Invalid JSON"):
             load_events(temp_path)

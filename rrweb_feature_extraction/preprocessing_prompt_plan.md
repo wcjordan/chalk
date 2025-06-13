@@ -24,8 +24,8 @@ You’re setting up the foundation for the **Input Ingestion & Preprocessing** m
 2. Initialize a Git repository (or ensure the folder is ready for version control).
 3. Add a testing framework (using **pytest**):
    * Add `pytest` to `requirements.txt` or `pyproject.toml`.
-   * Create a `tests/` directory.
-   * Write a basic smoke test in `tests/test_smoke.py` that simply imports `rrweb_ingest` and asserts that the module loads without error.
+   * Create a `rrweb_ingest/tests/` directory.
+   * Write a basic smoke test in `rrweb_ingest/tests/test_smoke.py` that simply imports `rrweb_ingest` and asserts that the module loads without error.
 4. Scaffold a Continuous Integration configuration file (e.g., `.github/workflows/ci.yml` or equivalent) that installs dependencies and runs `pytest`.
 
 **Verification Criteria:**
@@ -60,7 +60,7 @@ You’re implementing the **JSON Loader & Sorter** for the Input Ingestion modul
    * Raises a clear exception if the file doesn’t exist, isn’t valid JSON, or if any event is missing required fields.
    * Returns the list of events **sorted in ascending order** by their `timestamp`.
 2. Add or update `rrweb_ingest/loader.py`’s docstring to describe the function’s behavior, inputs, outputs, and exceptions.
-3. In `tests/test_loader.py`, write unit tests covering:
+3. In `rrweb_ingest/tests/test_loader.py`, write unit tests covering:
    * Loading a well-formed small JSON session and verifying that the returned list is sorted.
    * Passing malformed JSON (invalid syntax) raises `JSONDecodeError`.
    * Passing a JSON array with an element missing `"type"`, `"timestamp"`, or `"data"` raises a `ValueError`.

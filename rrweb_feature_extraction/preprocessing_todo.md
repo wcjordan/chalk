@@ -7,7 +7,7 @@
 - [x] Add `__init__.py` to make it a proper Python package
 - [x] Initialize Git repository or ensure folder is version control ready
 - [x] Add pytest to project dependencies (`requirements.txt` or `pyproject.toml`)
-- [x] Create `tests/` directory for test files
+- [x] Create `rrweb_ingest/tests/` directory for test files
 - [x] Write basic smoke test in `tests/test_smoke.py` that imports `rrweb_ingest`
 - [x] Create CI configuration file (`.github/workflows/ci.yml` or equivalent)
 - [x] Configure CI to install dependencies and run pytest

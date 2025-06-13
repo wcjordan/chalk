@@ -66,6 +66,8 @@ def load_events(filepath: str) -> List[dict]:
 
 
 if __name__ == "__main__":
-    filepath = '../session_stitching/output_sessions/4b458001-0e2c-483e-b013-a3410e3d8b1f.json'
+    filepath = (
+        "../session_stitching/output_sessions/4b458001-0e2c-483e-b013-a3410e3d8b1f.json"
+    )
     events = load_events(filepath)
     print(f"Loaded {len(events)} events from {filepath}")
