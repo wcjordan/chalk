@@ -18,18 +18,18 @@
 ## Step 2: JSON Loader & Sorter
 
 ### Tasks:
-- [ ] Implement `load_events(filepath)` function in `rrweb_ingest/loader.py`
-- [ ] Add file existence check with appropriate error handling
-- [ ] Parse JSON content into Python list structure
-- [ ] Validate each event has required fields: `type`, `timestamp`, `data`
-- [ ] Sort events by `timestamp` in ascending order
-- [ ] Handle malformed JSON with `JSONDecodeError` exceptions
-- [ ] Handle missing required fields with `ValueError` exceptions
-- [ ] Write unit tests for valid JSON loading and sorting
-- [ ] Write unit tests for malformed JSON error cases
-- [ ] Write unit tests for missing field validation
+- [x] Implement `load_events(filepath)` function in `rrweb_ingest/loader.py`
+- [x] Add file existence check with appropriate error handling
+- [x] Parse JSON content into Python list structure
+- [x] Validate each event has required fields: `type`, `timestamp`, `data`
+- [x] Sort events by `timestamp` in ascending order
+- [x] Handle malformed JSON with `JSONDecodeError` exceptions
+- [x] Handle missing required fields with `ValueError` exceptions
+- [x] Write unit tests for valid JSON loading and sorting
+- [x] Write unit tests for malformed JSON error cases
+- [x] Write unit tests for missing field validation
 - [ ] Test with sample rrweb JSON files
-- [ ] Verify correct timestamp sorting behavior
+- [x] Verify correct timestamp sorting behavior
 
 ## Step 3: Event Classification
 
