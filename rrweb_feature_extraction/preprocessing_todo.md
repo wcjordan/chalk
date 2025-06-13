@@ -49,15 +49,15 @@
 ## Step 4: Basic Chunk Segmentation
 
 ### Tasks:
-- [ ] Implement `segment_into_chunks(interactions, snapshots)` in `rrweb_ingest/segmenter.py`
-- [ ] Create logic to start new chunks at FullSnapshot boundaries
-- [ ] Iterate through interactions and group by snapshot timestamps
-- [ ] Handle case where no snapshots exist
-- [ ] Return list of raw interaction event lists (chunks)
-- [ ] Write unit tests with synthetic interaction and snapshot data
-- [ ] Test chunk boundaries align with snapshot positions
-- [ ] Verify no events are dropped during segmentation
-- [ ] Test edge cases: no snapshots, no interactions, single events
+- [x] Implement `segment_into_chunks(interactions, snapshots)` in `rrweb_ingest/segmenter.py`
+- [x] Create logic to start new chunks at FullSnapshot boundaries
+- [x] Iterate through interactions and group by snapshot timestamps
+- [x] Handle case where no snapshots exist
+- [x] Return list of raw interaction event lists (chunks)
+- [x] Write unit tests with synthetic interaction and snapshot data
+- [x] Test chunk boundaries align with snapshot positions
+- [x] Verify no events are dropped during segmentation
+- [x] Test edge cases: no snapshots, no interactions, single events
 - [ ] Add logging for chunk count and sizes
 
 ## Step 5: Time-Gap & Size-Cap Chunking
