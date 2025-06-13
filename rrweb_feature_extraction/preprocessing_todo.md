@@ -34,16 +34,16 @@
 ## Step 3: Event Classification
 
 ### Tasks:
-- [ ] Implement `classify_events(events)` function in `rrweb_ingest/classifier.py`
-- [ ] Create logic to separate events by `type` field:
-  - [ ] `type == 2` → snapshots (FullSnapshot)
-  - [ ] `type == 3` → interactions (IncrementalSnapshot)
-  - [ ] All other types → others (Meta, Custom, Plugin, etc.)
-- [ ] Return tuple of `(snapshots, interactions, others)` lists
-- [ ] Write unit tests for each event type classification
-- [ ] Test with mixed event types to verify correct bucketing
-- [ ] Test edge case: empty event list returns three empty lists
-- [ ] Verify no events are lost or duplicated during classification
+- [x] Implement `classify_events(events)` function in `rrweb_ingest/classifier.py`
+- [x] Create logic to separate events by `type` field:
+  - [x] `type == 2` → snapshots (FullSnapshot)
+  - [x] `type == 3` → interactions (IncrementalSnapshot)
+  - [x] All other types → others (Meta, Custom, Plugin, etc.)
+- [x] Return tuple of `(snapshots, interactions, others)` lists
+- [x] Write unit tests for each event type classification
+- [x] Test with mixed event types to verify correct bucketing
+- [x] Test edge case: empty event list returns three empty lists
+- [x] Verify no events are lost or duplicated during classification
 - [ ] Add logging for classification statistics
 
 ## Step 4: Basic Chunk Segmentation
