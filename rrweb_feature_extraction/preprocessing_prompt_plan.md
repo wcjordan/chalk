@@ -1,0 +1,133 @@
+Below is an **incremental implementation roadmap** for the **Input Ingestion & Preprocessing** module. Each step is self-contained, reviewable, and verifiable without breaking downstream behavior.
+
+---
+
+## 1. Project & Test Harness Setup
+
+**Goal:** Establish repository structure, test framework, and basic CI.
+**Accomplishes:**
+
+* Create a new module/package (e.g. `rrweb_ingest/`)
+* Add testing framework (e.g. pytest) and CI config stub
+* Include a “hello ingestion” smoke test that imports the module
+  **Verification:**
+* All tests pass on checkout
+* CI pipeline runs without errors
+
+---
+
+## 2. JSON Loader & Sorter
+
+**Goal:** Implement `load_events(filepath)` to open, parse, validate, and sort a raw rrweb JSON file.
+**Accomplishes:**
+
+* File‐exists check + JSON parsing
+* Schema check: each item has `type`, `timestamp`, `data`
+* Return a list of events sorted by `timestamp`
+  **Verification:**
+* Unit tests validate correct sorting order
+* Tests for malformed JSON and missing fields raise the expected exceptions
+
+---
+
+## 3. Event Classification
+
+**Goal:** Add `classify_events(events)` to split into `snapshots`, `interactions`, and `others`.
+**Accomplishes:**
+
+* Iterate sorted events, assign to three buckets based on `type`
+* Return a tuple `(snapshots, interactions, others)`
+  **Verification:**
+* Tests cover events of each `type` and assert correct bucket placement
+* Edge case: empty event list yields three empty buckets
+
+---
+
+## 4. Basic Chunk Segmentation
+
+**Goal:** Implement `segment_into_chunks(interactions, snapshots)` that creates preliminary chunks at snapshot boundaries.
+**Accomplishes:**
+
+* Iterate `interactions`, start new chunk whenever hitting a `FullSnapshot` timestamp
+* Produce a list of raw interaction lists
+  **Verification:**
+* Given synthetic interactions and snapshot events, assert chunk boundaries match snapshot positions
+* No dropped or merged events beyond boundaries
+
+---
+
+## 5. Time‐Gap & Size‐Cap Chunking
+
+**Goal:** Enhance segmentation to respect `max_gap_ms` and `max_events` thresholds.
+**Accomplishes:**
+
+* Split chunks further when time gap between events exceeds threshold
+* Enforce a maximum number of events per chunk
+  **Verification:**
+* Tests simulate gaps just below/above threshold and assert split/no‐split
+* Tests simulate over‐sized chunks and assert automatic split
+
+---
+
+## 6. Noise-Filtering Framework
+
+**Goal:** Introduce `is_low_signal(event)` predicate and `clean_chunk(events)` to drop trivial events.
+**Accomplishes:**
+
+* Define and document default noise rules (mousemove, micro-scroll, trivial mutation)
+* Apply deduplication of identical events
+  **Verification:**
+* Parameterized tests for each noise rule ensure correct drop/keep decisions
+* Duplicates in a chunk are reduced to one
+
+---
+
+## 7. Chunk Normalization & Schema
+
+**Goal:** Wrap cleaned event lists into `Chunk` objects with standardized fields.
+**Accomplishes:**
+
+* Generate `chunk_id`, record `start_time`, `end_time`, `events`, and basic metadata (`num_events`, `duration_ms`)
+* Define the `Chunk` dataclass or equivalent schema
+  **Verification:**
+* Tests confirm that fields match expectations on sample data
+* JSON‐schema or type‐check validation passes for constructed chunks
+
+---
+
+## 8. End-to-End Ingest Pipeline
+
+**Goal:** Wire together loader → classifier → segmentation → cleaning → normalization into `ingest_session(filepath)`.
+**Accomplishes:**
+
+* Single entry point that returns a list of `Chunk` instances
+* Proper exception bubbling for invalid inputs
+  **Verification:**
+* Integration tests on real-world sample sessions verify consistent chunk counts and schema conformance
+* Regression test ensures no change in chunk outputs for the same input
+
+---
+
+## 9. Configuration & Extensibility Hooks
+
+**Goal:** Expose key thresholds (e.g. `max_gap_ms`, `max_events`) via a config object or parameters.
+**Accomplishes:**
+
+* Refactor hard-coded values into configurable settings
+* Allow injection of custom noise filters
+  **Verification:**
+* Tests override thresholds and confirm altered chunking behavior
+* Custom noise filter is invoked when provided
+
+---
+
+## 10. Documentation & Sample Data
+
+**Goal:** Ship user-facing README and include a small sample rrweb JSON for manual exploration.
+**Accomplishes:**
+
+* Document each public function with expected inputs/outputs
+* Provide example CLI or code snippet in README
+  **Verification:**
+* README code example runs successfully against the sample data
+* Peer confirms documentation clarity in a short review
