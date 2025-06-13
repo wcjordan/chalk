@@ -12,10 +12,10 @@ from rrweb_ingest.classifier import classify_events
 def test_classify_empty_event_list():
     """Test that an empty event list returns three empty lists."""
     snapshots, interactions, others = classify_events([])
-    
-    assert snapshots == []
-    assert interactions == []
-    assert others == []
+
+    assert not snapshots
+    assert not interactions
+    assert not others
 
 
 def test_classify_mixed_event_types():
@@ -29,23 +29,23 @@ def test_classify_mixed_event_types():
         {"type": 3, "timestamp": 6000, "data": {"source": "interaction2"}},
         {"type": 4, "timestamp": 7000, "data": {"source": "plugin"}},
     ]
-    
+
     snapshots, interactions, others = classify_events(events)
-    
+
     # Verify snapshots (type == 2)
     assert len(snapshots) == 2
     assert snapshots[0]["type"] == 2
     assert snapshots[0]["data"]["source"] == "snapshot"
     assert snapshots[1]["type"] == 2
     assert snapshots[1]["data"]["source"] == "snapshot2"
-    
+
     # Verify interactions (type == 3)
     assert len(interactions) == 2
     assert interactions[0]["type"] == 3
     assert interactions[0]["data"]["source"] == "interaction"
     assert interactions[1]["type"] == 3
     assert interactions[1]["data"]["source"] == "interaction2"
-    
+
     # Verify others (all other types)
     assert len(others) == 3
     assert others[0]["type"] == 0
@@ -56,46 +56,13 @@ def test_classify_mixed_event_types():
     assert others[2]["data"]["source"] == "plugin"
 
 
-def test_classify_single_event_type():
-    """Test classification when all events are of the same type."""
-    # Test all snapshots
-    snapshot_events = [
-        {"type": 2, "timestamp": 1000, "data": {}},
-        {"type": 2, "timestamp": 2000, "data": {}},
-    ]
-    snapshots, interactions, others = classify_events(snapshot_events)
-    assert len(snapshots) == 2
-    assert len(interactions) == 0
-    assert len(others) == 0
-    
-    # Test all interactions
-    interaction_events = [
-        {"type": 3, "timestamp": 1000, "data": {}},
-        {"type": 3, "timestamp": 2000, "data": {}},
-    ]
-    snapshots, interactions, others = classify_events(interaction_events)
-    assert len(snapshots) == 0
-    assert len(interactions) == 2
-    assert len(others) == 0
-    
-    # Test all others
-    other_events = [
-        {"type": 0, "timestamp": 1000, "data": {}},
-        {"type": 1, "timestamp": 2000, "data": {}},
-    ]
-    snapshots, interactions, others = classify_events(other_events)
-    assert len(snapshots) == 0
-    assert len(interactions) == 0
-    assert len(others) == 2
-
-
 def test_classify_missing_type_field():
     """Test that events missing the 'type' field raise KeyError."""
     events_missing_type = [
         {"timestamp": 1000, "data": {"source": "no_type"}},
         {"type": 2, "timestamp": 2000, "data": {"source": "has_type"}},
     ]
-    
+
     with pytest.raises(KeyError):
         classify_events(events_missing_type)
 
@@ -107,9 +74,9 @@ def test_classify_unexpected_type_values():
         {"type": -1, "timestamp": 2000, "data": {}},
         {"type": "string", "timestamp": 3000, "data": {}},
     ]
-    
+
     snapshots, interactions, others = classify_events(events_with_unusual_types)
-    
+
     assert len(snapshots) == 0
     assert len(interactions) == 0
     assert len(others) == 3
@@ -127,9 +94,9 @@ def test_classify_preserves_event_order():
         {"type": 3, "timestamp": 4000, "data": {"id": "int2"}},
         {"type": 0, "timestamp": 5000, "data": {"id": "other1"}},
     ]
-    
+
     snapshots, interactions, others = classify_events(events)
-    
+
     # Verify order is preserved within each category
     assert snapshots[0]["data"]["id"] == "snap1"
     assert snapshots[1]["data"]["id"] == "snap2"

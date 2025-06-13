@@ -16,7 +16,7 @@ def classify_events(events: List[dict]) -> Tuple[List[dict], List[dict], List[di
     Takes a sorted list of rrweb event dictionaries and separates them into three
     categories based on their 'type' field:
     - Snapshots: Full DOM snapshots (type == 2)
-    - Interactions: Incremental changes (type == 3) 
+    - Interactions: Incremental changes (type == 3)
     - Others: All remaining event types (Meta, Custom, Plugin, etc.)
 
     Args:
@@ -35,7 +35,7 @@ def classify_events(events: List[dict]) -> Tuple[List[dict], List[dict], List[di
     for event in events:
         # Access 'type' field - will raise KeyError if missing
         event_type = event["type"]
-        
+
         if event_type == 2:
             # FullSnapshot events - complete DOM captures
             snapshots.append(event)
