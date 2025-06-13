@@ -1,0 +1,1 @@
+For Step <STEP_NUMBER> of the <MODULE_NAME> module: <STEP_DESCRIPTION>, can you provide a prompt that you would give a coding agent to ask it to do this?

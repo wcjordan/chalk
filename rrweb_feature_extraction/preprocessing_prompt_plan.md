@@ -84,6 +84,37 @@ You’re implementing the **JSON Loader & Sorter** for the Input Ingestion modul
 * Tests cover events of each `type` and assert correct bucket placement
 * Edge case: empty event list yields three empty buckets
 
+**Prompt for Coding Agent:**
+
+You’re implementing **Event Classification** for the Input Ingestion module.
+
+**Tasks:**
+
+1. Create a new file `rrweb_ingest/classifier.py`.
+2. In this file, implement a function `classify_events(events: List[dict]) -> Tuple[List[dict], List[dict], List[dict]]` that:
+   * Accepts a **sorted** list of rrweb event dicts.
+   * Splits them into three lists:
+     * **`snapshots`**: all events where `event["type"] == 2` (FullSnapshot)
+     * **`interactions`**: all events where `event["type"] == 3` (IncrementalSnapshot)
+     * **`others`**: all remaining events
+   * Returns `(snapshots, interactions, others)` in that exact order.
+3. Add a module-level docstring and inline comments to explain classification logic.
+
+**Testing:**
+
+1. Create `rrweb_ingest/tests/test_classifier.py`.
+2. Write unit tests to cover:
+
+   * An empty event list returns three empty lists.
+   * A mixed list of events with types 2, 3, and other values correctly populates each bucket.
+   * Events with unexpected or missing `type` keys raise a `KeyError`.
+
+**Verification Criteria:**
+
+* All tests in `test_classifier.py` pass under `pytest`.
+* The function signature and return order match the spec.
+* Existing loader tests and smoke tests remain green.
+
 ---
 
 ## 4. Basic Chunk Segmentation
