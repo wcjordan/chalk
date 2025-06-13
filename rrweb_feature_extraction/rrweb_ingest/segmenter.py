@@ -38,7 +38,7 @@ def segment_into_chunks(
             {"type": 2, "timestamp": 150, "data": {}},
             {"type": 2, "timestamp": 350, "data": {}},
         ]
-        
+
         Result: [
             [{"type": 3, "timestamp": 100, "data": {}}],  # Before first snapshot
             [{"type": 3, "timestamp": 200, "data": {}}],  # Between snapshots
@@ -48,33 +48,33 @@ def segment_into_chunks(
     # Handle edge cases
     if not interactions:
         return []
-    
+
     if not snapshots:
         return [interactions]
-    
+
     chunks = []
     current_chunk = []
     snapshot_iter = iter(snapshots)
     next_snapshot = next(snapshot_iter, None)
-    
+
     for interaction in interactions:
         interaction_timestamp = interaction["timestamp"]
-        
+
         # Check if we need to start a new chunk due to snapshot boundary
         while next_snapshot and interaction_timestamp >= next_snapshot["timestamp"]:
             # Finish current chunk if it has events
             if current_chunk:
                 chunks.append(current_chunk)
                 current_chunk = []
-            
+
             # Move to next snapshot
             next_snapshot = next(snapshot_iter, None)
-        
+
         # Add interaction to current chunk
         current_chunk.append(interaction)
-    
+
     # Add final chunk if it has events
     if current_chunk:
         chunks.append(current_chunk)
-    
+
     return chunks

@@ -11,8 +11,8 @@
 - [x] Write basic smoke test in `tests/test_smoke.py` that imports `rrweb_ingest`
 - [x] Create CI configuration file (`.github/workflows/ci.yml` or equivalent)
 - [x] Configure CI to install dependencies and run pytest
-- [ ] Verify pytest runs successfully with smoke test
-- [ ] Test CI pipeline locally or in CI environment
+- [x] Verify pytest runs successfully with smoke test
+- [x] Test CI pipeline locally or in CI environment
 - [ ] Add basic project documentation structure
 
 ## Step 2: JSON Loader & Sorter
@@ -28,7 +28,7 @@
 - [x] Write unit tests for valid JSON loading and sorting
 - [x] Write unit tests for malformed JSON error cases
 - [x] Write unit tests for missing field validation
-- [ ] Test with sample rrweb JSON files
+- [x] Test with sample rrweb JSON files
 - [x] Verify correct timestamp sorting behavior
 
 ## Step 3: Event Classification
