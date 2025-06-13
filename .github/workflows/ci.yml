@@ -9,7 +9,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  test_rrweb_ingest:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,9 +28,5 @@ jobs:
     - name: Run tests with pytest
       run: |
         cd rrweb_feature_extraction
-        python -m pytest tests/ -v
+        python -m pytest rrweb_ingest/tests/ -v
 
-    - name: Check import works
-      run: |
-        cd rrweb_feature_extraction
-        python -c "import rrweb_ingest; print(f'Successfully imported rrweb_ingest v{rrweb_ingest.__version__}')"

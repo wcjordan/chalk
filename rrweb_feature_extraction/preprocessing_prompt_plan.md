@@ -24,8 +24,8 @@ You’re setting up the foundation for the **Input Ingestion & Preprocessing** m
 2. Initialize a Git repository (or ensure the folder is ready for version control).
 3. Add a testing framework (using **pytest**):
    * Add `pytest` to `requirements.txt` or `pyproject.toml`.
-   * Create a `tests/` directory.
-   * Write a basic smoke test in `tests/test_smoke.py` that simply imports `rrweb_ingest` and asserts that the module loads without error.
+   * Create a `rrweb_ingest/tests/` directory.
+   * Write a basic smoke test in `rrweb_ingest/tests/test_smoke.py` that simply imports `rrweb_ingest` and asserts that the module loads without error.
 4. Scaffold a Continuous Integration configuration file (e.g., `.github/workflows/ci.yml` or equivalent) that installs dependencies and runs `pytest`.
 
 **Verification Criteria:**
@@ -47,6 +47,29 @@ You’re setting up the foundation for the **Input Ingestion & Preprocessing** m
   **Verification:**
 * Unit tests validate correct sorting order
 * Tests for malformed JSON and missing fields raise the expected exceptions
+
+**Prompt for Coding Agent:**
+
+You’re implementing the **JSON Loader & Sorter** for the Input Ingestion module.
+
+**Tasks:**
+
+1. In `rrweb_ingest/loader.py`, write a function `load_events(filepath: str) -> List[dict]` that:
+   * Opens the file at `filepath`, reads its contents, and parses it as JSON.
+   * Validates that the top-level JSON is a list and that each element is an object containing at least the keys `"type"`, `"timestamp"`, and `"data"`.
+   * Raises a clear exception if the file doesn’t exist, isn’t valid JSON, or if any event is missing required fields.
+   * Returns the list of events **sorted in ascending order** by their `timestamp`.
+2. Add or update `rrweb_ingest/loader.py`’s docstring to describe the function’s behavior, inputs, outputs, and exceptions.
+3. In `rrweb_ingest/tests/test_loader.py`, write unit tests covering:
+   * Loading a well-formed small JSON session and verifying that the returned list is sorted.
+   * Passing malformed JSON (invalid syntax) raises `JSONDecodeError`.
+   * Passing a JSON array with an element missing `"type"`, `"timestamp"`, or `"data"` raises a `ValueError`.
+   * Passing a non-list top-level JSON raises a `ValueError`.
+**Verification Criteria:**
+* All tests in `test_loader.py` pass under `pytest`.
+* Calling `load_events` on a valid file returns the correctly sorted list without side-effects.
+* Invalid inputs trigger the expected exception types and messages.
+* No downstream functionality is affected; existing smoke tests still pass.
 
 ---
 
