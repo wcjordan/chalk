@@ -41,13 +41,15 @@ def load_events(filepath: str) -> List[dict]:
             f"Invalid JSON in file {filepath}: {e.msg}", e.doc, e.pos
         )
 
+    rrweb_data = raw_data.get("rrweb_data", None)
+
     # Validate that the top-level structure is a list
-    if not isinstance(raw_data, list):
+    if not isinstance(rrweb_data, list):
         raise ValueError("Session must be JSON array")
 
     # Validate each event has required fields
     required_fields = {"type", "timestamp", "data"}
-    for i, event in enumerate(raw_data):
+    for i, event in enumerate(rrweb_data):
         if not isinstance(event, dict):
             raise ValueError(
                 f"Event at index {i} must be an object, got {type(event).__name__}"
@@ -60,4 +62,10 @@ def load_events(filepath: str) -> List[dict]:
             )
 
     # Sort events by timestamp in ascending order
-    return sorted(raw_data, key=lambda event: event["timestamp"])
+    return sorted(rrweb_data, key=lambda event: event["timestamp"])
+
+
+if __name__ == "__main__":
+    filepath = '../session_stitching/output_sessions/4b458001-0e2c-483e-b013-a3410e3d8b1f.json'
+    events = load_events(filepath)
+    print(f"Loaded {len(events)} events from {filepath}")
