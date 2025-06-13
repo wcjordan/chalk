@@ -14,6 +14,26 @@ Below is an **incremental implementation roadmap** for the **Input Ingestion & P
 * All tests pass on checkout
 * CI pipeline runs without errors
 
+**Prompt for Coding Agent:**
+
+You’re setting up the foundation for the **Input Ingestion & Preprocessing** module.
+
+**Tasks:**
+
+1. Create a new Python package named `rrweb_ingest/` with an `__init__.py`.
+2. Initialize a Git repository (or ensure the folder is ready for version control).
+3. Add a testing framework (using **pytest**):
+   * Add `pytest` to `requirements.txt` or `pyproject.toml`.
+   * Create a `tests/` directory.
+   * Write a basic smoke test in `tests/test_smoke.py` that simply imports `rrweb_ingest` and asserts that the module loads without error.
+4. Scaffold a Continuous Integration configuration file (e.g., `.github/workflows/ci.yml` or equivalent) that installs dependencies and runs `pytest`.
+
+**Verification Criteria:**
+
+* Running `pytest` passes with the single smoke test.
+* CI pipeline configuration runs successfully (you can simulate it by running the CI steps locally).
+* No production code is required beyond the package stub and the smoke test.
+
 ---
 
 ## 2. JSON Loader & Sorter
