@@ -74,6 +74,7 @@ def segment_into_chunks(
             if current_chunk:
                 chunks.append(current_chunk)
                 current_chunk = []
+                # Reset timestamp so next interaction isn't compared against the prior chunk
                 last_timestamp = None
 
             # Move to next snapshot
@@ -94,6 +95,7 @@ def segment_into_chunks(
             # Finish current chunk
             chunks.append(current_chunk)
             current_chunk = []
+            # Reset timestamp so next interaction isn't compared against the prior chunk
             last_timestamp = None
 
         # Add interaction to current chunk
