@@ -13,7 +13,7 @@ def segment_into_chunks(
     interactions: List[dict],
     snapshots: List[dict],
     max_gap_ms: int = 10_000,
-    max_events: int = 1000
+    max_events: int = 1000,
 ) -> List[List[dict]]:
     """
     Segment interaction events into chunks based on multiple boundary criteria.
@@ -59,9 +59,6 @@ def segment_into_chunks(
     if not interactions:
         return []
 
-    if not snapshots:
-        return [interactions]
-
     chunks = []
     current_chunk = []
     snapshot_iter = iter(snapshots)
@@ -83,8 +80,10 @@ def segment_into_chunks(
             next_snapshot = next(snapshot_iter, None)
 
         # Check if we need to start a new chunk due to time gap
-        if (last_timestamp is not None and 
-            interaction_timestamp - last_timestamp > max_gap_ms):
+        if (
+            last_timestamp is not None
+            and interaction_timestamp - last_timestamp > max_gap_ms
+        ):
             # Finish current chunk if it has events
             if current_chunk:
                 chunks.append(current_chunk)

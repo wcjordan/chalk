@@ -200,7 +200,11 @@ def test_time_gap_just_below_threshold():
     """Test that time gap just below max_gap_ms keeps events in same chunk."""
     interactions = [
         {"type": 3, "timestamp": 1000, "data": {"id": "int1"}},
-        {"type": 3, "timestamp": 10999, "data": {"id": "int2"}},  # Gap of 9999ms < 10000ms
+        {
+            "type": 3,
+            "timestamp": 10999,
+            "data": {"id": "int2"},
+        },  # Gap of 9999ms < 10000ms
         {"type": 3, "timestamp": 11000, "data": {"id": "int3"}},
     ]
 
@@ -218,7 +222,11 @@ def test_time_gap_just_above_threshold():
     """Test that time gap just above max_gap_ms splits into separate chunks."""
     interactions = [
         {"type": 3, "timestamp": 1000, "data": {"id": "int1"}},
-        {"type": 3, "timestamp": 11001, "data": {"id": "int2"}},  # Gap of 10001ms > 10000ms
+        {
+            "type": 3,
+            "timestamp": 11001,
+            "data": {"id": "int2"},
+        },  # Gap of 10001ms > 10000ms
         {"type": 3, "timestamp": 11100, "data": {"id": "int3"}},
     ]
 
@@ -226,11 +234,11 @@ def test_time_gap_just_above_threshold():
 
     # Should split into two chunks due to large gap
     assert len(result) == 2
-    
+
     # First chunk: before gap
     assert len(result[0]) == 1
     assert result[0][0]["data"]["id"] == "int1"
-    
+
     # Second chunk: after gap
     assert len(result[1]) == 2
     assert result[1][0]["data"]["id"] == "int2"
@@ -244,23 +252,27 @@ def test_multiple_time_gaps():
         {"type": 3, "timestamp": 1100, "data": {"id": "int2"}},
         {"type": 3, "timestamp": 12000, "data": {"id": "int3"}},  # Gap > 10000ms
         {"type": 3, "timestamp": 12100, "data": {"id": "int4"}},
-        {"type": 3, "timestamp": 25000, "data": {"id": "int5"}},  # Another gap > 10000ms
+        {
+            "type": 3,
+            "timestamp": 25000,
+            "data": {"id": "int5"},
+        },  # Another gap > 10000ms
     ]
 
     result = segment_into_chunks(interactions, [], max_gap_ms=10_000)
 
     assert len(result) == 3
-    
+
     # First chunk
     assert len(result[0]) == 2
     assert result[0][0]["data"]["id"] == "int1"
     assert result[0][1]["data"]["id"] == "int2"
-    
+
     # Second chunk
     assert len(result[1]) == 2
     assert result[1][0]["data"]["id"] == "int3"
     assert result[1][1]["data"]["id"] == "int4"
-    
+
     # Third chunk
     assert len(result[2]) == 1
     assert result[2][0]["data"]["id"] == "int5"
@@ -293,7 +305,7 @@ def test_max_events_exceeds_limit():
     assert len(result) == 2
     assert len(result[0]) == 5
     assert len(result[1]) == 2
-    
+
     # Verify correct events in each chunk
     assert result[0][0]["data"]["id"] == "int0"
     assert result[0][4]["data"]["id"] == "int4"
@@ -322,7 +334,11 @@ def test_combined_snapshot_and_time_gap():
     interactions = [
         {"type": 3, "timestamp": 100, "data": {"id": "int1"}},
         {"type": 3, "timestamp": 200, "data": {"id": "int2"}},
-        {"type": 3, "timestamp": 15000, "data": {"id": "int3"}},  # Large gap after snapshot
+        {
+            "type": 3,
+            "timestamp": 15000,
+            "data": {"id": "int3"},
+        },  # Large gap after snapshot
         {"type": 3, "timestamp": 15100, "data": {"id": "int4"}},
     ]
     snapshots = [
@@ -333,15 +349,15 @@ def test_combined_snapshot_and_time_gap():
 
     # Should create 3 chunks: before snapshot, after snapshot before gap, after gap
     assert len(result) == 3
-    
+
     # First chunk: before snapshot
     assert len(result[0]) == 1
     assert result[0][0]["data"]["id"] == "int1"
-    
+
     # Second chunk: after snapshot, before gap
     assert len(result[1]) == 1
     assert result[1][0]["data"]["id"] == "int2"
-    
+
     # Third chunk: after gap
     assert len(result[2]) == 2
     assert result[2][0]["data"]["id"] == "int3"
@@ -372,14 +388,17 @@ def test_combined_snapshot_and_size_limit():
 
 def test_combined_time_gap_and_size_limit():
     """Test combination of time gap and size limit splitting."""
-    interactions = [
-        {"type": 3, "timestamp": i * 100, "data": {"id": f"int{i}"}}
-        for i in range(4)  # 4 events close together
-    ] + [
-        {"type": 3, "timestamp": 15000, "data": {"id": "int4"}},  # Large gap
-        {"type": 3, "timestamp": 15000 + i * 100, "data": {"id": f"int{i+5}"}}
-        for i in range(7)  # 7 more events, exceeds limit
-    ]
+    interactions = (
+        [
+            {"type": 3, "timestamp": i * 100, "data": {"id": f"int{i}"}}
+            for i in range(4)  # 4 events close together
+        ]
+        + [{"type": 3, "timestamp": 15000, "data": {"id": "int4"}}]  # Large gap
+        + [
+            {"type": 3, "timestamp": 15000 + i * 100, "data": {"id": f"int{i+5}"}}
+            for i in range(7)  # 7 more events, exceeds limit
+        ]
+    )
 
     result = segment_into_chunks(interactions, [], max_gap_ms=10_000, max_events=5)
 
@@ -392,21 +411,27 @@ def test_combined_time_gap_and_size_limit():
 
 def test_all_three_splitting_criteria():
     """Test combination of snapshot, time gap, and size limit splitting."""
-    interactions = [
-        {"type": 3, "timestamp": 50, "data": {"id": "int0"}},
-        {"type": 3, "timestamp": 60, "data": {"id": "int1"}},
-    ] + [
-        {"type": 3, "timestamp": 200 + i * 10, "data": {"id": f"int{i+2}"}}
-        for i in range(6)  # 6 events after snapshot, exceeds limit of 5
-    ] + [
-        {"type": 3, "timestamp": 15000, "data": {"id": "int8"}},  # Large gap
-        {"type": 3, "timestamp": 15100, "data": {"id": "int9"}},
-    ]
+    interactions = (
+        [
+            {"type": 3, "timestamp": 50, "data": {"id": "int0"}},
+            {"type": 3, "timestamp": 60, "data": {"id": "int1"}},
+        ]
+        + [
+            {"type": 3, "timestamp": 200 + i * 10, "data": {"id": f"int{i+2}"}}
+            for i in range(6)  # 6 events after snapshot, exceeds limit of 5
+        ]
+        + [
+            {"type": 3, "timestamp": 15000, "data": {"id": "int8"}},  # Large gap
+            {"type": 3, "timestamp": 15100, "data": {"id": "int9"}},
+        ]
+    )
     snapshots = [
         {"type": 2, "timestamp": 100, "data": {"id": "snap1"}},
     ]
 
-    result = segment_into_chunks(interactions, snapshots, max_gap_ms=10_000, max_events=5)
+    result = segment_into_chunks(
+        interactions, snapshots, max_gap_ms=10_000, max_events=5
+    )
 
     # Should create 4 chunks: 2 before snapshot, 5 after snapshot, 1 remaining, 2 after gap
     assert len(result) == 4
@@ -425,6 +450,6 @@ def test_default_parameters_work():
 
     # Should work without specifying max_gap_ms and max_events
     result = segment_into_chunks(interactions, [])
-    
+
     assert len(result) == 1
     assert len(result[0]) == 2
