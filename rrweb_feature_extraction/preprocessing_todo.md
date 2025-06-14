@@ -11,8 +11,8 @@
 - [x] Write basic smoke test in `tests/test_smoke.py` that imports `rrweb_ingest`
 - [x] Create CI configuration file (`.github/workflows/ci.yml` or equivalent)
 - [x] Configure CI to install dependencies and run pytest
-- [ ] Verify pytest runs successfully with smoke test
-- [ ] Test CI pipeline locally or in CI environment
+- [x] Verify pytest runs successfully with smoke test
+- [x] Test CI pipeline locally or in CI environment
 - [ ] Add basic project documentation structure
 
 ## Step 2: JSON Loader & Sorter
@@ -28,7 +28,7 @@
 - [x] Write unit tests for valid JSON loading and sorting
 - [x] Write unit tests for malformed JSON error cases
 - [x] Write unit tests for missing field validation
-- [ ] Test with sample rrweb JSON files
+- [x] Test with sample rrweb JSON files
 - [x] Verify correct timestamp sorting behavior
 
 ## Step 3: Event Classification
@@ -49,15 +49,15 @@
 ## Step 4: Basic Chunk Segmentation
 
 ### Tasks:
-- [ ] Implement `segment_into_chunks(interactions, snapshots)` in `rrweb_ingest/segmenter.py`
-- [ ] Create logic to start new chunks at FullSnapshot boundaries
-- [ ] Iterate through interactions and group by snapshot timestamps
-- [ ] Handle case where no snapshots exist
-- [ ] Return list of raw interaction event lists (chunks)
-- [ ] Write unit tests with synthetic interaction and snapshot data
-- [ ] Test chunk boundaries align with snapshot positions
-- [ ] Verify no events are dropped during segmentation
-- [ ] Test edge cases: no snapshots, no interactions, single events
+- [x] Implement `segment_into_chunks(interactions, snapshots)` in `rrweb_ingest/segmenter.py`
+- [x] Create logic to start new chunks at FullSnapshot boundaries
+- [x] Iterate through interactions and group by snapshot timestamps
+- [x] Handle case where no snapshots exist
+- [x] Return list of raw interaction event lists (chunks)
+- [x] Write unit tests with synthetic interaction and snapshot data
+- [x] Test chunk boundaries align with snapshot positions
+- [x] Verify no events are dropped during segmentation
+- [x] Test edge cases: no snapshots, no interactions, single events
 - [ ] Add logging for chunk count and sizes
 
 ## Step 5: Time-Gap & Size-Cap Chunking

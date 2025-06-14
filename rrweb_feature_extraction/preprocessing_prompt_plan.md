@@ -128,6 +128,48 @@ You’re implementing **Event Classification** for the Input Ingestion module.
 * Given synthetic interactions and snapshot events, assert chunk boundaries match snapshot positions
 * No dropped or merged events beyond boundaries
 
+**Prompt for Coding Agent:**
+
+You’re implementing **Basic Chunk Segmentation** for the Input Ingestion module.
+
+**Tasks:**
+
+1. Create a new file `rrweb_ingest/segmenter.py`.
+2. Implement a function
+   ```python
+   def segment_into_chunks(
+       interactions: List[dict],
+       snapshots: List[dict]
+   ) -> List[List[dict]]:
+       ...
+   ```
+   that:
+   * Accepts two sorted lists of rrweb events:
+
+     * `interactions`: events where `type == 3`.
+     * `snapshots`: events where `type == 2`.
+   * Iterates through `interactions`, starting a new chunk whenever:
+
+     1. The timestamp of the next interaction meets or exceeds the next `FullSnapshot` timestamp.
+     2. After crossing that boundary, uses subsequent snapshots in order.
+   * Returns a list of chunks, where each chunk is a list of contiguous interaction events between snapshot boundaries.
+3. Add docstrings that describe inputs, outputs, and the snapshot-boundary logic.
+
+**Testing:**
+
+1. Create `tests/test_segmenter.py`.
+2. Write unit tests to cover:
+   * No interactions and no snapshots → returns an empty list.
+   * Interactions but no snapshots → returns a single chunk containing all interactions.
+   * Multiple snapshots interleaved with interactions → splits interactions into the correct number of chunks at each snapshot timestamp.
+   * Edge case where an interaction event timestamp exactly equals a snapshot timestamp → ensure boundary logic is consistent (e.g., interaction goes into the new chunk).
+
+**Verification Criteria:**
+
+* All tests in `test_segmenter.py` pass under `pytest`.
+* Calling `segment_into_chunks` with sample data yields the expected chunk boundaries.
+* No existing tests are broken by this change.
+
 ---
 
 ## 5. Time‐Gap & Size‐Cap Chunking
