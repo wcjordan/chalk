@@ -125,7 +125,7 @@ def test_sample_fixture_chunk_boundaries():
 
         err_msg = (
             f"Chunks should be chronologically ordered: chunk {i-1} ends at {prev_chunk.end_time}, chunk {i} "
-            "starts at {curr_chunk.start_time}"
+            f"starts at {curr_chunk.start_time}"
         )
         assert prev_chunk.end_time <= curr_chunk.start_time, err_msg
 
