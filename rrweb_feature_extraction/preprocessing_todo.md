@@ -93,17 +93,17 @@
 ## Step 7: Chunk Normalization & Schema
 
 ### Tasks:
-- [ ] Define `Chunk` dataclass in `rrweb_ingest/models.py`
-- [ ] Include fields: `chunk_id`, `start_time`, `end_time`, `events`, `metadata`
-- [ ] Implement chunk ID generation (`<session>-chunk<index>` format)
-- [ ] Calculate `start_time` and `end_time` from event timestamps
-- [ ] Add metadata fields: `num_events`, `duration_ms`, `snapshot_before`
-- [ ] Implement function to wrap cleaned events into Chunk objects
+- [x] Define `Chunk` dataclass in `rrweb_ingest/models.py`
+- [x] Include fields: `chunk_id`, `start_time`, `end_time`, `events`, `metadata`
+- [x] Implement chunk ID generation (`<session>-chunk<index>` format)
+- [x] Calculate `start_time` and `end_time` from event timestamps
+- [x] Add metadata fields: `num_events`, `duration_ms`, `snapshot_before`
+- [x] Implement function to wrap cleaned events into Chunk objects
 - [ ] Add JSON serialization support for Chunk objects
-- [ ] Write unit tests for Chunk object creation
-- [ ] Test field calculations match expected values
+- [x] Write unit tests for Chunk object creation
+- [x] Test field calculations match expected values
 - [ ] Test JSON schema validation for Chunk objects
-- [ ] Verify chunk IDs are unique and properly formatted
+- [x] Verify chunk IDs are unique and properly formatted
 
 ## Step 8: End-to-End Ingest Pipeline
 

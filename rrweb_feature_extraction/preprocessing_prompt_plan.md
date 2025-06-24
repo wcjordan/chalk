@@ -297,6 +297,59 @@ You’re building the **Noise-Filtering Framework** for the Input Ingestion modu
 * Tests confirm that fields match expectations on sample data
 * JSON‐schema or type‐check validation passes for constructed chunks
 
+**Prompt for Coding Agent:**
+
+You’re implementing **Chunk Normalization & Schema** for the Input Ingestion module.
+
+**Tasks:**
+
+1. In `rrweb_feature_extraction/rrweb_ingest/models.py`, define a `Chunk` dataclass or equivalent schema with fields:
+
+   ```python
+   @dataclass
+   class Chunk:
+       chunk_id: str
+       start_time: int
+       end_time: int
+       events: List[dict]
+       metadata: dict
+   ```
+
+   * `metadata` should include at least `num_events` and `duration_ms`.
+2. In `rrweb_feature_extraction/rrweb_ingest/normalizer.py`, implement a function:
+
+   ```python
+   def normalize_chunk(
+       raw_events: List[dict],
+       session_id: str,
+       chunk_index: int
+   ) -> Chunk:
+       """
+       Builds a Chunk object from a list of cleaned events.
+       """
+   ```
+
+   * Compute `start_time` and `end_time` from the first and last event timestamps.
+   * Generate `chunk_id` as `"{session_id}-chunk{chunk_index:03d}"`.
+   * Populate `metadata` with `num_events` (length of `events`) and `duration_ms` (`end_time - start_time`).
+   * Return the populated `Chunk` instance.
+3. Add docstrings describing inputs, outputs, and chunk ID formatting rules.
+
+**Testing:**
+
+1. Create `rrweb_feature_extraction/rrweb_ingest/tests/test_normalizer.py`.
+2. Write unit tests to cover:
+
+   * A small list of synthetic events yields the correct `start_time`, `end_time`, `num_events`, `duration_ms`, and properly formatted `chunk_id`.
+   * Edge case where all events share the same timestamp results in `duration_ms == 0`.
+   * Passing an empty list of events raises a `ValueError` or similar.
+
+**Verification Criteria:**
+
+* All tests in `test_normalizer.py` pass under `pytest`.
+* Calling `normalize_chunk` returns a `Chunk` matching the schema exactly.
+* No downstream code is broken by introducing the new `Chunk` model.
+
 ---
 
 ## 8. End-to-End Ingest Pipeline
