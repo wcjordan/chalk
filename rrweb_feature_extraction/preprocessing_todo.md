@@ -108,17 +108,17 @@
 ## Step 8: End-to-End Ingest Pipeline
 
 ### Tasks:
-- [ ] Implement `ingest_session(filepath)` main entry point in `rrweb_ingest/__init__.py`
-- [ ] Wire together: loader → classifier → segmentation → cleaning → normalization
-- [ ] Return list of `Chunk` instances from complete pipeline
-- [ ] Ensure proper exception bubbling for invalid inputs
-- [ ] Add comprehensive error handling and logging
-- [ ] Write integration tests with real-world sample rrweb sessions
-- [ ] Test with various session sizes and complexity levels
-- [ ] Verify consistent chunk counts for same input data
-- [ ] Test error handling for corrupted or invalid session files
-- [ ] Add regression tests to prevent output changes
-- [ ] Document expected input/output formats
+- [x] Implement `ingest_session(filepath)` main entry point in `rrweb_ingest/__init__.py`
+- [x] Wire together: loader → classifier → segmentation → cleaning → normalization
+- [x] Return list of `Chunk` instances from complete pipeline
+- [x] Ensure proper exception bubbling for invalid inputs
+- [x] Add comprehensive error handling and logging
+- [x] Write integration tests with real-world sample rrweb sessions
+- [x] Test with various session sizes and complexity levels
+- [x] Verify consistent chunk counts for same input data
+- [x] Test error handling for corrupted or invalid session files
+- [x] Add regression tests to prevent output changes
+- [x] Document expected input/output formats
 
 ## Step 9: Configuration & Extensibility Hooks
 

@@ -34,7 +34,7 @@ def ingest_session(
     *,
     max_gap_ms: int = 10_000,
     max_events: int = 1000,
-    micro_scroll_threshold: int = 20
+    micro_scroll_threshold: int = 20,
 ) -> List[Chunk]:
     """
     Load, classify, segment, filter, and normalize an rrweb session into Chunks.

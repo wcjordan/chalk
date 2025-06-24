@@ -414,7 +414,6 @@ You’re implementing the **End-to-End Ingest Pipeline** for the Input Ingestion
 * `ingest_session` stitches together prior components without altering their individual behavior.
 * CI pipeline remains green with the new integration tests included.
 
-
 ---
 
 ## 9. Configuration & Extensibility Hooks

@@ -19,9 +19,7 @@ def fixture_create_session_file():
 
     def _create_session_file(events, session_guid="test_session", raw_string=None):
         """Create a temporary file with rrweb session data."""
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             if raw_string:
                 f.write(raw_string)
             else:
@@ -47,8 +45,16 @@ class TestIngestSession:
             {"type": 2, "timestamp": 1000, "data": {"source": 0}},
             # Some interactions
             {"type": 3, "timestamp": 1100, "data": {"source": 2, "id": 5}},  # click
-            {"type": 3, "timestamp": 1200, "data": {"source": 5, "text": "hello"}},  # input
-            {"type": 3, "timestamp": 1300, "data": {"source": 3, "x": 50, "y": 100}},  # scroll
+            {
+                "type": 3,
+                "timestamp": 1200,
+                "data": {"source": 5, "text": "hello"},
+            },  # input
+            {
+                "type": 3,
+                "timestamp": 1300,
+                "data": {"source": 3, "x": 50, "y": 100},
+            },  # scroll
             # Another snapshot
             {"type": 2, "timestamp": 2000, "data": {"source": 0}},
             # More interactions
@@ -83,9 +89,17 @@ class TestIngestSession:
             {"type": 2, "timestamp": 1000, "data": {"source": 0}},  # snapshot
             {"type": 3, "timestamp": 1100, "data": {"source": 2, "id": 5}},  # click
             {"type": 3, "timestamp": 1150, "data": {"source": 1}},  # mousemove (noise)
-            {"type": 3, "timestamp": 1200, "data": {"source": 3, "x": 5, "y": 5}},  # micro-scroll (noise)
+            {
+                "type": 3,
+                "timestamp": 1200,
+                "data": {"source": 3, "x": 5, "y": 5},
+            },  # micro-scroll (noise)
             {"type": 3, "timestamp": 1300, "data": {"source": 2, "id": 10}},  # click
-            {"type": 3, "timestamp": 1300, "data": {"source": 2, "id": 10}},  # duplicate
+            {
+                "type": 3,
+                "timestamp": 1300,
+                "data": {"source": 2, "id": 10},
+            },  # duplicate
         ]
 
         temp_path = create_session_file(events)
@@ -94,7 +108,7 @@ class TestIngestSession:
         # Should have filtered out noise and duplicates
         assert len(result) == 1
         chunk = result[0]
-        
+
         # Should only have the 2 unique click events (noise filtered, duplicate removed)
         assert chunk.metadata["num_events"] == 2
         assert all(event["data"]["source"] == 2 for event in chunk.events)
@@ -139,7 +153,7 @@ class TestIngestSession:
 
         # With large max_gap_ms, should stay in one chunk
         result_large_gap = ingest_session("gap_test", temp_path, max_gap_ms=10_000)
-        
+
         # With small max_gap_ms, should split into multiple chunks
         result_small_gap = ingest_session("gap_test", temp_path, max_gap_ms=5_000)
 
@@ -158,7 +172,7 @@ class TestIngestSession:
 
         # With large max_events, should stay in fewer chunks
         result_large_max = ingest_session("events_test", temp_path, max_events=20)
-        
+
         # With small max_events, should split into more chunks
         result_small_max = ingest_session("events_test", temp_path, max_events=3)
 
@@ -173,7 +187,11 @@ class TestIngestSession:
         """Test that micro_scroll_threshold parameter affects filtering."""
         events = [
             {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 1}},  # click
-            {"type": 3, "timestamp": 1100, "data": {"source": 3, "x": 15, "y": 15}},  # scroll
+            {
+                "type": 3,
+                "timestamp": 1100,
+                "data": {"source": 3, "x": 15, "y": 15},
+            },  # scroll
             {"type": 3, "timestamp": 1200, "data": {"source": 2, "id": 2}},  # click
         ]
 
@@ -183,16 +201,18 @@ class TestIngestSession:
         result_high_threshold = ingest_session(
             "scroll_test", temp_path, micro_scroll_threshold=20
         )
-        
+
         # With low threshold, scroll should be kept
         result_low_threshold = ingest_session(
             "scroll_test", temp_path, micro_scroll_threshold=10
         )
 
         # High threshold should filter out the scroll, keeping only clicks
-        high_events = sum(chunk.metadata["num_events"] for chunk in result_high_threshold)
+        high_events = sum(
+            chunk.metadata["num_events"] for chunk in result_high_threshold
+        )
         low_events = sum(chunk.metadata["num_events"] for chunk in result_low_threshold)
-        
+
         assert high_events < low_events
 
     def test_ingest_session_file_not_found(self):
@@ -266,7 +286,7 @@ class TestIngestSession:
 
         assert len(result) == 1
         chunk = result[0]
-        
+
         # Verify events are in correct order
         assert chunk.events[0]["data"]["id"] == 1
         assert chunk.events[1]["data"]["id"] == 2
@@ -285,7 +305,7 @@ class TestIngestSession:
 
         assert len(result) == 1
         chunk = result[0]
-        
+
         # Verify metadata calculations
         assert chunk.start_time == 1000
         assert chunk.end_time == 2000
@@ -298,14 +318,11 @@ class TestIngestSession:
             # First chunk - before snapshot
             {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 1}},
             {"type": 3, "timestamp": 1100, "data": {"source": 1}},  # noise
-            
             # Snapshot boundary
             {"type": 2, "timestamp": 1500, "data": {"source": 0}},
-            
             # Second chunk - after snapshot, before time gap
             {"type": 3, "timestamp": 1600, "data": {"source": 2, "id": 2}},
             {"type": 3, "timestamp": 1700, "data": {"source": 2, "id": 3}},
-            
             # Large time gap
             {"type": 3, "timestamp": 15000, "data": {"source": 2, "id": 4}},
             {"type": 3, "timestamp": 15100, "data": {"source": 2, "id": 5}},
@@ -327,26 +344,5 @@ class TestIngestSession:
         all_events = []
         for chunk in result:
             all_events.extend(chunk.events)
-        
+
         assert all(event["data"]["source"] != 1 for event in all_events)
-````
-
-Now let me update the todo list to mark Step 8 as completed:
-
-rrweb_feature_extraction/preprocessing_todo.md
-````markdown
-<<<<<<< SEARCH
-## Step 8: End-to-End Ingest Pipeline
-
-### Tasks:
-- [ ] Implement `ingest_session(filepath)` main entry point in `rrweb_ingest/__init__.py`
-- [ ] Wire together: loader → classifier → segmentation → cleaning → normalization
-- [ ] Return list of `Chunk` instances from complete pipeline
-- [ ] Ensure proper exception bubbling for invalid inputs
-- [ ] Add comprehensive error handling and logging
-- [ ] Write integration tests with real-world sample rrweb sessions
-- [ ] Test with various session sizes and complexity levels
-- [ ] Verify consistent chunk counts for same input data
-- [ ] Test error handling for corrupted or invalid session files
-- [ ] Add regression tests to prevent output changes
-- [ ] Document expected input/output formats
