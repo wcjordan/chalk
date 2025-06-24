@@ -78,17 +78,17 @@
 ## Step 6: Noise-Filtering Framework
 
 ### Tasks:
-- [ ] Implement `is_low_signal(event)` predicate function in `rrweb_ingest/filters.py`
-- [ ] Define noise rules for mousemove-only events (`source == 1`)
-- [ ] Define noise rules for micro-scrolls (`source == 3`, `|delta| < 20px`)
-- [ ] Define noise rules for trivial DOM mutations
+- [x] Implement `is_low_signal(event)` predicate function in `rrweb_ingest/filter.py`
+- [x] Define noise rules for mousemove-only events (`source == 1`)
+- [x] Define noise rules for micro-scrolls (`source == 3`, `|delta| < 20px`)
+- [x] Define noise rules for trivial DOM mutations
 - [ ] Define noise rules for incomplete input events (no submit/blur)
-- [ ] Implement `clean_chunk(events)` function to apply filters
-- [ ] Add deduplication logic for identical events
+- [x] Implement `clean_chunk(events)` function to apply filters
+- [x] Add deduplication logic for identical events
 - [ ] Make noise rules configurable and extensible
-- [ ] Write parameterized tests for each noise rule type
-- [ ] Test that duplicates are properly removed
-- [ ] Test that legitimate events are preserved
+- [x] Write parameterized tests for each noise rule type
+- [x] Test that duplicates are properly removed
+- [x] Test that legitimate events are preserved
 - [ ] Add logging for filter statistics (kept vs. dropped)
 
 ## Step 7: Chunk Normalization & Schema
