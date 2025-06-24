@@ -123,17 +123,17 @@
 ## Step 9: Configuration & Extensibility Hooks
 
 ### Tasks:
-- [ ] Create `Config` class or configuration object in `rrweb_ingest/config.py`
-- [ ] Make configurable: `max_gap_ms`, `max_events`, `max_duration_ms`
-- [ ] Make configurable: `micro_scroll_threshold`, noise filter rules
-- [ ] Allow injection of custom noise filter functions
+- [x] Create `Config` class or configuration object in `rrweb_ingest/config.py`
+- [x] Make configurable: `max_gap_ms`, `max_events`, `max_duration_ms`
+- [x] Make configurable: `micro_scroll_threshold`, noise filter rules
+- [x] Allow injection of custom noise filter functions
 - [ ] Support configuration via file, environment variables, or parameters
-- [ ] Update all functions to accept configuration parameters
-- [ ] Write unit tests with overridden configuration values
-- [ ] Test that custom noise filters are properly invoked
-- [ ] Verify configuration changes affect chunking behavior as expected
-- [ ] Add validation for configuration parameter ranges
-- [ ] Document all configuration options
+- [x] Update all functions to accept configuration parameters
+- [x] Write unit tests with overridden configuration values
+- [x] Test that custom noise filters are properly invoked
+- [x] Verify configuration changes affect chunking behavior as expected
+- [x] Add validation for configuration parameter ranges
+- [x] Document all configuration options
 
 ## Step 10: Documentation & Sample Data
 

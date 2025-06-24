@@ -347,3 +347,51 @@ class TestIngestSession:
             all_events.extend(chunk.events)
 
         assert all(event["data"]["source"] != 1 for event in all_events)
+
+    def test_ingest_session_with_custom_filters(self, create_session_file):
+        """Test that custom filters are properly applied during ingestion."""
+        events = [
+            {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 1}},  # click
+            {"type": 3, "timestamp": 1100, "data": {"source": 99, "id": 2}},  # custom source
+            {"type": 3, "timestamp": 1200, "data": {"source": 5, "text": "input"}},  # input
+        ]
+
+        # Custom filter that removes events with source == 99
+        def filter_source_99(event):
+            return event.get("data", {}).get("source") == 99
+
+        temp_path = create_session_file(events)
+        result = ingest_session("custom_filter_test", temp_path, custom_filters=[filter_source_99])
+
+        # Should have filtered out the custom source event
+        assert len(result) == 1
+        chunk = result[0]
+        assert chunk.metadata["num_events"] == 2
+
+        # Verify the custom source event was filtered out
+        sources = [event["data"]["source"] for event in chunk.events]
+        assert 99 not in sources
+        assert 2 in sources  # click
+        assert 5 in sources  # input
+
+    def test_ingest_session_config_defaults_when_none(self, create_session_file):
+        """Test that pipeline uses config defaults when None is explicitly passed."""
+        events = [
+            {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 1}},
+            {"type": 3, "timestamp": 2000, "data": {"source": 2, "id": 2}},
+        ]
+
+        temp_path = create_session_file(events)
+        
+        # Explicitly pass None to test default fallback
+        result = ingest_session(
+            "defaults_test", 
+            temp_path, 
+            max_gap_ms=None, 
+            max_events=None, 
+            micro_scroll_threshold=None,
+            custom_filters=None
+        )
+
+        assert len(result) == 1
+        assert result[0].metadata["num_events"] == 2

@@ -7,13 +7,14 @@ that can be processed independently for feature extraction.
 """
 
 from typing import List
+from . import config
 
 
 def segment_into_chunks(
     interactions: List[dict],
     snapshots: List[dict],
-    max_gap_ms: int = 10_000,
-    max_events: int = 1000,
+    max_gap_ms: int = None,
+    max_events: int = None,
 ) -> List[List[dict]]:
     """
     Segment interaction events into chunks based on multiple boundary criteria.
@@ -29,9 +30,9 @@ def segment_into_chunks(
         interactions: List of interaction events (type == 3) sorted by timestamp
         snapshots: List of snapshot events (type == 2) sorted by timestamp
         max_gap_ms: Maximum time gap in milliseconds between consecutive interactions
-                   before starting a new chunk (default: 10,000ms)
+                   before starting a new chunk (default: from config.MAX_GAP_MS)
         max_events: Maximum number of events per chunk before starting a new chunk
-                   (default: 1000 events)
+                   (default: from config.MAX_EVENTS)
 
     Returns:
         List of chunks, where each chunk is a list of contiguous interaction events
@@ -55,6 +56,12 @@ def segment_into_chunks(
             [{"type": 3, "timestamp": 15000, "data": {}}],  # After large gap
         ]
     """
+    # Apply configuration defaults if not provided
+    if max_gap_ms is None:
+        max_gap_ms = config.MAX_GAP_MS
+    if max_events is None:
+        max_events = config.MAX_EVENTS
+
     # Handle edge cases
     if not interactions:
         return []

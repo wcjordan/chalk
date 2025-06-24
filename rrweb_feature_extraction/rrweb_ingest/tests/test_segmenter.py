@@ -6,6 +6,7 @@ events based on FullSnapshot boundaries.
 """
 
 from rrweb_ingest.segmenter import segment_into_chunks
+from rrweb_ingest import config
 
 
 def test_no_interactions_no_snapshots():
@@ -450,6 +451,54 @@ def test_default_parameters_work():
 
     # Should work without specifying max_gap_ms and max_events
     result = segment_into_chunks(interactions, [])
+
+    assert len(result) == 1
+    assert len(result[0]) == 2
+
+
+def test_config_override_max_gap_ms():
+    """Test that overriding max_gap_ms affects chunking behavior."""
+    interactions = [
+        {"type": 3, "timestamp": 1000, "data": {"id": "int1"}},
+        {"type": 3, "timestamp": 8000, "data": {"id": "int2"}},  # 7s gap
+    ]
+
+    # With default config (10s), should stay in one chunk
+    result_default = segment_into_chunks(interactions, [])
+    assert len(result_default) == 1
+
+    # With smaller threshold (5s), should split
+    result_small = segment_into_chunks(interactions, [], max_gap_ms=5000)
+    assert len(result_small) == 2
+
+
+def test_config_override_max_events():
+    """Test that overriding max_events affects chunking behavior."""
+    interactions = [
+        {"type": 3, "timestamp": i * 100, "data": {"id": f"int{i}"}}
+        for i in range(10)
+    ]
+
+    # With default config (1000), should stay in one chunk
+    result_default = segment_into_chunks(interactions, [])
+    assert len(result_default) == 1
+
+    # With smaller limit (5), should split
+    result_small = segment_into_chunks(interactions, [], max_events=5)
+    assert len(result_small) == 2
+    assert len(result_small[0]) == 5
+    assert len(result_small[1]) == 5
+
+
+def test_uses_config_defaults_when_none_provided():
+    """Test that function uses config defaults when None is explicitly passed."""
+    interactions = [
+        {"type": 3, "timestamp": 1000, "data": {"id": "int1"}},
+        {"type": 3, "timestamp": 2000, "data": {"id": "int2"}},
+    ]
+
+    # Explicitly pass None to test default fallback
+    result = segment_into_chunks(interactions, [], max_gap_ms=None, max_events=None)
 
     assert len(result) == 1
     assert len(result[0]) == 2
