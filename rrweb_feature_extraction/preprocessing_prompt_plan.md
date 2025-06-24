@@ -233,6 +233,57 @@ You’re extending **Chunk Segmentation** to enforce time-gap and size-cap bound
 * Parameterized tests for each noise rule ensure correct drop/keep decisions
 * Duplicates in a chunk are reduced to one
 
+**Prompt for Coding Agent:**
+
+You’re building the **Noise-Filtering Framework** for the Input Ingestion module.
+
+**Tasks:**
+
+1. In `rrweb_feature_extraction/rrweb_ingest/filter.py`, implement a predicate function:
+
+   ```python
+   def is_low_signal(event: dict, micro_scroll_threshold: int = 20) -> bool:
+       """
+       Returns True if the event should be dropped as low-signal noise.
+       """
+   ```
+
+   * Drop **mousemove** events (`source == 1`).
+   * Drop **micro-scrolls** (`source == 3` with `abs(delta) < micro_scroll_threshold`).
+   * Drop **trivial DOM mutations** (`source == 0` for insignificant attribute/text changes).
+2. Implement a `clean_chunk` function in the same file:
+
+   ```python
+   def clean_chunk(events: List[dict]) -> List[dict]:
+       """
+       Removes low-signal and duplicate events from a chunk.
+       """
+   ```
+
+   * Uses `is_low_signal` to filter out noise.
+   * Deduplicates events by `(type, data.source, timestamp, target id)` so identical events appear only once.
+3. Document both functions with clear docstrings describing parameters, return values, and default thresholds.
+
+**Testing:**
+
+1. Create `rrweb_feature_extraction/rrweb_ingest/tests/test_filter.py`.
+2. Write unit tests for `is_low_signal` to confirm:
+
+   * Mousemove events return `True`.
+   * Scroll events below threshold return `True`; above threshold return `False`.
+   * Simple mutation events with no meaningful change return `True`; significant mutation returns `False`.
+3. Write tests for `clean_chunk` to confirm:
+
+   * Noise events are removed.
+   * Duplicate events are collapsed to one.
+   * Non-noise, unique events are preserved in order.
+
+**Verification Criteria:**
+
+* All tests in `test_filter.py` pass under `pytest`.
+* Filtering logic correctly drops or keeps events per the spec.
+* Existing segmentation and loader tests remain unaffected.
+
 ---
 
 ## 7. Chunk Normalization & Schema
