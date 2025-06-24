@@ -5,8 +5,9 @@ Tests the is_low_signal and clean_chunk functions to ensure proper identificatio
 and removal of low-signal events and duplicates from rrweb chunks.
 """
 
+from unittest.mock import patch
+
 from rrweb_ingest.filter import is_low_signal, clean_chunk
-from rrweb_ingest import config
 
 
 class TestIsLowSignal:
@@ -54,7 +55,8 @@ class TestIsLowSignal:
         assert is_low_signal(scroll_event) is True
 
         # With lower threshold (10), this should not be noise
-        assert is_low_signal(scroll_event, micro_scroll_threshold=10) is False
+        with patch("rrweb_ingest.filter.config.MICRO_SCROLL_THRESHOLD", 10):
+            assert is_low_signal(scroll_event) is False
 
     def test_significant_scroll_above_threshold(self):
         """Test that scrolls above threshold are not identified as noise."""
@@ -401,6 +403,7 @@ class TestCleanChunk:
 
     def test_config_override_micro_scroll_threshold(self):
         """Test that overriding micro_scroll_threshold affects filtering."""
+        # pylint: disable=duplicate-code
         events = [
             {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 1}},  # click
             {
@@ -415,7 +418,8 @@ class TestCleanChunk:
         assert len(result_default) == 1  # Only click
 
         # With lower threshold (10), scroll should be kept
-        result_low_threshold = clean_chunk(events, micro_scroll_threshold=10)
+        with patch("rrweb_ingest.filter.config.MICRO_SCROLL_THRESHOLD", 10):
+            result_low_threshold = clean_chunk(events)
         assert len(result_low_threshold) == 2  # Click and scroll
 
     def test_custom_filters_applied(self):
@@ -438,7 +442,10 @@ class TestCleanChunk:
         def filter_source_99(event):
             return event.get("data", {}).get("source") == 99
 
-        result = clean_chunk(events, custom_filters=[filter_source_99])
+        with patch(
+            "rrweb_ingest.filter.config.DEFAULT_CUSTOM_FILTERS", [filter_source_99]
+        ):
+            result = clean_chunk(events)
 
         # Should keep click and input, filter out source 99
         assert len(result) == 2
@@ -473,9 +480,11 @@ class TestCleanChunk:
         def filter_source_88(event):
             return event.get("data", {}).get("source") == 88
 
-        result = clean_chunk(
-            events, custom_filters=[filter_source_99, filter_source_88]
-        )
+        with patch(
+            "rrweb_ingest.filter.config.DEFAULT_CUSTOM_FILTERS",
+            [filter_source_99, filter_source_88],
+        ):
+            result = clean_chunk(events)
 
         # Should keep only click and input
         assert len(result) == 2
@@ -483,13 +492,12 @@ class TestCleanChunk:
         assert result[1]["data"]["source"] == 5  # input
 
     def test_uses_config_defaults_when_none_provided(self):
-        """Test that function uses config defaults when None is explicitly passed."""
+        """Test that function uses config defaults."""
         events = [
             {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 5}},
         ]
 
-        # Explicitly pass None to test default fallback
-        result = clean_chunk(events, micro_scroll_threshold=None, custom_filters=None)
+        result = clean_chunk(events)
 
         assert len(result) == 1
         assert result[0]["data"]["source"] == 2

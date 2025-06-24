@@ -27,7 +27,7 @@ class TestConfigDefaults:
 
     def test_extensibility_defaults(self):
         """Test that extensibility configuration has expected default values."""
-        assert config.DEFAULT_CUSTOM_FILTERS == []
+        assert not config.DEFAULT_CUSTOM_FILTERS
         assert isinstance(config.DEFAULT_CUSTOM_FILTERS, list)
 
     def test_all_defaults_are_reasonable(self):

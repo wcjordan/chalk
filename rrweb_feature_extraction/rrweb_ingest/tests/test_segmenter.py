@@ -5,8 +5,9 @@ Tests the segment_into_chunks function to ensure proper segmentation of interact
 events based on FullSnapshot boundaries.
 """
 
+from unittest.mock import patch
+
 from rrweb_ingest.segmenter import segment_into_chunks
-from rrweb_ingest import config
 
 
 def test_no_interactions_no_snapshots():
@@ -209,7 +210,8 @@ def test_time_gap_just_below_threshold():
         {"type": 3, "timestamp": 11000, "data": {"id": "int3"}},
     ]
 
-    result = segment_into_chunks(interactions, [], max_gap_ms=10_000)
+    with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 10_000):
+        result = segment_into_chunks(interactions, [])
 
     # Should remain in single chunk since gap is below threshold
     assert len(result) == 1
@@ -231,7 +233,8 @@ def test_time_gap_just_above_threshold():
         {"type": 3, "timestamp": 11100, "data": {"id": "int3"}},
     ]
 
-    result = segment_into_chunks(interactions, [], max_gap_ms=10_000)
+    with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 10_000):
+        result = segment_into_chunks(interactions, [])
 
     # Should split into two chunks due to large gap
     assert len(result) == 2
@@ -260,7 +263,8 @@ def test_multiple_time_gaps():
         },  # Another gap > 10000ms
     ]
 
-    result = segment_into_chunks(interactions, [], max_gap_ms=10_000)
+    with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 10_000):
+        result = segment_into_chunks(interactions, [])
 
     assert len(result) == 3
 
@@ -286,7 +290,8 @@ def test_max_events_exactly_at_limit():
         for i in range(5)  # Exactly 5 events
     ]
 
-    result = segment_into_chunks(interactions, [], max_events=5)
+    with patch("rrweb_ingest.segmenter.config.MAX_EVENTS", 5):
+        result = segment_into_chunks(interactions, [])
 
     # Should remain as single chunk
     assert len(result) == 1
@@ -300,7 +305,8 @@ def test_max_events_exceeds_limit():
         for i in range(7)  # 7 events, limit is 5
     ]
 
-    result = segment_into_chunks(interactions, [], max_events=5)
+    with patch("rrweb_ingest.segmenter.config.MAX_EVENTS", 5):
+        result = segment_into_chunks(interactions, [])
 
     # Should split into two chunks: 5 + 2
     assert len(result) == 2
@@ -321,7 +327,8 @@ def test_multiple_size_splits():
         for i in range(12)  # 12 events, limit is 5
     ]
 
-    result = segment_into_chunks(interactions, [], max_events=5)
+    with patch("rrweb_ingest.segmenter.config.MAX_EVENTS", 5):
+        result = segment_into_chunks(interactions, [])
 
     # Should split into three chunks: 5 + 5 + 2
     assert len(result) == 3
@@ -346,7 +353,8 @@ def test_combined_snapshot_and_time_gap():
         {"type": 2, "timestamp": 150, "data": {"id": "snap1"}},
     ]
 
-    result = segment_into_chunks(interactions, snapshots, max_gap_ms=10_000)
+    with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 10_000):
+        result = segment_into_chunks(interactions, snapshots)
 
     # Should create 3 chunks: before snapshot, after snapshot before gap, after gap
     assert len(result) == 3
@@ -378,7 +386,8 @@ def test_combined_snapshot_and_size_limit():
         {"type": 2, "timestamp": 100, "data": {"id": "snap1"}},
     ]
 
-    result = segment_into_chunks(interactions, snapshots, max_events=5)
+    with patch("rrweb_ingest.segmenter.config.MAX_EVENTS", 5):
+        result = segment_into_chunks(interactions, snapshots)
 
     # Should create 3 chunks: 3 before snapshot, 5 after snapshot, 2 remaining
     assert len(result) == 3
@@ -401,7 +410,10 @@ def test_combined_time_gap_and_size_limit():
         ]
     )
 
-    result = segment_into_chunks(interactions, [], max_gap_ms=10_000, max_events=5)
+    with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 10_000), patch(
+        "rrweb_ingest.segmenter.config.MAX_EVENTS", 5
+    ):
+        result = segment_into_chunks(interactions, [])
 
     # Should create 3 chunks: 4 before gap, 5 after gap, 3 remaining
     assert len(result) == 3
@@ -430,9 +442,10 @@ def test_all_three_splitting_criteria():
         {"type": 2, "timestamp": 100, "data": {"id": "snap1"}},
     ]
 
-    result = segment_into_chunks(
-        interactions, snapshots, max_gap_ms=10_000, max_events=5
-    )
+    with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 10_000), patch(
+        "rrweb_ingest.segmenter.config.MAX_EVENTS", 5
+    ):
+        result = segment_into_chunks(interactions, snapshots)
 
     # Should create 4 chunks: 2 before snapshot, 5 after snapshot, 1 remaining, 2 after gap
     assert len(result) == 4
@@ -468,7 +481,8 @@ def test_config_override_max_gap_ms():
     assert len(result_default) == 1
 
     # With smaller threshold (5s), should split
-    result_small = segment_into_chunks(interactions, [], max_gap_ms=5000)
+    with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 5000):
+        result_small = segment_into_chunks(interactions, [])
     assert len(result_small) == 2
 
 
@@ -483,21 +497,21 @@ def test_config_override_max_events():
     assert len(result_default) == 1
 
     # With smaller limit (5), should split
-    result_small = segment_into_chunks(interactions, [], max_events=5)
+    with patch("rrweb_ingest.segmenter.config.MAX_EVENTS", 5):
+        result_small = segment_into_chunks(interactions, [])
     assert len(result_small) == 2
     assert len(result_small[0]) == 5
     assert len(result_small[1]) == 5
 
 
 def test_uses_config_defaults_when_none_provided():
-    """Test that function uses config defaults when None is explicitly passed."""
+    """Test that function uses config defaults."""
     interactions = [
         {"type": 3, "timestamp": 1000, "data": {"id": "int1"}},
         {"type": 3, "timestamp": 2000, "data": {"id": "int2"}},
     ]
 
-    # Explicitly pass None to test default fallback
-    result = segment_into_chunks(interactions, [], max_gap_ms=None, max_events=None)
+    result = segment_into_chunks(interactions, [])
 
     assert len(result) == 1
     assert len(result[0]) == 2

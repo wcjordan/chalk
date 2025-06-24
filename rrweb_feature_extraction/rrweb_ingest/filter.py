@@ -7,7 +7,7 @@ and duplicate events. This helps focus downstream processing on meaningful
 user interactions.
 """
 
-from typing import List, Set, Tuple, Callable, Optional
+from typing import List, Set, Tuple
 from . import config
 
 

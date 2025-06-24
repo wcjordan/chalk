@@ -6,7 +6,9 @@ components and correct handling of various session scenarios and error condition
 """
 
 import json
+from unittest.mock import patch
 import tempfile
+
 import pytest
 
 from rrweb_ingest.pipeline import ingest_session
@@ -153,10 +155,12 @@ class TestIngestSession:
         temp_path = create_session_file(events)
 
         # With large max_gap_ms, should stay in one chunk
-        result_large_gap = ingest_session("gap_test", temp_path, max_gap_ms=10_000)
+        with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 10_000):
+            result_large_gap = ingest_session("gap_test", temp_path)
 
         # With small max_gap_ms, should split into multiple chunks
-        result_small_gap = ingest_session("gap_test", temp_path, max_gap_ms=5_000)
+        with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 5_000):
+            result_small_gap = ingest_session("gap_test", temp_path)
 
         # Large gap should have fewer chunks than small gap
         assert len(result_large_gap) <= len(result_small_gap)
@@ -172,10 +176,12 @@ class TestIngestSession:
         temp_path = create_session_file(events)
 
         # With large max_events, should stay in fewer chunks
-        result_large_max = ingest_session("events_test", temp_path, max_events=20)
+        with patch("rrweb_ingest.segmenter.config.MAX_EVENTS", 20):
+            result_large_max = ingest_session("events_test", temp_path)
 
         # With small max_events, should split into more chunks
-        result_small_max = ingest_session("events_test", temp_path, max_events=3)
+        with patch("rrweb_ingest.segmenter.config.MAX_EVENTS", 3):
+            result_small_max = ingest_session("events_test", temp_path)
 
         # Small max should create more chunks than large max
         assert len(result_small_max) > len(result_large_max)
@@ -199,14 +205,12 @@ class TestIngestSession:
         temp_path = create_session_file(events)
 
         # With high threshold, scroll should be filtered as noise
-        result_high_threshold = ingest_session(
-            "scroll_test", temp_path, micro_scroll_threshold=20
-        )
+        with patch("rrweb_ingest.filter.config.MICRO_SCROLL_THRESHOLD", 20):
+            result_high_threshold = ingest_session("scroll_test", temp_path)
 
         # With low threshold, scroll should be kept
-        result_low_threshold = ingest_session(
-            "scroll_test", temp_path, micro_scroll_threshold=10
-        )
+        with patch("rrweb_ingest.filter.config.MICRO_SCROLL_THRESHOLD", 10):
+            result_low_threshold = ingest_session("scroll_test", temp_path)
 
         # High threshold should filter out the scroll, keeping only clicks
         high_events = sum(
@@ -330,7 +334,8 @@ class TestIngestSession:
         ]
 
         temp_path = create_session_file(events)
-        result = ingest_session("complex_test", temp_path, max_gap_ms=5000)
+        with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 5000):
+            result = ingest_session("complex_test", temp_path)
 
         # Should create multiple chunks due to snapshot and time gap
         assert len(result) >= 3
@@ -369,9 +374,10 @@ class TestIngestSession:
             return event.get("data", {}).get("source") == 99
 
         temp_path = create_session_file(events)
-        result = ingest_session(
-            "custom_filter_test", temp_path, custom_filters=[filter_source_99]
-        )
+        with patch(
+            "rrweb_ingest.segmenter.config.DEFAULT_CUSTOM_FILTERS", [filter_source_99]
+        ):
+            result = ingest_session("custom_filter_test", temp_path)
 
         # Should have filtered out the custom source event
         assert len(result) == 1
@@ -385,7 +391,7 @@ class TestIngestSession:
         assert 5 in sources  # input
 
     def test_ingest_session_config_defaults_when_none(self, create_session_file):
-        """Test that pipeline uses config defaults when None is explicitly passed."""
+        """Test that pipeline uses config defaults."""
         events = [
             {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 1}},
             {"type": 3, "timestamp": 2000, "data": {"source": 2, "id": 2}},
@@ -394,14 +400,7 @@ class TestIngestSession:
         temp_path = create_session_file(events)
 
         # Explicitly pass None to test default fallback
-        result = ingest_session(
-            "defaults_test",
-            temp_path,
-            max_gap_ms=None,
-            max_events=None,
-            micro_scroll_threshold=None,
-            custom_filters=None,
-        )
+        result = ingest_session("defaults_test", temp_path)
 
         assert len(result) == 1
         assert result[0].metadata["num_events"] == 2
