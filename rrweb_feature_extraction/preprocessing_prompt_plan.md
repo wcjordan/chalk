@@ -478,15 +478,15 @@ You’re creating **Documentation & Sample Data** for the Input Ingestion module
 
 **Tasks:**
 
-1. Add or update `README.md` at the project root to include:
+1. Add `rrweb_feature_extraction/README.md` to include:
 
    * An overview of the module’s purpose and public functions (`load_events`, `classify_events`, `segment_into_chunks`, `clean_chunk`, `normalize_chunk`, and `ingest_session`).
-   * Installation instructions and dependencies.
+   * Installation instructions and dependencies using `make init`.
    * A usage example showing how to call `ingest_session("session1", "path/to/sample.json")` and print out chunk summaries (`chunk_id`, `start_time`, `end_time`, `num_events`).
-2. Create a directory `tests/fixtures/` and add a small sample `rrweb_sample.json` (\~10–20 events) that exercises all event types (FullSnapshot, click, input, scroll, mutation).
-3. In `tests/test_fixtures.py`, write a test that:
+2. Create a directory `rrweb_feature_extraction/rrweb_ingest/tests/fixtures/` and add a small sample `rrweb_feature_extraction/rrweb_ingest/rrweb_sample.json` (\~10–20 events) that exercises all event types (FullSnapshot, click, input, scroll, mutation).
+3. In `rrweb_feature_extraction/rrweb_ingest/tests/test_fixtures.py`, write a test that:
 
-   * Calls `ingest_session("sample", "tests/fixtures/rrweb_sample.json")`.
+   * Calls `ingest_session("sample", "rrweb_feature_extraction/rrweb_ingest/tests/fixtures/rrweb_sample.json")`.
    * Asserts that the returned list of `Chunk` objects matches expected counts (e.g., number of chunks, events per chunk).
    * Validates that key fields (`chunk_id`, `start_time`, `end_time`, `metadata["num_events"]`) conform to the documented format.
 
