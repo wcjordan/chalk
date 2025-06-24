@@ -5,7 +5,6 @@ Tests the is_low_signal and clean_chunk functions to ensure proper identificatio
 and removal of low-signal events and duplicates from rrweb chunks.
 """
 
-import pytest
 from rrweb_ingest.filter import is_low_signal, clean_chunk
 
 
@@ -220,7 +219,7 @@ class TestCleanChunk:
     def test_empty_chunk(self):
         """Test that empty chunk returns empty list."""
         result = clean_chunk([])
-        assert result == []
+        assert not result
 
     def test_removes_mousemove_noise(self):
         """Test that mousemove events are removed from chunks."""
