@@ -11,9 +11,7 @@ from .models import Chunk
 
 
 def normalize_chunk(
-    raw_events: List[Dict[str, Any]],
-    session_id: str,
-    chunk_index: int
+    raw_events: List[Dict[str, Any]], session_id: str, chunk_index: int
 ) -> Chunk:
     """
     Builds a Chunk object from a list of cleaned events.
@@ -36,7 +34,7 @@ def normalize_chunk(
         Chunk object with populated fields:
         - chunk_id: Formatted as "{session_id}-chunk{chunk_index:03d}"
         - start_time: Timestamp of first event
-        - end_time: Timestamp of last event  
+        - end_time: Timestamp of last event
         - events: Copy of the input events list
         - metadata: Dictionary containing num_events and duration_ms
 
@@ -63,40 +61,40 @@ def normalize_chunk(
     # Validate inputs
     if not raw_events:
         raise ValueError("Cannot create chunk from empty event list")
-    
+
     if not session_id:
         raise ValueError("session_id cannot be empty")
-        
+
     if chunk_index < 0:
         raise ValueError("chunk_index must be non-negative")
 
     # Validate that all events have timestamps
     for i, event in enumerate(raw_events):
-        if 'timestamp' not in event:
+        if "timestamp" not in event:
             raise KeyError(f"Event at index {i} missing required 'timestamp' field")
 
     # Extract timestamps
-    timestamps = [event['timestamp'] for event in raw_events]
+    timestamps = [event["timestamp"] for event in raw_events]
     start_time = min(timestamps)
     end_time = max(timestamps)
-    
+
     # Generate chunk ID with zero-padded index
     chunk_id = f"{session_id}-chunk{chunk_index:03d}"
-    
+
     # Calculate metadata
     num_events = len(raw_events)
     duration_ms = end_time - start_time
-    
+
     metadata = {
-        'num_events': num_events,
-        'duration_ms': duration_ms,
+        "num_events": num_events,
+        "duration_ms": duration_ms,
     }
-    
+
     # Create and return the Chunk object
     return Chunk(
         chunk_id=chunk_id,
         start_time=start_time,
         end_time=end_time,
         events=raw_events.copy(),  # Create a copy to avoid mutation
-        metadata=metadata
+        metadata=metadata,
     )

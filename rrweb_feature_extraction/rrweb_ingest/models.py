@@ -30,6 +30,7 @@ class Chunk:
                  - duration_ms: Duration of the chunk in milliseconds (end_time - start_time)
                  - snapshot_before: Optional FullSnapshot event that preceded this chunk
     """
+
     chunk_id: str
     start_time: int
     end_time: int
@@ -40,15 +41,15 @@ class Chunk:
         """Validate chunk data after initialization."""
         if not self.chunk_id:
             raise ValueError("chunk_id cannot be empty")
-        
+
         if self.start_time < 0:
             raise ValueError("start_time must be non-negative")
-            
+
         if self.end_time < self.start_time:
             raise ValueError("end_time must be >= start_time")
-            
+
         if not isinstance(self.events, list):
             raise ValueError("events must be a list")
-            
+
         if not isinstance(self.metadata, dict):
             raise ValueError("metadata must be a dictionary")
