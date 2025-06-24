@@ -352,8 +352,16 @@ class TestIngestSession:
         """Test that custom filters are properly applied during ingestion."""
         events = [
             {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 1}},  # click
-            {"type": 3, "timestamp": 1100, "data": {"source": 99, "id": 2}},  # custom source
-            {"type": 3, "timestamp": 1200, "data": {"source": 5, "text": "input"}},  # input
+            {
+                "type": 3,
+                "timestamp": 1100,
+                "data": {"source": 99, "id": 2},
+            },  # custom source
+            {
+                "type": 3,
+                "timestamp": 1200,
+                "data": {"source": 5, "text": "input"},
+            },  # input
         ]
 
         # Custom filter that removes events with source == 99
@@ -361,7 +369,9 @@ class TestIngestSession:
             return event.get("data", {}).get("source") == 99
 
         temp_path = create_session_file(events)
-        result = ingest_session("custom_filter_test", temp_path, custom_filters=[filter_source_99])
+        result = ingest_session(
+            "custom_filter_test", temp_path, custom_filters=[filter_source_99]
+        )
 
         # Should have filtered out the custom source event
         assert len(result) == 1
@@ -382,15 +392,15 @@ class TestIngestSession:
         ]
 
         temp_path = create_session_file(events)
-        
+
         # Explicitly pass None to test default fallback
         result = ingest_session(
-            "defaults_test", 
-            temp_path, 
-            max_gap_ms=None, 
-            max_events=None, 
+            "defaults_test",
+            temp_path,
+            max_gap_ms=None,
+            max_events=None,
             micro_scroll_threshold=None,
-            custom_filters=None
+            custom_filters=None,
         )
 
         assert len(result) == 1

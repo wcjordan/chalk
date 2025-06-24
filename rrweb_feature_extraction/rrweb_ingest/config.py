@@ -13,14 +13,14 @@ Configuration Categories:
 Usage Examples:
     # Use default values
     from rrweb_ingest.config import MAX_GAP_MS
-    
+
     # Override in function calls
     chunks = segment_into_chunks(interactions, snapshots, max_gap_ms=5000)
-    
+
     # Custom noise filter
     def custom_filter(event):
         return event.get("data", {}).get("source") == 99
-    
+
     cleaned = clean_chunk(events, custom_filters=[custom_filter])
 """
 
@@ -74,22 +74,23 @@ DEFAULT_CUSTOM_FILTERS = []
 # Configuration Validation
 # ========================
 
+
 def validate_config():
     """
     Validate that all configuration values are within reasonable ranges.
-    
+
     Raises:
         ValueError: If any configuration value is invalid
     """
     if MAX_GAP_MS <= 0:
         raise ValueError("MAX_GAP_MS must be positive")
-    
+
     if MAX_EVENTS <= 0:
         raise ValueError("MAX_EVENTS must be positive")
-    
+
     if MAX_DURATION_MS <= 0:
         raise ValueError("MAX_DURATION_MS must be positive")
-    
+
     if MICRO_SCROLL_THRESHOLD < 0:
         raise ValueError("MICRO_SCROLL_THRESHOLD must be non-negative")
 

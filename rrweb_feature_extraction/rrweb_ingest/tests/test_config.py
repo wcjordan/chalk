@@ -36,10 +36,10 @@ class TestConfigDefaults:
         assert config.MAX_GAP_MS > 0
         assert config.MAX_EVENTS > 0
         assert config.MAX_DURATION_MS > 0
-        
+
         # Threshold should be non-negative
         assert config.MICRO_SCROLL_THRESHOLD >= 0
-        
+
         # Boolean flags should be boolean
         assert isinstance(config.FILTER_EMPTY_MUTATIONS, bool)
         assert isinstance(config.FILTER_STYLE_ONLY_MUTATIONS, bool)
@@ -61,7 +61,7 @@ class TestConfigValidation:
             config.MAX_GAP_MS = 0
             with pytest.raises(ValueError, match="MAX_GAP_MS must be positive"):
                 config.validate_config()
-            
+
             config.MAX_GAP_MS = -1000
             with pytest.raises(ValueError, match="MAX_GAP_MS must be positive"):
                 config.validate_config()
@@ -75,7 +75,7 @@ class TestConfigValidation:
             config.MAX_EVENTS = 0
             with pytest.raises(ValueError, match="MAX_EVENTS must be positive"):
                 config.validate_config()
-            
+
             config.MAX_EVENTS = -100
             with pytest.raises(ValueError, match="MAX_EVENTS must be positive"):
                 config.validate_config()
@@ -89,7 +89,7 @@ class TestConfigValidation:
             config.MAX_DURATION_MS = 0
             with pytest.raises(ValueError, match="MAX_DURATION_MS must be positive"):
                 config.validate_config()
-            
+
             config.MAX_DURATION_MS = -5000
             with pytest.raises(ValueError, match="MAX_DURATION_MS must be positive"):
                 config.validate_config()
@@ -101,11 +101,15 @@ class TestConfigValidation:
         original_value = config.MICRO_SCROLL_THRESHOLD
         try:
             config.MICRO_SCROLL_THRESHOLD = -1
-            with pytest.raises(ValueError, match="MICRO_SCROLL_THRESHOLD must be non-negative"):
+            with pytest.raises(
+                ValueError, match="MICRO_SCROLL_THRESHOLD must be non-negative"
+            ):
                 config.validate_config()
-            
+
             config.MICRO_SCROLL_THRESHOLD = -50
-            with pytest.raises(ValueError, match="MICRO_SCROLL_THRESHOLD must be non-negative"):
+            with pytest.raises(
+                ValueError, match="MICRO_SCROLL_THRESHOLD must be non-negative"
+            ):
                 config.validate_config()
         finally:
             config.MICRO_SCROLL_THRESHOLD = original_value

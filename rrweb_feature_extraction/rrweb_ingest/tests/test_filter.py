@@ -422,8 +422,16 @@ class TestCleanChunk:
         """Test that custom filter functions are properly applied."""
         events = [
             {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 5}},  # click
-            {"type": 3, "timestamp": 1100, "data": {"source": 99, "id": 10}},  # custom source
-            {"type": 3, "timestamp": 1200, "data": {"source": 5, "text": "input"}},  # input
+            {
+                "type": 3,
+                "timestamp": 1100,
+                "data": {"source": 99, "id": 10},
+            },  # custom source
+            {
+                "type": 3,
+                "timestamp": 1200,
+                "data": {"source": 5, "text": "input"},
+            },  # input
         ]
 
         # Custom filter that removes events with source == 99
@@ -441,9 +449,21 @@ class TestCleanChunk:
         """Test that multiple custom filters work together."""
         events = [
             {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 5}},  # click
-            {"type": 3, "timestamp": 1100, "data": {"source": 99, "id": 10}},  # custom source 99
-            {"type": 3, "timestamp": 1200, "data": {"source": 88, "id": 15}},  # custom source 88
-            {"type": 3, "timestamp": 1300, "data": {"source": 5, "text": "input"}},  # input
+            {
+                "type": 3,
+                "timestamp": 1100,
+                "data": {"source": 99, "id": 10},
+            },  # custom source 99
+            {
+                "type": 3,
+                "timestamp": 1200,
+                "data": {"source": 88, "id": 15},
+            },  # custom source 88
+            {
+                "type": 3,
+                "timestamp": 1300,
+                "data": {"source": 5, "text": "input"},
+            },  # input
         ]
 
         # Custom filters
@@ -453,7 +473,9 @@ class TestCleanChunk:
         def filter_source_88(event):
             return event.get("data", {}).get("source") == 88
 
-        result = clean_chunk(events, custom_filters=[filter_source_99, filter_source_88])
+        result = clean_chunk(
+            events, custom_filters=[filter_source_99, filter_source_88]
+        )
 
         # Should keep only click and input
         assert len(result) == 2

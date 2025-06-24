@@ -77,12 +77,23 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = None) -> bool:
         attributes = data.get("attributes", [])
 
         # If no significant changes, consider it trivial
-        if config.FILTER_EMPTY_MUTATIONS and not adds and not removes and not texts and not attributes:
+        if (
+            config.FILTER_EMPTY_MUTATIONS
+            and not adds
+            and not removes
+            and not texts
+            and not attributes
+        ):
             return True
 
         # If only minor attribute changes (like style updates), consider trivial
-        if (config.FILTER_STYLE_ONLY_MUTATIONS and 
-            not adds and not removes and not texts and len(attributes) == 1):
+        if (
+            config.FILTER_STYLE_ONLY_MUTATIONS
+            and not adds
+            and not removes
+            and not texts
+            and len(attributes) == 1
+        ):
             attr_change = attributes[0]
             # Simple heuristic: single style attribute changes are often trivial
             if attr_change.get("attributes", {}).get("style"):
@@ -92,9 +103,9 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = None) -> bool:
 
 
 def clean_chunk(
-    events: List[dict], 
+    events: List[dict],
     micro_scroll_threshold: int = None,
-    custom_filters: Optional[List[Callable[[dict], bool]]] = None
+    custom_filters: Optional[List[Callable[[dict], bool]]] = None,
 ) -> List[dict]:
     """
     Removes low-signal and duplicate events from a chunk.

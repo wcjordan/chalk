@@ -475,8 +475,7 @@ def test_config_override_max_gap_ms():
 def test_config_override_max_events():
     """Test that overriding max_events affects chunking behavior."""
     interactions = [
-        {"type": 3, "timestamp": i * 100, "data": {"id": f"int{i}"}}
-        for i in range(10)
+        {"type": 3, "timestamp": i * 100, "data": {"id": f"int{i}"}} for i in range(10)
     ]
 
     # With default config (1000), should stay in one chunk
