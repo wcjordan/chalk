@@ -427,6 +427,38 @@ You’re implementing the **End-to-End Ingest Pipeline** for the Input Ingestion
 * Tests override thresholds and confirm altered chunking behavior
 * Custom noise filter is invoked when provided
 
+**Prompt for Coding Agent:**
+
+You’re adding **Configuration & Extensibility Hooks** to the Input Ingestion module.
+
+**Tasks:**
+
+1. Create a configuration object or module `rrweb_ingest/config.py` that defines default values for:
+
+   * `MAX_GAP_MS` (default `10_000`)
+   * `MAX_EVENTS` (default `1000`)
+   * `MICRO_SCROLL_THRESHOLD` (default `20`)
+2. Refactor functions in `segmenter.py`, `filter.py`, and `pipeline.py` to import and use these defaults instead of hard‐coded literals.
+3. Update function signatures to accept optional overrides for these parameters, falling back to the config values when not provided.
+4. Introduce an extensibility hook in `filter.py`—e.g., allow passing a list of additional `is_low_signal` predicates or a custom filter function.
+5. Document in `config.py` and each affected module how to override defaults or inject custom filters.
+
+**Testing:**
+
+1. In `tests/test_config.py`, write unit tests that:
+
+   * Confirm the config module exposes the correct default values.
+2. In existing tests for `segmenter`, `filter`, and `pipeline`, add cases that:
+
+   * Override defaults via function arguments and verify behavior changes accordingly (e.g., smaller `max_gap_ms` causes more splits).
+   * Pass a custom noise predicate into `clean_chunk` and verify it’s applied.
+
+**Verification Criteria:**
+
+* All tests pass under `pytest` with both default and overridden settings.
+* Code review confirms no hard‐coded threshold literals remain.
+* Documentation clearly shows how to configure and extend ingestion behavior.
+
 ---
 
 ## 10. Documentation & Sample Data
@@ -439,3 +471,27 @@ You’re implementing the **End-to-End Ingest Pipeline** for the Input Ingestion
   **Verification:**
 * README code example runs successfully against the sample data
 * Peer confirms documentation clarity in a short review
+
+**Prompt for Coding Agent:**
+
+You’re creating **Documentation & Sample Data** for the Input Ingestion module.
+
+**Tasks:**
+
+1. Add or update `README.md` at the project root to include:
+
+   * An overview of the module’s purpose and public functions (`load_events`, `classify_events`, `segment_into_chunks`, `clean_chunk`, `normalize_chunk`, and `ingest_session`).
+   * Installation instructions and dependencies.
+   * A usage example showing how to call `ingest_session("session1", "path/to/sample.json")` and print out chunk summaries (`chunk_id`, `start_time`, `end_time`, `num_events`).
+2. Create a directory `tests/fixtures/` and add a small sample `rrweb_sample.json` (\~10–20 events) that exercises all event types (FullSnapshot, click, input, scroll, mutation).
+3. In `tests/test_fixtures.py`, write a test that:
+
+   * Calls `ingest_session("sample", "tests/fixtures/rrweb_sample.json")`.
+   * Asserts that the returned list of `Chunk` objects matches expected counts (e.g., number of chunks, events per chunk).
+   * Validates that key fields (`chunk_id`, `start_time`, `end_time`, `metadata["num_events"]`) conform to the documented format.
+
+**Verification Criteria:**
+
+* The README example runs without error and produces human-readable output.
+* The sample JSON covers all major event types and the test confirms ingestion works end-to-end.
+* Documentation clearly guides a new developer through installation, usage, and testing.

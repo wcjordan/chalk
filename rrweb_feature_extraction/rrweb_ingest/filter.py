@@ -8,9 +8,10 @@ user interactions.
 """
 
 from typing import List, Set, Tuple
+from . import config
 
 
-def is_low_signal(event: dict, micro_scroll_threshold: int = 20) -> bool:
+def is_low_signal(event: dict) -> bool:
     """
     Returns True if the event should be dropped as low-signal noise.
 
@@ -19,8 +20,6 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = 20) -> bool:
 
     Args:
         event: rrweb event dictionary with 'type', 'timestamp', and 'data' fields
-        micro_scroll_threshold: Minimum scroll distance in pixels to be considered
-                               meaningful (default: 20px)
 
     Returns:
         True if the event should be filtered out as noise, False if it should be kept
@@ -59,7 +58,10 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = 20) -> bool:
         y_delta = abs(data.get("y", 0))
 
         # If both deltas are below threshold, consider it a micro-scroll
-        if x_delta < micro_scroll_threshold and y_delta < micro_scroll_threshold:
+        if (
+            x_delta < config.MICRO_SCROLL_THRESHOLD
+            and y_delta < config.MICRO_SCROLL_THRESHOLD
+        ):
             return True
 
     # Drop trivial DOM mutations (source == 0)
@@ -72,11 +74,23 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = 20) -> bool:
         attributes = data.get("attributes", [])
 
         # If no significant changes, consider it trivial
-        if not adds and not removes and not texts and not attributes:
+        if (
+            config.FILTER_EMPTY_MUTATIONS
+            and not adds
+            and not removes
+            and not texts
+            and not attributes
+        ):
             return True
 
         # If only minor attribute changes (like style updates), consider trivial
-        if not adds and not removes and not texts and len(attributes) == 1:
+        if (
+            config.FILTER_STYLE_ONLY_MUTATIONS
+            and not adds
+            and not removes
+            and not texts
+            and len(attributes) == 1
+        ):
             attr_change = attributes[0]
             # Simple heuristic: single style attribute changes are often trivial
             if attr_change.get("attributes", {}).get("style"):
@@ -85,7 +99,9 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = 20) -> bool:
     return False
 
 
-def clean_chunk(events: List[dict], micro_scroll_threshold: int = 20) -> List[dict]:
+def clean_chunk(
+    events: List[dict],
+) -> List[dict]:
     """
     Removes low-signal and duplicate events from a chunk.
 
@@ -95,8 +111,6 @@ def clean_chunk(events: List[dict], micro_scroll_threshold: int = 20) -> List[di
 
     Args:
         events: List of rrweb event dictionaries to clean
-        micro_scroll_threshold: Minimum scroll distance in pixels to be
-                                considered meaningful (default: 20px)
 
     Returns:
         List of cleaned events with noise and duplicates removed, preserving
@@ -119,7 +133,11 @@ def clean_chunk(events: List[dict], micro_scroll_threshold: int = 20) -> List[di
 
     for event in events:
         # Skip low-signal events
-        if is_low_signal(event, micro_scroll_threshold):
+        if is_low_signal(event):
+            continue
+
+        # Apply custom filters
+        if any(custom_filter(event) for custom_filter in config.DEFAULT_CUSTOM_FILTERS):
             continue
 
         # Create a signature for deduplication

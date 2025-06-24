@@ -11,11 +11,6 @@ The pipeline performs the following steps:
 3. Segment interactions into logical chunks based on boundaries and limits
 4. Filter out noise and duplicate events from each chunk
 5. Normalize chunks into standardized objects with metadata
-
-Parameters can be configured to control chunking behavior:
-- max_gap_ms: Maximum time gap between events before starting new chunk
-- max_events: Maximum number of events per chunk
-- micro_scroll_threshold: Minimum scroll distance to be considered meaningful
 """
 
 from typing import List
@@ -31,10 +26,6 @@ from .models import Chunk
 def ingest_session(
     session_id: str,
     filepath: str,
-    *,
-    max_gap_ms: int = 10_000,
-    max_events: int = 1000,
-    micro_scroll_threshold: int = 20,
 ) -> List[Chunk]:
     """
     Load, classify, segment, filter, and normalize an rrweb session into Chunks.
@@ -53,12 +44,6 @@ def ingest_session(
     Args:
         session_id: Unique identifier for this session, used in chunk IDs
         filepath: Path to the rrweb JSON session file to process
-        max_gap_ms: Maximum time gap in milliseconds between consecutive
-                   interactions before starting a new chunk (default: 10,000ms)
-        max_events: Maximum number of events per chunk before starting a new
-                   chunk (default: 1000 events)
-        micro_scroll_threshold: Minimum scroll distance in pixels to be
-                               considered meaningful (default: 20px)
 
     Returns:
         List of normalized Chunk objects, each containing cleaned events and
@@ -74,8 +59,6 @@ def ingest_session(
         >>> chunks = ingest_session(
         ...     "user_session_123",
         ...     "/path/to/session.json",
-        ...     max_gap_ms=5000,
-        ...     max_events=500
         ... )
         >>> len(chunks)
         3
@@ -95,15 +78,13 @@ def ingest_session(
     snapshots, interactions, _ = classify_events(events)
 
     # Step 3: Segment interactions into raw chunks
-    raw_chunks = segment_into_chunks(
-        interactions, snapshots, max_gap_ms=max_gap_ms, max_events=max_events
-    )
+    raw_chunks = segment_into_chunks(interactions, snapshots)
 
     # Step 4 & 5: Clean and normalize each chunk
     normalized_chunks = []
     for chunk_index, raw_chunk in enumerate(raw_chunks):
         # Filter noise and duplicates
-        cleaned_events = clean_chunk(raw_chunk, micro_scroll_threshold)
+        cleaned_events = clean_chunk(raw_chunk)
 
         # Skip empty chunks after cleaning
         if not cleaned_events:
