@@ -363,6 +363,58 @@ You’re implementing **Chunk Normalization & Schema** for the Input Ingestion m
 * Integration tests on real-world sample sessions verify consistent chunk counts and schema conformance
 * Regression test ensures no change in chunk outputs for the same input
 
+**Prompt for Coding Agent:**
+
+You’re implementing the **End-to-End Ingest Pipeline** for the Input Ingestion module.
+
+**Tasks:**
+
+1. In `rrweb_feature_extraction/rrweb_ingest/pipeline.py`, create a function:
+
+   ```python
+   def ingest_session(
+       session_id: str,
+       filepath: str,
+       *,
+       max_gap_ms: int = 10_000,
+       max_events: int = 1000,
+       micro_scroll_threshold: int = 20
+   ) -> List[Chunk]:
+       """
+       Load, classify, segment, filter, and normalize an rrweb session into Chunks.
+       """
+   ```
+2. Inside `ingest_session`, sequentially invoke:
+
+   * `load_events(filepath)`
+   * `classify_events(...)`
+   * `segment_into_chunks(...)` with `max_gap_ms` and `max_events`
+   * For each raw chunk list:
+
+     * `clean_chunk(...)` with `micro_scroll_threshold`
+     * `normalize_chunk(...)` using `session_id` and chunk index
+3. Ensure errors (e.g., file not found, invalid JSON) propagate cleanly to the caller.
+4. Add a module-level docstring describing the overall pipeline and parameters.
+
+**Testing:**
+
+1. Create `rrweb_feature_extraction/rrweb_ingest/tests/test_pipeline.py`.
+2. Write integration tests that:
+
+   * Run `ingest_session` on a provided small sample rrweb JSON and assert:
+
+     * The return value is a non-empty list of `Chunk` objects.
+     * Each `Chunk` has `events`, `start_time`, `end_time`, and `metadata` populated.
+   * Verify that changing `max_gap_ms` or `max_events` alters the number or size of chunks as expected.
+   * Confirm that invalid file paths or malformed sessions raise the expected exceptions.
+
+**Verification Criteria:**
+
+* All new and existing tests (`loader`, `classifier`, `segmenter`, `filter`, `normalizer`) pass under `pytest`.
+* `ingest_session` stitches together prior components without altering their individual behavior.
+* CI pipeline remains green with the new integration tests included.
+
+
 ---
 
 ## 9. Configuration & Extensibility Hooks
