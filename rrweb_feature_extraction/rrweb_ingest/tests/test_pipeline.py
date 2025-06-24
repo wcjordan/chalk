@@ -17,9 +17,10 @@ from rrweb_ingest.models import Chunk
 def fixture_create_session_file():
     """Helper function to create a temporary rrweb session JSON file."""
 
-    def _create_session_file(events, session_guid="test_session", raw_string=None):
-        """Create a temporary file with rrweb session data."""
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json") as f:
+
+        def _create_session_file(events, session_guid="test_session", raw_string=None):
+            """Create a temporary file with rrweb session data."""
             if raw_string:
                 f.write(raw_string)
             else:
@@ -32,7 +33,7 @@ def fixture_create_session_file():
             f.flush()
             return f.name
 
-    return _create_session_file
+        yield _create_session_file
 
 
 class TestIngestSession:
