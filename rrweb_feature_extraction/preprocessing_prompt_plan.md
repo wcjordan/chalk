@@ -183,6 +183,43 @@ You’re implementing **Basic Chunk Segmentation** for the Input Ingestion modul
 * Tests simulate gaps just below/above threshold and assert split/no‐split
 * Tests simulate over‐sized chunks and assert automatic split
 
+**Prompt for Coding Agent:**
+
+You’re extending **Chunk Segmentation** to enforce time-gap and size-cap boundaries.
+
+**Tasks:**
+
+1. In `rrweb_ingest/segmenter.py`, update `segment_into_chunks` to also:
+
+   * Split a chunk when the time difference between consecutive interaction events exceeds `max_gap_ms` (default 10 000 ms).
+   * Split a chunk when the number of events in the current chunk reaches `max_events` (default 1000).
+2. Introduce these thresholds as optional parameters on the function signature:
+
+   ```python
+   def segment_into_chunks(
+       interactions: List[dict],
+       snapshots: List[dict],
+       max_gap_ms: int = 10_000,
+       max_events: int = 1000
+   ) -> List[List[dict]]:
+   ```
+3. Ensure that after a split, the next event starts a fresh chunk (i.e., no event is lost or duplicated).
+4. Update the docstring to describe the new parameters and boundary logic.
+
+**Testing:**
+
+1. In `tests/test_segmenter.py`, add cases for:
+
+   * A sequence of interactions with a gap just below `max_gap_ms` remains in one chunk, and with a gap just above splits into two.
+   * A sequence of interactions exactly `max_events` long stays as one chunk, and one longer splits into two at the correct index.
+   * Combined scenarios where both a time gap and size cap occur in the same stream.
+
+**Verification Criteria:**
+
+* All existing and new tests in `test_segmenter.py` pass under `pytest`.
+* Segmentation behavior matches the spec for both time-gap and size-cap scenarios.
+* No regressions: runs correctly when called without specifying `max_gap_ms` and `max_events` (defaults apply).
+
 ---
 
 ## 6. Noise-Filtering Framework
