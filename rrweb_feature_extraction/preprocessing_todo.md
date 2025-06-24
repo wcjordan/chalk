@@ -138,15 +138,15 @@
 ## Step 10: Documentation & Sample Data
 
 ### Tasks:
-- [x] Create comprehensive README.md with usage examples
-- [x] Document each public function with docstrings (inputs/outputs/exceptions)
-- [x] Include sample rrweb JSON file for testing and demonstration
-- [x] Provide CLI usage example or code snippet in README
-- [x] Add API documentation for all public classes and functions
-- [x] Create example scripts showing common usage patterns
-- [x] Document configuration options and their effects
-- [x] Add troubleshooting section for common issues
-- [x] Test that README code examples run successfully
+- [ ] Create comprehensive README.md with usage examples
+- [ ] Document each public function with docstrings (inputs/outputs/exceptions)
+- [ ] Include sample rrweb JSON file for testing and demonstration
+- [ ] Provide CLI usage example or code snippet in README
+- [ ] Add API documentation for all public classes and functions
+- [ ] Create example scripts showing common usage patterns
+- [ ] Document configuration options and their effects
+- [ ] Add troubleshooting section for common issues
+- [ ] Test that README code examples run successfully
 - [ ] Get peer review of documentation for clarity and completeness
-- [x] Add performance benchmarks and expected processing times
-- [x] Include information about supported rrweb versions and formats
+- [ ] Add performance benchmarks and expected processing times
+- [ ] Include information about supported rrweb versions and formats

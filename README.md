@@ -18,16 +18,6 @@ The application allows users to:
 
 The app uses Google OAuth for authentication and has both web and mobile (React Native) versions.  
 
-## rrweb Feature Extraction
-
-The project includes an rrweb session processing module for analyzing user behavior recordings. This module transforms raw rrweb session data into clean, structured chunks for feature extraction and behavior analysis.
-
-See [rrweb_feature_extraction/README.md](rrweb_feature_extraction/README.md) for detailed documentation on:
-- Processing rrweb session recordings
-- Extracting user interaction patterns
-- Configuring noise filtering and chunking behavior
-- API reference and usage examples
-
 ## Contributing
 ### Getting Started
 #### Install tools for dev env
