@@ -65,11 +65,3 @@ def load_events(filepath: str) -> List[dict]:
 
     # Sort events by timestamp in ascending order
     return sorted(rrweb_data, key=lambda event: event["timestamp"])
-
-
-if __name__ == "__main__":
-    EXAMPLE_PATH = (
-        "../session_stitching/output_sessions/4b458001-0e2c-483e-b013-a3410e3d8b1f.json"
-    )
-    events = load_events(EXAMPLE_PATH)
-    print(f"Loaded {len(events)} events from {EXAMPLE_PATH}")
