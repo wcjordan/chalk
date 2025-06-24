@@ -28,7 +28,6 @@ class Chunk:
         metadata: Additional information about the chunk including:
                  - num_events: Number of events in the chunk
                  - duration_ms: Duration of the chunk in milliseconds (end_time - start_time)
-                 - snapshot_before: Optional FullSnapshot event that preceded this chunk
     """
 
     chunk_id: str
