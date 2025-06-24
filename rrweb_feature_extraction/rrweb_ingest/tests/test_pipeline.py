@@ -227,7 +227,7 @@ class TestIngestSession:
         with pytest.raises(json.JSONDecodeError):
             ingest_session("test", temp_path)
 
-    def test_ingest_session_malformed_session_structure(self, create_session_file):
+    def test_ingest_session_malformed_session_structure(self):
         """Test that ValueError is raised for malformed session structure."""
         # Create file without rrweb_data field
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:

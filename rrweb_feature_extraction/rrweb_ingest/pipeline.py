@@ -92,7 +92,7 @@ def ingest_session(
     events = load_events(filepath)
 
     # Step 2: Classify events into categories
-    snapshots, interactions, others = classify_events(events)
+    snapshots, interactions, _ = classify_events(events)
 
     # Step 3: Segment interactions into raw chunks
     raw_chunks = segment_into_chunks(
@@ -103,7 +103,7 @@ def ingest_session(
     normalized_chunks = []
     for chunk_index, raw_chunk in enumerate(raw_chunks):
         # Filter noise and duplicates
-        cleaned_events = clean_chunk(raw_chunk)
+        cleaned_events = clean_chunk(raw_chunk, micro_scroll_threshold)
 
         # Skip empty chunks after cleaning
         if not cleaned_events:
