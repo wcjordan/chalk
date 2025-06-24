@@ -238,9 +238,17 @@ class TestCleanChunk:
     def test_removes_micro_scroll_noise(self):
         """Test that micro-scroll events are removed from chunks."""
         events = [
-            {"type": 3, "timestamp": 1000, "data": {"source": 3, "x": 5, "y": 10}},  # micro-scroll
+            {
+                "type": 3,
+                "timestamp": 1000,
+                "data": {"source": 3, "x": 5, "y": 10},
+            },  # micro-scroll
             {"type": 3, "timestamp": 2000, "data": {"source": 2, "id": 5}},  # click
-            {"type": 3, "timestamp": 3000, "data": {"source": 3, "x": 50, "y": 100}},  # significant scroll
+            {
+                "type": 3,
+                "timestamp": 3000,
+                "data": {"source": 3, "x": 50, "y": 100},
+            },  # significant scroll
         ]
 
         result = clean_chunk(events)
@@ -255,7 +263,11 @@ class TestCleanChunk:
         events = [
             {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 5}},  # click
             {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 5}},  # duplicate
-            {"type": 3, "timestamp": 2000, "data": {"source": 2, "id": 10}},  # different click
+            {
+                "type": 3,
+                "timestamp": 2000,
+                "data": {"source": 2, "id": 10},
+            },  # different click
         ]
 
         result = clean_chunk(events)
@@ -305,9 +317,17 @@ class TestCleanChunk:
     def test_handles_events_without_target_id(self):
         """Test deduplication works for events without target id."""
         events = [
-            {"type": 3, "timestamp": 1000, "data": {"source": 3, "x": 50}},  # scroll without id
+            {
+                "type": 3,
+                "timestamp": 1000,
+                "data": {"source": 3, "x": 50},
+            },  # scroll without id
             {"type": 3, "timestamp": 1000, "data": {"source": 3, "x": 50}},  # duplicate
-            {"type": 3, "timestamp": 2000, "data": {"source": 3, "x": 100}},  # different scroll
+            {
+                "type": 3,
+                "timestamp": 2000,
+                "data": {"source": 3, "x": 100},
+            },  # different scroll
         ]
 
         result = clean_chunk(events)
@@ -338,11 +358,37 @@ class TestCleanChunk:
         events = [
             {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 5}},  # click
             {"type": 3, "timestamp": 1100, "data": {"source": 1}},  # mousemove (noise)
-            {"type": 3, "timestamp": 1200, "data": {"source": 3, "x": 5, "y": 5}},  # micro-scroll (noise)
-            {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 5}},  # duplicate click
-            {"type": 3, "timestamp": 1300, "data": {"source": 0, "adds": [], "removes": [], "texts": [], "attributes": []}},  # trivial mutation (noise)
-            {"type": 3, "timestamp": 1400, "data": {"source": 3, "x": 50, "y": 100}},  # significant scroll
-            {"type": 3, "timestamp": 1500, "data": {"source": 5, "id": 10, "text": "input"}},  # input
+            {
+                "type": 3,
+                "timestamp": 1200,
+                "data": {"source": 3, "x": 5, "y": 5},
+            },  # micro-scroll (noise)
+            {
+                "type": 3,
+                "timestamp": 1000,
+                "data": {"source": 2, "id": 5},
+            },  # duplicate click
+            {
+                "type": 3,
+                "timestamp": 1300,
+                "data": {
+                    "source": 0,
+                    "adds": [],
+                    "removes": [],
+                    "texts": [],
+                    "attributes": [],
+                },
+            },  # trivial mutation (noise)
+            {
+                "type": 3,
+                "timestamp": 1400,
+                "data": {"source": 3, "x": 50, "y": 100},
+            },  # significant scroll
+            {
+                "type": 3,
+                "timestamp": 1500,
+                "data": {"source": 5, "id": 10, "text": "input"},
+            },  # input
         ]
 
         result = clean_chunk(events)

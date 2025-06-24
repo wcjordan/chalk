@@ -57,7 +57,7 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = 20) -> bool:
         # Check for scroll distance in x or y direction
         x_delta = abs(data.get("x", 0))
         y_delta = abs(data.get("y", 0))
-        
+
         # If both deltas are below threshold, consider it a micro-scroll
         if x_delta < micro_scroll_threshold and y_delta < micro_scroll_threshold:
             return True
