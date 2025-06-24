@@ -13,7 +13,6 @@
 - [x] Configure CI to install dependencies and run pytest
 - [x] Verify pytest runs successfully with smoke test
 - [x] Test CI pipeline locally or in CI environment
-- [ ] Add basic project documentation structure
 
 ## Step 2: JSON Loader & Sorter
 
@@ -63,17 +62,17 @@
 ## Step 5: Time-Gap & Size-Cap Chunking
 
 ### Tasks:
-- [ ] Enhance segmentation to respect `max_gap_ms` threshold (default 10,000ms)
-- [ ] Add logic to split chunks when time gap between events exceeds threshold
-- [ ] Implement `max_events` cap per chunk (default 1000 events)
+- [x] Enhance segmentation to respect `max_gap_ms` threshold (default 10,000ms)
+- [x] Add logic to split chunks when time gap between events exceeds threshold
+- [x] Implement `max_events` cap per chunk (default 1000 events)
 - [ ] Add `max_duration_ms` cap per chunk (default 30,000ms)
-- [ ] Update `segment_into_chunks()` to handle all splitting criteria
-- [ ] Make thresholds configurable via parameters
-- [ ] Write unit tests for time gap splitting just below/above threshold
-- [ ] Write unit tests for event count cap enforcement
+- [x] Update `segment_into_chunks()` to handle all splitting criteria
+- [x] Make thresholds configurable via parameters
+- [x] Write unit tests for time gap splitting just below/above threshold
+- [x] Write unit tests for event count cap enforcement
 - [ ] Write unit tests for duration cap enforcement
-- [ ] Test combinations of multiple splitting criteria
-- [ ] Verify chunk sizes stay within all specified limits
+- [x] Test combinations of multiple splitting criteria
+- [x] Verify chunk sizes stay within all specified limits
 
 ## Step 6: Noise-Filtering Framework
 
