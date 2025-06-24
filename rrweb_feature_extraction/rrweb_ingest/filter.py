@@ -85,7 +85,7 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = 20) -> bool:
     return False
 
 
-def clean_chunk(events: List[dict]) -> List[dict]:
+def clean_chunk(events: List[dict], micro_scroll_threshold: int = 20) -> List[dict]:
     """
     Removes low-signal and duplicate events from a chunk.
 
@@ -95,6 +95,8 @@ def clean_chunk(events: List[dict]) -> List[dict]:
 
     Args:
         events: List of rrweb event dictionaries to clean
+        micro_scroll_threshold: Minimum scroll distance in pixels to be
+                                considered meaningful (default: 20px)
 
     Returns:
         List of cleaned events with noise and duplicates removed, preserving
@@ -117,7 +119,7 @@ def clean_chunk(events: List[dict]) -> List[dict]:
 
     for event in events:
         # Skip low-signal events
-        if is_low_signal(event):
+        if is_low_signal(event, micro_scroll_threshold):
             continue
 
         # Create a signature for deduplication
