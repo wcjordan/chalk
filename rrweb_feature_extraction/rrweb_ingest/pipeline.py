@@ -11,16 +11,10 @@ The pipeline performs the following steps:
 3. Segment interactions into logical chunks based on boundaries and limits
 4. Filter out noise and duplicate events from each chunk
 5. Normalize chunks into standardized objects with metadata
-
-Parameters can be configured to control chunking behavior:
-- max_gap_ms: Maximum time gap between events before starting new chunk
-- max_events: Maximum number of events per chunk
-- micro_scroll_threshold: Minimum scroll distance to be considered meaningful
 """
 
-from typing import List, Callable, Optional
+from typing import List
 
-from . import config
 from .loader import load_events
 from .classifier import classify_events
 from .segmenter import segment_into_chunks
@@ -32,11 +26,6 @@ from .models import Chunk
 def ingest_session(
     session_id: str,
     filepath: str,
-    *,
-    max_gap_ms: int = None,
-    max_events: int = None,
-    micro_scroll_threshold: int = None,
-    custom_filters: Optional[List[Callable[[dict], bool]]] = None,
 ) -> List[Chunk]:
     """
     Load, classify, segment, filter, and normalize an rrweb session into Chunks.
@@ -55,14 +44,6 @@ def ingest_session(
     Args:
         session_id: Unique identifier for this session, used in chunk IDs
         filepath: Path to the rrweb JSON session file to process
-        max_gap_ms: Maximum time gap in milliseconds between consecutive
-                   interactions before starting a new chunk (default: from config.MAX_GAP_MS)
-        max_events: Maximum number of events per chunk before starting a new
-                   chunk (default: from config.MAX_EVENTS)
-        micro_scroll_threshold: Minimum scroll distance in pixels to be
-                               considered meaningful (default: from config.MICRO_SCROLL_THRESHOLD)
-        custom_filters: Optional list of additional filter functions for noise detection
-                       (default: from config.DEFAULT_CUSTOM_FILTERS)
 
     Returns:
         List of normalized Chunk objects, each containing cleaned events and
@@ -78,8 +59,6 @@ def ingest_session(
         >>> chunks = ingest_session(
         ...     "user_session_123",
         ...     "/path/to/session.json",
-        ...     max_gap_ms=5000,
-        ...     max_events=500
         ... )
         >>> len(chunks)
         3
@@ -88,16 +67,6 @@ def ingest_session(
         >>> chunks[0].metadata['num_events']
         45
     """
-    # Apply configuration defaults if not provided
-    if max_gap_ms is None:
-        max_gap_ms = config.MAX_GAP_MS
-    if max_events is None:
-        max_events = config.MAX_EVENTS
-    if micro_scroll_threshold is None:
-        micro_scroll_threshold = config.MICRO_SCROLL_THRESHOLD
-    if custom_filters is None:
-        custom_filters = config.DEFAULT_CUSTOM_FILTERS.copy()
-
     # Validate session_id
     if not session_id:
         raise ValueError("session_id cannot be empty")
@@ -109,15 +78,13 @@ def ingest_session(
     snapshots, interactions, _ = classify_events(events)
 
     # Step 3: Segment interactions into raw chunks
-    raw_chunks = segment_into_chunks(
-        interactions, snapshots, max_gap_ms=max_gap_ms, max_events=max_events
-    )
+    raw_chunks = segment_into_chunks(interactions, snapshots)
 
     # Step 4 & 5: Clean and normalize each chunk
     normalized_chunks = []
     for chunk_index, raw_chunk in enumerate(raw_chunks):
         # Filter noise and duplicates
-        cleaned_events = clean_chunk(raw_chunk, micro_scroll_threshold, custom_filters)
+        cleaned_events = clean_chunk(raw_chunk)
 
         # Skip empty chunks after cleaning
         if not cleaned_events:

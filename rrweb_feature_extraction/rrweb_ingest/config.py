@@ -2,8 +2,7 @@
 Configuration settings for rrweb ingestion pipeline.
 
 This module defines default values for all configurable parameters used throughout
-the ingestion pipeline. These defaults can be overridden by passing parameters
-to individual functions or by modifying the values in this module.
+the ingestion pipeline. These defaults can be overridden by modifying the values in this module.
 
 Configuration Categories:
 - Chunking thresholds: Control when new chunks are created
@@ -13,15 +12,6 @@ Configuration Categories:
 Usage Examples:
     # Use default values
     from rrweb_ingest.config import MAX_GAP_MS
-
-    # Override in function calls
-    chunks = segment_into_chunks(interactions, snapshots, max_gap_ms=5000)
-
-    # Custom noise filter
-    def custom_filter(event):
-        return event.get("data", {}).get("source") == 99
-
-    cleaned = clean_chunk(events, custom_filters=[custom_filter])
 """
 
 # Chunking Configuration

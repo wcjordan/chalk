@@ -11,7 +11,7 @@ from typing import List, Set, Tuple, Callable, Optional
 from . import config
 
 
-def is_low_signal(event: dict, micro_scroll_threshold: int = None) -> bool:
+def is_low_signal(event: dict) -> bool:
     """
     Returns True if the event should be dropped as low-signal noise.
 
@@ -20,8 +20,6 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = None) -> bool:
 
     Args:
         event: rrweb event dictionary with 'type', 'timestamp', and 'data' fields
-        micro_scroll_threshold: Minimum scroll distance in pixels to be considered
-                               meaningful (default: from config.MICRO_SCROLL_THRESHOLD)
 
     Returns:
         True if the event should be filtered out as noise, False if it should be kept
@@ -42,10 +40,6 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = None) -> bool:
         >>> is_low_signal(event)
         True
     """
-    # Apply configuration defaults if not provided
-    if micro_scroll_threshold is None:
-        micro_scroll_threshold = config.MICRO_SCROLL_THRESHOLD
-
     # Only filter IncrementalSnapshot events (type == 3)
     if event.get("type") != 3:
         return False
@@ -64,7 +58,10 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = None) -> bool:
         y_delta = abs(data.get("y", 0))
 
         # If both deltas are below threshold, consider it a micro-scroll
-        if x_delta < micro_scroll_threshold and y_delta < micro_scroll_threshold:
+        if (
+            x_delta < config.MICRO_SCROLL_THRESHOLD
+            and y_delta < config.MICRO_SCROLL_THRESHOLD
+        ):
             return True
 
     # Drop trivial DOM mutations (source == 0)
@@ -104,8 +101,6 @@ def is_low_signal(event: dict, micro_scroll_threshold: int = None) -> bool:
 
 def clean_chunk(
     events: List[dict],
-    micro_scroll_threshold: int = None,
-    custom_filters: Optional[List[Callable[[dict], bool]]] = None,
 ) -> List[dict]:
     """
     Removes low-signal and duplicate events from a chunk.
@@ -116,11 +111,6 @@ def clean_chunk(
 
     Args:
         events: List of rrweb event dictionaries to clean
-        micro_scroll_threshold: Minimum scroll distance in pixels to be
-                                considered meaningful (default: from config.MICRO_SCROLL_THRESHOLD)
-        custom_filters: Optional list of additional filter functions. Each function
-                       should take an event dict and return True if the event should
-                       be filtered out as noise (default: None)
 
     Returns:
         List of cleaned events with noise and duplicates removed, preserving
@@ -135,12 +125,6 @@ def clean_chunk(
         >>> clean_chunk(events)
         [{"type": 3, "data": {"source": 2, "id": 5}, "timestamp": 2000}]
     """
-    # Apply configuration defaults if not provided
-    if micro_scroll_threshold is None:
-        micro_scroll_threshold = config.MICRO_SCROLL_THRESHOLD
-    if custom_filters is None:
-        custom_filters = config.DEFAULT_CUSTOM_FILTERS.copy()
-
     if not events:
         return []
 
@@ -149,11 +133,11 @@ def clean_chunk(
 
     for event in events:
         # Skip low-signal events
-        if is_low_signal(event, micro_scroll_threshold):
+        if is_low_signal(event):
             continue
 
         # Apply custom filters
-        if any(custom_filter(event) for custom_filter in custom_filters):
+        if any(custom_filter(event) for custom_filter in config.DEFAULT_CUSTOM_FILTERS):
             continue
 
         # Create a signature for deduplication
