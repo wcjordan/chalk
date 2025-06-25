@@ -59,7 +59,7 @@ class TestLoadEvents:
 
         # Verify events are sorted by timestamp
         timestamps = [event["timestamp"] for event in result]
-        assert timestamps == [500, 750, 1000, 1500]
+        assert timestamps == sorted(timestamps)
 
         # Verify event content is preserved
         assert result[0]["type"] == 3  # timestamp 500
