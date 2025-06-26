@@ -11,7 +11,7 @@ def getChangeSetToTest() {
     } else {
         changeSet = []
     }
-    return ['rrweb_feature_extraction/.pylintrc']
+    return changeSet
 }
 
 return this
