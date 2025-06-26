@@ -1,5 +1,6 @@
 @NonCPS
 def getChangeSetToTest() {
+    sh "git branch -a"
     def changeSet = sh (
         script: 'git diff --name-only origin/main...',
         returnStdout: true
