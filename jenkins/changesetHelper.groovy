@@ -9,9 +9,9 @@ def getChangeSetToTest() {
     if (changeSet) {
         changeSet = changeSet.split('\n').collect { it.trim() }.findAll { it }
     } else {
-        changeSet = ['rrweb_feature_extraction/.pylintrc']
+        changeSet = []
     }
-    return []
+    return ['rrweb_feature_extraction/.pylintrc']
 }
 
 return this
