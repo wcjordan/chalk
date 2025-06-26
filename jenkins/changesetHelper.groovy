@@ -1,11 +1,9 @@
 @NonCPS
 def getChangeSetToTest() {
     // Fetch main so that it's available to diff against
+    echo "Starting test"
     sh 'git fetch origin refs/heads/main:refs/remotes/origin/main'
-    sh 'git branch -a'
-    sh 'git status'
-    sh 'git diff --name-only origin/main...'
-
+    echo "Testing"
     def changeSet = sh (
         script: 'git diff --name-only origin/main...',
         returnStdout: true
@@ -16,6 +14,7 @@ def getChangeSetToTest() {
     } else {
         changeSet = []
     }
+    return changeSet
 }
 
 return this
