@@ -1,8 +1,11 @@
 def GAR_HOST = 'us-east4-docker.pkg.dev'
 def GAR_REPO = "${GAR_HOST}/${env.GCP_PROJECT}/default-gar"
 
-def SERVER_IP = null
+// Variable defined later in the pipeline
 def HELM_DEPLOY_NAME = null
+def RUN_INTEGRATION_TESTS = true
+def SANITIZED_BUILD_TAG = null
+def SERVER_IP = null
 
 pipeline {
     agent none
@@ -19,6 +22,11 @@ pipeline {
             }
             steps {
                 script {
+                    def changesetHelper = load "jenkins/changesetHelper.groovy"
+                    def stagesHelper = load "jenkins/stagesHelper.groovy"
+                    def changeset = changesetHelper.getChangeSetToTest()
+                    RUN_INTEGRATION_TESTS = stagesHelper.shouldRunIntegrationTests(changeset)
+
                     SANITIZED_BUILD_TAG = env.BUILD_TAG.replaceAll(/[^a-zA-Z0-9_\-]/, '_')
                 }
             }
@@ -253,6 +261,12 @@ pipeline {
                                 memory: "1.5Gi"
                     """
                 }
+            }
+            when {
+                expression {
+                    RUN_INTEGRATION_TESTS
+                }
+                beforeAgent true
             }
             options {
                 throttle(['chalk-ci'])
