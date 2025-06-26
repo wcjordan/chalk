@@ -13,14 +13,16 @@ The pipeline performs the following steps:
 5. Normalize chunks into standardized objects with metadata
 """
 
+import os
+from collections import defaultdict
 from typing import List
 
-from .loader import load_events
-from .classifier import classify_events
-from .segmenter import segment_into_chunks
-from .filter import clean_chunk
-from .normalizer import normalize_chunk
-from .models import Chunk
+from rrweb_ingest.loader import load_events
+from rrweb_ingest.classifier import classify_events
+from rrweb_ingest.segmenter import segment_into_chunks
+from rrweb_ingest.filter import clean_chunk
+from rrweb_ingest.normalizer import normalize_chunk
+from rrweb_ingest.models import Chunk
 
 
 def ingest_session(
@@ -95,3 +97,23 @@ def ingest_session(
         normalized_chunks.append(chunk)
 
     return normalized_chunks
+
+
+if __name__ == "__main__":
+    SESSION_DIR = "../session_stitching/output_sessions"
+    chunk_sizes = defaultdict(int)
+    for curr_filename in os.listdir(SESSION_DIR):
+        if curr_filename.endswith(".json"):
+            curr_session_id = curr_filename.split(".")[0]
+            curr_filepath = os.path.join(SESSION_DIR, curr_filename)
+            try:
+                chunks = ingest_session(curr_session_id, curr_filepath)
+                chunk_sizes[len(chunks)] += 1
+            except Exception as e:
+                print(f"Error processing {curr_filename}: {e}")
+                raise e
+
+    print("Chunk size distribution:")
+    for size, count in sorted(chunk_sizes.items()):
+        print(f"{size} events: {count} sessions")
+    print(f"Total sessions processed: {sum(chunk_sizes.values())}")

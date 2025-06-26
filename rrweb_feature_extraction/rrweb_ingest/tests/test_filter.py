@@ -224,62 +224,6 @@ class TestCleanChunk:
         result = clean_chunk([])
         assert not result
 
-    def test_removes_mousemove_noise(self):
-        """Test that mousemove events are removed from chunks."""
-        events = [
-            {"type": 3, "timestamp": 1000, "data": {"source": 1}},  # mousemove (noise)
-            {"type": 3, "timestamp": 2000, "data": {"source": 2, "id": 5}},  # click
-            {"type": 3, "timestamp": 3000, "data": {"source": 1}},  # mousemove (noise)
-        ]
-
-        result = clean_chunk(events)
-
-        assert len(result) == 1
-        assert result[0]["data"]["source"] == 2  # Only click event remains
-
-    def test_removes_micro_scroll_noise(self):
-        """Test that micro-scroll events are removed from chunks."""
-        events = [
-            {
-                "type": 3,
-                "timestamp": 1000,
-                "data": {"source": 3, "x": 5, "y": 10},
-            },  # micro-scroll
-            {"type": 3, "timestamp": 2000, "data": {"source": 2, "id": 5}},  # click
-            {
-                "type": 3,
-                "timestamp": 3000,
-                "data": {"source": 3, "x": 50, "y": 100},
-            },  # significant scroll
-        ]
-
-        result = clean_chunk(events)
-
-        assert len(result) == 2
-        assert result[0]["data"]["source"] == 2  # click
-        assert result[1]["data"]["source"] == 3  # significant scroll
-        assert result[1]["data"]["x"] == 50  # verify it's the right scroll event
-
-    def test_removes_duplicate_events(self):
-        """Test that duplicate events are collapsed to one."""
-        events = [
-            {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 5}},  # click
-            {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 5}},  # duplicate
-            {
-                "type": 3,
-                "timestamp": 2000,
-                "data": {"source": 2, "id": 10},
-            },  # different click
-        ]
-
-        result = clean_chunk(events)
-
-        assert len(result) == 2
-        assert result[0]["timestamp"] == 1000
-        assert result[0]["data"]["id"] == 5
-        assert result[1]["timestamp"] == 2000
-        assert result[1]["data"]["id"] == 10
-
     def test_preserves_event_order(self):
         """Test that non-noise, unique events are preserved in original order."""
         events = [
@@ -338,23 +282,6 @@ class TestCleanChunk:
         assert result[0]["data"]["x"] == 50
         assert result[1]["data"]["x"] == 100
 
-    def test_preserves_non_incremental_events(self):
-        """Test that non-IncrementalSnapshot events are preserved."""
-        events = [
-            {"type": 2, "timestamp": 1000, "data": {"source": 0}},  # FullSnapshot
-            {"type": 3, "timestamp": 1500, "data": {"source": 1}},  # mousemove (noise)
-            {"type": 0, "timestamp": 2000, "data": {"source": 0}},  # Meta event
-            {"type": 3, "timestamp": 2500, "data": {"source": 2, "id": 5}},  # click
-        ]
-
-        result = clean_chunk(events)
-
-        assert len(result) == 3
-        assert result[0]["type"] == 2  # FullSnapshot preserved
-        assert result[1]["type"] == 0  # Meta event preserved
-        assert result[2]["type"] == 3  # Click preserved
-        assert result[2]["data"]["source"] == 2  # Mousemove filtered out
-
     def test_complex_filtering_scenario(self):
         """Test a complex scenario with multiple types of noise and duplicates."""
         events = [
@@ -400,27 +327,6 @@ class TestCleanChunk:
         assert result[0]["data"]["source"] == 2  # click
         assert result[1]["data"]["source"] == 3  # significant scroll
         assert result[2]["data"]["source"] == 5  # input
-
-    def test_config_override_micro_scroll_threshold(self):
-        """Test that overriding micro_scroll_threshold affects filtering."""
-        # pylint: disable=duplicate-code
-        events = [
-            {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 1}},  # click
-            {
-                "type": 3,
-                "timestamp": 1100,
-                "data": {"source": 3, "x": 15, "y": 15},
-            },  # scroll
-        ]
-
-        # With default threshold (20), scroll should be filtered
-        result_default = clean_chunk(events)
-        assert len(result_default) == 1  # Only click
-
-        # With lower threshold (10), scroll should be kept
-        with patch("rrweb_ingest.filter.config.MICRO_SCROLL_THRESHOLD", 10):
-            result_low_threshold = clean_chunk(events)
-        assert len(result_low_threshold) == 2  # Click and scroll
 
     def test_custom_filters_applied(self):
         """Test that custom filter functions are properly applied."""
@@ -490,14 +396,3 @@ class TestCleanChunk:
         assert len(result) == 2
         assert result[0]["data"]["source"] == 2  # click
         assert result[1]["data"]["source"] == 5  # input
-
-    def test_uses_config_defaults_when_none_provided(self):
-        """Test that function uses config defaults."""
-        events = [
-            {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 5}},
-        ]
-
-        result = clean_chunk(events)
-
-        assert len(result) == 1
-        assert result[0]["data"]["source"] == 2

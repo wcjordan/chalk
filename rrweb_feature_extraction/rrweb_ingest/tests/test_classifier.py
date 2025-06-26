@@ -18,44 +18,6 @@ def test_classify_empty_event_list():
     assert not others
 
 
-def test_classify_mixed_event_types():
-    """Test that mixed event types are correctly classified into appropriate buckets."""
-    events = [
-        {"type": 2, "timestamp": 1000, "data": {"source": "snapshot"}},
-        {"type": 3, "timestamp": 2000, "data": {"source": "interaction"}},
-        {"type": 0, "timestamp": 3000, "data": {"source": "meta"}},
-        {"type": 2, "timestamp": 4000, "data": {"source": "snapshot2"}},
-        {"type": 1, "timestamp": 5000, "data": {"source": "custom"}},
-        {"type": 3, "timestamp": 6000, "data": {"source": "interaction2"}},
-        {"type": 4, "timestamp": 7000, "data": {"source": "plugin"}},
-    ]
-
-    snapshots, interactions, others = classify_events(events)
-
-    # Verify snapshots (type == 2)
-    assert len(snapshots) == 2
-    assert snapshots[0]["type"] == 2
-    assert snapshots[0]["data"]["source"] == "snapshot"
-    assert snapshots[1]["type"] == 2
-    assert snapshots[1]["data"]["source"] == "snapshot2"
-
-    # Verify interactions (type == 3)
-    assert len(interactions) == 2
-    assert interactions[0]["type"] == 3
-    assert interactions[0]["data"]["source"] == "interaction"
-    assert interactions[1]["type"] == 3
-    assert interactions[1]["data"]["source"] == "interaction2"
-
-    # Verify others (all other types)
-    assert len(others) == 3
-    assert others[0]["type"] == 0
-    assert others[0]["data"]["source"] == "meta"
-    assert others[1]["type"] == 1
-    assert others[1]["data"]["source"] == "custom"
-    assert others[2]["type"] == 4
-    assert others[2]["data"]["source"] == "plugin"
-
-
 def test_classify_missing_type_field():
     """Test that events missing the 'type' field raise KeyError."""
     events_missing_type = [

@@ -404,3 +404,39 @@ class TestIngestSession:
 
         assert len(result) == 1
         assert result[0].metadata["num_events"] == 2
+
+    def test_ingest_session_all_events_filtered_as_noise(self, create_session_file):
+        """Test handling when all events in a chunk are filtered as noise."""
+        events = [
+            {"type": 2, "timestamp": 1000, "data": {"source": 0}},  # snapshot
+            {"type": 3, "timestamp": 1100, "data": {"source": 1}},  # mousemove (noise)
+            {"type": 3, "timestamp": 1200, "data": {"source": 1}},  # mousemove (noise)
+        ]
+
+        temp_path = create_session_file(events)
+        result = ingest_session("all_noise_test", temp_path)
+
+        # Should return empty list when all interactions are filtered
+        assert len(result) == 0
+
+    def test_ingest_session_consecutive_snapshots_no_interactions(
+        self, create_session_file
+    ):
+        """Test handling of consecutive snapshots with no interactions between."""
+        events = [
+            {"type": 2, "timestamp": 1000, "data": {"source": 0}},  # snapshot 1
+            {"type": 2, "timestamp": 2000, "data": {"source": 0}},  # snapshot 2
+            {"type": 2, "timestamp": 3000, "data": {"source": 0}},  # snapshot 3
+            {
+                "type": 3,
+                "timestamp": 4000,
+                "data": {"source": 2, "id": 1},
+            },  # interaction
+        ]
+
+        temp_path = create_session_file(events)
+        result = ingest_session("consecutive_snapshots_test", temp_path)
+
+        # Should only create one chunk for the final interaction
+        assert len(result) == 1
+        assert result[0].metadata["num_events"] == 1
