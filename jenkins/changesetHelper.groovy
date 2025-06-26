@@ -1,4 +1,3 @@
-@NonCPS
 def getChangeSetToTest() {
     // Fetch main so that it's available to diff against
     echo "Starting test"
