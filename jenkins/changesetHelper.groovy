@@ -1,36 +1,15 @@
 @NonCPS
-def _convertChangeSetToFilePaths(changeSets) {
-    for (changeSetLog1 in changeSets) {
-        for (entry1 in changeSetLog1.getItems()) {
-            for (file1 in entry1.getAffectedFiles()) {
-                print("File: ${file1.getPath()}")
-            }
-        }
-    }
-
-    return changeSets.collectMany { changeLogSet ->
-        changeLogSet.getItems().collectMany { entry ->
-            entry.getAffectedFiles().collect { file ->
-                file.getPath()
-            }
-        }
-    }.unique()
-}
-
-@NonCPS
 def getChangeSetToTest() {
-    def changeSet = _convertChangeSetToFilePaths(currentBuild.changeSets)
-    def cBuild = currentBuild.previousBuild
-    while (cBuild != null) {
-        // If the previous build didn't succeed, we include its changeset as needing to be tested.
-        // Keep working backwards until we find a build that succeeded.
-        if (cBuild.result == "SUCCESS") {
-            break
-        }
-        changeSet = changeSet + _convertChangeSetToFilePaths(previousBuild.changeSets)
-        cBuild = cBuild.previousBuild
+    def changeSet = sh (
+        script: 'git diff --name-only origin/main...',
+        returnStdout: true
+    ).trim()
+
+    if (changeSet) {
+        changeSet = changeSet.split('\n').collect { it.trim() }.findAll { it }
+    } else {
+        changeSet = []
     }
-    return changeSet
 }
 
 return this
