@@ -11,7 +11,7 @@ def getChangeSetToTest() {
     } else {
         changeSet = []
     }
-    return changeSet
+    return []
 }
 
 return this
