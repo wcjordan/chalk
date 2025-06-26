@@ -20,7 +20,7 @@ You’re setting up the foundation for the **Session Chunking & Feature Extracti
 
 **Tasks:**
 
-1. Create a new Python module `rrweb_features/models.py`.
+1. Create a new Python module `rrweb_feature_extraction/rrweb_features/models.py`.
 2. In this file, define the following data classes (or equivalent schemas):
 
    * **`DomMutation`**: captures mutation type (add/remove/attribute/text), target node ID, details, and timestamp.
@@ -31,7 +31,7 @@ You’re setting up the foundation for the **Session Chunking & Feature Extracti
    * **`ScrollPattern`**: captures the scroll event, the paired mutation event, and the delay.
    * **`FeatureChunk`**: aggregates a chunk’s `chunk_id`, `start_time`, `end_time`, original events list, and a `features` dict containing lists of the above objects.
 3. Add type hints and module‐level docstrings explaining each class’s purpose.
-4. Scaffold a test module `tests/test_models.py` that:
+4. Scaffold a test module `rrweb_feature_extraction/rrweb_features/tests/test_models.py` that:
 
    * Imports each class and constructs one instance of each with dummy values.
    * Asserts that attributes are stored correctly (e.g., `mutation.timestamp == 12345`).
@@ -40,7 +40,7 @@ You’re setting up the foundation for the **Session Chunking & Feature Extracti
 **Verification Criteria:**
 
 * Code review confirms all data classes are declared with the required fields and type hints.
-* Running `pytest tests/test_models.py` passes without errors.
+* Running `pytest rrweb_features/tests/test_models.py` passes without errors.
 * No existing preprocessing tests are broken by these additions.
 
 ---
@@ -61,7 +61,7 @@ You’re implementing **Virtual DOM State Initialization** for the Session Chunk
 
 **Tasks:**
 
-1. Create a new file `rrweb_features/dom_state.py`.
+1. Create a new file `rrweb_feature_extraction/rrweb_features/dom_state.py`.
 2. In this file, implement a function:
 
    ```python
@@ -84,7 +84,7 @@ You’re implementing **Virtual DOM State Initialization** for the Session Chunk
 
 **Testing:**
 
-1. Create `tests/test_dom_state.py`.
+1. Create `rrweb_feature_extraction/rrweb_features/tests/test_dom_state.py`.
 2. Write unit tests to cover:
 
    * Passing a synthetic FullSnapshot event with a simple DOM tree (e.g., root with two children) results in a `node_by_id` dict with the correct keys and `UINode` fields.
@@ -93,7 +93,7 @@ You’re implementing **Virtual DOM State Initialization** for the Session Chunk
 
 **Verification Criteria:**
 
-* `pytest tests/test_dom_state.py` passes without errors.
+* `pytest rrweb_features/tests/test_dom_state.py` passes without errors.
 * Code review confirms correct traversal of the snapshot structure and accurate population of the `UINode` map.
 * No existing feature extraction or ingestion tests are broken by this addition.
 
@@ -115,7 +115,7 @@ You’re implementing **Virtual DOM Mutation Updates** for the Session Chunking 
 
 **Tasks:**
 
-1. In `rrweb_features/dom_state.py`, add a function:
+1. In `rrweb_feature_extraction/rrweb_features/dom_state.py`, add a function:
 
    ```python
    def apply_mutations(
@@ -136,7 +136,7 @@ You’re implementing **Virtual DOM Mutation Updates** for the Session Chunking 
 
 **Testing:**
 
-1. In `tests/test_dom_state.py`, add tests for `apply_mutations`:
+1. In `rrweb_feature_extraction/rrweb_features/tests/test_dom_state.py`, add tests for `apply_mutations`:
 
    * Start with a small `node_by_id` map (e.g., two nodes), apply a mutation event that:
 
@@ -148,7 +148,7 @@ You’re implementing **Virtual DOM Mutation Updates** for the Session Chunking 
 
 **Verification Criteria:**
 
-* `pytest tests/test_dom_state.py` passes, including new mutation update tests.
+* `pytest rrweb_feature_extraction/rrweb_features/tests/test_dom_state.py` passes, including new mutation update tests.
 * Code review confirms that `apply_mutations` mutates `node_by_id` correctly and handles all mutation types.
 * No regressions in existing virtual DOM initialization tests.
 
@@ -170,7 +170,7 @@ You’re implementing **DOM Mutation Extraction** for the Session Chunking & Fea
 
 **Tasks:**
 
-1. Create or update `rrweb_features/extractors.py` (or a dedicated `dom_extractor.py`).
+1. Create or update `rrweb_feature_extraction/rrweb_features/extractors.py` (or a dedicated `dom_extractor.py`).
 2. Implement a function:
 
    ```python
@@ -193,7 +193,7 @@ You’re implementing **DOM Mutation Extraction** for the Session Chunking & Fea
 
 **Testing:**
 
-1. Create `tests/test_dom_extractor.py`.
+1. Create `rrweb_feature_extraction/rrweb_features/tests/test_dom_extractor.py`.
 2. Write unit tests to cover:
 
    * A single mutation event with multiple attribute changes produces one `DomMutation` per attribute.
@@ -204,7 +204,7 @@ You’re implementing **DOM Mutation Extraction** for the Session Chunking & Fea
 
 **Verification Criteria:**
 
-* `pytest tests/test_dom_extractor.py` passes without failures.
+* `pytest rrweb_features/tests/test_dom_extractor.py` passes without failures.
 * The extracted `DomMutation` objects match expected properties (type, node IDs, values, timestamp) in all test cases.
 * No existing feature-extraction tests are broken by this change.
 
@@ -226,7 +226,7 @@ You’re implementing **User Interaction Extraction** for the Session Chunking &
 
 **Tasks:**
 
-1. In `rrweb_features/extractors.py`, implement a function:
+1. In `rrweb_feature_extraction/rrweb_features/extractors.py`, implement a function:
 
    ```python
    def extract_user_interactions(events: List[dict]) -> List[UserInteraction]:
@@ -246,7 +246,7 @@ You’re implementing **User Interaction Extraction** for the Session Chunking &
 
 **Testing:**
 
-1. Create `tests/test_interactions_extractor.py`.
+1. Create `rrweb_feature_extraction/rrweb_features/tests/test_interactions_extractor.py`.
 2. Write unit tests to cover:
 
    * A mixed list of incremental snapshot events yields only click, input, and scroll interactions.
@@ -257,7 +257,7 @@ You’re implementing **User Interaction Extraction** for the Session Chunking &
 
 **Verification Criteria:**
 
-* `pytest tests/test_interactions_extractor.py` passes without failures.
+* `pytest rrweb_features/tests/test_interactions_extractor.py` passes without failures.
 * The returned `UserInteraction` objects have correct types and fields according to the spec.
 * No regressions in existing feature-extraction or preprocessing tests.
 
@@ -279,7 +279,7 @@ You’re implementing **Delay Computation** for the Session Chunking & Feature E
 
 **Tasks:**
 
-1. In `rrweb_features/extractors.py` (or a dedicated `delay_extractor.py`), implement two functions:
+1. In `rrweb_feature_extraction/rrweb_features/extractors.py` (or a dedicated `delay_extractor.py`), implement two functions:
 
    ```python
    def compute_inter_event_delays(events: List[dict]) -> List[EventDelay]:
@@ -307,7 +307,7 @@ You’re implementing **Delay Computation** for the Session Chunking & Feature E
 
 **Testing:**
 
-1. Create `tests/test_delay_extractor.py`.
+1. Create `rrweb_feature_extraction/rrweb_features/tests/test_delay_extractor.py`.
 2. Write unit tests to cover:
 
    * **Inter-event delays:** Given events with timestamps \[1000, 1500, 3000], assert two delays (500 ms, 1500 ms) with correct `from_ts`/`to_ts`.
@@ -318,7 +318,7 @@ You’re implementing **Delay Computation** for the Session Chunking & Feature E
 
 **Verification Criteria:**
 
-* Running `pytest tests/test_delay_extractor.py` passes all cases.
+* Running `pytest rrweb_features/tests/test_delay_extractor.py` passes all cases.
 * `compute_inter_event_delays` returns one `EventDelay` per adjacent event pair.
 * `compute_reaction_delays` returns one `EventDelay` per valid interaction→mutation pairing within the `max_reaction_ms` window.
 * No regressions in existing feature-extraction or preprocessing tests.
@@ -341,7 +341,7 @@ You’re implementing **UI Metadata Resolution** for the Session Chunking & Feat
 
 **Tasks:**
 
-1. In `rrweb_features/metadata.py`, implement a function:
+1. In `rrweb_feature_extraction/rrweb_features/metadata.py`, implement a function:
 
    ```python
    def resolve_node_metadata(
@@ -368,7 +368,7 @@ You’re implementing **UI Metadata Resolution** for the Session Chunking & Feat
 
 **Testing:**
 
-1. Create `tests/test_metadata.py`.
+1. Create `rrweb_feature_extraction/rrweb_features/tests/test_metadata.py`.
 2. Write unit tests that:
 
    * Given a simple `node_by_id` map with nested nodes, `resolve_node_metadata` returns the correct `dom_path`.
@@ -378,7 +378,7 @@ You’re implementing **UI Metadata Resolution** for the Session Chunking & Feat
 
 **Verification Criteria:**
 
-* `pytest tests/test_metadata.py` passes all tests.
+* `pytest rrweb_features/tests/test_metadata.py` passes all tests.
 * The returned metadata dict has exactly the specified keys with correct values.
 * No regressions in existing feature-extraction or preprocessing tests.
 
@@ -400,7 +400,7 @@ You’re implementing **Mouse Trajectory Clustering** for the Session Chunking &
 
 **Tasks:**
 
-1. In `rrweb_features/clustering.py`, implement a function:
+1. In `rrweb_feature_extraction/rrweb_features/clustering.py`, implement a function:
 
    ```python
    def cluster_mouse_trajectories(
@@ -427,7 +427,7 @@ You’re implementing **Mouse Trajectory Clustering** for the Session Chunking &
 
 **Testing:**
 
-1. Create `tests/test_clustering.py`.
+1. Create `rrweb_feature_extraction/rrweb_features/tests/test_clustering.py`.
 2. Write unit tests that:
 
    * Given consecutive mousemove events within both thresholds, they form a single cluster.
@@ -438,7 +438,7 @@ You’re implementing **Mouse Trajectory Clustering** for the Session Chunking &
 
 **Verification Criteria:**
 
-* Running `pytest tests/test_clustering.py` passes all cases.
+* Running `pytest rrweb_features/tests/test_clustering.py` passes all cases.
 * Clusters match expected boundaries and metrics based on synthetic event streams.
 * No regressions in existing feature‐extraction or preprocessing tests.
 
@@ -460,7 +460,7 @@ You’re implementing **Scroll-Pattern Detection** for the Session Chunking & Fe
 
 **Tasks:**
 
-1. In `rrweb_features/scroll_patterns.py`, implement a function:
+1. In `rrweb_feature_extraction/rrweb_features/scroll_patterns.py`, implement a function:
 
    ```python
    def detect_scroll_patterns(
@@ -481,7 +481,7 @@ You’re implementing **Scroll-Pattern Detection** for the Session Chunking & Fe
 
 **Testing:**
 
-1. Create `tests/test_scroll_patterns.py`.
+1. Create `rrweb_feature_extraction/rrweb_features/tests/test_scroll_patterns.py`.
 2. Write unit tests that verify:
 
    * A scroll event followed by a mutation within `max_reaction_ms` yields one `ScrollPattern`.
@@ -492,7 +492,7 @@ You’re implementing **Scroll-Pattern Detection** for the Session Chunking & Fe
 
 **Verification Criteria:**
 
-* `pytest tests/test_scroll_patterns.py` passes all scenarios.
+* `pytest rrweb_features/tests/test_scroll_patterns.py` passes all scenarios.
 * The `ScrollPattern` objects correctly capture the scroll event, mutation event, and delay.
 * No regressions in existing feature-extraction or preprocessing tests.
 
@@ -516,7 +516,7 @@ You’re implementing the **Assemble & Integrate Extractors** step for the Sessi
 
 **Tasks:**
 
-1. Create a new file `rrweb_features/pipeline.py`.
+1. Create a new file `rrweb_feature_extraction/rrweb_features/pipeline.py`.
 2. In this file, implement a function:
 
    ```python
@@ -545,7 +545,7 @@ You’re implementing the **Assemble & Integrate Extractors** step for the Sessi
 
 **Testing:**
 
-1. Create `tests/test_pipeline_features.py`.
+1. Create `rrweb_feature_extraction/rrweb_features/tests/test_pipeline_features.py`.
 2. Write an integration test that:
 
    * Feeds a sample `Chunk` (with a FullSnapshot event and a few interaction/mutation events) and its `dom_state` into `extract_features`.
@@ -554,7 +554,7 @@ You’re implementing the **Assemble & Integrate Extractors** step for the Sessi
 
 **Verification Criteria:**
 
-* `pytest tests/test_pipeline_features.py` passes.
+* `pytest rrweb_features/tests/test_pipeline_features.py` passes.
 * `FeatureChunk` contains all expected feature lists populated correctly.
 * No regressions in existing ingestion or extractor tests.
 
@@ -578,7 +578,7 @@ You’re adding **Configuration & Extensibility Hooks** to the Session Chunking 
 
 **Tasks:**
 
-1. Create a new module `rrweb_features/config.py` that defines default parameters for all extractors, for example:
+1. Create a new module `rrweb_feature_extraction/rrweb_features/config.py` that defines default parameters for all extractors, for example:
 
    ```python
    # rrweb_features/config.py
@@ -600,7 +600,7 @@ You’re adding **Configuration & Extensibility Hooks** to the Session Chunking 
 
 **Testing:**
 
-1. Create `tests/test_config_features.py`.
+1. Create `rrweb_feature_extraction/rrweb_features/tests/test_config_features.py`.
 2. Write unit tests to verify:
 
    * The `config` module exports the correct default values.
@@ -633,7 +633,7 @@ You’re creating **Documentation & Sample Data** for the Session Chunking & Fea
 
 **Tasks:**
 
-1. **Update `README.md`** at the project root (or in `rrweb_features/README.md`) to include:
+1. **Update `rrweb_feature_extraction/README.md`** to include:
 
    * A concise overview of the module’s purpose and key functions (`init_dom_state`, `apply_mutations`, `extract_dom_mutations`, `extract_user_interactions`, `compute_inter_event_delays`, `compute_reaction_delays`, `resolve_node_metadata`, `cluster_mouse_trajectories`, `detect_scroll_patterns`, `extract_features`).
    * Installation instructions and dependencies.
@@ -653,7 +653,7 @@ You’re creating **Documentation & Sample Data** for the Session Chunking & Fea
                len(feature_chunk.features["dom_mutations"]),
                len(feature_chunk.features["mouse_clusters"]))
      ```
-2. **Add sample data** under `tests/fixtures/`:
+2. **Add sample data** under `rrweb_feature_extraction/rrweb_features/tests/fixtures/`:
 
    * `sample_session.json`: a small rrweb session (\~15–25 events) that includes at least one FullSnapshot, several IncrementalSnapshots covering clicks, inputs, mutations, mousemoves, and scrolls.
    * `sample_featurechunk.json` (optional): expected output structure for one chunk after feature extraction.
@@ -668,6 +668,6 @@ You’re creating **Documentation & Sample Data** for the Session Chunking & Fea
 **Verification Criteria:**
 
 * The **README** example runs without errors and produces meaningful output.
-* **`pytest tests/test_fixtures_features.py`** passes, demonstrating end-to-end ingestion and feature extraction on the sample session.
+* **`pytest rrweb_features/tests/test_fixtures_features.py`** passes, demonstrating end-to-end ingestion and feature extraction on the sample session.
 * The **sample session fixture** covers all major event types and the test confirms accurate feature detection.
 * Documentation clearly guides a new developer through installation, running examples, and understanding expected outputs.
