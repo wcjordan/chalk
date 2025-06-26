@@ -20,8 +20,9 @@ pipeline {
             steps {
                 script {
                     def changesetHelper = load "jenkins/changesetHelper.groovy"
-                    echo "Changeset to test: ${changesetHelper.getChangeSetToTest()}"
-                    RUN_INTEGRATION_TESTS = changesetHelper.shouldRunIntegrationTests()
+                    def stagesHelper = load "jenkins/stagesHelper.groovy"
+                    def changeset = changesetHelper.getChangeSetToTest()
+                    RUN_INTEGRATION_TESTS = stagesHelper.shouldRunIntegrationTests(changeset)
 
                     SANITIZED_BUILD_TAG = env.BUILD_TAG.replaceAll(/[^a-zA-Z0-9_\-]/, '_')
                 }
@@ -257,6 +258,12 @@ pipeline {
                                 memory: "1.5Gi"
                     """
                 }
+            }
+            when {
+                expression {
+                    RUN_INTEGRATION_TESTS
+                }
+                beforeAgent true
             }
             options {
                 throttle(['chalk-ci'])
