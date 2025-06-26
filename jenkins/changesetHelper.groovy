@@ -1,5 +1,13 @@
 @NonCPS
 def _convertChangeSetToFilePaths(changeSets) {
+    for (changeSetLog1 in changeSets) {
+        for (entry1 in changeSetLog1.getItems()) {
+            for (file1 in entry1.getAffectedFiles()) {
+                print("File: ${file1.getPath()}")
+            }
+        }
+    }
+
     return changeSets.collectMany { changeLogSet ->
         changeLogSet.getItems().collectMany { entry ->
             entry.getAffectedFiles().collect { file ->
