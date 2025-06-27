@@ -24,8 +24,8 @@ pipeline {
                 script {
                     def changesetHelper = load "jenkins/changesetHelper.groovy"
                     def stagesHelper = load "jenkins/stagesHelper.groovy"
-                    def changeset = changesetHelper.getChangeSetToTest()
-                    RUN_INTEGRATION_TESTS = stagesHelper.shouldRunIntegrationTests(changeset)
+                    def changeSet = changesetHelper.getChangeSetToTest()
+                    RUN_INTEGRATION_TESTS = stagesHelper.shouldRunIntegrationTests(changeSet)
 
                     SANITIZED_BUILD_TAG = env.BUILD_TAG.replaceAll(/[^a-zA-Z0-9_\-]/, '_')
                 }

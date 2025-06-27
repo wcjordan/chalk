@@ -15,7 +15,16 @@ def shouldRunIntegrationTests(changeSet) {
     // Check if any of the changed files are not in the excluded directories
     def excludedDirs = ['rrweb_feature_extraction', 'session_stitching', 'test_gen', 'docs']
     def integrationTestFiles = changeSet.findAll { filepath -> !excludedDirs.any { filepath.startsWith(it + '/') } }
-    return integrationTestFiles.size() > 0
+    def runIntegrationTests = integrationTestFiles.size() > 0
+
+    if (!runIntegrationTests) {
+        echo "Skipping integration tests for change set: ${changeSet}"
+        publishChecks name: "Tests / Integration Tests / Playwright Tests",
+                      conclusion: 'SKIPPED',
+                      status: 'COMPLETED',
+                      text: "Skipped by change set: ${changeSet}"
+    }
+    return runIntegrationTests
 }
 
 return this
