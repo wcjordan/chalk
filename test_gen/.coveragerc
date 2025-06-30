@@ -2,3 +2,4 @@
 branch = True
 omit =
     rrweb_ingest/tests/*
+    session_stitching/tests/*
