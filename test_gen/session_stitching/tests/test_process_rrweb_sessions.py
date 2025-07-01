@@ -13,7 +13,7 @@ import pytest
 from google.cloud import storage
 from google.cloud.exceptions import NotFound
 
-from process_rrweb_sessions import (
+from session_stitching.process_rrweb_sessions import (
     _initialize_gcs_client,
     _download_json_files,
     _parse_and_validate_session_file,
@@ -100,7 +100,7 @@ def fixture_sample_bucket_data(sample_rrweb_data):
 def fixture_mock_client_class(mock_gcs_client):
     """Mock class for GCS client to be used in tests."""
     with patch(
-        "process_rrweb_sessions.storage.Client", return_value=mock_gcs_client
+        "session_stitching.process_rrweb_sessions.storage.Client", return_value=mock_gcs_client
     ) as client_class:
         yield client_class
 
@@ -349,16 +349,16 @@ class TestSessionDataValidation:
         """Test validation catches all combinations of missing required fields."""
         test_cases = [
             # Missing session_guid
-            ('{"session_data": [], "environment": "test"}', "session_guid"),
+            '{"session_data": [], "environment": "test"}',
             # Missing session_data
-            ('{"session_guid": "test", "environment": "test"}', "session_data"),
+            '{"session_guid": "test", "environment": "test"}',
             # Missing environment
-            ('{"session_guid": "test", "session_data": []}', "environment"),
+            '{"session_guid": "test", "session_data": []}',
             # Missing multiple fields
-            ('{"session_guid": "test"}', "session_data, environment"),
+            '{"session_guid": "test"}',
         ]
 
-        for content, expected_missing in test_cases:
+        for content in test_cases:
             result = _parse_and_validate_session_file("test.json", content)
             assert result is None
 
@@ -514,7 +514,7 @@ class TestPrivateMethodEdgeCases:
     def test_group_by_session_guid_handles_empty_list(self):
         """Test grouping handles empty input gracefully."""
         result = _group_by_session_guid([])
-        assert result == {}
+        assert not result
 
     def test_environment_validation_handles_empty_entries(self):
         """Test environment validation with sessions containing no entries."""
@@ -534,10 +534,10 @@ class TestPrivateMethodEdgeCases:
     def test_processing_handles_empty_session_groups(self):
         """Test edge case of empty session groups."""
         result = _sort_and_collect_timestamps({})
-        assert result == {}
+        assert not result
 
         result, conflicts = _validate_and_extract_environment({})
-        assert result == {}
+        assert not result
         assert conflicts == 0
 
     def test_merge_session_data_handles_empty_session_data(self):
@@ -574,7 +574,7 @@ class TestPrivateMethodEdgeCases:
     def test_merge_session_data_handles_empty_input(self):
         """Test merge handles empty sessions dictionary."""
         result = _merge_session_data({})
-        assert result == {}
+        assert not result
 
     def test_write_sessions_to_disk_handles_empty_sessions_dict(self, temp_output_dir):
         """Test that empty sessions dictionary is handled gracefully."""
@@ -637,7 +637,7 @@ class TestGcsInteractionEdgeCases:
         mock_bucket.list_blobs.return_value = []
 
         result = _download_json_files("empty-bucket")
-        assert result == []
+        assert not result
 
     def test_download_handles_gcs_errors(self, mock_gcs_client):
         """Test download handles GCS errors appropriately."""

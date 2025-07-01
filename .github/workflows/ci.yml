@@ -23,10 +23,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r rrweb_feature_extraction/requirements.txt
+        pip install -r test_gen/dev-requirements.txt
 
     - name: Run tests with pytest
       run: |
-        cd rrweb_feature_extraction
-        python -m pytest rrweb_ingest/tests/ -v
-
+        cd test_gen
+        python -m pytest -v rrweb_ingest/tests session_stitching/tests
