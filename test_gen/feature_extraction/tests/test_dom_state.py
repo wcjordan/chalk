@@ -7,7 +7,6 @@ and the accurate population of UINode mappings.
 
 import pytest
 from feature_extraction.dom_state import init_dom_state
-from feature_extraction.models import UINode
 
 
 def test_init_dom_state_simple_tree():
