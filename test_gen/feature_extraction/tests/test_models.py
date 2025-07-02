@@ -5,7 +5,6 @@ Tests the construction and basic functionality of all data classes
 used in the feature extraction pipeline.
 """
 
-import pytest
 from feature_extraction.models import (
     DomMutation,
     UserInteraction,

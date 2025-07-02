@@ -3,24 +3,24 @@
 ## Step 1: Define Data Models & Test Harness
 
 ### Tasks:
-- [ ] Create `test_gen/feature_extraction/` package directory structure
-- [ ] Add `__init__.py` to make it a proper Python package
-- [ ] Create `test_gen/feature_extraction/models.py` with data classes:
-  - [ ] `DomMutation` - captures mutation type, target node ID, details, timestamp
-  - [ ] `UserInteraction` - captures action type, target node ID, value/coordinates, timestamp
-  - [ ] `EventDelay` - captures event IDs/timestamps and delta between them
-  - [ ] `UINode` - captures node ID, tag, attributes dict, text content, parent ID
-  - [ ] `MouseCluster` - captures cluster timestamps, point list, duration/length
-  - [ ] `ScrollPattern` - captures scroll event, paired mutation event, delay
-  - [ ] `FeatureChunk` - aggregates chunk data with features dict
-- [ ] Add type hints and module-level docstrings for all classes
-- [ ] Create `test_gen/feature_extraction/tests/` directory
-- [ ] Create `test_gen/feature_extraction/tests/test_models.py`:
-  - [ ] Import and construct instances of each class with dummy values
-  - [ ] Assert attributes are stored correctly
-  - [ ] Verify `FeatureChunk` can be instantiated with empty feature lists
-- [ ] Verify pytest runs successfully on model tests
-- [ ] Ensure no existing preprocessing tests are broken
+- [x] Create `test_gen/feature_extraction/` package directory structure
+- [x] Add `__init__.py` to make it a proper Python package
+- [x] Create `test_gen/feature_extraction/models.py` with data classes:
+  - [x] `DomMutation` - captures mutation type, target node ID, details, timestamp
+  - [x] `UserInteraction` - captures action type, target node ID, value/coordinates, timestamp
+  - [x] `EventDelay` - captures event IDs/timestamps and delta between them
+  - [x] `UINode` - captures node ID, tag, attributes dict, text content, parent ID
+  - [x] `MouseCluster` - captures cluster timestamps, point list, duration/length
+  - [x] `ScrollPattern` - captures scroll event, paired mutation event, delay
+  - [x] `FeatureChunk` - aggregates chunk data with features dict
+- [x] Add type hints and module-level docstrings for all classes
+- [x] Create `test_gen/feature_extraction/tests/` directory
+- [x] Create `test_gen/feature_extraction/tests/test_models.py`:
+  - [x] Import and construct instances of each class with dummy values
+  - [x] Assert attributes are stored correctly
+  - [x] Verify `FeatureChunk` can be instantiated with empty feature lists
+- [x] Verify pytest runs successfully on model tests
+- [x] Ensure no existing preprocessing tests are broken
 
 ## Step 2: Virtual DOM State Initialization
 
