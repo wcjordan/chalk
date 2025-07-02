@@ -158,4 +158,4 @@ class FeatureChunk:
     end_time: int
     events: List[Dict[str, Any]]
     features: Dict[str, List[Any]]
-    metadata: dict
+    metadata: Dict[str, Any]
