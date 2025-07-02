@@ -100,7 +100,8 @@ def fixture_sample_bucket_data(sample_rrweb_data):
 def fixture_mock_client_class(mock_gcs_client):
     """Mock class for GCS client to be used in tests."""
     with patch(
-        "session_stitching.process_rrweb_sessions.storage.Client", return_value=mock_gcs_client
+        "session_stitching.process_rrweb_sessions.storage.Client",
+        return_value=mock_gcs_client,
     ) as client_class:
         yield client_class
 
