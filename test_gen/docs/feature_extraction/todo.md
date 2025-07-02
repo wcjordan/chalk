@@ -25,20 +25,20 @@
 ## Step 2: Virtual DOM State Initialization
 
 ### Tasks:
-- [ ] Create `test_gen/feature_extraction/dom_state.py`
-- [ ] Implement `init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]`:
-  - [ ] Handle rrweb events with `type == 2` and `data.node`
-  - [ ] Traverse snapshot payload to build node tree
-  - [ ] Extract node ID, tag, attributes, text content, parent ID
-  - [ ] Return dict mapping node IDs to UINode instances
-- [ ] Add module-level docstring explaining virtual DOM initialization
-- [ ] Create `test_gen/feature_extraction/tests/test_dom_state.py`:
-  - [ ] Test with synthetic FullSnapshot event and simple DOM tree
-  - [ ] Verify correct node_by_id dict with proper keys and UINode fields
-  - [ ] Test root node has parent = None
-  - [ ] Test node attributes and textContent captured exactly
-- [ ] Verify pytest passes without errors
-- [ ] Code review confirms correct snapshot traversal and UINode population
+- [x] Create `test_gen/feature_extraction/dom_state.py`
+- [x] Implement `init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]`:
+  - [x] Handle rrweb events with `type == 2` and `data.node`
+  - [x] Traverse snapshot payload to build node tree
+  - [x] Extract node ID, tag, attributes, text content, parent ID
+  - [x] Return dict mapping node IDs to UINode instances
+- [x] Add module-level docstring explaining virtual DOM initialization
+- [x] Create `test_gen/feature_extraction/tests/test_dom_state.py`:
+  - [x] Test with synthetic FullSnapshot event and simple DOM tree
+  - [x] Verify correct node_by_id dict with proper keys and UINode fields
+  - [x] Test root node has parent = None
+  - [x] Test node attributes and textContent captured exactly
+- [x] Verify pytest passes without errors
+- [x] Code review confirms correct snapshot traversal and UINode population
 
 ## Step 3: Virtual DOM Mutation Updates
 
