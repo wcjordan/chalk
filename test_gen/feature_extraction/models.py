@@ -156,6 +156,6 @@ class FeatureChunk:
     chunk_id: str
     start_time: int
     end_time: int
-    events: List[dict]
+    events: List[Dict[str, Any]]
     features: Dict[str, List[Any]]
     metadata: dict
