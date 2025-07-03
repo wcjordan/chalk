@@ -66,9 +66,7 @@ def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
     return node_by_id
 
 
-def apply_mutations(
-    node_by_id: Dict[int, UINode], mutation_events: List[dict]
-) -> None:
+def apply_mutations(node_by_id: Dict[int, UINode], mutation_events: List[dict]) -> None:
     """
     Applies a sequence of rrweb mutation events to update the in-memory DOM state in place.
 

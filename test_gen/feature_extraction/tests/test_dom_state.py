@@ -403,7 +403,11 @@ def test_apply_mutations_mixed_operations():
                 "adds": [
                     {
                         "parentId": 1,
-                        "node": {"id": 3, "tagName": "p", "textContent": "new paragraph"},
+                        "node": {
+                            "id": 3,
+                            "tagName": "p",
+                            "textContent": "new paragraph",
+                        },
                     }
                 ],
                 "removes": [{"id": 2}],
