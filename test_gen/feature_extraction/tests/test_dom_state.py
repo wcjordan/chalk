@@ -352,7 +352,7 @@ def test_apply_mutations_change_text():
 
     # Assert other properties unchanged
     assert updated_node.tag == "p"
-    assert updated_node.attributes == {}
+    assert not updated_node.attributes
 
 
 def test_apply_mutations_ignore_invalid_node_ids():
