@@ -126,7 +126,9 @@ def _apply_node_removals(node_by_id: Dict[int, UINode], removes: List[dict]) -> 
             del node_by_id[node_id]
 
 
-def _apply_attribute_changes(node_by_id: Dict[int, UINode], attributes: List[dict]) -> None:
+def _apply_attribute_changes(
+    node_by_id: Dict[int, UINode], attributes: List[dict]
+) -> None:
     """Apply attribute change mutations to the DOM state."""
     for attr_record in attributes:
         node_id = attr_record.get("id")
