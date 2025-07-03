@@ -43,22 +43,22 @@
 ## Step 3: Virtual DOM Mutation Updates
 
 ### Tasks:
-- [ ] Add `apply_mutations(node_by_id: Dict[int, UINode], mutation_events: List[dict]) -> None` to `dom_state.py`:
-  - [ ] Handle "adds" - create new UINode and insert into node_by_id
-  - [ ] Handle "removes" - delete node ID from node_by_id
-  - [ ] Handle "attributes" - update UINode.attributes dict
-  - [ ] Handle "texts" - update UINode.text field
-  - [ ] Ignore mutations with non-existent node IDs
-- [ ] Update module docstring to explain incremental DOM maintenance
-- [ ] Add tests to `test_dom_state.py` for `apply_mutations`:
-  - [ ] Test adding new child node
-  - [ ] Test removing existing node
-  - [ ] Test changing node attributes
-  - [ ] Test changing node text
-  - [ ] Test invalid mutations are safely ignored
-- [ ] Verify pytest passes including new mutation tests
-- [ ] Code review confirms correct node_by_id mutations for all types
-- [ ] No regressions in existing virtual DOM initialization tests
+- [x] Add `apply_mutations(node_by_id: Dict[int, UINode], mutation_events: List[dict]) -> None` to `dom_state.py`:
+  - [x] Handle "adds" - create new UINode and insert into node_by_id
+  - [x] Handle "removes" - delete node ID from node_by_id
+  - [x] Handle "attributes" - update UINode.attributes dict
+  - [x] Handle "texts" - update UINode.text field
+  - [x] Ignore mutations with non-existent node IDs
+- [x] Update module docstring to explain incremental DOM maintenance
+- [x] Add tests to `test_dom_state.py` for `apply_mutations`:
+  - [x] Test adding new child node
+  - [x] Test removing existing node
+  - [x] Test changing node attributes
+  - [x] Test changing node text
+  - [x] Test invalid mutations are safely ignored
+- [x] Verify pytest passes including new mutation tests
+- [x] Code review confirms correct node_by_id mutations for all types
+- [x] No regressions in existing virtual DOM initialization tests
 
 ## Step 4: DOM Mutation Extraction
 

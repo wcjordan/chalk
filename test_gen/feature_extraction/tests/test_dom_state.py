@@ -2,11 +2,13 @@
 Unit tests for DOM state initialization and management.
 
 Tests the creation of virtual DOM state from rrweb FullSnapshot events
-and the accurate population of UINode mappings.
+and the accurate population of UINode mappings, as well as mutation
+application for maintaining evolving DOM state.
 """
 
 import pytest
-from feature_extraction.dom_state import init_dom_state
+from feature_extraction.dom_state import init_dom_state, apply_mutations
+from feature_extraction.models import UINode
 
 
 def test_init_dom_state_simple_tree():
@@ -197,3 +199,284 @@ def test_init_dom_state_nodes_without_ids_ignored():
     assert p_node.tag == "p"
     assert p_node.text == "Has ID"
     assert p_node.parent == 1
+
+
+def test_apply_mutations_add_node():
+    """Test that apply_mutations correctly adds new nodes."""
+    # Start with a simple node_by_id map
+    node_by_id = {
+        1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
+        2: UINode(id=2, tag="span", attributes={}, text="existing", parent=1),
+    }
+
+    # Create a mutation event that adds a new node
+    mutation_events = [
+        {
+            "type": 3,
+            "data": {
+                "source": 0,
+                "adds": [
+                    {
+                        "parentId": 1,
+                        "node": {
+                            "id": 3,
+                            "tagName": "button",
+                            "attributes": {"class": "btn"},
+                            "textContent": "Click me",
+                        },
+                    }
+                ],
+            },
+        }
+    ]
+
+    apply_mutations(node_by_id, mutation_events)
+
+    # Assert the new node was added
+    assert 3 in node_by_id
+    new_node = node_by_id[3]
+    assert new_node.id == 3
+    assert new_node.tag == "button"
+    assert new_node.attributes == {"class": "btn"}
+    assert new_node.text == "Click me"
+    assert new_node.parent == 1
+
+    # Assert existing nodes are unchanged
+    assert len(node_by_id) == 3
+    assert node_by_id[1].tag == "div"
+    assert node_by_id[2].tag == "span"
+
+
+def test_apply_mutations_remove_node():
+    """Test that apply_mutations correctly removes existing nodes."""
+    # Start with a simple node_by_id map
+    node_by_id = {
+        1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
+        2: UINode(id=2, tag="span", attributes={}, text="to remove", parent=1),
+        3: UINode(id=3, tag="p", attributes={}, text="to keep", parent=1),
+    }
+
+    # Create a mutation event that removes a node
+    mutation_events = [
+        {
+            "type": 3,
+            "data": {
+                "source": 0,
+                "removes": [{"id": 2}],
+            },
+        }
+    ]
+
+    apply_mutations(node_by_id, mutation_events)
+
+    # Assert the node was removed
+    assert 2 not in node_by_id
+    assert len(node_by_id) == 2
+
+    # Assert other nodes are unchanged
+    assert 1 in node_by_id
+    assert 3 in node_by_id
+    assert node_by_id[3].text == "to keep"
+
+
+def test_apply_mutations_change_attributes():
+    """Test that apply_mutations correctly updates node attributes."""
+    # Start with a node that has some attributes
+    node_by_id = {
+        1: UINode(
+            id=1,
+            tag="button",
+            attributes={"class": "btn", "disabled": "false"},
+            text="Submit",
+            parent=None,
+        ),
+    }
+
+    # Create a mutation event that changes attributes
+    mutation_events = [
+        {
+            "type": 3,
+            "data": {
+                "source": 0,
+                "attributes": [
+                    {
+                        "id": 1,
+                        "attributes": {"class": "btn btn-primary", "disabled": "true"},
+                    }
+                ],
+            },
+        }
+    ]
+
+    apply_mutations(node_by_id, mutation_events)
+
+    # Assert attributes were updated
+    updated_node = node_by_id[1]
+    assert updated_node.attributes["class"] == "btn btn-primary"
+    assert updated_node.attributes["disabled"] == "true"
+
+    # Assert other properties unchanged
+    assert updated_node.tag == "button"
+    assert updated_node.text == "Submit"
+
+
+def test_apply_mutations_change_text():
+    """Test that apply_mutations correctly updates node text content."""
+    # Start with a node that has text
+    node_by_id = {
+        1: UINode(
+            id=1,
+            tag="p",
+            attributes={},
+            text="Original text",
+            parent=None,
+        ),
+    }
+
+    # Create a mutation event that changes text
+    mutation_events = [
+        {
+            "type": 3,
+            "data": {
+                "source": 0,
+                "texts": [{"id": 1, "value": "Updated text content"}],
+            },
+        }
+    ]
+
+    apply_mutations(node_by_id, mutation_events)
+
+    # Assert text was updated
+    updated_node = node_by_id[1]
+    assert updated_node.text == "Updated text content"
+
+    # Assert other properties unchanged
+    assert updated_node.tag == "p"
+    assert updated_node.attributes == {}
+
+
+def test_apply_mutations_ignore_invalid_node_ids():
+    """Test that mutations referencing nonexistent node IDs are safely ignored."""
+    # Start with a simple node_by_id map
+    node_by_id = {
+        1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
+    }
+
+    # Create mutation events that reference nonexistent nodes
+    mutation_events = [
+        {
+            "type": 3,
+            "data": {
+                "source": 0,
+                "removes": [{"id": 999}],  # Nonexistent node
+                "attributes": [
+                    {"id": 888, "attributes": {"class": "new"}}  # Nonexistent node
+                ],
+                "texts": [{"id": 777, "value": "new text"}],  # Nonexistent node
+            },
+        }
+    ]
+
+    # This should not raise any errors
+    apply_mutations(node_by_id, mutation_events)
+
+    # Assert original node is unchanged
+    assert len(node_by_id) == 1
+    assert 1 in node_by_id
+    assert node_by_id[1].tag == "div"
+
+
+def test_apply_mutations_mixed_operations():
+    """Test apply_mutations with multiple operation types in one event."""
+    # Start with initial nodes
+    node_by_id = {
+        1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
+        2: UINode(id=2, tag="span", attributes={"class": "old"}, text="old", parent=1),
+    }
+
+    # Create a mutation event with multiple operations
+    mutation_events = [
+        {
+            "type": 3,
+            "data": {
+                "source": 0,
+                "adds": [
+                    {
+                        "parentId": 1,
+                        "node": {"id": 3, "tagName": "p", "textContent": "new paragraph"},
+                    }
+                ],
+                "removes": [{"id": 2}],
+                "attributes": [{"id": 1, "attributes": {"class": "container"}}],
+                "texts": [{"id": 1, "value": "updated div text"}],
+            },
+        }
+    ]
+
+    apply_mutations(node_by_id, mutation_events)
+
+    # Assert all operations were applied
+    assert len(node_by_id) == 2  # One removed, one added
+    assert 2 not in node_by_id  # Removed
+    assert 3 in node_by_id  # Added
+
+    # Check added node
+    new_node = node_by_id[3]
+    assert new_node.tag == "p"
+    assert new_node.text == "new paragraph"
+    assert new_node.parent == 1
+
+    # Check updated node
+    updated_node = node_by_id[1]
+    assert updated_node.attributes["class"] == "container"
+    assert updated_node.text == "updated div text"
+
+
+def test_apply_mutations_ignore_non_mutation_events():
+    """Test that non-mutation events are ignored."""
+    # Start with a simple node_by_id map
+    node_by_id = {
+        1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
+    }
+
+    # Create events that are not mutation events
+    mutation_events = [
+        {"type": 2, "data": {"node": {}}},  # FullSnapshot, not mutation
+        {"type": 3, "data": {"source": 1}},  # IncrementalSnapshot, but not mutation
+        {"type": 3, "data": {"source": 2}},  # IncrementalSnapshot, but not mutation
+    ]
+
+    apply_mutations(node_by_id, mutation_events)
+
+    # Assert node_by_id is unchanged
+    assert len(node_by_id) == 1
+    assert node_by_id[1].tag == "div"
+
+
+def test_apply_mutations_empty_mutation_data():
+    """Test that mutation events with empty data don't cause errors."""
+    # Start with a simple node_by_id map
+    node_by_id = {
+        1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
+    }
+
+    # Create mutation events with empty or missing data
+    mutation_events = [
+        {"type": 3, "data": {"source": 0}},  # No mutation data
+        {
+            "type": 3,
+            "data": {
+                "source": 0,
+                "adds": [],
+                "removes": [],
+                "attributes": [],
+                "texts": [],
+            },
+        },  # Empty mutation data
+    ]
+
+    apply_mutations(node_by_id, mutation_events)
+
+    # Assert node_by_id is unchanged
+    assert len(node_by_id) == 1
+    assert node_by_id[1].tag == "div"
