@@ -161,20 +161,23 @@ def test_init_dom_state_empty_attributes():
     assert div_node.text == ""
 
 
-@pytest.mark.parametrize("invalid_event,expected_error", [
-    (
-        {"type": 3, "data": {"source": 0}},  # Not a FullSnapshot
-        "Event must be a FullSnapshot event"
-    ),
-    (
-        {"type": 2, "data": {}},  # Missing node
-        "FullSnapshot event must contain data.node"
-    ),
-    (
-        {"type": 2},  # Missing data entirely
-        "FullSnapshot event must contain data.node"
-    ),
-])
+@pytest.mark.parametrize(
+    "invalid_event,expected_error",
+    [
+        (
+            {"type": 3, "data": {"source": 0}},  # Not a FullSnapshot
+            "Event must be a FullSnapshot event",
+        ),
+        (
+            {"type": 2, "data": {}},  # Missing node
+            "FullSnapshot event must contain data.node",
+        ),
+        (
+            {"type": 2},  # Missing data entirely
+            "FullSnapshot event must contain data.node",
+        ),
+    ],
+)
 def test_init_dom_state_invalid_events(invalid_event, expected_error):
     """Test that invalid events raise ValueError with appropriate messages."""
     with pytest.raises(ValueError, match=expected_error):
@@ -280,35 +283,47 @@ def test_apply_mutations_remove_node(rich_node_by_id):
     assert rich_node_by_id[3].text == "to keep"
 
 
-@pytest.mark.parametrize("mutation_type,mutation_data,expected_changes", [
-    (
-        "attributes",
-        {"attributes": [{"id": 1, "attributes": {"class": "btn btn-primary", "disabled": "true"}}]},
-        lambda node: (
-            node.attributes["class"] == "btn btn-primary" and 
-            node.attributes["disabled"] == "true" and
-            node.tag == "button" and 
-            node.text == "Submit"
-        )
-    ),
-    (
-        "texts", 
-        {"texts": [{"id": 1, "value": "Updated text content"}]},
-        lambda node: (
-            node.text == "Updated text content" and
-            node.tag == "p" and
-            not node.attributes
-        )
-    ),
-])
-def test_apply_mutations_change_properties(mutation_type, mutation_data, expected_changes):
+@pytest.mark.parametrize(
+    "mutation_type,mutation_data,expected_changes",
+    [
+        (
+            "attributes",
+            {
+                "attributes": [
+                    {
+                        "id": 1,
+                        "attributes": {"class": "btn btn-primary", "disabled": "true"},
+                    }
+                ]
+            },
+            lambda node: (
+                node.attributes["class"] == "btn btn-primary"
+                and node.attributes["disabled"] == "true"
+                and node.tag == "button"
+                and node.text == "Submit"
+            ),
+        ),
+        (
+            "texts",
+            {"texts": [{"id": 1, "value": "Updated text content"}]},
+            lambda node: (
+                node.text == "Updated text content"
+                and node.tag == "p"
+                and not node.attributes
+            ),
+        ),
+    ],
+)
+def test_apply_mutations_change_properties(
+    mutation_type, mutation_data, expected_changes
+):
     """Test that apply_mutations correctly updates node attributes and text."""
     # Setup different initial nodes based on mutation type
     if mutation_type == "attributes":
         node_by_id = {
             1: UINode(
                 id=1,
-                tag="button", 
+                tag="button",
                 attributes={"class": "btn", "disabled": "false"},
                 text="Submit",
                 parent=None,
@@ -410,33 +425,44 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
     assert updated_node.text == "updated div text"
 
 
-@pytest.mark.parametrize("mutation_events,description", [
-    (
-        [
-            {"type": 2, "data": {"node": {}}},  # FullSnapshot, not mutation
-            {"type": 3, "data": {"source": 1}},  # IncrementalSnapshot, but not mutation
-            {"type": 3, "data": {"source": 2}},  # IncrementalSnapshot, but not mutation
-        ],
-        "non-mutation events"
-    ),
-    (
-        [
-            {"type": 3, "data": {"source": 0}},  # No mutation data
-            {
-                "type": 3,
-                "data": {
-                    "source": 0,
-                    "adds": [],
-                    "removes": [],
-                    "attributes": [],
-                    "texts": [],
-                },
-            },  # Empty mutation data
-        ],
-        "empty mutation data"
-    ),
-])
-def test_apply_mutations_ignore_invalid_events(simple_node_by_id, mutation_events, description):
+@pytest.mark.parametrize(
+    "mutation_events,description",
+    [
+        (
+            [
+                {"type": 2, "data": {"node": {}}},  # FullSnapshot, not mutation
+                {
+                    "type": 3,
+                    "data": {"source": 1},
+                },  # IncrementalSnapshot, but not mutation
+                {
+                    "type": 3,
+                    "data": {"source": 2},
+                },  # IncrementalSnapshot, but not mutation
+            ],
+            "non-mutation events",
+        ),
+        (
+            [
+                {"type": 3, "data": {"source": 0}},  # No mutation data
+                {
+                    "type": 3,
+                    "data": {
+                        "source": 0,
+                        "adds": [],
+                        "removes": [],
+                        "attributes": [],
+                        "texts": [],
+                    },
+                },  # Empty mutation data
+            ],
+            "empty mutation data",
+        ),
+    ],
+)
+def test_apply_mutations_ignore_invalid_events(
+    simple_node_by_id, mutation_events, description
+):
     """Test that non-mutation events and empty mutation data are safely ignored."""
     original_length = len(simple_node_by_id)
     original_tag = simple_node_by_id[1].tag
