@@ -228,7 +228,9 @@ def test_extract_features_timing_delays_computed(
 
     # Check that we have some reaction delays (click->mutation, scroll->mutation)
     reaction_delays = [
-        d for d in delays if d.delta_ms in [200, 200]  # Click->mutation, scroll->mutation
+        d
+        for d in delays
+        if d.delta_ms in [200, 200]  # Click->mutation, scroll->mutation
     ]
     assert len(reaction_delays) >= 1
 
@@ -289,7 +291,9 @@ def test_extract_features_timestamps_and_ids_align(
     feature_chunk = extract_features(sample_chunk_with_interactions, initial_dom_state)
 
     # Collect all timestamps from original events
-    original_timestamps = {event.get("timestamp") for event in sample_chunk_with_interactions.events}
+    original_timestamps = {
+        event.get("timestamp") for event in sample_chunk_with_interactions.events
+    }
 
     # Check that mutation timestamps are from original events
     for mutation in feature_chunk.features["dom_mutations"]:
@@ -363,7 +367,7 @@ def test_extract_features_handles_empty_chunk():
         events=[],
         metadata={},
     )
-    
+
     empty_dom_state = {}
 
     feature_chunk = extract_features(empty_chunk, empty_dom_state)
@@ -389,12 +393,20 @@ def test_extract_features_handles_missing_nodes_gracefully():
             {
                 "type": 3,
                 "timestamp": 1100,
-                "data": {"source": 2, "id": 999, "x": 100, "y": 200},  # Non-existent node
+                "data": {
+                    "source": 2,
+                    "id": 999,
+                    "x": 100,
+                    "y": 200,
+                },  # Non-existent node
             },
             {
                 "type": 3,
                 "timestamp": 1200,
-                "data": {"source": 0, "attributes": [{"id": 888, "attributes": {"class": "test"}}]},  # Non-existent node
+                "data": {
+                    "source": 0,
+                    "attributes": [{"id": 888, "attributes": {"class": "test"}}],
+                },  # Non-existent node
             },
         ],
         metadata={},

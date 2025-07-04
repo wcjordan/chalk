@@ -76,7 +76,7 @@ def extract_features(chunk: Chunk, dom_state: Dict[int, UINode]) -> FeatureChunk
 
     # Resolve UI metadata for mutations and interactions
     ui_nodes = {}
-    
+
     # Collect unique node IDs from mutations and interactions
     referenced_node_ids = set()
     for mutation in dom_mutations:
