@@ -85,23 +85,23 @@
 ## Step 5: User Interaction Extraction
 
 ### Tasks:
-- [ ] Add `extract_user_interactions(events: List[dict]) -> List[UserInteraction]` to `extractors.py`:
-  - [ ] Filter events where `type == 3`
-  - [ ] Handle `data.source == 2` as "click" interactions (target_id, x, y, timestamp)
-  - [ ] Handle `data.source == 5` as "input" interactions (target_id, value/checked, timestamp)
-  - [ ] Handle `data.source == 3` as "scroll" interactions (target_id, x, y, timestamp)
-  - [ ] Ignore other sources
-  - [ ] Preserve event order in returned list
-- [ ] Add docstring explaining source value mappings to interaction types
-- [ ] Create `test_gen/feature_extraction/tests/test_interactions_extractor.py`:
-  - [ ] Test mixed incremental snapshot events yield only click/input/scroll
-  - [ ] Test click events produce correct type with coordinates and target
-  - [ ] Test input events capture value/checked fields
-  - [ ] Test scroll events produce scroll interactions with x/y data
-  - [ ] Test non-interaction sources are ignored
-- [ ] Verify pytest passes without failures
-- [ ] UserInteraction objects have correct types and fields per spec
-- [ ] No regressions in existing tests
+- [x] Add `extract_user_interactions(events: List[dict]) -> List[UserInteraction]` to `extractors.py`:
+  - [x] Filter events where `type == 3`
+  - [x] Handle `data.source == 2` as "click" interactions (target_id, x, y, timestamp)
+  - [x] Handle `data.source == 5` as "input" interactions (target_id, value/checked, timestamp)
+  - [x] Handle `data.source == 3` as "scroll" interactions (target_id, x, y, timestamp)
+  - [x] Ignore other sources
+  - [x] Preserve event order in returned list
+- [x] Add docstring explaining source value mappings to interaction types
+- [x] Create `test_gen/feature_extraction/tests/test_interactions_extractor.py`:
+  - [x] Test mixed incremental snapshot events yield only click/input/scroll
+  - [x] Test click events produce correct type with coordinates and target
+  - [x] Test input events capture value/checked fields
+  - [x] Test scroll events produce scroll interactions with x/y data
+  - [x] Test non-interaction sources are ignored
+- [x] Verify pytest passes without failures
+- [x] UserInteraction objects have correct types and fields per spec
+- [x] No regressions in existing tests
 
 ## Step 6: Delay Computation
 
