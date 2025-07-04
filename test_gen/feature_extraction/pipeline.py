@@ -13,6 +13,9 @@ The extraction pipeline processes chunks in the following order:
 4. Cluster mouse trajectories and detect scroll patterns
 5. Assemble all features into a FeatureChunk
 
+Configuration:
+    All extractor functions use default parameters from config module.
+
 This enables rule-based and LLM-driven behavior inference by providing structured,
 semantic representations of user interactions and system responses.
 """
@@ -36,7 +39,10 @@ from .scroll_patterns import detect_scroll_patterns
 logger = logging.getLogger(__name__)
 
 
-def extract_features(chunk: Chunk, dom_state: Dict[int, UINode]) -> FeatureChunk:
+def extract_features(
+    chunk: Chunk,
+    dom_state: Dict[int, UINode],
+) -> FeatureChunk:
     """
     Given a preprocessed Chunk and its initial virtual DOM state,
     run all feature extractors and return a populated FeatureChunk.
@@ -67,50 +73,25 @@ def extract_features(chunk: Chunk, dom_state: Dict[int, UINode]) -> FeatureChunk
     # Apply mutations from the chunk to update DOM state
     apply_mutations(dom_state, chunk.events)
 
-    # Extract DOM mutations
+    # Extract core features
     dom_mutations = extract_dom_mutations(chunk.events)
-
-    # Extract user interactions
     interactions = extract_user_interactions(chunk.events)
-
-    # Compute timing delays
     inter_event_delays = compute_inter_event_delays(chunk.events)
     reaction_delays = compute_reaction_delays(chunk.events)
-    all_delays = inter_event_delays + reaction_delays
 
-    # Resolve UI metadata for mutations and interactions
-    ui_nodes = {}
+    # Resolve UI metadata for referenced nodes
+    ui_nodes = _resolve_ui_metadata(dom_mutations, interactions, dom_state)
 
-    # Collect unique node IDs from mutations and interactions
-    referenced_node_ids = set()
-    for mutation in dom_mutations:
-        referenced_node_ids.add(mutation.target_id)
-    for interaction in interactions:
-        referenced_node_ids.add(interaction.target_id)
-
-    # Resolve metadata for each referenced node
-    for node_id in referenced_node_ids:
-        try:
-            ui_nodes[node_id] = resolve_node_metadata(node_id, dom_state)
-        except KeyError:
-            # Node not found in DOM state - log and skip metadata resolution
-            logger.warning(
-                "Node ID %s not found in DOM state. Skipping metadata resolution.",
-                node_id,
-            )
-            continue
-
-    # Extract mouse trajectory clusters
+    # Extract behavioral patterns
     mouse_clusters = cluster_mouse_trajectories(chunk.events)
-
-    # Detect scroll patterns
     scroll_patterns = detect_scroll_patterns(chunk.events)
 
     # Assemble all features into FeatureChunk
     features = {
         "dom_mutations": dom_mutations,
         "interactions": interactions,
-        "delays": all_delays,
+        "inter_event_delays": inter_event_delays,
+        "reaction_delays": reaction_delays,
         "ui_nodes": ui_nodes,
         "mouse_clusters": mouse_clusters,
         "scroll_patterns": scroll_patterns,
@@ -124,3 +105,35 @@ def extract_features(chunk: Chunk, dom_state: Dict[int, UINode]) -> FeatureChunk
         features=features,
         metadata=chunk.metadata,
     )
+
+
+def _resolve_ui_metadata(dom_mutations, interactions, dom_state):
+    """Resolve UI metadata for all nodes referenced in mutations and interactions."""
+    ui_nodes = {}
+
+    # Collect unique node IDs from mutations and interactions
+    referenced_node_ids = _collect_referenced_node_ids(dom_mutations, interactions)
+
+    # Resolve metadata for each referenced node
+    for node_id in referenced_node_ids:
+        try:
+            ui_nodes[node_id] = resolve_node_metadata(node_id, dom_state)
+        except KeyError:
+            # Node not found in DOM state - log and skip metadata resolution
+            logger.warning(
+                "Node ID %s not found in DOM state. Skipping metadata resolution.",
+                node_id,
+            )
+            continue
+
+    return ui_nodes
+
+
+def _collect_referenced_node_ids(dom_mutations, interactions):
+    """Collect unique node IDs referenced in mutations and interactions."""
+    referenced_node_ids = set()
+    for mutation in dom_mutations:
+        referenced_node_ids.add(mutation.target_id)
+    for interaction in interactions:
+        referenced_node_ids.add(interaction.target_id)
+    return referenced_node_ids

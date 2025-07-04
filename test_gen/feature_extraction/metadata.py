@@ -4,14 +4,25 @@ UI Metadata Resolution for rrweb Session Feature Extraction.
 This module provides functions to resolve human-readable context for UI nodes,
 including semantic attributes, DOM paths, and accessibility information that
 can be used for behavior analysis and test generation.
+
+Configuration:
+    Uses default_dom_path_formatter from config module for DOM path formatting.
+    Custom formatters can be passed to override the default behavior.
+
+Extensibility:
+    Custom DOM path formatters can be provided to modify how DOM paths are
+    constructed and formatted. The formatter function should accept a list
+    of path parts and return a formatted string.
 """
 
 from typing import Dict, Any
 from .models import UINode
+from . import config
 
 
 def resolve_node_metadata(
-    node_id: int, node_by_id: Dict[int, UINode]
+    node_id: int,
+    node_by_id: Dict[int, UINode],
 ) -> Dict[str, Any]:
     """
     Given a node ID and the current virtual DOM map, return a metadata
@@ -111,4 +122,4 @@ def _compute_dom_path(node: UINode, node_by_id: Dict[int, UINode]) -> str:
         else:
             current_node = None
 
-    return " > ".join(path_parts)
+    return config.default_dom_path_formatter(path_parts)

@@ -11,23 +11,22 @@ configurable time and distance thresholds. When either threshold is exceeded,
 a new cluster is started. This helps identify distinct phases of mouse activity
 and can reveal user interaction patterns.
 
-Parameters:
-    time_delta_ms: Maximum time gap between mousemove events in the same cluster (default: 100ms)
-    dist_delta_px: Maximum Euclidean distance between mousemove events in the same cluster (default: 50px)
+Configuration:
+    Uses DEFAULT_TIME_DELTA_MS and DEFAULT_DIST_DELTA_PX from config module.
 
 Usage:
-    clusters = cluster_mouse_trajectories(events, time_delta_ms=150, dist_delta_px=75)
+    clusters = cluster_mouse_trajectories(events)
     for cluster in clusters:
         print(f"Cluster: {cluster.point_count} points over {cluster.duration_ms}ms")
 """
 
-import math
 from typing import List
 from .models import MouseCluster
+from . import config
 
 
 def cluster_mouse_trajectories(
-    events: List[dict], time_delta_ms: int = 100, dist_delta_px: int = 50
+    events: List[dict],
 ) -> List[MouseCluster]:
     """
     Groups rrweb mousemove events into clusters based on temporal
@@ -41,8 +40,6 @@ def cluster_mouse_trajectories(
 
     Args:
         events: List of rrweb events to process
-        time_delta_ms: Maximum time gap between events in same cluster (milliseconds)
-        dist_delta_px: Maximum Euclidean distance between events in same cluster (pixels)
 
     Returns:
         List of MouseCluster objects in order of input events, each containing:
@@ -67,9 +64,7 @@ def cluster_mouse_trajectories(
     for event in mousemove_events:
         current_point = _extract_point_from_event(event)
 
-        should_start_new_cluster = _should_start_new_cluster(
-            last_point, current_point, time_delta_ms, dist_delta_px
-        )
+        should_start_new_cluster = _should_start_new_cluster(last_point, current_point)
 
         if should_start_new_cluster and current_cluster_points:
             cluster = _create_mouse_cluster(current_cluster_points)
@@ -123,7 +118,8 @@ def _extract_point_from_event(event: dict) -> dict:
 
 
 def _should_start_new_cluster(
-    last_point: dict, current_point: dict, time_delta_ms: int, dist_delta_px: int
+    last_point: dict,
+    current_point: dict,
 ) -> bool:
     """
     Determine if a new cluster should be started based on time and distance thresholds.
@@ -131,8 +127,6 @@ def _should_start_new_cluster(
     Args:
         last_point: Previous mouse position point (or None if first point)
         current_point: Current mouse position point
-        time_delta_ms: Maximum time gap threshold
-        dist_delta_px: Maximum distance threshold
 
     Returns:
         True if a new cluster should be started, False otherwise
@@ -141,25 +135,12 @@ def _should_start_new_cluster(
         return False
 
     time_diff = current_point["ts"] - last_point["ts"]
-    distance = _calculate_euclidean_distance(last_point, current_point)
+    distance = config.default_distance_comparator(last_point, current_point)
 
-    return time_diff > time_delta_ms or distance > dist_delta_px
-
-
-def _calculate_euclidean_distance(point1: dict, point2: dict) -> float:
-    """
-    Calculate Euclidean distance between two points.
-
-    Args:
-        point1: Dictionary with x and y keys
-        point2: Dictionary with x and y keys
-
-    Returns:
-        Euclidean distance between the points
-    """
-    dx = point2["x"] - point1["x"]
-    dy = point2["y"] - point1["y"]
-    return math.sqrt(dx * dx + dy * dy)
+    return (
+        time_diff > config.DEFAULT_TIME_DELTA_MS
+        or distance > config.DEFAULT_DIST_DELTA_PX
+    )
 
 
 def _create_mouse_cluster(points: List[dict]) -> MouseCluster:

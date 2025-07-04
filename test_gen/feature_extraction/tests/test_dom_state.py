@@ -184,25 +184,14 @@ def test_init_dom_state_invalid_events(invalid_event, expected_error):
         init_dom_state(invalid_event)
 
 
-def test_init_dom_state_nodes_without_ids_ignored():
+def test_init_dom_state_nodes_without_ids_ignored(create_full_snapshot_event):
     """Test that nodes without IDs are safely ignored."""
-    full_snapshot_event = {
-        "type": 2,
-        "data": {
-            "node": {
-                "id": 1,
-                "tagName": "div",
-                "childNodes": [
-                    {
-                        # Missing id - should be ignored
-                        "tagName": "span",
-                        "textContent": "No ID",
-                    },
-                    {"id": 2, "tagName": "p", "textContent": "Has ID"},
-                ],
-            }
-        },
-    }
+    full_snapshot_event = create_full_snapshot_event(
+        child_nodes=[
+            {"tagName": "span", "textContent": "No ID"},  # Missing ID
+            {"id": 2, "tagName": "p", "textContent": "Has ID"},  # Valid node
+        ]
+    )
 
     node_by_id = init_dom_state(full_snapshot_event)
 

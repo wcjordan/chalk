@@ -139,7 +139,8 @@ def test_extract_features_returns_populated_feature_chunk(
     # Verify all feature categories are present
     assert "dom_mutations" in feature_chunk.features
     assert "interactions" in feature_chunk.features
-    assert "delays" in feature_chunk.features
+    assert "inter_event_delays" in feature_chunk.features
+    assert "reaction_delays" in feature_chunk.features
     assert "ui_nodes" in feature_chunk.features
     assert "mouse_clusters" in feature_chunk.features
     assert "scroll_patterns" in feature_chunk.features
@@ -147,7 +148,12 @@ def test_extract_features_returns_populated_feature_chunk(
     # Verify feature lists are non-empty where expected
     assert len(feature_chunk.features["dom_mutations"]) > 0  # Should have 2 mutations
     assert len(feature_chunk.features["interactions"]) > 0  # Should have 3 interactions
-    assert len(feature_chunk.features["delays"]) > 0  # Should have inter-event delays
+    assert (
+        len(feature_chunk.features["inter_event_delays"]) > 0
+    )  # Should have inter-event delays
+    assert (
+        len(feature_chunk.features["reaction_delays"]) > 0
+    )  # Should have reaction delays
     assert len(feature_chunk.features["ui_nodes"]) > 0  # Should have metadata for nodes
     assert len(feature_chunk.features["mouse_clusters"]) > 0  # Should have 1 cluster
     assert len(feature_chunk.features["scroll_patterns"]) > 0  # Should have 1 pattern
@@ -221,18 +227,15 @@ def test_extract_features_timing_delays_computed(
 ):
     """Test that timing delays are computed correctly."""
     feature_chunk = extract_features(sample_chunk_with_interactions, initial_dom_state)
-    delays = feature_chunk.features["delays"]
+    delays = feature_chunk.features["inter_event_delays"]
 
     # Should have inter-event delays (7 for 8 events) plus reaction delays
     assert len(delays) >= 7
 
     # Check that we have some reaction delays (click->mutation, scroll->mutation)
-    reaction_delays = [
-        d
-        for d in delays
-        if d.delta_ms in [200, 200]  # Click->mutation, scroll->mutation
-    ]
+    reaction_delays = feature_chunk.features["reaction_delays"]
     assert len(reaction_delays) >= 1
+    assert reaction_delays[0].delta_ms == 200
 
 
 def test_extract_features_ui_metadata_resolved(
@@ -304,7 +307,7 @@ def test_extract_features_timestamps_and_ids_align(
         assert interaction.timestamp in original_timestamps
 
     # Check that delay timestamps reference original events
-    for delay in feature_chunk.features["delays"]:
+    for delay in feature_chunk.features["inter_event_delays"]:
         assert delay.from_ts in original_timestamps
         assert delay.to_ts in original_timestamps
 
@@ -344,8 +347,11 @@ def test_extract_features_idempotent_calls(
     assert len(feature_chunk1.features["interactions"]) == len(
         feature_chunk2.features["interactions"]
     )
-    assert len(feature_chunk1.features["delays"]) == len(
-        feature_chunk2.features["delays"]
+    assert len(feature_chunk1.features["inter_event_delays"]) == len(
+        feature_chunk2.features["inter_event_delays"]
+    )
+    assert len(feature_chunk1.features["reaction_delays"]) == len(
+        feature_chunk2.features["reaction_delays"]
     )
     assert len(feature_chunk1.features["ui_nodes"]) == len(
         feature_chunk2.features["ui_nodes"]
@@ -376,7 +382,8 @@ def test_extract_features_handles_empty_chunk():
     assert feature_chunk.chunk_id == "empty-chunk"
     assert len(feature_chunk.features["dom_mutations"]) == 0
     assert len(feature_chunk.features["interactions"]) == 0
-    assert len(feature_chunk.features["delays"]) == 0
+    assert len(feature_chunk.features["inter_event_delays"]) == 0
+    assert len(feature_chunk.features["reaction_delays"]) == 0
     assert len(feature_chunk.features["ui_nodes"]) == 0
     assert len(feature_chunk.features["mouse_clusters"]) == 0
     assert len(feature_chunk.features["scroll_patterns"]) == 0
@@ -423,3 +430,423 @@ def test_extract_features_handles_missing_nodes_gracefully():
 
     # But UI metadata should be empty (nodes not found)
     assert len(feature_chunk.features["ui_nodes"]) == 0
+
+
+def test_extract_features_handles_events_with_missing_fields():
+    """Test that the pipeline gracefully handles events with missing required fields."""
+    events_with_missing_fields = [
+        # FullSnapshot for DOM initialization
+        {
+            "type": 2,
+            "timestamp": 1000,
+            "data": {
+                "node": {
+                    "id": 1,
+                    "tagName": "div",
+                    "childNodes": [],
+                }
+            },
+        },
+        # Click event missing timestamp
+        {
+            "type": 3,
+            "data": {"source": 2, "id": 1, "x": 100, "y": 200},
+        },
+        # Input event missing target ID
+        {
+            "type": 3,
+            "timestamp": 1200,
+            "data": {"source": 5, "text": "input without id"},
+        },
+        # Mutation event missing node ID in attributes
+        {
+            "type": 3,
+            "timestamp": 1300,
+            "data": {
+                "source": 0,
+                "attributes": [{"attributes": {"class": "no-id"}}],
+            },
+        },
+        # Mouse move event missing coordinates
+        {
+            "type": 3,
+            "timestamp": 1400,
+            "data": {"source": 1},
+        },
+        # Scroll event missing target ID
+        {
+            "type": 3,
+            "timestamp": 1500,
+            "data": {"source": 3, "x": 0, "y": 100},
+        },
+    ]
+
+    chunk = Chunk(
+        chunk_id="missing-fields-chunk",
+        start_time=1000,
+        end_time=1500,
+        events=events_with_missing_fields,
+        metadata={},
+    )
+
+    initial_dom_state = init_dom_state(events_with_missing_fields[0])
+
+    # Should not raise errors
+    feature_chunk = extract_features(chunk, initial_dom_state)
+
+    # Should extract only valid interactions (click with missing timestamp should still work)
+    assert len(feature_chunk.features["interactions"]) == 1
+    assert feature_chunk.features["interactions"][0].action == "click"
+    assert feature_chunk.features["interactions"][0].timestamp == 0  # Default timestamp
+
+    # Should extract no mutations (missing node ID)
+    assert len(feature_chunk.features["dom_mutations"]) == 0
+
+    # Should handle mouse moves with missing coordinates
+    assert len(feature_chunk.features["mouse_clusters"]) == 1
+    cluster = feature_chunk.features["mouse_clusters"][0]
+    assert cluster.points[0]["x"] == 0  # Default coordinate
+    assert cluster.points[0]["y"] == 0  # Default coordinate
+
+
+def test_extract_features_with_complex_interaction_sequences(
+    create_full_snapshot_event,
+):
+    """Test pipeline with rapid sequences of interactions and mutations."""
+    # Create events with rapid sequences and overlapping mutations
+    rapid_events = [
+        # FullSnapshot for DOM initialization
+        create_full_snapshot_event(
+            child_nodes=[
+                {
+                    "id": 2,
+                    "tagName": "button",
+                    "attributes": {"id": "btn1"},
+                    "textContent": "Button 1",
+                    "childNodes": [],
+                },
+                {
+                    "id": 3,
+                    "tagName": "button",
+                    "attributes": {"id": "btn2"},
+                    "textContent": "Button 2",
+                    "childNodes": [],
+                },
+            ]
+        ),
+        # Rapid click sequence
+        {
+            "type": 3,
+            "timestamp": 1100,
+            "data": {"source": 2, "id": 2, "x": 50, "y": 50},
+        },
+        {
+            "type": 3,
+            "timestamp": 1110,
+            "data": {"source": 2, "id": 3, "x": 150, "y": 50},
+        },
+        {
+            "type": 3,
+            "timestamp": 1120,
+            "data": {"source": 2, "id": 2, "x": 50, "y": 50},
+        },
+        # Overlapping mutations in response
+        {
+            "type": 3,
+            "timestamp": 1150,
+            "data": {
+                "source": 0,
+                "attributes": [{"id": 2, "attributes": {"class": "clicked"}}],
+            },
+        },
+        {
+            "type": 3,
+            "timestamp": 1160,
+            "data": {
+                "source": 0,
+                "attributes": [{"id": 3, "attributes": {"class": "clicked"}}],
+            },
+        },
+        {
+            "type": 3,
+            "timestamp": 1170,
+            "data": {
+                "source": 0,
+                "attributes": [{"id": 2, "attributes": {"class": "double-clicked"}}],
+            },
+        },
+        # Rapid mouse movements
+        {"type": 3, "timestamp": 1200, "data": {"source": 1, "x": 100, "y": 100}},
+        {"type": 3, "timestamp": 1205, "data": {"source": 1, "x": 105, "y": 105}},
+        {"type": 3, "timestamp": 1210, "data": {"source": 1, "x": 110, "y": 110}},
+        {"type": 3, "timestamp": 1215, "data": {"source": 1, "x": 115, "y": 115}},
+        # Rapid input sequence
+        {"type": 3, "timestamp": 1300, "data": {"source": 5, "id": 2, "text": "a"}},
+        {"type": 3, "timestamp": 1310, "data": {"source": 5, "id": 2, "text": "ab"}},
+        {"type": 3, "timestamp": 1320, "data": {"source": 5, "id": 2, "text": "abc"}},
+    ]
+
+    chunk = Chunk(
+        chunk_id="rapid-sequence-chunk",
+        start_time=1000,
+        end_time=1320,
+        events=rapid_events,
+        metadata={},
+    )
+
+    initial_dom_state = init_dom_state(rapid_events[0])
+
+    feature_chunk = extract_features(chunk, initial_dom_state)
+
+    # Should extract all interactions
+    assert len(feature_chunk.features["interactions"]) == 6  # 3 clicks + 3 inputs
+
+    # Should extract all mutations
+    assert len(feature_chunk.features["dom_mutations"]) == 3
+
+    # Should detect multiple reaction delays
+    reaction_delays = [
+        d
+        for d in feature_chunk.features["reaction_delays"]
+        if d.delta_ms == 50  # Click->mutation delays
+    ]
+    assert len(reaction_delays) >= 3
+
+    # Should cluster rapid mouse movements into one cluster
+    assert len(feature_chunk.features["mouse_clusters"]) == 1
+    cluster = feature_chunk.features["mouse_clusters"][0]
+    assert cluster.point_count == 4
+    assert cluster.duration_ms == 15  # 1215 - 1200
+
+    # Should have many inter-event delays due to rapid sequence
+    assert (
+        len(feature_chunk.features["inter_event_delays"]) >= 12
+    )  # At least one per event pair
+
+
+def test_extract_features_boundary_conditions():
+    """Test pipeline behavior at configuration boundaries."""
+    # Create events exactly at time/distance thresholds
+    boundary_events = [
+        # FullSnapshot for DOM initialization
+        {
+            "type": 2,
+            "timestamp": 1000,
+            "data": {
+                "node": {
+                    "id": 1,
+                    "tagName": "div",
+                    "childNodes": [],
+                }
+            },
+        },
+        # Mouse moves over time threshold (100ms apart)
+        {"type": 3, "timestamp": 1100, "data": {"source": 1, "x": 0, "y": 0}},
+        {
+            "type": 3,
+            "timestamp": 1201,
+            "data": {"source": 1, "x": 10, "y": 10},
+        },  # Over 100ms later
+        {
+            "type": 3,
+            "timestamp": 1302,
+            "data": {"source": 1, "x": 20, "y": 20},
+        },  # Over another 100ms
+        # Mouse moves exactly at distance threshold (50px apart)
+        {"type": 3, "timestamp": 1400, "data": {"source": 1, "x": 0, "y": 0}},
+        {
+            "type": 3,
+            "timestamp": 1450,
+            "data": {"source": 1, "x": 30, "y": 40},
+        },  # Distance = 50px exactly
+        {
+            "type": 3,
+            "timestamp": 1500,
+            "data": {"source": 1, "x": 60, "y": 80},
+        },  # Another 50px
+        # Scroll and mutation exactly at reaction threshold (2000ms)
+        {
+            "type": 3,
+            "timestamp": 2000,
+            "data": {"source": 3, "id": 1, "x": 0, "y": 100},
+        },
+        {
+            "type": 3,
+            "timestamp": 4000,  # Exactly 2000ms later
+            "data": {
+                "source": 0,
+                "adds": [{"parentId": 1, "node": {"id": 2, "tagName": "span"}}],
+            },
+        },
+        # Click and mutation exactly at reaction threshold (10000ms)
+        {
+            "type": 3,
+            "timestamp": 5000,
+            "data": {"source": 2, "id": 1, "x": 100, "y": 100},
+        },
+        {
+            "type": 3,
+            "timestamp": 15000,  # Exactly 10000ms later
+            "data": {
+                "source": 0,
+                "attributes": [{"id": 1, "attributes": {"class": "clicked"}}],
+            },
+        },
+    ]
+
+    chunk = Chunk(
+        chunk_id="boundary-conditions-chunk",
+        start_time=1000,
+        end_time=15000,
+        events=boundary_events,
+        metadata={},
+    )
+
+    initial_dom_state = init_dom_state(boundary_events[0])
+
+    feature_chunk = extract_features(chunk, initial_dom_state)
+
+    # Mouse clustering at time boundary - should split at 100ms threshold
+    mouse_clusters = feature_chunk.features["mouse_clusters"]
+    assert len(mouse_clusters) >= 2  # Should split due to time threshold
+
+    # Scroll pattern at exact reaction threshold - should be detected
+    scroll_patterns = feature_chunk.features["scroll_patterns"]
+    assert len(scroll_patterns) == 1
+    assert scroll_patterns[0].delay_ms == 2000
+
+    # Reaction delay at exact threshold - should be detected
+    reaction_delays = [
+        d for d in feature_chunk.features["reaction_delays"] if d.delta_ms == 10000
+    ]
+    assert len(reaction_delays) == 1
+
+    # Should extract all interactions and mutations
+    assert len(feature_chunk.features["interactions"]) == 2  # 1 scroll + 1 click
+    assert len(feature_chunk.features["dom_mutations"]) == 2  # 1 add + 1 attribute
+
+
+def test_extract_features_large_event_volume():
+    """Test pipeline performance with larger event volumes."""
+    # Generate a large number of events to test scalability
+    large_events = [
+        # FullSnapshot for DOM initialization
+        {
+            "type": 2,
+            "timestamp": 0,
+            "data": {
+                "node": {
+                    "id": 1,
+                    "tagName": "div",
+                    "childNodes": [
+                        {
+                            "id": i,
+                            "tagName": "button",
+                            "attributes": {"id": f"btn{i}"},
+                            "textContent": f"Button {i}",
+                            "childNodes": [],
+                        }
+                        for i in range(2, 102)  # 100 buttons
+                    ],
+                }
+            },
+        }
+    ]
+
+    # Generate 500 mouse move events (will create multiple clusters)
+    for i in range(500):
+        large_events.append(
+            {
+                "type": 3,
+                "timestamp": 1000 + i * 10,  # Every 10ms
+                "data": {"source": 1, "x": i % 100, "y": (i * 2) % 100},
+            }
+        )
+
+    # Generate 100 click events
+    for i in range(100):
+        large_events.append(
+            {
+                "type": 3,
+                "timestamp": 6000 + i * 50,  # Every 50ms
+                "data": {"source": 2, "id": (i % 100) + 2, "x": i, "y": i},
+            }
+        )
+
+    # Generate 100 mutation events in response
+    for i in range(100):
+        large_events.append(
+            {
+                "type": 3,
+                "timestamp": 6100 + i * 50,  # 100ms after each click
+                "data": {
+                    "source": 0,
+                    "attributes": [
+                        {"id": (i % 100) + 2, "attributes": {"class": f"clicked-{i}"}}
+                    ],
+                },
+            }
+        )
+
+    # Generate 50 scroll events
+    for i in range(50):
+        large_events.append(
+            {
+                "type": 3,
+                "timestamp": 11000 + i * 100,  # Every 100ms
+                "data": {"source": 3, "id": 1, "x": 0, "y": i * 10},
+            }
+        )
+
+    # Generate 50 input events
+    for i in range(50):
+        large_events.append(
+            {
+                "type": 3,
+                "timestamp": 16000 + i * 20,  # Every 20ms
+                "data": {"source": 5, "id": (i % 10) + 2, "text": f"input-{i}"},
+            }
+        )
+
+    chunk = Chunk(
+        chunk_id="large-volume-chunk",
+        start_time=0,
+        end_time=17000,
+        events=large_events,
+        metadata={"num_events": len(large_events)},
+    )
+
+    initial_dom_state = init_dom_state(large_events[0])
+
+    # Should handle large volume without errors
+    feature_chunk = extract_features(chunk, initial_dom_state)
+
+    # Verify all event types were processed
+    assert (
+        len(feature_chunk.features["interactions"]) == 200
+    )  # 100 clicks + 50 scrolls + 50 inputs
+    assert len(feature_chunk.features["dom_mutations"]) == 100  # 100 attribute changes
+
+    # Should have many mouse clusters due to volume
+    assert len(feature_chunk.features["mouse_clusters"]) >= 5
+
+    # Should have many delays due to volume
+    assert (
+        len(feature_chunk.features["inter_event_delays"]) >= 800
+    )  # Many inter-event delays
+
+    # Should have reaction delays for click->mutation pairs
+    reaction_delays = [
+        d
+        for d in feature_chunk.features["reaction_delays"]
+        if d.delta_ms == 100  # Click->mutation delay
+    ]
+    assert len(reaction_delays) >= 90  # Most clicks should have reactions
+
+    # Should resolve UI metadata for referenced nodes
+    assert len(feature_chunk.features["ui_nodes"]) >= 50  # Many nodes referenced
+
+    # Verify performance - should complete in reasonable time
+    # (This is implicit - if the test completes, performance is acceptable)
+    assert feature_chunk.chunk_id == "large-volume-chunk"
+    assert len(feature_chunk.events) == len(large_events)
