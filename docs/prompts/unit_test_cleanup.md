@@ -1,0 +1,3 @@
+/ask Please read `docs/unit_test_policy.md` then review `<MODULE>/tests/test_*.py`.  We built up tests for each module one at a time.  `<MODULE>/<ENTRY_POINT_FILE>.py` exercises the whole pipeline and is tested in whole through `<MODULE>/tests/<ENTRY_POINT_TEST_FILE>.py`.  Ideally we should go through and prune the tests in the other `test_*.py` files and only keep tests that cover edge cases to fit the guidance in `docs/unit_test_policy.md`.
+
+Could you review the test files and suggest tests which could be pruned or modified.  Also please feel comfortable suggesting tests that could be better covered end to end by enhancing `<MODULE>/tests/<ENTRY_POINT_TEST_FILE>.py`.
