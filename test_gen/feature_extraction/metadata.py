@@ -80,9 +80,7 @@ def resolve_node_metadata(
     }
 
 
-def _compute_dom_path(
-    node: UINode, node_by_id: Dict[int, UINode]
-) -> str:
+def _compute_dom_path(node: UINode, node_by_id: Dict[int, UINode]) -> str:
     """
     Compute a CSS-like selector path from root to the given node.
 

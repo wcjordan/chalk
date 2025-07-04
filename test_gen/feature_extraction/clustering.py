@@ -71,9 +71,7 @@ def cluster_mouse_trajectories(
     for event in mousemove_events:
         current_point = _extract_point_from_event(event)
 
-        should_start_new_cluster = _should_start_new_cluster(
-            last_point, current_point
-        )
+        should_start_new_cluster = _should_start_new_cluster(last_point, current_point)
 
         if should_start_new_cluster and current_cluster_points:
             cluster = _create_mouse_cluster(current_cluster_points)
@@ -146,7 +144,10 @@ def _should_start_new_cluster(
     time_diff = current_point["ts"] - last_point["ts"]
     distance = config.default_distance_comparator(last_point, current_point)
 
-    return time_diff > config.DEFAULT_TIME_DELTA_MS or distance > config.DEFAULT_DIST_DELTA_PX
+    return (
+        time_diff > config.DEFAULT_TIME_DELTA_MS
+        or distance > config.DEFAULT_DIST_DELTA_PX
+    )
 
 
 def _create_mouse_cluster(points: List[dict]) -> MouseCluster:

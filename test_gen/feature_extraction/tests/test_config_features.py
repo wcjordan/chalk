@@ -60,7 +60,7 @@ def test_clustering_with_custom_distance_threshold():
     assert len(clusters_default) == 1
 
     # With smaller threshold (40px), should be two clusters
-    with patch.object(config, 'DEFAULT_DIST_DELTA_PX', 40):
+    with patch.object(config, "DEFAULT_DIST_DELTA_PX", 40):
         clusters_strict = cluster_mouse_trajectories(events)
         assert len(clusters_strict) == 2
 
@@ -85,7 +85,7 @@ def test_clustering_with_custom_time_threshold():
     assert len(clusters_default) == 1
 
     # With smaller threshold (50ms), should be two clusters
-    with patch.object(config, 'DEFAULT_TIME_DELTA_MS', 50):
+    with patch.object(config, "DEFAULT_TIME_DELTA_MS", 50):
         clusters_strict = cluster_mouse_trajectories(events)
         assert len(clusters_strict) == 2
 
@@ -110,7 +110,7 @@ def test_clustering_with_custom_distance_comparator():
         return 1.0  # Always return 1px distance
 
     # With custom comparator, should be one cluster (distance always < threshold)
-    with patch.object(config, 'default_distance_comparator', always_close_comparator):
+    with patch.object(config, "default_distance_comparator", always_close_comparator):
         clusters = cluster_mouse_trajectories(events)
         assert len(clusters) == 1
 
@@ -139,7 +139,7 @@ def test_scroll_patterns_with_custom_reaction_window():
     assert len(patterns_default) == 1
 
     # With smaller window (500ms), should find no pattern
-    with patch.object(config, 'DEFAULT_SCROLL_REACTION_MS', 500):
+    with patch.object(config, "DEFAULT_SCROLL_REACTION_MS", 500):
         patterns_strict = detect_scroll_patterns(events)
         assert len(patterns_strict) == 0
 
@@ -163,7 +163,7 @@ def test_custom_dom_path_formatter():
         return " >> ".join(path_parts)
 
     # With custom formatter, should use custom separator
-    with patch.object(config, 'default_dom_path_formatter', custom_formatter):
+    with patch.object(config, "default_dom_path_formatter", custom_formatter):
         metadata = resolve_node_metadata(3, node_by_id)
         assert metadata["dom_path"] == "html >> body >> button#submit"
 
@@ -194,7 +194,7 @@ def test_custom_dom_path_formatter_with_complex_logic():
         return " -> ".join(formatted_parts)
 
     # Should use custom formatting logic
-    with patch.object(config, 'default_dom_path_formatter', indexed_formatter):
+    with patch.object(config, "default_dom_path_formatter", indexed_formatter):
         metadata = resolve_node_metadata(3, node_by_id)
         assert metadata["dom_path"] == "[0]HTML -> [1]BODY -> [2]DIV.CONTAINER"
 

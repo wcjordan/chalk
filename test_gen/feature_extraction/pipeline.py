@@ -78,17 +78,22 @@ def extract_features(
     dom_mutations = extract_dom_mutations(chunk.events)
     interactions = extract_user_interactions(chunk.events)
     all_delays = _extract_timing_delays(chunk.events)
-    
+
     # Resolve UI metadata for referenced nodes
     ui_nodes = _resolve_ui_metadata(dom_mutations, interactions, dom_state)
-    
+
     # Extract behavioral patterns
     mouse_clusters = cluster_mouse_trajectories(chunk.events)
     scroll_patterns = detect_scroll_patterns(chunk.events)
 
     # Assemble all features into FeatureChunk
     features = _assemble_features(
-        dom_mutations, interactions, all_delays, ui_nodes, mouse_clusters, scroll_patterns
+        dom_mutations,
+        interactions,
+        all_delays,
+        ui_nodes,
+        mouse_clusters,
+        scroll_patterns,
     )
 
     return FeatureChunk(
@@ -111,10 +116,10 @@ def _extract_timing_delays(events):
 def _resolve_ui_metadata(dom_mutations, interactions, dom_state):
     """Resolve UI metadata for all nodes referenced in mutations and interactions."""
     ui_nodes = {}
-    
+
     # Collect unique node IDs from mutations and interactions
     referenced_node_ids = _collect_referenced_node_ids(dom_mutations, interactions)
-    
+
     # Resolve metadata for each referenced node
     for node_id in referenced_node_ids:
         try:
@@ -126,7 +131,7 @@ def _resolve_ui_metadata(dom_mutations, interactions, dom_state):
                 node_id,
             )
             continue
-    
+
     return ui_nodes
 
 
@@ -140,7 +145,9 @@ def _collect_referenced_node_ids(dom_mutations, interactions):
     return referenced_node_ids
 
 
-def _assemble_features(dom_mutations, interactions, delays, ui_nodes, mouse_clusters, scroll_patterns):
+def _assemble_features(
+    dom_mutations, interactions, delays, ui_nodes, mouse_clusters, scroll_patterns
+):
     """Assemble all extracted features into a dictionary."""
     return {
         "dom_mutations": dom_mutations,

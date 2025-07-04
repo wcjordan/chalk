@@ -5,7 +5,10 @@ Tests the computation of inter-event delays and reaction delays between
 user interactions and DOM mutations with proper timing validation.
 """
 
+from unittest.mock import patch
+
 import pytest
+
 from feature_extraction.extractors import (
     compute_inter_event_delays,
     compute_reaction_delays,
@@ -168,9 +171,8 @@ def test_compute_reaction_delays_within_window(reaction_events_within_window):
 
 def test_compute_reaction_delays_outside_window(reaction_events_outside_window):
     """Test no reaction delays are emitted when mutation is outside window."""
-    delays = compute_reaction_delays(
-        reaction_events_outside_window, max_reaction_ms=10000
-    )
+    with patch("feature_extraction.config.DEFAULT_MAX_REACTION_MS", 10000):
+        delays = compute_reaction_delays(reaction_events_outside_window)
 
     # Should have no reaction delays (11000ms > 10000ms window)
     assert len(delays) == 0
@@ -204,9 +206,7 @@ def test_compute_reaction_delays_custom_sources():
     ]
 
     # Use input events (source 5) as interactions
-    delays = compute_reaction_delays(
-        events, interaction_source=5, mutation_source=0
-    )
+    delays = compute_reaction_delays(events, interaction_source=5, mutation_source=0)
 
     assert len(delays) == 1
     delay = delays[0]
@@ -217,9 +217,7 @@ def test_compute_reaction_delays_custom_sources():
 
 def test_compute_reaction_delays_custom_max_window():
     """Test reaction delays with custom maximum reaction window."""
-    from unittest.mock import patch
-    from feature_extraction import config
-    
+
     events = [
         {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 42}},  # Click
         {
@@ -230,13 +228,13 @@ def test_compute_reaction_delays_custom_max_window():
     ]
 
     # Use smaller window (500ms)
-    with patch.object(config, 'DEFAULT_MAX_REACTION_MS', 500):
+    with patch("feature_extraction.config.DEFAULT_MAX_REACTION_MS", 500):
         delays = compute_reaction_delays(events)
         # Should have no delays (600ms > 500ms window)
         assert len(delays) == 0
 
     # Use larger window (1000ms)
-    with patch.object(config, 'DEFAULT_MAX_REACTION_MS', 1000):
+    with patch("feature_extraction.config.DEFAULT_MAX_REACTION_MS", 1000):
         delays = compute_reaction_delays(events)
         # Should have 1 delay (600ms <= 1000ms window)
         assert len(delays) == 1

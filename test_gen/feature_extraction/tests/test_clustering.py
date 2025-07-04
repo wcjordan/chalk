@@ -5,7 +5,10 @@ Tests the clustering of mouse movement events based on temporal and spatial
 proximity thresholds, verifying correct cluster boundaries and metrics.
 """
 
+from unittest.mock import patch
+
 import pytest
+
 from feature_extraction.clustering import cluster_mouse_trajectories
 
 
@@ -160,7 +163,8 @@ def test_consecutive_events_within_thresholds_form_single_cluster(
 
 def test_events_separated_by_time_split_into_clusters(events_separated_by_time):
     """Test that events separated by more than time_delta_ms split into two clusters."""
-    clusters = cluster_mouse_trajectories(events_separated_by_time, time_delta_ms=100)
+    with patch("feature_extraction.config.DEFAULT_TIME_DELTA_MS", 100):
+        clusters = cluster_mouse_trajectories(events_separated_by_time)
 
     assert len(clusters) == 2
 
@@ -181,9 +185,8 @@ def test_events_separated_by_time_split_into_clusters(events_separated_by_time):
 
 def test_events_separated_by_distance_split_into_clusters(events_separated_by_distance):
     """Test that events with spatial separation exceeding dist_delta_px split into two clusters."""
-    clusters = cluster_mouse_trajectories(
-        events_separated_by_distance, dist_delta_px=50
-    )
+    with patch("feature_extraction.config.DEFAULT_DIST_DELTA_PX", 50):
+        clusters = cluster_mouse_trajectories(events_separated_by_distance)
 
     assert len(clusters) == 2
 
@@ -204,9 +207,10 @@ def test_mixed_temporal_spatial_splits_produce_correct_clusters(
     mixed_temporal_spatial_splits,
 ):
     """Test that a mix of temporal and spatial splits produces the correct number of clusters."""
-    clusters = cluster_mouse_trajectories(
-        mixed_temporal_spatial_splits, time_delta_ms=100, dist_delta_px=50
-    )
+    with patch("feature_extraction.config.DEFAULT_TIME_DELTA_MS", 100), patch(
+        "feature_extraction.config.DEFAULT_DIST_DELTA_PX", 50
+    ):
+        clusters = cluster_mouse_trajectories(mixed_temporal_spatial_splits)
 
     assert len(clusters) == 3
 
@@ -264,9 +268,7 @@ def test_single_mousemove_event_creates_single_point_cluster():
 
 def test_custom_thresholds_affect_clustering():
     """Test that custom time and distance thresholds affect clustering behavior."""
-    from unittest.mock import patch
-    from feature_extraction import config
-    
+
     events = [
         {
             "type": 3,
@@ -285,12 +287,12 @@ def test_custom_thresholds_affect_clustering():
     assert len(clusters_default) == 1
 
     # With stricter time threshold (50ms), should be two clusters
-    with patch.object(config, 'DEFAULT_TIME_DELTA_MS', 50):
+    with patch("feature_extraction.config.DEFAULT_TIME_DELTA_MS", 50):
         clusters_strict_time = cluster_mouse_trajectories(events)
         assert len(clusters_strict_time) == 2
 
     # With stricter distance threshold (30px), should be two clusters
-    with patch.object(config, 'DEFAULT_DIST_DELTA_PX', 30):
+    with patch("feature_extraction.config.DEFAULT_DIST_DELTA_PX", 30):
         clusters_strict_dist = cluster_mouse_trajectories(events)
         assert len(clusters_strict_dist) == 2
 
@@ -315,7 +317,8 @@ def test_clusters_preserve_chronological_order():
         },
     ]
 
-    clusters = cluster_mouse_trajectories(events, time_delta_ms=100)
+    with patch("feature_extraction.config.DEFAULT_TIME_DELTA_MS", 100):
+        clusters = cluster_mouse_trajectories(events)
 
     # Should have 3 clusters due to large gaps
     assert len(clusters) == 3
@@ -419,9 +422,11 @@ def test_euclidean_distance_calculation():
     ]
 
     # With distance threshold of 50px, all events should be in one cluster
-    clusters = cluster_mouse_trajectories(events, dist_delta_px=50)
+    with patch("feature_extraction.config.DEFAULT_DIST_DELTA_PX", 50):
+        clusters = cluster_mouse_trajectories(events)
     assert len(clusters) == 1  # All in one cluster (50px is exactly at threshold)
 
     # With distance threshold of 49px, should split after first event
-    clusters = cluster_mouse_trajectories(events, dist_delta_px=49)
+    with patch("feature_extraction.config.DEFAULT_DIST_DELTA_PX", 49):
+        clusters = cluster_mouse_trajectories(events)
     assert len(clusters) == 2  # Split because 50px > 49px threshold

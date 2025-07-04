@@ -5,7 +5,10 @@ Tests the detection of scroll events followed by DOM mutations within
 specified time windows, verifying correct pattern matching and timing.
 """
 
+from unittest.mock import patch
+
 import pytest
+
 from feature_extraction.scroll_patterns import detect_scroll_patterns
 
 
@@ -237,9 +240,7 @@ def test_empty_event_list_returns_empty_list():
 
 def test_custom_max_reaction_window():
     """Test that custom max_reaction_ms affects pattern detection."""
-    from unittest.mock import patch
-    from feature_extraction import config
-    
+
     events = [
         {
             "type": 3,
@@ -258,12 +259,12 @@ def test_custom_max_reaction_window():
     assert len(patterns_default) == 1
 
     # With smaller window (500ms), should find no pattern
-    with patch.object(config, 'DEFAULT_SCROLL_REACTION_MS', 500):
+    with patch("feature_extraction.config.DEFAULT_SCROLL_REACTION_MS", 500):
         patterns_small = detect_scroll_patterns(events)
         assert len(patterns_small) == 0
 
     # With larger window (1000ms), should find pattern
-    with patch.object(config, 'DEFAULT_SCROLL_REACTION_MS', 1000):
+    with patch("feature_extraction.config.DEFAULT_SCROLL_REACTION_MS", 1000):
         patterns_large = detect_scroll_patterns(events)
         assert len(patterns_large) == 1
 
