@@ -308,7 +308,7 @@ def compute_reaction_delays(
                 delays.append(delay)
                 mutation_index += 1  # Move to the next mutation event
                 break  # Only match the first mutation for this interaction
-            elif mutation_ts > interaction_ts:
+            if mutation_ts > interaction_ts:
                 break  # Stop if mutation is outside the time window
             mutation_index += 1
     return delays
