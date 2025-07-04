@@ -270,42 +270,40 @@ def compute_reaction_delays(
     """
     delays = []
 
-    # Find all interaction events
-    interaction_events = []
-    for event in events:
-        if (
-            event.get("type") == 3
-            and event.get("data", {}).get("source") == interaction_source
-        ):
-            interaction_events.append(event)
+    # Sort events by timestamp to ensure sequential processing
+    events.sort(key=lambda e: e.get("timestamp", 0))
 
-    # For each interaction, find the next mutation within the time window
+    # Separate interaction and mutation events
+    interaction_events = [
+        event for event in events
+        if event.get("type") == 3 and event.get("data", {}).get("source") == interaction_source
+    ]
+    mutation_events = [
+        event for event in events
+        if event.get("type") == 3 and event.get("data", {}).get("source") == mutation_source
+    ]
+
+    # Use a pointer to track the position in mutation events
+    mutation_index = 0
     for interaction in interaction_events:
         interaction_ts = interaction.get("timestamp", 0)
 
-        # Look for the next mutation event within the time window
-        for event in events:
-            if (
-                event.get("type") == 3
-                and event.get("data", {}).get("source") == mutation_source
-            ):
+        # Find the next mutation event within the time window
+        while mutation_index < len(mutation_events):
+            mutation = mutation_events[mutation_index]
+            mutation_ts = mutation.get("timestamp", 0)
 
-                mutation_ts = event.get("timestamp", 0)
-
-                # Check if this mutation occurs after the interaction
-                # and within the reaction time window
-                if (
-                    mutation_ts > interaction_ts
-                    and mutation_ts - interaction_ts <= max_reaction_ms
-                ):
-
-                    delta_ms = mutation_ts - interaction_ts
-                    delay = EventDelay(
-                        from_ts=interaction_ts, to_ts=mutation_ts, delta_ms=delta_ms
-                    )
-                    delays.append(delay)
-                    break  # Only match the first mutation for this interaction
-
+            if mutation_ts > interaction_ts and mutation_ts - interaction_ts <= max_reaction_ms:
+                delta_ms = mutation_ts - interaction_ts
+                delay = EventDelay(
+                    from_ts=interaction_ts, to_ts=mutation_ts, delta_ms=delta_ms
+                )
+                delays.append(delay)
+                mutation_index += 1  # Move to the next mutation event
+                break  # Only match the first mutation for this interaction
+            elif mutation_ts > interaction_ts:
+                break  # Stop if mutation is outside the time window
+            mutation_index += 1
     return delays
 
 
