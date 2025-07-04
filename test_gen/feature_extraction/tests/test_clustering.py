@@ -264,6 +264,9 @@ def test_single_mousemove_event_creates_single_point_cluster():
 
 def test_custom_thresholds_affect_clustering():
     """Test that custom time and distance thresholds affect clustering behavior."""
+    from unittest.mock import patch
+    from feature_extraction import config
+    
     events = [
         {
             "type": 3,
@@ -282,12 +285,14 @@ def test_custom_thresholds_affect_clustering():
     assert len(clusters_default) == 1
 
     # With stricter time threshold (50ms), should be two clusters
-    clusters_strict_time = cluster_mouse_trajectories(events, time_delta_ms=50)
-    assert len(clusters_strict_time) == 2
+    with patch.object(config, 'DEFAULT_TIME_DELTA_MS', 50):
+        clusters_strict_time = cluster_mouse_trajectories(events)
+        assert len(clusters_strict_time) == 2
 
     # With stricter distance threshold (30px), should be two clusters
-    clusters_strict_dist = cluster_mouse_trajectories(events, dist_delta_px=30)
-    assert len(clusters_strict_dist) == 2
+    with patch.object(config, 'DEFAULT_DIST_DELTA_PX', 30):
+        clusters_strict_dist = cluster_mouse_trajectories(events)
+        assert len(clusters_strict_dist) == 2
 
 
 def test_clusters_preserve_chronological_order():

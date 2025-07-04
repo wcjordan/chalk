@@ -60,8 +60,9 @@ def test_clustering_with_custom_distance_threshold():
     assert len(clusters_default) == 1
 
     # With smaller threshold (40px), should be two clusters
-    clusters_strict = cluster_mouse_trajectories(events, dist_delta_px=40)
-    assert len(clusters_strict) == 2
+    with patch.object(config, 'DEFAULT_DIST_DELTA_PX', 40):
+        clusters_strict = cluster_mouse_trajectories(events)
+        assert len(clusters_strict) == 2
 
 
 def test_clustering_with_custom_time_threshold():
