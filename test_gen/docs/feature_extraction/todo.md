@@ -148,23 +148,23 @@
 ## Step 8: Mouse Trajectory Clustering
 
 ### Tasks:
-- [ ] Create `test_gen/feature_extraction/clustering.py`
-- [ ] Implement `cluster_mouse_trajectories(events: List[dict], time_delta_ms=100, dist_delta_px=50) -> List[MouseCluster]`:
-  - [ ] Filter events where `type == 3` and `data.source == 1`
-  - [ ] Compute time difference and Euclidean distance to previous mousemove
-  - [ ] Start new cluster when either threshold exceeded
-  - [ ] Build MouseCluster with start_ts, end_ts, point list, duration_ms, point_count
-  - [ ] Return clusters in chronological order
-- [ ] Add module-level docstring explaining clustering parameters
-- [ ] Create `test_gen/feature_extraction/tests/test_clustering.py`:
-  - [ ] Test consecutive events within thresholds form single cluster
-  - [ ] Test events separated by time_delta_ms split into two clusters
-  - [ ] Test events with spatial separation > dist_delta_px split clusters
-  - [ ] Test mix of temporal/spatial splits produces correct cluster count
-  - [ ] Test no mousemove events returns empty list
-- [ ] Verify pytest passes all cases
-- [ ] Clusters match expected boundaries and metrics
-- [ ] No regressions in existing tests
+- [x] Create `test_gen/feature_extraction/clustering.py`
+- [x] Implement `cluster_mouse_trajectories(events: List[dict], time_delta_ms=100, dist_delta_px=50) -> List[MouseCluster]`:
+  - [x] Filter events where `type == 3` and `data.source == 1`
+  - [x] Compute time difference and Euclidean distance to previous mousemove
+  - [x] Start new cluster when either threshold exceeded
+  - [x] Build MouseCluster with start_ts, end_ts, point list, duration_ms, point_count
+  - [x] Return clusters in chronological order
+- [x] Add module-level docstring explaining clustering parameters
+- [x] Create `test_gen/feature_extraction/tests/test_clustering.py`:
+  - [x] Test consecutive events within thresholds form single cluster
+  - [x] Test events separated by time_delta_ms split into two clusters
+  - [x] Test events with spatial separation > dist_delta_px split clusters
+  - [x] Test mix of temporal/spatial splits produces correct cluster count
+  - [x] Test no mousemove events returns empty list
+- [x] Verify pytest passes all cases
+- [x] Clusters match expected boundaries and metrics
+- [x] No regressions in existing tests
 
 ## Step 9: Scroll-Pattern Detection
 
