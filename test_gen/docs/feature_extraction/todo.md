@@ -214,29 +214,29 @@
 ## Step 11: Configuration & Extensibility
 
 ### Tasks:
-- [ ] Create `test_gen/feature_extraction/config.py` with default parameters:
-  - [ ] DEFAULT_TIME_DELTA_MS = 100
-  - [ ] DEFAULT_DIST_DELTA_PX = 50
-  - [ ] DEFAULT_SCROLL_REACTION_MS = 2000
-  - [ ] DEFAULT_MAX_REACTION_MS = 10000
-- [ ] Refactor extractor functions to import and use config defaults:
-  - [ ] Update dom_state.py functions
-  - [ ] Update extractors.py functions
-  - [ ] Update clustering.py functions
-  - [ ] Update scroll_patterns.py functions
-  - [ ] Update pipeline.py functions
-- [ ] Add function signature overrides that default to config values
-- [ ] Add extensibility hooks:
-  - [ ] Custom DOM path formatting function in metadata resolver
-  - [ ] Pluggable distance/time comparator in clustering
-- [ ] Update docstrings to document config constants and override methods
-- [ ] Create `test_gen/feature_extraction/tests/test_config_features.py`:
-  - [ ] Test config module exports correct default values
-  - [ ] Test custom parameter overrides change behavior
-  - [ ] Test custom DOM path formatter is invoked and output appears
-- [ ] Verify all existing tests still pass
-- [ ] New config tests pass demonstrating defaults and overrides
-- [ ] Code review confirms no hard-coded thresholds remain
+- [x] Create `test_gen/feature_extraction/config.py` with default parameters:
+  - [x] DEFAULT_TIME_DELTA_MS = 100
+  - [x] DEFAULT_DIST_DELTA_PX = 50
+  - [x] DEFAULT_SCROLL_REACTION_MS = 2000
+  - [x] DEFAULT_MAX_REACTION_MS = 10000
+- [x] Refactor extractor functions to import and use config defaults:
+  - [x] Update dom_state.py functions
+  - [x] Update extractors.py functions
+  - [x] Update clustering.py functions
+  - [x] Update scroll_patterns.py functions
+  - [x] Update pipeline.py functions
+- [x] Add function signature overrides that default to config values
+- [x] Add extensibility hooks:
+  - [x] Custom DOM path formatting function in metadata resolver
+  - [x] Pluggable distance/time comparator in clustering
+- [x] Update docstrings to document config constants and override methods
+- [x] Create `test_gen/feature_extraction/tests/test_config_features.py`:
+  - [x] Test config module exports correct default values
+  - [x] Test custom parameter overrides change behavior
+  - [x] Test custom DOM path formatter is invoked and output appears
+- [x] Verify all existing tests still pass
+- [x] New config tests pass demonstrating defaults and overrides
+- [x] Code review confirms no hard-coded thresholds remain
 
 ## Step 12: Documentation & Sample Data
 
