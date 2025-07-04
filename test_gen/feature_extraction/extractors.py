@@ -88,6 +88,7 @@ def _extract_text_mutations(data: dict, timestamp: int) -> List[DomMutation]:
 def _extract_node_additions(data: dict, timestamp: int) -> List[DomMutation]:
     """Extract node addition mutations from event data."""
     mutations = []
+    # pylint: disable=duplicate-code
     for add_record in data.get("adds", []):
         node_data = add_record.get("node", {})
         node_id = node_data.get("id")
