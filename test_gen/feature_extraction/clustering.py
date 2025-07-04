@@ -55,13 +55,8 @@ def cluster_mouse_trajectories(
         Only events with type == 3 and data.source == 1 are considered mousemove events.
         Empty input or no mousemove events will return an empty list.
     """
-    # Filter for mousemove events only
-    mousemove_events = [
-        event
-        for event in events
-        if event.get("type") == 3 and event.get("data", {}).get("source") == 1
-    ]
-
+    mousemove_events = _filter_mousemove_events(events)
+    
     if not mousemove_events:
         return []
 
@@ -70,36 +65,17 @@ def cluster_mouse_trajectories(
     last_point = None
 
     for event in mousemove_events:
-        data = event.get("data", {})
-        timestamp = event.get("timestamp", 0)
-        x = data.get("x", 0)
-        y = data.get("y", 0)
+        current_point = _extract_point_from_event(event)
+        
+        should_start_new_cluster = _should_start_new_cluster(
+            last_point, current_point, time_delta_ms, dist_delta_px
+        )
 
-        current_point = {"x": x, "y": y, "ts": timestamp}
-
-        # Check if we should start a new cluster
-        should_start_new_cluster = False
-
-        if last_point is not None:
-            # Calculate time difference
-            time_diff = timestamp - last_point["ts"]
-
-            # Calculate Euclidean distance
-            dx = x - last_point["x"]
-            dy = y - last_point["y"]
-            distance = math.sqrt(dx * dx + dy * dy)
-
-            # Start new cluster if either threshold is exceeded
-            if time_diff > time_delta_ms or distance > dist_delta_px:
-                should_start_new_cluster = True
-
-        # If we need to start a new cluster and have points in current cluster
         if should_start_new_cluster and current_cluster_points:
             cluster = _create_mouse_cluster(current_cluster_points)
             clusters.append(cluster)
             current_cluster_points = []
 
-        # Add current point to the cluster
         current_cluster_points.append(current_point)
         last_point = current_point
 
@@ -109,6 +85,81 @@ def cluster_mouse_trajectories(
         clusters.append(cluster)
 
     return clusters
+
+
+def _filter_mousemove_events(events: List[dict]) -> List[dict]:
+    """
+    Filter events to only include mousemove events.
+    
+    Args:
+        events: List of rrweb events to filter
+        
+    Returns:
+        List of events where type == 3 and data.source == 1
+    """
+    return [
+        event
+        for event in events
+        if event.get("type") == 3 and event.get("data", {}).get("source") == 1
+    ]
+
+
+def _extract_point_from_event(event: dict) -> dict:
+    """
+    Extract mouse position and timestamp from an rrweb event.
+    
+    Args:
+        event: rrweb mousemove event
+        
+    Returns:
+        Dictionary with x, y, and ts keys
+    """
+    data = event.get("data", {})
+    timestamp = event.get("timestamp", 0)
+    x = data.get("x", 0)
+    y = data.get("y", 0)
+    
+    return {"x": x, "y": y, "ts": timestamp}
+
+
+def _should_start_new_cluster(
+    last_point: dict, current_point: dict, time_delta_ms: int, dist_delta_px: int
+) -> bool:
+    """
+    Determine if a new cluster should be started based on time and distance thresholds.
+    
+    Args:
+        last_point: Previous mouse position point (or None if first point)
+        current_point: Current mouse position point
+        time_delta_ms: Maximum time gap threshold
+        dist_delta_px: Maximum distance threshold
+        
+    Returns:
+        True if a new cluster should be started, False otherwise
+    """
+    if last_point is None:
+        return False
+        
+    time_diff = current_point["ts"] - last_point["ts"]
+    distance = _calculate_euclidean_distance(last_point, current_point)
+    
+    return time_diff > time_delta_ms or distance > dist_delta_px
+
+
+def _calculate_euclidean_distance(point1: dict, point2: dict) -> float:
+    """
+    Calculate Euclidean distance between two points.
+    
+    Args:
+        point1: Dictionary with x and y keys
+        point2: Dictionary with x and y keys
+        
+    Returns:
+        Euclidean distance between the points
+    """
+    dx = point2["x"] - point1["x"]
+    dy = point2["y"] - point1["y"]
+    return math.sqrt(dx * dx + dy * dy)
 
 
 def _create_mouse_cluster(points: List[dict]) -> MouseCluster:
