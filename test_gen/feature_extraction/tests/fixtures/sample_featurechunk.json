@@ -1,0 +1,270 @@
+{
+  "chunk_id": "sample-session-chunk001",
+  "start_time": 1640995200000,
+  "end_time": 1640995202300,
+  "events": [],
+  "features": {
+    "dom_mutations": [
+      {
+        "mutation_type": "text",
+        "target_id": 9,
+        "details": {
+          "text": "user@example.com"
+        },
+        "timestamp": 1640995200850
+      },
+      {
+        "mutation_type": "attribute",
+        "target_id": 9,
+        "details": {
+          "attributes": {
+            "value": "user@example.com"
+          }
+        },
+        "timestamp": 1640995200850
+      },
+      {
+        "mutation_type": "attribute",
+        "target_id": 10,
+        "details": {
+          "attributes": {
+            "class": "btn-clicked"
+          }
+        },
+        "timestamp": 1640995201300
+      },
+      {
+        "mutation_type": "add",
+        "target_id": 12,
+        "details": {
+          "parent_id": 7,
+          "tag": "div",
+          "attributes": {
+            "class": "success-message",
+            "data-testid": "success-msg"
+          },
+          "text": ""
+        },
+        "timestamp": 1640995201700
+      },
+      {
+        "mutation_type": "attribute",
+        "target_id": 12,
+        "details": {
+          "attributes": {
+            "style": "display: none;"
+          }
+        },
+        "timestamp": 1640995202300
+      }
+    ],
+    "interactions": [
+      {
+        "action": "click",
+        "target_id": 9,
+        "value": {
+          "x": 140,
+          "y": 170
+        },
+        "timestamp": 1640995200250
+      },
+      {
+        "action": "input",
+        "target_id": 9,
+        "value": {
+          "value": "user@example.com",
+          "checked": false
+        },
+        "timestamp": 1640995200800
+      },
+      {
+        "action": "click",
+        "target_id": 10,
+        "value": {
+          "x": 210,
+          "y": 230
+        },
+        "timestamp": 1640995201100
+      },
+      {
+        "action": "scroll",
+        "target_id": 7,
+        "value": {
+          "x": 0,
+          "y": 100
+        },
+        "timestamp": 1640995201500
+      },
+      {
+        "action": "click",
+        "target_id": 12,
+        "value": {
+          "x": 320,
+          "y": 360
+        },
+        "timestamp": 1640995202100
+      }
+    ],
+    "inter_event_delays": [],
+    "reaction_delays": [
+      {
+        "from_ts": 1640995200800,
+        "to_ts": 1640995200850,
+        "delta_ms": 50
+      },
+      {
+        "from_ts": 1640995201100,
+        "to_ts": 1640995201300,
+        "delta_ms": 200
+      },
+      {
+        "from_ts": 1640995202100,
+        "to_ts": 1640995202300,
+        "delta_ms": 200
+      }
+    ],
+    "ui_nodes": {
+      "7": {
+        "tag": "body",
+        "aria_label": null,
+        "data_testid": null,
+        "role": null,
+        "text": null,
+        "dom_path": "html > body.main-content"
+      },
+      "9": {
+        "tag": "input",
+        "aria_label": "Email Address",
+        "data_testid": "email-input",
+        "role": null,
+        "text": "user@example.com",
+        "dom_path": "html > body.main-content > form#contact-form > input#email"
+      },
+      "10": {
+        "tag": "button",
+        "aria_label": "Submit Form",
+        "data_testid": "submit-btn",
+        "role": null,
+        "text": "Submit",
+        "dom_path": "html > body.main-content > form#contact-form > button#submit"
+      },
+      "12": {
+        "tag": "div",
+        "aria_label": null,
+        "data_testid": "success-msg",
+        "role": null,
+        "text": null,
+        "dom_path": "html > body.main-content > div.success-message"
+      }
+    },
+    "mouse_clusters": [
+      {
+        "start_ts": 1640995200100,
+        "end_ts": 1640995200200,
+        "points": [
+          {
+            "x": 100,
+            "y": 150,
+            "ts": 1640995200100
+          },
+          {
+            "x": 120,
+            "y": 160,
+            "ts": 1640995200150
+          },
+          {
+            "x": 140,
+            "y": 170,
+            "ts": 1640995200200
+          }
+        ],
+        "duration_ms": 100,
+        "point_count": 3
+      },
+      {
+        "start_ts": 1640995201000,
+        "end_ts": 1640995201050,
+        "points": [
+          {
+            "x": 200,
+            "y": 220,
+            "ts": 1640995201000
+          },
+          {
+            "x": 210,
+            "y": 230,
+            "ts": 1640995201050
+          }
+        ],
+        "duration_ms": 50,
+        "point_count": 2
+      },
+      {
+        "start_ts": 1640995202000,
+        "end_ts": 1640995202050,
+        "points": [
+          {
+            "x": 300,
+            "y": 350,
+            "ts": 1640995202000
+          },
+          {
+            "x": 320,
+            "y": 360,
+            "ts": 1640995202050
+          }
+        ],
+        "duration_ms": 50,
+        "point_count": 2
+      }
+    ],
+    "scroll_patterns": [
+      {
+        "scroll_event": {
+          "type": 3,
+          "data": {
+            "source": 3,
+            "id": 7,
+            "x": 0,
+            "y": 100
+          },
+          "timestamp": 1640995201500
+        },
+        "mutation_event": {
+          "type": 3,
+          "data": {
+            "source": 0,
+            "texts": [],
+            "attributes": [],
+            "removes": [],
+            "adds": [
+              {
+                "parentId": 7,
+                "nextId": null,
+                "node": {
+                  "type": "Element",
+                  "tagName": "div",
+                  "attributes": {
+                    "class": "success-message",
+                    "data-testid": "success-msg"
+                  },
+                  "childNodes": [
+                    {
+                      "type": "Text",
+                      "textContent": "Form submitted successfully!",
+                      "id": 13
+                    }
+                  ],
+                  "id": 12
+                }
+              }
+            ]
+          },
+          "timestamp": 1640995201700
+        },
+        "delay_ms": 200
+      }
+    ]
+  },
+  "metadata": {}
+}

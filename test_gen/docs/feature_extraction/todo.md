@@ -241,25 +241,25 @@
 ## Step 12: Documentation & Sample Data
 
 ### Tasks:
-- [ ] Create/update `test_gen/feature_extraction/README.md`:
-  - [ ] Concise overview of module purpose and key functions
-  - [ ] Installation instructions and dependencies
-  - [ ] Usage example showing integration with rrweb_ingest pipeline
-  - [ ] Example output showing feature extraction results
-- [ ] Create sample data under `test_gen/feature_extraction/tests/fixtures/`:
-  - [ ] `sample_session.json` - small rrweb session (~15-25 events)
-  - [ ] Include FullSnapshot, IncrementalSnapshots with clicks, inputs, mutations, mousemoves, scrolls
-  - [ ] `sample_featurechunk.json` (optional) - expected output structure
-- [ ] Create `test_gen/feature_extraction/tests/test_fixtures_features.py`:
-  - [ ] Load sample_session.json via ingest_session
-  - [ ] Initialize DOM with init_dom_state from first chunk
-  - [ ] Call extract_features on first chunk
-  - [ ] Assert each feature list is present and non-empty
-  - [ ] Optional: compare result against sample_featurechunk.json
-- [ ] Verify README example runs without errors
-- [ ] Verify pytest passes on fixtures test
-- [ ] Sample session covers all major event types
-- [ ] Documentation guides new developers through installation and usage
+- [x] Create/update `test_gen/feature_extraction/README.md`:
+  - [x] Concise overview of module purpose and key functions
+  - [x] Installation instructions and dependencies
+  - [x] Usage example showing integration with rrweb_ingest pipeline
+  - [x] Example output showing feature extraction results
+- [x] Create sample data under `test_gen/feature_extraction/tests/fixtures/`:
+  - [x] `sample_session.json` - small rrweb session (~15-25 events)
+  - [x] Include FullSnapshot, IncrementalSnapshots with clicks, inputs, mutations, mousemoves, scrolls
+  - [x] `sample_featurechunk.json` (optional) - expected output structure
+- [x] Create `test_gen/feature_extraction/tests/test_fixtures_features.py`:
+  - [x] Load sample_session.json via ingest_session
+  - [x] Initialize DOM with init_dom_state from first chunk
+  - [x] Call extract_features on first chunk
+  - [x] Assert each feature list is present and non-empty
+  - [x] Optional: compare result against sample_featurechunk.json
+- [x] Verify README example runs without errors
+- [x] Verify pytest passes on fixtures test
+- [x] Sample session covers all major event types
+- [x] Documentation guides new developers through installation and usage
 
 ## Step 13: Integration Testing & Validation
 
