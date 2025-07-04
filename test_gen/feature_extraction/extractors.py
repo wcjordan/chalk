@@ -33,6 +33,7 @@ def extract_dom_mutations(events: List[dict]) -> List[DomMutation]:
 
     for event in events:
         # Only process mutation events
+        # TODO replace types w/ constants here and throughout
         if event.get("type") != 3:
             continue
 
