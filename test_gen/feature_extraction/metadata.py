@@ -49,7 +49,7 @@ def resolve_node_metadata(
 
     # Extract basic node information
     tag = node.tag
-    text = node.text if node.text else None
+    text = node.text.strip() if node.text and node.text.strip() else None
 
     # Extract semantic attributes
     aria_label = node.attributes.get("aria-label")
