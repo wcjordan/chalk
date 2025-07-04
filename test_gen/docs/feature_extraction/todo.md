@@ -191,25 +191,25 @@
 ## Step 10: Assemble & Integrate Extractors
 
 ### Tasks:
-- [ ] Create `test_gen/feature_extraction/pipeline.py`
-- [ ] Implement `extract_features(chunk: Chunk, dom_state: Dict[int, UINode]) -> FeatureChunk`:
-  - [ ] Apply mutations from chunk to update dom_state
-  - [ ] Extract DomMutation entries via extract_dom_mutations
-  - [ ] Extract UserInteraction entries via extract_user_interactions
-  - [ ] Extract EventDelay entries via compute_inter_event_delays and compute_reaction_delays
-  - [ ] Resolve UI metadata for each mutation and interaction
-  - [ ] Extract MouseCluster entries via cluster_mouse_trajectories
-  - [ ] Extract ScrollPattern entries via detect_scroll_patterns
-  - [ ] Assemble results into FeatureChunk with chunk_id, times, events
-- [ ] Add module-level docstring describing extraction pipeline
-- [ ] Create `test_gen/feature_extraction/tests/test_pipeline_features.py`:
-  - [ ] Test sample Chunk with FullSnapshot and interaction/mutation events
-  - [ ] Assert FeatureChunk has non-empty lists for each feature category
-  - [ ] Verify timestamps and IDs align with input events
-  - [ ] Test calling extract_features twice yields identical results
-- [ ] Verify pytest passes
-- [ ] FeatureChunk contains all expected feature lists populated correctly
-- [ ] No regressions in existing tests
+- [x] Create `test_gen/feature_extraction/pipeline.py`
+- [x] Implement `extract_features(chunk: Chunk, dom_state: Dict[int, UINode]) -> FeatureChunk`:
+  - [x] Apply mutations from chunk to update dom_state
+  - [x] Extract DomMutation entries via extract_dom_mutations
+  - [x] Extract UserInteraction entries via extract_user_interactions
+  - [x] Extract EventDelay entries via compute_inter_event_delays and compute_reaction_delays
+  - [x] Resolve UI metadata for each mutation and interaction
+  - [x] Extract MouseCluster entries via cluster_mouse_trajectories
+  - [x] Extract ScrollPattern entries via detect_scroll_patterns
+  - [x] Assemble results into FeatureChunk with chunk_id, times, events
+- [x] Add module-level docstring describing extraction pipeline
+- [x] Create `test_gen/feature_extraction/tests/test_pipeline_features.py`:
+  - [x] Test sample Chunk with FullSnapshot and interaction/mutation events
+  - [x] Assert FeatureChunk has non-empty lists for each feature category
+  - [x] Verify timestamps and IDs align with input events
+  - [x] Test calling extract_features twice yields identical results
+- [x] Verify pytest passes
+- [x] FeatureChunk contains all expected feature lists populated correctly
+- [x] No regressions in existing tests
 
 ## Step 11: Configuration & Extensibility
 
