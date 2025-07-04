@@ -106,24 +106,24 @@
 ## Step 6: Delay Computation
 
 ### Tasks:
-- [ ] Add delay computation functions to `extractors.py` (or create `delay_extractor.py`):
-- [ ] Implement `compute_inter_event_delays(events: List[dict]) -> List[EventDelay]`:
-  - [ ] Process events sorted by timestamp
-  - [ ] Create EventDelay for each consecutive pair with from_ts, to_ts, delta_ms
-- [ ] Implement `compute_reaction_delays(events, interaction_source=2, mutation_source=0, max_reaction_ms=10000) -> List[EventDelay]`:
-  - [ ] Find interaction events with specified source
-  - [ ] Find next mutation event within max_reaction_ms window
-  - [ ] Create EventDelay capturing interaction→mutation timing
-- [ ] Add docstrings explaining inputs, outputs, parameter meanings
-- [ ] Create `test_gen/feature_extraction/tests/test_delay_extractor.py`:
-  - [ ] Test inter-event delays with known timestamps produce correct deltas
-  - [ ] Test reaction delays within window are captured
-  - [ ] Test no reaction delays outside max window
-  - [ ] Test multiple interactions produce multiple reaction delays
-  - [ ] Test non-interaction sources are ignored
-- [ ] Verify pytest passes all cases
-- [ ] Functions return correct EventDelay counts and timing
-- [ ] No regressions in existing tests
+- [x] Add delay computation functions to `extractors.py` (or create `delay_extractor.py`):
+- [x] Implement `compute_inter_event_delays(events: List[dict]) -> List[EventDelay]`:
+  - [x] Process events sorted by timestamp
+  - [x] Create EventDelay for each consecutive pair with from_ts, to_ts, delta_ms
+- [x] Implement `compute_reaction_delays(events, interaction_source=2, mutation_source=0, max_reaction_ms=10000) -> List[EventDelay]`:
+  - [x] Find interaction events with specified source
+  - [x] Find next mutation event within max_reaction_ms window
+  - [x] Create EventDelay capturing interaction→mutation timing
+- [x] Add docstrings explaining inputs, outputs, parameter meanings
+- [x] Create `test_gen/feature_extraction/tests/test_delay_extractor.py`:
+  - [x] Test inter-event delays with known timestamps produce correct deltas
+  - [x] Test reaction delays within window are captured
+  - [x] Test no reaction delays outside max window
+  - [x] Test multiple interactions produce multiple reaction delays
+  - [x] Test non-interaction sources are ignored
+- [x] Verify pytest passes all cases
+- [x] Functions return correct EventDelay counts and timing
+- [x] No regressions in existing tests
 
 ## Step 7: UI Metadata Resolution
 
