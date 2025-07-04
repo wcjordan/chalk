@@ -27,9 +27,7 @@ from .models import MouseCluster
 
 
 def cluster_mouse_trajectories(
-    events: List[dict],
-    time_delta_ms: int = 100,
-    dist_delta_px: int = 50
+    events: List[dict], time_delta_ms: int = 100, dist_delta_px: int = 50
 ) -> List[MouseCluster]:
     """
     Groups rrweb mousemove events into clusters based on temporal
@@ -59,7 +57,8 @@ def cluster_mouse_trajectories(
     """
     # Filter for mousemove events only
     mousemove_events = [
-        event for event in events
+        event
+        for event in events
         if event.get("type") == 3 and event.get("data", {}).get("source") == 1
     ]
 
@@ -84,7 +83,7 @@ def cluster_mouse_trajectories(
         if last_point is not None:
             # Calculate time difference
             time_diff = timestamp - last_point["ts"]
-            
+
             # Calculate Euclidean distance
             dx = x - last_point["x"]
             dy = y - last_point["y"]
@@ -135,5 +134,5 @@ def _create_mouse_cluster(points: List[dict]) -> MouseCluster:
         end_ts=end_ts,
         points=points,
         duration_ms=duration_ms,
-        point_count=point_count
+        point_count=point_count,
     )

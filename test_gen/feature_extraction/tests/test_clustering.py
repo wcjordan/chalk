@@ -137,7 +137,9 @@ def fixture_non_mousemove_events():
     ]
 
 
-def test_consecutive_events_within_thresholds_form_single_cluster(consecutive_events_within_thresholds):
+def test_consecutive_events_within_thresholds_form_single_cluster(
+    consecutive_events_within_thresholds,
+):
     """Test that consecutive mousemove events within both thresholds form a single cluster."""
     clusters = cluster_mouse_trajectories(consecutive_events_within_thresholds)
 
@@ -179,7 +181,9 @@ def test_events_separated_by_time_split_into_clusters(events_separated_by_time):
 
 def test_events_separated_by_distance_split_into_clusters(events_separated_by_distance):
     """Test that events with spatial separation exceeding dist_delta_px split into two clusters."""
-    clusters = cluster_mouse_trajectories(events_separated_by_distance, dist_delta_px=50)
+    clusters = cluster_mouse_trajectories(
+        events_separated_by_distance, dist_delta_px=50
+    )
 
     assert len(clusters) == 2
 
@@ -196,12 +200,12 @@ def test_events_separated_by_distance_split_into_clusters(events_separated_by_di
     assert cluster2.point_count == 2
 
 
-def test_mixed_temporal_spatial_splits_produce_correct_clusters(mixed_temporal_spatial_splits):
+def test_mixed_temporal_spatial_splits_produce_correct_clusters(
+    mixed_temporal_spatial_splits,
+):
     """Test that a mix of temporal and spatial splits produces the correct number of clusters."""
     clusters = cluster_mouse_trajectories(
-        mixed_temporal_spatial_splits, 
-        time_delta_ms=100, 
-        dist_delta_px=50
+        mixed_temporal_spatial_splits, time_delta_ms=100, dist_delta_px=50
     )
 
     assert len(clusters) == 3
@@ -392,12 +396,20 @@ def test_euclidean_distance_calculation():
         {
             "type": 3,
             "timestamp": 1050,
-            "data": {"source": 1, "x": 30, "y": 40},  # Distance = sqrt(30^2 + 40^2) = 50px exactly
+            "data": {
+                "source": 1,
+                "x": 30,
+                "y": 40,
+            },  # Distance = sqrt(30^2 + 40^2) = 50px exactly
         },
         {
             "type": 3,
             "timestamp": 1100,
-            "data": {"source": 1, "x": 31, "y": 41},  # Distance = sqrt(1^2 + 1^2) ≈ 1.4px
+            "data": {
+                "source": 1,
+                "x": 31,
+                "y": 41,
+            },  # Distance = sqrt(1^2 + 1^2) ≈ 1.4px
         },
     ]
 
@@ -408,30 +420,3 @@ def test_euclidean_distance_calculation():
     # With distance threshold of 49px, should split after first event
     clusters = cluster_mouse_trajectories(events, dist_delta_px=49)
     assert len(clusters) == 2  # Split because 50px > 49px threshold
-````
-
-Now I'll update the todo list to mark Step 8 as completed:
-
-test_gen/docs/feature_extraction/todo.md
-````markdown
-<<<<<<< SEARCH
-## Step 8: Mouse Trajectory Clustering
-
-### Tasks:
-- [ ] Create `test_gen/feature_extraction/clustering.py`
-- [ ] Implement `cluster_mouse_trajectories(events: List[dict], time_delta_ms=100, dist_delta_px=50) -> List[MouseCluster]`:
-  - [ ] Filter events where `type == 3` and `data.source == 1`
-  - [ ] Compute time difference and Euclidean distance to previous mousemove
-  - [ ] Start new cluster when either threshold exceeded
-  - [ ] Build MouseCluster with start_ts, end_ts, point list, duration_ms, point_count
-  - [ ] Return clusters in chronological order
-- [ ] Add module-level docstring explaining clustering parameters
-- [ ] Create `test_gen/feature_extraction/tests/test_clustering.py`:
-  - [ ] Test consecutive events within thresholds form single cluster
-  - [ ] Test events separated by time_delta_ms split into two clusters
-  - [ ] Test events with spatial separation > dist_delta_px split clusters
-  - [ ] Test mix of temporal/spatial splits produces correct cluster count
-  - [ ] Test no mousemove events returns empty list
-- [ ] Verify pytest passes all cases
-- [ ] Clusters match expected boundaries and metrics
-- [ ] No regressions in existing tests
