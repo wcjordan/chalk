@@ -209,7 +209,7 @@ def _extract_input_interaction(data: dict, timestamp: int) -> UserInteraction:
             value["value"] = data["text"]
         if "isChecked" in data:
             value["checked"] = data["isChecked"]
-        
+
         return UserInteraction(
             action="input",
             target_id=target_id,
