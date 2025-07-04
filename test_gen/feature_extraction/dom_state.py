@@ -120,6 +120,8 @@ def _apply_node_additions(node_by_id: Dict[int, UINode], adds: List[dict]) -> No
 
 def _apply_node_removals(node_by_id: Dict[int, UINode], removes: List[dict]) -> None:
     """Apply node removal mutations to the DOM state."""
+    # TODO check with real data if there's risk of a node removal leaving dangling references to children in node_by_id
+    # after a parent node is removed.
     for remove_record in removes:
         node_id = remove_record.get("id")
         if node_id is not None and node_id in node_by_id:
