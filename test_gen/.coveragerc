@@ -1,5 +1,6 @@
 [run]
 branch = True
 omit =
+    feature_extraction/tests/*
     rrweb_ingest/tests/*
     session_stitching/tests/*
