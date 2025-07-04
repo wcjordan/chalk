@@ -135,7 +135,11 @@ def fixture_non_mutation_events():
         # Scroll event
         {"type": 3, "timestamp": 4000, "data": {"source": 3, "x": 0, "y": 100}},
         # Input event
-        {"type": 3, "timestamp": 5000, "data": {"source": 5, "id": 456, "text": "input"}},
+        {
+            "type": 3,
+            "timestamp": 5000,
+            "data": {"source": 5, "id": 456, "text": "input"},
+        },
     ]
 
 
@@ -308,7 +312,10 @@ def test_extract_preserves_event_order():
         {
             "type": 3,
             "timestamp": 3000,
-            "data": {"source": 0, "attributes": [{"id": 3, "attributes": {"class": "test"}}]},
+            "data": {
+                "source": 0,
+                "attributes": [{"id": 3, "attributes": {"class": "test"}}],
+            },
         },
     ]
 
