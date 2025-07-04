@@ -7,7 +7,6 @@ covering attribute changes, text modifications, node additions, and removals.
 
 import pytest
 from feature_extraction.extractors import extract_dom_mutations
-from feature_extraction.models import DomMutation
 
 
 @pytest.fixture(name="single_attribute_mutation_event")
