@@ -327,7 +327,7 @@ def test_missing_coordinates_default_to_zero():
         {
             "type": 3,
             "timestamp": 1000,
-            "data": {"source": 1, "x": 100, "y": 200},
+            "data": {"source": 1, "x": 10, "y": 5},
         },
         {
             "type": 3,

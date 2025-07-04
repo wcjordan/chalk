@@ -56,7 +56,7 @@ def cluster_mouse_trajectories(
         Empty input or no mousemove events will return an empty list.
     """
     mousemove_events = _filter_mousemove_events(events)
-    
+
     if not mousemove_events:
         return []
 
@@ -66,7 +66,7 @@ def cluster_mouse_trajectories(
 
     for event in mousemove_events:
         current_point = _extract_point_from_event(event)
-        
+
         should_start_new_cluster = _should_start_new_cluster(
             last_point, current_point, time_delta_ms, dist_delta_px
         )
@@ -90,10 +90,10 @@ def cluster_mouse_trajectories(
 def _filter_mousemove_events(events: List[dict]) -> List[dict]:
     """
     Filter events to only include mousemove events.
-    
+
     Args:
         events: List of rrweb events to filter
-        
+
     Returns:
         List of events where type == 3 and data.source == 1
     """
@@ -107,10 +107,10 @@ def _filter_mousemove_events(events: List[dict]) -> List[dict]:
 def _extract_point_from_event(event: dict) -> dict:
     """
     Extract mouse position and timestamp from an rrweb event.
-    
+
     Args:
         event: rrweb mousemove event
-        
+
     Returns:
         Dictionary with x, y, and ts keys
     """
@@ -118,7 +118,7 @@ def _extract_point_from_event(event: dict) -> dict:
     timestamp = event.get("timestamp", 0)
     x = data.get("x", 0)
     y = data.get("y", 0)
-    
+
     return {"x": x, "y": y, "ts": timestamp}
 
 
@@ -127,33 +127,33 @@ def _should_start_new_cluster(
 ) -> bool:
     """
     Determine if a new cluster should be started based on time and distance thresholds.
-    
+
     Args:
         last_point: Previous mouse position point (or None if first point)
         current_point: Current mouse position point
         time_delta_ms: Maximum time gap threshold
         dist_delta_px: Maximum distance threshold
-        
+
     Returns:
         True if a new cluster should be started, False otherwise
     """
     if last_point is None:
         return False
-        
+
     time_diff = current_point["ts"] - last_point["ts"]
     distance = _calculate_euclidean_distance(last_point, current_point)
-    
+
     return time_diff > time_delta_ms or distance > dist_delta_px
 
 
 def _calculate_euclidean_distance(point1: dict, point2: dict) -> float:
     """
     Calculate Euclidean distance between two points.
-    
+
     Args:
         point1: Dictionary with x and y keys
         point2: Dictionary with x and y keys
-        
+
     Returns:
         Euclidean distance between the points
     """
