@@ -77,7 +77,8 @@ def extract_features(
     # Extract core features
     dom_mutations = extract_dom_mutations(chunk.events)
     interactions = extract_user_interactions(chunk.events)
-    all_delays = _extract_timing_delays(chunk.events)
+    inter_event_delays = compute_inter_event_delays(chunk.events)
+    reaction_delays = compute_reaction_delays(chunk.events)
 
     # Resolve UI metadata for referenced nodes
     ui_nodes = _resolve_ui_metadata(dom_mutations, interactions, dom_state)
@@ -90,7 +91,8 @@ def extract_features(
     features = {
         "dom_mutations": dom_mutations,
         "interactions": interactions,
-        "delays": all_delays,
+        "inter_event_delays": inter_event_delays,
+        "reaction_delays": reaction_delays,
         "ui_nodes": ui_nodes,
         "mouse_clusters": mouse_clusters,
         "scroll_patterns": scroll_patterns,
@@ -104,13 +106,6 @@ def extract_features(
         features=features,
         metadata=chunk.metadata,
     )
-
-
-def _extract_timing_delays(events):
-    """Extract and combine inter-event and reaction delays."""
-    inter_event_delays = compute_inter_event_delays(events)
-    reaction_delays = compute_reaction_delays(events)
-    return inter_event_delays + reaction_delays
 
 
 def _resolve_ui_metadata(dom_mutations, interactions, dom_state):
