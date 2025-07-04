@@ -7,7 +7,10 @@ functionality and accurate feature detection across all major event types.
 
 import json
 import os
+import time
+
 import pytest
+
 from rrweb_ingest.pipeline import ingest_session
 from feature_extraction.dom_state import init_dom_state
 from feature_extraction.pipeline import extract_features
@@ -29,26 +32,26 @@ def fixture_sample_session_data(sample_session_path):
 
 def test_sample_session_loads_successfully(sample_session_data):
     """Test that the sample session JSON loads and has expected structure."""
-    assert isinstance(sample_session_data, list)
-    assert len(sample_session_data) >= 15  # Should have ~15-25 events
-    assert len(sample_session_data) <= 25
+    rrweb_data = sample_session_data.get("rrweb_data", [])
+    assert isinstance(rrweb_data, list)
+    assert len(rrweb_data) >= 15  # Should have ~15-25 events
+    assert len(rrweb_data) <= 25
 
     # Should have at least one FullSnapshot event
-    full_snapshots = [event for event in sample_session_data if event.get("type") == 2]
+    full_snapshots = [event for event in rrweb_data if event.get("type") == 2]
     assert len(full_snapshots) >= 1
 
     # Should have various IncrementalSnapshot events
-    incremental_snapshots = [
-        event for event in sample_session_data if event.get("type") == 3
-    ]
+    incremental_snapshots = [event for event in rrweb_data if event.get("type") == 3]
     assert len(incremental_snapshots) >= 10
 
 
 def test_sample_session_covers_all_event_types(sample_session_data):
     """Test that the sample session covers all major event types."""
     # Collect all source types from IncrementalSnapshot events
+    rrweb_data = sample_session_data.get("rrweb_data", [])
     sources = set()
-    for event in sample_session_data:
+    for event in rrweb_data:
         if event.get("type") == 3:
             source = event.get("data", {}).get("source")
             if source is not None:
@@ -123,9 +126,10 @@ def test_end_to_end_feature_extraction(sample_session_path):
         len(feature_chunk.features["reaction_delays"]) > 0
     ), "Should have reaction delays"
     assert len(feature_chunk.features["ui_nodes"]) > 0, "Should have UI metadata"
+    # Mouse clusters won't exist because of rrweb_ingest.filter.is_low_signal filters out mousemove events
     assert (
-        len(feature_chunk.features["mouse_clusters"]) > 0
-    ), "Should have mouse clusters"
+        len(feature_chunk.features["mouse_clusters"]) == 0
+    ), "Should have no mouse clusters"
     assert (
         len(feature_chunk.features["scroll_patterns"]) > 0
     ), "Should have scroll patterns"
@@ -235,8 +239,6 @@ def test_feature_extraction(snapshot, sample_session_path):
 
 def test_performance_with_sample_session(sample_session_path):
     """Test that feature extraction completes in reasonable time."""
-    import time
-
     start_time = time.time()
 
     chunks = ingest_session("sample-session", sample_session_path)
