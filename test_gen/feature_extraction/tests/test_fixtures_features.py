@@ -124,9 +124,7 @@ def test_end_to_end_feature_extraction(sample_session_path):
         ), f"Missing feature type: {feature_type}"
 
     # Verify feature lists are non-empty where expected
-    assert (
-        len(feature_chunk.features["dom_mutations"]) > 0
-    ), "Should have DOM mutations"
+    assert len(feature_chunk.features["dom_mutations"]) > 0, "Should have DOM mutations"
     assert (
         len(feature_chunk.features["interactions"]) > 0
     ), "Should have user interactions"
