@@ -75,15 +75,7 @@ def test_end_to_end_feature_extraction(sample_session_path):
     first_chunk = chunks[0]
 
     # Initialize DOM state from FullSnapshot if available
-    dom_state = {}
-    if first_chunk.metadata.get("snapshot_before"):
-        dom_state = init_dom_state(first_chunk.metadata["snapshot_before"])
-    else:
-        # Find FullSnapshot in chunk events
-        for event in first_chunk.events:
-            if event.get("type") == 2:
-                dom_state = init_dom_state(event)
-                break
+    dom_state = initialize_dom_state(first_chunk)
 
     # TODO it doesn't appear that ingest_session returns the DOM state
     # We should address that so that UI node metadata can be added to events
