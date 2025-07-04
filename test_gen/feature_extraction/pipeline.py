@@ -87,14 +87,14 @@ def extract_features(
     scroll_patterns = detect_scroll_patterns(chunk.events)
 
     # Assemble all features into FeatureChunk
-    features = _assemble_features(
-        dom_mutations,
-        interactions,
-        all_delays,
-        ui_nodes,
-        mouse_clusters,
-        scroll_patterns,
-    )
+    features = {
+        "dom_mutations": dom_mutations,
+        "interactions": interactions,
+        "delays": all_delays,
+        "ui_nodes": ui_nodes,
+        "mouse_clusters": mouse_clusters,
+        "scroll_patterns": scroll_patterns,
+    }
 
     return FeatureChunk(
         chunk_id=chunk.chunk_id,
@@ -143,17 +143,3 @@ def _collect_referenced_node_ids(dom_mutations, interactions):
     for interaction in interactions:
         referenced_node_ids.add(interaction.target_id)
     return referenced_node_ids
-
-
-def _assemble_features(
-    dom_mutations, interactions, delays, ui_nodes, mouse_clusters, scroll_patterns
-):
-    """Assemble all extracted features into a dictionary."""
-    return {
-        "dom_mutations": dom_mutations,
-        "interactions": interactions,
-        "delays": delays,
-        "ui_nodes": ui_nodes,
-        "mouse_clusters": mouse_clusters,
-        "scroll_patterns": scroll_patterns,
-    }
