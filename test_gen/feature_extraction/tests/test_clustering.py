@@ -413,7 +413,7 @@ def test_euclidean_distance_calculation():
         },
     ]
 
-    # With distance threshold of 50px, first two should cluster, third should be separate
+    # With distance threshold of 50px, all events should be in one cluster
     clusters = cluster_mouse_trajectories(events, dist_delta_px=50)
     assert len(clusters) == 1  # All in one cluster (50px is exactly at threshold)
 

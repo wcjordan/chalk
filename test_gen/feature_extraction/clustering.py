@@ -45,7 +45,7 @@ def cluster_mouse_trajectories(
         dist_delta_px: Maximum Euclidean distance between events in same cluster (pixels)
 
     Returns:
-        List of MouseCluster objects in chronological order, each containing:
+        List of MouseCluster objects in order of input events, each containing:
         - start_ts and end_ts: Time boundaries of the cluster
         - points: Ordered list of {x, y, ts} dictionaries
         - duration_ms: Total time span of the cluster
