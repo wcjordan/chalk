@@ -5,10 +5,6 @@ Tests the computation of inter-event delays and reaction delays between
 user interactions and DOM mutations with proper timing validation.
 """
 
-from unittest.mock import patch
-
-import pytest
-
 from feature_extraction.extractors import (
     compute_inter_event_delays,
     compute_reaction_delays,

@@ -5,8 +5,6 @@ Tests the detection of scroll events followed by DOM mutations within
 specified time windows, verifying correct pattern matching and timing.
 """
 
-from unittest.mock import patch
-
 import pytest
 
 from feature_extraction.scroll_patterns import detect_scroll_patterns
