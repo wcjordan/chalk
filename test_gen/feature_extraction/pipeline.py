@@ -17,7 +17,9 @@ This enables rule-based and LLM-driven behavior inference by providing structure
 semantic representations of user interactions and system responses.
 """
 
+import logging
 from typing import Dict
+
 from rrweb_ingest.models import Chunk
 from .models import FeatureChunk, UINode
 from .dom_state import apply_mutations
@@ -30,6 +32,8 @@ from .extractors import (
 from .metadata import resolve_node_metadata
 from .clustering import cluster_mouse_trajectories
 from .scroll_patterns import detect_scroll_patterns
+
+logger = logging.getLogger(__name__)
 
 
 def extract_features(chunk: Chunk, dom_state: Dict[int, UINode]) -> FeatureChunk:
@@ -90,7 +94,10 @@ def extract_features(chunk: Chunk, dom_state: Dict[int, UINode]) -> FeatureChunk
             ui_nodes[node_id] = resolve_node_metadata(node_id, dom_state)
         except KeyError:
             # Node not found in DOM state - log and skip metadata resolution
-            logger.warning(f"Node ID {node_id} not found in DOM state. Skipping metadata resolution.")
+            logger.warning(
+                "Node ID %s not found in DOM state. Skipping metadata resolution.",
+                node_id,
+            )
             continue
 
     # Extract mouse trajectory clusters
