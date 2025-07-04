@@ -24,4 +24,4 @@ format:
 .PHONY: test
 test:
 	$(ACTIVATE_VENV)
-	python -m pytest --cov=. --cov-report=html  -v rrweb_ingest/tests session_stitching/tests
+	python -m pytest --cov=. --cov-report=html  -v feature_extraction/tests rrweb_ingest/tests session_stitching/tests

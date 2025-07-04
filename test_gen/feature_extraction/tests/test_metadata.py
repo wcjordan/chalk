@@ -81,7 +81,7 @@ def test_resolve_node_metadata_correct_dom_path(simple_nested_nodes):
     """Test that resolve_node_metadata returns the correct dom_path for nested nodes."""
     metadata = resolve_node_metadata(4, simple_nested_nodes)
 
-    expected_path = "html > body > div.container > button#submit"
+    expected_path = "html > body > div.container > button#submit.btn"
     assert metadata["dom_path"] == expected_path
 
 

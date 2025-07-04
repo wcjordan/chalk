@@ -429,35 +429,31 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
     "mutation_events",
     [
         # Non-mutation events
-        (
-            [
-                {"type": 2, "data": {"node": {}}},  # FullSnapshot, not mutation
-                {
-                    "type": 3,
-                    "data": {"source": 1},
-                },  # IncrementalSnapshot, but not mutation
-                {
-                    "type": 3,
-                    "data": {"source": 2},
-                },  # IncrementalSnapshot, but not mutation
-            ],
-        ),
+        [
+            {"type": 2, "data": {"node": {}}},  # FullSnapshot, not mutation
+            {
+                "type": 3,
+                "data": {"source": 1},
+            },  # IncrementalSnapshot, but not mutation
+            {
+                "type": 3,
+                "data": {"source": 2},
+            },  # IncrementalSnapshot, but not mutation
+        ],
         # Empty mutation data
-        (
-            [
-                {"type": 3, "data": {"source": 0}},  # No mutation data
-                {
-                    "type": 3,
-                    "data": {
-                        "source": 0,
-                        "adds": [],
-                        "removes": [],
-                        "attributes": [],
-                        "texts": [],
-                    },
-                },  # Empty mutation data
-            ],
-        ),
+        [
+            {"type": 3, "data": {"source": 0}},  # No mutation data
+            {
+                "type": 3,
+                "data": {
+                    "source": 0,
+                    "adds": [],
+                    "removes": [],
+                    "attributes": [],
+                    "texts": [],
+                },
+            },  # Empty mutation data
+        ],
     ],
 )
 def test_apply_mutations_ignore_invalid_events(simple_node_by_id, mutation_events):
