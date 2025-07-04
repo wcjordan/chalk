@@ -11,8 +11,8 @@ from feature_extraction.dom_state import init_dom_state, apply_mutations
 from feature_extraction.models import UINode
 
 
-@pytest.fixture
-def simple_full_snapshot():
+@pytest.fixture(name="simple_full_snapshot")
+def fixture_simple_full_snapshot():
     """Fixture providing a simple FullSnapshot event with nested DOM structure."""
     return {
         "type": 2,
@@ -48,8 +48,8 @@ def simple_full_snapshot():
     }
 
 
-@pytest.fixture
-def button_snapshot():
+@pytest.fixture(name="button_snapshot")
+def fixture_button_snapshot():
     """Fixture providing a FullSnapshot with a button element with rich attributes."""
     return {
         "type": 2,
@@ -70,8 +70,8 @@ def button_snapshot():
     }
 
 
-@pytest.fixture
-def simple_node_by_id():
+@pytest.fixture(name="simple_node_by_id")
+def fixture_simple_node_by_id():
     """Fixture providing a simple node_by_id dictionary for mutation testing."""
     return {
         1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
@@ -79,8 +79,8 @@ def simple_node_by_id():
     }
 
 
-@pytest.fixture
-def rich_node_by_id():
+@pytest.fixture(name="rich_node_by_id")
+def fixture_rich_node_by_id():
     """Fixture providing a richer node_by_id dictionary for complex mutation testing."""
     return {
         1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
@@ -426,8 +426,9 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
 
 
 @pytest.mark.parametrize(
-    "mutation_events,description",
+    "mutation_events",
     [
+        # Non-mutation events
         (
             [
                 {"type": 2, "data": {"node": {}}},  # FullSnapshot, not mutation
@@ -440,8 +441,8 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
                     "data": {"source": 2},
                 },  # IncrementalSnapshot, but not mutation
             ],
-            "non-mutation events",
         ),
+        # Empty mutation data
         (
             [
                 {"type": 3, "data": {"source": 0}},  # No mutation data
@@ -456,13 +457,10 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
                     },
                 },  # Empty mutation data
             ],
-            "empty mutation data",
         ),
     ],
 )
-def test_apply_mutations_ignore_invalid_events(
-    simple_node_by_id, mutation_events, description
-):
+def test_apply_mutations_ignore_invalid_events(simple_node_by_id, mutation_events):
     """Test that non-mutation events and empty mutation data are safely ignored."""
     original_length = len(simple_node_by_id)
     original_tag = simple_node_by_id[1].tag
