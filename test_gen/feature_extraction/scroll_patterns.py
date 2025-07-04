@@ -17,12 +17,9 @@ Configuration:
     Uses DEFAULT_SCROLL_REACTION_MS from config module.
     All parameters can be overridden via function arguments.
 
-Parameters:
-    max_reaction_ms: Maximum time window to consider a mutation as triggered by a scroll
-
 Usage:
     from .config import DEFAULT_SCROLL_REACTION_MS
-    patterns = detect_scroll_patterns(events, max_reaction_ms=3000)
+    patterns = detect_scroll_patterns(events)
     for pattern in patterns:
         print(f"Scroll at {pattern.scroll_event['timestamp']} triggered mutation after {pattern.delay_ms}ms")
 """

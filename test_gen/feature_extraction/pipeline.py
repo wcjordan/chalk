@@ -15,7 +15,6 @@ The extraction pipeline processes chunks in the following order:
 
 Configuration:
     All extractor functions use default parameters from config module.
-    Custom parameters can be passed through the extract_features function.
 
 This enables rule-based and LLM-driven behavior inference by providing structured,
 semantic representations of user interactions and system responses.

@@ -13,16 +13,9 @@ and can reveal user interaction patterns.
 
 Configuration:
     Uses DEFAULT_TIME_DELTA_MS and DEFAULT_DIST_DELTA_PX from config module.
-    All parameters can be overridden via function arguments.
-
-Parameters:
-    time_delta_ms: Maximum time gap between mousemove events in the same cluster
-    dist_delta_px: Maximum Euclidean distance between mousemove events in the same cluster
-    distance_comparator: Custom function to compute distance between points
 
 Usage:
-    from .config import DEFAULT_TIME_DELTA_MS, DEFAULT_DIST_DELTA_PX
-    clusters = cluster_mouse_trajectories(events, time_delta_ms=150, dist_delta_px=75)
+    clusters = cluster_mouse_trajectories(events)
     for cluster in clusters:
         print(f"Cluster: {cluster.point_count} points over {cluster.duration_ms}ms")
 """
