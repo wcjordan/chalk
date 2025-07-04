@@ -128,22 +128,22 @@
 ## Step 7: UI Metadata Resolution
 
 ### Tasks:
-- [ ] Create `test_gen/feature_extraction/metadata.py`
-- [ ] Implement `resolve_node_metadata(node_id: int, node_by_id: Dict[int, UINode]) -> Dict[str, Any]`:
-  - [ ] Look up UINode by node_id
-  - [ ] Extract tag, aria_label, data_testid, role from attributes
-  - [ ] Extract text content
-  - [ ] Compute dom_path by walking parent pointers to root
-  - [ ] Return dict with tag, aria_label, data_testid, role, text, dom_path keys
-- [ ] Add module-level docstring explaining human-readable UI context
-- [ ] Create `test_gen/feature_extraction/tests/test_metadata.py`:
-  - [ ] Test simple node_by_id map produces correct dom_path
-  - [ ] Test nodes with/without aria_label, data_testid, role attributes
-  - [ ] Test text content captured accurately
-  - [ ] Test nonexistent node_id raises KeyError or clear error
-- [ ] Verify pytest passes all tests
-- [ ] Returned metadata dict has specified keys with correct values
-- [ ] No regressions in existing tests
+- [x] Create `test_gen/feature_extraction/metadata.py`
+- [x] Implement `resolve_node_metadata(node_id: int, node_by_id: Dict[int, UINode]) -> Dict[str, Any]`:
+  - [x] Look up UINode by node_id
+  - [x] Extract tag, aria_label, data_testid, role from attributes
+  - [x] Extract text content
+  - [x] Compute dom_path by walking parent pointers to root
+  - [x] Return dict with tag, aria_label, data_testid, role, text, dom_path keys
+- [x] Add module-level docstring explaining human-readable UI context
+- [x] Create `test_gen/feature_extraction/tests/test_metadata.py`:
+  - [x] Test simple node_by_id map produces correct dom_path
+  - [x] Test nodes with/without aria_label, data_testid, role attributes
+  - [x] Test text content captured accurately
+  - [x] Test nonexistent node_id raises KeyError or clear error
+- [x] Verify pytest passes all tests
+- [x] Returned metadata dict has specified keys with correct values
+- [x] No regressions in existing tests
 
 ## Step 8: Mouse Trajectory Clustering
 
