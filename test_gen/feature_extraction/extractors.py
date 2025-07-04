@@ -6,7 +6,7 @@ including DOM mutations, user interactions, and timing delays.
 """
 
 from typing import List
-from .models import DomMutation
+from .models import DomMutation, UserInteraction
 
 
 def extract_dom_mutations(events: List[dict]) -> List[DomMutation]:
@@ -33,6 +33,7 @@ def extract_dom_mutations(events: List[dict]) -> List[DomMutation]:
 
     for event in events:
         # Only process mutation events
+        # TODO replace types w/ constants here and throughout
         if event.get("type") != 3:
             continue
 
@@ -128,3 +129,107 @@ def _extract_node_removals(data: dict, timestamp: int) -> List[DomMutation]:
             )
             mutations.append(mutation)
     return mutations
+
+
+def extract_user_interactions(events: List[dict]) -> List[UserInteraction]:
+    """
+    From a list of rrweb events, return structured UserInteraction records
+    for click, input, and scroll actions.
+
+    This function processes rrweb events and extracts user interactions including
+    mouse clicks, input changes, and scroll events. Only events with type == 3
+    (IncrementalSnapshot) are considered, and specific data.source values map to
+    different interaction types:
+    - source == 2: Mouse interactions (click, dblclick)
+    - source == 5: Input events (text changes, checkboxes)
+    - source == 3: Scroll events
+
+    Args:
+        events: List of rrweb events to process
+
+    Returns:
+        List of UserInteraction objects representing user actions, preserving
+        the original event order
+
+    Note:
+        Events with other source values or missing required fields are ignored.
+        The function preserves event order in the returned list.
+    """
+    interactions = []
+
+    for event in events:
+        # Only process IncrementalSnapshot events
+        if event.get("type") != 3:
+            continue
+
+        data = event.get("data", {})
+        source = data.get("source")
+        timestamp = event.get("timestamp", 0)
+
+        if source == 2:
+            # Mouse interactions (click, dblclick)
+            interaction = _extract_click_interaction(data, timestamp)
+            if interaction:
+                interactions.append(interaction)
+        elif source == 5:
+            # Input events (text changes, checkboxes)
+            interaction = _extract_input_interaction(data, timestamp)
+            if interaction:
+                interactions.append(interaction)
+        elif source == 3:
+            # Scroll events
+            interaction = _extract_scroll_interaction(data, timestamp)
+            if interaction:
+                interactions.append(interaction)
+
+    return interactions
+
+
+def _extract_click_interaction(data: dict, timestamp: int) -> UserInteraction:
+    """Extract click interaction from mouse event data."""
+    target_id = data.get("id")
+    if target_id is not None:
+        x = data.get("x", 0)
+        y = data.get("y", 0)
+        return UserInteraction(
+            action="click",
+            target_id=target_id,
+            value={"x": x, "y": y},
+            timestamp=timestamp,
+        )
+    return None
+
+
+def _extract_input_interaction(data: dict, timestamp: int) -> UserInteraction:
+    """Extract input interaction from input event data."""
+    target_id = data.get("id")
+    if target_id is not None:
+        # Input events can have either 'text' or 'isChecked' fields
+        value = {}
+        if "text" in data:
+            value["value"] = data["text"]
+        if "isChecked" in data:
+            value["checked"] = data["isChecked"]
+
+        return UserInteraction(
+            action="input",
+            target_id=target_id,
+            value=value,
+            timestamp=timestamp,
+        )
+    return None
+
+
+def _extract_scroll_interaction(data: dict, timestamp: int) -> UserInteraction:
+    """Extract scroll interaction from scroll event data."""
+    target_id = data.get("id")
+    if target_id is not None:
+        x = data.get("x", 0)
+        y = data.get("y", 0)
+        return UserInteraction(
+            action="scroll",
+            target_id=target_id,
+            value={"x": x, "y": y},
+            timestamp=timestamp,
+        )
+    return None
