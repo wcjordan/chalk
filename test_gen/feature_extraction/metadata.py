@@ -11,8 +11,7 @@ from .models import UINode
 
 
 def resolve_node_metadata(
-    node_id: int,
-    node_by_id: Dict[int, UINode]
+    node_id: int, node_by_id: Dict[int, UINode]
 ) -> Dict[str, Any]:
     """
     Given a node ID and the current virtual DOM map, return a metadata

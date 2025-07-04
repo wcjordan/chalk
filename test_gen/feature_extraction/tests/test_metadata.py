@@ -16,7 +16,9 @@ def fixture_simple_nested_nodes():
     return {
         1: UINode(id=1, tag="html", attributes={}, text="", parent=None),
         2: UINode(id=2, tag="body", attributes={}, text="", parent=1),
-        3: UINode(id=3, tag="div", attributes={"class": "container"}, text="", parent=2),
+        3: UINode(
+            id=3, tag="div", attributes={"class": "container"}, text="", parent=2
+        ),
         4: UINode(
             id=4,
             tag="button",
@@ -151,7 +153,11 @@ def test_resolve_node_metadata_all_required_keys():
         1: UINode(
             id=1,
             tag="button",
-            attributes={"aria-label": "Test", "data-testid": "test-btn", "role": "button"},
+            attributes={
+                "aria-label": "Test",
+                "data-testid": "test-btn",
+                "role": "button",
+            },
             text="Click me",
             parent=None,
         )
@@ -263,7 +269,9 @@ def test_resolve_node_metadata_missing_parent_reference():
     """Test that missing parent references are handled gracefully."""
     node_by_id = {
         1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
-        2: UINode(id=2, tag="span", attributes={}, text="", parent=999),  # Parent doesn't exist
+        2: UINode(
+            id=2, tag="span", attributes={}, text="", parent=999
+        ),  # Parent doesn't exist
     }
 
     # Should still work, just stop at the node with missing parent
