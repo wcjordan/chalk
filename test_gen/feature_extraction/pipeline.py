@@ -22,7 +22,7 @@ semantic representations of user interactions and system responses.
 """
 
 import logging
-from typing import Dict, Callable, Optional
+from typing import Dict, Callable
 
 from rrweb_ingest.models import Chunk
 from .models import FeatureChunk, UINode

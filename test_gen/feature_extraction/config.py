@@ -16,6 +16,9 @@ Extensibility:
     their behavior without changing the core algorithms.
 """
 
+import math
+
+
 # Mouse trajectory clustering thresholds
 DEFAULT_TIME_DELTA_MS = 100
 DEFAULT_DIST_DELTA_PX = 50
@@ -51,8 +54,6 @@ def default_distance_comparator(point1, point2):
     Returns:
         Float representing the Euclidean distance between points
     """
-    import math
-
     dx = point2["x"] - point1["x"]
     dy = point2["y"] - point1["y"]
     return math.sqrt(dx * dx + dy * dy)

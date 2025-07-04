@@ -27,7 +27,6 @@ Usage:
         print(f"Cluster: {cluster.point_count} points over {cluster.duration_ms}ms")
 """
 
-import math
 from typing import List, Callable
 from .models import MouseCluster
 from .config import (

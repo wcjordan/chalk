@@ -5,7 +5,6 @@ Tests the configuration module exports, parameter overrides, and custom
 extensibility hooks like DOM path formatters and distance comparators.
 """
 
-import pytest
 from feature_extraction import config
 from feature_extraction.clustering import cluster_mouse_trajectories
 from feature_extraction.scroll_patterns import detect_scroll_patterns
@@ -104,7 +103,7 @@ def test_clustering_with_custom_distance_comparator():
     ]
 
     # Custom comparator that always returns a small distance
-    def always_close_comparator(point1, point2):
+    def always_close_comparator(_point1, _point2):
         return 1.0  # Always return 1px distance
 
     # With custom comparator, should be one cluster (distance always < threshold)
