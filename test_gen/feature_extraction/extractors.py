@@ -222,30 +222,26 @@ def compute_inter_event_delays(events: List[dict]) -> List[EventDelay]:
         the computed delays may not represent actual temporal relationships.
     """
     delays = []
-    
+
     for i in range(len(events) - 1):
         current_event = events[i]
         next_event = events[i + 1]
-        
+
         from_ts = current_event.get("timestamp", 0)
         to_ts = next_event.get("timestamp", 0)
         delta_ms = to_ts - from_ts
-        
-        delay = EventDelay(
-            from_ts=from_ts,
-            to_ts=to_ts,
-            delta_ms=delta_ms
-        )
+
+        delay = EventDelay(from_ts=from_ts, to_ts=to_ts, delta_ms=delta_ms)
         delays.append(delay)
-    
+
     return delays
 
 
 def compute_reaction_delays(
     events: List[dict],
-    interaction_source: int = 2,      # click
-    mutation_source: int = 0,         # DOM mutation
-    max_reaction_ms: int = 10000
+    interaction_source: int = 2,  # click
+    mutation_source: int = 0,  # DOM mutation
+    max_reaction_ms: int = 10000,
 ) -> List[EventDelay]:
     """
     For each user interaction event (source == interaction_source),
@@ -273,39 +269,43 @@ def compute_reaction_delays(
         within the time window, and then the search continues from the next interaction.
     """
     delays = []
-    
+
     # Find all interaction events
     interaction_events = []
     for event in events:
-        if (event.get("type") == 3 and 
-            event.get("data", {}).get("source") == interaction_source):
+        if (
+            event.get("type") == 3
+            and event.get("data", {}).get("source") == interaction_source
+        ):
             interaction_events.append(event)
-    
+
     # For each interaction, find the next mutation within the time window
     for interaction in interaction_events:
         interaction_ts = interaction.get("timestamp", 0)
-        
+
         # Look for the next mutation event within the time window
         for event in events:
-            if (event.get("type") == 3 and 
-                event.get("data", {}).get("source") == mutation_source):
-                
+            if (
+                event.get("type") == 3
+                and event.get("data", {}).get("source") == mutation_source
+            ):
+
                 mutation_ts = event.get("timestamp", 0)
-                
+
                 # Check if this mutation occurs after the interaction
                 # and within the reaction time window
-                if (mutation_ts > interaction_ts and 
-                    mutation_ts - interaction_ts <= max_reaction_ms):
-                    
+                if (
+                    mutation_ts > interaction_ts
+                    and mutation_ts - interaction_ts <= max_reaction_ms
+                ):
+
                     delta_ms = mutation_ts - interaction_ts
                     delay = EventDelay(
-                        from_ts=interaction_ts,
-                        to_ts=mutation_ts,
-                        delta_ms=delta_ms
+                        from_ts=interaction_ts, to_ts=mutation_ts, delta_ms=delta_ms
                     )
                     delays.append(delay)
                     break  # Only match the first mutation for this interaction
-    
+
     return delays
 
 
