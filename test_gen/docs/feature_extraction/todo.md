@@ -169,24 +169,24 @@
 ## Step 9: Scroll-Pattern Detection
 
 ### Tasks:
-- [ ] Create `test_gen/feature_extraction/scroll_patterns.py`
-- [ ] Implement `detect_scroll_patterns(events: List[dict], max_reaction_ms=2000) -> List[ScrollPattern]`:
-  - [ ] Filter scroll events (`type == 3`, `data.source == 3`)
-  - [ ] For each scroll, find next mutation event (`type == 3`, `data.source == 0`)
-  - [ ] Check mutation timestamp within max_reaction_ms of scroll
-  - [ ] Create ScrollPattern with scroll event, mutation event, delay
-  - [ ] Reset lookahead after match (each scroll matches ≤1 mutation)
-  - [ ] Return ScrollPattern records in chronological order
-- [ ] Add module-level docstring explaining scroll→mutation pattern detection
-- [ ] Create `test_gen/feature_extraction/tests/test_scroll_patterns.py`:
-  - [ ] Test scroll followed by mutation within window yields ScrollPattern
-  - [ ] Test scroll with no subsequent/distant mutation yields no pattern
-  - [ ] Test multiple scrolls match to nearest valid mutations
-  - [ ] Test out-of-order or non-scroll/mutation sources ignored
-  - [ ] Test empty event list returns empty list
-- [ ] Verify pytest passes all scenarios
-- [ ] ScrollPattern objects capture scroll event, mutation event, delay correctly
-- [ ] No regressions in existing tests
+- [x] Create `test_gen/feature_extraction/scroll_patterns.py`
+- [x] Implement `detect_scroll_patterns(events: List[dict], max_reaction_ms=2000) -> List[ScrollPattern]`:
+  - [x] Filter scroll events (`type == 3`, `data.source == 3`)
+  - [x] For each scroll, find next mutation event (`type == 3`, `data.source == 0`)
+  - [x] Check mutation timestamp within max_reaction_ms of scroll
+  - [x] Create ScrollPattern with scroll event, mutation event, delay
+  - [x] Reset lookahead after match (each scroll matches ≤1 mutation)
+  - [x] Return ScrollPattern records in chronological order
+- [x] Add module-level docstring explaining scroll→mutation pattern detection
+- [x] Create `test_gen/feature_extraction/tests/test_scroll_patterns.py`:
+  - [x] Test scroll followed by mutation within window yields ScrollPattern
+  - [x] Test scroll with no subsequent/distant mutation yields no pattern
+  - [x] Test multiple scrolls match to nearest valid mutations
+  - [x] Test out-of-order or non-scroll/mutation sources ignored
+  - [x] Test empty event list returns empty list
+- [x] Verify pytest passes all scenarios
+- [x] ScrollPattern objects capture scroll event, mutation event, delay correctly
+- [x] No regressions in existing tests
 
 ## Step 10: Assemble & Integrate Extractors
 
