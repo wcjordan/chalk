@@ -89,7 +89,8 @@ def extract_features(chunk: Chunk, dom_state: Dict[int, UINode]) -> FeatureChunk
         try:
             ui_nodes[node_id] = resolve_node_metadata(node_id, dom_state)
         except KeyError:
-            # Node not found in DOM state - skip metadata resolution
+            # Node not found in DOM state - log and skip metadata resolution
+            logger.warning(f"Node ID {node_id} not found in DOM state. Skipping metadata resolution.")
             continue
 
     # Extract mouse trajectory clusters
