@@ -3,10 +3,15 @@ Event extractors for the Session Chunking & Feature Extraction module.
 
 This module contains functions to extract structured feature data from raw rrweb events,
 including DOM mutations, user interactions, and timing delays.
+
+Configuration:
+    Uses DEFAULT_MAX_REACTION_MS from config module for reaction delay computation.
+    All parameters can be overridden via function arguments.
 """
 
 from typing import List
 from .models import DomMutation, UserInteraction, EventDelay
+from .config import DEFAULT_MAX_REACTION_MS
 
 
 def extract_dom_mutations(events: List[dict]) -> List[DomMutation]:
@@ -241,7 +246,7 @@ def compute_reaction_delays(
     events: List[dict],
     interaction_source: int = 2,  # click
     mutation_source: int = 0,  # DOM mutation
-    max_reaction_ms: int = 10000,
+    max_reaction_ms: int = DEFAULT_MAX_REACTION_MS,
 ) -> List[EventDelay]:
     """
     For each user interaction event (source == interaction_source),
@@ -257,7 +262,8 @@ def compute_reaction_delays(
         events: List of rrweb events to analyze
         interaction_source: Source ID for interaction events (default: 2 for clicks)
         mutation_source: Source ID for mutation events (default: 0 for DOM mutations)
-        max_reaction_ms: Maximum time window in milliseconds to consider a valid reaction
+        max_reaction_ms: Maximum time window in milliseconds to consider a valid reaction.
+                        Defaults to DEFAULT_MAX_REACTION_MS from config.
 
     Returns:
         List of EventDelay objects representing interaction→mutation reaction times.

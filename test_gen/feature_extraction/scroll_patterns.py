@@ -13,10 +13,15 @@ where scrolling triggers content changes, such as:
 - Dynamic content updates based on viewport position
 - Progressive disclosure patterns
 
+Configuration:
+    Uses DEFAULT_SCROLL_REACTION_MS from config module.
+    All parameters can be overridden via function arguments.
+
 Parameters:
-    max_reaction_ms: Maximum time window to consider a mutation as triggered by a scroll (default: 2000ms)
+    max_reaction_ms: Maximum time window to consider a mutation as triggered by a scroll
 
 Usage:
+    from .config import DEFAULT_SCROLL_REACTION_MS
     patterns = detect_scroll_patterns(events, max_reaction_ms=3000)
     for pattern in patterns:
         print(f"Scroll at {pattern.scroll_event['timestamp']} triggered mutation after {pattern.delay_ms}ms")
@@ -24,10 +29,11 @@ Usage:
 
 from typing import List
 from .models import ScrollPattern
+from .config import DEFAULT_SCROLL_REACTION_MS
 
 
 def detect_scroll_patterns(
-    events: List[dict], max_reaction_ms: int = 2000
+    events: List[dict], max_reaction_ms: int = DEFAULT_SCROLL_REACTION_MS
 ) -> List[ScrollPattern]:
     """
     Identifies scroll events followed by DOM mutations within a time window.
@@ -40,7 +46,8 @@ def detect_scroll_patterns(
     Args:
         events: List of rrweb events to analyze
         max_reaction_ms: Maximum time window in milliseconds to consider a mutation
-                        as triggered by a scroll event (default: 2000ms)
+                        as triggered by a scroll event. Defaults to DEFAULT_SCROLL_REACTION_MS
+                        from config.
 
     Returns:
         List of ScrollPattern objects representing scroll→mutation pairs, ordered

@@ -4,14 +4,26 @@ UI Metadata Resolution for rrweb Session Feature Extraction.
 This module provides functions to resolve human-readable context for UI nodes,
 including semantic attributes, DOM paths, and accessibility information that
 can be used for behavior analysis and test generation.
+
+Configuration:
+    Uses default_dom_path_formatter from config module for DOM path formatting.
+    Custom formatters can be passed to override the default behavior.
+
+Extensibility:
+    Custom DOM path formatters can be provided to modify how DOM paths are
+    constructed and formatted. The formatter function should accept a list
+    of path parts and return a formatted string.
 """
 
-from typing import Dict, Any
+from typing import Dict, Any, Callable
 from .models import UINode
+from .config import default_dom_path_formatter
 
 
 def resolve_node_metadata(
-    node_id: int, node_by_id: Dict[int, UINode]
+    node_id: int, 
+    node_by_id: Dict[int, UINode],
+    dom_path_formatter: Callable[[list], str] = default_dom_path_formatter
 ) -> Dict[str, Any]:
     """
     Given a node ID and the current virtual DOM map, return a metadata
@@ -24,6 +36,9 @@ def resolve_node_metadata(
     Args:
         node_id: The ID of the DOM node to resolve metadata for
         node_by_id: Dictionary mapping node IDs to UINode instances
+        dom_path_formatter: Function to format DOM path parts into a string.
+                           Defaults to default_dom_path_formatter from config.
+                           Should accept a list of path parts and return a string.
 
     Returns:
         Dict containing:
@@ -57,7 +72,7 @@ def resolve_node_metadata(
     role = node.attributes.get("role")
 
     # Compute DOM path
-    dom_path = _compute_dom_path(node, node_by_id)
+    dom_path = _compute_dom_path(node, node_by_id, dom_path_formatter)
 
     return {
         "tag": tag,
@@ -69,7 +84,7 @@ def resolve_node_metadata(
     }
 
 
-def _compute_dom_path(node: UINode, node_by_id: Dict[int, UINode]) -> str:
+def _compute_dom_path(node: UINode, node_by_id: Dict[int, UINode], formatter: Callable[[list], str]) -> str:
     """
     Compute a CSS-like selector path from root to the given node.
 
@@ -79,6 +94,7 @@ def _compute_dom_path(node: UINode, node_by_id: Dict[int, UINode]) -> str:
     Args:
         node: The UINode to compute the path for
         node_by_id: Dictionary mapping node IDs to UINode instances
+        formatter: Function to format the path parts into a string
 
     Returns:
         String representing the DOM path (e.g., "html > body > div.container > button#submit")
@@ -111,4 +127,4 @@ def _compute_dom_path(node: UINode, node_by_id: Dict[int, UINode]) -> str:
         else:
             current_node = None
 
-    return " > ".join(path_parts)
+    return formatter(path_parts)
