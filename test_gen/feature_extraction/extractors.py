@@ -42,67 +42,88 @@ def extract_dom_mutations(events: List[dict]) -> List[DomMutation]:
 
         timestamp = event.get("timestamp", 0)
 
-        # Extract attribute changes
-        for attr_change in data.get("attributes", []):
-            node_id = attr_change.get("id")
-            if node_id is not None:
-                attributes = attr_change.get("attributes", {})
-                mutation = DomMutation(
-                    mutation_type="attribute",
-                    target_id=node_id,
-                    details={"attributes": attributes},
-                    timestamp=timestamp,
-                )
-                mutations.append(mutation)
+        # Extract different types of mutations
+        mutations.extend(_extract_attribute_mutations(data, timestamp))
+        mutations.extend(_extract_text_mutations(data, timestamp))
+        mutations.extend(_extract_node_additions(data, timestamp))
+        mutations.extend(_extract_node_removals(data, timestamp))
 
-        # Extract text changes
-        for text_change in data.get("texts", []):
-            node_id = text_change.get("id")
-            if node_id is not None:
-                text_value = text_change.get("value", "")
-                mutation = DomMutation(
-                    mutation_type="text",
-                    target_id=node_id,
-                    details={"text": text_value},
-                    timestamp=timestamp,
-                )
-                mutations.append(mutation)
+    return mutations
 
-        # Extract node additions
-        # pylint: disable=duplicate-code
-        for add_record in data.get("adds", []):
-            node_data = add_record.get("node", {})
-            node_id = node_data.get("id")
-            parent_id = add_record.get("parentId")
 
-            if node_id is not None:
-                tag = node_data.get("tagName", node_data.get("type", ""))
-                attributes = node_data.get("attributes", {})
-                text = node_data.get("textContent", "")
+def _extract_attribute_mutations(data: dict, timestamp: int) -> List[DomMutation]:
+    """Extract attribute change mutations from event data."""
+    mutations = []
+    for attr_change in data.get("attributes", []):
+        node_id = attr_change.get("id")
+        if node_id is not None:
+            attributes = attr_change.get("attributes", {})
+            mutation = DomMutation(
+                mutation_type="attribute",
+                target_id=node_id,
+                details={"attributes": attributes},
+                timestamp=timestamp,
+            )
+            mutations.append(mutation)
+    return mutations
 
-                mutation = DomMutation(
-                    mutation_type="add",
-                    target_id=node_id,
-                    details={
-                        "parent_id": parent_id,
-                        "tag": tag,
-                        "attributes": attributes,
-                        "text": text,
-                    },
-                    timestamp=timestamp,
-                )
-                mutations.append(mutation)
 
-        # Extract node removals
-        for remove_record in data.get("removes", []):
-            node_id = remove_record.get("id")
-            if node_id is not None:
-                mutation = DomMutation(
-                    mutation_type="remove",
-                    target_id=node_id,
-                    details={},
-                    timestamp=timestamp,
-                )
-                mutations.append(mutation)
+def _extract_text_mutations(data: dict, timestamp: int) -> List[DomMutation]:
+    """Extract text content change mutations from event data."""
+    mutations = []
+    for text_change in data.get("texts", []):
+        node_id = text_change.get("id")
+        if node_id is not None:
+            text_value = text_change.get("value", "")
+            mutation = DomMutation(
+                mutation_type="text",
+                target_id=node_id,
+                details={"text": text_value},
+                timestamp=timestamp,
+            )
+            mutations.append(mutation)
+    return mutations
 
+
+def _extract_node_additions(data: dict, timestamp: int) -> List[DomMutation]:
+    """Extract node addition mutations from event data."""
+    mutations = []
+    for add_record in data.get("adds", []):
+        node_data = add_record.get("node", {})
+        node_id = node_data.get("id")
+        parent_id = add_record.get("parentId")
+
+        if node_id is not None:
+            tag = node_data.get("tagName", node_data.get("type", ""))
+            attributes = node_data.get("attributes", {})
+            text = node_data.get("textContent", "")
+
+            mutation = DomMutation(
+                mutation_type="add",
+                target_id=node_id,
+                details={
+                    "parent_id": parent_id,
+                    "tag": tag,
+                    "attributes": attributes,
+                    "text": text,
+                },
+                timestamp=timestamp,
+            )
+            mutations.append(mutation)
+    return mutations
+
+
+def _extract_node_removals(data: dict, timestamp: int) -> List[DomMutation]:
+    """Extract node removal mutations from event data."""
+    mutations = []
+    for remove_record in data.get("removes", []):
+        node_id = remove_record.get("id")
+        if node_id is not None:
+            mutation = DomMutation(
+                mutation_type="remove",
+                target_id=node_id,
+                details={},
+                timestamp=timestamp,
+            )
+            mutations.append(mutation)
     return mutations
