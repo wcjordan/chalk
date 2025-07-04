@@ -1,10 +1,11 @@
 """
 Unit tests for configuration and extensibility features.
 
-Tests the configuration module exports, parameter overrides, and custom
-extensibility hooks like DOM path formatters and distance comparators.
+Tests the configuration module exports and custom extensibility hooks
+like DOM path formatters and distance comparators using mock patches.
 """
 
+from unittest.mock import patch
 from feature_extraction import config
 from feature_extraction.clustering import cluster_mouse_trajectories
 from feature_extraction.scroll_patterns import detect_scroll_patterns
@@ -83,8 +84,9 @@ def test_clustering_with_custom_time_threshold():
     assert len(clusters_default) == 1
 
     # With smaller threshold (50ms), should be two clusters
-    clusters_strict = cluster_mouse_trajectories(events, time_delta_ms=50)
-    assert len(clusters_strict) == 2
+    with patch.object(config, 'DEFAULT_TIME_DELTA_MS', 50):
+        clusters_strict = cluster_mouse_trajectories(events)
+        assert len(clusters_strict) == 2
 
 
 def test_clustering_with_custom_distance_comparator():
@@ -107,13 +109,12 @@ def test_clustering_with_custom_distance_comparator():
         return 1.0  # Always return 1px distance
 
     # With custom comparator, should be one cluster (distance always < threshold)
-    clusters = cluster_mouse_trajectories(
-        events, dist_delta_px=50, distance_comparator=always_close_comparator
-    )
-    assert len(clusters) == 1
+    with patch.object(config, 'default_distance_comparator', always_close_comparator):
+        clusters = cluster_mouse_trajectories(events)
+        assert len(clusters) == 1
 
     # With default comparator, should be two clusters (distance > threshold)
-    clusters_default = cluster_mouse_trajectories(events, dist_delta_px=50)
+    clusters_default = cluster_mouse_trajectories(events)
     assert len(clusters_default) == 2
 
 
@@ -137,8 +138,9 @@ def test_scroll_patterns_with_custom_reaction_window():
     assert len(patterns_default) == 1
 
     # With smaller window (500ms), should find no pattern
-    patterns_strict = detect_scroll_patterns(events, max_reaction_ms=500)
-    assert len(patterns_strict) == 0
+    with patch.object(config, 'DEFAULT_SCROLL_REACTION_MS', 500):
+        patterns_strict = detect_scroll_patterns(events)
+        assert len(patterns_strict) == 0
 
 
 def test_custom_dom_path_formatter():
@@ -159,10 +161,10 @@ def test_custom_dom_path_formatter():
     def custom_formatter(path_parts):
         return " >> ".join(path_parts)
 
-    metadata = resolve_node_metadata(3, node_by_id, custom_formatter)
-
-    # Should use custom separator
-    assert metadata["dom_path"] == "html >> body >> button#submit"
+    # With custom formatter, should use custom separator
+    with patch.object(config, 'default_dom_path_formatter', custom_formatter):
+        metadata = resolve_node_metadata(3, node_by_id)
+        assert metadata["dom_path"] == "html >> body >> button#submit"
 
     # Compare with default formatter
     metadata_default = resolve_node_metadata(3, node_by_id)
@@ -190,10 +192,10 @@ def test_custom_dom_path_formatter_with_complex_logic():
             formatted_parts.append(f"[{i}]{part.upper()}")
         return " -> ".join(formatted_parts)
 
-    metadata = resolve_node_metadata(3, node_by_id, indexed_formatter)
-
     # Should use custom formatting logic
-    assert metadata["dom_path"] == "[0]HTML -> [1]BODY -> [2]DIV.CONTAINER"
+    with patch.object(config, 'default_dom_path_formatter', indexed_formatter):
+        metadata = resolve_node_metadata(3, node_by_id)
+        assert metadata["dom_path"] == "[0]HTML -> [1]BODY -> [2]DIV.CONTAINER"
 
 
 def test_config_parameters_are_used_as_defaults():
@@ -245,12 +247,12 @@ def test_extensibility_hooks_are_optional():
         1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
     }
 
-    # Should work without passing custom formatter
+    # Should work with default formatter
     metadata = resolve_node_metadata(1, node_by_id)
     assert "dom_path" in metadata
     assert metadata["dom_path"] == "div"
 
-    # Should work without passing custom distance comparator
+    # Should work with default distance comparator
     events = [
         {
             "type": 3,

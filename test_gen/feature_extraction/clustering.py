@@ -27,20 +27,13 @@ Usage:
         print(f"Cluster: {cluster.point_count} points over {cluster.duration_ms}ms")
 """
 
-from typing import List, Callable
+from typing import List
 from .models import MouseCluster
-from .config import (
-    DEFAULT_TIME_DELTA_MS,
-    DEFAULT_DIST_DELTA_PX,
-    default_distance_comparator,
-)
+from . import config
 
 
 def cluster_mouse_trajectories(
     events: List[dict],
-    time_delta_ms: int = DEFAULT_TIME_DELTA_MS,
-    dist_delta_px: int = DEFAULT_DIST_DELTA_PX,
-    distance_comparator: Callable[[dict, dict], float] = default_distance_comparator,
 ) -> List[MouseCluster]:
     """
     Groups rrweb mousemove events into clusters based on temporal
@@ -54,13 +47,6 @@ def cluster_mouse_trajectories(
 
     Args:
         events: List of rrweb events to process
-        time_delta_ms: Maximum time gap between events in same cluster (milliseconds).
-                      Defaults to DEFAULT_TIME_DELTA_MS from config.
-        dist_delta_px: Maximum distance between events in same cluster (pixels).
-                      Defaults to DEFAULT_DIST_DELTA_PX from config.
-        distance_comparator: Function to compute distance between two points.
-                           Defaults to default_distance_comparator from config.
-                           Should accept two point dicts and return float distance.
 
     Returns:
         List of MouseCluster objects in order of input events, each containing:
@@ -86,7 +72,7 @@ def cluster_mouse_trajectories(
         current_point = _extract_point_from_event(event)
 
         should_start_new_cluster = _should_start_new_cluster(
-            last_point, current_point, time_delta_ms, dist_delta_px, distance_comparator
+            last_point, current_point
         )
 
         if should_start_new_cluster and current_cluster_points:
@@ -143,9 +129,6 @@ def _extract_point_from_event(event: dict) -> dict:
 def _should_start_new_cluster(
     last_point: dict,
     current_point: dict,
-    time_delta_ms: int,
-    dist_delta_px: int,
-    distance_comparator: Callable[[dict, dict], float],
 ) -> bool:
     """
     Determine if a new cluster should be started based on time and distance thresholds.
@@ -153,9 +136,6 @@ def _should_start_new_cluster(
     Args:
         last_point: Previous mouse position point (or None if first point)
         current_point: Current mouse position point
-        time_delta_ms: Maximum time gap threshold
-        dist_delta_px: Maximum distance threshold
-        distance_comparator: Function to compute distance between points
 
     Returns:
         True if a new cluster should be started, False otherwise
@@ -164,9 +144,9 @@ def _should_start_new_cluster(
         return False
 
     time_diff = current_point["ts"] - last_point["ts"]
-    distance = distance_comparator(last_point, current_point)
+    distance = config.default_distance_comparator(last_point, current_point)
 
-    return time_diff > time_delta_ms or distance > dist_delta_px
+    return time_diff > config.DEFAULT_TIME_DELTA_MS or distance > config.DEFAULT_DIST_DELTA_PX
 
 
 def _create_mouse_cluster(points: List[dict]) -> MouseCluster:

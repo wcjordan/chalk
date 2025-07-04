@@ -15,15 +15,14 @@ Extensibility:
     of path parts and return a formatted string.
 """
 
-from typing import Dict, Any, Callable
+from typing import Dict, Any
 from .models import UINode
-from .config import default_dom_path_formatter
+from . import config
 
 
 def resolve_node_metadata(
     node_id: int,
     node_by_id: Dict[int, UINode],
-    dom_path_formatter: Callable[[list], str] = default_dom_path_formatter,
 ) -> Dict[str, Any]:
     """
     Given a node ID and the current virtual DOM map, return a metadata
@@ -36,9 +35,6 @@ def resolve_node_metadata(
     Args:
         node_id: The ID of the DOM node to resolve metadata for
         node_by_id: Dictionary mapping node IDs to UINode instances
-        dom_path_formatter: Function to format DOM path parts into a string.
-                           Defaults to default_dom_path_formatter from config.
-                           Should accept a list of path parts and return a string.
 
     Returns:
         Dict containing:
@@ -72,7 +68,7 @@ def resolve_node_metadata(
     role = node.attributes.get("role")
 
     # Compute DOM path
-    dom_path = _compute_dom_path(node, node_by_id, dom_path_formatter)
+    dom_path = _compute_dom_path(node, node_by_id)
 
     return {
         "tag": tag,
@@ -85,7 +81,7 @@ def resolve_node_metadata(
 
 
 def _compute_dom_path(
-    node: UINode, node_by_id: Dict[int, UINode], formatter: Callable[[list], str]
+    node: UINode, node_by_id: Dict[int, UINode]
 ) -> str:
     """
     Compute a CSS-like selector path from root to the given node.
@@ -96,7 +92,6 @@ def _compute_dom_path(
     Args:
         node: The UINode to compute the path for
         node_by_id: Dictionary mapping node IDs to UINode instances
-        formatter: Function to format the path parts into a string
 
     Returns:
         String representing the DOM path (e.g., "html > body > div.container > button#submit")
@@ -129,4 +124,4 @@ def _compute_dom_path(
         else:
             current_node = None
 
-    return formatter(path_parts)
+    return config.default_dom_path_formatter(path_parts)

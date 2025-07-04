@@ -22,7 +22,7 @@ semantic representations of user interactions and system responses.
 """
 
 import logging
-from typing import Dict, Callable
+from typing import Dict
 
 from rrweb_ingest.models import Chunk
 from .models import FeatureChunk, UINode
@@ -36,14 +36,6 @@ from .extractors import (
 from .metadata import resolve_node_metadata
 from .clustering import cluster_mouse_trajectories
 from .scroll_patterns import detect_scroll_patterns
-from .config import (
-    DEFAULT_TIME_DELTA_MS,
-    DEFAULT_DIST_DELTA_PX,
-    DEFAULT_SCROLL_REACTION_MS,
-    DEFAULT_MAX_REACTION_MS,
-    default_dom_path_formatter,
-    default_distance_comparator,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -51,12 +43,6 @@ logger = logging.getLogger(__name__)
 def extract_features(
     chunk: Chunk,
     dom_state: Dict[int, UINode],
-    time_delta_ms: int = DEFAULT_TIME_DELTA_MS,
-    dist_delta_px: int = DEFAULT_DIST_DELTA_PX,
-    scroll_reaction_ms: int = DEFAULT_SCROLL_REACTION_MS,
-    max_reaction_ms: int = DEFAULT_MAX_REACTION_MS,
-    dom_path_formatter: Callable[[list], str] = default_dom_path_formatter,
-    distance_comparator: Callable[[dict, dict], float] = default_distance_comparator,
 ) -> FeatureChunk:
     """
     Given a preprocessed Chunk and its initial virtual DOM state,
@@ -71,12 +57,6 @@ def extract_features(
         chunk: Preprocessed Chunk containing filtered and normalized rrweb events
         dom_state: Dictionary mapping node IDs to UINode instances representing
                   the current virtual DOM state (will be modified in place)
-        time_delta_ms: Maximum time gap for mouse clustering. Defaults to DEFAULT_TIME_DELTA_MS.
-        dist_delta_px: Maximum distance for mouse clustering. Defaults to DEFAULT_DIST_DELTA_PX.
-        scroll_reaction_ms: Maximum time window for scroll patterns. Defaults to DEFAULT_SCROLL_REACTION_MS.
-        max_reaction_ms: Maximum time window for reaction delays. Defaults to DEFAULT_MAX_REACTION_MS.
-        dom_path_formatter: Function to format DOM paths. Defaults to default_dom_path_formatter.
-        distance_comparator: Function to compute distances. Defaults to default_distance_comparator.
 
     Returns:
         FeatureChunk containing the original chunk data plus extracted features:
@@ -97,16 +77,14 @@ def extract_features(
     # Extract core features
     dom_mutations = extract_dom_mutations(chunk.events)
     interactions = extract_user_interactions(chunk.events)
-    all_delays = _extract_timing_delays(chunk.events, max_reaction_ms)
+    all_delays = _extract_timing_delays(chunk.events)
     
     # Resolve UI metadata for referenced nodes
-    ui_nodes = _resolve_ui_metadata(dom_mutations, interactions, dom_state, dom_path_formatter)
+    ui_nodes = _resolve_ui_metadata(dom_mutations, interactions, dom_state)
     
     # Extract behavioral patterns
-    mouse_clusters = cluster_mouse_trajectories(
-        chunk.events, time_delta_ms, dist_delta_px, distance_comparator
-    )
-    scroll_patterns = detect_scroll_patterns(chunk.events, scroll_reaction_ms)
+    mouse_clusters = cluster_mouse_trajectories(chunk.events)
+    scroll_patterns = detect_scroll_patterns(chunk.events)
 
     # Assemble all features into FeatureChunk
     features = _assemble_features(
@@ -123,14 +101,14 @@ def extract_features(
     )
 
 
-def _extract_timing_delays(events, max_reaction_ms):
+def _extract_timing_delays(events):
     """Extract and combine inter-event and reaction delays."""
     inter_event_delays = compute_inter_event_delays(events)
-    reaction_delays = compute_reaction_delays(events, max_reaction_ms=max_reaction_ms)
+    reaction_delays = compute_reaction_delays(events)
     return inter_event_delays + reaction_delays
 
 
-def _resolve_ui_metadata(dom_mutations, interactions, dom_state, dom_path_formatter):
+def _resolve_ui_metadata(dom_mutations, interactions, dom_state):
     """Resolve UI metadata for all nodes referenced in mutations and interactions."""
     ui_nodes = {}
     
@@ -140,9 +118,7 @@ def _resolve_ui_metadata(dom_mutations, interactions, dom_state, dom_path_format
     # Resolve metadata for each referenced node
     for node_id in referenced_node_ids:
         try:
-            ui_nodes[node_id] = resolve_node_metadata(
-                node_id, dom_state, dom_path_formatter
-            )
+            ui_nodes[node_id] = resolve_node_metadata(node_id, dom_state)
         except KeyError:
             # Node not found in DOM state - log and skip metadata resolution
             logger.warning(

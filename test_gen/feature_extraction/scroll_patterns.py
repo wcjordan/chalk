@@ -29,11 +29,11 @@ Usage:
 
 from typing import List
 from .models import ScrollPattern
-from .config import DEFAULT_SCROLL_REACTION_MS
+from . import config
 
 
 def detect_scroll_patterns(
-    events: List[dict], max_reaction_ms: int = DEFAULT_SCROLL_REACTION_MS
+    events: List[dict],
 ) -> List[ScrollPattern]:
     """
     Identifies scroll events followed by DOM mutations within a time window.
@@ -45,9 +45,6 @@ def detect_scroll_patterns(
 
     Args:
         events: List of rrweb events to analyze
-        max_reaction_ms: Maximum time window in milliseconds to consider a mutation
-                        as triggered by a scroll event. Defaults to DEFAULT_SCROLL_REACTION_MS
-                        from config.
 
     Returns:
         List of ScrollPattern objects representing scroll→mutation pairs, ordered
@@ -89,7 +86,7 @@ def detect_scroll_patterns(
 
             # If mutation is within the reaction window, create a pattern
             delay_ms = mutation_ts - scroll_ts
-            if delay_ms <= max_reaction_ms:
+            if delay_ms <= config.DEFAULT_SCROLL_REACTION_MS:
                 pattern = ScrollPattern(
                     scroll_event=scroll_event,
                     mutation_event=mutation_event,
