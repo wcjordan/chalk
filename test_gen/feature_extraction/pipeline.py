@@ -94,29 +94,49 @@ def extract_features(
     # Apply mutations from the chunk to update DOM state
     apply_mutations(dom_state, chunk.events)
 
-    # Extract DOM mutations
+    # Extract core features
     dom_mutations = extract_dom_mutations(chunk.events)
-
-    # Extract user interactions
     interactions = extract_user_interactions(chunk.events)
-
-    # Compute timing delays
-    inter_event_delays = compute_inter_event_delays(chunk.events)
-    reaction_delays = compute_reaction_delays(
-        chunk.events, max_reaction_ms=max_reaction_ms
+    all_delays = _extract_timing_delays(chunk.events, max_reaction_ms)
+    
+    # Resolve UI metadata for referenced nodes
+    ui_nodes = _resolve_ui_metadata(dom_mutations, interactions, dom_state, dom_path_formatter)
+    
+    # Extract behavioral patterns
+    mouse_clusters = cluster_mouse_trajectories(
+        chunk.events, time_delta_ms, dist_delta_px, distance_comparator
     )
-    all_delays = inter_event_delays + reaction_delays
+    scroll_patterns = detect_scroll_patterns(chunk.events, scroll_reaction_ms)
 
-    # Resolve UI metadata for mutations and interactions
+    # Assemble all features into FeatureChunk
+    features = _assemble_features(
+        dom_mutations, interactions, all_delays, ui_nodes, mouse_clusters, scroll_patterns
+    )
+
+    return FeatureChunk(
+        chunk_id=chunk.chunk_id,
+        start_time=chunk.start_time,
+        end_time=chunk.end_time,
+        events=chunk.events,
+        features=features,
+        metadata=chunk.metadata,
+    )
+
+
+def _extract_timing_delays(events, max_reaction_ms):
+    """Extract and combine inter-event and reaction delays."""
+    inter_event_delays = compute_inter_event_delays(events)
+    reaction_delays = compute_reaction_delays(events, max_reaction_ms=max_reaction_ms)
+    return inter_event_delays + reaction_delays
+
+
+def _resolve_ui_metadata(dom_mutations, interactions, dom_state, dom_path_formatter):
+    """Resolve UI metadata for all nodes referenced in mutations and interactions."""
     ui_nodes = {}
-
+    
     # Collect unique node IDs from mutations and interactions
-    referenced_node_ids = set()
-    for mutation in dom_mutations:
-        referenced_node_ids.add(mutation.target_id)
-    for interaction in interactions:
-        referenced_node_ids.add(interaction.target_id)
-
+    referenced_node_ids = _collect_referenced_node_ids(dom_mutations, interactions)
+    
     # Resolve metadata for each referenced node
     for node_id in referenced_node_ids:
         try:
@@ -130,30 +150,27 @@ def extract_features(
                 node_id,
             )
             continue
+    
+    return ui_nodes
 
-    # Extract mouse trajectory clusters
-    mouse_clusters = cluster_mouse_trajectories(
-        chunk.events, time_delta_ms, dist_delta_px, distance_comparator
-    )
 
-    # Detect scroll patterns
-    scroll_patterns = detect_scroll_patterns(chunk.events, scroll_reaction_ms)
+def _collect_referenced_node_ids(dom_mutations, interactions):
+    """Collect unique node IDs referenced in mutations and interactions."""
+    referenced_node_ids = set()
+    for mutation in dom_mutations:
+        referenced_node_ids.add(mutation.target_id)
+    for interaction in interactions:
+        referenced_node_ids.add(interaction.target_id)
+    return referenced_node_ids
 
-    # Assemble all features into FeatureChunk
-    features = {
+
+def _assemble_features(dom_mutations, interactions, delays, ui_nodes, mouse_clusters, scroll_patterns):
+    """Assemble all extracted features into a dictionary."""
+    return {
         "dom_mutations": dom_mutations,
         "interactions": interactions,
-        "delays": all_delays,
+        "delays": delays,
         "ui_nodes": ui_nodes,
         "mouse_clusters": mouse_clusters,
         "scroll_patterns": scroll_patterns,
     }
-
-    return FeatureChunk(
-        chunk_id=chunk.chunk_id,
-        start_time=chunk.start_time,
-        end_time=chunk.end_time,
-        events=chunk.events,
-        features=features,
-        metadata=chunk.metadata,
-    )
