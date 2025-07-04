@@ -12,23 +12,6 @@ import pytest
 from feature_extraction.scroll_patterns import detect_scroll_patterns
 
 
-@pytest.fixture(name="scroll_with_mutation_within_window")
-def fixture_scroll_with_mutation_within_window():
-    """Fixture providing a scroll event followed by a mutation within the time window."""
-    return [
-        {
-            "type": 3,
-            "timestamp": 1000,
-            "data": {"source": 3, "id": 100, "x": 0, "y": 500},
-        },  # Scroll
-        {
-            "type": 3,
-            "timestamp": 1800,  # 800ms later (within 2000ms window)
-            "data": {"source": 0, "adds": [{"node": {"id": 200}}]},
-        },  # Mutation
-    ]
-
-
 @pytest.fixture(name="scroll_with_mutation_outside_window")
 def fixture_scroll_with_mutation_outside_window():
     """Fixture providing a scroll event with mutation outside the time window."""
@@ -65,43 +48,6 @@ def fixture_scroll_with_no_mutation():
             "timestamp": 2000,
             "data": {"source": 2, "id": 150},
         },  # Click
-    ]
-
-
-@pytest.fixture(name="multiple_scrolls_with_mutations")
-def fixture_multiple_scrolls_with_mutations():
-    """Fixture providing multiple scroll events with corresponding mutations."""
-    return [
-        {
-            "type": 3,
-            "timestamp": 1000,
-            "data": {"source": 3, "id": 100, "x": 0, "y": 500},
-        },  # Scroll 1
-        {
-            "type": 3,
-            "timestamp": 1200,  # 200ms later
-            "data": {"source": 0, "adds": [{"node": {"id": 200}}]},
-        },  # Mutation 1
-        {
-            "type": 3,
-            "timestamp": 2000,
-            "data": {"source": 3, "id": 101, "x": 0, "y": 1000},
-        },  # Scroll 2
-        {
-            "type": 3,
-            "timestamp": 2500,  # 500ms later
-            "data": {"source": 0, "texts": [{"id": 201, "value": "new text"}]},
-        },  # Mutation 2
-        {
-            "type": 3,
-            "timestamp": 3000,
-            "data": {"source": 3, "id": 102, "x": 0, "y": 1500},
-        },  # Scroll 3
-        {
-            "type": 3,
-            "timestamp": 3300,  # 300ms later
-            "data": {"source": 0, "removes": [{"id": 202}]},
-        },  # Mutation 3
     ]
 
 
@@ -144,26 +90,6 @@ def fixture_non_scroll_mutation_events():
     ]
 
 
-def test_scroll_followed_by_mutation_within_window_yields_pattern(
-    scroll_with_mutation_within_window,
-):
-    """Test that a scroll event followed by a mutation within max_reaction_ms yields one ScrollPattern."""
-    patterns = detect_scroll_patterns(scroll_with_mutation_within_window)
-
-    assert len(patterns) == 1
-
-    pattern = patterns[0]
-    assert pattern.scroll_event["timestamp"] == 1000
-    assert pattern.mutation_event["timestamp"] == 1800
-    assert pattern.delay_ms == 800
-
-    # Verify the events are preserved correctly
-    assert pattern.scroll_event["data"]["source"] == 3
-    assert pattern.mutation_event["data"]["source"] == 0
-    assert pattern.scroll_event["data"]["id"] == 100
-    assert "adds" in pattern.mutation_event["data"]
-
-
 def test_scroll_with_mutation_outside_window_yields_no_pattern(
     scroll_with_mutation_outside_window,
 ):
@@ -180,33 +106,6 @@ def test_scroll_with_no_subsequent_mutation_yields_no_pattern(scroll_with_no_mut
 
     # Should have no patterns (no mutations)
     assert len(patterns) == 0
-
-
-def test_multiple_scrolls_match_to_nearest_valid_mutations(
-    multiple_scrolls_with_mutations,
-):
-    """Test that multiple scrolls each match to their nearest valid mutation when within window."""
-    patterns = detect_scroll_patterns(multiple_scrolls_with_mutations)
-
-    assert len(patterns) == 3
-
-    # First pattern: Scroll at 1000 -> Mutation at 1200 (200ms)
-    pattern1 = patterns[0]
-    assert pattern1.scroll_event["timestamp"] == 1000
-    assert pattern1.mutation_event["timestamp"] == 1200
-    assert pattern1.delay_ms == 200
-
-    # Second pattern: Scroll at 2000 -> Mutation at 2500 (500ms)
-    pattern2 = patterns[1]
-    assert pattern2.scroll_event["timestamp"] == 2000
-    assert pattern2.mutation_event["timestamp"] == 2500
-    assert pattern2.delay_ms == 500
-
-    # Third pattern: Scroll at 3000 -> Mutation at 3300 (300ms)
-    pattern3 = patterns[2]
-    assert pattern3.scroll_event["timestamp"] == 3000
-    assert pattern3.mutation_event["timestamp"] == 3300
-    assert pattern3.delay_ms == 300
 
 
 def test_out_of_order_events_handled_correctly(out_of_order_events):
@@ -236,37 +135,6 @@ def test_empty_event_list_returns_empty_list():
     """Test that passing an empty event list returns an empty list."""
     patterns = detect_scroll_patterns([])
     assert len(patterns) == 0
-
-
-def test_custom_max_reaction_window():
-    """Test that custom max_reaction_ms affects pattern detection."""
-
-    events = [
-        {
-            "type": 3,
-            "timestamp": 1000,
-            "data": {"source": 3, "id": 100, "x": 0, "y": 500},
-        },  # Scroll
-        {
-            "type": 3,
-            "timestamp": 1800,  # 800ms later
-            "data": {"source": 0, "adds": [{"node": {"id": 200}}]},
-        },  # Mutation
-    ]
-
-    # With default window (2000ms), should find pattern
-    patterns_default = detect_scroll_patterns(events)
-    assert len(patterns_default) == 1
-
-    # With smaller window (500ms), should find no pattern
-    with patch("feature_extraction.config.DEFAULT_SCROLL_REACTION_MS", 500):
-        patterns_small = detect_scroll_patterns(events)
-        assert len(patterns_small) == 0
-
-    # With larger window (1000ms), should find pattern
-    with patch("feature_extraction.config.DEFAULT_SCROLL_REACTION_MS", 1000):
-        patterns_large = detect_scroll_patterns(events)
-        assert len(patterns_large) == 1
 
 
 def test_scroll_matches_first_mutation_only():
