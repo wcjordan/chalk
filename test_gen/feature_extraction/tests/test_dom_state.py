@@ -184,6 +184,29 @@ def test_init_dom_state_invalid_events(invalid_event, expected_error):
         init_dom_state(invalid_event)
 
 
+def test_init_dom_state_nodes_without_ids_ignored(create_full_snapshot_event):
+    """Test that nodes without IDs are safely ignored."""
+    full_snapshot_event = create_full_snapshot_event(
+        child_nodes=[
+            {"tagName": "span", "textContent": "No ID"},  # Missing ID
+            {"id": 2, "tagName": "p", "textContent": "Has ID"},  # Valid node
+        ]
+    )
+
+    node_by_id = init_dom_state(full_snapshot_event)
+
+    # Should only contain nodes with IDs
+    assert len(node_by_id) == 2
+    assert 1 in node_by_id
+    assert 2 in node_by_id
+
+    # Verify the valid child node
+    p_node = node_by_id[2]
+    assert p_node.tag == "p"
+    assert p_node.text == "Has ID"
+    assert p_node.parent == 1
+
+
 def test_apply_mutations_add_node(simple_node_by_id):
     """Test that apply_mutations correctly adds new nodes."""
     # Create a mutation event that adds a new node

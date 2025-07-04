@@ -509,37 +509,31 @@ def test_extract_features_handles_events_with_missing_fields():
     assert cluster.points[0]["y"] == 0  # Default coordinate
 
 
-def test_extract_features_with_complex_interaction_sequences():
+def test_extract_features_with_complex_interaction_sequences(
+    create_full_snapshot_event,
+):
     """Test pipeline with rapid sequences of interactions and mutations."""
     # Create events with rapid sequences and overlapping mutations
     rapid_events = [
         # FullSnapshot for DOM initialization
-        {
-            "type": 2,
-            "timestamp": 1000,
-            "data": {
-                "node": {
-                    "id": 1,
-                    "tagName": "div",
-                    "childNodes": [
-                        {
-                            "id": 2,
-                            "tagName": "button",
-                            "attributes": {"id": "btn1"},
-                            "textContent": "Button 1",
-                            "childNodes": [],
-                        },
-                        {
-                            "id": 3,
-                            "tagName": "button",
-                            "attributes": {"id": "btn2"},
-                            "textContent": "Button 2",
-                            "childNodes": [],
-                        },
-                    ],
-                }
-            },
-        },
+        create_full_snapshot_event(
+            child_nodes=[
+                {
+                    "id": 2,
+                    "tagName": "button",
+                    "attributes": {"id": "btn1"},
+                    "textContent": "Button 1",
+                    "childNodes": [],
+                },
+                {
+                    "id": 3,
+                    "tagName": "button",
+                    "attributes": {"id": "btn2"},
+                    "textContent": "Button 2",
+                    "childNodes": [],
+                },
+            ]
+        ),
         # Rapid click sequence
         {
             "type": 3,
