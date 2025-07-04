@@ -63,24 +63,24 @@
 ## Step 4: DOM Mutation Extraction
 
 ### Tasks:
-- [ ] Create `test_gen/feature_extraction/extractors.py` (or `dom_extractor.py`)
-- [ ] Implement `extract_dom_mutations(events: List[dict]) -> List[DomMutation]`:
-  - [ ] Filter events where `type == 3` and `data.source == 0`
-  - [ ] Extract attribute changes from `data.attributes`
-  - [ ] Extract text changes from `data.texts`
-  - [ ] Extract node additions from `data.adds`
-  - [ ] Extract node removals from `data.removes`
-  - [ ] Preserve original event order in returned list
-- [ ] Add docstring explaining function purpose, inputs, outputs
-- [ ] Create `test_gen/feature_extraction/tests/test_dom_extractor.py`:
-  - [ ] Test single mutation event with multiple attribute changes
-  - [ ] Test text-change events produce correct DomMutation
-  - [ ] Test add/remove events produce appropriate DomMutation entries
-  - [ ] Test mixed sequence filters only mutation events
-  - [ ] Test empty mutation data doesn't produce spurious entries
-- [ ] Verify pytest passes without failures
-- [ ] Extracted DomMutation objects match expected properties
-- [ ] No regressions in existing feature-extraction tests
+- [x] Create `test_gen/feature_extraction/extractors.py` (or `dom_extractor.py`)
+- [x] Implement `extract_dom_mutations(events: List[dict]) -> List[DomMutation]`:
+  - [x] Filter events where `type == 3` and `data.source == 0`
+  - [x] Extract attribute changes from `data.attributes`
+  - [x] Extract text changes from `data.texts`
+  - [x] Extract node additions from `data.adds`
+  - [x] Extract node removals from `data.removes`
+  - [x] Preserve original event order in returned list
+- [x] Add docstring explaining function purpose, inputs, outputs
+- [x] Create `test_gen/feature_extraction/tests/test_dom_extractor.py`:
+  - [x] Test single mutation event with multiple attribute changes
+  - [x] Test text-change events produce correct DomMutation
+  - [x] Test add/remove events produce appropriate DomMutation entries
+  - [x] Test mixed sequence filters only mutation events
+  - [x] Test empty mutation data doesn't produce spurious entries
+- [x] Verify pytest passes without failures
+- [x] Extracted DomMutation objects match expected properties
+- [x] No regressions in existing feature-extraction tests
 
 ## Step 5: User Interaction Extraction
 
