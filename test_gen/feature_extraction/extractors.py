@@ -275,12 +275,16 @@ def compute_reaction_delays(
 
     # Separate interaction and mutation events
     interaction_events = [
-        event for event in events
-        if event.get("type") == 3 and event.get("data", {}).get("source") == interaction_source
+        event
+        for event in events
+        if event.get("type") == 3
+        and event.get("data", {}).get("source") == interaction_source
     ]
     mutation_events = [
-        event for event in events
-        if event.get("type") == 3 and event.get("data", {}).get("source") == mutation_source
+        event
+        for event in events
+        if event.get("type") == 3
+        and event.get("data", {}).get("source") == mutation_source
     ]
 
     # Use a pointer to track the position in mutation events
@@ -293,7 +297,10 @@ def compute_reaction_delays(
             mutation = mutation_events[mutation_index]
             mutation_ts = mutation.get("timestamp", 0)
 
-            if mutation_ts > interaction_ts and mutation_ts - interaction_ts <= max_reaction_ms:
+            if (
+                mutation_ts > interaction_ts
+                and mutation_ts - interaction_ts <= max_reaction_ms
+            ):
                 delta_ms = mutation_ts - interaction_ts
                 delay = EventDelay(
                     from_ts=interaction_ts, to_ts=mutation_ts, delta_ms=delta_ms
