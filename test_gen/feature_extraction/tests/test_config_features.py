@@ -19,7 +19,7 @@ def test_config_module_exports_correct_defaults():
     assert config.DEFAULT_DIST_DELTA_PX == 50
     assert config.DEFAULT_SCROLL_REACTION_MS == 2000
     assert config.DEFAULT_MAX_REACTION_MS == 10000
-    
+
     # Test that default functions exist and are callable
     assert callable(config.default_dom_path_formatter)
     assert callable(config.default_distance_comparator)
@@ -200,7 +200,7 @@ def test_custom_dom_path_formatter_with_complex_logic():
 def test_config_parameters_are_used_as_defaults():
     """Test that config parameters are actually used as function defaults."""
     # This test verifies that when no parameters are passed, the config defaults are used
-    
+
     # Test clustering defaults
     events = [
         {
@@ -228,7 +228,9 @@ def test_config_parameters_are_used_as_defaults():
         },
         {
             "type": 3,
-            "timestamp": 1000 + config.DEFAULT_SCROLL_REACTION_MS + 1,  # Just over threshold
+            "timestamp": 1000
+            + config.DEFAULT_SCROLL_REACTION_MS
+            + 1,  # Just over threshold
             "data": {"source": 0, "adds": [{"node": {"id": 200}}]},
         },
     ]

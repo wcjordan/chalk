@@ -30,14 +30,18 @@ Usage:
 import math
 from typing import List, Callable
 from .models import MouseCluster
-from .config import DEFAULT_TIME_DELTA_MS, DEFAULT_DIST_DELTA_PX, default_distance_comparator
+from .config import (
+    DEFAULT_TIME_DELTA_MS,
+    DEFAULT_DIST_DELTA_PX,
+    default_distance_comparator,
+)
 
 
 def cluster_mouse_trajectories(
-    events: List[dict], 
-    time_delta_ms: int = DEFAULT_TIME_DELTA_MS, 
+    events: List[dict],
+    time_delta_ms: int = DEFAULT_TIME_DELTA_MS,
     dist_delta_px: int = DEFAULT_DIST_DELTA_PX,
-    distance_comparator: Callable[[dict, dict], float] = default_distance_comparator
+    distance_comparator: Callable[[dict, dict], float] = default_distance_comparator,
 ) -> List[MouseCluster]:
     """
     Groups rrweb mousemove events into clusters based on temporal
@@ -138,8 +142,11 @@ def _extract_point_from_event(event: dict) -> dict:
 
 
 def _should_start_new_cluster(
-    last_point: dict, current_point: dict, time_delta_ms: int, dist_delta_px: int,
-    distance_comparator: Callable[[dict, dict], float]
+    last_point: dict,
+    current_point: dict,
+    time_delta_ms: int,
+    dist_delta_px: int,
+    distance_comparator: Callable[[dict, dict], float],
 ) -> bool:
     """
     Determine if a new cluster should be started based on time and distance thresholds.
@@ -161,8 +168,6 @@ def _should_start_new_cluster(
     distance = distance_comparator(last_point, current_point)
 
     return time_diff > time_delta_ms or distance > dist_delta_px
-
-
 
 
 def _create_mouse_cluster(points: List[dict]) -> MouseCluster:

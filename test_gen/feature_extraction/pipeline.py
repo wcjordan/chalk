@@ -49,14 +49,14 @@ logger = logging.getLogger(__name__)
 
 
 def extract_features(
-    chunk: Chunk, 
+    chunk: Chunk,
     dom_state: Dict[int, UINode],
     time_delta_ms: int = DEFAULT_TIME_DELTA_MS,
     dist_delta_px: int = DEFAULT_DIST_DELTA_PX,
     scroll_reaction_ms: int = DEFAULT_SCROLL_REACTION_MS,
     max_reaction_ms: int = DEFAULT_MAX_REACTION_MS,
     dom_path_formatter: Callable[[list], str] = default_dom_path_formatter,
-    distance_comparator: Callable[[dict, dict], float] = default_distance_comparator
+    distance_comparator: Callable[[dict, dict], float] = default_distance_comparator,
 ) -> FeatureChunk:
     """
     Given a preprocessed Chunk and its initial virtual DOM state,
@@ -102,7 +102,9 @@ def extract_features(
 
     # Compute timing delays
     inter_event_delays = compute_inter_event_delays(chunk.events)
-    reaction_delays = compute_reaction_delays(chunk.events, max_reaction_ms=max_reaction_ms)
+    reaction_delays = compute_reaction_delays(
+        chunk.events, max_reaction_ms=max_reaction_ms
+    )
     all_delays = inter_event_delays + reaction_delays
 
     # Resolve UI metadata for mutations and interactions
@@ -118,7 +120,9 @@ def extract_features(
     # Resolve metadata for each referenced node
     for node_id in referenced_node_ids:
         try:
-            ui_nodes[node_id] = resolve_node_metadata(node_id, dom_state, dom_path_formatter)
+            ui_nodes[node_id] = resolve_node_metadata(
+                node_id, dom_state, dom_path_formatter
+            )
         except KeyError:
             # Node not found in DOM state - log and skip metadata resolution
             logger.warning(

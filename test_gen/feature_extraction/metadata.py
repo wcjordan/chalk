@@ -21,9 +21,9 @@ from .config import default_dom_path_formatter
 
 
 def resolve_node_metadata(
-    node_id: int, 
+    node_id: int,
     node_by_id: Dict[int, UINode],
-    dom_path_formatter: Callable[[list], str] = default_dom_path_formatter
+    dom_path_formatter: Callable[[list], str] = default_dom_path_formatter,
 ) -> Dict[str, Any]:
     """
     Given a node ID and the current virtual DOM map, return a metadata
@@ -84,7 +84,9 @@ def resolve_node_metadata(
     }
 
 
-def _compute_dom_path(node: UINode, node_by_id: Dict[int, UINode], formatter: Callable[[list], str]) -> str:
+def _compute_dom_path(
+    node: UINode, node_by_id: Dict[int, UINode], formatter: Callable[[list], str]
+) -> str:
     """
     Compute a CSS-like selector path from root to the given node.
 
