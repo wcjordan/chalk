@@ -30,6 +30,28 @@ def fixture_sample_session_data(sample_session_path):
         return json.load(f)
 
 
+@pytest.fixture(name="initialize_dom_state")
+def fixture_initialize_dom_state():
+    """Fixture to initialize DOM state from the first chunk's FullSnapshot."""
+
+    def _init_dom_state(first_chunk):
+        """
+        Initialize DOM state from the first chunk's FullSnapshot event.
+
+        If no FullSnapshot is found, returns an empty state.
+        """
+        if first_chunk.metadata.get("snapshot_before"):
+            return init_dom_state(first_chunk.metadata["snapshot_before"])
+
+        # Find FullSnapshot in chunk events
+        for event in first_chunk.events:
+            if event.get("type") == 2:
+                return init_dom_state(event)
+        return {}
+
+    return _init_dom_state
+
+
 def test_sample_session_loads_successfully(sample_session_data):
     """Test that the sample session JSON loads and has expected structure."""
     rrweb_data = sample_session_data.get("rrweb_data", [])
@@ -64,7 +86,7 @@ def test_sample_session_covers_all_event_types(sample_session_data):
     ), f"Missing sources: {expected_sources - sources}"
 
 
-def test_end_to_end_feature_extraction(sample_session_path):
+def test_end_to_end_feature_extraction(initialize_dom_state, sample_session_path):
     """Test complete pipeline from sample session to feature extraction."""
     # Load session via ingest_session
     chunks = ingest_session("sample-session", sample_session_path)
@@ -74,7 +96,6 @@ def test_end_to_end_feature_extraction(sample_session_path):
     # Process the first chunk
     first_chunk = chunks[0]
 
-    # Initialize DOM state from FullSnapshot if available
     dom_state = initialize_dom_state(first_chunk)
 
     # TODO it doesn't appear that ingest_session returns the DOM state
@@ -127,17 +148,12 @@ def test_end_to_end_feature_extraction(sample_session_path):
     ), "Should have scroll patterns"
 
 
-def test_timing_accuracy(sample_session_path):
+def test_timing_accuracy(initialize_dom_state, sample_session_path):
     """Test that timing delays are computed accurately."""
     chunks = ingest_session("sample-session", sample_session_path)
     first_chunk = chunks[0]
 
-    # Initialize DOM state
-    dom_state = {}
-    for event in first_chunk.events:
-        if event.get("type") == 2:
-            dom_state = init_dom_state(event)
-            break
+    dom_state = initialize_dom_state(first_chunk)
 
     feature_chunk = extract_features(first_chunk, dom_state)
 
@@ -156,17 +172,12 @@ def test_timing_accuracy(sample_session_path):
         assert delay.delta_ms > 50
 
 
-def test_mouse_clustering_accuracy(sample_session_path):
+def test_mouse_clustering_accuracy(initialize_dom_state, sample_session_path):
     """Test that mouse clustering produces expected results."""
     chunks = ingest_session("sample-session", sample_session_path)
     first_chunk = chunks[0]
 
-    # Initialize DOM state
-    dom_state = {}
-    for event in first_chunk.events:
-        if event.get("type") == 2:
-            dom_state = init_dom_state(event)
-            break
+    dom_state = initialize_dom_state(first_chunk)
 
     feature_chunk = extract_features(first_chunk, dom_state)
     mouse_clusters = feature_chunk.features["mouse_clusters"]
@@ -188,17 +199,12 @@ def test_mouse_clustering_accuracy(sample_session_path):
         assert first_cluster.points[2]["y"] == 170
 
 
-def test_scroll_pattern_detection(sample_session_path):
+def test_scroll_pattern_detection(initialize_dom_state, sample_session_path):
     """Test that scroll patterns are correctly detected."""
     chunks = ingest_session("sample-session", sample_session_path)
     first_chunk = chunks[0]
 
-    # Initialize DOM state
-    dom_state = {}
-    for event in first_chunk.events:
-        if event.get("type") == 2:
-            dom_state = init_dom_state(event)
-            break
+    dom_state = initialize_dom_state(first_chunk)
 
     feature_chunk = extract_features(first_chunk, dom_state)
     scroll_patterns = feature_chunk.features["scroll_patterns"]
@@ -211,17 +217,12 @@ def test_scroll_pattern_detection(sample_session_path):
     assert pattern.mutation_event["data"]["source"] == 0, "Should be mutation event"
 
 
-def test_feature_extraction(snapshot, sample_session_path):
+def test_feature_extraction(snapshot, initialize_dom_state, sample_session_path):
     """Test that the extracted feature chunk matches the expected snapshot."""
     chunks = ingest_session("sample-session", sample_session_path)
     first_chunk = chunks[0]
 
-    # Initialize DOM state
-    dom_state = {}
-    for event in first_chunk.events:
-        if event.get("type") == 2:
-            dom_state = init_dom_state(event)
-            break
+    dom_state = initialize_dom_state(first_chunk)
 
     feature_chunk = extract_features(first_chunk, dom_state)
 
@@ -229,19 +230,14 @@ def test_feature_extraction(snapshot, sample_session_path):
     assert feature_chunk == snapshot
 
 
-def test_performance_with_sample_session(sample_session_path):
+def test_performance_with_sample_session(initialize_dom_state, sample_session_path):
     """Test that feature extraction completes in reasonable time."""
     start_time = time.time()
 
     chunks = ingest_session("sample-session", sample_session_path)
     first_chunk = chunks[0]
 
-    # Initialize DOM state
-    dom_state = {}
-    for event in first_chunk.events:
-        if event.get("type") == 2:
-            dom_state = init_dom_state(event)
-            break
+    dom_state = initialize_dom_state(first_chunk)
 
     feature_chunk = extract_features(first_chunk, dom_state)
 
