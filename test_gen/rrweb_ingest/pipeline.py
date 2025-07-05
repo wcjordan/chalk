@@ -100,7 +100,7 @@ def ingest_session(
 
 
 if __name__ == "__main__":
-    SESSION_DIR = "../session_stitching/output_sessions"
+    SESSION_DIR = "data/output_sessions"
     chunk_sizes = defaultdict(int)
     for curr_filename in os.listdir(SESSION_DIR):
         if curr_filename.endswith(".json"):

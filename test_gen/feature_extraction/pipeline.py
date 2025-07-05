@@ -21,11 +21,13 @@ semantic representations of user interactions and system responses.
 """
 
 import logging
+import os
 from typing import Dict
 
 from rrweb_ingest.models import Chunk
+from rrweb_ingest.pipeline import ingest_session
 from .models import FeatureChunk, UINode
-from .dom_state import apply_mutations
+from .dom_state import apply_mutations, init_dom_state
 from .extractors import (
     extract_dom_mutations,
     extract_user_interactions,
@@ -137,3 +139,44 @@ def _collect_referenced_node_ids(dom_mutations, interactions):
     for interaction in interactions:
         referenced_node_ids.add(interaction.target_id)
     return referenced_node_ids
+
+
+if __name__ == "__main__":
+    SESSION_DIR = "data/output_sessions"
+    MAX_SESSIONS = 200  # Limit sessions for testing
+    sessions_handled = 0
+    for curr_filename in os.listdir(SESSION_DIR):
+        if sessions_handled >= MAX_SESSIONS:
+            break
+
+        if curr_filename.endswith(".json"):
+            curr_session_id = curr_filename.split(".")[0]
+            curr_filepath = os.path.join(SESSION_DIR, curr_filename)
+            try:
+                chunks = ingest_session(curr_session_id, curr_filepath)
+                for chunk in chunks:
+                    # Initialize DOM state from FullSnapshot if available
+                    if chunk.metadata.get("snapshot_before"):
+                        dom = init_dom_state(chunk.metadata["snapshot_before"])
+                    else:
+                        dom = {}  # Start with empty DOM state
+
+                    # Extract features from the chunk
+                    feature_chunk = extract_features(chunk, dom)
+
+                    # Analyze extracted features
+                    print(f"{feature_chunk.chunk_id}:")
+                    print(f"  DOM mutations: {len(feature_chunk.features['dom_mutations'])}")
+                    print(f"  User interactions: {len(feature_chunk.features['interactions'])}")
+                    print(f"  Mouse clusters: {len(feature_chunk.features['mouse_clusters'])}")
+                    print(f"  Scroll patterns: {len(feature_chunk.features['scroll_patterns'])}")
+
+                    # Access specific feature data
+                    for interaction in feature_chunk.features["interactions"]:
+                        if interaction.action == "click":
+                            print(f"  Click on node {interaction.target_id} at {interaction.timestamp}")
+
+                sessions_handled += 1
+            except Exception as e:
+                print(f"Error processing {curr_filename}: {e}")
+                raise e

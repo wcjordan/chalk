@@ -10,6 +10,11 @@ through mutation tracking.
 from typing import Dict, List
 from .models import UINode
 
+TYPE_TO_TAG_MAP = {
+    2: "attribute",
+    3: "text_content",
+}
+
 
 def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
     """
@@ -44,7 +49,7 @@ def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
             return
 
         # Extract node properties
-        tag = node_data.get("tagName", node_data.get("type", ""))
+        tag = node_data.get("tagName", TYPE_TO_TAG_MAP[node_data.get("type")])
         attributes = node_data.get("attributes", {})
         text = node_data.get("textContent", "")
 
@@ -104,7 +109,7 @@ def _apply_node_additions(node_by_id: Dict[int, UINode], adds: List[dict]) -> No
         parent_id = add_record.get("parentId")
 
         if node_id is not None:
-            tag = node_data.get("tagName", node_data.get("type", ""))
+            tag = node_data.get("tagName", TYPE_TO_TAG_MAP[node_data.get("type")])
             attributes = node_data.get("attributes", {})
             text = node_data.get("textContent", "")
 

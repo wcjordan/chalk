@@ -12,6 +12,7 @@ Configuration:
 from typing import List
 from .models import DomMutation, UserInteraction, EventDelay
 from . import config
+from .dom_state import TYPE_TO_TAG_MAP
 
 
 def extract_dom_mutations(events: List[dict]) -> List[DomMutation]:
@@ -101,7 +102,7 @@ def _extract_node_additions(data: dict, timestamp: int) -> List[DomMutation]:
         parent_id = add_record.get("parentId")
 
         if node_id is not None:
-            tag = node_data.get("tagName", node_data.get("type", ""))
+            tag = node_data.get("tagName", TYPE_TO_TAG_MAP[node_data.get("type")])
             attributes = node_data.get("attributes", {})
             text = node_data.get("textContent", "")
 
