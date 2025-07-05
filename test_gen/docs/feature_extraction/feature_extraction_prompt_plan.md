@@ -633,7 +633,7 @@ You’re creating **Documentation & Sample Data** for the Session Chunking & Fea
 
 **Tasks:**
 
-1. **Update `test_gen/feature_extraction/README.md`** to include:
+1. **Create `test_gen/feature_extraction/README.md`** to include:
 
    * A concise overview of the module’s purpose and key functions (`init_dom_state`, `apply_mutations`, `extract_dom_mutations`, `extract_user_interactions`, `compute_inter_event_delays`, `compute_reaction_delays`, `resolve_node_metadata`, `cluster_mouse_trajectories`, `detect_scroll_patterns`, `extract_features`).
    * Installation instructions and dependencies.
