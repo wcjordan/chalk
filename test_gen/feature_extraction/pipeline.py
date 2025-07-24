@@ -122,10 +122,10 @@ def _resolve_ui_metadata(dom_mutations, interactions, dom_state):
             ui_nodes[node_id] = resolve_node_metadata(node_id, dom_state)
         except KeyError:
             # Node not found in DOM state - log and skip metadata resolution
-            # logger.warning(
-            #     "Node ID %s not found in DOM state. Skipping metadata resolution.",
-            #     node_id,
-            # )
+            logger.warning(
+                "Node ID %s not found in DOM state. Skipping metadata resolution.",
+                node_id,
+            )
             continue
 
     return ui_nodes
@@ -159,6 +159,10 @@ if __name__ == "__main__":
                     if chunk.metadata.get("snapshot_before"):
                         dom = init_dom_state(chunk.metadata["snapshot_before"])
                     else:
+                        logger.warning(
+                            "No initial snapshot found for chunk %s. Using empty DOM state.",
+                            chunk.chunk_id,
+                        )
                         dom = {}  # Start with empty DOM state
 
                     # Extract features from the chunk

@@ -86,14 +86,14 @@ def ingest_session(
     normalized_chunks = []
     for chunk_index, raw_chunk in enumerate(raw_chunks):
         # Filter noise and duplicates
-        cleaned_events = clean_chunk(raw_chunk)
+        cleaned_events = clean_chunk(raw_chunk["interactions"])
 
         # Skip empty chunks after cleaning
         if not cleaned_events:
             continue
 
         # Normalize into Chunk object
-        chunk = normalize_chunk(cleaned_events, session_id, chunk_index)
+        chunk = normalize_chunk(cleaned_events, session_id, chunk_index, raw_chunk.get("snapshot_before"))
         normalized_chunks.append(chunk)
 
     return normalized_chunks

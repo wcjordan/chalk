@@ -10,9 +10,21 @@ through mutation tracking.
 from typing import Dict, List
 from .models import UINode
 
+# Sync w/ rrweb's NodeType enum
+# https://github.com/rrweb-io/rrweb/blob/4db9782d1278a2b7235ed48162ccedf0e0952113/packages/rrdom/src/document.ts#L753
 TYPE_TO_TAG_MAP = {
-    2: "attribute",
-    3: "text_content",
+    0: "placeholder", # Used for the root node, but potentially others
+    1: "element_node",
+    2: "attribute_node",
+    3: "text_node",
+    4: "cdata_section_node",
+    5: "entity_reference_node",
+    6: "entity_node",
+    7: "processing_instruction_node",
+    8: "comment_node",
+    9: "document_node",
+    10: "document_type_node",
+    11: "document_fragment_node",
 }
 
 
