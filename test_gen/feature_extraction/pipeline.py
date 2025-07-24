@@ -122,10 +122,10 @@ def _resolve_ui_metadata(dom_mutations, interactions, dom_state):
             ui_nodes[node_id] = resolve_node_metadata(node_id, dom_state)
         except KeyError:
             # Node not found in DOM state - log and skip metadata resolution
-            logger.warning(
-                "Node ID %s not found in DOM state. Skipping metadata resolution.",
-                node_id,
-            )
+            # logger.warning(
+            #     "Node ID %s not found in DOM state. Skipping metadata resolution.",
+            #     node_id,
+            # )
             continue
 
     return ui_nodes
@@ -164,17 +164,30 @@ if __name__ == "__main__":
                     # Extract features from the chunk
                     feature_chunk = extract_features(chunk, dom)
 
-                    # Analyze extracted features
+                    # Analyze extracted features and print summary statistics
                     print(f"{feature_chunk.chunk_id}:")
-                    print(f"  DOM mutations: {len(feature_chunk.features['dom_mutations'])}")
-                    print(f"  User interactions: {len(feature_chunk.features['interactions'])}")
-                    print(f"  Mouse clusters: {len(feature_chunk.features['mouse_clusters'])}")
-                    print(f"  Scroll patterns: {len(feature_chunk.features['scroll_patterns'])}")
+                    mutation_types = {}
+                    for mutation in feature_chunk.features["dom_mutations"]:
+                        mutation_type = mutation.mutation_type or "unknown"
+                        if mutation_type not in mutation_types:
+                            mutation_types[mutation_type] = 0
+                        mutation_types[mutation_type] += 1
+                    for mutation_type, count in mutation_types.items():
+                        print(f"  DOM mutations - {mutation_type}: {count}")
 
-                    # Access specific feature data
+                    interaction_types = {}
                     for interaction in feature_chunk.features["interactions"]:
-                        if interaction.action == "click":
-                            print(f"  Click on node {interaction.target_id} at {interaction.timestamp}")
+                        action = interaction.action or "unknown"
+                        if action not in interaction_types:
+                            interaction_types[action] = 0
+                        interaction_types[action] += 1
+                    for action, count in interaction_types.items():
+                        print(f"  User interactions - {action}: {count}")
+
+                    if len(feature_chunk.features['mouse_clusters']):
+                        print(f"  Mouse clusters: {len(feature_chunk.features['mouse_clusters'])}")
+                    if len(feature_chunk.features['scroll_patterns']):
+                        print(f"  Scroll patterns: {len(feature_chunk.features['scroll_patterns'])}")
 
                 sessions_handled += 1
             except Exception as e:
