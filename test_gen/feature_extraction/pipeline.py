@@ -122,7 +122,7 @@ def _resolve_ui_metadata(dom_mutations, interactions, dom_state):
             ui_nodes[node_id] = resolve_node_metadata(node_id, dom_state)
         except KeyError:
             # Node not found in DOM state - log and skip metadata resolution
-            logger.warning(
+            print(
                 "Node ID %s not found in DOM state. Skipping metadata resolution.",
                 node_id,
             )
