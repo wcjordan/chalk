@@ -68,8 +68,7 @@ def segment_into_chunks(
         return []
 
     chunks = []
-    last_snapshot = None
-    current_chunk = _new_chunk(last_snapshot)
+    current_chunk = _new_chunk()
     snapshot_iter = iter(snapshots)
     next_snapshot = next(snapshot_iter, None)
     last_timestamp = None
@@ -84,8 +83,7 @@ def segment_into_chunks(
                 chunks.append(current_chunk)
 
             # Start a new chunk from the next snapshot
-            last_snapshot = next_snapshot
-            current_chunk = _new_chunk(last_snapshot)
+            current_chunk = _new_chunk(next_snapshot)
 
             # Reset timestamp so next interaction isn't compared against the prior chunk
             last_timestamp = None
@@ -101,13 +99,13 @@ def segment_into_chunks(
             # Finish current chunk if it has events
             if current_chunk["interactions"]:
                 chunks.append(current_chunk)
-                current_chunk = _new_chunk(last_snapshot)
+                current_chunk = _new_chunk()
 
         # Check if we need to start a new chunk due to size limit
         if len(current_chunk["interactions"]) >= config.MAX_EVENTS:
             # Finish current chunk
             chunks.append(current_chunk)
-            current_chunk = _new_chunk(last_snapshot)
+            current_chunk = _new_chunk()
             # Reset timestamp so next interaction isn't compared against the prior chunk
             last_timestamp = None
 

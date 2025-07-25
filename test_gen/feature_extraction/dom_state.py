@@ -107,8 +107,9 @@ def apply_mutations(node_by_id: Dict[int, UINode], mutation_events: List[dict]) 
         data = event.get("data", {})
 
         # Handle different types of mutations
+        # Note we don't do anything for node removals since we want to be able to map interactions to nodes even if
+        # they're removed from the DOM
         _apply_node_additions(node_by_id, data.get("adds", []))
-        _apply_node_removals(node_by_id, data.get("removes", []))
         _apply_attribute_changes(node_by_id, data.get("attributes", []))
         _apply_text_changes(node_by_id, data.get("texts", []))
 
@@ -133,16 +134,6 @@ def _apply_node_additions(node_by_id: Dict[int, UINode], adds: List[dict]) -> No
                 parent=parent_id,
             )
             node_by_id[node_id] = ui_node
-
-
-def _apply_node_removals(node_by_id: Dict[int, UINode], removes: List[dict]) -> None:
-    """Apply node removal mutations to the DOM state."""
-    # TODO check with real data if there's risk of a node removal leaving dangling references to children in node_by_id
-    # after a parent node is removed.
-    for remove_record in removes:
-        node_id = remove_record.get("id")
-        if node_id is not None and node_id in node_by_id:
-            del node_by_id[node_id]
 
 
 def _apply_attribute_changes(
