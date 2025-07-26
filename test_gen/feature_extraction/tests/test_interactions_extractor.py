@@ -7,6 +7,7 @@ covering click, input, and scroll interactions with proper field mapping.
 
 import pytest
 from feature_extraction.extractors import extract_user_interactions
+from rrweb_util import EventType, IncrementalSource
 
 
 @pytest.fixture(name="non_interaction_events")
@@ -14,19 +15,19 @@ def fixture_non_interaction_events():
     """Fixture providing events that are not user interactions."""
     return [
         # FullSnapshot event
-        {"type": 2, "timestamp": 1000, "data": {"node": {}}},
+        {"type": EventType.FULL_SNAPSHOT, "timestamp": 1000, "data": {"node": {}}},
         # Mouse move event (source 1)
-        {"type": 3, "timestamp": 2000, "data": {"source": 1, "x": 100, "y": 200}},
+        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 2000, "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 100, "y": 200}},
         # DOM mutation event (source 0)
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 3000,
-            "data": {"source": 0, "adds": []},
+            "data": {"source": IncrementalSource.MUTATION, "adds": []},
         },
         # Unknown source
-        {"type": 3, "timestamp": 4000, "data": {"source": 99, "id": 123}},
+        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 4000, "data": {"source": 99, "id": 123}},
         # Meta event
-        {"type": 4, "timestamp": 5000, "data": {"width": 1920, "height": 1080}},
+        {"type": EventType.CUSTOM, "timestamp": 5000, "data": {"width": 1920, "height": 1080}},
     ]
 
 
@@ -43,19 +44,19 @@ def test_extract_preserves_event_order():
     # Create events with different timestamps in a specific order
     events = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": 3, "id": 1, "x": 0, "y": 100},
+            "data": {"source": IncrementalSource.SCROLL, "id": 1, "x": 0, "y": 100},
         },  # scroll
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2000,
-            "data": {"source": 2, "id": 2, "x": 50, "y": 60},
+            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 2, "x": 50, "y": 60},
         },  # click
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 3000,
-            "data": {"source": 5, "id": 3, "text": "input"},
+            "data": {"source": IncrementalSource.INPUT, "id": 3, "text": "input"},
         },  # input
     ]
 
@@ -75,34 +76,34 @@ def test_extract_handles_missing_target_ids():
     """Test that interaction events without target IDs are safely ignored."""
     events_with_missing_ids = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": 2, "x": 100, "y": 200},  # Missing id
+            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "x": 100, "y": 200},  # Missing id
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2000,
-            "data": {"source": 2, "id": 42, "x": 150, "y": 250},  # Valid
+            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42, "x": 150, "y": 250},  # Valid
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 3000,
-            "data": {"source": 5, "text": "no id"},  # Missing id
+            "data": {"source": IncrementalSource.INPUT, "text": "no id"},  # Missing id
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 4000,
-            "data": {"source": 5, "id": 43, "text": "valid"},  # Valid
+            "data": {"source": IncrementalSource.INPUT, "id": 43, "text": "valid"},  # Valid
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 5000,
-            "data": {"source": 3, "x": 0, "y": 100},  # Missing id
+            "data": {"source": IncrementalSource.SCROLL, "x": 0, "y": 100},  # Missing id
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 6000,
-            "data": {"source": 3, "id": 44, "x": 0, "y": 200},  # Valid
+            "data": {"source": IncrementalSource.SCROLL, "id": 44, "x": 0, "y": 200},  # Valid
         },
     ]
 
@@ -122,19 +123,19 @@ def test_extract_handles_missing_coordinates():
     """Test that click and scroll events handle missing x/y coordinates gracefully."""
     events_with_missing_coords = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": 2, "id": 42},  # Missing x, y
+            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42},  # Missing x, y
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2000,
-            "data": {"source": 3, "id": 43, "x": 100},  # Missing y
+            "data": {"source": IncrementalSource.SCROLL, "id": 43, "x": 100},  # Missing y
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 3000,
-            "data": {"source": 3, "id": 44, "y": 200},  # Missing x
+            "data": {"source": IncrementalSource.SCROLL, "id": 44, "y": 200},  # Missing x
         },
     ]
 
@@ -165,9 +166,9 @@ def test_extract_handles_empty_input_data():
     """Test that input events with no text or checked data produce empty value dict."""
     events_with_empty_input = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": 5, "id": 42},  # No text or isChecked
+            "data": {"source": IncrementalSource.INPUT, "id": 42},  # No text or isChecked
         }
     ]
 

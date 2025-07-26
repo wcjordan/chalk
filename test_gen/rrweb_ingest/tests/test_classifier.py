@@ -7,6 +7,7 @@ into snapshots, interactions, and others based on event type.
 
 import pytest
 from rrweb_ingest.classifier import classify_events
+from rrweb_util import EventType
 
 
 def test_classify_empty_event_list():

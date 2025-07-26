@@ -9,13 +9,14 @@ application for maintaining evolving DOM state.
 import pytest
 from feature_extraction.dom_state import init_dom_state, apply_mutations
 from feature_extraction.models import UINode
+from rrweb_util import EventType, IncrementalSource
 
 
 @pytest.fixture(name="simple_full_snapshot")
 def fixture_simple_full_snapshot():
     """Fixture providing a simple FullSnapshot event with nested DOM structure."""
     return {
-        "type": 2,
+        "type": EventType.FULL_SNAPSHOT,
         "data": {
             "node": {
                 "id": 1,
@@ -52,7 +53,7 @@ def fixture_simple_full_snapshot():
 def fixture_button_snapshot():
     """Fixture providing a FullSnapshot with a button element with rich attributes."""
     return {
-        "type": 2,
+        "type": EventType.FULL_SNAPSHOT,
         "data": {
             "node": {
                 "id": 1,
@@ -150,7 +151,7 @@ def test_init_dom_state_attributes_and_text_captured(button_snapshot):
 def test_init_dom_state_empty_attributes():
     """Test handling of nodes with no attributes."""
     full_snapshot_event = {
-        "type": 2,
+        "type": EventType.FULL_SNAPSHOT,
         "data": {"node": {"id": 1, "tagName": "div", "childNodes": []}},
     }
 
@@ -165,15 +166,15 @@ def test_init_dom_state_empty_attributes():
     "invalid_event,expected_error",
     [
         (
-            {"type": 3, "data": {"source": 0}},  # Not a FullSnapshot
+            {"type": EventType.INCREMENTAL_SNAPSHOT, "data": {"source": IncrementalSource.MUTATION}},  # Not a FullSnapshot
             "Event must be a FullSnapshot event",
         ),
         (
-            {"type": 2, "data": {}},  # Missing node
+            {"type": EventType.FULL_SNAPSHOT, "data": {}},  # Missing node
             "FullSnapshot event must contain data.node",
         ),
         (
-            {"type": 2},  # Missing data entirely
+            {"type": EventType.FULL_SNAPSHOT},  # Missing data entirely
             "FullSnapshot event must contain data.node",
         ),
     ],
@@ -212,9 +213,9 @@ def test_apply_mutations_add_node(simple_node_by_id):
     # Create a mutation event that adds a new node
     mutation_events = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "data": {
-                "source": 0,
+                "source": IncrementalSource.MUTATION,
                 "adds": [
                     {
                         "parentId": 1,
@@ -253,9 +254,9 @@ def test_apply_mutations_remove_node(rich_node_by_id):
     initial_length = len(rich_node_by_id)
     mutation_events = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "data": {
-                "source": 0,
+                "source": IncrementalSource.MUTATION,
                 "removes": [{"id": 2}],
             },
         }
@@ -333,8 +334,8 @@ def test_apply_mutations_change_properties(
     # Create mutation event
     mutation_events = [
         {
-            "type": 3,
-            "data": {"source": 0, **mutation_data},
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "data": {"source": IncrementalSource.MUTATION, **mutation_data},
         }
     ]
 
@@ -350,9 +351,9 @@ def test_apply_mutations_ignore_invalid_node_ids(simple_node_by_id):
     # Create mutation events that reference nonexistent nodes
     mutation_events = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "data": {
-                "source": 0,
+                "source": IncrementalSource.MUTATION,
                 "removes": [{"id": 999}],  # Nonexistent node
                 "attributes": [
                     {"id": 888, "attributes": {"class": "new"}}  # Nonexistent node
@@ -376,9 +377,9 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
     # Create a mutation event with multiple operations
     mutation_events = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "data": {
-                "source": 0,
+                "source": IncrementalSource.MUTATION,
                 "adds": [
                     {
                         "parentId": 1,
@@ -420,23 +421,23 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
     [
         # Non-mutation events
         [
-            {"type": 2, "data": {"node": {}}},  # FullSnapshot, not mutation
+            {"type": EventType.FULL_SNAPSHOT, "data": {"node": {}}},  # FullSnapshot, not mutation
             {
-                "type": 3,
-                "data": {"source": 1},
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "data": {"source": IncrementalSource.MOUSE_MOVE},
             },  # IncrementalSnapshot, but not mutation
             {
-                "type": 3,
-                "data": {"source": 2},
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION},
             },  # IncrementalSnapshot, but not mutation
         ],
         # Empty mutation data
         [
-            {"type": 3, "data": {"source": 0}},  # No mutation data
+            {"type": EventType.INCREMENTAL_SNAPSHOT, "data": {"source": IncrementalSource.MUTATION}},  # No mutation data
             {
-                "type": 3,
+                "type": EventType.INCREMENTAL_SNAPSHOT,
                 "data": {
-                    "source": 0,
+                    "source": IncrementalSource.MUTATION,
                     "adds": [],
                     "removes": [],
                     "attributes": [],

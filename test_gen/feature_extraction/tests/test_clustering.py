@@ -10,6 +10,7 @@ from unittest.mock import patch
 import pytest
 
 from feature_extraction.clustering import cluster_mouse_trajectories
+from rrweb_util import EventType, IncrementalSource
 
 
 @pytest.fixture(name="non_mousemove_events")
@@ -17,15 +18,15 @@ def fixture_non_mousemove_events():
     """Fixture providing events that are not mousemove events."""
     return [
         # FullSnapshot event
-        {"type": 2, "timestamp": 1000, "data": {"node": {}}},
+        {"type": EventType.FULL_SNAPSHOT, "timestamp": 1000, "data": {"node": {}}},
         # Click event (source 2)
-        {"type": 3, "timestamp": 1100, "data": {"source": 2, "id": 42}},
+        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1100, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42}},
         # DOM mutation (source 0)
-        {"type": 3, "timestamp": 1200, "data": {"source": 0, "adds": []}},
+        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1200, "data": {"source": IncrementalSource.MUTATION, "adds": []}},
         # Scroll event (source 3)
-        {"type": 3, "timestamp": 1300, "data": {"source": 3, "x": 0, "y": 100}},
+        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1300, "data": {"source": IncrementalSource.SCROLL, "x": 0, "y": 100}},
         # Input event (source 5)
-        {"type": 3, "timestamp": 1400, "data": {"source": 5, "text": "input"}},
+        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1400, "data": {"source": IncrementalSource.INPUT, "text": "input"}},
     ]
 
 
@@ -45,19 +46,19 @@ def test_clusters_preserve_chronological_order():
     """Test that clusters are returned in chronological order."""
     events = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": 1, "x": 100, "y": 200},
+            "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 100, "y": 200},
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2000,  # Large time gap
-            "data": {"source": 1, "x": 200, "y": 300},
+            "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 200, "y": 300},
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 500,  # Earlier timestamp (out of order)
-            "data": {"source": 1, "x": 50, "y": 100},
+            "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 50, "y": 100},
         },
     ]
 
@@ -77,19 +78,19 @@ def test_missing_coordinates_default_to_zero():
     """Test that missing x/y coordinates default to 0."""
     events = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": 1, "x": 10, "y": 5},
+            "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 10, "y": 5},
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1050,
-            "data": {"source": 1},  # Missing x and y
+            "data": {"source": IncrementalSource.MOUSE_MOVE},  # Missing x and y
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1100,
-            "data": {"source": 1, "x": 10},  # Missing y
+            "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 10},  # Missing y
         },
     ]
 
@@ -108,24 +109,24 @@ def test_euclidean_distance_calculation():
     """Test that Euclidean distance is calculated correctly for clustering decisions."""
     events = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": 1, "x": 0, "y": 0},
+            "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 0, "y": 0},
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1050,
             "data": {
-                "source": 1,
+                "source": IncrementalSource.MOUSE_MOVE,
                 "x": 30,
                 "y": 40,
             },  # Distance = sqrt(30^2 + 40^2) = 50px exactly
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1100,
             "data": {
-                "source": 1,
+                "source": IncrementalSource.MOUSE_MOVE,
                 "x": 31,
                 "y": 41,
             },  # Distance = sqrt(1^2 + 1^2) ≈ 1.4px
