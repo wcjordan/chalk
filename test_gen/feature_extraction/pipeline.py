@@ -168,6 +168,8 @@ if __name__ == "__main__":
                     print(f"{feature_chunk.chunk_id}:")
                     mutation_types = {}
                     for mutation in feature_chunk.features["dom_mutations"]:
+                        # print(mutation)
+                        # print(feature_chunk.features["ui_nodes"][mutation.target_id])
                         mutation_type = mutation.mutation_type or "unknown"
                         if mutation_type not in mutation_types:
                             mutation_types[mutation_type] = 0
@@ -177,6 +179,8 @@ if __name__ == "__main__":
 
                     interaction_types = {}
                     for interaction in feature_chunk.features["interactions"]:
+                        # print(interaction)
+                        # print(feature_chunk.features["ui_nodes"][interaction.target_id])
                         action = interaction.action or "unknown"
                         if action not in interaction_types:
                             interaction_types[action] = 0
