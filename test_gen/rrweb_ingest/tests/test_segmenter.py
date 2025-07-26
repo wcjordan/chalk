@@ -37,7 +37,8 @@ def test_interactions_no_snapshots():
     result = segment_into_chunks(interactions, [])
 
     assert len(result) == 1
-    assert result[0] == interactions
+    assert result[0]["interactions"] == interactions
+    assert result[0]["snapshot_before"] is None
 
 
 def test_interaction_timestamp_equals_snapshot_timestamp():
@@ -56,13 +57,17 @@ def test_interaction_timestamp_equals_snapshot_timestamp():
     assert len(result) == 2
 
     # First chunk: interactions before snapshot timestamp
-    assert len(result[0]) == 1
-    assert result[0][0]["data"]["id"] == "int1"  # timestamp 100
+    assert len(result[0]["interactions"]) == 1
+    assert result[0]["interactions"][0]["data"]["id"] == "int1"  # timestamp 100
+    assert result[0]["snapshot_before"] is None
 
     # Second chunk: interactions at or after snapshot timestamp (>= 200)
-    assert len(result[1]) == 2
-    assert result[1][0]["data"]["id"] == "int2"  # timestamp 200 (equals snapshot)
-    assert result[1][1]["data"]["id"] == "int3"  # timestamp 300
+    assert len(result[1]["interactions"]) == 2
+    assert (
+        result[1]["interactions"][0]["data"]["id"] == "int2"
+    )  # timestamp 200 (equals snapshot)
+    assert result[1]["interactions"][1]["data"]["id"] == "int3"  # timestamp 300
+    assert result[1]["snapshot_before"] == snapshots[0]
 
 
 def test_all_interactions_before_snapshots():
@@ -79,8 +84,9 @@ def test_all_interactions_before_snapshots():
     result = segment_into_chunks(interactions, snapshots)
 
     assert len(result) == 1
-    assert len(result[0]) == len(interactions)
-    assert result[0] == interactions
+    assert len(result[0]["interactions"]) == len(interactions)
+    assert result[0]["interactions"] == interactions
+    assert result[0]["snapshot_before"] is None
 
 
 def test_all_interactions_after_snapshots():
@@ -97,8 +103,9 @@ def test_all_interactions_after_snapshots():
     result = segment_into_chunks(interactions, snapshots)
 
     assert len(result) == 1
-    assert len(result[0]) == 2
-    assert result[0] == interactions
+    assert len(result[0]["interactions"]) == 2
+    assert result[0]["interactions"] == interactions
+    assert result[0]["snapshot_before"] == snapshots[-1]
 
 
 def test_consecutive_snapshots_create_empty_chunks():
@@ -127,12 +134,16 @@ def test_consecutive_snapshots_create_empty_chunks():
     assert len(result) == 2
 
     # First chunk: before first snapshot
-    assert len(result[0]) == 1
-    assert result[0][0]["data"]["id"] == "int1"  # timestamp 50
+    first_chunk_interactions = result[0]["interactions"]
+    assert len(first_chunk_interactions) == 1
+    assert first_chunk_interactions[0]["data"]["id"] == "int1"  # timestamp 50
+    assert result[0]["snapshot_before"] is None
 
     # Second chunk: after all snapshots
-    assert len(result[1]) == 1
-    assert result[1][0]["data"]["id"] == "int2"  # timestamp 350
+    second_chunk_interactions = result[1]["interactions"]
+    assert len(second_chunk_interactions) == 1
+    assert second_chunk_interactions[0]["data"]["id"] == "int2"  # timestamp 350
+    assert result[1]["snapshot_before"] == snapshots[-1]
 
 
 def test_all_three_splitting_criteria():
@@ -162,7 +173,13 @@ def test_all_three_splitting_criteria():
 
     # Should create 4 chunks: 2 before snapshot, 5 after snapshot, 1 remaining, 2 after gap
     assert len(result) == 4
-    assert len(result[0]) == 2  # Before snapshot
-    assert len(result[1]) == 5  # After snapshot, up to size limit
-    assert len(result[2]) == 1  # Remaining event before gap
-    assert len(result[3]) == 2  # After time gap
+    assert len(result[0]["interactions"]) == 2  # Before snapshot
+    assert result[0]["snapshot_before"] is None  # No snapshot before this chunk
+    assert len(result[1]["interactions"]) == 5  # After snapshot, up to size limit
+    assert result[1]["snapshot_before"] is not None
+    assert len(result[2]["interactions"]) == 1  # Remaining event before gap
+    assert (
+        result[2]["snapshot_before"] is None
+    )  # No snapshot when chunk started by size limit
+    assert len(result[3]["interactions"]) == 2  # After time gap
+    assert result[3]["snapshot_before"] is None  # No snapshot when chunk started by gap

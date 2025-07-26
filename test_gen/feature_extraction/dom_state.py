@@ -61,7 +61,7 @@ def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
             return
 
         # Extract node properties
-        tag = node_data.get("tagName", TYPE_TO_TAG_MAP[node_data.get("type")])
+        tag = get_tag_name(node_data)
         attributes = node_data.get("attributes", {})
         text = node_data.get("textContent", "")
 
@@ -122,7 +122,7 @@ def _apply_node_additions(node_by_id: Dict[int, UINode], adds: List[dict]) -> No
         parent_id = add_record.get("parentId")
 
         if node_id is not None:
-            tag = node_data.get("tagName", TYPE_TO_TAG_MAP[node_data.get("type")])
+            tag = get_tag_name(node_data)
             attributes = node_data.get("attributes", {})
             text = node_data.get("textContent", "")
 
@@ -154,3 +154,12 @@ def _apply_text_changes(node_by_id: Dict[int, UINode], texts: List[dict]) -> Non
         if node_id is not None and node_id in node_by_id:
             new_text = text_record.get("value", "")
             node_by_id[node_id].text = new_text
+
+
+def get_tag_name(node_data: dict) -> str:
+    """
+    Get the tag name for a given node data dictionary.
+    """
+    return node_data.get(
+        "tagName", TYPE_TO_TAG_MAP.get(node_data.get("type"), "unknown")
+    )
