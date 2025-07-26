@@ -9,6 +9,7 @@ through mutation tracking.
 
 from typing import Dict, List
 from .models import UINode
+from ..rrweb_util import is_full_snapshot, is_dom_mutation_event
 
 # Sync w/ rrweb's NodeType enum
 # https://github.com/rrweb-io/rrweb/blob/4db9782d1278a2b7235ed48162ccedf0e0952113/packages/rrdom/src/document.ts#L753
@@ -45,8 +46,8 @@ def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
     Raises:
         ValueError: If the event is not a valid FullSnapshot event
     """
-    if full_snapshot_event.get("type") != 2:
-        raise ValueError("Event must be a FullSnapshot event (type == 2)")
+    if not is_full_snapshot(full_snapshot_event):
+        raise ValueError("Event must be a FullSnapshot event")
 
     if "data" not in full_snapshot_event or "node" not in full_snapshot_event["data"]:
         raise ValueError("FullSnapshot event must contain data.node")
@@ -101,7 +102,7 @@ def apply_mutations(node_by_id: Dict[int, UINode], mutation_events: List[dict]) 
     """
     for event in mutation_events:
         # Only process mutation events
-        if event.get("type") != 3 or event.get("data", {}).get("source") != 0:
+        if not is_dom_mutation_event(event):
             continue
 
         data = event.get("data", {})

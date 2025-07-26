@@ -7,6 +7,7 @@ interactions (incremental changes), and other event types for downstream process
 """
 
 from typing import List, Tuple
+from ..rrweb_util import EventType
 
 
 def classify_events(events: List[dict]) -> Tuple[List[dict], List[dict], List[dict]]:
@@ -36,10 +37,10 @@ def classify_events(events: List[dict]) -> Tuple[List[dict], List[dict], List[di
         # Access 'type' field - will raise KeyError if missing
         event_type = event["type"]
 
-        if event_type == 2:
+        if event_type == EventType.FULL_SNAPSHOT:
             # FullSnapshot events - complete DOM captures
             snapshots.append(event)
-        elif event_type == 3:
+        elif event_type == EventType.INCREMENTAL_SNAPSHOT:
             # IncrementalSnapshot events - DOM mutations, mouse moves, inputs, etc.
             interactions.append(event)
         else:

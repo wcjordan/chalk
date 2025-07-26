@@ -8,6 +8,7 @@ that can be processed independently for feature extraction.
 
 from typing import List
 from . import config
+from ..rrweb_util import get_event_timestamp
 
 
 def _new_chunk(snapshot_before=None) -> dict:
@@ -74,10 +75,10 @@ def segment_into_chunks(
     last_timestamp = None
 
     for interaction in interactions:
-        interaction_timestamp = interaction["timestamp"]
+        interaction_timestamp = get_event_timestamp(interaction)
 
         # Check if we need to start a new chunk due to snapshot boundary
-        while next_snapshot and interaction_timestamp >= next_snapshot["timestamp"]:
+        while next_snapshot and interaction_timestamp >= get_event_timestamp(next_snapshot):
             # Finish current chunk if it has events
             if current_chunk["interactions"]:
                 chunks.append(current_chunk)

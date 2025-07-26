@@ -9,6 +9,13 @@ user interactions.
 
 from typing import List, Set, Tuple
 from . import config
+from ..rrweb_util import (
+    is_incremental_snapshot,
+    is_mouse_move_event,
+    is_scroll_event,
+    is_dom_mutation_event,
+    get_scroll_delta,
+)
 
 
 def is_low_signal(event: dict) -> bool:
@@ -40,32 +47,27 @@ def is_low_signal(event: dict) -> bool:
         >>> is_low_signal(event)
         True
     """
-    # Only filter IncrementalSnapshot events (type == 3)
-    if event.get("type") != 3:
+    # Only filter IncrementalSnapshot events
+    if not is_incremental_snapshot(event):
         return False
 
-    data = event.get("data", {})
-    source = data.get("source")
-
-    # Drop mousemove events (source == 1)
-    if source == 1:
+    # Drop mousemove events
+    if is_mouse_move_event(event):
         return True
 
-    # Drop micro-scrolls (source == 3 with small delta)
-    if source == 3:
-        # Check for scroll distance in x or y direction
-        x_delta = abs(data.get("x", 0))
-        y_delta = abs(data.get("y", 0))
-
+    # Drop micro-scrolls with small delta
+    if is_scroll_event(event):
+        x_delta, y_delta = get_scroll_delta(event)
         # If both deltas are below threshold, consider it a micro-scroll
         if (
-            x_delta < config.MICRO_SCROLL_THRESHOLD
-            and y_delta < config.MICRO_SCROLL_THRESHOLD
+            abs(x_delta) < config.MICRO_SCROLL_THRESHOLD
+            and abs(y_delta) < config.MICRO_SCROLL_THRESHOLD
         ):
             return True
 
-    # Drop trivial DOM mutations (source == 0)
-    if source == 0:
+    # Drop trivial DOM mutations
+    if is_dom_mutation_event(event):
+        data = event.get("data", {})
         # Check for trivial mutations - this is a simplified heuristic
         # In practice, this would need more sophisticated analysis
         adds = data.get("adds", [])
