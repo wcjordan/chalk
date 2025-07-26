@@ -200,4 +200,4 @@ if __name__ == "__main__":
                 SESSIONS_HANDLED += 1
             except Exception as e:
                 print(f"Error processing {curr_filename}: {e}")
-                raise e
+                raise
