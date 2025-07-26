@@ -93,7 +93,9 @@ def ingest_session(
             continue
 
         # Normalize into Chunk object
-        chunk = normalize_chunk(cleaned_events, session_id, chunk_index, raw_chunk.get("snapshot_before"))
+        chunk = normalize_chunk(
+            cleaned_events, session_id, chunk_index, raw_chunk.get("snapshot_before")
+        )
         normalized_chunks.append(chunk)
 
     return normalized_chunks

@@ -154,7 +154,7 @@ if __name__ == "__main__":
             curr_filepath = os.path.join(SESSION_DIR, curr_filename)
             try:
                 chunks = ingest_session(curr_session_id, curr_filepath)
-                dom = {} # Start with empty DOM state
+                dom = {}  # Start with empty DOM state
                 for chunk in chunks:
                     # Initialize DOM state from FullSnapshot if available
                     # Otherwise use the DOM from the last chunk (after mutations)
@@ -188,10 +188,14 @@ if __name__ == "__main__":
                     for action, count in interaction_types.items():
                         print(f"  User interactions - {action}: {count}")
 
-                    if len(feature_chunk.features['mouse_clusters']):
-                        print(f"  Mouse clusters: {len(feature_chunk.features['mouse_clusters'])}")
-                    if len(feature_chunk.features['scroll_patterns']):
-                        print(f"  Scroll patterns: {len(feature_chunk.features['scroll_patterns'])}")
+                    if len(feature_chunk.features["mouse_clusters"]):
+                        print(
+                            f"  Mouse clusters: {len(feature_chunk.features['mouse_clusters'])}"
+                        )
+                    if len(feature_chunk.features["scroll_patterns"]):
+                        print(
+                            f"  Scroll patterns: {len(feature_chunk.features['scroll_patterns'])}"
+                        )
 
                 sessions_handled += 1
             except Exception as e:

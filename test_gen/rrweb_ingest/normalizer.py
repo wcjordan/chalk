@@ -11,7 +11,10 @@ from .models import Chunk
 
 
 def normalize_chunk(
-    raw_events: List[Dict[str, Any]], session_id: str, chunk_index: int, snapshot_before: dict
+    raw_events: List[Dict[str, Any]],
+    session_id: str,
+    chunk_index: int,
+    snapshot_before: dict,
 ) -> Chunk:
     """
     Builds a Chunk object from a list of cleaned events.
