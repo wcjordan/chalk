@@ -7,16 +7,17 @@ covering attribute changes, text modifications, node additions, and removals.
 
 import pytest
 from feature_extraction.extractors import extract_dom_mutations
+from rrweb_util import EventType, IncrementalSource
 
 
 @pytest.fixture(name="single_attribute_mutation_event")
 def fixture_single_attribute_mutation_event():
     """Fixture providing a mutation event with multiple attribute changes."""
     return {
-        "type": 3,
+        "type": EventType.INCREMENTAL_SNAPSHOT,
         "timestamp": 12345,
         "data": {
-            "source": 0,
+            "source": IncrementalSource.MUTATION,
             "attributes": [
                 {
                     "id": 42,
@@ -36,18 +37,30 @@ def fixture_non_mutation_events():
     """Fixture providing events that are not mutation events."""
     return [
         # FullSnapshot event
-        {"type": 2, "timestamp": 1000, "data": {"node": {}}},
+        {"type": EventType.FULL_SNAPSHOT, "timestamp": 1000, "data": {"node": {}}},
         # Mouse move event
-        {"type": 3, "timestamp": 2000, "data": {"source": 1, "x": 100, "y": 200}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 2000,
+            "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 100, "y": 200},
+        },
         # Click event
-        {"type": 3, "timestamp": 3000, "data": {"source": 2, "id": 123}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 3000,
+            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 123},
+        },
         # Scroll event
-        {"type": 3, "timestamp": 4000, "data": {"source": 3, "x": 0, "y": 100}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 4000,
+            "data": {"source": IncrementalSource.SCROLL, "x": 0, "y": 100},
+        },
         # Input event
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 5000,
-            "data": {"source": 5, "id": 456, "text": "input"},
+            "data": {"source": IncrementalSource.INPUT, "id": 456, "text": "input"},
         },
     ]
 
@@ -75,13 +88,17 @@ def test_extract_empty_mutation_data():
     """Test that events with empty mutation data do not produce spurious entries."""
     empty_mutation_events = [
         # Event with no mutation data at all
-        {"type": 3, "timestamp": 1000, "data": {"source": 0}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1000,
+            "data": {"source": IncrementalSource.MUTATION},
+        },
         # Event with empty mutation arrays
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2000,
             "data": {
-                "source": 0,
+                "source": IncrementalSource.MUTATION,
                 "attributes": [],
                 "texts": [],
                 "adds": [],
@@ -101,20 +118,23 @@ def test_extract_preserves_event_order():
     # Create events with different timestamps in a specific order
     events = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": 0, "removes": [{"id": 1}]},
+            "data": {"source": IncrementalSource.MUTATION, "removes": [{"id": 1}]},
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2000,
-            "data": {"source": 0, "texts": [{"id": 2, "value": "text"}]},
+            "data": {
+                "source": IncrementalSource.MUTATION,
+                "texts": [{"id": 2, "value": "text"}],
+            },
         },
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 3000,
             "data": {
-                "source": 0,
+                "source": IncrementalSource.MUTATION,
                 "attributes": [{"id": 3, "attributes": {"class": "test"}}],
             },
         },
@@ -136,10 +156,10 @@ def test_extract_handles_missing_node_ids():
     """Test that mutation records without node IDs are safely ignored."""
     events_with_missing_ids = [
         {
-            "type": 3,
+            "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
             "data": {
-                "source": 0,
+                "source": IncrementalSource.MUTATION,
                 "attributes": [
                     {"attributes": {"class": "test"}},  # Missing id
                     {"id": 42, "attributes": {"valid": "true"}},  # Valid
@@ -182,16 +202,16 @@ def test_extract_handles_missing_node_ids():
 def test_extract_handles_node_type_fallback():
     """Test that node additions handle 'type' field when 'tagName' is missing."""
     event_with_type_field = {
-        "type": 3,
+        "type": EventType.INCREMENTAL_SNAPSHOT,
         "timestamp": 1000,
         "data": {
-            "source": 0,
+            "source": IncrementalSource.MUTATION,
             "adds": [
                 {
                     "parentId": 50,
                     "node": {
                         "id": 100,
-                        "type": 3,  # Using 'type' instead of 'tagName'.  Tuype for text_node
+                        "type": 3,  # Using 'type' instead of 'tagName'.  Type for text_node
                         "textContent": "Text node",
                     },
                 }

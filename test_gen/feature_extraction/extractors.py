@@ -10,9 +10,21 @@ Configuration:
 """
 
 from typing import List
+
+from rrweb_util import (
+    is_incremental_snapshot,
+    is_dom_mutation_event,
+    is_mouse_interaction_event,
+    is_input_event,
+    is_scroll_event,
+    get_event_timestamp,
+    get_event_data,
+    get_target_id,
+    get_mouse_coordinates,
+    get_tag_name,
+)
 from .models import DomMutation, UserInteraction, EventDelay
 from . import config
-from .dom_state import get_tag_name
 
 
 def extract_dom_mutations(events: List[dict]) -> List[DomMutation]:
@@ -39,15 +51,11 @@ def extract_dom_mutations(events: List[dict]) -> List[DomMutation]:
 
     for event in events:
         # Only process mutation events
-        # TODO replace types w/ constants here and throughout
-        if event.get("type") != 3:
+        if not is_dom_mutation_event(event):
             continue
 
-        data = event.get("data", {})
-        if data.get("source") != 0:
-            continue
-
-        timestamp = event.get("timestamp", 0)
+        timestamp = get_event_timestamp(event)
+        data = get_event_data(event)
 
         # Extract different types of mutations
         mutations.extend(_extract_attribute_mutations(data, timestamp))
@@ -165,38 +173,35 @@ def extract_user_interactions(events: List[dict]) -> List[UserInteraction]:
 
     for event in events:
         # Only process IncrementalSnapshot events
-        if event.get("type") != 3:
+        if not is_incremental_snapshot(event):
             continue
 
-        data = event.get("data", {})
-        source = data.get("source")
-        timestamp = event.get("timestamp", 0)
+        timestamp = get_event_timestamp(event)
 
-        if source == 2:
+        if is_mouse_interaction_event(event):
             # Mouse interactions (click, dblclick)
-            interaction = _extract_click_interaction(data, timestamp)
+            interaction = _extract_click_interaction(event, timestamp)
             if interaction:
                 interactions.append(interaction)
-        elif source == 5:
+        elif is_input_event(event):
             # Input events (text changes, checkboxes)
-            interaction = _extract_input_interaction(data, timestamp)
+            interaction = _extract_input_interaction(event, timestamp)
             if interaction:
                 interactions.append(interaction)
-        elif source == 3:
+        elif is_scroll_event(event):
             # Scroll events
-            interaction = _extract_scroll_interaction(data, timestamp)
+            interaction = _extract_scroll_interaction(event, timestamp)
             if interaction:
                 interactions.append(interaction)
 
     return interactions
 
 
-def _extract_click_interaction(data: dict, timestamp: int) -> UserInteraction:
+def _extract_click_interaction(event: dict, timestamp: int) -> UserInteraction:
     """Extract click interaction from mouse event data."""
-    target_id = data.get("id")
+    target_id = get_target_id(event)
     if target_id is not None:
-        x = data.get("x", 0)
-        y = data.get("y", 0)
+        x, y = get_mouse_coordinates(event)
         return UserInteraction(
             action="click",
             target_id=target_id,
@@ -233,8 +238,8 @@ def compute_inter_event_delays(events: List[dict]) -> List[EventDelay]:
         current_event = events[i]
         next_event = events[i + 1]
 
-        from_ts = current_event.get("timestamp", 0)
-        to_ts = next_event.get("timestamp", 0)
+        from_ts = get_event_timestamp(current_event)
+        to_ts = get_event_timestamp(next_event)
         delta_ms = to_ts - from_ts
 
         delay = EventDelay(from_ts=from_ts, to_ts=to_ts, delta_ms=delta_ms)
@@ -275,31 +280,31 @@ def compute_reaction_delays(
     delays = []
 
     # Sort events by timestamp to ensure sequential processing
-    events.sort(key=lambda e: e.get("timestamp", 0))
+    events.sort(key=get_event_timestamp)
 
     # Separate interaction and mutation events
     interaction_events = [
         event
         for event in events
-        if event.get("type") == 3
-        and event.get("data", {}).get("source") == interaction_source
+        if is_incremental_snapshot(event)
+        and get_event_data(event).get("source") == interaction_source
     ]
     mutation_events = [
         event
         for event in events
-        if event.get("type") == 3
-        and event.get("data", {}).get("source") == mutation_source
+        if is_incremental_snapshot(event)
+        and get_event_data(event).get("source") == mutation_source
     ]
 
     # Use a pointer to track the position in mutation events
     mutation_index = 0
     for interaction in interaction_events:
-        interaction_ts = interaction.get("timestamp", 0)
+        interaction_ts = get_event_timestamp(interaction)
 
         # Find the next mutation event within the time window
         while mutation_index < len(mutation_events):
             mutation = mutation_events[mutation_index]
-            mutation_ts = mutation.get("timestamp", 0)
+            mutation_ts = get_event_timestamp(mutation)
 
             if (
                 mutation_ts > interaction_ts
@@ -318,10 +323,11 @@ def compute_reaction_delays(
     return delays
 
 
-def _extract_input_interaction(data: dict, timestamp: int) -> UserInteraction:
+def _extract_input_interaction(event: dict, timestamp: int) -> UserInteraction:
     """Extract input interaction from input event data."""
-    target_id = data.get("id")
+    target_id = get_target_id(event)
     if target_id is not None:
+        data = get_event_data(event)
         # Input events can have either 'text' or 'isChecked' fields
         value = {}
         if "text" in data:
@@ -338,10 +344,11 @@ def _extract_input_interaction(data: dict, timestamp: int) -> UserInteraction:
     return None
 
 
-def _extract_scroll_interaction(data: dict, timestamp: int) -> UserInteraction:
+def _extract_scroll_interaction(event: dict, timestamp: int) -> UserInteraction:
     """Extract scroll interaction from scroll event data."""
-    target_id = data.get("id")
+    target_id = get_target_id(event)
     if target_id is not None:
+        data = get_event_data(event)
         x = data.get("x", 0)
         y = data.get("y", 0)
         return UserInteraction(

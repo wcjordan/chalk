@@ -13,6 +13,7 @@ import pytest
 
 from rrweb_ingest.pipeline import ingest_session
 from rrweb_ingest.models import Chunk
+from rrweb_util import EventType, IncrementalSource
 
 
 @pytest.fixture(name="create_session_file")
@@ -45,24 +46,44 @@ class TestIngestSession:
         """Test ingesting a basic session with mixed event types."""
         events = [
             # FullSnapshot to establish baseline
-            {"type": 2, "timestamp": 1000, "data": {"source": 0}},
-            # Some interactions
-            {"type": 3, "timestamp": 1100, "data": {"source": 2, "id": 5}},  # click
             {
-                "type": 3,
+                "type": EventType.FULL_SNAPSHOT,
+                "timestamp": 1000,
+                "data": {"source": IncrementalSource.MUTATION},
+            },
+            # Some interactions
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1100,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5},
+            },  # click
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
                 "timestamp": 1200,
-                "data": {"source": 5, "text": "hello"},
+                "data": {"source": IncrementalSource.INPUT, "text": "hello"},
             },  # input
             {
-                "type": 3,
+                "type": EventType.INCREMENTAL_SNAPSHOT,
                 "timestamp": 1300,
-                "data": {"source": 3, "x": 50, "y": 100},
+                "data": {"source": IncrementalSource.SCROLL, "x": 50, "y": 100},
             },  # scroll
             # Another snapshot
-            {"type": 2, "timestamp": 2000, "data": {"source": 0}},
+            {
+                "type": EventType.FULL_SNAPSHOT,
+                "timestamp": 2000,
+                "data": {"source": IncrementalSource.MUTATION},
+            },
             # More interactions
-            {"type": 3, "timestamp": 2100, "data": {"source": 2, "id": 10}},  # click
-            {"type": 3, "timestamp": 2200, "data": {"source": 2, "id": 15}},  # click
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 2100,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 10},
+            },  # click
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 2200,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 15},
+            },  # click
         ]
 
         temp_path = create_session_file(events)
@@ -89,19 +110,35 @@ class TestIngestSession:
     def test_ingest_session_with_noise_filtering(self, create_session_file):
         """Test that noise events are properly filtered during ingestion."""
         events = [
-            {"type": 2, "timestamp": 1000, "data": {"source": 0}},  # snapshot
-            {"type": 3, "timestamp": 1100, "data": {"source": 2, "id": 5}},  # click
-            {"type": 3, "timestamp": 1150, "data": {"source": 1}},  # mousemove (noise)
             {
-                "type": 3,
+                "type": EventType.FULL_SNAPSHOT,
+                "timestamp": 1000,
+                "data": {"source": IncrementalSource.MUTATION},
+            },  # snapshot
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1100,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5},
+            },  # click
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1150,
+                "data": {"source": IncrementalSource.MOUSE_MOVE},
+            },  # mousemove (noise)
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
                 "timestamp": 1200,
-                "data": {"source": 3, "x": 5, "y": 5},
+                "data": {"source": IncrementalSource.SCROLL, "x": 5, "y": 5},
             },  # micro-scroll (noise)
-            {"type": 3, "timestamp": 1300, "data": {"source": 2, "id": 10}},  # click
             {
-                "type": 3,
+                "type": EventType.INCREMENTAL_SNAPSHOT,
                 "timestamp": 1300,
-                "data": {"source": 2, "id": 10},
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 10},
+            },  # click
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1300,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 10},
             },  # duplicate
         ]
 
@@ -114,7 +151,10 @@ class TestIngestSession:
 
         # Should only have the 2 unique click events (noise filtered, duplicate removed)
         assert chunk.metadata["num_events"] == 2
-        assert all(event["data"]["source"] == 2 for event in chunk.events)
+        assert all(
+            event["data"]["source"] == IncrementalSource.MOUSE_INTERACTION
+            for event in chunk.events
+        )
 
     def test_ingest_session_chunking_by_snapshots(self, create_session_file):
         """Test that snapshots create proper chunk boundaries."""

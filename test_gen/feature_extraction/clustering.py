@@ -21,6 +21,8 @@ Usage:
 """
 
 from typing import List
+
+from rrweb_util import is_mouse_move_event, get_event_timestamp, get_mouse_coordinates
 from .models import MouseCluster
 from . import config
 
@@ -92,11 +94,7 @@ def _filter_mousemove_events(events: List[dict]) -> List[dict]:
     Returns:
         List of events where type == 3 and data.source == 1
     """
-    return [
-        event
-        for event in events
-        if event.get("type") == 3 and event.get("data", {}).get("source") == 1
-    ]
+    return [event for event in events if is_mouse_move_event(event)]
 
 
 def _extract_point_from_event(event: dict) -> dict:
@@ -109,11 +107,8 @@ def _extract_point_from_event(event: dict) -> dict:
     Returns:
         Dictionary with x, y, and ts keys
     """
-    data = event.get("data", {})
-    timestamp = event.get("timestamp", 0)
-    x = data.get("x", 0)
-    y = data.get("y", 0)
-
+    timestamp = get_event_timestamp(event)
+    x, y = get_mouse_coordinates(event)
     return {"x": x, "y": y, "ts": timestamp}
 
 

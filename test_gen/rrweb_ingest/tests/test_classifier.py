@@ -7,6 +7,7 @@ into snapshots, interactions, and others based on event type.
 
 import pytest
 from rrweb_ingest.classifier import classify_events
+from rrweb_util import EventType
 
 
 def test_classify_empty_event_list():
@@ -50,11 +51,19 @@ def test_classify_unexpected_type_values():
 def test_classify_preserves_event_order():
     """Test that events maintain their relative order within each category."""
     events = [
-        {"type": 2, "timestamp": 1000, "data": {"id": "snap1"}},
-        {"type": 3, "timestamp": 2000, "data": {"id": "int1"}},
-        {"type": 2, "timestamp": 3000, "data": {"id": "snap2"}},
-        {"type": 3, "timestamp": 4000, "data": {"id": "int2"}},
-        {"type": 0, "timestamp": 5000, "data": {"id": "other1"}},
+        {"type": EventType.FULL_SNAPSHOT, "timestamp": 1000, "data": {"id": "snap1"}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 2000,
+            "data": {"id": "int1"},
+        },
+        {"type": EventType.FULL_SNAPSHOT, "timestamp": 3000, "data": {"id": "snap2"}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 4000,
+            "data": {"id": "int2"},
+        },
+        {"type": EventType.META, "timestamp": 5000, "data": {"id": "other1"}},
     ]
 
     snapshots, interactions, others = classify_events(events)

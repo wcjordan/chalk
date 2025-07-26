@@ -25,6 +25,8 @@ Usage:
 """
 
 from typing import List
+
+from rrweb_util import is_scroll_event, is_dom_mutation_event, get_event_timestamp
 from .models import ScrollPattern
 from . import config
 
@@ -69,12 +71,12 @@ def detect_scroll_patterns(
     mutation_index = 0
 
     for scroll_event in scroll_events:
-        scroll_ts = scroll_event.get("timestamp", 0)
+        scroll_ts = get_event_timestamp(scroll_event)
 
         # Look for the next mutation event within the time window
         while mutation_index < len(mutation_events):
             mutation_event = mutation_events[mutation_index]
-            mutation_ts = mutation_event.get("timestamp", 0)
+            mutation_ts = get_event_timestamp(mutation_event)
 
             # If mutation is before scroll, skip it
             if mutation_ts <= scroll_ts:
@@ -109,13 +111,9 @@ def _filter_scroll_events(events: List[dict]) -> List[dict]:
     Returns:
         List of events where type == 3 and data.source == 3, sorted by timestamp
     """
-    scroll_events = [
-        event
-        for event in events
-        if event.get("type") == 3 and event.get("data", {}).get("source") == 3
-    ]
+    scroll_events = [event for event in events if is_scroll_event(event)]
     # Sort by timestamp to ensure chronological processing
-    scroll_events.sort(key=lambda e: e.get("timestamp", 0))
+    scroll_events.sort(key=get_event_timestamp)
     return scroll_events
 
 
@@ -129,11 +127,7 @@ def _filter_mutation_events(events: List[dict]) -> List[dict]:
     Returns:
         List of events where type == 3 and data.source == 0, sorted by timestamp
     """
-    mutation_events = [
-        event
-        for event in events
-        if event.get("type") == 3 and event.get("data", {}).get("source") == 0
-    ]
+    mutation_events = [event for event in events if is_dom_mutation_event(event)]
     # Sort by timestamp to ensure chronological processing
-    mutation_events.sort(key=lambda e: e.get("timestamp", 0))
+    mutation_events.sort(key=get_event_timestamp)
     return mutation_events

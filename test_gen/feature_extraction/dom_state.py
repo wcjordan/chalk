@@ -8,24 +8,9 @@ through mutation tracking.
 """
 
 from typing import Dict, List
-from .models import UINode
 
-# Sync w/ rrweb's NodeType enum
-# https://github.com/rrweb-io/rrweb/blob/4db9782d1278a2b7235ed48162ccedf0e0952113/packages/rrdom/src/document.ts#L753
-TYPE_TO_TAG_MAP = {
-    0: "placeholder",  # Used for the root node, but potentially others
-    1: "element_node",
-    2: "attribute_node",
-    3: "text_node",
-    4: "cdata_section_node",
-    5: "entity_reference_node",
-    6: "entity_node",
-    7: "processing_instruction_node",
-    8: "comment_node",
-    9: "document_node",
-    10: "document_type_node",
-    11: "document_fragment_node",
-}
+from rrweb_util import is_full_snapshot, is_dom_mutation_event, get_tag_name
+from .models import UINode
 
 
 def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
@@ -45,8 +30,8 @@ def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
     Raises:
         ValueError: If the event is not a valid FullSnapshot event
     """
-    if full_snapshot_event.get("type") != 2:
-        raise ValueError("Event must be a FullSnapshot event (type == 2)")
+    if not is_full_snapshot(full_snapshot_event):
+        raise ValueError("Event must be a FullSnapshot event")
 
     if "data" not in full_snapshot_event or "node" not in full_snapshot_event["data"]:
         raise ValueError("FullSnapshot event must contain data.node")
@@ -101,7 +86,7 @@ def apply_mutations(node_by_id: Dict[int, UINode], mutation_events: List[dict]) 
     """
     for event in mutation_events:
         # Only process mutation events
-        if event.get("type") != 3 or event.get("data", {}).get("source") != 0:
+        if not is_dom_mutation_event(event):
             continue
 
         data = event.get("data", {})
@@ -154,12 +139,3 @@ def _apply_text_changes(node_by_id: Dict[int, UINode], texts: List[dict]) -> Non
         if node_id is not None and node_id in node_by_id:
             new_text = text_record.get("value", "")
             node_by_id[node_id].text = new_text
-
-
-def get_tag_name(node_data: dict) -> str:
-    """
-    Get the tag name for a given node data dictionary.
-    """
-    return node_data.get(
-        "tagName", TYPE_TO_TAG_MAP.get(node_data.get("type"), "unknown")
-    )
