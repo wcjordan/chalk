@@ -12,7 +12,7 @@ Configuration:
 from typing import List
 from .models import DomMutation, UserInteraction, EventDelay
 from . import config
-from ..rrweb_util import (
+from rrweb_util import (
     is_incremental_snapshot,
     is_dom_mutation_event,
     is_mouse_interaction_event,

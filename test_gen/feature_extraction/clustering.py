@@ -23,7 +23,7 @@ Usage:
 from typing import List
 from .models import MouseCluster
 from . import config
-from ..rrweb_util import is_mouse_move_event, get_event_timestamp, get_mouse_coordinates
+from rrweb_util import is_mouse_move_event, get_event_timestamp, get_mouse_coordinates
 
 
 def cluster_mouse_trajectories(

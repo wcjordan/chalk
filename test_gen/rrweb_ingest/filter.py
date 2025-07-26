@@ -9,7 +9,7 @@ user interactions.
 
 from typing import List, Set, Tuple
 from . import config
-from ..rrweb_util import (
+from rrweb_util import (
     is_incremental_snapshot,
     is_mouse_move_event,
     is_scroll_event,

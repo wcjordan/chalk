@@ -7,7 +7,7 @@ interactions (incremental changes), and other event types for downstream process
 """
 
 from typing import List, Tuple
-from ..rrweb_util import EventType
+from rrweb_util import EventType
 
 
 def classify_events(events: List[dict]) -> Tuple[List[dict], List[dict], List[dict]]:

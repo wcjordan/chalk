@@ -27,7 +27,7 @@ Usage:
 from typing import List
 from .models import ScrollPattern
 from . import config
-from ..rrweb_util import is_scroll_event, is_dom_mutation_event, get_event_timestamp
+from rrweb_util import is_scroll_event, is_dom_mutation_event, get_event_timestamp
 
 
 def detect_scroll_patterns(

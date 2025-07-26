@@ -8,7 +8,7 @@ that can be processed independently for feature extraction.
 
 from typing import List
 from . import config
-from ..rrweb_util import get_event_timestamp
+from rrweb_util import get_event_timestamp
 
 
 def _new_chunk(snapshot_before=None) -> dict:
