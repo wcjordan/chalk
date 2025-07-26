@@ -138,5 +138,3 @@ def _apply_text_changes(node_by_id: Dict[int, UINode], texts: List[dict]) -> Non
         if node_id is not None and node_id in node_by_id:
             new_text = text_record.get("value", "")
             node_by_id[node_id].text = new_text
-
-

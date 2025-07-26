@@ -23,7 +23,10 @@ def fixture_scroll_with_mutation_outside_window():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 4000,  # 3000ms later (outside 2000ms window)
-            "data": {"source": IncrementalSource.MUTATION, "adds": [{"node": {"id": 200}}]},
+            "data": {
+                "source": IncrementalSource.MUTATION,
+                "adds": [{"node": {"id": 200}}],
+            },
         },  # Mutation
     ]
 
@@ -62,12 +65,18 @@ def fixture_out_of_order_events():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": IncrementalSource.MUTATION, "adds": [{"node": {"id": 200}}]},
+            "data": {
+                "source": IncrementalSource.MUTATION,
+                "adds": [{"node": {"id": 200}}],
+            },
         },  # Mutation (earlier timestamp)
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2200,  # 200ms after scroll
-            "data": {"source": IncrementalSource.MUTATION, "texts": [{"id": 201, "value": "text"}]},
+            "data": {
+                "source": IncrementalSource.MUTATION,
+                "texts": [{"id": 201, "value": "text"}],
+            },
         },  # Another mutation
     ]
 
@@ -79,13 +88,29 @@ def fixture_non_scroll_mutation_events():
         # FullSnapshot event
         {"type": EventType.FULL_SNAPSHOT, "timestamp": 1000, "data": {"node": {}}},
         # Mouse move event
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1100, "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 100, "y": 200}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1100,
+            "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 100, "y": 200},
+        },
         # Click event
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1200, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1200,
+            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42},
+        },
         # Input event
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1300, "data": {"source": IncrementalSource.INPUT, "text": "input"}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1300,
+            "data": {"source": IncrementalSource.INPUT, "text": "input"},
+        },
         # Meta event
-        {"type": EventType.CUSTOM, "timestamp": 1400, "data": {"width": 1920, "height": 1080}},
+        {
+            "type": EventType.CUSTOM,
+            "timestamp": 1400,
+            "data": {"width": 1920, "height": 1080},
+        },
     ]
 
 
@@ -147,12 +172,18 @@ def test_scroll_matches_first_mutation_only():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1200,  # 200ms later
-            "data": {"source": IncrementalSource.MUTATION, "adds": [{"node": {"id": 200}}]},
+            "data": {
+                "source": IncrementalSource.MUTATION,
+                "adds": [{"node": {"id": 200}}],
+            },
         },  # First mutation
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1400,  # 400ms later
-            "data": {"source": IncrementalSource.MUTATION, "texts": [{"id": 201, "value": "text"}]},
+            "data": {
+                "source": IncrementalSource.MUTATION,
+                "texts": [{"id": 201, "value": "text"}],
+            },
         },  # Second mutation
     ]
 
@@ -182,12 +213,18 @@ def test_patterns_returned_in_chronological_order():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1200,  # 200ms after first scroll
-            "data": {"source": IncrementalSource.MUTATION, "adds": [{"node": {"id": 200}}]},
+            "data": {
+                "source": IncrementalSource.MUTATION,
+                "adds": [{"node": {"id": 200}}],
+            },
         },  # Mutation for first scroll
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2300,  # 300ms after second scroll
-            "data": {"source": IncrementalSource.MUTATION, "texts": [{"id": 201, "value": "text"}]},
+            "data": {
+                "source": IncrementalSource.MUTATION,
+                "texts": [{"id": 201, "value": "text"}],
+            },
         },  # Mutation for second scroll
     ]
 
@@ -206,7 +243,10 @@ def test_mutation_before_scroll_ignored():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": IncrementalSource.MUTATION, "adds": [{"node": {"id": 200}}]},
+            "data": {
+                "source": IncrementalSource.MUTATION,
+                "adds": [{"node": {"id": 200}}],
+            },
         },  # Mutation first
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
@@ -231,7 +271,10 @@ def test_missing_timestamps_default_to_zero():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": IncrementalSource.MUTATION, "adds": [{"node": {"id": 200}}]},
+            "data": {
+                "source": IncrementalSource.MUTATION,
+                "adds": [{"node": {"id": 200}}],
+            },
         },  # Mutation with timestamp
     ]
 

@@ -20,13 +20,29 @@ def fixture_non_mousemove_events():
         # FullSnapshot event
         {"type": EventType.FULL_SNAPSHOT, "timestamp": 1000, "data": {"node": {}}},
         # Click event (source 2)
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1100, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1100,
+            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42},
+        },
         # DOM mutation (source 0)
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1200, "data": {"source": IncrementalSource.MUTATION, "adds": []}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1200,
+            "data": {"source": IncrementalSource.MUTATION, "adds": []},
+        },
         # Scroll event (source 3)
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1300, "data": {"source": IncrementalSource.SCROLL, "x": 0, "y": 100}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1300,
+            "data": {"source": IncrementalSource.SCROLL, "x": 0, "y": 100},
+        },
         # Input event (source 5)
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1400, "data": {"source": IncrementalSource.INPUT, "text": "input"}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1400,
+            "data": {"source": IncrementalSource.INPUT, "text": "input"},
+        },
     ]
 
 

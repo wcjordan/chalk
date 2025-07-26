@@ -39,11 +39,23 @@ def fixture_non_mutation_events():
         # FullSnapshot event
         {"type": EventType.FULL_SNAPSHOT, "timestamp": 1000, "data": {"node": {}}},
         # Mouse move event
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 2000, "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 100, "y": 200}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 2000,
+            "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 100, "y": 200},
+        },
         # Click event
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 3000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 123}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 3000,
+            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 123},
+        },
         # Scroll event
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 4000, "data": {"source": IncrementalSource.SCROLL, "x": 0, "y": 100}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 4000,
+            "data": {"source": IncrementalSource.SCROLL, "x": 0, "y": 100},
+        },
         # Input event
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
@@ -76,7 +88,11 @@ def test_extract_empty_mutation_data():
     """Test that events with empty mutation data do not produce spurious entries."""
     empty_mutation_events = [
         # Event with no mutation data at all
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.MUTATION}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1000,
+            "data": {"source": IncrementalSource.MUTATION},
+        },
         # Event with empty mutation arrays
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
@@ -109,7 +125,10 @@ def test_extract_preserves_event_order():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2000,
-            "data": {"source": IncrementalSource.MUTATION, "texts": [{"id": 2, "value": "text"}]},
+            "data": {
+                "source": IncrementalSource.MUTATION,
+                "texts": [{"id": 2, "value": "text"}],
+            },
         },
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,

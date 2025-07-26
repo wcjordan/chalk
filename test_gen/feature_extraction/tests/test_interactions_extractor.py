@@ -17,7 +17,11 @@ def fixture_non_interaction_events():
         # FullSnapshot event
         {"type": EventType.FULL_SNAPSHOT, "timestamp": 1000, "data": {"node": {}}},
         # Mouse move event (source 1)
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 2000, "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 100, "y": 200}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 2000,
+            "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 100, "y": 200},
+        },
         # DOM mutation event (source 0)
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
@@ -25,9 +29,17 @@ def fixture_non_interaction_events():
             "data": {"source": IncrementalSource.MUTATION, "adds": []},
         },
         # Unknown source
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 4000, "data": {"source": 99, "id": 123}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 4000,
+            "data": {"source": 99, "id": 123},
+        },
         # Meta event
-        {"type": EventType.CUSTOM, "timestamp": 5000, "data": {"width": 1920, "height": 1080}},
+        {
+            "type": EventType.CUSTOM,
+            "timestamp": 5000,
+            "data": {"width": 1920, "height": 1080},
+        },
     ]
 
 
@@ -51,7 +63,12 @@ def test_extract_preserves_event_order():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2000,
-            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 2, "x": 50, "y": 60},
+            "data": {
+                "source": IncrementalSource.MOUSE_INTERACTION,
+                "id": 2,
+                "x": 50,
+                "y": 60,
+            },
         },  # click
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
@@ -78,12 +95,21 @@ def test_extract_handles_missing_target_ids():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "x": 100, "y": 200},  # Missing id
+            "data": {
+                "source": IncrementalSource.MOUSE_INTERACTION,
+                "x": 100,
+                "y": 200,
+            },  # Missing id
         },
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2000,
-            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42, "x": 150, "y": 250},  # Valid
+            "data": {
+                "source": IncrementalSource.MOUSE_INTERACTION,
+                "id": 42,
+                "x": 150,
+                "y": 250,
+            },  # Valid
         },
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
@@ -93,17 +119,30 @@ def test_extract_handles_missing_target_ids():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 4000,
-            "data": {"source": IncrementalSource.INPUT, "id": 43, "text": "valid"},  # Valid
+            "data": {
+                "source": IncrementalSource.INPUT,
+                "id": 43,
+                "text": "valid",
+            },  # Valid
         },
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 5000,
-            "data": {"source": IncrementalSource.SCROLL, "x": 0, "y": 100},  # Missing id
+            "data": {
+                "source": IncrementalSource.SCROLL,
+                "x": 0,
+                "y": 100,
+            },  # Missing id
         },
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 6000,
-            "data": {"source": IncrementalSource.SCROLL, "id": 44, "x": 0, "y": 200},  # Valid
+            "data": {
+                "source": IncrementalSource.SCROLL,
+                "id": 44,
+                "x": 0,
+                "y": 200,
+            },  # Valid
         },
     ]
 
@@ -125,17 +164,28 @@ def test_extract_handles_missing_coordinates():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42},  # Missing x, y
+            "data": {
+                "source": IncrementalSource.MOUSE_INTERACTION,
+                "id": 42,
+            },  # Missing x, y
         },
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 2000,
-            "data": {"source": IncrementalSource.SCROLL, "id": 43, "x": 100},  # Missing y
+            "data": {
+                "source": IncrementalSource.SCROLL,
+                "id": 43,
+                "x": 100,
+            },  # Missing y
         },
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 3000,
-            "data": {"source": IncrementalSource.SCROLL, "id": 44, "y": 200},  # Missing x
+            "data": {
+                "source": IncrementalSource.SCROLL,
+                "id": 44,
+                "y": 200,
+            },  # Missing x
         },
     ]
 
@@ -168,7 +218,10 @@ def test_extract_handles_empty_input_data():
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": IncrementalSource.INPUT, "id": 42},  # No text or isChecked
+            "data": {
+                "source": IncrementalSource.INPUT,
+                "id": 42,
+            },  # No text or isChecked
         }
     ]
 

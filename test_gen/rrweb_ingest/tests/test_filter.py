@@ -19,7 +19,10 @@ class TestIsLowSignal:
         mousemove_event = {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": IncrementalSource.MOUSE_MOVE, "positions": [{"x": 100, "y": 200}]},
+            "data": {
+                "source": IncrementalSource.MOUSE_MOVE,
+                "positions": [{"x": 100, "y": 200}],
+            },
         }
 
         assert is_low_signal(mousemove_event) is True
@@ -27,11 +30,19 @@ class TestIsLowSignal:
     def test_non_incremental_events_not_filtered(self):
         """Test that non-IncrementalSnapshot events are never filtered."""
         # FullSnapshot event
-        snapshot_event = {"type": EventType.FULL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.MOUSE_MOVE}}
+        snapshot_event = {
+            "type": EventType.FULL_SNAPSHOT,
+            "timestamp": 1000,
+            "data": {"source": IncrementalSource.MOUSE_MOVE},
+        }
         assert is_low_signal(snapshot_event) is False
 
         # Meta event
-        meta_event = {"type": EventType.META, "timestamp": 1000, "data": {"source": IncrementalSource.MOUSE_MOVE}}
+        meta_event = {
+            "type": EventType.META,
+            "timestamp": 1000,
+            "data": {"source": IncrementalSource.MOUSE_MOVE},
+        }
         assert is_low_signal(meta_event) is False
 
     def test_micro_scroll_below_threshold(self):
@@ -39,7 +50,11 @@ class TestIsLowSignal:
         micro_scroll_event = {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": IncrementalSource.SCROLL, "x": 5, "y": 10},  # Both below default 20px threshold
+            "data": {
+                "source": IncrementalSource.SCROLL,
+                "x": 5,
+                "y": 10,
+            },  # Both below default 20px threshold
         }
 
         assert is_low_signal(micro_scroll_event) is True
@@ -64,7 +79,11 @@ class TestIsLowSignal:
         significant_scroll_event = {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1000,
-            "data": {"source": IncrementalSource.SCROLL, "x": 50, "y": 100},  # Above 20px threshold
+            "data": {
+                "source": IncrementalSource.SCROLL,
+                "x": 50,
+                "y": 100,
+            },  # Above 20px threshold
         }
 
         assert is_low_signal(significant_scroll_event) is False
@@ -213,7 +232,11 @@ class TestIsLowSignal:
 
     def test_event_missing_source_field(self):
         """Test handling of events missing the source field in data."""
-        event_no_source = {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {}}
+        event_no_source = {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1000,
+            "data": {},
+        }
         assert is_low_signal(event_no_source) is False
 
 
@@ -228,10 +251,26 @@ class TestCleanChunk:
     def test_preserves_event_order(self):
         """Test that non-noise, unique events are preserved in original order."""
         events = [
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5}},  # click 1
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1500, "data": {"source": IncrementalSource.MOUSE_MOVE}},  # mousemove (noise)
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 2000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 10}},  # click 2
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 3000, "data": {"source": IncrementalSource.INPUT, "id": 15}},  # input
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1000,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5},
+            },  # click 1
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1500,
+                "data": {"source": IncrementalSource.MOUSE_MOVE},
+            },  # mousemove (noise)
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 2000,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 10},
+            },  # click 2
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 3000,
+                "data": {"source": IncrementalSource.INPUT, "id": 15},
+            },  # input
         ]
 
         result = clean_chunk(events)
@@ -245,11 +284,27 @@ class TestCleanChunk:
         """Test that deduplication uses correct signature components."""
         events = [
             # Same type, source, timestamp, but different target id - should keep both
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5}},
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 10}},
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1000,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5},
+            },
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1000,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 10},
+            },
             # Same everything including target id - should deduplicate
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 2000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5}},
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 2000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5}},
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 2000,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5},
+            },
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 2000,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5},
+            },
         ]
 
         result = clean_chunk(events)
@@ -269,7 +324,11 @@ class TestCleanChunk:
                 "timestamp": 1000,
                 "data": {"source": IncrementalSource.SCROLL, "x": 50},
             },  # scroll without id
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.SCROLL, "x": 50}},  # duplicate
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1000,
+                "data": {"source": IncrementalSource.SCROLL, "x": 50},
+            },  # duplicate
             {
                 "type": EventType.INCREMENTAL_SNAPSHOT,
                 "timestamp": 2000,
@@ -286,8 +345,16 @@ class TestCleanChunk:
     def test_complex_filtering_scenario(self):
         """Test a complex scenario with multiple types of noise and duplicates."""
         events = [
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5}},  # click
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1100, "data": {"source": IncrementalSource.MOUSE_MOVE}},  # mousemove (noise)
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1000,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5},
+            },  # click
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1100,
+                "data": {"source": IncrementalSource.MOUSE_MOVE},
+            },  # mousemove (noise)
             {
                 "type": EventType.INCREMENTAL_SNAPSHOT,
                 "timestamp": 1200,
@@ -325,14 +392,22 @@ class TestCleanChunk:
 
         # Should keep: click (deduplicated), significant scroll, input
         assert len(result) == 3
-        assert result[0]["data"]["source"] == IncrementalSource.MOUSE_INTERACTION  # click
-        assert result[1]["data"]["source"] == IncrementalSource.SCROLL  # significant scroll
+        assert (
+            result[0]["data"]["source"] == IncrementalSource.MOUSE_INTERACTION
+        )  # click
+        assert (
+            result[1]["data"]["source"] == IncrementalSource.SCROLL
+        )  # significant scroll
         assert result[2]["data"]["source"] == IncrementalSource.INPUT  # input
 
     def test_custom_filters_applied(self):
         """Test that custom filter functions are properly applied."""
         events = [
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5}},  # click
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1000,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5},
+            },  # click
             {
                 "type": EventType.INCREMENTAL_SNAPSHOT,
                 "timestamp": 1100,
@@ -356,13 +431,19 @@ class TestCleanChunk:
 
         # Should keep click and input, filter out source 99
         assert len(result) == 2
-        assert result[0]["data"]["source"] == IncrementalSource.MOUSE_INTERACTION  # click
+        assert (
+            result[0]["data"]["source"] == IncrementalSource.MOUSE_INTERACTION
+        )  # click
         assert result[1]["data"]["source"] == IncrementalSource.INPUT  # input
 
     def test_multiple_custom_filters(self):
         """Test that multiple custom filters work together."""
         events = [
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5}},  # click
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "timestamp": 1000,
+                "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 5},
+            },  # click
             {
                 "type": EventType.INCREMENTAL_SNAPSHOT,
                 "timestamp": 1100,
@@ -395,5 +476,7 @@ class TestCleanChunk:
 
         # Should keep only click and input
         assert len(result) == 2
-        assert result[0]["data"]["source"] == IncrementalSource.MOUSE_INTERACTION  # click
+        assert (
+            result[0]["data"]["source"] == IncrementalSource.MOUSE_INTERACTION
+        )  # click
         assert result[1]["data"]["source"] == IncrementalSource.INPUT  # input

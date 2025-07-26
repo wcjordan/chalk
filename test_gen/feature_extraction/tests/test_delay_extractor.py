@@ -23,7 +23,11 @@ def test_compute_inter_event_delays_preserves_order():
     events = [
         {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 100, "data": {}},
         {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 200, "data": {}},
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 150, "data": {}},  # Out of order timestamp
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 150,
+            "data": {},
+        },  # Out of order timestamp
         {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 300, "data": {}},
     ]
 
@@ -60,12 +64,24 @@ def test_compute_inter_event_delays_missing_timestamps():
 def test_compute_reaction_delays_custom_sources():
     """Test reaction delays with custom interaction and mutation sources."""
     events = [
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.INPUT, "id": 42}},  # Input event
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1200, "data": {"source": IncrementalSource.MUTATION, "adds": []}},  # Mutation
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1000,
+            "data": {"source": IncrementalSource.INPUT, "id": 42},
+        },  # Input event
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1200,
+            "data": {"source": IncrementalSource.MUTATION, "adds": []},
+        },  # Mutation
     ]
 
     # Use input events (source 5) as interactions
-    delays = compute_reaction_delays(events, interaction_source=IncrementalSource.INPUT, mutation_source=IncrementalSource.MUTATION)
+    delays = compute_reaction_delays(
+        events,
+        interaction_source=IncrementalSource.INPUT,
+        mutation_source=IncrementalSource.MUTATION,
+    )
 
     assert len(delays) == 1
     delay = delays[0]
@@ -77,7 +93,11 @@ def test_compute_reaction_delays_custom_sources():
 def test_compute_reaction_delays_first_mutation_only():
     """Test that each interaction matches only the first mutation within window."""
     events = [
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42}},  # Click
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1000,
+            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42},
+        },  # Click
         {
             "type": EventType.INCREMENTAL_SNAPSHOT,
             "timestamp": 1200,
@@ -103,9 +123,21 @@ def test_compute_reaction_delays_first_mutation_only():
 def test_compute_reaction_delays_no_mutations():
     """Test that interactions with no subsequent mutations produce no delays."""
     events = [
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1000, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42}},  # Click
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1100, "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 100}},  # Mouse move
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1200, "data": {"source": IncrementalSource.SCROLL, "y": 200}},  # Scroll
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1000,
+            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42},
+        },  # Click
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1100,
+            "data": {"source": IncrementalSource.MOUSE_MOVE, "x": 100},
+        },  # Mouse move
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1200,
+            "data": {"source": IncrementalSource.SCROLL, "y": 200},
+        },  # Scroll
     ]
 
     delays = compute_reaction_delays(events)
@@ -122,7 +154,11 @@ def test_compute_reaction_delays_mutation_before_interaction():
             "timestamp": 1000,
             "data": {"source": IncrementalSource.MUTATION, "adds": []},
         },  # Mutation first
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 1100, "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42}},  # Click after
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 1100,
+            "data": {"source": IncrementalSource.MOUSE_INTERACTION, "id": 42},
+        },  # Click after
     ]
 
     delays = compute_reaction_delays(events)

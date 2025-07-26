@@ -20,7 +20,7 @@ def fixture_simple_full_snapshot():
         "data": {
             "node": {
                 "id": 1,
-                "type": 9, # "document_node",
+                "type": 9,  # "document_node",
                 "childNodes": [
                     {
                         "id": 2,
@@ -166,7 +166,10 @@ def test_init_dom_state_empty_attributes():
     "invalid_event,expected_error",
     [
         (
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "data": {"source": IncrementalSource.MUTATION}},  # Not a FullSnapshot
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "data": {"source": IncrementalSource.MUTATION},
+            },  # Not a FullSnapshot
             "Event must be a FullSnapshot event",
         ),
         (
@@ -421,7 +424,10 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
     [
         # Non-mutation events
         [
-            {"type": EventType.FULL_SNAPSHOT, "data": {"node": {}}},  # FullSnapshot, not mutation
+            {
+                "type": EventType.FULL_SNAPSHOT,
+                "data": {"node": {}},
+            },  # FullSnapshot, not mutation
             {
                 "type": EventType.INCREMENTAL_SNAPSHOT,
                 "data": {"source": IncrementalSource.MOUSE_MOVE},
@@ -433,7 +439,10 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
         ],
         # Empty mutation data
         [
-            {"type": EventType.INCREMENTAL_SNAPSHOT, "data": {"source": IncrementalSource.MUTATION}},  # No mutation data
+            {
+                "type": EventType.INCREMENTAL_SNAPSHOT,
+                "data": {"source": IncrementalSource.MUTATION},
+            },  # No mutation data
             {
                 "type": EventType.INCREMENTAL_SNAPSHOT,
                 "data": {

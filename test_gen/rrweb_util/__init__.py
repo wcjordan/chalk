@@ -24,7 +24,7 @@ from .helpers import (
 __all__ = [
     # Constants
     "EventType",
-    "IncrementalSource", 
+    "IncrementalSource",
     "MouseInteractionType",
     "NodeType",
     # Helpers

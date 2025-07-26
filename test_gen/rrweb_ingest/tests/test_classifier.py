@@ -52,9 +52,17 @@ def test_classify_preserves_event_order():
     """Test that events maintain their relative order within each category."""
     events = [
         {"type": EventType.FULL_SNAPSHOT, "timestamp": 1000, "data": {"id": "snap1"}},
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 2000, "data": {"id": "int1"}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 2000,
+            "data": {"id": "int1"},
+        },
         {"type": EventType.FULL_SNAPSHOT, "timestamp": 3000, "data": {"id": "snap2"}},
-        {"type": EventType.INCREMENTAL_SNAPSHOT, "timestamp": 4000, "data": {"id": "int2"}},
+        {
+            "type": EventType.INCREMENTAL_SNAPSHOT,
+            "timestamp": 4000,
+            "data": {"id": "int2"},
+        },
         {"type": EventType.META, "timestamp": 5000, "data": {"id": "other1"}},
     ]
 
