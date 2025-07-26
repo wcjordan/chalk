@@ -5,6 +5,8 @@ Tests the is_low_signal and clean_chunk functions to ensure proper identificatio
 and removal of low-signal events and duplicates from rrweb chunks.
 """
 
+# pylint: disable=duplicate-code
+
 from unittest.mock import patch
 
 from rrweb_ingest.filter import is_low_signal, clean_chunk

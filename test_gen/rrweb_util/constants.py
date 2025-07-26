@@ -2,6 +2,8 @@
 Shared constants for rrweb event processing across all modules.
 """
 
+# pylint: disable=too-few-public-methods
+
 
 class EventType:
     """rrweb event type constants."""
