@@ -8,7 +8,7 @@ user interactions.
 """
 
 from typing import List, Set, Tuple
-from . import config
+
 from rrweb_util import (
     is_incremental_snapshot,
     is_mouse_move_event,
@@ -16,6 +16,7 @@ from rrweb_util import (
     is_dom_mutation_event,
     get_scroll_delta,
 )
+from . import config
 
 
 def is_low_signal(event: dict) -> bool:

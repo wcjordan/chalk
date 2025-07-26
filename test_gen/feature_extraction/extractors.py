@@ -10,8 +10,7 @@ Configuration:
 """
 
 from typing import List
-from .models import DomMutation, UserInteraction, EventDelay
-from . import config
+
 from rrweb_util import (
     is_incremental_snapshot,
     is_dom_mutation_event,
@@ -24,6 +23,8 @@ from rrweb_util import (
     get_mouse_coordinates,
     get_tag_name,
 )
+from .models import DomMutation, UserInteraction, EventDelay
+from . import config
 
 
 def extract_dom_mutations(events: List[dict]) -> List[DomMutation]:

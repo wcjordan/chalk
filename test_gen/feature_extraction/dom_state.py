@@ -8,8 +8,9 @@ through mutation tracking.
 """
 
 from typing import Dict, List
-from .models import UINode
+
 from rrweb_util import is_full_snapshot, is_dom_mutation_event, get_tag_name
+from .models import UINode
 
 
 def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
