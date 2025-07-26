@@ -144,9 +144,9 @@ def _collect_referenced_node_ids(dom_mutations, interactions):
 if __name__ == "__main__":
     SESSION_DIR = "data/output_sessions"
     MAX_SESSIONS = 200  # Limit sessions for testing
-    sessions_handled = 0
+    SESSIONS_HANDLED = 0
     for curr_filename in os.listdir(SESSION_DIR):
-        if sessions_handled >= MAX_SESSIONS:
+        if SESSIONS_HANDLED >= MAX_SESSIONS:
             break
 
         if curr_filename.endswith(".json"):
@@ -155,22 +155,22 @@ if __name__ == "__main__":
             try:
                 chunks = ingest_session(curr_session_id, curr_filepath)
                 dom = {}  # Start with empty DOM state
-                for chunk in chunks:
+                for curr_chunk in chunks:
                     # Initialize DOM state from FullSnapshot if available
                     # Otherwise use the DOM from the last chunk (after mutations)
-                    if chunk.metadata.get("snapshot_before"):
-                        dom = init_dom_state(chunk.metadata["snapshot_before"])
+                    if curr_chunk.metadata.get("snapshot_before"):
+                        dom = init_dom_state(curr_chunk.metadata["snapshot_before"])
 
                     # Extract features from the chunk
-                    feature_chunk = extract_features(chunk, dom)
+                    feature_chunk = extract_features(curr_chunk, dom)
 
                     # Analyze extracted features and print summary statistics
                     print(f"{feature_chunk.chunk_id}:")
                     mutation_types = {}
-                    for mutation in feature_chunk.features["dom_mutations"]:
-                        # print(mutation)
-                        # print(feature_chunk.features["ui_nodes"][mutation.target_id])
-                        mutation_type = mutation.mutation_type or "unknown"
+                    for curr_mutation in feature_chunk.features["dom_mutations"]:
+                        # print(curr_mutation)
+                        # print(feature_chunk.features["ui_nodes"][curr_mutation.target_id])
+                        mutation_type = curr_mutation.mutation_type or "unknown"
                         if mutation_type not in mutation_types:
                             mutation_types[mutation_type] = 0
                         mutation_types[mutation_type] += 1
@@ -178,10 +178,10 @@ if __name__ == "__main__":
                         print(f"  DOM mutations - {mutation_type}: {count}")
 
                     interaction_types = {}
-                    for interaction in feature_chunk.features["interactions"]:
-                        # print(interaction)
-                        # print(feature_chunk.features["ui_nodes"][interaction.target_id])
-                        action = interaction.action or "unknown"
+                    for curr_interaction in feature_chunk.features["interactions"]:
+                        # print(curr_interaction)
+                        # print(feature_chunk.features["ui_nodes"][curr_interaction.target_id])
+                        action = curr_interaction.action or "unknown"
                         if action not in interaction_types:
                             interaction_types[action] = 0
                         interaction_types[action] += 1
@@ -197,7 +197,7 @@ if __name__ == "__main__":
                             f"  Scroll patterns: {len(feature_chunk.features['scroll_patterns'])}"
                         )
 
-                sessions_handled += 1
+                SESSIONS_HANDLED += 1
             except Exception as e:
                 print(f"Error processing {curr_filename}: {e}")
                 raise e

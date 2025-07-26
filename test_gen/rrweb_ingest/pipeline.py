@@ -109,7 +109,9 @@ if __name__ == "__main__":
             curr_session_id = curr_filename.split(".")[0]
             curr_filepath = os.path.join(SESSION_DIR, curr_filename)
             try:
-                chunks = ingest_session(curr_session_id, curr_filepath)
+                chunks = ingest_session(
+                    curr_session_id, curr_filepath
+                )  # pylint: disable=duplicate-code
                 chunk_sizes[len(chunks)] += 1
             except Exception as e:
                 print(f"Error processing {curr_filename}: {e}")
