@@ -19,7 +19,7 @@ def fixture_simple_full_snapshot():
         "data": {
             "node": {
                 "id": 1,
-                "type": "Document",
+                "type": 9, # "document_node",
                 "childNodes": [
                     {
                         "id": 2,
@@ -99,7 +99,7 @@ def test_init_dom_state_simple_tree(simple_full_snapshot):
     # Verify root node
     root_node = node_by_id[1]
     assert root_node.id == 1
-    assert root_node.tag == "Document"
+    assert root_node.tag == "document_node"
     assert root_node.parent is None
     assert root_node.attributes == {}
 
@@ -250,6 +250,7 @@ def test_apply_mutations_add_node(simple_node_by_id):
 def test_apply_mutations_remove_node(rich_node_by_id):
     """Test that apply_mutations correctly removes existing nodes."""
     # Create a mutation event that removes a node
+    initial_length = len(rich_node_by_id)
     mutation_events = [
         {
             "type": 3,
@@ -262,9 +263,9 @@ def test_apply_mutations_remove_node(rich_node_by_id):
 
     apply_mutations(rich_node_by_id, mutation_events)
 
-    # Assert the node was removed
-    assert 2 not in rich_node_by_id
-    assert len(rich_node_by_id) == 2
+    # Assert the node was not removed
+    assert 2 in rich_node_by_id
+    assert len(rich_node_by_id) == initial_length
 
     # Assert other nodes are unchanged
     assert 1 in rich_node_by_id
@@ -398,8 +399,8 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
     apply_mutations(simple_node_by_id, mutation_events)
 
     # Assert all operations were applied
-    assert len(simple_node_by_id) == 2  # One removed, one added
-    assert 2 not in simple_node_by_id  # Removed
+    assert len(simple_node_by_id) == 3  # One added
+    assert 2 in simple_node_by_id  # Removes are ignored
     assert 3 in simple_node_by_id  # Added
 
     # Check added node

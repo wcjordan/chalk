@@ -191,7 +191,7 @@ def test_extract_handles_node_type_fallback():
                     "parentId": 50,
                     "node": {
                         "id": 100,
-                        "type": "text",  # Using 'type' instead of 'tagName'
+                        "type": 3,  # Using 'type' instead of 'tagName'.  Tuype for text_node
                         "textContent": "Text node",
                     },
                 }
@@ -204,5 +204,5 @@ def test_extract_handles_node_type_fallback():
     assert len(mutations) == 1
     mutation = mutations[0]
     assert mutation.mutation_type == "add"
-    assert mutation.details["tag"] == "text"
+    assert mutation.details["tag"] == "text_node"
     assert mutation.details["text"] == "Text node"
