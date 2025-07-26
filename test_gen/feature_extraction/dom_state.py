@@ -9,24 +9,7 @@ through mutation tracking.
 
 from typing import Dict, List
 from .models import UINode
-from ..rrweb_util import is_full_snapshot, is_dom_mutation_event
-
-# Sync w/ rrweb's NodeType enum
-# https://github.com/rrweb-io/rrweb/blob/4db9782d1278a2b7235ed48162ccedf0e0952113/packages/rrdom/src/document.ts#L753
-TYPE_TO_TAG_MAP = {
-    0: "placeholder",  # Used for the root node, but potentially others
-    1: "element_node",
-    2: "attribute_node",
-    3: "text_node",
-    4: "cdata_section_node",
-    5: "entity_reference_node",
-    6: "entity_node",
-    7: "processing_instruction_node",
-    8: "comment_node",
-    9: "document_node",
-    10: "document_type_node",
-    11: "document_fragment_node",
-}
+from ..rrweb_util import is_full_snapshot, is_dom_mutation_event, get_tag_name
 
 
 def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
@@ -157,10 +140,3 @@ def _apply_text_changes(node_by_id: Dict[int, UINode], texts: List[dict]) -> Non
             node_by_id[node_id].text = new_text
 
 
-def get_tag_name(node_data: dict) -> str:
-    """
-    Get the tag name for a given node data dictionary.
-    """
-    return node_data.get(
-        "tagName", TYPE_TO_TAG_MAP.get(node_data.get("type"), "unknown")
-    )

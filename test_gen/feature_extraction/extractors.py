@@ -12,7 +12,6 @@ Configuration:
 from typing import List
 from .models import DomMutation, UserInteraction, EventDelay
 from . import config
-from .dom_state import get_tag_name
 from ..rrweb_util import (
     is_incremental_snapshot,
     is_dom_mutation_event,
@@ -23,6 +22,7 @@ from ..rrweb_util import (
     get_event_data,
     get_target_id,
     get_mouse_coordinates,
+    get_tag_name,
 )
 
 
