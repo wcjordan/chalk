@@ -8,16 +8,22 @@ Shared constants for rrweb event processing across all modules.
 class EventType:
     """rrweb event type constants."""
 
-    META = 0
+    # sync w/
+    # https://github.com/rrweb-io/rrweb/blob/4db9782d1278a2b7235ed48162ccedf0e0952113/packages/types/src/index.ts
+    DOM_CONTENT_LOADED = 0
+    LOAD = 1
     FULL_SNAPSHOT = 2
     INCREMENTAL_SNAPSHOT = 3
-    CUSTOM = 4
-    PLUGIN = 5
+    META = 4
+    CUSTOM = 5
+    PLUGIN = 6
 
 
 class IncrementalSource:
     """rrweb incremental snapshot source constants."""
 
+    # sync w/
+    # https://github.com/rrweb-io/rrweb/blob/4db9782d1278a2b7235ed48162ccedf0e0952113/packages/types/src/index.ts#L62
     MUTATION = 0
     MOUSE_MOVE = 1
     MOUSE_INTERACTION = 2
@@ -32,11 +38,16 @@ class IncrementalSource:
     LOG = 11
     DRAG = 12
     STYLE_DECLARATION = 13
+    SELECTION = 14
+    ADOPTED_STYLE_SHEET = 15
+    CUSTOM_ELEMENT = 16
 
 
 class MouseInteractionType:
     """Mouse interaction type constants."""
 
+    # sync w/
+    # https://github.com/rrweb-io/rrweb/blob/4db9782d1278a2b7235ed48162ccedf0e0952113/packages/types/src/index.ts#L359
     MOUSE_UP = 0
     MOUSE_DOWN = 1
     CLICK = 2
@@ -53,6 +64,8 @@ class MouseInteractionType:
 class NodeType:
     """DOM node type constants (sync with rrweb's NodeType enum)."""
 
+    # sync w/
+    # https://github.com/rrweb-io/rrweb/blob/4db9782d1278a2b7235ed48162ccedf0e0952113/packages/rrdom/src/document.ts#L753
     PLACEHOLDER = 0
     ELEMENT_NODE = 1
     ATTRIBUTE_NODE = 2
