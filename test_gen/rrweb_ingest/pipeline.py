@@ -86,28 +86,32 @@ def ingest_session(
     normalized_chunks = []
     for chunk_index, raw_chunk in enumerate(raw_chunks):
         # Filter noise and duplicates
-        cleaned_events = clean_chunk(raw_chunk)
+        cleaned_events = clean_chunk(raw_chunk["interactions"])
 
         # Skip empty chunks after cleaning
         if not cleaned_events:
             continue
 
         # Normalize into Chunk object
-        chunk = normalize_chunk(cleaned_events, session_id, chunk_index)
+        chunk = normalize_chunk(
+            cleaned_events, session_id, chunk_index, raw_chunk.get("snapshot_before")
+        )
         normalized_chunks.append(chunk)
 
     return normalized_chunks
 
 
 if __name__ == "__main__":
-    SESSION_DIR = "../session_stitching/output_sessions"
+    SESSION_DIR = "data/output_sessions"
     chunk_sizes = defaultdict(int)
     for curr_filename in os.listdir(SESSION_DIR):
         if curr_filename.endswith(".json"):
             curr_session_id = curr_filename.split(".")[0]
             curr_filepath = os.path.join(SESSION_DIR, curr_filename)
             try:
-                chunks = ingest_session(curr_session_id, curr_filepath)
+                chunks = ingest_session(
+                    curr_session_id, curr_filepath
+                )  # pylint: disable=duplicate-code
                 chunk_sizes[len(chunks)] += 1
             except Exception as e:
                 print(f"Error processing {curr_filename}: {e}")

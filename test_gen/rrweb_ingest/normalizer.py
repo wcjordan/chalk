@@ -11,7 +11,10 @@ from .models import Chunk
 
 
 def normalize_chunk(
-    raw_events: List[Dict[str, Any]], session_id: str, chunk_index: int
+    raw_events: List[Dict[str, Any]],
+    session_id: str,
+    chunk_index: int,
+    snapshot_before: dict,
 ) -> Chunk:
     """
     Builds a Chunk object from a list of cleaned events.
@@ -29,6 +32,7 @@ def normalize_chunk(
                    generate the chunk_id.
         chunk_index: Zero-based index of this chunk within the session. Used to
                     generate the chunk_id with zero-padding.
+        snapshot_before: Snapshot data with the initial DOM state before this chunk.
 
     Returns:
         Chunk object with populated fields:
@@ -88,6 +92,7 @@ def normalize_chunk(
     metadata = {
         "num_events": num_events,
         "duration_ms": duration_ms,
+        "snapshot_before": snapshot_before,
     }
 
     # Create and return the Chunk object

@@ -10,6 +10,19 @@ from typing import List
 from . import config
 
 
+def _new_chunk(snapshot_before=None) -> dict:
+    """
+    Create a new empty chunk to hold interaction events and initial snapshot.
+
+    Returns:
+        An empty dictionary representing a new chunk of interaction events.
+    """
+    return {
+        "interactions": [],
+        "snapshot_before": snapshot_before,
+    }
+
+
 def segment_into_chunks(
     interactions: List[dict],
     snapshots: List[dict],
@@ -55,7 +68,7 @@ def segment_into_chunks(
         return []
 
     chunks = []
-    current_chunk = []
+    current_chunk = _new_chunk()
     snapshot_iter = iter(snapshots)
     next_snapshot = next(snapshot_iter, None)
     last_timestamp = None
@@ -66,11 +79,14 @@ def segment_into_chunks(
         # Check if we need to start a new chunk due to snapshot boundary
         while next_snapshot and interaction_timestamp >= next_snapshot["timestamp"]:
             # Finish current chunk if it has events
-            if current_chunk:
+            if current_chunk["interactions"]:
                 chunks.append(current_chunk)
-                current_chunk = []
-                # Reset timestamp so next interaction isn't compared against the prior chunk
-                last_timestamp = None
+
+            # Start a new chunk from the next snapshot
+            current_chunk = _new_chunk(next_snapshot)
+
+            # Reset timestamp so next interaction isn't compared against the prior chunk
+            last_timestamp = None
 
             # Move to next snapshot
             next_snapshot = next(snapshot_iter, None)
@@ -81,24 +97,24 @@ def segment_into_chunks(
             and interaction_timestamp - last_timestamp > config.MAX_GAP_MS
         ):
             # Finish current chunk if it has events
-            if current_chunk:
+            if current_chunk["interactions"]:
                 chunks.append(current_chunk)
-                current_chunk = []
+                current_chunk = _new_chunk()
 
         # Check if we need to start a new chunk due to size limit
-        if len(current_chunk) >= config.MAX_EVENTS:
+        if len(current_chunk["interactions"]) >= config.MAX_EVENTS:
             # Finish current chunk
             chunks.append(current_chunk)
-            current_chunk = []
+            current_chunk = _new_chunk()
             # Reset timestamp so next interaction isn't compared against the prior chunk
             last_timestamp = None
 
         # Add interaction to current chunk
-        current_chunk.append(interaction)
+        current_chunk["interactions"].append(interaction)
         last_timestamp = interaction_timestamp
 
     # Add final chunk if it has events
-    if current_chunk:
+    if current_chunk["interactions"]:
         chunks.append(current_chunk)
 
     return chunks

@@ -22,7 +22,7 @@ class TestNormalizeChunk:
         session_id = "same_time_session"
         chunk_index = 5
 
-        result = normalize_chunk(events, session_id, chunk_index)
+        result = normalize_chunk(events, session_id, chunk_index, {})
 
         assert result.start_time == 1000
         assert result.end_time == 1000
@@ -39,7 +39,7 @@ class TestNormalizeChunk:
         session_id = "out_of_order_session"
         chunk_index = 2
 
-        result = normalize_chunk(events, session_id, chunk_index)
+        result = normalize_chunk(events, session_id, chunk_index, {})
 
         # Should use min and max timestamps regardless of order
         assert result.start_time == 1000
@@ -51,21 +51,21 @@ class TestNormalizeChunk:
         with pytest.raises(
             ValueError, match="Cannot create chunk from empty event list"
         ):
-            normalize_chunk([], "session_id", 0)
+            normalize_chunk([], "session_id", 0, {})
 
     def test_empty_session_id_raises_error(self):
         """Test that passing an empty session_id raises ValueError."""
         events = [{"type": 3, "timestamp": 1000, "data": {}}]
 
         with pytest.raises(ValueError, match="session_id cannot be empty"):
-            normalize_chunk(events, "", 0)
+            normalize_chunk(events, "", 0, {})
 
     def test_negative_chunk_index_raises_error(self):
         """Test that passing a negative chunk_index raises ValueError."""
         events = [{"type": 3, "timestamp": 1000, "data": {}}]
 
         with pytest.raises(ValueError, match="chunk_index must be non-negative"):
-            normalize_chunk(events, "session_id", -1)
+            normalize_chunk(events, "session_id", -1, {})
 
     def test_event_missing_timestamp_raises_error(self):
         """Test that events missing timestamp field raise KeyError."""
@@ -77,7 +77,7 @@ class TestNormalizeChunk:
         with pytest.raises(
             KeyError, match="Event at index 1 missing required 'timestamp' field"
         ):
-            normalize_chunk(events, "session_id", 0)
+            normalize_chunk(events, "session_id", 0, {})
 
     def test_events_list_is_copied(self):
         """Test that the events list is copied, not referenced."""
@@ -85,7 +85,7 @@ class TestNormalizeChunk:
             {"type": 3, "timestamp": 1000, "data": {"source": 2}},
         ]
 
-        result = normalize_chunk(original_events, "session_id", 0)
+        result = normalize_chunk(original_events, "session_id", 0, {})
 
         # Modify original list
         original_events.append({"type": 3, "timestamp": 2000, "data": {}})
