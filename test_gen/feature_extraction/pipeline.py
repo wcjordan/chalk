@@ -21,11 +21,10 @@ semantic representations of user interactions and system responses.
 """
 
 import logging
-import os
-from typing import Dict
+from typing import Any, Dict, Generator, Tuple
 
 from rrweb_ingest.models import Chunk
-from rrweb_ingest.pipeline import ingest_session
+from rrweb_ingest.pipeline import iterate_sessions
 from .models import FeatureChunk, UINode
 from .dom_state import apply_mutations, init_dom_state
 from .extractors import (
@@ -141,63 +140,47 @@ def _collect_referenced_node_ids(dom_mutations, interactions):
     return referenced_node_ids
 
 
-if __name__ == "__main__":
-    SESSION_DIR = "data/output_sessions"
-    MAX_SESSIONS = 200  # Limit sessions for testing
-    SESSIONS_HANDLED = 0
-    for curr_filename in os.listdir(SESSION_DIR):
-        if SESSIONS_HANDLED >= MAX_SESSIONS:
-            break
+def iterate_feature_extraction(
+    session_dir: str, max_sessions: int = None
+) -> Generator[Tuple[FeatureChunk, Dict[str, Any]], None, None]:
+    """
+    Generator function to iterate through all rrweb session files in a directory and extract features.
 
-        if curr_filename.endswith(".json"):
-            curr_session_id = curr_filename.split(".")[0]
-            curr_filepath = os.path.join(SESSION_DIR, curr_filename)
-            try:
-                chunks = ingest_session(curr_session_id, curr_filepath)
-                dom = {}  # Start with empty DOM state
-                for curr_chunk in chunks:
-                    # Initialize DOM state from FullSnapshot if available
-                    # Otherwise use the DOM from the last chunk (after mutations)
-                    if curr_chunk.metadata.get("snapshot_before"):
-                        dom = init_dom_state(curr_chunk.metadata["snapshot_before"])
+    This function processes each session file, extracts features using the
+    extract_features function and yields the results.
 
-                    # Extract features from the chunk
-                    feature_chunk = extract_features(curr_chunk, dom)
+    Args:
+        session_dir: Directory containing rrweb JSON session files
+        max_sessions: Optional limit on number of sessions to process
+    """
+    session_generator = iterate_sessions(session_dir, max_sessions=max_sessions)
+    for session_chunks in session_generator:
+        dom = {}  # Start with empty DOM state
+        for curr_chunk in session_chunks:
+            has_snapshot_before = bool(curr_chunk.metadata.get("snapshot_before"))
+            chunk_metadata = {
+                "chunk_id": curr_chunk.chunk_id,
+                "start_time": curr_chunk.start_time,
+                "end_time": curr_chunk.end_time,
+                "session_id": curr_chunk.metadata["session_id"],
+                "num_events": len(curr_chunk.events),
+                "has_snapshot_before": has_snapshot_before,
+                "dom_initialized_from_snapshot": False,
+                "dom_state_nodes_before": len(dom),
+                "features": {},
+            }
 
-                    # Analyze extracted features and print summary statistics
-                    print(f"{feature_chunk.chunk_id}:")
-                    mutation_types = {}
-                    for curr_mutation in feature_chunk.features["dom_mutations"]:
-                        # print(curr_mutation)
-                        # print(feature_chunk.features["ui_nodes"][curr_mutation.target_id])
-                        mutation_type = curr_mutation.mutation_type or "unknown"
-                        if mutation_type not in mutation_types:
-                            mutation_types[mutation_type] = 0
-                        mutation_types[mutation_type] += 1
-                    for mutation_type, count in mutation_types.items():
-                        print(f"  DOM mutations - {mutation_type}: {count}")
+            # Initialize DOM state from FullSnapshot if available
+            # Otherwise use the DOM from the last chunk (after mutations)
+            if has_snapshot_before:
+                chunk_metadata["dom_initialized_from_snapshot"] = True
+                dom = init_dom_state(curr_chunk.metadata["snapshot_before"])
+            chunk_metadata["dom_state_nodes_after_init"] = len(dom)
 
-                    interaction_types = {}
-                    for curr_interaction in feature_chunk.features["interactions"]:
-                        # print(curr_interaction)
-                        # print(feature_chunk.features["ui_nodes"][curr_interaction.target_id])
-                        action = curr_interaction.action or "unknown"
-                        if action not in interaction_types:
-                            interaction_types[action] = 0
-                        interaction_types[action] += 1
-                    for action, count in interaction_types.items():
-                        print(f"  User interactions - {action}: {count}")
+            # Extract features from the chunk
+            chunk_data = extract_features(curr_chunk, dom)
 
-                    if len(feature_chunk.features["mouse_clusters"]):
-                        print(
-                            f"  Mouse clusters: {len(feature_chunk.features['mouse_clusters'])}"
-                        )
-                    if len(feature_chunk.features["scroll_patterns"]):
-                        print(
-                            f"  Scroll patterns: {len(feature_chunk.features['scroll_patterns'])}"
-                        )
+            # Track DOM state evolution
+            chunk_metadata["dom_state_nodes_final"] = len(dom)
 
-                SESSIONS_HANDLED += 1
-            except Exception as e:
-                print(f"Error processing {curr_filename}: {e}")
-                raise
+            yield chunk_data, chunk_metadata

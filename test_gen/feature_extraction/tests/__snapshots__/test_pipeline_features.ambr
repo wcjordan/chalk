@@ -25,6 +25,7 @@
         }),
         'has_snapshot_before': True,
         'num_events': 368,
+        'session_id': '08463d03-1928-4b7f-b2bc-763b73d094db',
         'start_time': 1746826219175,
       }),
       dict({
@@ -48,6 +49,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 1,
+        'session_id': '08463d03-1928-4b7f-b2bc-763b73d094db',
         'start_time': 1746826245485,
       }),
       dict({
@@ -71,6 +73,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 1,
+        'session_id': '08463d03-1928-4b7f-b2bc-763b73d094db',
         'start_time': 1746826265719,
       }),
       dict({
@@ -97,12 +100,11 @@
         }),
         'has_snapshot_before': False,
         'num_events': 50,
+        'session_id': '08463d03-1928-4b7f-b2bc-763b73d094db',
         'start_time': 1746826331801,
       }),
     ]),
     'error': None,
-    'filename': '08463d03-1928-4b7f-b2bc-763b73d094db.json',
-    'session_id': '08463d03-1928-4b7f-b2bc-763b73d094db',
   })
 # ---
 # name: test_full_pipeline_integration_mimics_main_block[session_25131bfa-d87f-4301-8f84-ac0c955b8f4c]
@@ -133,12 +135,11 @@
         }),
         'has_snapshot_before': True,
         'num_events': 282,
+        'session_id': '25131bfa-d87f-4301-8f84-ac0c955b8f4c',
         'start_time': 1749315510793,
       }),
     ]),
     'error': None,
-    'filename': '25131bfa-d87f-4301-8f84-ac0c955b8f4c.json',
-    'session_id': '25131bfa-d87f-4301-8f84-ac0c955b8f4c',
   })
 # ---
 # name: test_full_pipeline_integration_mimics_main_block[session_30497eae-825d-433d-a484-4b75074332b2]
@@ -167,6 +168,7 @@
         }),
         'has_snapshot_before': True,
         'num_events': 332,
+        'session_id': '30497eae-825d-433d-a484-4b75074332b2',
         'start_time': 1746226644865,
       }),
       dict({
@@ -193,6 +195,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 8,
+        'session_id': '30497eae-825d-433d-a484-4b75074332b2',
         'start_time': 1746232585790,
       }),
       dict({
@@ -219,6 +222,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 8,
+        'session_id': '30497eae-825d-433d-a484-4b75074332b2',
         'start_time': 1746232610051,
       }),
       dict({
@@ -247,6 +251,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 210,
+        'session_id': '30497eae-825d-433d-a484-4b75074332b2',
         'start_time': 1746232631883,
       }),
       dict({
@@ -272,6 +277,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 104,
+        'session_id': '30497eae-825d-433d-a484-4b75074332b2',
         'start_time': 1746232693928,
       }),
       dict({
@@ -300,6 +306,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 53,
+        'session_id': '30497eae-825d-433d-a484-4b75074332b2',
         'start_time': 1746232719790,
       }),
       dict({
@@ -326,6 +333,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 43,
+        'session_id': '30497eae-825d-433d-a484-4b75074332b2',
         'start_time': 1746232746414,
       }),
       dict({
@@ -351,6 +359,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 25,
+        'session_id': '30497eae-825d-433d-a484-4b75074332b2',
         'start_time': 1746232772159,
       }),
       dict({
@@ -375,6 +384,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 23,
+        'session_id': '30497eae-825d-433d-a484-4b75074332b2',
         'start_time': 1746232793076,
       }),
       dict({
@@ -398,12 +408,11 @@
         }),
         'has_snapshot_before': False,
         'num_events': 3,
+        'session_id': '30497eae-825d-433d-a484-4b75074332b2',
         'start_time': 1746232823906,
       }),
     ]),
     'error': None,
-    'filename': '30497eae-825d-433d-a484-4b75074332b2.json',
-    'session_id': '30497eae-825d-433d-a484-4b75074332b2',
   })
 # ---
 # name: test_full_pipeline_integration_mimics_main_block[session_6c720608-fa29-41cb-9594-5c080fc05343]
@@ -435,6 +444,7 @@
         }),
         'has_snapshot_before': True,
         'num_events': 556,
+        'session_id': '6c720608-fa29-41cb-9594-5c080fc05343',
         'start_time': 1746707978165,
       }),
       dict({
@@ -458,12 +468,11 @@
         }),
         'has_snapshot_before': False,
         'num_events': 3,
+        'session_id': '6c720608-fa29-41cb-9594-5c080fc05343',
         'start_time': 1746755913308,
       }),
     ]),
     'error': None,
-    'filename': '6c720608-fa29-41cb-9594-5c080fc05343.json',
-    'session_id': '6c720608-fa29-41cb-9594-5c080fc05343',
   })
 # ---
 # name: test_full_pipeline_integration_mimics_main_block[session_e1e2280b-47ff-4be0-bab5-85c1ec4202a1]
@@ -492,6 +501,7 @@
         }),
         'has_snapshot_before': True,
         'num_events': 12,
+        'session_id': 'e1e2280b-47ff-4be0-bab5-85c1ec4202a1',
         'start_time': 1746907449033,
       }),
       dict({
@@ -515,6 +525,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 1,
+        'session_id': 'e1e2280b-47ff-4be0-bab5-85c1ec4202a1',
         'start_time': 1746907706666,
       }),
       dict({
@@ -538,6 +549,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 1,
+        'session_id': 'e1e2280b-47ff-4be0-bab5-85c1ec4202a1',
         'start_time': 1746907716672,
       }),
       dict({
@@ -562,6 +574,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 2,
+        'session_id': 'e1e2280b-47ff-4be0-bab5-85c1ec4202a1',
         'start_time': 1746907807059,
       }),
       dict({
@@ -588,6 +601,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 30,
+        'session_id': 'e1e2280b-47ff-4be0-bab5-85c1ec4202a1',
         'start_time': 1746908148446,
       }),
       dict({
@@ -614,6 +628,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 53,
+        'session_id': 'e1e2280b-47ff-4be0-bab5-85c1ec4202a1',
         'start_time': 1746908183686,
       }),
       dict({
@@ -640,6 +655,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 42,
+        'session_id': 'e1e2280b-47ff-4be0-bab5-85c1ec4202a1',
         'start_time': 1746908675171,
       }),
       dict({
@@ -663,6 +679,7 @@
         }),
         'has_snapshot_before': False,
         'num_events': 1,
+        'session_id': 'e1e2280b-47ff-4be0-bab5-85c1ec4202a1',
         'start_time': 1746908705105,
       }),
       dict({
@@ -686,12 +703,11 @@
         }),
         'has_snapshot_before': False,
         'num_events': 2,
+        'session_id': 'e1e2280b-47ff-4be0-bab5-85c1ec4202a1',
         'start_time': 1746908723855,
       }),
     ]),
     'error': None,
-    'filename': 'e1e2280b-47ff-4be0-bab5-85c1ec4202a1.json',
-    'session_id': 'e1e2280b-47ff-4be0-bab5-85c1ec4202a1',
   })
 # ---
 # name: test_full_pipeline_integration_mimics_main_block[sessions_processed]
