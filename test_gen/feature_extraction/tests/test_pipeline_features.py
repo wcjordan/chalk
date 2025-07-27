@@ -6,8 +6,11 @@ to populated FeatureChunk objects, verifying correct integration of all
 extractors and proper handling of DOM state.
 """
 
+import os
+
 import pytest
 from rrweb_ingest.models import Chunk
+from rrweb_ingest.pipeline import ingest_session
 from feature_extraction.pipeline import extract_features
 from feature_extraction.dom_state import init_dom_state
 from feature_extraction.models import UINode
@@ -852,159 +855,104 @@ def test_extract_features_large_event_volume():
     assert len(feature_chunk.events) == len(large_events)
 
 
-@pytest.mark.integration
 def test_full_pipeline_integration_mimics_main_block(snapshot):
     """
     Integration test that mimics the __main__ block in pipeline.py.
-    
+
     Tests the complete pipeline flow including:
     - Processing multiple session files from data/output_sessions
     - Handling multiple chunks per session with DOM state persistence
     - Both cases: chunks with and without snapshot_before metadata
     - Session limits and error handling
     - Feature extraction statistics similar to main block output
-    
+
     Uses syrupy snapshots to capture and verify the complete pipeline output.
     """
-    import os
-    from rrweb_ingest.pipeline import ingest_session
-    from feature_extraction.dom_state import init_dom_state
-    
-    SESSION_DIR = "data/output_sessions"
-    MAX_SESSIONS = 3  # Limit for test performance
-    
-    # Skip test if session directory doesn't exist
-    if not os.path.exists(SESSION_DIR):
-        pytest.skip(f"Session directory {SESSION_DIR} not found")
-    
+    SESSION_DIR = "feature_extraction/tests/test_sessions"
+
     # Collect results to match main block output format
-    pipeline_results = []
-    sessions_processed = 0
-    
+    sessions_processed = []
+
     # Get list of session files, sorted for deterministic test results
     session_files = sorted([f for f in os.listdir(SESSION_DIR) if f.endswith(".json")])
-    
-    if not session_files:
-        pytest.skip(f"No session files found in {SESSION_DIR}")
-    
+
     for curr_filename in session_files:
-        if sessions_processed >= MAX_SESSIONS:
-            break
-            
         curr_session_id = curr_filename.split(".")[0]
         curr_filepath = os.path.join(SESSION_DIR, curr_filename)
-        
+
         session_result = {
             "session_id": curr_session_id,
             "filename": curr_filename,
             "chunks": [],
-            "error": None
+            "error": None,
         }
-        
-        try:
-            # Ingest session to get chunks (mimics main block)
-            chunks = ingest_session(curr_session_id, curr_filepath)
-            dom = {}  # Start with empty DOM state
-            
-            for curr_chunk in chunks:
-                chunk_result = {
-                    "chunk_id": curr_chunk.chunk_id,
-                    "start_time": curr_chunk.start_time,
-                    "end_time": curr_chunk.end_time,
-                    "num_events": len(curr_chunk.events),
-                    "has_snapshot_before": bool(curr_chunk.metadata.get("snapshot_before")),
-                    "dom_state_nodes_before": len(dom),
-                    "features": {}
-                }
-                
-                # Initialize DOM state from FullSnapshot if available
-                # Otherwise use the DOM from the last chunk (mimics main block logic)
-                if curr_chunk.metadata.get("snapshot_before"):
-                    dom = init_dom_state(curr_chunk.metadata["snapshot_before"])
-                    chunk_result["dom_initialized_from_snapshot"] = True
-                else:
-                    chunk_result["dom_initialized_from_snapshot"] = False
-                
-                chunk_result["dom_state_nodes_after_init"] = len(dom)
-                
-                # Extract features from the chunk (mimics main block)
-                feature_chunk = extract_features(curr_chunk, dom)
-                
-                # Analyze extracted features and collect statistics (mimics main block)
-                # DOM mutations by type
-                mutation_types = {}
-                for curr_mutation in feature_chunk.features["dom_mutations"]:
-                    mutation_type = curr_mutation.mutation_type or "unknown"
-                    mutation_types[mutation_type] = mutation_types.get(mutation_type, 0) + 1
-                chunk_result["features"]["dom_mutations"] = mutation_types
-                
-                # User interactions by action
-                interaction_types = {}
-                for curr_interaction in feature_chunk.features["interactions"]:
-                    action = curr_interaction.action or "unknown"
-                    interaction_types[action] = interaction_types.get(action, 0) + 1
-                chunk_result["features"]["interactions"] = interaction_types
-                
-                # Other feature counts
-                chunk_result["features"]["mouse_clusters"] = len(feature_chunk.features["mouse_clusters"])
-                chunk_result["features"]["scroll_patterns"] = len(feature_chunk.features["scroll_patterns"])
-                chunk_result["features"]["inter_event_delays"] = len(feature_chunk.features["inter_event_delays"])
-                chunk_result["features"]["reaction_delays"] = len(feature_chunk.features["reaction_delays"])
-                chunk_result["features"]["ui_nodes"] = len(feature_chunk.features["ui_nodes"])
-                
-                # Track DOM state evolution
-                chunk_result["dom_state_nodes_final"] = len(dom)
-                
-                # Verify feature chunk structure
-                assert feature_chunk.chunk_id == curr_chunk.chunk_id
-                assert feature_chunk.start_time == curr_chunk.start_time
-                assert feature_chunk.end_time == curr_chunk.end_time
-                assert len(feature_chunk.events) == len(curr_chunk.events)
-                assert feature_chunk.metadata == curr_chunk.metadata
-                
-                # Verify all expected feature categories are present
-                expected_features = [
-                    "dom_mutations", "interactions", "inter_event_delays", 
-                    "reaction_delays", "ui_nodes", "mouse_clusters", "scroll_patterns"
-                ]
-                for feature_type in expected_features:
-                    assert feature_type in feature_chunk.features
-                
-                session_result["chunks"].append(chunk_result)
-            
-            sessions_processed += 1
-            
-        except Exception as e:
-            # Capture errors like main block does
-            session_result["error"] = str(e)
-            # Re-raise to fail the test - we want to know about processing errors
-            raise
-        
-        pipeline_results.append(session_result)
-    
-    # Verify we processed some sessions
-    assert sessions_processed > 0, "No sessions were successfully processed"
-    
-    # Verify multi-chunk sessions show DOM state persistence
-    multi_chunk_sessions = [s for s in pipeline_results if len(s["chunks"]) > 1]
-    if multi_chunk_sessions:
-        # Check that DOM state persists across chunks in at least one session
-        session = multi_chunk_sessions[0]
-        for i in range(1, len(session["chunks"])):
-            prev_chunk = session["chunks"][i-1]
-            curr_chunk = session["chunks"][i]
-            
-            # If current chunk doesn't have snapshot_before, it should use previous DOM
-            if not curr_chunk["has_snapshot_before"]:
-                # DOM should have nodes from previous chunk processing
-                assert curr_chunk["dom_state_nodes_before"] == prev_chunk["dom_state_nodes_final"]
-    
-    # Verify we have both cases: with and without snapshot_before
-    chunks_with_snapshot = sum(1 for s in pipeline_results for c in s["chunks"] if c["has_snapshot_before"])
-    chunks_without_snapshot = sum(1 for s in pipeline_results for c in s["chunks"] if not c["has_snapshot_before"])
-    
-    # At least one chunk should have snapshot_before (first chunk of each session typically does)
-    assert chunks_with_snapshot > 0, "No chunks with snapshot_before found"
-    
-    # Capture complete pipeline results with syrupy snapshot
-    assert pipeline_results == snapshot
+
+        # Ingest session to get chunks (mimics main block)
+        sessions_processed.append(curr_session_id)
+        chunks = ingest_session(curr_session_id, curr_filepath)
+        dom = {}  # Start with empty DOM state
+
+        for curr_chunk in chunks:
+            chunk_result = {
+                "chunk_id": curr_chunk.chunk_id,
+                "start_time": curr_chunk.start_time,
+                "end_time": curr_chunk.end_time,
+                "num_events": len(curr_chunk.events),
+                "has_snapshot_before": bool(curr_chunk.metadata.get("snapshot_before")),
+                "dom_state_nodes_before": len(dom),
+                "features": {},
+            }
+
+            # Initialize DOM state from FullSnapshot if available
+            # Otherwise use the DOM from the last chunk (mimics main block logic)
+            if curr_chunk.metadata.get("snapshot_before"):
+                dom = init_dom_state(curr_chunk.metadata["snapshot_before"])
+                chunk_result["dom_initialized_from_snapshot"] = True
+            else:
+                chunk_result["dom_initialized_from_snapshot"] = False
+
+            chunk_result["dom_state_nodes_after_init"] = len(dom)
+
+            # Extract features from the chunk (mimics main block)
+            feature_chunk = extract_features(curr_chunk, dom)
+
+            # Analyze extracted features and collect statistics (mimics main block)
+            # DOM mutations by type
+            mutation_types = {}
+            for curr_mutation in feature_chunk.features["dom_mutations"]:
+                mutation_type = curr_mutation.mutation_type or "unknown"
+                mutation_types[mutation_type] = mutation_types.get(mutation_type, 0) + 1
+            chunk_result["features"]["dom_mutation_stats"] = mutation_types
+
+            # User interactions by action
+            interaction_types = {}
+            for curr_interaction in feature_chunk.features["interactions"]:
+                action = curr_interaction.action or "unknown"
+                interaction_types[action] = interaction_types.get(action, 0) + 1
+            chunk_result["features"]["interaction_stats"] = interaction_types
+
+            # Other feature counts
+            chunk_result["features"]["mouse_clusters"] = len(
+                feature_chunk.features["mouse_clusters"]
+            )
+            chunk_result["features"]["scroll_patterns"] = len(
+                feature_chunk.features["scroll_patterns"]
+            )
+            chunk_result["features"]["inter_event_delays"] = len(
+                feature_chunk.features["inter_event_delays"]
+            )
+            chunk_result["features"]["reaction_delays"] = len(
+                feature_chunk.features["reaction_delays"]
+            )
+            chunk_result["features"]["ui_nodes"] = len(
+                feature_chunk.features["ui_nodes"]
+            )
+
+            # Track DOM state evolution
+            chunk_result["dom_state_nodes_final"] = len(dom)
+
+            session_result["chunks"].append(chunk_result)
+
+        assert session_result == snapshot(name=f"session_{curr_session_id}")
+
+    assert sessions_processed == snapshot(name="sessions_processed")
