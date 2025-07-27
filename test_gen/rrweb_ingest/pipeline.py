@@ -13,9 +13,9 @@ The pipeline performs the following steps:
 5. Normalize chunks into standardized objects with metadata
 """
 
+import logging
 import os
-from collections import defaultdict
-from typing import List
+from typing import Generator, List
 
 from rrweb_ingest.loader import load_events
 from rrweb_ingest.classifier import classify_events
@@ -23,6 +23,8 @@ from rrweb_ingest.segmenter import segment_into_chunks
 from rrweb_ingest.filter import clean_chunk
 from rrweb_ingest.normalizer import normalize_chunk
 from rrweb_ingest.models import Chunk
+
+logger = logging.getLogger(__name__)
 
 
 def ingest_session(
@@ -101,23 +103,35 @@ def ingest_session(
     return normalized_chunks
 
 
-if __name__ == "__main__":
-    SESSION_DIR = "data/output_sessions"
-    chunk_sizes = defaultdict(int)
-    for curr_filename in os.listdir(SESSION_DIR):
-        if curr_filename.endswith(".json"):
-            curr_session_id = curr_filename.split(".")[0]
-            curr_filepath = os.path.join(SESSION_DIR, curr_filename)
-            try:
-                chunks = ingest_session(
-                    curr_session_id, curr_filepath
-                )  # pylint: disable=duplicate-code
-                chunk_sizes[len(chunks)] += 1
-            except Exception as e:
-                print(f"Error processing {curr_filename}: {e}")
-                raise e
+def iterate_sessions(
+    session_dir: str, max_sessions: int = None
+) -> Generator[List[Chunk], None, None]:
+    """
+    Generator function to iterate through all rrweb session files in a directory and ingest them.
 
-    print("Chunk size distribution:")
-    for size, count in sorted(chunk_sizes.items()):
-        print(f"{size} events: {count} sessions")
-    print(f"Total sessions processed: {sum(chunk_sizes.values())}")
+    This function scans the specified directory for rrweb JSON files, ingests
+    each session using the ingest_session function, and yields all
+    normalized chunks from all sessions.
+
+    Args:
+        session_dir: Directory containing rrweb session JSON files
+        max_sessions: Optional limit on number of sessions to process
+
+    Returns:
+        Generator yielding all normalized Chunk objects from processed sessions.
+    """
+    sessions_handled = 0
+    session_files = sorted([f for f in os.listdir(session_dir) if f.endswith(".json")])
+
+    for filename in session_files:
+        if max_sessions is not None and sessions_handled >= max_sessions:
+            break
+
+        session_id = filename.split(".")[0]
+        filepath = os.path.join(session_dir, filename)
+        try:
+            yield ingest_session(session_id, filepath)
+            sessions_handled += 1
+        except Exception as e:
+            logger.error("Error processing %s: %s", filename, e)
+            raise

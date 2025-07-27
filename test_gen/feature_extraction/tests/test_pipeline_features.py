@@ -6,9 +6,11 @@ to populated FeatureChunk objects, verifying correct integration of all
 extractors and proper handling of DOM state.
 """
 
+from collections import defaultdict
+
 import pytest
 from rrweb_ingest.models import Chunk
-from feature_extraction.pipeline import extract_features
+from feature_extraction.pipeline import extract_features, iterate_feature_extraction
 from feature_extraction.dom_state import init_dom_state
 from feature_extraction.models import UINode
 
@@ -850,3 +852,72 @@ def test_extract_features_large_event_volume():
     # (This is implicit - if the test completes, performance is acceptable)
     assert feature_chunk.chunk_id == "large-volume-chunk"
     assert len(feature_chunk.events) == len(large_events)
+
+
+def test_full_pipeline_integration_mimics_main_block(snapshot):
+    """
+    Integration test that mimics the __main__ block in pipeline.py.
+
+    Tests the complete pipeline flow including:
+    - Processing multiple session files from data/output_sessions
+    - Handling multiple chunks per session with DOM state persistence
+    - Both cases: chunks with and without snapshot_before metadata
+    - Session limits and error handling
+    - Feature extraction statistics similar to main block output
+
+    Uses syrupy snapshots to capture and verify the complete pipeline output.
+    """
+
+    # Collect results to match main block output format
+    def _create_empty_session_result():
+        return {
+            "chunks": [],
+            "error": None,
+        }
+
+    session_results = defaultdict(_create_empty_session_result)
+
+    chunk_generator = iterate_feature_extraction(
+        "feature_extraction/tests/test_sessions"
+    )
+    for chunk_data, chunk_metadata in chunk_generator:
+
+        # Analyze extracted features and collect statistics (mimics main block)
+        # DOM mutations by type
+        mutation_types = {}
+        for curr_mutation in chunk_data.features["dom_mutations"]:
+            mutation_type = curr_mutation.mutation_type or "unknown"
+            mutation_types[mutation_type] = mutation_types.get(mutation_type, 0) + 1
+        chunk_metadata["features"]["dom_mutation_stats"] = mutation_types
+
+        # User interactions by action
+        interaction_types = {}
+        for curr_interaction in chunk_data.features["interactions"]:
+            action = curr_interaction.action or "unknown"
+            interaction_types[action] = interaction_types.get(action, 0) + 1
+        chunk_metadata["features"]["interaction_stats"] = interaction_types
+
+        # Other feature counts
+        chunk_metadata["features"]["mouse_clusters"] = len(
+            chunk_data.features["mouse_clusters"]
+        )
+        chunk_metadata["features"]["scroll_patterns"] = len(
+            chunk_data.features["scroll_patterns"]
+        )
+        chunk_metadata["features"]["inter_event_delays"] = len(
+            chunk_data.features["inter_event_delays"]
+        )
+        chunk_metadata["features"]["reaction_delays"] = len(
+            chunk_data.features["reaction_delays"]
+        )
+        chunk_metadata["features"]["ui_nodes"] = len(chunk_data.features["ui_nodes"])
+
+        session_result = session_results[chunk_metadata["session_id"]]
+        session_result["chunks"].append(chunk_metadata)
+
+    sessions_processed = []
+    for session_id, session_result in session_results.items():
+        sessions_processed.append(session_id)
+        assert session_result == snapshot(name=f"session_{session_id}")
+
+    assert sessions_processed == snapshot(name="sessions_processed")

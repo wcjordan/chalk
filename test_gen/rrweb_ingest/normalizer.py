@@ -93,6 +93,7 @@ def normalize_chunk(
         "num_events": num_events,
         "duration_ms": duration_ms,
         "snapshot_before": snapshot_before,
+        "session_id": session_id,
     }
 
     # Create and return the Chunk object
