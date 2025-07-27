@@ -869,18 +869,18 @@ def test_full_pipeline_integration_mimics_main_block(snapshot):
     """
 
     # Collect results to match main block output format
-    def _new_session_result():
+    def _create_empty_session_result():
         return {
             "chunks": [],
             "error": None,
         }
 
-    session_results = defaultdict(_new_session_result)
+    session_results = defaultdict(_create_empty_session_result)
 
-    feature_chunk_generator = iterate_feature_extraction(
+    chunk_generator = iterate_feature_extraction(
         "feature_extraction/tests/test_sessions"
     )
-    for chunk_data, chunk_metadata in feature_chunk_generator:
+    for chunk_data, chunk_metadata in chunk_generator:
 
         # Analyze extracted features and collect statistics (mimics main block)
         # DOM mutations by type
