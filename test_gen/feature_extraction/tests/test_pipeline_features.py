@@ -875,10 +875,11 @@ def test_full_pipeline_integration_mimics_main_block(snapshot):
             "chunks": [],
             "error": None,
         }
+
     session_results = defaultdict(_new_session_result)
 
     feature_chunk_generator = iterate_feature_extraction(SESSION_DIR)
-    for chunk_data, chunk_metadata  in feature_chunk_generator:
+    for chunk_data, chunk_metadata in feature_chunk_generator:
 
         # Analyze extracted features and collect statistics (mimics main block)
         # DOM mutations by type
@@ -908,9 +909,7 @@ def test_full_pipeline_integration_mimics_main_block(snapshot):
         chunk_metadata["features"]["reaction_delays"] = len(
             chunk_data.features["reaction_delays"]
         )
-        chunk_metadata["features"]["ui_nodes"] = len(
-            chunk_data.features["ui_nodes"]
-        )
+        chunk_metadata["features"]["ui_nodes"] = len(chunk_data.features["ui_nodes"])
 
         session_result = session_results[chunk_metadata["session_id"]]
         session_result["chunks"].append(chunk_metadata)
