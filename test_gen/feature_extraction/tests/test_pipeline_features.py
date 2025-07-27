@@ -867,7 +867,6 @@ def test_full_pipeline_integration_mimics_main_block(snapshot):
 
     Uses syrupy snapshots to capture and verify the complete pipeline output.
     """
-    SESSION_DIR = "feature_extraction/tests/test_sessions"
 
     # Collect results to match main block output format
     def _new_session_result():
@@ -878,7 +877,9 @@ def test_full_pipeline_integration_mimics_main_block(snapshot):
 
     session_results = defaultdict(_new_session_result)
 
-    feature_chunk_generator = iterate_feature_extraction(SESSION_DIR)
+    feature_chunk_generator = iterate_feature_extraction(
+        "feature_extraction/tests/test_sessions"
+    )
     for chunk_data, chunk_metadata in feature_chunk_generator:
 
         # Analyze extracted features and collect statistics (mimics main block)

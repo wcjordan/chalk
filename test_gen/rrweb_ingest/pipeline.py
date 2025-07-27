@@ -15,7 +15,6 @@ The pipeline performs the following steps:
 
 import logging
 import os
-from collections import defaultdict
 from typing import Generator, List
 
 from rrweb_ingest.loader import load_events
@@ -134,5 +133,5 @@ def iterate_sessions(
             yield ingest_session(session_id, filepath)
             sessions_handled += 1
         except Exception as e:
-            logger.error(f"Error processing {filename}: {e}")
+            logger.error("Error processing %s: %s", filename, e)
             raise
