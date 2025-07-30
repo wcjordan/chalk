@@ -1,0 +1,1 @@
+Please review the whole conversation, collect all details related to this project.  Construct a detailed spec that brings those ideas together such as you would want to hand off to a developer to onboard them to a project.

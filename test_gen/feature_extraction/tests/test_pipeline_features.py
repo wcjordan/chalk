@@ -854,7 +854,7 @@ def test_extract_features_large_event_volume():
     assert len(feature_chunk.events) == len(large_events)
 
 
-def test_full_pipeline_integration_mimics_main_block(snapshot):
+def test_full_pipeline_integration(snapshot):
     """
     Integration test that mimics the __main__ block in pipeline.py.
 
