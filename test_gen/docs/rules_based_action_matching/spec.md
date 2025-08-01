@@ -41,7 +41,7 @@ All feature types are Python `@dataclass` models.
 
 ### 2. **Rule File**
 
-Rules are stored in **YAML** format (JSON-compatible) in the `rules/` directory. Each rule file defines a single pattern like this:
+Rules are stored in **YAML** format (JSON-compatible) in the `test_gen/data/rules` directory. Each rule file defines a single pattern like this:
 
 ```yaml
 id: search_input_basic
@@ -80,7 +80,7 @@ class DetectedAction:
     related_events: List[int]   # Indexes of matching events in chunk.events
 ```
 
-These will be collected and saved into the `action_mappings/` storage layer.
+These will be collected and saved into the `test_gen/data/action_mappings/` storage layer.
 
 ---
 
@@ -162,7 +162,7 @@ The schema and engine should be **future-compatible** with:
 
 ## 🧪 Example Test Cases
 
-Create PyTest tests in `tests/rule_engine/` to validate:
+Create PyTest tests in `test_gen/rule_engine/tests` to validate:
 
 1. A rule matches a `UserInteraction` + `UINode` pair
 2. Variable extraction works (attributes, nested, child text)
@@ -183,7 +183,7 @@ Mock chunks can be constructed directly in tests using dataclass models.
 
 ### 2. **Rule Loader**
 
-* Load `.yaml` files from `rules/` into memory
+* Load `.yaml` files from `test_gen/data/rules/` into memory
 * Validate required fields
 
 ### 3. **Matching Engine**
@@ -209,25 +209,25 @@ Mock chunks can be constructed directly in tests using dataclass models.
 ### 5. **Emit Results**
 
 * Return or save `List[DetectedAction]`
-* Store in `action_mappings/{chunk_id}.json` or return in-memory
+* Store in `test_gen/data/action_mappings/{chunk_id}.json` or return in-memory
 
 ---
 
 ## 📂 Directory Structure
 
 ```
-/rule_engine/
+test_gen/rule_engine/
   matcher.py              # Main engine
   rules_loader.py         # Loads and validates rules
   variable_resolver.py    # Handles variable expressions
   models.py               # DetectedAction and support dataclasses
   utils.py                # DOM helpers, selector matching
 
-/rules/
+test_gen/data/rules/
   search_input.yaml
   submit_button.yaml
 
-/tests/rule_engine/
+test_gen/rule_engine/tests/
   test_matcher.py
   test_variable_extraction.py
 ```

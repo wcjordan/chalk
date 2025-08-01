@@ -22,7 +22,7 @@ Add support for loading YAML rule files from disk and converting them into `Rule
 
 **How to verify:**
 
-* Load all rules in `rules/` directory
+* Load all rules in `test_gen/data/rules/` directory
 * Unit tests verify parsing of well-formed rule files
 * Invalid or missing fields raise clean validation errors
 
@@ -99,7 +99,7 @@ Support rules that extract values from descendant nodes via simple CSS selectors
 ### **Step 8: Serialize and Save Matched Actions**
 
 **What it accomplishes:**
-Write detected actions from a chunk to disk as JSON in `action_mappings/`, keyed by `chunk_id`.
+Write detected actions from a chunk to disk as JSON in `test_gen/data/action_mappings/`, keyed by `chunk_id`.
 
 **How to verify:**
 
