@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_full_pipeline_integration_mimics_main_block[session_08463d03-1928-4b7f-b2bc-763b73d094db]
+# name: test_full_pipeline_integration[session_08463d03-1928-4b7f-b2bc-763b73d094db]
   dict({
     'chunks': list([
       dict({
@@ -107,7 +107,7 @@
     'error': None,
   })
 # ---
-# name: test_full_pipeline_integration_mimics_main_block[session_25131bfa-d87f-4301-8f84-ac0c955b8f4c]
+# name: test_full_pipeline_integration[session_25131bfa-d87f-4301-8f84-ac0c955b8f4c]
   dict({
     'chunks': list([
       dict({
@@ -142,7 +142,7 @@
     'error': None,
   })
 # ---
-# name: test_full_pipeline_integration_mimics_main_block[session_30497eae-825d-433d-a484-4b75074332b2]
+# name: test_full_pipeline_integration[session_30497eae-825d-433d-a484-4b75074332b2]
   dict({
     'chunks': list([
       dict({
@@ -415,7 +415,7 @@
     'error': None,
   })
 # ---
-# name: test_full_pipeline_integration_mimics_main_block[session_6c720608-fa29-41cb-9594-5c080fc05343]
+# name: test_full_pipeline_integration[session_6c720608-fa29-41cb-9594-5c080fc05343]
   dict({
     'chunks': list([
       dict({
@@ -475,7 +475,7 @@
     'error': None,
   })
 # ---
-# name: test_full_pipeline_integration_mimics_main_block[session_e1e2280b-47ff-4be0-bab5-85c1ec4202a1]
+# name: test_full_pipeline_integration[session_e1e2280b-47ff-4be0-bab5-85c1ec4202a1]
   dict({
     'chunks': list([
       dict({
@@ -710,7 +710,7 @@
     'error': None,
   })
 # ---
-# name: test_full_pipeline_integration_mimics_main_block[sessions_processed]
+# name: test_full_pipeline_integration[sessions_processed]
   list([
     '08463d03-1928-4b7f-b2bc-763b73d094db',
     '25131bfa-d87f-4301-8f84-ac0c955b8f4c',
