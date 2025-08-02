@@ -13,6 +13,60 @@ Introduce `DetectedAction` and `Rule` models using Python dataclasses. These rep
 * Sample `Rule` object can be created from a dictionary
 * No side effects; safe to merge independently
 
+Here’s a prompt you can give to a coding agent for **Step 1: Define Core Data Models** of the Rule-Based Action Detection module:
+
+**Detailed Prompt**
+
+### ✅ Requirements
+
+Create the following dataclasses in a new file:
+
+📄 `test_gen/rule_engine/models.py`
+
+#### 1. `DetectedAction`
+
+Represents a user action detected by a rule.
+
+Fields:
+
+* `action_id: str` — human-readable label (e.g., `"search_query"`)
+* `timestamp: int` — timestamp from the first matched event
+* `confidence: float` — fixed or rule-supplied confidence
+* `rule_id: str` — ID of the rule that matched
+* `variables: Dict[str, Any]` — extracted values (e.g., input text)
+* `target_element: Optional[UINode]` — the `UINode` involved, if any
+* `related_events: List[int]` — indices of events in the chunk that contributed to the match
+
+#### 2. `Rule`
+
+Represents a rule parsed from YAML.
+
+Fields:
+
+* `id: str`
+* `description: Optional[str]`
+* `match: Dict[str, Any]` — event and node match conditions
+* `confidence: float`
+* `variables: Dict[str, str]` — variable extraction expressions
+* `action_id: str`
+
+Use Python 3.9+ typing (`list`, `dict`, `Optional`, not `List`, `Dict` from `typing` unless necessary).
+
+---
+
+### 🧪 Testing
+
+Create a unit test file:
+📄 `test_gen/rule_engine/tests/test_models.py`
+
+Write simple tests that:
+
+* Instantiate `DetectedAction` and `Rule` with sample data
+* Assert field values are correctly stored and accessible
+* Ensure missing optional fields (like `description`) do not raise errors
+
+Do not implement logic — just data structure definitions and basic tests.
+
 ---
 
 ### **Step 2: Implement Rule Loader**
