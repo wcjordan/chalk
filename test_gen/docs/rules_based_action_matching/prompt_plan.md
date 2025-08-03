@@ -15,13 +15,13 @@ Introduce `DetectedAction` and `Rule` models using Python dataclasses. These rep
 
 **Detailed Prompt**
 
-### ✅ Requirements
+#### ✅ Requirements
 
 Create the following dataclasses in a new file:
 
 📄 `test_gen/rule_engine/models.py`
 
-#### 1. `DetectedAction`
+##### 1. `DetectedAction`
 
 Represents a user action detected by a rule.
 
@@ -35,7 +35,7 @@ Fields:
 * `target_element: Optional[UINode]` — the `UINode` involved, if any
 * `related_events: List[int]` — indices of events in the chunk that contributed to the match
 
-#### 2. `Rule`
+##### 2. `Rule`
 
 Represents a rule parsed from YAML.
 
@@ -52,7 +52,7 @@ Use Python 3.9+ typing (`list`, `dict`, `Optional`, not `List`, `Dict` from `typ
 
 ---
 
-### 🧪 Testing
+#### 🧪 Testing
 
 Create a unit test file:
 📄 `test_gen/rule_engine/tests/test_models.py`
@@ -77,6 +77,91 @@ Add support for loading YAML rule files from disk and converting them into `Rule
 * Load all rules in `test_gen/data/rules/` directory
 * Unit tests verify parsing of well-formed rule files
 * Invalid or missing fields raise clean validation errors
+
+**Detailed Prompt**
+
+You are building a rule-based engine that processes rrweb session chunks to detect user actions. Your current task is to implement the **Rule Loader**, which loads and validates rules from disk.
+
+---
+
+#### ✅ Requirements
+
+Create the following module:
+📄 `test_gen/rule_engine/rules_loader.py`
+
+Implement a function:
+
+```python
+def load_rules(directory: Union[str, Path]) -> List[Rule]:
+    ...
+```
+
+Where:
+
+* `directory` points to the folder containing rule files (YAML format)
+* Each file contains one rule (schema described below)
+* The function loads and parses all rule files into `Rule` objects defined in `models.py`
+
+Raise a `ValueError` for any rule missing required fields.
+
+Use the `Rule` dataclass from:
+📄 `test_gen/rule_engine/models.py`
+
+---
+
+#### 📁 Input Folder
+
+All rule files are in:
+`test_gen/data/rules/`
+Each rule is a `.yaml` file with the following structure:
+
+```yaml
+id: search_input_basic
+description: "Detects a user typing into a search box"
+match:
+  event:
+    action: input
+  node:
+    tag: input
+    attributes:
+      type: search
+confidence: 0.8
+variables:
+  input_value: event.value
+  placeholder: node.attributes.placeholder
+action_id: search_query
+```
+
+Required fields:
+
+* `id`, `match`, `confidence`, `variables`, `action_id`
+
+---
+
+#### 🧪 Testing
+
+Create the following test file:
+📄 `test_gen/rule_engine/tests/test_rules_loader.py`
+
+Write unit tests that:
+
+* Load one or more valid `.yaml` files from a temp dir or fixture
+* Confirm that a `Rule` object is returned with expected fields
+* Include negative test: malformed rule (e.g., missing `action_id`) raises `ValueError`
+* Include test for multiple rule files in the directory
+
+---
+
+#### ✅ Deliverables
+
+* `rules_loader.py` with `load_rules(...)` function
+* `test_rules_loader.py` with coverage of:
+
+  * Valid parsing
+  * Invalid structure
+  * File iteration
+
+Do not implement rule evaluation or matching yet — only loading and validation.
 
 ---
 
