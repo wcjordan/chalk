@@ -12,8 +12,8 @@ from typing import List
 
 import yaml
 
-from test_gen.rule_engine.rules_loader import load_rules
-from test_gen.rule_engine.models import Rule
+from rule_engine.rules_loader import load_rules
+from rule_engine.models import Rule
 
 
 class TestRulesLoader:
