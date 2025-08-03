@@ -116,4 +116,4 @@ update-repomix:
 
 .PHONY: implement-step
 implement-step:
-	claude "/project:implement_step \"$$(python helpers/prompt/pull_prompt.py)\""
+	claude "/project:implement_step \"$$(python helpers/prompt/pull_prompt.py $(STEP_NUMBER))\""
