@@ -15,10 +15,10 @@ from feature_extraction.models import UINode
 class DetectedAction:
     """
     Represents a user action detected by a rule.
-    
+
     Captures the essential information about a detected action including
     the action type, timing, confidence, and associated context.
-    
+
     Attributes:
         action_id: Human-readable label (e.g., "search_query")
         timestamp: Timestamp from the first matched event
@@ -28,7 +28,7 @@ class DetectedAction:
         target_element: The UINode involved, if any
         related_events: Indices of events in the chunk that contributed to the match
     """
-    
+
     action_id: str
     timestamp: int
     confidence: float
@@ -42,10 +42,10 @@ class DetectedAction:
 class Rule:
     """
     Represents a rule parsed from YAML.
-    
+
     Defines the conditions and extraction logic for detecting specific
     user actions from event sequences.
-    
+
     Attributes:
         id: Unique identifier for the rule
         description: Optional human-readable description
@@ -54,7 +54,7 @@ class Rule:
         variables: Variable extraction expressions
         action_id: The action type this rule detects
     """
-    
+
     id: str
     description: Optional[str]
     match: Dict[str, Any]

@@ -16,9 +16,9 @@ def test_detected_action_creation():
         tag="input",
         attributes={"type": "text", "placeholder": "Search..."},
         text="",
-        parent=100
+        parent=100,
     )
-    
+
     action = DetectedAction(
         action_id="search_query",
         timestamp=12345,
@@ -26,7 +26,7 @@ def test_detected_action_creation():
         rule_id="search_input_rule",
         variables={"query_text": "machine learning"},
         target_element=ui_node,
-        related_events=[0, 1, 2]
+        related_events=[0, 1, 2],
     )
 
     assert action.action_id == "search_query"
@@ -47,11 +47,11 @@ def test_detected_action_no_target_element():
         rule_id="page_load_rule",
         variables={},
         target_element=None,
-        related_events=[0]
+        related_events=[0],
     )
 
     assert action.target_element is None
-    assert action.variables == {}
+    assert not action.variables
     assert action.related_events == [0]
 
 
@@ -60,21 +60,15 @@ def test_rule_creation():
     rule = Rule(
         id="click_button_rule",
         description="Detects button clicks",
-        match={
-            "event": {"type": "click"},
-            "node": {"tag": "button"}
-        },
+        match={"event": {"type": "click"}, "node": {"tag": "button"}},
         confidence=0.95,
         variables={"button_text": "node.text"},
-        action_id="button_click"
+        action_id="button_click",
     )
 
     assert rule.id == "click_button_rule"
     assert rule.description == "Detects button clicks"
-    assert rule.match == {
-        "event": {"type": "click"},
-        "node": {"tag": "button"}
-    }
+    assert rule.match == {"event": {"type": "click"}, "node": {"tag": "button"}}
     assert rule.confidence == 0.95
     assert rule.variables == {"button_text": "node.text"}
     assert rule.action_id == "button_click"
@@ -88,14 +82,14 @@ def test_rule_creation_minimal():
         match={"event": {"type": "input"}},
         confidence=0.8,
         variables={},
-        action_id="text_input"
+        action_id="text_input",
     )
 
     assert rule.id == "minimal_rule"
     assert rule.description is None
     assert rule.match == {"event": {"type": "input"}}
     assert rule.confidence == 0.8
-    assert rule.variables == {}
+    assert not rule.variables
     assert rule.action_id == "text_input"
 
 
@@ -104,25 +98,22 @@ def test_rule_from_dict_like():
     rule_data = {
         "id": "form_submit_rule",
         "description": "Detects form submissions",
-        "match": {
-            "event": {"type": "submit"},
-            "node": {"tag": "form"}
-        },
+        "match": {"event": {"type": "submit"}, "node": {"tag": "form"}},
         "confidence": 0.99,
         "variables": {
             "form_id": "node.attributes.id",
-            "form_action": "node.attributes.action"
+            "form_action": "node.attributes.action",
         },
-        "action_id": "form_submit"
+        "action_id": "form_submit",
     }
-    
+
     rule = Rule(
         id=rule_data["id"],
         description=rule_data["description"],
         match=rule_data["match"],
         confidence=rule_data["confidence"],
         variables=rule_data["variables"],
-        action_id=rule_data["action_id"]
+        action_id=rule_data["action_id"],
     )
 
     assert rule.id == "form_submit_rule"
