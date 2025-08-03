@@ -28,4 +28,4 @@ jobs:
     - name: Run tests with pytest
       run: |
         cd test_gen
-        python -m pytest -v feature_extraction/tests rrweb_ingest/tests session_stitching/tests
+        python -m pytest -v */tests

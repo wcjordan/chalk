@@ -13,8 +13,6 @@ Introduce `DetectedAction` and `Rule` models using Python dataclasses. These rep
 * Sample `Rule` object can be created from a dictionary
 * No side effects; safe to merge independently
 
-Here’s a prompt you can give to a coding agent for **Step 1: Define Core Data Models** of the Rule-Based Action Detection module:
-
 **Detailed Prompt**
 
 ### ✅ Requirements
