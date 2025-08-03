@@ -113,3 +113,7 @@ aider:
 .PHONY: update-repomix
 update-repomix:
 	repomix --ignore "ui/js/src/**/__snapshots__/**/*,db/starter_db/starter_db.sql"
+
+.PHONY: implement-step
+implement-step:
+	claude "/project:implement_step \"$$(python helpers/prompt/pull_prompt.py)\""
