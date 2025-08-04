@@ -178,6 +178,90 @@ Implement matching logic for a single `UserInteraction` and its associated `UINo
 
 ---
 
+**Detailed Prompt**
+
+#### ✅ Requirements
+
+Create or update this module:
+📄 `test_gen/rule_engine/matcher.py`
+
+Implement the following function:
+
+```python
+def rule_matches_event_node(
+    rule: Rule,
+    event: UserInteraction,
+    node: UINode
+) -> bool:
+    ...
+```
+
+This function returns `True` if both:
+
+* The `event` matches `rule.match.event`
+* The `node` matches `rule.match.node`
+
+Return `False` if any condition fails.
+
+---
+
+#### 🎯 Matching Criteria
+
+##### `match.event` block supports:
+
+* `action`: exact string match with `event.action`
+
+##### `match.node` block supports:
+
+* `tag`: exact string match with `node.tag`
+* `attributes`: dictionary of required key-value pairs. Match only if all specified attributes are present in `node.attributes` and values are equal.
+
+Example:
+
+```yaml
+match:
+  event:
+    action: input
+  node:
+    tag: input
+    attributes:
+      type: search
+```
+
+The above rule would match if:
+
+* `event.action == "input"`
+* `node.tag == "input"`
+* `"type": "search"` exists in `node.attributes`
+
+---
+
+#### 🧪 Testing
+
+Create the following test file:
+📄 `test_gen/rule_engine/tests/test_matcher.py`
+
+Write unit tests for `rule_matches_event_node(...)`:
+
+* Positive case: event and node match fully
+* Negative case: action mismatch
+* Negative case: tag mismatch
+* Negative case: missing or incorrect attribute
+
+Use mock objects or real `UserInteraction` and `UINode` instances.
+
+---
+
+#### ✅ Deliverables
+
+* Function: `rule_matches_event_node(rule, event, node) → bool`
+* Unit test file: `test_matcher.py` with full coverage
+* No dependencies on variable extraction, chunk traversal, or DOM queries yet
+
+Let me know when you're ready for Step 4: Variable Extraction.
+
+---
+
 ### **Step 4: Add Variable Extraction (Direct Fields)**
 
 **What it accomplishes:**
