@@ -2,8 +2,14 @@
 Utility python script which can extract a specific prompt from the prompt_plan.md markdown file.
 This is handy for passing a specific prompt to the LLM for executing on implementation steps.
 """
+import sys
 
-PROMPT_NUMBER = "1"
+if len(sys.argv) != 2:
+    print("Usage: python pull_prompt.py <step_number>")
+    print("Example: python pull_prompt.py 1")
+    sys.exit(1)
+
+PROMPT_NUMBER = sys.argv[1]
 PROMPT_DIR = "test_gen/docs/rules_based_action_matching"
 
 print(f"- Directory of with `spec.md` and `prompt_plan.md`: \"{PROMPT_DIR}\"")
