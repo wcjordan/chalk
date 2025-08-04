@@ -4,12 +4,10 @@ Tests for the rules_loader module.
 This module contains unit tests for loading and validating rules from YAML files.
 """
 
-import os
 import tempfile
-import pytest
 from pathlib import Path
-from typing import List
 
+import pytest
 import yaml
 
 from rule_engine.rules_loader import load_rules
@@ -38,7 +36,7 @@ class TestRulesLoader:
 
         with tempfile.TemporaryDirectory() as temp_dir:
             rule_file = Path(temp_dir) / "test_rule.yaml"
-            with open(rule_file, "w") as f:
+            with open(rule_file, "w", encoding="utf-8") as f:
                 yaml.dump(rule_data, f)
 
             rules = load_rules(temp_dir)
@@ -74,9 +72,9 @@ class TestRulesLoader:
 
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create two rule files
-            with open(Path(temp_dir) / "rule1.yaml", "w") as f:
+            with open(Path(temp_dir) / "rule1.yaml", "w", encoding="utf-8") as f:
                 yaml.dump(rule1, f)
-            with open(Path(temp_dir) / "rule2.yml", "w") as f:
+            with open(Path(temp_dir) / "rule2.yml", "w", encoding="utf-8") as f:
                 yaml.dump(rule2, f)
 
             rules = load_rules(temp_dir)
@@ -98,7 +96,7 @@ class TestRulesLoader:
 
         with tempfile.TemporaryDirectory() as temp_dir:
             rule_file = Path(temp_dir) / "minimal.yaml"
-            with open(rule_file, "w") as f:
+            with open(rule_file, "w", encoding="utf-8") as f:
                 yaml.dump(rule_data, f)
 
             rules = load_rules(temp_dir)
@@ -119,7 +117,7 @@ class TestRulesLoader:
 
         with tempfile.TemporaryDirectory() as temp_dir:
             rule_file = Path(temp_dir) / "incomplete.yaml"
-            with open(rule_file, "w") as f:
+            with open(rule_file, "w", encoding="utf-8") as f:
                 yaml.dump(incomplete_rule, f)
 
             with pytest.raises(ValueError) as exc_info:
@@ -141,7 +139,7 @@ class TestRulesLoader:
 
         with tempfile.TemporaryDirectory() as temp_dir:
             rule_file = Path(temp_dir) / "invalid.yaml"
-            with open(rule_file, "w") as f:
+            with open(rule_file, "w", encoding="utf-8") as f:
                 yaml.dump(rule_with_invalid_confidence, f)
 
             with pytest.raises(ValueError) as exc_info:
@@ -162,7 +160,7 @@ class TestRulesLoader:
 
         with tempfile.TemporaryDirectory() as temp_dir:
             rule_file = Path(temp_dir) / "wrong_types.yaml"
-            with open(rule_file, "w") as f:
+            with open(rule_file, "w", encoding="utf-8") as f:
                 yaml.dump(rule_with_wrong_types, f)
 
             with pytest.raises(ValueError) as exc_info:
@@ -182,7 +180,7 @@ class TestRulesLoader:
 
         with tempfile.TemporaryDirectory() as temp_dir:
             rule_file = Path(temp_dir) / "malformed.yaml"
-            with open(rule_file, "w") as f:
+            with open(rule_file, "w", encoding="utf-8") as f:
                 f.write(malformed_yaml)
 
             with pytest.raises(yaml.YAMLError):
@@ -205,7 +203,7 @@ class TestRulesLoader:
         """Test that empty directory returns empty list."""
         with tempfile.TemporaryDirectory() as temp_dir:
             rules = load_rules(temp_dir)
-            assert rules == []
+            assert not rules
 
     def test_directory_with_non_yaml_files_ignores_them(self):
         """Test that non-YAML files are ignored."""
@@ -219,13 +217,13 @@ class TestRulesLoader:
 
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create a valid YAML file
-            with open(Path(temp_dir) / "valid.yaml", "w") as f:
+            with open(Path(temp_dir) / "valid.yaml", "w", encoding="utf-8") as f:
                 yaml.dump(rule_data, f)
 
             # Create non-YAML files that should be ignored
-            with open(Path(temp_dir) / "readme.txt", "w") as f:
+            with open(Path(temp_dir) / "readme.txt", "w", encoding="utf-8") as f:
                 f.write("This is not a rule file")
-            with open(Path(temp_dir) / "config.json", "w") as f:
+            with open(Path(temp_dir) / "config.json", "w", encoding="utf-8") as f:
                 f.write('{"not": "a rule"}')
 
             rules = load_rules(temp_dir)
@@ -245,11 +243,11 @@ class TestRulesLoader:
 
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create a valid rule file
-            with open(Path(temp_dir) / "valid.yaml", "w") as f:
+            with open(Path(temp_dir) / "valid.yaml", "w", encoding="utf-8") as f:
                 yaml.dump(rule_data, f)
 
             # Create an empty YAML file
-            with open(Path(temp_dir) / "empty.yaml", "w") as f:
+            with open(Path(temp_dir) / "empty.yaml", "w", encoding="utf-8") as f:
                 pass  # Empty file
 
             rules = load_rules(temp_dir)

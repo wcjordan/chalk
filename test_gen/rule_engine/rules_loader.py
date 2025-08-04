@@ -5,7 +5,6 @@ This module provides functionality to load and validate rules from YAML files,
 converting them into Rule objects for use in the rule-based action detection system.
 """
 
-import os
 from pathlib import Path
 from typing import List, Union, Dict, Any
 
@@ -54,9 +53,11 @@ def load_rules(directory: Union[str, Path]) -> List[Rule]:
             rules.append(rule)
 
         except yaml.YAMLError as e:
-            raise yaml.YAMLError(f"Error parsing YAML file {yaml_file.name}: {e}")
+            raise yaml.YAMLError(
+                f"Error parsing YAML file {yaml_file.name}: {e}"
+            ) from e
         except Exception as e:
-            raise ValueError(f"Error processing rule file {yaml_file.name}: {e}")
+            raise ValueError(f"Error processing rule file {yaml_file.name}: {e}") from e
 
     return rules
 
