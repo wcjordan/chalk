@@ -276,6 +276,98 @@ Extract values from matched `event` and `node` based on the `variables:` section
   * `node.attributes.<key>`
 * Fallback or error behavior clearly defined (e.g., missing fields = None)
 
+**Detailed Prompt**
+
+You are working on a rule-based system that detects user actions from rrweb session data. Your task is to implement **variable extraction** logic based on the `variables:` block of a rule.
+
+This logic will be used after a rule has matched a `UserInteraction` and `UINode`.
+
+---
+
+#### ✅ Requirements
+
+Create or update the following module:
+📄 `test_gen/rule_engine/variable_resolver.py`
+
+Implement a function:
+
+```python
+def extract_variables(
+    variable_map: Dict[str, str],
+    event: UserInteraction,
+    node: UINode
+) -> Dict[str, Any]:
+    ...
+```
+
+Where:
+
+* `variable_map` comes from `rule.variables`
+* Keys are variable names to output (e.g., `input_value`)
+* Values are source paths (e.g., `"event.value"`, `"node.text"`, `"node.attributes.placeholder"`)
+
+The function should return a dictionary of resolved variable values:
+
+* Resolve paths dynamically
+* If a path does not exist, return `None` for that variable
+
+---
+
+#### 🧪 Examples
+
+Given this input:
+
+```yaml
+variables:
+  input_value: event.value
+  placeholder: node.attributes.placeholder
+  node_text: node.text
+```
+
+And a matching `event` and `node`, the function should return:
+
+```python
+{
+  "input_value": "cats",
+  "placeholder": "Search...",
+  "node_text": "Search field"
+}
+```
+
+If a key is missing (e.g., `node.attributes.placeholder` not present), return:
+
+```python
+{
+  "placeholder": None
+}
+```
+
+---
+
+#### 🧪 Testing
+
+Create this test file:
+📄 `test_gen/rule_engine/tests/test_variable_extraction.py`
+
+Write unit tests that:
+
+* Validate extraction from `event.value`, `node.text`
+* Validate attribute extraction like `node.attributes.placeholder`
+* Validate missing attributes return `None`
+* Validate handling of invalid or unknown paths (e.g., `node.foo.bar`)
+
+Use simple mock `UserInteraction` and `UINode` objects.
+
+---
+
+#### ✅ Deliverables
+
+* `extract_variables(variable_map, event, node)` in `variable_resolver.py`
+* Full test coverage in `test_variable_extraction.py`
+* Logic limited to flat access for now (no CSS selectors yet)
+
+Let me know when you’re ready for Step 5: Emitting `DetectedAction` objects.
+
 ---
 
 ### **Step 5: Emit `DetectedAction` for Matches**
