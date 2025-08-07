@@ -56,8 +56,7 @@ def _resolve_path(path: str, event: UserInteraction, node: UINode) -> Any:
         node: The UINode object
 
     Returns:
-        The resolved value, or None if the path cannot be resolved (including when AttributeError,
-        KeyError, or TypeError is raised).
+        The resolved value, or None if the path cannot be resolved.
     """
     path_parts = path.split(".")
 
