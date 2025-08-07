@@ -539,6 +539,84 @@ Support rules that extract values from descendant nodes via simple CSS selectors
 * Mock DOM structure in tests
 * Unit tests verify successful extraction or fallback behavior
 
+**Detailed Prompt:**
+
+You are enhancing the rule-based variable extraction system to support **simple CSS-style queries** on DOM nodes. This will allow rules to extract values from **child or descendant nodes** of a matched `UINode`.
+
+---
+
+#### ✅ Requirements
+
+##### 1. Implement a DOM query helper
+
+Create or update:
+📄 `test_gen/rule_engine/utils.py`
+
+Add a function:
+
+```python
+def query_node_text(
+    root_node: UINode,
+    all_nodes: List[UINode],
+    selector: str
+) -> Optional[str]:
+    ...
+```
+
+This should:
+
+* Interpret `selector` as a **simple CSS query** (e.g., `"div > span"`, `"label"`).
+* Search the subtree under `root_node` for the **first** matching descendant (by tag, optionally using `>` for direct children).
+* Return the `.text` of the matching `UINode`, or `None` if not found.
+
+💡 For v1:
+
+* Only support tag-based selectors (e.g., `"span"`, `"div > span"`)
+* Do **not** support classes, IDs, or attributes
+* Use `parent` references or build a map of children for tree traversal
+
+##### 2. Update variable extraction logic
+
+Update:
+📄 `test_gen/rule_engine/variable_resolver.py`
+
+Enhance `extract_variables(...)` to recognize expressions like:
+
+```yaml
+child_label: node.query("div > span").text
+```
+
+When this pattern is detected:
+
+* Extract the selector from the string
+* Use `query_node_text(...)` to find the matching node’s text
+* Return `None` if no match found
+
+---
+
+#### 🧪 Testing
+
+Create or extend test file:
+📄 `test_gen/rule_engine/tests/test_variable_extraction.py`
+
+Write unit tests that:
+
+* Construct a mock `UINode` tree with parent-child relationships
+* Test `query_node_text(...)` with:
+
+  * Simple tag match (e.g., `"span"`)
+  * Direct child match (e.g., `"div > span"`)
+  * No match (should return `None`)
+* Test `extract_variables(...)` with `node.query(...).text` expressions
+
+---
+
+#### ✅ Deliverables
+
+* Utility function: `query_node_text(...)` in `utils.py`
+* Updated logic in `extract_variables(...)` to support `.query(...)` access
+* Unit tests validating behavior and fallbacks
+
 ---
 
 ### **Step 8: Serialize and Save Matched Actions**
