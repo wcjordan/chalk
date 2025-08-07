@@ -45,7 +45,10 @@ def extract_variables(
 
 def _resolve_path(path: str, event: UserInteraction, node: UINode) -> Any:
     """
-    Resolve a dotted path expression to extract a value from event or node.
+    Private helper function to resolve a dotted path expression to extract a value from event or node.
+
+    This function returns None if the path cannot be resolved, specifically if an AttributeError,
+    KeyError, or TypeError is encountered during resolution.
 
     Args:
         path: Dotted path expression (e.g., "event.value", "node.text", "node.attributes.placeholder")
@@ -53,7 +56,8 @@ def _resolve_path(path: str, event: UserInteraction, node: UINode) -> Any:
         node: The UINode object
 
     Returns:
-        The resolved value, or None if the path cannot be resolved.
+        The resolved value, or None if the path cannot be resolved (including when AttributeError,
+        KeyError, or TypeError is raised).
     """
     path_parts = path.split(".")
 
