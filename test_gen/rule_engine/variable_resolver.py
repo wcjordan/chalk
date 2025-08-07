@@ -5,8 +5,11 @@ This module provides functionality to extract variable values from UserInteracti
 events and UINode objects based on path expressions defined in rules.
 """
 
+import logging
 from typing import Dict, Any
 from feature_extraction.models import UserInteraction, UINode
+
+logger = logging.getLogger(__name__)
 
 
 def extract_variables(
@@ -84,7 +87,7 @@ def _resolve_path(path: str, event: UserInteraction, node: UINode) -> Any:
             else:
                 return None
         except (AttributeError, KeyError, TypeError) as e:
-            logger.debug(f"Failed to resolve path '{path}' at part '{part}': {e}")
+            logger.debug("Failed to resolve path '%s' at part '%s': %s", path, part, e)
             return None
 
     return current_obj

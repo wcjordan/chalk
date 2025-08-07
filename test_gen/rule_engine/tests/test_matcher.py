@@ -315,7 +315,7 @@ class TestApplyRuleToEventAndNode:
         assert result.timestamp == 1000000000
         assert result.confidence == 0.9
         assert result.rule_id == "simple_click"
-        assert result.variables == {}
+        assert not result.variables
         assert result.target_element == node
         assert result.related_events == [0]
 
