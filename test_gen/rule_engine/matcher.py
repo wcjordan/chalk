@@ -5,7 +5,7 @@ This module implements the core matching logic to determine if a UserInteraction
 and UINode pair matches the conditions specified in a Rule.
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 from feature_extraction.models import UserInteraction, UINode
 
@@ -116,3 +116,51 @@ def apply_rule_to_event_and_node(
         target_element=node,
         related_events=[event_index],
     )
+
+
+def detect_actions_in_chunk(
+    chunk: Dict[str, Any], rules: List[Rule]
+) -> List[DetectedAction]:
+    """
+    Detect actions in a full chunk by applying all rules to all UserInteractions.
+
+    This function iterates through each UserInteraction in the chunk, finds the
+    corresponding UINode, and applies each rule to determine if any actions
+    should be detected.
+
+    Args:
+        chunk: A chunk dictionary containing features with user_interactions and ui_nodes
+        rules: List of rules to apply for action detection
+
+    Returns:
+        List of DetectedAction objects for all matched rules and interactions
+    """
+    detected_actions = []
+
+    # Get user interactions and ui nodes from the chunk
+    user_interactions = chunk.get("features", {}).get("user_interactions", [])
+    ui_nodes = chunk.get("features", {}).get("ui_nodes", [])
+
+    # Create a mapping from node ID to UINode for quick lookup
+    node_map = {node.id: node for node in ui_nodes}
+
+    # Iterate through each user interaction
+    for event_index, interaction in enumerate(user_interactions):
+        # Find the corresponding UINode using target_id
+        target_node = node_map.get(interaction.target_id)
+
+        # Skip if no corresponding node found
+        if target_node is None:
+            continue
+
+        # Apply each rule to this event-node pair
+        for rule in rules:
+            detected_action = apply_rule_to_event_and_node(
+                rule, interaction, target_node, event_index
+            )
+
+            # If the rule matched, add to our results
+            if detected_action is not None:
+                detected_actions.append(detected_action)
+
+    return detected_actions
