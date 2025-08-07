@@ -190,7 +190,7 @@ class TestRuleMatchesEventNode:
         node = create_test_node(
             tag="button",
             attributes={
-                "type": "submit"
+                "type": "submit",
                 # Missing 'class' attribute
             },
         )
