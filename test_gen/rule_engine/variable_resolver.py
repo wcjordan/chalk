@@ -15,7 +15,10 @@ logger = logging.getLogger(__name__)
 
 
 def extract_variables(
-    variable_map: Dict[str, str], event: UserInteraction, node: UINode, all_nodes: List[UINode] = None
+    variable_map: Dict[str, str],
+    event: UserInteraction,
+    node: UINode,
+    all_nodes: List[UINode] = None,
 ) -> Dict[str, Any]:
     """
     Extract variables from matched event and node based on path expressions.
@@ -104,10 +107,10 @@ def _resolve_path(path: str, event: UserInteraction, node: UINode) -> Any:
 def _is_query_expression(path: str) -> bool:
     """
     Check if a path expression is a node.query().text pattern.
-    
+
     Args:
         path: The path expression to check
-        
+
     Returns:
         True if this is a node.query().text expression, False otherwise
     """
@@ -116,32 +119,36 @@ def _is_query_expression(path: str) -> bool:
     return bool(re.match(pattern, path))
 
 
-def _resolve_query_expression(path: str, node: UINode, all_nodes: List[UINode]) -> Optional[str]:
+def _resolve_query_expression(
+    path: str, node: UINode, all_nodes: List[UINode]
+) -> Optional[str]:
     """
     Resolve a node.query().text expression by extracting the selector and querying the DOM.
-    
+
     Args:
         path: The query expression (e.g., 'node.query("div > span").text')
         node: The root node to search from
         all_nodes: List of all nodes for building the tree structure
-        
+
     Returns:
         The text content of the matching node, or None if no match found or invalid expression
     """
     if not all_nodes:
-        logger.debug("Cannot resolve query expression '%s': all_nodes is required", path)
+        logger.debug(
+            "Cannot resolve query expression '%s': all_nodes is required", path
+        )
         return None
-    
+
     # Extract the selector from the expression
     pattern = r'^node\.query\(["\']([^"\']+)["\']\)\.text$'
     match = re.match(pattern, path)
-    
+
     if not match:
         logger.debug("Invalid query expression format: '%s'", path)
         return None
-    
+
     selector = match.group(1)
-    
+
     try:
         return query_node_text(node, all_nodes, selector)
     except Exception as e:
