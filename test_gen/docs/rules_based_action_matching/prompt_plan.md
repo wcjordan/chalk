@@ -462,6 +462,70 @@ Add a top-level matcher that runs over all `UserInteraction`s in a session chunk
 * Unit tests validate end-to-end matching with mock chunks and rules
 * No integration with file I/O or storage yet
 
+**Detailed Prompt**
+
+You are building a rule-based system to detect user actions from preprocessed rrweb session chunks. Your task is to implement the **top-level matching function** that runs over all `UserInteraction` events in a chunk and applies all loaded rules.
+
+---
+
+#### ✅ Requirements
+
+Update:
+📄 `test_gen/rule_engine/matcher.py`
+
+Implement the function:
+
+```python
+def detect_actions_in_chunk(
+    chunk: Dict[str, Any],
+    rules: List[Rule]
+) -> List[DetectedAction]:
+    ...
+```
+
+This function should:
+
+1. Iterate through each `UserInteraction` in `chunk["features"]["user_interactions"]`
+2. For each interaction, find the corresponding `UINode` using `target_id` (from `chunk["features"]["ui_nodes"]`)
+3. Apply each rule using `apply_rule_to_event_and_node(...)`
+4. Collect and return all non-None `DetectedAction` objects
+
+💡 You may assume:
+
+* `target_id` will match a `UINode.id`
+* Rule loading and individual match/evaluation logic is already tested
+
+---
+
+#### 🧪 Testing
+
+Create or extend this test file:
+📄 `test_gen/rule_engine/tests/test_matcher.py`
+
+Write an end-to-end test that:
+
+* Creates a mock chunk with:
+
+  * One or more `UserInteraction` events
+  * Corresponding `UINode`s
+* Supplies a list of valid `Rule` objects
+* Verifies the returned list of `DetectedAction`s:
+
+  * Has the expected length
+  * Contains correct action IDs and variables
+
+Negative test:
+
+* A rule that should not match yields no `DetectedAction`
+
+---
+
+#### ✅ Deliverables
+
+* Function `detect_actions_in_chunk(chunk, rules)` in `matcher.py`
+* Tests verifying rule application across a complete chunk
+* No disk I/O or file saving in this step
+
 ---
 
 ### **Step 7: Add CSS-style Child Node Query Support**
