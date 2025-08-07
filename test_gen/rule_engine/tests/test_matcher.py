@@ -7,7 +7,7 @@ and UINode pairs match Rule conditions.
 
 from typing import Dict, Any
 
-from rule_engine.matcher import rule_matches_event_node
+from rule_engine.matcher import rule_matches_event_node, apply_rule_to_event_and_node
 from rule_engine.models import Rule
 from feature_extraction.models import UserInteraction, UINode
 
@@ -229,3 +229,117 @@ class TestRuleMatchesEventNode:
         )
 
         assert rule_matches_event_node(rule, event, node) is True
+
+
+class TestApplyRuleToEventAndNode:
+    """Tests for apply_rule_to_event_and_node function."""
+
+    def test_successful_match_returns_detected_action(self):
+        """Test that a successful match returns a properly structured DetectedAction."""
+        rule = create_test_rule(
+            rule_id="search_rule",
+            match_event={"action": "input"},
+            match_node={"tag": "input", "attributes": {"type": "search"}},
+            action_id="search_query",
+            confidence=0.85,
+        )
+        rule.variables = {
+            "search_term": "event.value",
+            "placeholder": "node.attributes.placeholder",
+        }
+
+        event = create_test_event(
+            action="input",
+            target_id=123,
+            value="cats",
+            timestamp=1642500000000,
+        )
+
+        node = create_test_node(
+            node_id=123,
+            tag="input",
+            attributes={"type": "search", "placeholder": "Search..."},
+            text="",
+        )
+
+        event_index = 5
+        result = apply_rule_to_event_and_node(rule, event, node, event_index)
+
+        assert result is not None
+        assert result.action_id == "search_query"
+        assert result.timestamp == 1642500000000
+        assert result.confidence == 0.85
+        assert result.rule_id == "search_rule"
+        assert result.variables == {"search_term": "cats", "placeholder": "Search..."}
+        assert result.target_element == node
+        assert result.related_events == [5]
+
+    def test_failed_match_returns_none(self):
+        """Test that a failed match returns None."""
+        rule = create_test_rule(
+            match_event={"action": "click"},
+            match_node={"tag": "button"},
+        )
+
+        event = create_test_event(action="input")  # Different action
+        node = create_test_node(tag="button")
+        event_index = 10
+
+        result = apply_rule_to_event_and_node(rule, event, node, event_index)
+
+        assert result is None
+
+    def test_match_with_empty_variables(self):
+        """Test successful match with empty variables dictionary."""
+        rule = create_test_rule(
+            rule_id="simple_click",
+            match_event={"action": "click"},
+            match_node={"tag": "button"},
+            action_id="button_click",
+            confidence=0.9,
+        )
+        rule.variables = {}
+
+        event = create_test_event(
+            action="click",
+            timestamp=1000000000,
+        )
+
+        node = create_test_node(tag="button", text="Submit")
+        event_index = 0
+
+        result = apply_rule_to_event_and_node(rule, event, node, event_index)
+
+        assert result is not None
+        assert result.action_id == "button_click"
+        assert result.timestamp == 1000000000
+        assert result.confidence == 0.9
+        assert result.rule_id == "simple_click"
+        assert not result.variables
+        assert result.target_element == node
+        assert result.related_events == [0]
+
+    def test_match_with_unresolvable_variables(self):
+        """Test that unresolvable variables are handled gracefully."""
+        rule = create_test_rule(
+            rule_id="test_rule",
+            match_event={"action": "input"},
+            match_node={"tag": "input"},
+            action_id="input_action",
+        )
+        rule.variables = {
+            "valid_var": "event.value",
+            "invalid_var": "event.nonexistent",
+            "another_invalid": "node.missing.field",
+        }
+
+        event = create_test_event(action="input", value="test_value")
+        node = create_test_node(tag="input")
+        event_index = 3
+
+        result = apply_rule_to_event_and_node(rule, event, node, event_index)
+
+        assert result is not None
+        assert result.variables["valid_var"] == "test_value"
+        assert result.variables["invalid_var"] is None
+        assert result.variables["another_invalid"] is None
