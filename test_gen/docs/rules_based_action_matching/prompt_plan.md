@@ -381,6 +381,74 @@ Generate `DetectedAction` objects for successfully matched rules including confi
 * Timestamp uses `UserInteraction.timestamp`
 * `related_events` contains only the matched event
 
+**Detailed Prompt**
+
+You are building a rule-based engine to detect user actions from rrweb session chunks. Your current task is to implement the logic that **emits `DetectedAction` objects** once a rule successfully matches a `UserInteraction` and a `UINode`.
+
+---
+
+#### ✅ Requirements
+
+Update the following module:
+📄 `test_gen/rule_engine/matcher.py`
+
+Implement a function:
+
+```python
+def apply_rule_to_event_and_node(
+    rule: Rule,
+    event: UserInteraction,
+    node: UINode,
+    event_index: int
+) -> Optional[DetectedAction]:
+    ...
+```
+
+This function should:
+
+* First check if the rule matches the `event` + `node` using `rule_matches_event_node(...)`
+* If it matches:
+
+  * Extract variables using `extract_variables(...)`
+  * Construct a `DetectedAction` with:
+
+    * `action_id` from the rule
+    * `timestamp` from `event.timestamp`
+    * `confidence` from the rule
+    * `rule_id` from the rule
+    * `variables` from extracted result
+    * `target_element` as the `UINode` passed in
+    * `related_events` as a list with the single `event_index`
+* If the rule does not match, return `None`
+
+---
+
+#### 🧪 Testing
+
+Extend:
+📄 `test_gen/rule_engine/tests/test_matcher.py`
+
+Add unit tests that:
+
+* Use a simple valid rule and event+node pair
+* Assert that a `DetectedAction` is returned
+* Confirm correct values for:
+
+  * `action_id`, `confidence`, `rule_id`
+  * `timestamp == event.timestamp`
+  * `variables` match expected values
+  * `related_events == [event_index]`
+
+Include a negative test where the rule does not match and the result is `None`.
+
+---
+
+#### ✅ Deliverables
+
+* Function: `apply_rule_to_event_and_node(...)` in `matcher.py`
+* Unit tests covering both match and non-match cases
+* This function will later be called in a full chunk-wide matcher
+
 ---
 
 ### **Step 6: Integrate Matcher Over Full Chunk**
