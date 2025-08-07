@@ -5,7 +5,6 @@ This module provides helper functions for DOM traversal and CSS-style
 node queries to support enhanced variable extraction.
 """
 
-import re
 from typing import List, Optional
 from feature_extraction.models import UINode
 
@@ -40,9 +39,6 @@ def query_node_text(
     selector_parts = [part.strip() for part in selector.split(">")]
     if not selector_parts or not all(part for part in selector_parts):
         return None
-
-    # Build a map of node ID to UINode for efficient lookup
-    node_map = {node.id: node for node in all_nodes}
 
     # Build children map for tree traversal
     children_map = {}

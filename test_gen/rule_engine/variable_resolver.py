@@ -7,7 +7,7 @@ events and UINode objects based on path expressions defined in rules.
 
 import logging
 import re
-from typing import Dict, Any, List
+from typing import Any, Dict, List, Optional
 from feature_extraction.models import UserInteraction, UINode
 from .utils import query_node_text
 
@@ -42,7 +42,12 @@ def extract_variables(
         ...     "child_label": "node.query('div > span').text"
         ... }
         >>> result = extract_variables(variable_map, event, node, all_nodes)
-        >>> # Returns: {"input_value": "cats", "placeholder": "Search...", "node_text": "Search field", "child_label": "Label text"}
+        >>> # Returns: {
+        ...     "input_value": "cats",
+        ...     "placeholder": "Search...",
+        ...     "node_text": "Search field",
+        ...     "child_label": "Label text"
+        ... }
     """
     result = {}
 
@@ -149,8 +154,4 @@ def _resolve_query_expression(
 
     selector = match.group(1)
 
-    try:
-        return query_node_text(node, all_nodes, selector)
-    except Exception as e:
-        logger.debug("Failed to resolve query expression '%s': %s", path, e)
-        return None
+    return query_node_text(node, all_nodes, selector)
