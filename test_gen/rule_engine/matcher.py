@@ -7,8 +7,9 @@ and UINode pair matches the conditions specified in a Rule.
 
 from typing import Dict, Any
 
-from .models import Rule
 from feature_extraction.models import UserInteraction, UINode
+
+from .models import Rule
 
 
 def rule_matches_event_node(rule: Rule, event: UserInteraction, node: UINode) -> bool:

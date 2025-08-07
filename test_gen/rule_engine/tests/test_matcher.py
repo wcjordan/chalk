@@ -5,7 +5,6 @@ This module tests the core matching logic that determines if UserInteraction
 and UINode pairs match Rule conditions.
 """
 
-import pytest
 from typing import Dict, Any
 
 from rule_engine.matcher import rule_matches_event_node
