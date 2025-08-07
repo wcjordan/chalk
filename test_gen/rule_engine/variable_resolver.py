@@ -84,7 +84,8 @@ def _resolve_path(path: str, event: UserInteraction, node: UINode) -> Any:
                 current_obj = current_obj[part]
             else:
                 return None
-        except (AttributeError, KeyError, TypeError):
+        except (AttributeError, KeyError, TypeError) as e:
+            logger.debug(f"Failed to resolve path '{path}' at part '{part}': {e}")
             return None
 
     return current_obj
