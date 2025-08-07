@@ -88,10 +88,7 @@ def _node_matches(match_node: Dict[str, Any], node: UINode) -> bool:
 
 
 def apply_rule_to_event_and_node(
-    rule: Rule,
-    event: UserInteraction,
-    node: UINode,
-    event_index: int
+    rule: Rule, event: UserInteraction, node: UINode, event_index: int
 ) -> Optional[DetectedAction]:
     """
     Apply a rule to an event and node, returning a DetectedAction if matched.
@@ -117,5 +114,5 @@ def apply_rule_to_event_and_node(
         rule_id=rule.id,
         variables=variables,
         target_element=node,
-        related_events=[event_index]
+        related_events=[event_index],
     )

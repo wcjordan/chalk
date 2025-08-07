@@ -243,7 +243,10 @@ class TestApplyRuleToEventAndNode:
             action_id="search_query",
             confidence=0.85,
         )
-        rule.variables = {"search_term": "event.value", "placeholder": "node.attributes.placeholder"}
+        rule.variables = {
+            "search_term": "event.value",
+            "placeholder": "node.attributes.placeholder",
+        }
 
         event = create_test_event(
             action="input",
@@ -327,7 +330,7 @@ class TestApplyRuleToEventAndNode:
         rule.variables = {
             "valid_var": "event.value",
             "invalid_var": "event.nonexistent",
-            "another_invalid": "node.missing.field"
+            "another_invalid": "node.missing.field",
         }
 
         event = create_test_event(action="input", value="test_value")
