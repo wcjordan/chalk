@@ -7,7 +7,11 @@ and UINode pairs match Rule conditions.
 
 from typing import Dict, Any
 
-from rule_engine.matcher import rule_matches_event_node, apply_rule_to_event_and_node, detect_actions_in_chunk
+from rule_engine.matcher import (
+    rule_matches_event_node,
+    apply_rule_to_event_and_node,
+    detect_actions_in_chunk,
+)
 from rule_engine.models import Rule
 from feature_extraction.models import UserInteraction, UINode
 

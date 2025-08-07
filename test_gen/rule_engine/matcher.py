@@ -119,8 +119,7 @@ def apply_rule_to_event_and_node(
 
 
 def detect_actions_in_chunk(
-    chunk: Dict[str, Any],
-    rules: List[Rule]
+    chunk: Dict[str, Any], rules: List[Rule]
 ) -> List[DetectedAction]:
     """
     Detect actions in a full chunk by applying all rules to all UserInteractions.
@@ -149,7 +148,7 @@ def detect_actions_in_chunk(
     for event_index, interaction in enumerate(user_interactions):
         # Find the corresponding UINode using target_id
         target_node = node_map.get(interaction.target_id)
-        
+
         # Skip if no corresponding node found
         if target_node is None:
             continue
@@ -159,7 +158,7 @@ def detect_actions_in_chunk(
             detected_action = apply_rule_to_event_and_node(
                 rule, interaction, target_node, event_index
             )
-            
+
             # If the rule matched, add to our results
             if detected_action is not None:
                 detected_actions.append(detected_action)
