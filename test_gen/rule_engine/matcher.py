@@ -5,11 +5,12 @@ This module implements the core matching logic to determine if a UserInteraction
 and UINode pair matches the conditions specified in a Rule.
 """
 
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from feature_extraction.models import UserInteraction, UINode
 
-from .models import Rule
+from .models import Rule, DetectedAction
+from .variable_resolver import extract_variables
 
 
 def rule_matches_event_node(rule: Rule, event: UserInteraction, node: UINode) -> bool:
@@ -84,3 +85,37 @@ def _node_matches(match_node: Dict[str, Any], node: UINode) -> bool:
                 return False
 
     return True
+
+
+def apply_rule_to_event_and_node(
+    rule: Rule,
+    event: UserInteraction,
+    node: UINode,
+    event_index: int
+) -> Optional[DetectedAction]:
+    """
+    Apply a rule to an event and node, returning a DetectedAction if matched.
+
+    Args:
+        rule: The rule to evaluate
+        event: The user interaction event to check
+        node: The UI node to check
+        event_index: The index of the event in the chunk
+
+    Returns:
+        DetectedAction if the rule matches, None otherwise
+    """
+    if not rule_matches_event_node(rule, event, node):
+        return None
+
+    variables = extract_variables(rule.variables, event, node)
+
+    return DetectedAction(
+        action_id=rule.action_id,
+        timestamp=event.timestamp,
+        confidence=rule.confidence,
+        rule_id=rule.id,
+        variables=variables,
+        target_element=node,
+        related_events=[event_index]
+    )
