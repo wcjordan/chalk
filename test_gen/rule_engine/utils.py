@@ -43,6 +43,7 @@ def query_node_text(
     # Build children map for tree traversal
     children_map = {}
     for node in all_nodes:
+        # Assume node.parent is always the parent node's ID (not the node object)
         if node.parent is not None:
             if node.parent not in children_map:
                 children_map[node.parent] = []
