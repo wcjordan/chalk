@@ -172,7 +172,7 @@ def detect_actions_in_chunk(
 def save_detected_actions(
     actions: List[DetectedAction],
     chunk_id: str,
-    output_dir: Union[str, Path] = "test_gen/data/action_mappings"
+    output_dir: Union[str, Path] = "test_gen/data/action_mappings",
 ) -> None:
     """
     Serialize detected actions to disk as JSON using chunk_id as filename.
@@ -187,26 +187,26 @@ def save_detected_actions(
     """
     # Convert output_dir to Path object
     output_path = Path(output_dir)
-    
+
     # Create the output directory if it doesn't exist
     output_path.mkdir(parents=True, exist_ok=True)
-    
+
     # Convert DetectedAction objects to JSON-serializable dicts
     serializable_actions = []
     for action in actions:
         action_dict = asdict(action)
-        
+
         # Convert UINode to dict if present (asdict handles this automatically)
         # but ensure it's JSON-serializable
-        if action_dict.get('target_element') is not None:
+        if action_dict.get("target_element") is not None:
             # asdict already converts dataclasses to dicts recursively
             pass
-        
+
         serializable_actions.append(action_dict)
-    
+
     # Define the output file path
     output_file = output_path / f"{chunk_id}.json"
-    
+
     # Write to JSON file
-    with open(output_file, 'w', encoding='utf-8') as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         json.dump(serializable_actions, f, indent=2, ensure_ascii=False)

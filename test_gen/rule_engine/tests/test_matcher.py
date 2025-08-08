@@ -660,9 +660,7 @@ class TestSaveDetectedActions:
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create test actions
             rule = create_test_rule(
-                rule_id="test_rule_1",
-                action_id="search_query",
-                confidence=0.9
+                rule_id="test_rule_1", action_id="search_query", confidence=0.9
             )
             rule.variables = {"search_term": "event.value"}
 
@@ -670,14 +668,14 @@ class TestSaveDetectedActions:
                 action="input",
                 target_id=123,
                 value="machine learning",
-                timestamp=1642500000000
+                timestamp=1642500000000,
             )
 
             node = create_test_node(
                 node_id=123,
                 tag="input",
                 attributes={"type": "search", "placeholder": "Search..."},
-                text=""
+                text="",
             )
 
             # Create a detected action using apply_rule_to_event_and_node
@@ -694,28 +692,31 @@ class TestSaveDetectedActions:
             assert expected_file.exists()
 
             # Load and verify JSON content
-            with open(expected_file, 'r') as f:
+            with open(expected_file, "r") as f:
                 saved_data = json.load(f)
 
             assert len(saved_data) == 1
             action_data = saved_data[0]
-            
+
             # Verify all DetectedAction fields are present
-            assert action_data['action_id'] == "search_query"
-            assert action_data['timestamp'] == 1642500000000
-            assert action_data['confidence'] == 0.9
-            assert action_data['rule_id'] == "test_rule_1"
-            assert action_data['variables'] == {"search_term": "machine learning"}
-            assert action_data['related_events'] == [0]
-            
+            assert action_data["action_id"] == "search_query"
+            assert action_data["timestamp"] == 1642500000000
+            assert action_data["confidence"] == 0.9
+            assert action_data["rule_id"] == "test_rule_1"
+            assert action_data["variables"] == {"search_term": "machine learning"}
+            assert action_data["related_events"] == [0]
+
             # Verify target_element (UINode) is properly serialized
-            assert action_data['target_element'] is not None
-            target_element = action_data['target_element']
-            assert target_element['id'] == 123
-            assert target_element['tag'] == "input"
-            assert target_element['attributes'] == {"type": "search", "placeholder": "Search..."}
-            assert target_element['text'] == ""
-            assert target_element['parent'] is None
+            assert action_data["target_element"] is not None
+            target_element = action_data["target_element"]
+            assert target_element["id"] == 123
+            assert target_element["tag"] == "input"
+            assert target_element["attributes"] == {
+                "type": "search",
+                "placeholder": "Search...",
+            }
+            assert target_element["text"] == ""
+            assert target_element["parent"] is None
 
     def test_save_empty_actions_list(self):
         """Test saving empty actions list creates valid empty JSON file."""
@@ -731,7 +732,7 @@ class TestSaveDetectedActions:
             assert expected_file.exists()
 
             # Load and verify JSON content is empty list
-            with open(expected_file, 'r') as f:
+            with open(expected_file, "r") as f:
                 saved_data = json.load(f)
 
             assert saved_data == []
@@ -745,7 +746,7 @@ class TestSaveDetectedActions:
                 match_event={"action": "input"},
                 match_node={"tag": "input", "attributes": {"type": "search"}},
                 action_id="search_query",
-                confidence=0.9
+                confidence=0.9,
             )
             rule.variables = {"search_term": "event.value"}
 
@@ -753,13 +754,11 @@ class TestSaveDetectedActions:
                 action="input",
                 target_id=123,
                 value="integration test",
-                timestamp=1642500000000
+                timestamp=1642500000000,
             )
 
             node = create_test_node(
-                node_id=123,
-                tag="input",
-                attributes={"type": "search", "name": "query"}
+                node_id=123, tag="input", attributes={"type": "search", "name": "query"}
             )
 
             chunk = {
@@ -781,11 +780,11 @@ class TestSaveDetectedActions:
             expected_file = Path(temp_dir) / f"{chunk_id}.json"
             assert expected_file.exists()
 
-            with open(expected_file, 'r') as f:
+            with open(expected_file, "r") as f:
                 saved_data = json.load(f)
 
             assert len(saved_data) == 1
             action_data = saved_data[0]
-            assert action_data['action_id'] == "search_query"
-            assert action_data['variables'] == {"search_term": "integration test"}
-            assert action_data['rule_id'] == "integration_rule"
+            assert action_data["action_id"] == "search_query"
+            assert action_data["variables"] == {"search_term": "integration test"}
+            assert action_data["rule_id"] == "integration_rule"
