@@ -630,6 +630,67 @@ Write detected actions from a chunk to disk as JSON in `test_gen/data/action_map
 * File content matches expected structure
 * Integration test: process test chunk → check saved file
 
+**Detailed prompt:**
+
+You are working on a rule-based engine that detects user actions from rrweb session chunks. Your task is to **serialize detected actions to disk as JSON**, using a filename based on the chunk ID.
+
+---
+
+#### ✅ Requirements
+
+Create or update the following module:
+📄 `test_gen/rule_engine/matcher.py`
+
+Add a function:
+
+```python
+def save_detected_actions(
+    actions: List[DetectedAction],
+    chunk_id: str,
+    output_dir: Union[str, Path] = "test_gen/data/action_mappings"
+) -> None:
+    ...
+```
+
+This function should:
+
+* Create the output directory if it doesn’t exist
+* Serialize `actions` to JSON using `chunk_id` as the filename:
+  → `test_gen/data/action_mappings/{chunk_id}.json`
+* Convert all fields of `DetectedAction` into JSON-safe values:
+
+  * Use `asdict()` or manual serialization if needed
+  * `UINode` (if present) should also be serialized as a dict
+
+---
+
+#### 🧪 Testing
+
+Create or extend:
+📄 `test_gen/rule_engine/tests/test_matcher.py`
+
+Write an integration-style test that:
+
+* Creates a fake chunk and rules
+* Runs `detect_actions_in_chunk(...)`
+* Saves the result with `save_detected_actions(...)`
+* Loads the written file and asserts:
+
+  * File exists at correct location
+  * JSON content includes expected action fields (e.g., `action_id`, `timestamp`, `variables`)
+
+Also test:
+
+* Saving with no detected actions (should still create a valid empty list file)
+
+---
+
+#### ✅ Deliverables
+
+* Function `save_detected_actions(...)` in `matcher.py`
+* JSON file written to `test_gen/data/action_mappings/{chunk_id}.json`
+* Unit test verifying file structure and output correctness
+
 ---
 
 ### **Step 9: Add CLI Entry Point**
