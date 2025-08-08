@@ -704,6 +704,92 @@ Add command-line interface to process a file or directory of chunk JSONs and pro
 * Accepts `--output` argument
 * Prints summary: “3 actions detected from 1 rule”
 
+**Detailed prompt:**
+
+You’re adding a small command-line tool that runs the rule-based detector over one or more preprocessed rrweb **chunk JSON files** and writes detected actions to disk.
+
+---
+
+#### ✅ Requirements
+
+Create a CLI module:
+📄 `test_gen/rule_engine/match_chunk.py`
+
+Provide a `main()` that can be invoked as:
+
+* `python -m test_gen.rule_engine.match_chunk input.json`
+* (If the project exposes a `rule_engine` package alias, it should also work as `python -m rule_engine.match_chunk input.json`.)
+
+**Behavior:**
+
+* Accept **either**:
+
+  * a single file path to a chunk JSON, **or**
+  * a directory containing one or more `*.json` chunk files
+* Arguments:
+
+  * `INPUT_PATH` (positional): file or directory
+  * `--rules-dir` (optional, default: `test_gen/data/rules`)
+  * `--output` (optional, default: `test_gen/data/action_mappings`)
+  * `--verbose` / `-v` (optional) to print extra info
+* Flow for each chunk file:
+
+  1. Load rules via `load_rules(...)`
+  2. Read the chunk JSON into the Python structure expected by `detect_actions_in_chunk(...)`
+  3. Run detection to get a list of `DetectedAction`s
+  4. Save results with `save_detected_actions(...)` (file name derived from `chunk_id`)
+* **Summary printout** at the end, e.g.:
+  `“3 actions detected from 1 rule across 1 file”`
+  Include counts for total actions, distinct rules matched, and number of processed files.
+
+**Notes:**
+
+* Do not change detection logic; just wire together loading, running, and saving.
+* Be tolerant of empty or invalid files: skip with a clear console message (non-fatal).
+
+---
+
+#### 🧪 Testing
+
+Create/extend an integration-style test:
+📄 `test_gen/rule_engine/tests/test_cli_match_chunk.py`
+
+Test cases:
+
+1. **Single file path**
+
+   * Arrange: temp dir with:
+
+     * one valid chunk JSON file containing at least one `UserInteraction` + `UINode`
+     * one valid rule in a temp `rules-dir`
+   * Act: call `main()` directly (or run via `subprocess` if needed) with `INPUT_PATH=<file>`, `--rules-dir=<temp_rules>`, `--output=<temp_output>`
+   * Assert:
+
+     * An output JSON file exists in `<temp_output>` named after `chunk_id`
+     * JSON contains expected fields (e.g., `action_id`, `timestamp`)
+     * Stdout includes summary like `“1 actions detected from 1 rule across 1 file”`
+
+2. **Directory path**
+
+   * Arrange: temp dir with two chunk JSONs, one that matches and one that doesn’t
+   * Act: run CLI on directory
+   * Assert:
+
+     * One output file created for the matching chunk; none for the non-matching is fine (or an empty list file if your saver does that)
+     * Summary reflects correct totals (actions, rules, files)
+
+3. **Graceful handling**
+
+   * Malformed JSON or missing `chunk_id` → skipped with message; process continues
+
+---
+
+#### ✅ Deliverables
+
+* `match_chunk.py` with a runnable `main()` and `if __name__ == "__main__": main()`
+* Argument parsing, directory/file handling, summary printing
+* Tests in `test_cli_match_chunk.py` validating single-file and directory flows, plus summary output
+
 ---
 
 ### **Step 10: Add Logging and Rule Match Traceability**
@@ -715,6 +801,99 @@ Introduce logging to trace which rules matched, which failed, and why (optional 
 
 * Log output includes rule ID and matched element
 * Can be toggled via verbosity flag
+
+**Detailed prompt:**
+
+You’re adding **diagnostic logging** to the rule-based detector so developers can understand which rules matched, which didn’t, and why. Logging should be **off/quiet by default** and **toggleable** via a verbosity flag (integrated with the CLI from Step 9).
+
+---
+
+#### ✅ Requirements
+
+##### 1) Add a module-level logger
+
+* Use Python’s `logging` (no third-party deps).
+* Logger namespace: `test_gen.rule_engine`.
+* Default level: `WARNING` (quiet). Verbose mode: `INFO`. Optional deep tracing: `DEBUG`.
+
+##### 2) Emit structured, readable messages at key points
+
+Add logs in these places:
+
+* **When evaluating a rule against an event+node** (in `matcher.py`):
+
+  * `DEBUG`: start evaluation — include `rule_id`, `event.action`, `node.tag`, and `node.id` if available.
+  * `DEBUG`: per-check failures with a short reason:
+
+    * action mismatch
+    * tag mismatch
+    * missing attribute(s) (list which keys were missing or mismatched)
+  * `INFO`: on match — include `rule_id`, `action_id`, `event_index` (or timestamp), and an excerpt of extracted vars (limit size).
+
+* **When extracting variables** (in `variable_resolver.py`):
+
+  * `DEBUG`: variable extraction failures per key (e.g., `node.attributes.placeholder` not found → None).
+
+* **Top-level detection over a chunk** (in `matcher.py`):
+
+  * `INFO`: per chunk — counts of evaluated rules, matches found, distinct rules matched.
+  * `DEBUG`: number of interactions processed.
+
+* **CLI wiring** (in `match_chunk.py`):
+
+  * Add `--verbose/-v` to set level `INFO`.
+  * (Optional) Add `--trace-match` to set level `DEBUG`.
+
+##### 3) Keep logs concise and privacy-safe
+
+* Don’t log full DOM snapshots or long values.
+* Truncate variable values >80 chars with an ellipsis.
+
+---
+
+#### 🧪 Testing
+
+Create or extend tests:
+
+📄 `test_gen/rule_engine/tests/test_logging_traceability.py`
+
+* Use `caplog` (PyTest) to capture logs.
+* **Success case**: a simple rule matches one event+node.
+
+  * Assert an `INFO` log mentions `rule_id`, `action_id`, and the matched element (tag/id).
+* **Failure diagnostics**: a rule fails due to attribute mismatch.
+
+  * At `DEBUG` level, assert a log explains which attribute(s) failed.
+* **Verbosity toggle**:
+
+  * With no verbosity, logs at `WARNING` or higher only.
+  * With `--verbose`, `INFO` logs appear (simulate by setting logger level in test).
+  * With `--trace-match`, `DEBUG` logs appear (simulate likewise).
+
+*(CLI end-to-end logging behavior may be validated lightly; focus tests on library logging semantics.)*
+
+---
+
+#### 📁 Files to touch
+
+* `test_gen/rule_engine/matcher.py` (add logs in rule evaluation & chunk loop)
+* `test_gen/rule_engine/variable_resolver.py` (add extraction failure debug logs)
+* `test_gen/rule_engine/match_chunk.py` (wire `--verbose` and optional `--trace-match` into logger level)
+* `test_gen/rule_engine/tests/test_logging_traceability.py` (new)
+
+---
+
+#### ✅ Deliverables
+
+* Logging integrated across matcher and variable resolver with meaningful messages.
+* CLI flags control verbosity (`--verbose` → INFO, `--trace-match` → DEBUG).
+* Tests verifying:
+
+  * Presence of match `INFO` logs.
+  * Presence of failure `DEBUG` logs when enabled.
+  * Verbosity toggling works as expected.
+
+Keep implementation light; aim for **useful, non-noisy** diagnostics that make rule behavior easy to trace during debugging.
 
 ---
 
