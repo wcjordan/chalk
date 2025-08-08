@@ -196,12 +196,6 @@ def save_detected_actions(
     for action in actions:
         action_dict = asdict(action)
 
-        # Convert UINode to dict if present (asdict handles this automatically)
-        # but ensure it's JSON-serializable
-        if action_dict.get("target_element") is not None:
-            # asdict already converts dataclasses to dicts recursively
-            pass
-
         serializable_actions.append(action_dict)
 
     # Define the output file path
