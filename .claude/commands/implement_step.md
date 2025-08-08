@@ -7,4 +7,6 @@ $ARGUMENTS
 
 --
 
+Please feel free to make changes to existing code.  When you're done, please make a commit using git including all changes.  Please use the content of your final "deliverables completed" summary message as the commit message.  Please don't try running the tests added, I will run the test manually.
+
 Please implement the step described in the input section above.
