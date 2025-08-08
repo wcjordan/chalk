@@ -5,12 +5,16 @@ This module tests the core matching logic that determines if UserInteraction
 and UINode pairs match Rule conditions.
 """
 
+import json
+import tempfile
+from pathlib import Path
 from typing import Dict, Any
 
 from rule_engine.matcher import (
     rule_matches_event_node,
     apply_rule_to_event_and_node,
     detect_actions_in_chunk,
+    save_detected_actions,
 )
 from rule_engine.models import Rule
 from feature_extraction.models import UserInteraction, UINode
@@ -646,3 +650,141 @@ class TestDetectActionsInChunk:
 
         # Verify empty result
         assert len(result) == 0
+
+
+class TestSaveDetectedActions:
+    """Tests for save_detected_actions function."""
+
+    def test_save_actions_with_data(self):
+        """Test saving detected actions to JSON file."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Create test actions
+            rule = create_test_rule(
+                rule_id="test_rule_1", action_id="search_query", confidence=0.9
+            )
+            rule.variables = {"search_term": "event.value"}
+
+            event = create_test_event(
+                action="input",
+                target_id=123,
+                value="machine learning",
+                timestamp=1642500000000,
+            )
+
+            node = create_test_node(
+                node_id=123,
+                tag="input",
+                attributes={"type": "search", "placeholder": "Search..."},
+                text="",
+            )
+
+            # Create a detected action using apply_rule_to_event_and_node
+            detected_action = apply_rule_to_event_and_node(rule, event, node, 0)
+            actions = [detected_action]
+
+            chunk_id = "test_chunk_123"
+
+            # Save actions
+            save_detected_actions(actions, chunk_id, temp_dir)
+
+            # Verify file was created
+            expected_file = Path(temp_dir) / f"{chunk_id}.json"
+            assert expected_file.exists()
+
+            # Load and verify JSON content
+            with open(expected_file, "r", encoding="utf-8") as f:
+                saved_data = json.load(f)
+
+            assert len(saved_data) == 1
+            action_data = saved_data[0]
+
+            # Verify all DetectedAction fields are present
+            assert action_data["action_id"] == "search_query"
+            assert action_data["timestamp"] == 1642500000000
+            assert action_data["confidence"] == 0.9
+            assert action_data["rule_id"] == "test_rule_1"
+            assert action_data["variables"] == {"search_term": "machine learning"}
+            assert action_data["related_events"] == [0]
+
+            # Verify target_element (UINode) is properly serialized
+            assert action_data["target_element"] is not None
+            target_element = action_data["target_element"]
+            assert target_element["id"] == 123
+            assert target_element["tag"] == "input"
+            assert target_element["attributes"] == {
+                "type": "search",
+                "placeholder": "Search...",
+            }
+            assert target_element["text"] == ""
+            assert target_element["parent"] is None
+
+    def test_save_empty_actions_list(self):
+        """Test saving empty actions list creates valid empty JSON file."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            chunk_id = "empty_chunk_456"
+            actions = []
+
+            # Save empty actions
+            save_detected_actions(actions, chunk_id, temp_dir)
+
+            # Verify file was created
+            expected_file = Path(temp_dir) / f"{chunk_id}.json"
+            assert expected_file.exists()
+
+            # Load and verify JSON content is empty list
+            with open(expected_file, "r", encoding="utf-8") as f:
+                saved_data = json.load(f)
+
+            assert saved_data == []
+
+    def test_integration_detect_and_save_actions(self):
+        """Integration test: detect actions in chunk and save to file."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Create rule and chunk data
+            rule = create_test_rule(
+                rule_id="integration_rule",
+                match_event={"action": "input"},
+                match_node={"tag": "input", "attributes": {"type": "search"}},
+                action_id="search_query",
+                confidence=0.9,
+            )
+            rule.variables = {"search_term": "event.value"}
+
+            interaction = create_test_event(
+                action="input",
+                target_id=123,
+                value="integration test",
+                timestamp=1642500000000,
+            )
+
+            node = create_test_node(
+                node_id=123, tag="input", attributes={"type": "search", "name": "query"}
+            )
+
+            chunk = {
+                "features": {
+                    "user_interactions": [interaction],
+                    "ui_nodes": [node],
+                }
+            }
+
+            # Detect actions
+            detected_actions = detect_actions_in_chunk(chunk, [rule])
+            assert len(detected_actions) == 1
+
+            # Save detected actions
+            chunk_id = "integration_test_chunk"
+            save_detected_actions(detected_actions, chunk_id, temp_dir)
+
+            # Verify saved file
+            expected_file = Path(temp_dir) / f"{chunk_id}.json"
+            assert expected_file.exists()
+
+            with open(expected_file, "r", encoding="utf-8") as f:
+                saved_data = json.load(f)
+
+            assert len(saved_data) == 1
+            action_data = saved_data[0]
+            assert action_data["action_id"] == "search_query"
+            assert action_data["variables"] == {"search_term": "integration test"}
+            assert action_data["rule_id"] == "integration_rule"
