@@ -692,7 +692,7 @@ class TestSaveDetectedActions:
             assert expected_file.exists()
 
             # Load and verify JSON content
-            with open(expected_file, "r") as f:
+            with open(expected_file, "r", encoding="utf-8") as f:
                 saved_data = json.load(f)
 
             assert len(saved_data) == 1
@@ -732,7 +732,7 @@ class TestSaveDetectedActions:
             assert expected_file.exists()
 
             # Load and verify JSON content is empty list
-            with open(expected_file, "r") as f:
+            with open(expected_file, "r", encoding="utf-8") as f:
                 saved_data = json.load(f)
 
             assert saved_data == []
@@ -780,7 +780,7 @@ class TestSaveDetectedActions:
             expected_file = Path(temp_dir) / f"{chunk_id}.json"
             assert expected_file.exists()
 
-            with open(expected_file, "r") as f:
+            with open(expected_file, "r", encoding="utf-8") as f:
                 saved_data = json.load(f)
 
             assert len(saved_data) == 1
