@@ -25,6 +25,7 @@ The feature extraction pipeline processes chunks of rrweb events and extracts:
 - `cluster_mouse_trajectories(events)`: Group related mouse movements
 - `detect_scroll_patterns(events)`: Find scroll events that trigger mutations
 - `extract_features(chunk, dom_state)`: Main pipeline function orchestrating all extractors
+- `extract_and_save_features(session_dir, output_dir)`: Extract features and save as JSON files
 
 ## Installation
 
@@ -46,7 +47,9 @@ pip install -e .
 export PYTHONPATH="${PYTHONPATH}:/path/to/test_gen"
 ```
 
-## Usage Example
+## Usage Examples
+
+### Basic Feature Extraction
 
 ```python
 from rrweb_ingest.pipeline import ingest_session
@@ -83,6 +86,74 @@ for chunk in chunks:
             print(f"  Added node {mutation.target_id}: {mutation.details['tag']}")
 ```
 
+### Batch Feature Extraction and Saving
+
+```python
+from feature_extraction.pipeline import extract_and_save_features
+
+# Extract features from all sessions and save as JSON files
+stats = extract_and_save_features(
+    session_dir="test_gen/data/output_sessions",
+    output_dir="test_gen/data/output_features", 
+    max_sessions=50,  # Process first 50 sessions
+    verbose=True
+)
+
+print(f"Processed {stats['sessions_processed']} sessions")
+print(f"Saved {stats['chunks_saved']} feature chunks")
+print(f"Total features extracted: {sum(stats['total_features'].values()):,}")
+
+# Check for errors
+if stats['errors']:
+    print(f"Encountered {len(stats['errors'])} errors")
+    for error in stats['errors']:
+        print(f"  {error}")
+```
+
+### Using JSON Output with Rule Engine
+
+```python
+import json
+from rule_engine.match_chunk import process_chunk_file
+from rule_engine.rules_loader import load_rules
+
+# First, extract features and save to JSON
+extract_and_save_features(
+    session_dir="test_gen/data/output_sessions",
+    output_dir="test_gen/data/output_features"
+)
+
+# Then use the saved features with the rule engine
+rules = load_rules("test_gen/data/rules")
+feature_files = Path("test_gen/data/output_features").glob("*.json")
+
+for feature_file in feature_files:
+    # Load pre-extracted features instead of processing raw chunks
+    with open(feature_file, 'r') as f:
+        feature_data = json.load(f)
+    
+    # Process with rule engine (features already extracted)
+    actions_detected, rules_matched = process_chunk_file(
+        feature_file, rules, "test_gen/data/action_mappings", verbose=True
+    )
+```
+
+### Command Line Usage
+
+```bash
+# Extract features from all sessions
+python -m feature_extraction test_gen/data/output_sessions
+
+# Extract with custom output directory
+python -m feature_extraction test_gen/data/output_sessions --output my_features
+
+# Process limited sessions with verbose output
+python -m feature_extraction test_gen/data/output_sessions --max-sessions 10 --verbose
+
+# Show help and options
+python -m feature_extraction --help
+```
+
 ## Configuration
 
 The module uses configurable thresholds that can be customized:
@@ -109,7 +180,7 @@ metadata = resolve_node_metadata(node_id, node_by_id, custom_path_formatter)
 
 ## Output Structure
 
-The `extract_features` function returns a `FeatureChunk` with the following structure:
+The `extract_features` function returns a `FeatureChunk` object, and `extract_and_save_features` saves each chunk as a JSON file with the following structure:
 
 ```python
 {
@@ -149,7 +220,13 @@ The `extract_features` function returns a `FeatureChunk` with the following stru
         "mouse_clusters": [...],
         "scroll_patterns": [...]
     },
-    "metadata": {...}
+    "metadata": {...},
+    "processing_metadata": {
+        "feature_extraction_timestamp": "2025-01-01T12:00:00Z",
+        "dom_initialized_from_snapshot": true,
+        "dom_state_nodes_final": 156,
+        "feature_extraction_version": "1.0"
+    }
 }
 ```
 
@@ -163,7 +240,8 @@ pytest test_gen/feature_extraction/tests/
 
 # Run specific test modules
 pytest test_gen/feature_extraction/tests/test_pipeline_features.py
-pytest test_gen/feature_extraction/tests/test_fixtures_features.py
+pytest test_gen/feature_extraction/tests/test_serialization.py
+pytest test_gen/feature_extraction/tests/test_extract_and_save_features.py
 
 # Run with verbose output
 pytest -v test_gen/feature_extraction/tests/

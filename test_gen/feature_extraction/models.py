@@ -30,6 +30,15 @@ class DomMutation:
     details: Dict[str, Any]
     timestamp: int
 
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "mutation_type": self.mutation_type,
+            "target_id": self.target_id,
+            "details": self.details,
+            "timestamp": self.timestamp,
+        }
+
 
 @dataclass
 class UserInteraction:
@@ -51,6 +60,15 @@ class UserInteraction:
     value: Any
     timestamp: int
 
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "action": self.action,
+            "target_id": self.target_id,
+            "value": self.value,
+            "timestamp": self.timestamp,
+        }
+
 
 @dataclass
 class EventDelay:
@@ -69,6 +87,14 @@ class EventDelay:
     from_ts: int
     to_ts: int
     delta_ms: int
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "from_ts": self.from_ts,
+            "to_ts": self.to_ts,
+            "delta_ms": self.delta_ms,
+        }
 
 
 @dataclass
@@ -93,6 +119,16 @@ class UINode:
     text: str
     parent: Optional[int]
 
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "id": self.id,
+            "tag": self.tag,
+            "attributes": self.attributes,
+            "text": self.text,
+            "parent": self.parent,
+        }
+
 
 @dataclass
 class MouseCluster:
@@ -116,6 +152,16 @@ class MouseCluster:
     duration_ms: int
     point_count: int
 
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "start_ts": self.start_ts,
+            "end_ts": self.end_ts,
+            "points": self.points,
+            "duration_ms": self.duration_ms,
+            "point_count": self.point_count,
+        }
+
 
 @dataclass
 class ScrollPattern:
@@ -134,6 +180,14 @@ class ScrollPattern:
     scroll_event: Dict[str, Any]
     mutation_event: Dict[str, Any]
     delay_ms: int
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "scroll_event": self.scroll_event,
+            "mutation_event": self.mutation_event,
+            "delay_ms": self.delay_ms,
+        }
 
 
 @dataclass
@@ -159,3 +213,35 @@ class FeatureChunk:
     events: List[Dict[str, Any]]
     features: Dict[str, List[Any]]
     metadata: Dict[str, Any]
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        # Convert features dictionary, handling different object types
+        features_dict = {}
+        for key, value_list in self.features.items():
+            if key == "ui_nodes":
+                # ui_nodes is a Dict[int, UINode] converted to Dict[str, dict]
+                if isinstance(value_list, dict):
+                    features_dict[key] = {
+                        str(node_id): (
+                            node.to_dict() if hasattr(node, "to_dict") else node
+                        )
+                        for node_id, node in value_list.items()
+                    }
+                else:
+                    features_dict[key] = value_list
+            else:
+                # Other features are lists of objects
+                features_dict[key] = [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in value_list
+                ]
+
+        return {
+            "chunk_id": self.chunk_id,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+            "events": self.events,
+            "features": features_dict,
+            "metadata": self.metadata,
+        }
