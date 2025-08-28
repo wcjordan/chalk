@@ -20,29 +20,27 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Extract features from all sessions in test_gen/data/output_sessions
-  python -m feature_extraction.extract_features_cli test_gen/data/output_sessions
+  # Extract features from all sessions in data/output_sessions
+  python -m feature_extraction.extract_features_cli
 
-  # Extract features with custom output directory
-  python -m feature_extraction.extract_features_cli test_gen/data/output_sessions --output test_gen/data/my_features
+  # Extract features with custom input and output directories
+  python -m feature_extraction.extract_features_cli --session_dir data/my_sessions --output_dir data/my_features
 
   # Process only first 10 sessions with verbose output
-  python -m feature_extraction.extract_features_cli test_gen/data/output_sessions --max-sessions 10 --verbose
-
-  # Process and save to specific directory
-  python -m feature_extraction.extract_features_cli /path/to/sessions --output /path/to/features --verbose
+  python -m feature_extraction.extract_features_cli --max-sessions 10 --verbose
         """,
     )
 
     parser.add_argument(
-        "session_dir",
-        help="Directory containing rrweb JSON session files to process",
+        "--session_dir",
+        default="data/output_sessions",
+        help="Directory containing rrweb JSON session files to process  (default: data/output_sessions)",
     )
 
     parser.add_argument(
-        "--output",
-        default="test_gen/data/output_features",
-        help="Output directory for extracted feature JSON files (default: test_gen/data/output_features)",
+        "--output_dir",
+        default="data/output_features",
+        help="Output directory for extracted feature JSON files (default: data/output_features)",
     )
 
     parser.add_argument(
@@ -62,7 +60,7 @@ Examples:
 
     # Convert paths to Path objects and validate
     session_dir = Path(args.session_dir)
-    output_dir = Path(args.output)
+    output_dir = Path(args.output_dir)
 
     if not session_dir.exists():
         print(f"Error: Session directory does not exist: {session_dir}", file=sys.stderr)
@@ -102,11 +100,11 @@ Examples:
         print(f"Feature extraction completed successfully!")
         print(f"Sessions processed: {stats['sessions_processed']}")
         print(f"Feature chunks saved: {stats['chunks_saved']}")
-        
+
         # Print feature type counts if any were extracted
         feature_counts = stats['total_features']
         total_feature_count = sum(count for count in feature_counts.values())
-        
+
         if total_feature_count > 0:
             print(f"Total features extracted: {total_feature_count:,}")
             if args.verbose:
