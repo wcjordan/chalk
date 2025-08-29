@@ -63,7 +63,9 @@ Examples:
     output_dir = Path(args.output_dir)
 
     if not session_dir.exists():
-        print(f"Error: Session directory does not exist: {session_dir}", file=sys.stderr)
+        print(
+            f"Error: Session directory does not exist: {session_dir}", file=sys.stderr
+        )
         sys.exit(1)
 
     if not session_dir.is_dir():
@@ -73,7 +75,10 @@ Examples:
     # Check if session directory contains any JSON files
     json_files = list(session_dir.glob("*.json"))
     if not json_files:
-        print(f"Warning: No JSON files found in session directory: {session_dir}", file=sys.stderr)
+        print(
+            f"Warning: No JSON files found in session directory: {session_dir}",
+            file=sys.stderr,
+        )
 
     if args.verbose:
         print(f"Feature Extraction CLI")
@@ -102,7 +107,7 @@ Examples:
         print(f"Feature chunks saved: {stats['chunks_saved']}")
 
         # Print feature type counts if any were extracted
-        feature_counts = stats['total_features']
+        feature_counts = stats["total_features"]
         total_feature_count = sum(count for count in feature_counts.values())
 
         if total_feature_count > 0:
@@ -114,11 +119,11 @@ Examples:
                         print(f"  {feature_type}: {count:,}")
 
         # Print error summary
-        if stats['errors']:
+        if stats["errors"]:
             print(f"Errors encountered: {len(stats['errors'])}")
             if args.verbose:
                 print("Error details:")
-                for error in stats['errors']:
+                for error in stats["errors"]:
                     print(f"  {error}")
         else:
             print("No errors encountered")

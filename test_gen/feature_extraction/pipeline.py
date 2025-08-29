@@ -240,7 +240,7 @@ def extract_and_save_features(
         },
         "errors": [],
     }
-    
+
     # Track unique sessions seen
     sessions_seen = set()
 
@@ -250,7 +250,9 @@ def extract_and_save_features(
 
     try:
         # Process each session using the existing feature extraction generator
-        chunk_generator = iterate_feature_extraction(session_dir, max_sessions=max_sessions)
+        chunk_generator = iterate_feature_extraction(
+            session_dir, max_sessions=max_sessions
+        )
 
         for chunk_data, chunk_metadata in chunk_generator:
             try:
@@ -273,7 +275,9 @@ def extract_and_save_features(
                     "dom_initialized_from_snapshot": chunk_metadata.get(
                         "dom_initialized_from_snapshot", False
                     ),
-                    "dom_state_nodes_final": chunk_metadata.get("dom_state_nodes_final", 0),
+                    "dom_state_nodes_final": chunk_metadata.get(
+                        "dom_state_nodes_final", 0
+                    ),
                     "feature_extraction_version": "1.0",
                 }
 
@@ -294,7 +298,9 @@ def extract_and_save_features(
                     print(f"  Saved: {output_filename}")
 
             except Exception as chunk_error:
-                error_msg = f"Error processing chunk {chunk_data.chunk_id}: {str(chunk_error)}"
+                error_msg = (
+                    f"Error processing chunk {chunk_data.chunk_id}: {str(chunk_error)}"
+                )
                 stats["errors"].append(error_msg)
                 logger.error(error_msg)
                 if verbose:

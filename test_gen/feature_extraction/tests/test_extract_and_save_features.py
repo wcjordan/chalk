@@ -49,13 +49,11 @@ def test_extract_and_save_features_creates_output_directory(temp_output_dir):
     assert not output_path.exists()
 
     # Mock the iterator to return no chunks
-    with patch('feature_extraction.pipeline.iterate_feature_extraction') as mock_iter:
+    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
         mock_iter.return_value = iter([])
-        
+
         stats = extract_and_save_features(
-            session_dir="dummy", 
-            output_dir=str(output_path), 
-            verbose=False
+            session_dir="dummy", output_dir=str(output_path), verbose=False
         )
 
     assert output_path.exists()
@@ -63,7 +61,9 @@ def test_extract_and_save_features_creates_output_directory(temp_output_dir):
     assert stats["chunks_saved"] == 0
 
 
-def test_extract_and_save_features_saves_single_chunk(temp_output_dir, sample_feature_chunk):
+def test_extract_and_save_features_saves_single_chunk(
+    temp_output_dir, sample_feature_chunk
+):
     """Test that a single feature chunk is saved correctly."""
     chunk_metadata = {
         "session_id": "session-123",
@@ -71,13 +71,11 @@ def test_extract_and_save_features_saves_single_chunk(temp_output_dir, sample_fe
         "dom_state_nodes_final": 10,
     }
 
-    with patch('feature_extraction.pipeline.iterate_feature_extraction') as mock_iter:
+    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
         mock_iter.return_value = iter([(sample_feature_chunk, chunk_metadata)])
-        
+
         stats = extract_and_save_features(
-            session_dir="dummy",
-            output_dir=str(temp_output_dir),
-            verbose=False
+            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
         )
 
     # Check statistics
@@ -91,7 +89,7 @@ def test_extract_and_save_features_saves_single_chunk(temp_output_dir, sample_fe
     assert output_file.exists()
 
     # Verify file contents
-    with open(output_file, 'r') as f:
+    with open(output_file, "r") as f:
         saved_data = json.load(f)
 
     assert saved_data["chunk_id"] == "test-chunk-001"
@@ -99,7 +97,7 @@ def test_extract_and_save_features_saves_single_chunk(temp_output_dir, sample_fe
     assert saved_data["end_time"] == 2000
     assert "features" in saved_data
     assert "processing_metadata" in saved_data
-    
+
     # Check processing metadata
     processing_meta = saved_data["processing_metadata"]
     assert processing_meta["dom_initialized_from_snapshot"] is True
@@ -150,13 +148,11 @@ def test_extract_and_save_features_saves_multiple_chunks(temp_output_dir):
         ),
     ]
 
-    with patch('feature_extraction.pipeline.iterate_feature_extraction') as mock_iter:
+    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
         mock_iter.return_value = iter(chunks_and_metadata)
-        
+
         stats = extract_and_save_features(
-            session_dir="dummy",
-            output_dir=str(temp_output_dir),
-            verbose=False
+            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
         )
 
     # Check statistics
@@ -170,16 +166,18 @@ def test_extract_and_save_features_saves_multiple_chunks(temp_output_dir):
     assert file2.exists()
 
     # Verify both files have correct content
-    with open(file1, 'r') as f:
+    with open(file1, "r") as f:
         data1 = json.load(f)
-    with open(file2, 'r') as f:
+    with open(file2, "r") as f:
         data2 = json.load(f)
 
     assert data1["chunk_id"] == "chunk-001"
     assert data2["chunk_id"] == "chunk-002"
 
 
-def test_extract_and_save_features_handles_chunk_processing_error(temp_output_dir, sample_feature_chunk):
+def test_extract_and_save_features_handles_chunk_processing_error(
+    temp_output_dir, sample_feature_chunk
+):
     """Test error handling when individual chunk processing fails."""
     chunk_metadata = {"session_id": "session-123"}
 
@@ -190,16 +188,14 @@ def test_extract_and_save_features_handles_chunk_processing_error(temp_output_di
 
     chunks_data = [
         (sample_feature_chunk, chunk_metadata),  # This should succeed
-        (problematic_chunk, chunk_metadata),     # This should fail
+        (problematic_chunk, chunk_metadata),  # This should fail
     ]
 
-    with patch('feature_extraction.pipeline.iterate_feature_extraction') as mock_iter:
+    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
         mock_iter.return_value = iter(chunks_data)
-        
+
         stats = extract_and_save_features(
-            session_dir="dummy",
-            output_dir=str(temp_output_dir),
-            verbose=False
+            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
         )
 
     # Check statistics - one success, one error
@@ -217,13 +213,11 @@ def test_extract_and_save_features_handles_chunk_processing_error(temp_output_di
 
 def test_extract_and_save_features_handles_fatal_error(temp_output_dir):
     """Test error handling when the entire iteration fails."""
-    with patch('feature_extraction.pipeline.iterate_feature_extraction') as mock_iter:
+    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
         mock_iter.side_effect = Exception("Fatal iteration error")
-        
+
         stats = extract_and_save_features(
-            session_dir="dummy",
-            output_dir=str(temp_output_dir),
-            verbose=False
+            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
         )
 
     # Check error was recorded
@@ -234,17 +228,17 @@ def test_extract_and_save_features_handles_fatal_error(temp_output_dir):
     assert "Fatal iteration error" in stats["errors"][0]
 
 
-def test_extract_and_save_features_verbose_output(temp_output_dir, sample_feature_chunk, capsys):
+def test_extract_and_save_features_verbose_output(
+    temp_output_dir, sample_feature_chunk, capsys
+):
     """Test that verbose mode produces expected output."""
     chunk_metadata = {"session_id": "session-123"}
 
-    with patch('feature_extraction.pipeline.iterate_feature_extraction') as mock_iter:
+    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
         mock_iter.return_value = iter([(sample_feature_chunk, chunk_metadata)])
-        
+
         stats = extract_and_save_features(
-            session_dir="dummy",
-            output_dir=str(temp_output_dir),
-            verbose=True
+            session_dir="dummy", output_dir=str(temp_output_dir), verbose=True
         )
 
     # Check console output
@@ -258,14 +252,14 @@ def test_extract_and_save_features_verbose_output(temp_output_dir, sample_featur
 
 def test_extract_and_save_features_max_sessions_parameter(temp_output_dir):
     """Test that max_sessions parameter is passed through correctly."""
-    with patch('feature_extraction.pipeline.iterate_feature_extraction') as mock_iter:
+    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
         mock_iter.return_value = iter([])
-        
+
         extract_and_save_features(
             session_dir="test/sessions",
             output_dir=str(temp_output_dir),
             max_sessions=5,
-            verbose=False
+            verbose=False,
         )
 
     # Verify mock was called with correct parameters
@@ -303,13 +297,11 @@ def test_extract_and_save_features_counts_feature_statistics(temp_output_dir):
 
     chunk_metadata = {"session_id": "stats-test"}
 
-    with patch('feature_extraction.pipeline.iterate_feature_extraction') as mock_iter:
+    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
         mock_iter.return_value = iter([(chunk_with_features, chunk_metadata)])
-        
+
         stats = extract_and_save_features(
-            session_dir="dummy",
-            output_dir=str(temp_output_dir),
-            verbose=False
+            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
         )
 
     # Check feature counts in statistics
@@ -322,31 +314,31 @@ def test_extract_and_save_features_counts_feature_statistics(temp_output_dir):
     assert stats["total_features"]["scroll_patterns"] == 0
 
 
-def test_extract_and_save_features_json_formatting(temp_output_dir, sample_feature_chunk):
+def test_extract_and_save_features_json_formatting(
+    temp_output_dir, sample_feature_chunk
+):
     """Test that JSON files are properly formatted and readable."""
     chunk_metadata = {"session_id": "formatting-test"}
 
-    with patch('feature_extraction.pipeline.iterate_feature_extraction') as mock_iter:
+    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
         mock_iter.return_value = iter([(sample_feature_chunk, chunk_metadata)])
-        
+
         extract_and_save_features(
-            session_dir="dummy",
-            output_dir=str(temp_output_dir),
-            verbose=False
+            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
         )
 
     # Read the saved file and verify it's properly formatted JSON
     output_file = temp_output_dir / "formatting-test_test-chunk-001.json"
-    
-    with open(output_file, 'r', encoding='utf-8') as f:
+
+    with open(output_file, "r", encoding="utf-8") as f:
         content = f.read()
-        
+
     # Should be indented (pretty-printed)
-    assert '  ' in content  # Check for indentation
-    
+    assert "  " in content  # Check for indentation
+
     # Should parse as valid JSON
     data = json.loads(content)
     assert data["chunk_id"] == "test-chunk-001"
-    
+
     # Check that ensure_ascii=False worked (should support Unicode if present)
     # The file should be readable with UTF-8 encoding

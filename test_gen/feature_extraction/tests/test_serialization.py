@@ -142,7 +142,11 @@ def test_mouse_cluster_to_dict():
 def test_scroll_pattern_to_dict():
     """Test ScrollPattern serialization to dictionary."""
     pattern = ScrollPattern(
-        scroll_event={"type": 3, "timestamp": 1000, "data": {"source": 3, "x": 0, "y": 100}},
+        scroll_event={
+            "type": 3,
+            "timestamp": 1000,
+            "data": {"source": 3, "x": 0, "y": 100},
+        },
         mutation_event={
             "type": 3,
             "timestamp": 1200,
@@ -154,7 +158,11 @@ def test_scroll_pattern_to_dict():
     result = pattern.to_dict()
 
     assert result == {
-        "scroll_event": {"type": 3, "timestamp": 1000, "data": {"source": 3, "x": 0, "y": 100}},
+        "scroll_event": {
+            "type": 3,
+            "timestamp": 1000,
+            "data": {"source": 3, "x": 0, "y": 100},
+        },
         "mutation_event": {
             "type": 3,
             "timestamp": 1200,
@@ -206,7 +214,7 @@ def test_feature_chunk_to_dict_complete():
 
     # Verify features are serialized correctly
     features = result["features"]
-    
+
     # Check DOM mutations
     assert len(features["dom_mutations"]) == 1
     assert features["dom_mutations"][0] == dom_mutation.to_dict()
@@ -276,11 +284,28 @@ def test_feature_chunk_to_dict_with_plain_objects():
         end_time=1000,
         events=[],
         features={
-            "dom_mutations": [{"mutation_type": "add", "target_id": 1, "details": {}, "timestamp": 500}],
-            "interactions": [{"action": "click", "target_id": 2, "value": {}, "timestamp": 600}],
+            "dom_mutations": [
+                {
+                    "mutation_type": "add",
+                    "target_id": 1,
+                    "details": {},
+                    "timestamp": 500,
+                }
+            ],
+            "interactions": [
+                {"action": "click", "target_id": 2, "value": {}, "timestamp": 600}
+            ],
             "inter_event_delays": [],
             "reaction_delays": [],
-            "ui_nodes": {"1": {"id": 1, "tag": "div", "attributes": {}, "text": "", "parent": None}},
+            "ui_nodes": {
+                "1": {
+                    "id": 1,
+                    "tag": "div",
+                    "attributes": {},
+                    "text": "",
+                    "parent": None,
+                }
+            },
             "mouse_clusters": [],
             "scroll_patterns": [],
         },
@@ -305,7 +330,7 @@ def test_feature_chunk_to_dict_with_plain_objects():
 def test_feature_chunk_serialization_roundtrip():
     """Test that serialization produces JSON-compatible output."""
     import json
-    
+
     # Create a FeatureChunk with various data types
     feature_chunk = FeatureChunk(
         chunk_id="roundtrip-test",

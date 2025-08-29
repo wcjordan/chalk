@@ -44,7 +44,7 @@ def fixture_create_sample_chunk():
                 tag="button",
                 attributes={"type": "submit"},
                 text="Submit",
-                parent="parent_id"
+                parent="parent_id",
             )
             nodes.append(node)
 
@@ -52,7 +52,9 @@ def fixture_create_sample_chunk():
             "chunk_id": chunk_id,
             "features": {"user_interactions": interactions, "ui_nodes": nodes},
         }
+
     return _create_sample_chunk
+
 
 @pytest.fixture(name="sample_rule")
 def fixture_sample_rule() -> dict:
@@ -68,6 +70,7 @@ def fixture_sample_rule() -> dict:
         "variables": {"button_text": "node.text"},
         "action_id": "submit_button_click",
     }
+
 
 def test_single_file_processing(create_sample_chunk, sample_rule):
     """Test processing a single chunk JSON file."""
@@ -121,6 +124,7 @@ def test_single_file_processing(create_sample_chunk, sample_rule):
         assert action["confidence"] == 0.9
         assert action["variables"]["button_text"] == "Submit"
 
+
 def test_directory_processing(sample_rule, create_sample_chunk):
     """Test processing a directory containing multiple chunk files."""
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -143,16 +147,12 @@ def test_directory_processing(sample_rule, create_sample_chunk):
 
         # Create multiple chunk files - one matching, one not matching
         chunk1_file = chunks_dir / "chunk1.json"
-        chunk1_data = create_sample_chunk(
-            "chunk1", has_matching_interaction=True
-        )
+        chunk1_data = create_sample_chunk("chunk1", has_matching_interaction=True)
         with open(chunk1_file, "w", encoding="utf-8") as f:
             json.dump(chunk1_data, f)
 
         chunk2_file = chunks_dir / "chunk2.json"
-        chunk2_data = create_sample_chunk(
-            "chunk2", has_matching_interaction=False
-        )
+        chunk2_data = create_sample_chunk("chunk2", has_matching_interaction=False)
         with open(chunk2_file, "w", encoding="utf-8") as f:
             json.dump(chunk2_data, f)
 
@@ -182,6 +182,7 @@ def test_directory_processing(sample_rule, create_sample_chunk):
             call.args[0] for call in mock_stdout.write.calls if call.args
         )
         assert "1 actions detected from 1 rules across 2 files" in printed_output
+
 
 def test_malformed_json_handling(sample_rule):
     """Test graceful handling of malformed JSON files."""
@@ -226,6 +227,7 @@ def test_malformed_json_handling(sample_rule):
         assert actions_count2 == 0
         assert rules_count2 == 0
 
+
 def test_nonexistent_input_path():
     """Test handling of nonexistent input paths."""
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -241,6 +243,7 @@ def test_nonexistent_input_path():
 
                 # Should exit with error code 1
                 assert exc_info.value.code == 1
+
 
 def test_empty_directory(sample_rule):
     """Test processing an empty directory."""
@@ -279,6 +282,7 @@ def test_empty_directory(sample_rule):
             call.args[0] for call in mock_stdout.write.calls if call.args
         )
         assert "0 actions detected from 0 rules across 0 files" in printed_output
+
 
 def test_invalid_rules_directory(create_sample_chunk):
     """Test handling of invalid rules directory."""
