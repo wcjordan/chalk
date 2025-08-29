@@ -81,8 +81,8 @@ Examples:
         )
 
     if args.verbose:
-        print(f"Feature Extraction CLI")
-        print(f"======================")
+        print("Feature Extraction CLI")
+        print("======================")
         print(f"Session directory: {session_dir}")
         print(f"Output directory: {output_dir}")
         print(f"Max sessions: {args.max_sessions or 'unlimited'}")
@@ -102,7 +102,7 @@ Examples:
         if args.verbose:
             print(f"\n{'='*50}")
 
-        print(f"Feature extraction completed successfully!")
+        print("Feature extraction completed successfully!")
         print(f"Sessions processed: {stats['sessions_processed']}")
         print(f"Feature chunks saved: {stats['chunks_saved']}")
 
@@ -113,7 +113,7 @@ Examples:
         if total_feature_count > 0:
             print(f"Total features extracted: {total_feature_count:,}")
             if args.verbose:
-                print(f"Feature breakdown:")
+                print("Feature breakdown:")
                 for feature_type, count in feature_counts.items():
                     if count > 0:
                         print(f"  {feature_type}: {count:,}")
@@ -131,7 +131,7 @@ Examples:
         print(f"Output files saved to: {output_dir}")
 
     except KeyboardInterrupt:
-        print(f"\nFeature extraction interrupted by user", file=sys.stderr)
+        print("\nFeature extraction interrupted by user", file=sys.stderr)
         sys.exit(1)
     except Exception as e:
         print(f"Fatal error during feature extraction: {e}", file=sys.stderr)

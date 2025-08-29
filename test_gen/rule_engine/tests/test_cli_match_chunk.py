@@ -14,13 +14,16 @@ import pytest
 import yaml
 
 from rule_engine.match_chunk import main, process_chunk_file
-from rule_engine.models import Rule
 from rule_engine.rules_loader import load_rules
 from feature_extraction.models import UserInteraction, UINode
 
 
 @pytest.fixture(name="create_sample_chunk")
 def fixture_create_sample_chunk():
+    """
+    Fixture to create a sample chunk dictionary for testing.
+    """
+
     def _create_sample_chunk(
         chunk_id: str, has_matching_interaction: bool = True
     ) -> dict:
@@ -237,12 +240,11 @@ def test_nonexistent_input_path():
         test_args = [str(nonexistent_path)]
 
         with patch("sys.argv", ["match_chunk.py"] + test_args):
-            with patch("sys.stderr") as mock_stderr:
-                with pytest.raises(SystemExit) as exc_info:
-                    main()
+            with pytest.raises(SystemExit) as exc_info:
+                main()
 
-                # Should exit with error code 1
-                assert exc_info.value.code == 1
+            # Should exit with error code 1
+            assert exc_info.value.code == 1
 
 
 def test_empty_directory(sample_rule):
@@ -301,9 +303,8 @@ def test_invalid_rules_directory(create_sample_chunk):
         test_args = [str(chunk_file), "--rules-dir", str(nonexistent_rules)]
 
         with patch("sys.argv", ["match_chunk.py"] + test_args):
-            with patch("sys.stderr") as mock_stderr:
-                with pytest.raises(SystemExit) as exc_info:
-                    main()
+            with pytest.raises(SystemExit) as exc_info:
+                main()
 
-                # Should exit with error code 1
-                assert exc_info.value.code == 1
+            # Should exit with error code 1
+            assert exc_info.value.code == 1

@@ -12,18 +12,18 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 from feature_extraction.pipeline import extract_and_save_features
-from feature_extraction.models import FeatureChunk
+from feature_extraction.models import DomMutation, FeatureChunk, UserInteraction, UINode
 
 
-@pytest.fixture
-def temp_output_dir():
+@pytest.fixture(name="temp_output_dir")
+def fixture_temp_output_dir():
     """Create a temporary directory for test output files."""
     with tempfile.TemporaryDirectory() as temp_dir:
         yield Path(temp_dir)
 
 
-@pytest.fixture
-def sample_feature_chunk():
+@pytest.fixture(name="sample_feature_chunk")
+def fixture_sample_feature_chunk():
     """Create a sample FeatureChunk for testing."""
     return FeatureChunk(
         chunk_id="test-chunk-001",
@@ -89,7 +89,7 @@ def test_extract_and_save_features_saves_single_chunk(
     assert output_file.exists()
 
     # Verify file contents
-    with open(output_file, "r") as f:
+    with open(output_file, "r", encoding="utf-8") as f:
         saved_data = json.load(f)
 
     assert saved_data["chunk_id"] == "test-chunk-001"
@@ -166,9 +166,9 @@ def test_extract_and_save_features_saves_multiple_chunks(temp_output_dir):
     assert file2.exists()
 
     # Verify both files have correct content
-    with open(file1, "r") as f:
+    with open(file1, "r", encoding="utf-8") as f:
         data1 = json.load(f)
-    with open(file2, "r") as f:
+    with open(file2, "r", encoding="utf-8") as f:
         data2 = json.load(f)
 
     assert data1["chunk_id"] == "chunk-001"
@@ -237,7 +237,7 @@ def test_extract_and_save_features_verbose_output(
     with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
         mock_iter.return_value = iter([(sample_feature_chunk, chunk_metadata)])
 
-        stats = extract_and_save_features(
+        extract_and_save_features(
             session_dir="dummy", output_dir=str(temp_output_dir), verbose=True
         )
 
@@ -268,7 +268,6 @@ def test_extract_and_save_features_max_sessions_parameter(temp_output_dir):
 
 def test_extract_and_save_features_counts_feature_statistics(temp_output_dir):
     """Test that feature counts are calculated correctly in statistics."""
-    from feature_extraction.models import DomMutation, UserInteraction, UINode
 
     chunk_with_features = FeatureChunk(
         chunk_id="feature-chunk",

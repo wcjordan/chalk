@@ -5,7 +5,8 @@ Tests that all dataclass models can be properly serialized to dictionaries
 and that the FeatureChunk serialization handles complex nested structures correctly.
 """
 
-import pytest
+import json
+
 from feature_extraction.models import (
     DomMutation,
     UserInteraction,
@@ -329,7 +330,6 @@ def test_feature_chunk_to_dict_with_plain_objects():
 
 def test_feature_chunk_serialization_roundtrip():
     """Test that serialization produces JSON-compatible output."""
-    import json
 
     # Create a FeatureChunk with various data types
     feature_chunk = FeatureChunk(

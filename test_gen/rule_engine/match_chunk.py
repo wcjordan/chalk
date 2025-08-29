@@ -9,11 +9,10 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import List
 
 from .rules_loader import load_rules
 from .matcher import detect_actions_in_chunk, save_detected_actions
-from .models import DetectedAction
 
 
 def process_chunk_file(
@@ -65,10 +64,10 @@ def process_chunk_file(
                 )
 
             return len(detected_actions), unique_rules
-        else:
-            if verbose:
-                print(f"  No actions detected")
-            return 0, 0
+
+        if verbose:
+            print("  No actions detected")
+        return 0, 0
 
     except json.JSONDecodeError as e:
         print(
@@ -168,15 +167,12 @@ def main():
 
             # We need to track unique rule IDs across all files
             # Since process_chunk_file only returns count, we'll re-detect to get rule IDs
-            try:
-                with open(chunk_file, "r", encoding="utf-8") as f:
-                    chunk_data = json.load(f)
-                if isinstance(chunk_data, dict) and "chunk_id" in chunk_data:
-                    detected_actions = detect_actions_in_chunk(chunk_data, rules)
-                    for action in detected_actions:
-                        total_unique_rules.add(action.rule_id)
-            except:
-                pass  # Already handled errors in process_chunk_file
+            with open(chunk_file, "r", encoding="utf-8") as f:
+                chunk_data = json.load(f)
+            if isinstance(chunk_data, dict) and "chunk_id" in chunk_data:
+                detected_actions = detect_actions_in_chunk(chunk_data, rules)
+                for action in detected_actions:
+                    total_unique_rules.add(action.rule_id)
 
     # Print summary
     files_processed = len([f for f in chunk_files if f.exists()])

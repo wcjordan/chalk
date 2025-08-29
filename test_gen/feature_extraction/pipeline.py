@@ -318,10 +318,10 @@ def extract_and_save_features(
             print(f"Fatal error: {error_msg}")
 
     if verbose:
-        print(f"\nProcessing Summary:")
+        print("\nProcessing Summary:")
         print(f"  Sessions processed: {stats['sessions_processed']}")
         print(f"  Chunks saved: {stats['chunks_saved']}")
-        print(f"  Total features extracted:")
+        print("  Total features extracted:")
         for feature_type, count in stats["total_features"].items():
             if count > 0:
                 print(f"    {feature_type}: {count:,}")

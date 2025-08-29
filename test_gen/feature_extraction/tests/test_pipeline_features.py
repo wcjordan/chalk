@@ -8,11 +8,13 @@ extractors and proper handling of DOM state.
 
 from collections import defaultdict
 
+import json
 import pytest
 from rrweb_ingest.models import Chunk
 from feature_extraction.pipeline import extract_features, iterate_feature_extraction
 from feature_extraction.dom_state import init_dom_state
 from feature_extraction.models import UINode
+from feature_extraction.pipeline import extract_and_save_features
 
 
 @pytest.fixture(name="sample_chunk_with_interactions")
@@ -930,7 +932,6 @@ def test_extract_and_save_features_integration(tmp_path):
     Tests the complete flow from session files to saved feature JSON files,
     verifying file creation, content accuracy, and statistics.
     """
-    from feature_extraction.pipeline import extract_and_save_features
 
     # Use a small subset of test sessions
     test_session_dir = "feature_extraction/tests/test_sessions"
@@ -959,7 +960,7 @@ def test_extract_and_save_features_integration(tmp_path):
 
     # Verify at least one file has expected structure
     if json_files:
-        with open(json_files[0], "r") as f:
+        with open(json_files[0], "r", encoding="utf-8") as f:
             feature_data = json.load(f)
 
         # Check required top-level fields
