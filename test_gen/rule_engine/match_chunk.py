@@ -86,18 +86,19 @@ def main():
         description="Process chunk JSON files and detect actions using rules"
     )
     parser.add_argument(
-        "input_path",
-        help="Path to a chunk JSON file or directory containing chunk JSON files",
+        "--input_path",
+        default="data/output_features",
+        help="Path to a chunk JSON file or directory containing chunk JSON files (default: data/output_features)",
     )
     parser.add_argument(
         "--rules-dir",
-        default="test_gen/data/rules",
-        help="Directory containing rule YAML files (default: test_gen/data/rules)",
+        default="data/rules",
+        help="Directory containing rule YAML files (default: data/rules)",
     )
     parser.add_argument(
         "--output",
-        default="test_gen/data/action_mappings",
-        help="Output directory for detected actions (default: test_gen/data/action_mappings)",
+        default="data/action_mappings",
+        help="Output directory for detected actions (default: data/action_mappings)",
     )
     parser.add_argument(
         "-v",
