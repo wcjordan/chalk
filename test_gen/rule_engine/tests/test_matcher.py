@@ -67,6 +67,10 @@ def create_test_node(
     return UINode(id=node_id, tag=tag, attributes=attributes, text=text, parent=parent)
 
 
+def _ui_nodes_to_dict(ui_nodes: list[UINode]) -> dict[int, UINode]:
+    """Convert a list of UINodes to a dictionary keyed by node ID."""
+    return {node.id: node for node in ui_nodes}
+
 class TestRuleMatchesEventNode:
     """Tests for rule_matches_event_node function."""
 
@@ -386,7 +390,7 @@ class TestDetectActionsInChunk:
         chunk = {
             "features": {
                 "user_interactions": [interaction],
-                "ui_nodes": [node],
+                "ui_nodes": _ui_nodes_to_dict([node]),
             }
         }
 
@@ -458,7 +462,7 @@ class TestDetectActionsInChunk:
         chunk = {
             "features": {
                 "user_interactions": [search_interaction, click_interaction],
-                "ui_nodes": [search_node, button_node],
+                "ui_nodes": _ui_nodes_to_dict([search_node, button_node]),
             }
         }
 
@@ -514,7 +518,7 @@ class TestDetectActionsInChunk:
         chunk = {
             "features": {
                 "user_interactions": [interaction],
-                "ui_nodes": [node],
+                "ui_nodes": _ui_nodes_to_dict([node]),
             }
         }
 
@@ -549,7 +553,7 @@ class TestDetectActionsInChunk:
         chunk = {
             "features": {
                 "user_interactions": [interaction],
-                "ui_nodes": [node],
+                "ui_nodes": _ui_nodes_to_dict([node]),
             }
         }
 
@@ -574,7 +578,7 @@ class TestDetectActionsInChunk:
         chunk = {
             "features": {
                 "user_interactions": [],
-                "ui_nodes": [],
+                "ui_nodes": {},
             }
         }
 
@@ -595,7 +599,7 @@ class TestDetectActionsInChunk:
         chunk = {
             "features": {
                 "user_interactions": [interaction],
-                "ui_nodes": [node],
+                "ui_nodes": _ui_nodes_to_dict([node]),
             }
         }
 
@@ -639,7 +643,7 @@ class TestDetectActionsInChunk:
         # Chunk with features but missing user_interactions
         chunk = {
             "features": {
-                "ui_nodes": [create_test_node(node_id=123, tag="button")],
+                "ui_nodes": _ui_nodes_to_dict([create_test_node(node_id=123, tag="button")]),
             }
         }
 
@@ -764,7 +768,7 @@ class TestSaveDetectedActions:
             chunk = {
                 "features": {
                     "user_interactions": [interaction],
-                    "ui_nodes": [node],
+                    "ui_nodes": _ui_nodes_to_dict([node]),
                 }
             }
 
