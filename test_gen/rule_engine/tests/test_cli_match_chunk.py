@@ -18,8 +18,10 @@ from rule_engine.match_chunk import main, process_chunk_file
 from rule_engine.rules_loader import load_rules
 from feature_extraction.models import FeatureChunk, UserInteraction, UINode
 
-# TODO move to a common helper
-from rule_engine.tests.test_matcher import _ui_nodes_to_dict
+
+def _ui_nodes_to_map(ui_nodes: list[UINode]) -> dict[int, UINode]:
+    """Convert a list of UINodes to a dictionary keyed by node ID."""
+    return {node.id: node for node in ui_nodes}
 
 
 @pytest.fixture(name="create_sample_chunk")
@@ -63,7 +65,7 @@ def fixture_create_sample_chunk():
             metadata={},
             features={
                 "interactions": interactions,
-                "ui_nodes": _ui_nodes_to_dict(nodes),
+                "ui_nodes": _ui_nodes_to_map(nodes),
             },
         )
 
