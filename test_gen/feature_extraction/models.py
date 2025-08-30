@@ -247,8 +247,6 @@ class FeatureChunk:
         }
 
 
-
-
 def feature_chunk_from_dict(data: Dict[str, Any]) -> FeatureChunk:
     """Create a FeatureChunk instance from a dictionary."""
     features = {}
@@ -261,10 +259,7 @@ def feature_chunk_from_dict(data: Dict[str, Any]) -> FeatureChunk:
             }
         else:
             # Other features are lists of objects
-            features[key] = [
-                UserInteraction(**item_data)
-                for item_data in value
-            ]
+            features[key] = [UserInteraction(**item_data) for item_data in value]
 
     return FeatureChunk(
         chunk_id=data["chunk_id"],

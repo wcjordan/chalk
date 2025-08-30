@@ -38,7 +38,6 @@ def process_chunk_file(
         with open(chunk_file, "r", encoding="utf-8") as f:
             chunk_data = json.load(f)
 
-
         # Validate chunk has required structure
         if not isinstance(chunk_data, dict) or "chunk_id" not in chunk_data:
             logger.error("Warning: Skipping %s - missing chunk_id", chunk_file.name)
@@ -141,9 +140,7 @@ def main():
     processed_files = 0
 
     for chunk_file in sorted(chunk_files):
-        actions_count, rules_matched = process_chunk_file(
-            chunk_file, rules, output_dir
-        )
+        actions_count, rules_matched = process_chunk_file(chunk_file, rules, output_dir)
 
         processed_files += 1
         total_actions += actions_count

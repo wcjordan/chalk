@@ -68,8 +68,7 @@ def create_test_node(
 
 
 def create_feature_chunk(
-    ui_nodes: list[UINode] = None,
-    interactions: list[UserInteraction] = None
+    ui_nodes: list[UINode] = None, interactions: list[UserInteraction] = None
 ) -> FeatureChunk:
     if ui_nodes is None:
         ui_nodes = []
@@ -405,10 +404,7 @@ class TestDetectActionsInChunk:
             text="",
         )
 
-        chunk = create_feature_chunk(
-            ui_nodes=[node],
-            interactions=[interaction]
-        )
+        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
 
         rules = [search_rule]
 
@@ -477,7 +473,7 @@ class TestDetectActionsInChunk:
 
         chunk = create_feature_chunk(
             ui_nodes=[search_node, button_node],
-            interactions=[search_interaction, click_interaction]
+            interactions=[search_interaction, click_interaction],
         )
 
         rules = [search_rule, button_rule]
@@ -529,10 +525,7 @@ class TestDetectActionsInChunk:
             tag="button",  # Different tag than rule expects
         )
 
-        chunk = create_feature_chunk(
-            ui_nodes=[node],
-            interactions=[interaction]
-        )
+        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
 
         rules = [rule]
 
@@ -562,10 +555,7 @@ class TestDetectActionsInChunk:
             tag="button",
         )
 
-        chunk = create_feature_chunk(
-            ui_nodes=[node],
-            interactions=[interaction]
-        )
+        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
 
         rules = [rule]
 
@@ -601,10 +591,7 @@ class TestDetectActionsInChunk:
         interaction = create_test_event(action="click", target_id=123)
         node = create_test_node(node_id=123, tag="button")
 
-        chunk = create_feature_chunk(
-            ui_nodes=[node],
-            interactions=[interaction]
-        )
+        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
 
         rules = []  # Empty rules list
 
@@ -613,7 +600,6 @@ class TestDetectActionsInChunk:
 
         # Verify empty result
         assert len(result) == 0
-
 
     def test_partial_chunk_features_graceful_handling(self):
         """Test handling of chunk with partial features."""
@@ -747,10 +733,7 @@ class TestSaveDetectedActions:
                 node_id=123, tag="input", attributes={"type": "search", "name": "query"}
             )
 
-            chunk = create_feature_chunk(
-                ui_nodes=[node],
-                interactions=[interaction]
-            )
+            chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
 
             # Detect actions
             detected_actions = detect_actions_in_chunk(chunk, [rule])

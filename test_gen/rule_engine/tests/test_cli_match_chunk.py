@@ -117,9 +117,7 @@ def test_single_file_processing(create_sample_chunk, sample_rule):
 
         # Test direct function call
         rules = load_rules(rules_dir)
-        actions_count, matched_rules = process_chunk_file(
-            chunk_file, rules, output_dir
-        )
+        actions_count, matched_rules = process_chunk_file(chunk_file, rules, output_dir)
 
         # Assertions
         assert actions_count == 1
@@ -182,7 +180,9 @@ def test_directory_processing(caplog, sample_rule, create_sample_chunk):
             str(output_dir),
         ]
 
-        with patch("sys.argv", ["match_chunk.py"] + test_args), caplog.at_level(logging.INFO):
+        with patch("sys.argv", ["match_chunk.py"] + test_args), caplog.at_level(
+            logging.INFO
+        ):
             main()
 
         # Check output files
@@ -285,7 +285,9 @@ def test_empty_directory(caplog, sample_rule):
             str(output_dir),
         ]
 
-        with patch("sys.argv", ["match_chunk.py"] + test_args), caplog.at_level(logging.INFO):
+        with patch("sys.argv", ["match_chunk.py"] + test_args), caplog.at_level(
+            logging.INFO
+        ):
             main()
 
         # Should complete without error and report 0 actions
@@ -306,7 +308,12 @@ def test_invalid_rules_directory(create_sample_chunk):
         # Use nonexistent rules directory
         nonexistent_rules = temp_path / "nonexistent_rules"
 
-        test_args = ["--input_path", str(chunk_file), "--rules-dir", str(nonexistent_rules)]
+        test_args = [
+            "--input_path",
+            str(chunk_file),
+            "--rules-dir",
+            str(nonexistent_rules),
+        ]
 
         with patch("sys.argv", ["match_chunk.py"] + test_args):
             with pytest.raises(SystemExit) as exc_info:
