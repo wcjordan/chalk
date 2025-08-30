@@ -80,7 +80,7 @@ def test_extract_and_save_features_saves_single_chunk(
 
     # Check statistics
     assert stats["chunks_saved"] == 1
-    assert stats["sessions_processed"] == 0  # Will be 0 due to mocking
+    assert stats["sessions_processed"] == 1
     assert len(stats["errors"]) == 0
 
     # Check file was created with correct name
