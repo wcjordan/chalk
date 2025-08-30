@@ -7,6 +7,7 @@ including single file processing, directory processing, and error handling.
 
 import json
 import tempfile
+import logging
 from pathlib import Path
 from unittest.mock import patch
 
@@ -15,7 +16,10 @@ import yaml
 
 from rule_engine.match_chunk import main, process_chunk_file
 from rule_engine.rules_loader import load_rules
-from feature_extraction.models import UserInteraction, UINode
+from feature_extraction.models import FeatureChunk, UserInteraction, UINode
+
+# TODO move to a common helper
+from rule_engine.tests.test_matcher import _ui_nodes_to_dict
 
 
 @pytest.fixture(name="create_sample_chunk")
@@ -36,14 +40,14 @@ def fixture_create_sample_chunk():
             interaction = UserInteraction(
                 timestamp=1234567890,
                 action="click",
-                target_id="node_1",
+                target_id=11,
                 value=None,
             )
             interactions.append(interaction)
 
             # Create a UINode that will match our test rule
             node = UINode(
-                id="node_1",
+                id=11,
                 tag="button",
                 attributes={"type": "submit"},
                 text="Submit",
@@ -51,10 +55,17 @@ def fixture_create_sample_chunk():
             )
             nodes.append(node)
 
-        return {
-            "chunk_id": chunk_id,
-            "features": {"user_interactions": interactions, "ui_nodes": nodes},
-        }
+        return FeatureChunk(
+            chunk_id=chunk_id,
+            start_time=1234567890,
+            end_time=1234567890,
+            events=[],
+            metadata={},
+            features={
+                "interactions": interactions,
+                "ui_nodes": _ui_nodes_to_dict(nodes),
+            },
+        )
 
     return _create_sample_chunk
 
@@ -100,17 +111,17 @@ def test_single_file_processing(create_sample_chunk, sample_rule):
         )
 
         with open(chunk_file, "w", encoding="utf-8") as f:
-            json.dump(chunk_data, f)
+            json.dump(chunk_data.to_dict(), f, indent=2, ensure_ascii=False)
 
         # Test direct function call
         rules = load_rules(rules_dir)
-        actions_count, rules_count = process_chunk_file(
-            chunk_file, rules, output_dir, verbose=True
+        actions_count, matched_rules = process_chunk_file(
+            chunk_file, rules, output_dir
         )
 
         # Assertions
         assert actions_count == 1
-        assert rules_count == 1
+        assert len(matched_rules) == 1
 
         # Check that output file was created
         output_file = output_dir / "test_chunk_123.json"
@@ -128,7 +139,7 @@ def test_single_file_processing(create_sample_chunk, sample_rule):
         assert action["variables"]["button_text"] == "Submit"
 
 
-def test_directory_processing(sample_rule, create_sample_chunk):
+def test_directory_processing(caplog, sample_rule, create_sample_chunk):
     """Test processing a directory containing multiple chunk files."""
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
@@ -152,26 +163,25 @@ def test_directory_processing(sample_rule, create_sample_chunk):
         chunk1_file = chunks_dir / "chunk1.json"
         chunk1_data = create_sample_chunk("chunk1", has_matching_interaction=True)
         with open(chunk1_file, "w", encoding="utf-8") as f:
-            json.dump(chunk1_data, f)
+            json.dump(chunk1_data.to_dict(), f, indent=2, ensure_ascii=False)
 
         chunk2_file = chunks_dir / "chunk2.json"
         chunk2_data = create_sample_chunk("chunk2", has_matching_interaction=False)
         with open(chunk2_file, "w", encoding="utf-8") as f:
-            json.dump(chunk2_data, f)
+            json.dump(chunk2_data.to_dict(), f, indent=2, ensure_ascii=False)
 
         # Test using command line arguments simulation
         test_args = [
+            "--input_path",
             str(chunks_dir),
             "--rules-dir",
             str(rules_dir),
             "--output",
             str(output_dir),
-            "--verbose",
         ]
 
-        with patch("sys.argv", ["match_chunk.py"] + test_args):
-            with patch("sys.stdout") as mock_stdout:
-                main()
+        with patch("sys.argv", ["match_chunk.py"] + test_args), caplog.at_level(logging.INFO):
+            main()
 
         # Check output files
         output1 = output_dir / "chunk1.json"
@@ -181,10 +191,7 @@ def test_directory_processing(sample_rule, create_sample_chunk):
         assert not output2.exists()  # Should not exist for non-matching chunk
 
         # Verify the printed summary contains expected information
-        printed_output = "".join(
-            call.args[0] for call in mock_stdout.write.calls if call.args
-        )
-        assert "1 actions detected from 1 rules across 2 files" in printed_output
+        assert "1 actions detected from 1 rules across 2 files" in caplog.text
 
 
 def test_malformed_json_handling(sample_rule):
@@ -217,18 +224,18 @@ def test_malformed_json_handling(sample_rule):
 
         # Test processing malformed file
         rules = load_rules(rules_dir)
-        actions_count1, rules_count1 = process_chunk_file(
+        actions_count1, rules_matched1 = process_chunk_file(
             bad_chunk_file, rules, output_dir
         )
         assert actions_count1 == 0
-        assert rules_count1 == 0
+        assert rules_matched1 == set()
 
         # Test processing file missing chunk_id
-        actions_count2, rules_count2 = process_chunk_file(
+        actions_count2, rules_matched2 = process_chunk_file(
             missing_id_file, rules, output_dir
         )
         assert actions_count2 == 0
-        assert rules_count2 == 0
+        assert rules_matched2 == set()
 
 
 def test_nonexistent_input_path():
@@ -237,7 +244,7 @@ def test_nonexistent_input_path():
         temp_path = Path(temp_dir)
         nonexistent_path = temp_path / "does_not_exist.json"
 
-        test_args = [str(nonexistent_path)]
+        test_args = ["--input_path", str(nonexistent_path)]
 
         with patch("sys.argv", ["match_chunk.py"] + test_args):
             with pytest.raises(SystemExit) as exc_info:
@@ -247,7 +254,7 @@ def test_nonexistent_input_path():
             assert exc_info.value.code == 1
 
 
-def test_empty_directory(sample_rule):
+def test_empty_directory(caplog, sample_rule):
     """Test processing an empty directory."""
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
@@ -268,6 +275,7 @@ def test_empty_directory(sample_rule):
             yaml.dump(rule_data, f)
 
         test_args = [
+            "--input_path",
             str(empty_dir),
             "--rules-dir",
             str(rules_dir),
@@ -275,15 +283,11 @@ def test_empty_directory(sample_rule):
             str(output_dir),
         ]
 
-        with patch("sys.argv", ["match_chunk.py"] + test_args):
-            with patch("sys.stdout") as mock_stdout:
-                main()
+        with patch("sys.argv", ["match_chunk.py"] + test_args), caplog.at_level(logging.INFO):
+            main()
 
         # Should complete without error and report 0 actions
-        printed_output = "".join(
-            call.args[0] for call in mock_stdout.write.calls if call.args
-        )
-        assert "0 actions detected from 0 rules across 0 files" in printed_output
+        assert "0 actions detected from 0 rules across 0 files" in caplog.text
 
 
 def test_invalid_rules_directory(create_sample_chunk):
@@ -295,12 +299,12 @@ def test_invalid_rules_directory(create_sample_chunk):
         chunk_file = temp_path / "test_chunk.json"
         chunk_data = create_sample_chunk("test_chunk")
         with open(chunk_file, "w", encoding="utf-8") as f:
-            json.dump(chunk_data, f)
+            json.dump(chunk_data.to_dict(), f, indent=2, ensure_ascii=False)
 
         # Use nonexistent rules directory
         nonexistent_rules = temp_path / "nonexistent_rules"
 
-        test_args = [str(chunk_file), "--rules-dir", str(nonexistent_rules)]
+        test_args = ["--input_path", str(chunk_file), "--rules-dir", str(nonexistent_rules)]
 
         with patch("sys.argv", ["match_chunk.py"] + test_args):
             with pytest.raises(SystemExit) as exc_info:

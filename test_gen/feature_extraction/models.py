@@ -7,7 +7,7 @@ delays, UI nodes, mouse clusters, scroll patterns, and the final feature chunk.
 """
 
 from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
 
 
 @dataclass
@@ -211,7 +211,7 @@ class FeatureChunk:
     start_time: int
     end_time: int
     events: List[Dict[str, Any]]
-    features: Dict[str, List[Any]]
+    features: Dict[str, Union[List[Any], Dict[str, Any]]]
     metadata: Dict[str, Any]
 
     def to_dict(self) -> Dict[str, Any]:
@@ -245,3 +245,32 @@ class FeatureChunk:
             "features": features_dict,
             "metadata": self.metadata,
         }
+
+
+
+
+def feature_chunk_from_dict(data: Dict[str, Any]) -> FeatureChunk:
+    """Create a FeatureChunk instance from a dictionary."""
+    features = {}
+    for key, value in data.get("features", {}).items():
+        if key == "ui_nodes":
+            # Convert UI nodes back to their original structure
+            features[key] = {
+                int(node_id): UINode(**node_data)
+                for node_id, node_data in value.items()
+            }
+        else:
+            # Other features are lists of objects
+            features[key] = [
+                UserInteraction(**item_data)
+                for item_data in value
+            ]
+
+    return FeatureChunk(
+        chunk_id=data["chunk_id"],
+        start_time=data["start_time"],
+        end_time=data["end_time"],
+        events=data["events"],
+        features=features,
+        metadata=data["metadata"],
+    )

@@ -7,17 +7,21 @@ over preprocessed chunk JSON files and save detected actions to disk.
 
 import argparse
 import json
+import logging
 import sys
 from pathlib import Path
 from typing import List
 
+from feature_extraction.models import feature_chunk_from_dict
 from .rules_loader import load_rules
 from .matcher import detect_actions_in_chunk, save_detected_actions
 
+logger = logging.getLogger(__name__)
+
 
 def process_chunk_file(
-    chunk_file: Path, rules: List, output_dir: Path, verbose: bool = False
-) -> tuple[int, int]:
+    chunk_file: Path, rules: List, output_dir: Path
+) -> tuple[int, set]:
     """
     Process a single chunk JSON file and save detected actions.
 
@@ -25,59 +29,52 @@ def process_chunk_file(
         chunk_file: Path to the chunk JSON file
         rules: List of Rule objects to apply
         output_dir: Directory to save detected actions
-        verbose: Whether to print extra information
 
     Returns:
-        Tuple of (number of actions detected, number of rules matched)
+        Tuple of (number of actions detected, a set of the rules matched)
     """
     try:
         # Load and parse the chunk JSON
         with open(chunk_file, "r", encoding="utf-8") as f:
             chunk_data = json.load(f)
 
+
         # Validate chunk has required structure
         if not isinstance(chunk_data, dict) or "chunk_id" not in chunk_data:
-            print(
-                f"Warning: Skipping {chunk_file.name} - missing chunk_id",
-                file=sys.stderr,
-            )
-            return 0, 0
+            logger.error("Warning: Skipping %s - missing chunk_id", chunk_file.name)
+            return 0, set()
+        feature_chunk = feature_chunk_from_dict(chunk_data)
 
-        chunk_id = chunk_data["chunk_id"]
-
-        if verbose:
-            print(f"Processing chunk {chunk_id} from {chunk_file.name}")
+        chunk_id = feature_chunk.chunk_id
+        logger.debug("Processing chunk %s from %s", chunk_id, chunk_file.name)
 
         # Detect actions using the rule engine
-        detected_actions = detect_actions_in_chunk(chunk_data, rules)
+        detected_actions = detect_actions_in_chunk(feature_chunk, rules)
 
         # Save detected actions to disk
         if detected_actions:
             save_detected_actions(detected_actions, chunk_id, output_dir)
 
             # Count unique rules that matched
-            unique_rules = len(set(action.rule_id for action in detected_actions))
+            unique_rules = set(action.rule_id for action in detected_actions)
 
-            if verbose:
-                print(
-                    f"  Found {len(detected_actions)} actions from {unique_rules} rules"
-                )
+            logger.debug(
+                "  Found %d actions from %d rules",
+                len(detected_actions),
+                len(unique_rules),
+            )
 
             return len(detected_actions), unique_rules
 
-        if verbose:
-            print("  No actions detected")
-        return 0, 0
+        logger.debug("  No actions detected")
+        return 0, set()
 
     except json.JSONDecodeError as e:
-        print(
-            f"Warning: Skipping {chunk_file.name} - malformed JSON: {e}",
-            file=sys.stderr,
-        )
-        return 0, 0
+        logger.error("Warning: Skipping %s - malformed JSON: %s", chunk_file.name, e)
+        return 0, set()
     except Exception as e:
-        print(f"Warning: Skipping {chunk_file.name} - error: {e}", file=sys.stderr)
-        return 0, 0
+        logger.error("Warning: Skipping %s - error: %s", chunk_file.name, e)
+        return 0, set()
 
 
 def main():
@@ -100,12 +97,6 @@ def main():
         default="data/action_mappings",
         help="Output directory for detected actions (default: data/action_mappings)",
     )
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        help="Print extra information during processing",
-    )
 
     args = parser.parse_args()
 
@@ -116,19 +107,17 @@ def main():
 
     # Validate input path exists
     if not input_path.exists():
-        print(f"Error: Input path does not exist: {input_path}", file=sys.stderr)
+        logger.error("Error: Input path does not exist: %s", input_path)
         sys.exit(1)
 
     try:
         # Load rules from the rules directory
-        if args.verbose:
-            print(f"Loading rules from {rules_dir}")
+        logger.debug("Loading rules from %s", rules_dir)
         rules = load_rules(rules_dir)
-        if args.verbose:
-            print(f"Loaded {len(rules)} rules")
+        logger.debug("Loaded %d rules", len(rules))
 
     except Exception as e:
-        print(f"Error loading rules from {rules_dir}: {e}", file=sys.stderr)
+        logger.error("Error loading rules from %s: %s", rules_dir, e)
         sys.exit(1)
 
     # Collect chunk files to process
@@ -141,15 +130,9 @@ def main():
         # Directory - find all JSON files
         chunk_files = list(input_path.glob("*.json"))
         if not chunk_files:
-            print(
-                f"Warning: No JSON files found in directory {input_path}",
-                file=sys.stderr,
-            )
+            logger.warning("Warning: No JSON files found in directory %s", input_path)
     else:
-        print(
-            f"Error: Input path is neither a file nor a directory: {input_path}",
-            file=sys.stderr,
-        )
+        logger.error("Input path is neither a file nor a directory: %s", input_path)
         sys.exit(1)
 
     # Process all chunk files
@@ -158,29 +141,23 @@ def main():
     processed_files = 0
 
     for chunk_file in sorted(chunk_files):
-        actions_count, rules_count = process_chunk_file(
-            chunk_file, rules, output_dir, args.verbose
+        actions_count, rules_matched = process_chunk_file(
+            chunk_file, rules, output_dir
         )
 
-        if actions_count > 0 or rules_count > 0:
-            processed_files += 1
-            total_actions += actions_count
-
-            # We need to track unique rule IDs across all files
-            # Since process_chunk_file only returns count, we'll re-detect to get rule IDs
-            with open(chunk_file, "r", encoding="utf-8") as f:
-                chunk_data = json.load(f)
-            if isinstance(chunk_data, dict) and "chunk_id" in chunk_data:
-                detected_actions = detect_actions_in_chunk(chunk_data, rules)
-                for action in detected_actions:
-                    total_unique_rules.add(action.rule_id)
+        processed_files += 1
+        total_actions += actions_count
+        total_unique_rules.update(rules_matched)
 
     # Print summary
     files_processed = len([f for f in chunk_files if f.exists()])
     unique_rules_count = len(total_unique_rules)
 
-    print(
-        f"{total_actions} actions detected from {unique_rules_count} rules across {files_processed} files"
+    logger.info(
+        "%d actions detected from %d rules across %d files",
+        total_actions,
+        unique_rules_count,
+        files_processed,
     )
 
 
