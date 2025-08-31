@@ -8,7 +8,7 @@ including error handling, file naming, and statistics tracking.
 import json
 import tempfile
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 import pytest
 from feature_extraction.pipeline import extract_and_save_features
@@ -173,59 +173,6 @@ def test_extract_and_save_features_saves_multiple_chunks(temp_output_dir):
 
     assert data1["chunk_id"] == "chunk-001"
     assert data2["chunk_id"] == "chunk-002"
-
-
-def test_extract_and_save_features_handles_chunk_processing_error(
-    temp_output_dir, sample_feature_chunk
-):
-    """Test error handling when individual chunk processing fails."""
-    chunk_metadata = {"session_id": "session-123"}
-
-    # Mock the feature chunk to have a problematic to_dict method
-    problematic_chunk = MagicMock()
-    problematic_chunk.chunk_id = "problematic-chunk"
-    problematic_chunk.to_dict.side_effect = Exception("Serialization failed")
-
-    chunks_data = [
-        (sample_feature_chunk, chunk_metadata),  # This should succeed
-        (problematic_chunk, chunk_metadata),  # This should fail
-    ]
-
-    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
-        mock_iter.return_value = iter(chunks_data)
-
-        stats = extract_and_save_features(
-            session_dir="dummy", output_dir=str(temp_output_dir)
-        )
-
-    # Check statistics - one success, one error
-    assert stats["chunks_saved"] == 1
-    assert len(stats["errors"]) == 1
-    assert "problematic-chunk" in stats["errors"][0]
-    assert "Serialization failed" in stats["errors"][0]
-
-    # Check only the successful file was created
-    successful_file = temp_output_dir / "session-123_test-chunk-001.json"
-    problematic_file = temp_output_dir / "session-123_problematic-chunk.json"
-    assert successful_file.exists()
-    assert not problematic_file.exists()
-
-
-def test_extract_and_save_features_handles_fatal_error(temp_output_dir):
-    """Test error handling when the entire iteration fails."""
-    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
-        mock_iter.side_effect = Exception("Fatal iteration error")
-
-        stats = extract_and_save_features(
-            session_dir="dummy", output_dir=str(temp_output_dir)
-        )
-
-    # Check error was recorded
-    assert stats["chunks_saved"] == 0
-    assert stats["sessions_processed"] == 0
-    assert len(stats["errors"]) == 1
-    assert "Fatal error in feature extraction" in stats["errors"][0]
-    assert "Fatal iteration error" in stats["errors"][0]
 
 
 def test_extract_and_save_features_verbose_output(

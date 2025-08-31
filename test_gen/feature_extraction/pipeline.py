@@ -188,6 +188,58 @@ def iterate_feature_extraction(
             yield chunk_data, chunk_metadata
 
 
+def _extract_and_save_session_features(
+    sessions_seen, stats, output_path, chunk_data, chunk_metadata
+):
+    """
+    Extract features from a single session and save to disk.
+
+    Args:
+        sessions_seen: Set of session IDs that have been processed
+        stats: Dictionary to update processing statistics
+        output_path: Path to the output directory
+        chunk_data: The FeatureChunk containing the extracted features
+        chunk_metadata: Metadata associated with the chunk
+    """
+    session_id = chunk_metadata["session_id"]
+    chunk_id = chunk_data.chunk_id
+
+    # Track unique sessions
+    sessions_seen.add(session_id)
+
+    # Generate output filename: {session_id}_{chunk_id}.json
+    output_filename = f"{session_id}_{chunk_id}.json"
+    output_file_path = output_path / output_filename
+
+    # Convert FeatureChunk to dictionary for JSON serialization
+    chunk_dict = chunk_data.to_dict()
+
+    # Add processing metadata
+    chunk_dict["processing_metadata"] = {
+        "feature_extraction_timestamp": chunk_metadata.get("timestamp"),
+        "dom_initialized_from_snapshot": chunk_metadata.get(
+            "dom_initialized_from_snapshot", False
+        ),
+        "dom_state_nodes_final": chunk_metadata.get("dom_state_nodes_final", 0),
+        "feature_extraction_version": "1.0",
+    }
+
+    # Save to JSON file with pretty formatting
+    with open(output_file_path, "w", encoding="utf-8") as f:
+        json.dump(chunk_dict, f, indent=2, ensure_ascii=False)
+
+    # Update statistics
+    stats["chunks_saved"] += 1
+    for feature_type, feature_list in chunk_data.features.items():
+        if feature_type in stats["total_features"]:
+            if isinstance(feature_list, dict):  # ui_nodes case
+                stats["total_features"][feature_type] += len(feature_list)
+            elif isinstance(feature_list, list):  # all other features
+                stats["total_features"][feature_type] += len(feature_list)
+
+    logger.debug("  Saved: %s", output_filename)
+
+
 def extract_and_save_features(
     session_dir: str,
     output_dir: str,
@@ -245,71 +297,16 @@ def extract_and_save_features(
     logger.debug("Processing sessions from: %s", session_path)
     logger.debug("Saving features to: %s", output_path)
 
-    try:
-        # Process each session using the existing feature extraction generator
-        chunk_generator = iterate_feature_extraction(
-            session_dir, max_sessions=max_sessions
+    # Process each session using the existing feature extraction generator
+    chunk_generator = iterate_feature_extraction(session_dir, max_sessions=max_sessions)
+
+    for chunk_data, chunk_metadata in chunk_generator:
+        _extract_and_save_session_features(
+            sessions_seen, stats, output_path, chunk_data, chunk_metadata
         )
 
-        for chunk_data, chunk_metadata in chunk_generator:
-            try:
-                session_id = chunk_metadata["session_id"]
-                chunk_id = chunk_data.chunk_id
-
-                # Track unique sessions
-                sessions_seen.add(session_id)
-
-                # Generate output filename: {session_id}_{chunk_id}.json
-                output_filename = f"{session_id}_{chunk_id}.json"
-                output_file_path = output_path / output_filename
-
-                # Convert FeatureChunk to dictionary for JSON serialization
-                chunk_dict = chunk_data.to_dict()
-
-                # Add processing metadata
-                chunk_dict["processing_metadata"] = {
-                    "feature_extraction_timestamp": chunk_metadata.get("timestamp"),
-                    "dom_initialized_from_snapshot": chunk_metadata.get(
-                        "dom_initialized_from_snapshot", False
-                    ),
-                    "dom_state_nodes_final": chunk_metadata.get(
-                        "dom_state_nodes_final", 0
-                    ),
-                    "feature_extraction_version": "1.0",
-                }
-
-                # Save to JSON file with pretty formatting
-                with open(output_file_path, "w", encoding="utf-8") as f:
-                    json.dump(chunk_dict, f, indent=2, ensure_ascii=False)
-
-                # Update statistics
-                stats["chunks_saved"] += 1
-                for feature_type, feature_list in chunk_data.features.items():
-                    if feature_type in stats["total_features"]:
-                        if isinstance(feature_list, dict):  # ui_nodes case
-                            stats["total_features"][feature_type] += len(feature_list)
-                        elif isinstance(feature_list, list):  # all other features
-                            stats["total_features"][feature_type] += len(feature_list)
-
-                logger.debug("  Saved: %s", output_filename)
-
-            except Exception as chunk_error:
-                error_msg = (
-                    f"Error processing chunk {chunk_data.chunk_id}: {str(chunk_error)}"
-                )
-                stats["errors"].append(error_msg)
-                logger.error(error_msg)
-                logger.debug("  Error: %s", error_msg)
-                continue
-
-        # Update session count from tracked sessions
-        stats["sessions_processed"] = len(sessions_seen)
-
-    except Exception as e:
-        error_msg = f"Fatal error in feature extraction: {str(e)}"
-        stats["errors"].append(error_msg)
-        logger.error(error_msg)
-        logger.debug("Fatal error: %s", error_msg)
+    # Update session count from tracked sessions
+    stats["sessions_processed"] = len(sessions_seen)
 
     logger.debug("\nProcessing Summary:")
     logger.debug("  Sessions processed: %d", stats["sessions_processed"])
