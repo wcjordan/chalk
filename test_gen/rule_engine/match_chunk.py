@@ -71,13 +71,12 @@ def process_chunk_file(
     except json.JSONDecodeError as e:
         logger.error("Warning: Skipping %s - malformed JSON: %s", chunk_file.name, e)
         return 0, set()
-    except Exception as e:
-        logger.error("Warning: Skipping %s - error: %s", chunk_file.name, e)
-        return 0, set()
 
 
-def main():
-    """Main entry point for the CLI tool."""
+def _parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments for the feature extraction tool.
+    """
     parser = argparse.ArgumentParser(
         description="Process chunk JSON files and detect actions using rules"
     )
@@ -97,7 +96,12 @@ def main():
         help="Output directory for detected actions (default: data/action_mappings)",
     )
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main():
+    """Main entry point for the CLI tool."""
+    args = _parse_arguments()
 
     # Convert paths to Path objects
     input_path = Path(args.input_path)
@@ -114,9 +118,8 @@ def main():
         logger.debug("Loading rules from %s", rules_dir)
         rules = load_rules(rules_dir)
         logger.debug("Loaded %d rules", len(rules))
-
-    except Exception as e:
-        logger.error("Error loading rules from %s: %s", rules_dir, e)
+    except FileNotFoundError as e:
+        logger.error("Error unable to find rules file in %s: %s", rules_dir, e)
         sys.exit(1)
 
     # Collect chunk files to process

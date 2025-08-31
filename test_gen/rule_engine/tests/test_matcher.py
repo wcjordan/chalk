@@ -70,6 +70,16 @@ def create_test_node(
 def create_feature_chunk(
     ui_nodes: list[UINode] = None, interactions: list[UserInteraction] = None
 ) -> FeatureChunk:
+    """
+    Create a FeatureChunk for testing.
+
+    Args:
+        ui_nodes: List of UINode objects
+        interactions: List of UserInteraction objects
+
+    Returns:
+        A FeatureChunk object populated with the provided UI nodes and interactions.
+    """
     if ui_nodes is None:
         ui_nodes = []
     if interactions is None:
