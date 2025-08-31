@@ -53,7 +53,7 @@ def test_extract_and_save_features_creates_output_directory(temp_output_dir):
         mock_iter.return_value = iter([])
 
         stats = extract_and_save_features(
-            session_dir="dummy", output_dir=str(output_path), verbose=False
+            session_dir="dummy", output_dir=str(output_path)
         )
 
     assert output_path.exists()
@@ -75,7 +75,7 @@ def test_extract_and_save_features_saves_single_chunk(
         mock_iter.return_value = iter([(sample_feature_chunk, chunk_metadata)])
 
         stats = extract_and_save_features(
-            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
+            session_dir="dummy", output_dir=str(temp_output_dir)
         )
 
     # Check statistics
@@ -152,7 +152,7 @@ def test_extract_and_save_features_saves_multiple_chunks(temp_output_dir):
         mock_iter.return_value = iter(chunks_and_metadata)
 
         stats = extract_and_save_features(
-            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
+            session_dir="dummy", output_dir=str(temp_output_dir)
         )
 
     # Check statistics
@@ -195,7 +195,7 @@ def test_extract_and_save_features_handles_chunk_processing_error(
         mock_iter.return_value = iter(chunks_data)
 
         stats = extract_and_save_features(
-            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
+            session_dir="dummy", output_dir=str(temp_output_dir)
         )
 
     # Check statistics - one success, one error
@@ -217,7 +217,7 @@ def test_extract_and_save_features_handles_fatal_error(temp_output_dir):
         mock_iter.side_effect = Exception("Fatal iteration error")
 
         stats = extract_and_save_features(
-            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
+            session_dir="dummy", output_dir=str(temp_output_dir)
         )
 
     # Check error was recorded
@@ -229,25 +229,24 @@ def test_extract_and_save_features_handles_fatal_error(temp_output_dir):
 
 
 def test_extract_and_save_features_verbose_output(
-    temp_output_dir, sample_feature_chunk, capsys
+    caplog, temp_output_dir, sample_feature_chunk
 ):
     """Test that verbose mode produces expected output."""
     chunk_metadata = {"session_id": "session-123"}
 
-    with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
+    with patch(
+        "feature_extraction.pipeline.iterate_feature_extraction"
+    ) as mock_iter, caplog.at_level("DEBUG"):
         mock_iter.return_value = iter([(sample_feature_chunk, chunk_metadata)])
 
-        extract_and_save_features(
-            session_dir="dummy", output_dir=str(temp_output_dir), verbose=True
-        )
+        extract_and_save_features(session_dir="dummy", output_dir=str(temp_output_dir))
 
     # Check console output
-    captured = capsys.readouterr()
-    assert "Processing sessions from:" in captured.out
-    assert "Saving features to:" in captured.out
-    assert "Saved: session-123_test-chunk-001.json" in captured.out
-    assert "Processing Summary:" in captured.out
-    assert "Chunks saved: 1" in captured.out
+    assert "Processing sessions from:" in caplog.text
+    assert "Saving features to:" in caplog.text
+    assert "Saved: session-123_test-chunk-001.json" in caplog.text
+    assert "Processing Summary:" in caplog.text
+    assert "Chunks saved: 1" in caplog.text
 
 
 def test_extract_and_save_features_max_sessions_parameter(temp_output_dir):
@@ -259,7 +258,6 @@ def test_extract_and_save_features_max_sessions_parameter(temp_output_dir):
             session_dir="test/sessions",
             output_dir=str(temp_output_dir),
             max_sessions=5,
-            verbose=False,
         )
 
     # Verify mock was called with correct parameters
@@ -300,7 +298,7 @@ def test_extract_and_save_features_counts_feature_statistics(temp_output_dir):
         mock_iter.return_value = iter([(chunk_with_features, chunk_metadata)])
 
         stats = extract_and_save_features(
-            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
+            session_dir="dummy", output_dir=str(temp_output_dir)
         )
 
     # Check feature counts in statistics
@@ -322,9 +320,7 @@ def test_extract_and_save_features_json_formatting(
     with patch("feature_extraction.pipeline.iterate_feature_extraction") as mock_iter:
         mock_iter.return_value = iter([(sample_feature_chunk, chunk_metadata)])
 
-        extract_and_save_features(
-            session_dir="dummy", output_dir=str(temp_output_dir), verbose=False
-        )
+        extract_and_save_features(session_dir="dummy", output_dir=str(temp_output_dir))
 
     # Read the saved file and verify it's properly formatted JSON
     output_file = temp_output_dir / "formatting-test_test-chunk-001.json"

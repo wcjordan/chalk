@@ -7,14 +7,21 @@ and save them as JSON files for use by the rule engine or other analysis tools.
 """
 
 import argparse
+import logging
+import os
 import sys
 from pathlib import Path
 
 from .pipeline import extract_and_save_features
 
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO").upper())
+logger = logging.getLogger(__name__)
 
-def main():
-    """Main entry point for the CLI tool."""
+
+def _parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments for the feature extraction tool.
+    """
     parser = argparse.ArgumentParser(
         description="Extract features from rrweb session files and save as JSON",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -26,8 +33,8 @@ Examples:
   # Extract features with custom input and output directories
   python -m feature_extraction.extract_features_cli --session_dir data/my_sessions --output_dir data/my_features
 
-  # Process only first 10 sessions with verbose output
-  python -m feature_extraction.extract_features_cli --max-sessions 10 --verbose
+  # Process only first 10 sessions with verbose debugging output
+  LOGLEVEL=DEBUG python -m feature_extraction.extract_features_cli --max-sessions 10
         """,
     )
 
@@ -49,45 +56,45 @@ Examples:
         help="Maximum number of sessions to process (default: process all)",
     )
 
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        help="Print detailed progress information",
-    )
+    return parser.parse_args()
 
-    args = parser.parse_args()
 
+def _validate_inputs(args):
+    """
+    Validate command-line arguments for the feature extraction tool.
+    """
     # Convert paths to Path objects and validate
     session_dir = Path(args.session_dir)
     output_dir = Path(args.output_dir)
 
     if not session_dir.exists():
-        print(
-            f"Error: Session directory does not exist: {session_dir}", file=sys.stderr
-        )
+        logger.error("Session directory does not exist: %s", session_dir)
         sys.exit(1)
 
     if not session_dir.is_dir():
-        print(f"Error: Session path is not a directory: {session_dir}", file=sys.stderr)
+        logger.error("Session path is not a directory: %s", session_dir)
         sys.exit(1)
 
     # Check if session directory contains any JSON files
     json_files = list(session_dir.glob("*.json"))
     if not json_files:
-        print(
-            f"Warning: No JSON files found in session directory: {session_dir}",
-            file=sys.stderr,
-        )
+        logger.warning("No JSON files found in session directory: %s", session_dir)
 
-    if args.verbose:
-        print("Feature Extraction CLI")
-        print("======================")
-        print(f"Session directory: {session_dir}")
-        print(f"Output directory: {output_dir}")
-        print(f"Max sessions: {args.max_sessions or 'unlimited'}")
-        print(f"Found {len(json_files)} JSON files")
-        print()
+    logger.debug("Feature Extraction CLI")
+    logger.debug("======================")
+    logger.debug("Session directory: %s", session_dir)
+    logger.debug("Output directory: %s", output_dir)
+    logger.debug("Max sessions: %s", args.max_sessions or "unlimited")
+    logger.debug("Found %d JSON files", len(json_files))
+    logger.debug("")
+
+    return session_dir, output_dir
+
+
+def main():
+    """Main entry point for the CLI tool."""
+    args = _parse_arguments()
+    session_dir, output_dir = _validate_inputs(args)
 
     try:
         # Run the feature extraction
@@ -95,46 +102,39 @@ Examples:
             session_dir=str(session_dir),
             output_dir=str(output_dir),
             max_sessions=args.max_sessions,
-            verbose=args.verbose,
         )
 
         # Print final summary
-        if args.verbose:
-            print(f"\n{'='*50}")
+        logger.debug("\n%s", "=" * 50)
 
-        print("Feature extraction completed successfully!")
-        print(f"Sessions processed: {stats['sessions_processed']}")
-        print(f"Feature chunks saved: {stats['chunks_saved']}")
+        logger.info("Feature extraction completed successfully!")
+        logger.info("Sessions processed: %d", stats["sessions_processed"])
+        logger.info("Feature chunks saved: %d", stats["chunks_saved"])
 
         # Print feature type counts if any were extracted
         feature_counts = stats["total_features"]
         total_feature_count = sum(count for count in feature_counts.values())
 
         if total_feature_count > 0:
-            print(f"Total features extracted: {total_feature_count:,}")
-            if args.verbose:
-                print("Feature breakdown:")
-                for feature_type, count in feature_counts.items():
-                    if count > 0:
-                        print(f"  {feature_type}: {count:,}")
+            logger.info("Total features extracted: %d", total_feature_count)
+            logger.debug("Feature breakdown:")
+            for feature_type, count in feature_counts.items():
+                if count > 0:
+                    logger.debug("  %s: %d", feature_type, count)
 
         # Print error summary
         if stats["errors"]:
-            print(f"Errors encountered: {len(stats['errors'])}")
-            if args.verbose:
-                print("Error details:")
-                for error in stats["errors"]:
-                    print(f"  {error}")
+            logger.warning("Errors encountered: %d", len(stats["errors"]))
+            logger.warning("Error details:")
+            for error in stats["errors"]:
+                logger.warning("  %s", error)
         else:
-            print("No errors encountered")
+            logger.info("No errors encountered")
 
-        print(f"Output files saved to: {output_dir}")
+        logger.info("Output files saved to: %s", output_dir)
 
     except KeyboardInterrupt:
-        print("\nFeature extraction interrupted by user", file=sys.stderr)
-        sys.exit(1)
-    except Exception as e:
-        print(f"Fatal error during feature extraction: {e}", file=sys.stderr)
+        logger.warning("Feature extraction interrupted by user")
         sys.exit(1)
 
 

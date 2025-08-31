@@ -942,7 +942,6 @@ def test_extract_and_save_features_integration(tmp_path):
         session_dir=test_session_dir,
         output_dir=str(output_dir),
         max_sessions=2,  # Limit for faster testing
-        verbose=False,
     )
 
     # Verify statistics make sense

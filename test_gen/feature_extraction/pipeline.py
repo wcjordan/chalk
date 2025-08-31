@@ -192,7 +192,6 @@ def extract_and_save_features(
     session_dir: str,
     output_dir: str,
     max_sessions: int = None,
-    verbose: bool = False,
 ) -> Dict[str, Any]:
     """
     Extract features from all sessions and save them as JSON files to output directory.
@@ -205,7 +204,6 @@ def extract_and_save_features(
         session_dir: Directory containing rrweb JSON session files
         output_dir: Directory where extracted features will be saved as JSON files
         max_sessions: Optional limit on number of sessions to process
-        verbose: Whether to print progress information
 
     Returns:
         Dictionary containing processing statistics:
@@ -244,9 +242,8 @@ def extract_and_save_features(
     # Track unique sessions seen
     sessions_seen = set()
 
-    if verbose:
-        print(f"Processing sessions from: {session_path}")
-        print(f"Saving features to: {output_path}")
+    logger.debug("Processing sessions from: %s", session_path)
+    logger.debug("Saving features to: %s", output_path)
 
     try:
         # Process each session using the existing feature extraction generator
@@ -294,8 +291,7 @@ def extract_and_save_features(
                         elif isinstance(feature_list, list):  # all other features
                             stats["total_features"][feature_type] += len(feature_list)
 
-                if verbose:
-                    print(f"  Saved: {output_filename}")
+                logger.debug("  Saved: %s", output_filename)
 
             except Exception as chunk_error:
                 error_msg = (
@@ -303,8 +299,7 @@ def extract_and_save_features(
                 )
                 stats["errors"].append(error_msg)
                 logger.error(error_msg)
-                if verbose:
-                    print(f"  Error: {error_msg}")
+                logger.debug("  Error: %s", error_msg)
                 continue
 
         # Update session count from tracked sessions
@@ -314,18 +309,16 @@ def extract_and_save_features(
         error_msg = f"Fatal error in feature extraction: {str(e)}"
         stats["errors"].append(error_msg)
         logger.error(error_msg)
-        if verbose:
-            print(f"Fatal error: {error_msg}")
+        logger.debug("Fatal error: %s", error_msg)
 
-    if verbose:
-        print("\nProcessing Summary:")
-        print(f"  Sessions processed: {stats['sessions_processed']}")
-        print(f"  Chunks saved: {stats['chunks_saved']}")
-        print("  Total features extracted:")
-        for feature_type, count in stats["total_features"].items():
-            if count > 0:
-                print(f"    {feature_type}: {count:,}")
-        if stats["errors"]:
-            print(f"  Errors encountered: {len(stats['errors'])}")
+    logger.debug("\nProcessing Summary:")
+    logger.debug("  Sessions processed: %d", stats["sessions_processed"])
+    logger.debug("  Chunks saved: %d", stats["chunks_saved"])
+    logger.debug("  Total features extracted:")
+    for feature_type, count in stats["total_features"].items():
+        if count > 0:
+            logger.debug("    %s: %d", feature_type, count)
+    if stats["errors"]:
+        logger.warning("  Errors encountered: %d", len(stats["errors"]))
 
     return stats
