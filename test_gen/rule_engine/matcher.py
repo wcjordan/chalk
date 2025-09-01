@@ -6,6 +6,7 @@ and UINode pair matches the conditions specified in a Rule.
 """
 
 import json
+import logging
 from dataclasses import asdict
 from pathlib import Path
 from typing import Dict, Any, Optional, List, Union
@@ -14,6 +15,8 @@ from feature_extraction.models import UserInteraction, UINode
 
 from .models import Rule, DetectedAction
 from .variable_resolver import extract_variables
+
+logger = logging.getLogger("test_gen.rule_engine")
 
 
 def rule_matches_event_node(rule: Rule, event: UserInteraction, node: UINode) -> bool:
@@ -29,8 +32,16 @@ def rule_matches_event_node(rule: Rule, event: UserInteraction, node: UINode) ->
         True if both the event matches rule.match.event and
         the node matches rule.match.node, False otherwise
     """
+    node_id = getattr(node, 'id', 'unknown')
+    logger.debug(
+        "Evaluating rule '%s' against event.action='%s', node.tag='%s', node.id='%s'",
+        rule.id, event.action, node.tag, node_id
+    )
+    
     # Check if event matches rule.match.event
     if not _event_matches(rule.match.get("event", {}), event):
+        logger.debug("Rule '%s': action mismatch (expected: %s, got: %s)", 
+                    rule.id, rule.match.get("event", {}).get("action"), event.action)
         return False
 
     # Check if node matches rule.match.node
@@ -73,6 +84,8 @@ def _node_matches(match_node: Dict[str, Any], node: UINode) -> bool:
     # Check tag match
     if "tag" in match_node:
         if match_node["tag"] != node.tag:
+            logger.debug("Node tag mismatch (expected: %s, got: %s)", 
+                        match_node["tag"], node.tag)
             return False
 
     # Check attributes match
@@ -81,11 +94,21 @@ def _node_matches(match_node: Dict[str, Any], node: UINode) -> bool:
         if not isinstance(required_attributes, dict):
             return False
 
+        missing_attrs = []
+        mismatched_attrs = []
+        
         for key, expected_value in required_attributes.items():
             if key not in node.attributes:
-                return False
-            if node.attributes[key] != expected_value:
-                return False
+                missing_attrs.append(key)
+            elif node.attributes[key] != expected_value:
+                mismatched_attrs.append(f"{key}={node.attributes[key]} (expected: {expected_value})")
+
+        if missing_attrs:
+            logger.debug("Missing attributes: %s", missing_attrs)
+            return False
+        if mismatched_attrs:
+            logger.debug("Mismatched attributes: %s", mismatched_attrs)
+            return False
 
     return True
 
@@ -109,6 +132,19 @@ def apply_rule_to_event_and_node(
         return None
 
     variables = extract_variables(rule.variables, event, node)
+
+    # Truncate large variable values for logging
+    truncated_vars = {}
+    for k, v in variables.items():
+        if isinstance(v, str) and len(v) > 80:
+            truncated_vars[k] = v[:77] + "..."
+        else:
+            truncated_vars[k] = v
+
+    logger.info(
+        "Rule '%s' matched: action_id='%s', event_index=%d, timestamp=%d, variables=%s",
+        rule.id, rule.action_id, event_index, event.timestamp, truncated_vars
+    )
 
     return DetectedAction(
         action_id=rule.action_id,
@@ -145,6 +181,8 @@ def detect_actions_in_chunk(
     user_interactions = chunk_features.get("interactions", [])
     node_map = chunk_features.get("ui_nodes", {})
 
+    logger.debug("Processing %d interactions in chunk", len(user_interactions))
+
     # Iterate through each user interaction
     for event_index, interaction in enumerate(user_interactions):
         # Find the corresponding UINode using target_id
@@ -163,6 +201,13 @@ def detect_actions_in_chunk(
             # If the rule matched, add to our results
             if detected_action is not None:
                 detected_actions.append(detected_action)
+
+    # Log chunk-level summary
+    unique_rules_matched = set(action.rule_id for action in detected_actions)
+    logger.info(
+        "Chunk processing complete: %d rules evaluated, %d matches found, %d distinct rules matched",
+        len(rules), len(detected_actions), len(unique_rules_matched)
+    )
 
     return detected_actions
 

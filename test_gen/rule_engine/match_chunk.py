@@ -16,7 +16,7 @@ from feature_extraction.models import feature_chunk_from_dict
 from .rules_loader import load_rules
 from .matcher import detect_actions_in_chunk, save_detected_actions
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("test_gen.rule_engine")
 
 
 def process_chunk_file(
@@ -95,6 +95,16 @@ def _parse_arguments() -> argparse.Namespace:
         default="data/action_mappings",
         help="Output directory for detected actions (default: data/action_mappings)",
     )
+    parser.add_argument(
+        "--verbose", "-v",
+        action="store_true",
+        help="Enable verbose logging (INFO level)",
+    )
+    parser.add_argument(
+        "--trace-match",
+        action="store_true",
+        help="Enable trace matching logging (DEBUG level)",
+    )
 
     return parser.parse_args()
 
@@ -102,6 +112,25 @@ def _parse_arguments() -> argparse.Namespace:
 def main():
     """Main entry point for the CLI tool."""
     args = _parse_arguments()
+
+    # Set up logging based on verbosity flags
+    log_level = logging.WARNING  # Default: quiet
+    if args.trace_match:
+        log_level = logging.DEBUG  # Deep tracing
+    elif args.verbose:
+        log_level = logging.INFO   # Verbose mode
+    
+    # Configure the test_gen.rule_engine logger
+    rule_engine_logger = logging.getLogger("test_gen.rule_engine")
+    rule_engine_logger.setLevel(log_level)
+    
+    # Set up console handler if it doesn't exist
+    if not rule_engine_logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        rule_engine_logger.addHandler(handler)
+        rule_engine_logger.propagate = False
 
     # Convert paths to Path objects
     input_path = Path(args.input_path)
