@@ -269,3 +269,16 @@ def feature_chunk_from_dict(data: Dict[str, Any]) -> FeatureChunk:
         features=features,
         metadata=data["metadata"],
     )
+
+
+def create_empty_features_obj() -> Dict[str, Union[List[Any], Dict[str, Any]]]:
+    """Create an empty features object for a FeatureChunk."""
+    return {
+        "dom_mutations": [],
+        "interactions": [],
+        "inter_event_delays": [],
+        "reaction_delays": [],
+        "ui_nodes": {},
+        "mouse_clusters": [],
+        "scroll_patterns": [],
+    }

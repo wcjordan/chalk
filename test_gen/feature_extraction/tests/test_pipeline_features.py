@@ -13,7 +13,7 @@ import pytest
 from rrweb_ingest.models import Chunk
 from feature_extraction.pipeline import extract_features, iterate_feature_extraction
 from feature_extraction.dom_state import init_dom_state
-from feature_extraction.models import UINode
+from feature_extraction.models import UINode, create_empty_features_obj
 from feature_extraction.pipeline import extract_and_save_features
 
 
@@ -973,15 +973,7 @@ def test_extract_and_save_features_integration(tmp_path):
 
         # Check features structure
         features = feature_data["features"]
-        expected_feature_types = [
-            "dom_mutations",
-            "interactions",
-            "inter_event_delays",
-            "reaction_delays",
-            "ui_nodes",
-            "mouse_clusters",
-            "scroll_patterns",
-        ]
+        expected_feature_types = create_empty_features_obj().keys()
         for feature_type in expected_feature_types:
             assert feature_type in features
 

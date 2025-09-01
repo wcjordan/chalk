@@ -12,7 +12,13 @@ from unittest.mock import patch
 
 import pytest
 from feature_extraction.pipeline import extract_and_save_features
-from feature_extraction.models import DomMutation, FeatureChunk, UserInteraction, UINode
+from feature_extraction.models import (
+    DomMutation,
+    FeatureChunk,
+    UserInteraction,
+    UINode,
+    create_empty_features_obj,
+)
 
 
 @pytest.fixture(name="temp_output_dir")
@@ -30,15 +36,7 @@ def fixture_sample_feature_chunk():
         start_time=1000,
         end_time=2000,
         events=[{"type": 3, "timestamp": 1500}],
-        features={
-            "dom_mutations": [],
-            "interactions": [],
-            "inter_event_delays": [],
-            "reaction_delays": [],
-            "ui_nodes": {},
-            "mouse_clusters": [],
-            "scroll_patterns": [],
-        },
+        features=create_empty_features_obj(),
         metadata={"test": True},
     )
 
@@ -114,15 +112,7 @@ def test_extract_and_save_features_saves_multiple_chunks(temp_output_dir):
                 start_time=1000,
                 end_time=2000,
                 events=[],
-                features={
-                    "dom_mutations": [],
-                    "interactions": [],
-                    "inter_event_delays": [],
-                    "reaction_delays": [],
-                    "ui_nodes": {},
-                    "mouse_clusters": [],
-                    "scroll_patterns": [],
-                },
+                features=create_empty_features_obj(),
                 metadata={},
             ),
             {"session_id": "session-A"},
@@ -133,15 +123,7 @@ def test_extract_and_save_features_saves_multiple_chunks(temp_output_dir):
                 start_time=3000,
                 end_time=4000,
                 events=[],
-                features={
-                    "dom_mutations": [],
-                    "interactions": [],
-                    "inter_event_delays": [],
-                    "reaction_delays": [],
-                    "ui_nodes": {},
-                    "mouse_clusters": [],
-                    "scroll_patterns": [],
-                },
+                features=create_empty_features_obj(),
                 metadata={},
             ),
             {"session_id": "session-B"},

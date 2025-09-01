@@ -244,26 +244,9 @@ def test_feature_chunk_to_dict_complete():
     assert features["scroll_patterns"][0] == scroll_pattern.to_dict()
 
 
-def test_feature_chunk_to_dict_empty_features():
+def test_feature_chunk_to_dict_empty_features(empty_feature_chunk):
     """Test FeatureChunk serialization with empty feature lists."""
-    feature_chunk = FeatureChunk(
-        chunk_id="empty-chunk",
-        start_time=0,
-        end_time=1000,
-        events=[],
-        features={
-            "dom_mutations": [],
-            "interactions": [],
-            "inter_event_delays": [],
-            "reaction_delays": [],
-            "ui_nodes": {},
-            "mouse_clusters": [],
-            "scroll_patterns": [],
-        },
-        metadata={},
-    )
-
-    result = feature_chunk.to_dict()
+    result = empty_feature_chunk.to_dict()
 
     # Verify all feature lists are empty but present
     features = result["features"]
