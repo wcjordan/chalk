@@ -257,9 +257,19 @@ def feature_chunk_from_dict(data: Dict[str, Any]) -> FeatureChunk:
                 int(node_id): UINode(**node_data)
                 for node_id, node_data in value.items()
             }
-        else:
+        elif key == "interactions":
             # Other features are lists of objects
             features[key] = [UserInteraction(**item_data) for item_data in value]
+        elif key in ("inter_event_delays", "reaction_delays"):
+            features[key] = [EventDelay(**item_data) for item_data in value]
+        elif key == "dom_mutations":
+            features[key] = [DomMutation(**item_data) for item_data in value]
+        elif key == "mouse_clusters":
+            features[key] = [MouseCluster(**item_data) for item_data in value]
+        elif key == "scroll_patterns":
+            features[key] = [ScrollPattern(**item_data) for item_data in value]
+        else:
+            raise ValueError(f"Unknown feature key: {key}")
 
     return FeatureChunk(
         chunk_id=data["chunk_id"],
