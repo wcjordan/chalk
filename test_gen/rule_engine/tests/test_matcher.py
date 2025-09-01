@@ -17,7 +17,7 @@ from rule_engine.matcher import (
     save_detected_actions,
 )
 from rule_engine.models import Rule
-from feature_extraction.models import UserInteraction, UINode
+from feature_extraction.models import FeatureChunk, UserInteraction, UINode
 
 
 def create_test_rule(
@@ -65,6 +65,37 @@ def create_test_node(
         attributes = {}
 
     return UINode(id=node_id, tag=tag, attributes=attributes, text=text, parent=parent)
+
+
+def create_feature_chunk(
+    ui_nodes: list[UINode] = None, interactions: list[UserInteraction] = None
+) -> FeatureChunk:
+    """
+    Create a FeatureChunk for testing.
+
+    Args:
+        ui_nodes: List of UINode objects
+        interactions: List of UserInteraction objects
+
+    Returns:
+        A FeatureChunk object populated with the provided UI nodes and interactions.
+    """
+    if ui_nodes is None:
+        ui_nodes = []
+    if interactions is None:
+        interactions = []
+
+    return FeatureChunk(
+        chunk_id="test_chunk",
+        start_time=0,
+        end_time=1000,
+        events=[],
+        metadata={},
+        features={
+            "interactions": interactions,
+            "ui_nodes": {node.id: node for node in ui_nodes},
+        },
+    )
 
 
 class TestRuleMatchesEventNode:
@@ -383,12 +414,7 @@ class TestDetectActionsInChunk:
             text="",
         )
 
-        chunk = {
-            "features": {
-                "user_interactions": [interaction],
-                "ui_nodes": [node],
-            }
-        }
+        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
 
         rules = [search_rule]
 
@@ -455,12 +481,10 @@ class TestDetectActionsInChunk:
             text="Search",
         )
 
-        chunk = {
-            "features": {
-                "user_interactions": [search_interaction, click_interaction],
-                "ui_nodes": [search_node, button_node],
-            }
-        }
+        chunk = create_feature_chunk(
+            ui_nodes=[search_node, button_node],
+            interactions=[search_interaction, click_interaction],
+        )
 
         rules = [search_rule, button_rule]
 
@@ -511,12 +535,7 @@ class TestDetectActionsInChunk:
             tag="button",  # Different tag than rule expects
         )
 
-        chunk = {
-            "features": {
-                "user_interactions": [interaction],
-                "ui_nodes": [node],
-            }
-        }
+        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
 
         rules = [rule]
 
@@ -546,12 +565,7 @@ class TestDetectActionsInChunk:
             tag="button",
         )
 
-        chunk = {
-            "features": {
-                "user_interactions": [interaction],
-                "ui_nodes": [node],
-            }
-        }
+        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
 
         rules = [rule]
 
@@ -571,12 +585,7 @@ class TestDetectActionsInChunk:
         )
 
         # Empty chunk
-        chunk = {
-            "features": {
-                "user_interactions": [],
-                "ui_nodes": [],
-            }
-        }
+        chunk = create_feature_chunk()
 
         rules = [rule]
 
@@ -592,34 +601,9 @@ class TestDetectActionsInChunk:
         interaction = create_test_event(action="click", target_id=123)
         node = create_test_node(node_id=123, tag="button")
 
-        chunk = {
-            "features": {
-                "user_interactions": [interaction],
-                "ui_nodes": [node],
-            }
-        }
+        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
 
         rules = []  # Empty rules list
-
-        # Execute the function
-        result = detect_actions_in_chunk(chunk, rules)
-
-        # Verify empty result
-        assert len(result) == 0
-
-    def test_malformed_chunk_graceful_handling(self):
-        """Test that malformed chunk structure is handled gracefully."""
-        rule = create_test_rule(
-            rule_id="test_rule",
-            match_event={"action": "click"},
-            match_node={"tag": "button"},
-            action_id="click_action",
-        )
-
-        # Malformed chunk missing features
-        chunk = {}
-
-        rules = [rule]
 
         # Execute the function
         result = detect_actions_in_chunk(chunk, rules)
@@ -637,11 +621,9 @@ class TestDetectActionsInChunk:
         )
 
         # Chunk with features but missing user_interactions
-        chunk = {
-            "features": {
-                "ui_nodes": [create_test_node(node_id=123, tag="button")],
-            }
-        }
+        chunk = create_feature_chunk(
+            ui_nodes=[create_test_node(node_id=123, tag="button")],
+        )
 
         rules = [rule]
 
@@ -761,12 +743,7 @@ class TestSaveDetectedActions:
                 node_id=123, tag="input", attributes={"type": "search", "name": "query"}
             )
 
-            chunk = {
-                "features": {
-                    "user_interactions": [interaction],
-                    "ui_nodes": [node],
-                }
-            }
+            chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
 
             # Detect actions
             detected_actions = detect_actions_in_chunk(chunk, [rule])

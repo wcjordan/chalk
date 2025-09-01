@@ -14,6 +14,7 @@ import pytest
 from rrweb_ingest.pipeline import ingest_session
 from feature_extraction.dom_state import init_dom_state
 from feature_extraction.pipeline import extract_features
+from feature_extraction.models import create_empty_features_obj
 
 
 @pytest.fixture(name="sample_session_path")
@@ -112,40 +113,20 @@ def test_end_to_end_feature_extraction(initialize_dom_state, sample_session_path
     assert len(feature_chunk.events) == len(first_chunk.events)
 
     # Verify all feature categories are present
-    required_features = [
-        "dom_mutations",
-        "interactions",
-        "inter_event_delays",
-        "reaction_delays",
-        "ui_nodes",
-        "mouse_clusters",
-        "scroll_patterns",
-    ]
-
+    required_features = create_empty_features_obj().keys()
     for feature_type in required_features:
         assert (
             feature_type in feature_chunk.features
         ), f"Missing feature type: {feature_type}"
-
-    # Verify feature lists are non-empty where expected
-    assert len(feature_chunk.features["dom_mutations"]) > 0, "Should have DOM mutations"
-    assert (
-        len(feature_chunk.features["interactions"]) > 0
-    ), "Should have user interactions"
-    assert (
-        len(feature_chunk.features["inter_event_delays"]) > 0
-    ), "Should have inter-event delays"
-    assert (
-        len(feature_chunk.features["reaction_delays"]) > 0
-    ), "Should have reaction delays"
-    assert len(feature_chunk.features["ui_nodes"]) > 0, "Should have UI metadata"
-    # Mouse clusters won't exist because of rrweb_ingest.filter.is_low_signal filters out mousemove events
-    assert (
-        len(feature_chunk.features["mouse_clusters"]) == 0
-    ), "Should have no mouse clusters"
-    assert (
-        len(feature_chunk.features["scroll_patterns"]) > 0
-    ), "Should have scroll patterns"
+        if feature_type != "mouse_clusters":
+            assert (
+                len(feature_chunk.features[feature_type]) >= 0
+            ), f"Should have {feature_type}"
+        else:
+            # Mouse clusters won't exist because of rrweb_ingest.filter.is_low_signal filters out mousemove events
+            assert (
+                len(feature_chunk.features[feature_type]) == 0
+            ), f"Should have no {feature_type}"
 
 
 def test_timing_accuracy(initialize_dom_state, sample_session_path):

@@ -13,6 +13,7 @@ from feature_extraction.models import (
     MouseCluster,
     ScrollPattern,
     FeatureChunk,
+    create_empty_features_obj,
 )
 
 
@@ -118,14 +119,7 @@ def test_feature_chunk_creation():
         start_time=10000,
         end_time=15000,
         events=[{"type": 2, "timestamp": 10000}],
-        features={
-            "dom_mutations": [],
-            "interactions": [],
-            "delays": [],
-            "ui_nodes": {},
-            "mouse_clusters": [],
-            "scroll_patterns": [],
-        },
+        features=create_empty_features_obj(),
         metadata={"num_events": 1, "duration_ms": 5000},
     )
 
@@ -137,34 +131,21 @@ def test_feature_chunk_creation():
     assert chunk.metadata["num_events"] == 1
 
 
-def test_feature_chunk_empty_features():
+def test_feature_chunk_empty_features(empty_feature_chunk):
     """Test that FeatureChunk can be instantiated with empty feature lists."""
-    chunk = FeatureChunk(
-        chunk_id="test-chunk",
-        start_time=0,
-        end_time=1000,
-        events=[],
-        features={
-            "dom_mutations": [],
-            "interactions": [],
-            "delays": [],
-            "ui_nodes": {},
-            "mouse_clusters": [],
-            "scroll_patterns": [],
-        },
-        metadata={},
-    )
-
+    features = empty_feature_chunk.features
     # Verify all feature lists are present and empty
-    assert isinstance(chunk.features["dom_mutations"], list)
-    assert len(chunk.features["dom_mutations"]) == 0
-    assert isinstance(chunk.features["interactions"], list)
-    assert len(chunk.features["interactions"]) == 0
-    assert isinstance(chunk.features["delays"], list)
-    assert len(chunk.features["delays"]) == 0
-    assert isinstance(chunk.features["ui_nodes"], dict)
-    assert len(chunk.features["ui_nodes"]) == 0
-    assert isinstance(chunk.features["mouse_clusters"], list)
-    assert len(chunk.features["mouse_clusters"]) == 0
-    assert isinstance(chunk.features["scroll_patterns"], list)
-    assert len(chunk.features["scroll_patterns"]) == 0
+    assert isinstance(features["dom_mutations"], list)
+    assert len(features["dom_mutations"]) == 0
+    assert isinstance(features["interactions"], list)
+    assert len(features["interactions"]) == 0
+    assert isinstance(features["inter_event_delays"], list)
+    assert len(features["inter_event_delays"]) == 0
+    assert isinstance(features["reaction_delays"], list)
+    assert len(features["reaction_delays"]) == 0
+    assert isinstance(features["ui_nodes"], dict)
+    assert len(features["ui_nodes"]) == 0
+    assert isinstance(features["mouse_clusters"], list)
+    assert len(features["mouse_clusters"]) == 0
+    assert isinstance(features["scroll_patterns"], list)
+    assert len(features["scroll_patterns"]) == 0

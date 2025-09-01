@@ -8,11 +8,13 @@ extractors and proper handling of DOM state.
 
 from collections import defaultdict
 
+import json
 import pytest
 from rrweb_ingest.models import Chunk
 from feature_extraction.pipeline import extract_features, iterate_feature_extraction
 from feature_extraction.dom_state import init_dom_state
-from feature_extraction.models import UINode
+from feature_extraction.models import UINode, create_empty_features_obj
+from feature_extraction.pipeline import extract_and_save_features
 
 
 @pytest.fixture(name="sample_chunk_with_interactions")
@@ -921,3 +923,61 @@ def test_full_pipeline_integration(snapshot):
         assert session_result == snapshot(name=f"session_{session_id}")
 
     assert sessions_processed == snapshot(name="sessions_processed")
+
+
+def test_extract_and_save_features_integration(tmp_path):
+    """
+    Integration test for extract_and_save_features function.
+
+    Tests the complete flow from session files to saved feature JSON files,
+    verifying file creation, content accuracy, and statistics.
+    """
+
+    # Use a small subset of test sessions
+    test_session_dir = "feature_extraction/tests/test_sessions"
+    output_dir = tmp_path / "extracted_features"
+
+    # Run the extraction
+    stats = extract_and_save_features(
+        session_dir=test_session_dir,
+        output_dir=str(output_dir),
+        max_sessions=2,  # Limit for faster testing
+    )
+
+    # Verify statistics make sense
+    assert stats["chunks_saved"] >= 0
+    assert stats["sessions_processed"] >= 0
+    assert isinstance(stats["total_features"], dict)
+    assert isinstance(stats["errors"], list)
+
+    # Verify output directory was created
+    assert output_dir.exists()
+
+    # Verify JSON files were created
+    json_files = list(output_dir.glob("*.json"))
+    assert len(json_files) == stats["chunks_saved"]
+
+    # Verify at least one file has expected structure
+    if json_files:
+        with open(json_files[0], "r", encoding="utf-8") as f:
+            feature_data = json.load(f)
+
+        # Check required top-level fields
+        assert "chunk_id" in feature_data
+        assert "start_time" in feature_data
+        assert "end_time" in feature_data
+        assert "events" in feature_data
+        assert "features" in feature_data
+        assert "metadata" in feature_data
+        assert "processing_metadata" in feature_data
+
+        # Check features structure
+        features = feature_data["features"]
+        expected_feature_types = create_empty_features_obj().keys()
+        for feature_type in expected_feature_types:
+            assert feature_type in features
+
+        # Check processing metadata
+        proc_meta = feature_data["processing_metadata"]
+        assert "feature_extraction_version" in proc_meta
+        assert proc_meta["feature_extraction_version"] == "1.0"

@@ -20,7 +20,9 @@ This enables rule-based and LLM-driven behavior inference by providing structure
 semantic representations of user interactions and system responses.
 """
 
+import json
 import logging
+from pathlib import Path
 from typing import Any, Dict, Generator, Tuple
 
 from rrweb_ingest.models import Chunk
@@ -184,3 +186,136 @@ def iterate_feature_extraction(
             chunk_metadata["dom_state_nodes_final"] = len(dom)
 
             yield chunk_data, chunk_metadata
+
+
+def _extract_and_save_session_features(
+    sessions_seen, stats, output_path, chunk_data, chunk_metadata
+):
+    """
+    Extract features from a single session and save to disk.
+
+    Args:
+        sessions_seen: Set of session IDs that have been processed
+        stats: Dictionary to update processing statistics
+        output_path: Path to the output directory
+        chunk_data: The FeatureChunk containing the extracted features
+        chunk_metadata: Metadata associated with the chunk
+    """
+    session_id = chunk_metadata["session_id"]
+    chunk_id = chunk_data.chunk_id
+
+    # Track unique sessions
+    sessions_seen.add(session_id)
+
+    # Generate output filename: {session_id}_{chunk_id}.json
+    output_filename = f"{session_id}_{chunk_id}.json"
+    output_file_path = output_path / output_filename
+
+    # Convert FeatureChunk to dictionary for JSON serialization
+    chunk_dict = chunk_data.to_dict()
+
+    # Add processing metadata
+    chunk_dict["processing_metadata"] = {
+        "feature_extraction_timestamp": chunk_metadata.get("timestamp"),
+        "dom_initialized_from_snapshot": chunk_metadata.get(
+            "dom_initialized_from_snapshot", False
+        ),
+        "dom_state_nodes_final": chunk_metadata.get("dom_state_nodes_final", 0),
+        "feature_extraction_version": "1.0",
+    }
+
+    # Save to JSON file with pretty formatting
+    with open(output_file_path, "w", encoding="utf-8") as f:
+        json.dump(chunk_dict, f, indent=2, ensure_ascii=False)
+
+    # Update statistics
+    stats["chunks_saved"] += 1
+    for feature_type, feature_list in chunk_data.features.items():
+        if feature_type in stats["total_features"]:
+            if isinstance(feature_list, dict):  # ui_nodes case
+                stats["total_features"][feature_type] += len(feature_list)
+            elif isinstance(feature_list, list):  # all other features
+                stats["total_features"][feature_type] += len(feature_list)
+
+    logger.debug("  Saved: %s", output_filename)
+
+
+def extract_and_save_features(
+    session_dir: str,
+    output_dir: str,
+    max_sessions: int = None,
+) -> Dict[str, Any]:
+    """
+    Extract features from all sessions and save them as JSON files to output directory.
+
+    This function processes rrweb session files, extracts features using the complete
+    feature extraction pipeline, and saves each FeatureChunk as a JSON file. The output
+    files can then be loaded by the rule engine for action detection.
+
+    Args:
+        session_dir: Directory containing rrweb JSON session files
+        output_dir: Directory where extracted features will be saved as JSON files
+        max_sessions: Optional limit on number of sessions to process
+
+    Returns:
+        Dictionary containing processing statistics:
+        - sessions_processed: Number of session files processed
+        - chunks_saved: Total number of feature chunks saved
+        - total_features: Aggregate counts of each feature type
+        - errors: List of any errors encountered during processing
+
+    File Output Format:
+        Each FeatureChunk is saved as: {output_dir}/{session_id}_{chunk_id}.json
+        The JSON structure matches the FeatureChunk.to_dict() format with all
+        nested feature objects serialized as dictionaries.
+    """
+    output_path = Path(output_dir)
+    session_path = Path(session_dir)
+
+    # Ensure output directory exists
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    # Initialize statistics tracking
+    stats = {
+        "sessions_processed": 0,
+        "chunks_saved": 0,
+        "total_features": {
+            "dom_mutations": 0,
+            "interactions": 0,
+            "inter_event_delays": 0,
+            "reaction_delays": 0,
+            "ui_nodes": 0,
+            "mouse_clusters": 0,
+            "scroll_patterns": 0,
+        },
+        "errors": [],
+    }
+
+    # Track unique sessions seen
+    sessions_seen = set()
+
+    logger.debug("Processing sessions from: %s", session_path)
+    logger.debug("Saving features to: %s", output_path)
+
+    # Process each session using the existing feature extraction generator
+    chunk_generator = iterate_feature_extraction(session_dir, max_sessions=max_sessions)
+
+    for chunk_data, chunk_metadata in chunk_generator:
+        _extract_and_save_session_features(
+            sessions_seen, stats, output_path, chunk_data, chunk_metadata
+        )
+
+    # Update session count from tracked sessions
+    stats["sessions_processed"] = len(sessions_seen)
+
+    logger.debug("\nProcessing Summary:")
+    logger.debug("  Sessions processed: %d", stats["sessions_processed"])
+    logger.debug("  Chunks saved: %d", stats["chunks_saved"])
+    logger.debug("  Total features extracted:")
+    for feature_type, count in stats["total_features"].items():
+        if count > 0:
+            logger.debug("    %s: %d", feature_type, count)
+    if stats["errors"]:
+        logger.warning("  Errors encountered: %d", len(stats["errors"]))
+
+    return stats

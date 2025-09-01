@@ -141,11 +141,9 @@ def detect_actions_in_chunk(
     detected_actions = []
 
     # Get user interactions and ui nodes from the chunk
-    user_interactions = chunk.get("features", {}).get("user_interactions", [])
-    ui_nodes = chunk.get("features", {}).get("ui_nodes", [])
-
-    # Create a mapping from node ID to UINode for quick lookup
-    node_map = {node.id: node for node in ui_nodes}
+    chunk_features = chunk.features
+    user_interactions = chunk_features.get("interactions", [])
+    node_map = chunk_features.get("ui_nodes", {})
 
     # Iterate through each user interaction
     for event_index, interaction in enumerate(user_interactions):
