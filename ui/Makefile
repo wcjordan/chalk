@@ -46,7 +46,7 @@ test:
 
 .PHONY: test-jest
 test-jest:
-	cd js; JEST_JUNIT_CLASSNAME="ui_unit_tests.{classname} {title}" yarn jest $(TEST_ARGS)
+	cd js; JEST_JUNIT_CLASSNAME="ui_unit_tests.{classname} {title}" NODE_OPTIONS="$$NODE_OPTIONS --experimental-vm-modules" yarn jest $(TEST_ARGS)
 
 .PHONY: test-storybook-inner
 test-storybook-inner:
