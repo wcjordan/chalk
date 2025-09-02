@@ -1,8 +1,8 @@
-Django==5.2
-djangorestframework==3.16.0
-django-simple-history==3.8.0
+Django==5.2.5
+djangorestframework==3.16.1
+django-simple-history==3.10.1
 google-auth-oauthlib==1.2.2
-google-cloud-storage==3.1.0
+google-cloud-storage==3.3.1
 gunicorn==23.0.0
 psycopg2==2.9.10
-requests==2.32.4
+requests==2.32.5
