@@ -110,11 +110,8 @@ def _parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def main():
-    """Main entry point for the CLI tool."""
-    args = _parse_arguments()
-
-    # Set up logging based on verbosity flags
+def _setup_logger(args):
+    """Set up logging for the rule engine based on the verbosity flags."""
     log_level = logging.WARNING  # Default: quiet
     if args.trace_match:
         log_level = logging.DEBUG  # Deep tracing
@@ -124,6 +121,12 @@ def main():
     # Configure the test_gen.rule_engine logger
     rule_engine_logger = logging.getLogger("test_gen.rule_engine")
     rule_engine_logger.setLevel(log_level)
+
+
+def main():
+    """Main entry point for the CLI tool."""
+    args = _parse_arguments()
+    _setup_logger(args)
 
     # Convert paths to Path objects
     input_path = Path(args.input_path)
