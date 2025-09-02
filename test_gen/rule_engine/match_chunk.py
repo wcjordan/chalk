@@ -125,14 +125,6 @@ def main():
     rule_engine_logger = logging.getLogger("test_gen.rule_engine")
     rule_engine_logger.setLevel(log_level)
 
-    # Set up console handler if it doesn't exist
-    if not rule_engine_logger.handlers:
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter("%(levelname)s - %(message)s")
-        handler.setFormatter(formatter)
-        rule_engine_logger.addHandler(handler)
-        rule_engine_logger.propagate = False
-
     # Convert paths to Path objects
     input_path = Path(args.input_path)
     rules_dir = Path(args.rules_dir)

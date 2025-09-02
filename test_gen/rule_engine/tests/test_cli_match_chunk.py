@@ -7,7 +7,6 @@ including single file processing, directory processing, and error handling.
 
 import json
 import tempfile
-import logging
 from pathlib import Path
 from unittest.mock import patch
 
