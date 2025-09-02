@@ -96,7 +96,8 @@ def _parse_arguments() -> argparse.Namespace:
         help="Output directory for detected actions (default: data/action_mappings)",
     )
     parser.add_argument(
-        "--verbose", "-v",
+        "--verbose",
+        "-v",
         action="store_true",
         help="Enable verbose logging (INFO level)",
     )
@@ -118,16 +119,16 @@ def main():
     if args.trace_match:
         log_level = logging.DEBUG  # Deep tracing
     elif args.verbose:
-        log_level = logging.INFO   # Verbose mode
-    
+        log_level = logging.INFO  # Verbose mode
+
     # Configure the test_gen.rule_engine logger
     rule_engine_logger = logging.getLogger("test_gen.rule_engine")
     rule_engine_logger.setLevel(log_level)
-    
+
     # Set up console handler if it doesn't exist
     if not rule_engine_logger.handlers:
         handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(levelname)s - %(message)s')
+        formatter = logging.Formatter("%(levelname)s - %(message)s")
         handler.setFormatter(formatter)
         rule_engine_logger.addHandler(handler)
         rule_engine_logger.propagate = False

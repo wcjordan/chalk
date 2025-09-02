@@ -32,16 +32,23 @@ def rule_matches_event_node(rule: Rule, event: UserInteraction, node: UINode) ->
         True if both the event matches rule.match.event and
         the node matches rule.match.node, False otherwise
     """
-    node_id = getattr(node, 'id', 'unknown')
+    node_id = getattr(node, "id", "unknown")
     logger.debug(
         "Evaluating rule '%s' against event.action='%s', node.tag='%s', node.id='%s'",
-        rule.id, event.action, node.tag, node_id
+        rule.id,
+        event.action,
+        node.tag,
+        node_id,
     )
-    
+
     # Check if event matches rule.match.event
     if not _event_matches(rule.match.get("event", {}), event):
-        logger.debug("Rule '%s': action mismatch (expected: %s, got: %s)", 
-                    rule.id, rule.match.get("event", {}).get("action"), event.action)
+        logger.debug(
+            "Rule '%s': action mismatch (expected: %s, got: %s)",
+            rule.id,
+            rule.match.get("event", {}).get("action"),
+            event.action,
+        )
         return False
 
     # Check if node matches rule.match.node
@@ -84,8 +91,9 @@ def _node_matches(match_node: Dict[str, Any], node: UINode) -> bool:
     # Check tag match
     if "tag" in match_node:
         if match_node["tag"] != node.tag:
-            logger.debug("Node tag mismatch (expected: %s, got: %s)", 
-                        match_node["tag"], node.tag)
+            logger.debug(
+                "Node tag mismatch (expected: %s, got: %s)", match_node["tag"], node.tag
+            )
             return False
 
     # Check attributes match
@@ -96,12 +104,14 @@ def _node_matches(match_node: Dict[str, Any], node: UINode) -> bool:
 
         missing_attrs = []
         mismatched_attrs = []
-        
+
         for key, expected_value in required_attributes.items():
             if key not in node.attributes:
                 missing_attrs.append(key)
             elif node.attributes[key] != expected_value:
-                mismatched_attrs.append(f"{key}={node.attributes[key]} (expected: {expected_value})")
+                mismatched_attrs.append(
+                    f"{key}={node.attributes[key]} (expected: {expected_value})"
+                )
 
         if missing_attrs:
             logger.debug("Missing attributes: %s", missing_attrs)
@@ -143,7 +153,11 @@ def apply_rule_to_event_and_node(
 
     logger.info(
         "Rule '%s' matched: action_id='%s', event_index=%d, timestamp=%d, variables=%s",
-        rule.id, rule.action_id, event_index, event.timestamp, truncated_vars
+        rule.id,
+        rule.action_id,
+        event_index,
+        event.timestamp,
+        truncated_vars,
     )
 
     return DetectedAction(
@@ -206,7 +220,9 @@ def detect_actions_in_chunk(
     unique_rules_matched = set(action.rule_id for action in detected_actions)
     logger.info(
         "Chunk processing complete: %d rules evaluated, %d matches found, %d distinct rules matched",
-        len(rules), len(detected_actions), len(unique_rules_matched)
+        len(rules),
+        len(detected_actions),
+        len(unique_rules_matched),
     )
 
     return detected_actions

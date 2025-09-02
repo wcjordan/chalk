@@ -57,12 +57,15 @@ def extract_variables(
             resolved_value = _resolve_query_expression(path, node, all_nodes)
         else:
             resolved_value = _resolve_path(path, event, node)
-        
+
         # Log extraction failures
         if resolved_value is None:
-            logger.debug("Variable extraction failed for '%s': path '%s' not found", 
-                        variable_name, path)
-        
+            logger.debug(
+                "Variable extraction failed for '%s': path '%s' not found",
+                variable_name,
+                path,
+            )
+
         result[variable_name] = resolved_value
 
     return result
