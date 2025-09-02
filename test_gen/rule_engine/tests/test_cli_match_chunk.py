@@ -7,7 +7,6 @@ including single file processing, directory processing, and error handling.
 
 import json
 import tempfile
-import logging
 from pathlib import Path
 from unittest.mock import patch
 
@@ -168,11 +167,10 @@ def test_directory_processing(caplog, sample_rule, create_sample_chunk, temp_pat
         str(rules_dir),
         "--output",
         str(output_dir),
+        "--verbose",
     ]
 
-    with patch("sys.argv", ["match_chunk.py"] + test_args), caplog.at_level(
-        logging.INFO
-    ):
+    with patch("sys.argv", ["match_chunk.py"] + test_args):
         main()
 
     # Check output files
@@ -255,11 +253,10 @@ def test_empty_directory(caplog, sample_rule, temp_paths):
         str(rules_dir),
         "--output",
         str(output_dir),
+        "--verbose",
     ]
 
-    with patch("sys.argv", ["match_chunk.py"] + test_args), caplog.at_level(
-        logging.INFO
-    ):
+    with patch("sys.argv", ["match_chunk.py"] + test_args):
         main()
 
     # Should complete without error and report 0 actions
