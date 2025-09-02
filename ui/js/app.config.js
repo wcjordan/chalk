@@ -25,7 +25,8 @@ export default {
   },
   assetBundlePatterns: ['**/*'],
   ios: {
-    supportsTablet: true,
+    "bundleIdentifier": "com.flipperkid.chalk",
+    "supportsTablet": true,
   },
   web: {
     favicon: './assets/favicon.png',

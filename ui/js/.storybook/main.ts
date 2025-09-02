@@ -1,22 +1,27 @@
-import type { StorybookConfig } from '@storybook/react-webpack5';
+import type { StorybookConfig } from '@storybook/react-native-web-vite';
+
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+
   addons: [
     '@storybook/addon-onboarding',
     '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
-    {
-      name: '@storybook/addon-react-native-web',
-    },
-    '@storybook/addon-webpack5-compiler-babel',
+    '@storybook/addon-docs'
   ],
   framework: {
-    name: '@storybook/react-webpack5',
-    options: {},
-  },
-  docs: {
-    autodocs: true,
-  },
+    name: '@storybook/react-native-web-vite',
+    options: {
+      pluginReactOptions: {
+        babel: {
+          plugins: [
+            "react-native-paper/babel",
+            "@babel/plugin-proposal-export-namespace-from",
+            "react-native-worklets/plugin",
+          ],
+        },
+      },
+    }
+  }
 };
+
 export default config;
