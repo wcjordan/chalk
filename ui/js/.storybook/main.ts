@@ -4,19 +4,21 @@ const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
 
   addons: [
-    '@storybook/addon-onboarding',
     '@storybook/addon-links',
     '@storybook/addon-docs'
   ],
+  core: {
+    builder: '@storybook/builder-vite'
+  },
   framework: {
     name: '@storybook/react-native-web-vite',
     options: {
       pluginReactOptions: {
         babel: {
+          presets: ['module:babel-preset-expo'],
           plugins: [
-            "react-native-paper/babel",
             "@babel/plugin-proposal-export-namespace-from",
-            "react-native-worklets/plugin",
+            "react-native-reanimated/plugin",
           ],
         },
       },
