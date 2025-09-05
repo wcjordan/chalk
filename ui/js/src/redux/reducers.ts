@@ -7,18 +7,19 @@ import {
   getCsrfToken,
   recordSessionData,
 } from './fetchApi';
-import labelsApiSlice, { listLabels } from './labelsApiSlice';
+import { labelsApiSlice, listLabels } from './labelsApiSlice';
 import notificationsSlice from './notificationsSlice';
 import shortcutSlice from './shortcutSlice';
 import { RootState } from './store';
-import todosApiSlice, {
+import {
   createTodo,
   listTodos as listTodosApi,
   moveTodo as moveTodoApi,
+  todosApiSlice,
   updateTodo as updateTodoApi,
 } from './todosApiSlice';
 import { MoveTodoOperation, TodoPatch } from './types';
-import workspaceSlice from './workspaceSlice';
+import { workspaceSlice } from './workspaceSlice';
 
 type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
@@ -170,7 +171,7 @@ export const toggleShowCompletedTodos =
 export const toggleShowLabelFilter =
   workspaceSlice.actions.toggleShowLabelFilter;
 export { createTodo, listLabels };
-export default {
+export const rootReducerConfig = {
   labelsApi: labelsApiSlice.reducer,
   notifications: notificationsSlice.reducer,
   shortcuts: shortcutSlice.reducer,

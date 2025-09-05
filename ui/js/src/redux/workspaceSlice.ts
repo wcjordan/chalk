@@ -73,7 +73,7 @@ const initialState: WorkspaceState = {
   showCompletedTodos: false,
   showLabelFilter: false,
 };
-export default createSlice({
+export const workspaceSlice = createSlice({
   name: 'workspace',
   initialState,
   reducers: {

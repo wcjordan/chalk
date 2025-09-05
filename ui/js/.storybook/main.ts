@@ -13,13 +13,10 @@ const config: StorybookConfig = {
   framework: {
     name: '@storybook/react-native-web-vite',
     options: {
+      modulesToTranspile: ['react-native-reanimated', 'react-native-draggable-flatlist'],
       pluginReactOptions: {
         babel: {
           presets: ['module:babel-preset-expo'],
-          plugins: [
-            "@babel/plugin-proposal-export-namespace-from",
-            "react-native-reanimated/plugin",
-          ],
         },
       },
     }

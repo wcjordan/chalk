@@ -74,7 +74,7 @@ test-storybook:
 
 .PHONY: storybook
 storybook:
-	make run-test-container TEST_CMD="yarn run storybook" TEST_ARGS="" \
+	make run-test-container TEST_CMD=" BABEL_SHOW_CONFIG_FOR=.storybook/main.js yarn run storybook" TEST_ARGS="" \
 		DOCKER_ARGS="-w /workspace/js -p 127.0.0.1:9009:9009 -a stdin -a stdout -i"
 
 # Update snapshot tests

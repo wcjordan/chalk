@@ -1,6 +1,6 @@
 import '../__mocks__/matchMediaMock';
 import fetchMock from 'fetch-mock-jest';
-import labelsApiSlice, { getLabelsApi, listLabels } from './labelsApiSlice';
+import { getLabelsApi, labelsApiSlice, listLabels } from './labelsApiSlice';
 import { setupStore } from './store';
 
 describe('listLabels', function () {

@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import rootReducerConfig from './reducers';
+import { rootReducerConfig } from './reducers';
 
 const rootReducer = combineReducers(rootReducerConfig);
 export function setupStore(preloadedState?: Partial<RootState>) {
