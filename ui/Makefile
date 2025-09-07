@@ -22,7 +22,6 @@ run-test-container:
 		-v $(CURDIR)/js/.eslintrc:/workspace/js/.eslintrc \
 		-v $(CURDIR)/js/.storybook:/workspace/js/.storybook \
 		-v $(CURDIR)/js/assets:/workspace/js/assets \
-		-v $(CURDIR)/js/babel.config.js:/jworkspace/s/babel.config.js \
 		-v $(CURDIR)/js/jest.config.js:/workspace/js/jest.config.js \
 		-v $(CURDIR)/js/src:/workspace/js/src \
 		-v $(CURDIR)/js/tsconfig.json:/workspace/js/tsconfig.json \
@@ -74,7 +73,7 @@ test-storybook:
 
 .PHONY: storybook
 storybook:
-	make run-test-container TEST_CMD=" BABEL_SHOW_CONFIG_FOR=.storybook/main.js yarn run storybook" TEST_ARGS="" \
+	make run-test-container TEST_CMD="yarn run storybook --debug" TEST_ARGS="" \
 		DOCKER_ARGS="-w /workspace/js -p 127.0.0.1:9009:9009 -a stdin -a stdout -i"
 
 # Update snapshot tests

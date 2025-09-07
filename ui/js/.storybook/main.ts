@@ -1,26 +1,43 @@
 import type { StorybookConfig } from '@storybook/react-native-web-vite';
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
 
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-docs'
   ],
-  core: {
-    builder: '@storybook/builder-vite'
-  },
   framework: {
     name: '@storybook/react-native-web-vite',
     options: {
-      modulesToTranspile: ['react-native-reanimated', 'react-native-draggable-flatlist'],
       pluginReactOptions: {
         babel: {
-          presets: ['module:babel-preset-expo'],
+          plugins: [
+            "@babel/plugin-proposal-export-namespace-from",
+            ["react-native-reanimated/plugin", { disableSourceMaps: true }],
+          ],
         },
       },
     }
-  }
+  },
+  async viteFinal(config) {
+    return {
+      ...config,
+      optimizeDeps: {
+        force: true,
+        exclude: [
+          ...(config.optimizeDeps?.exclude ?? []),
+          'react-native-draggable-flatlist',
+        ],
+        include: [
+          ...(config.optimizeDeps?.include ?? []),
+          'react-native-draggable-flatlist > react-native-reanimated',
+          'hoist-non-react-statics',
+          'invariant',
+        ]
+      },
+    };
+  },
 };
 
 export default config;
