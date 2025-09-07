@@ -14,7 +14,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "typeRoots": ["node_modules/@types", "src/types"],
