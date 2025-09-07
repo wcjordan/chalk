@@ -36,6 +36,16 @@ const config: StorybookConfig = {
           'invariant',
         ]
       },
+      resolve: {
+        ...(config.resolve ?? {}),
+        alias: {
+          ...(config.resolve?.alias ?? {}),
+          // react-native-paper requires all 3 of these in a try catch.
+          // Aliasing them all to the one used suppressed some warnings in Storybook
+          '@react-native-vector-icons/material-design-icons': '@expo/vector-icons/MaterialCommunityIcons',
+          'react-native-vector-icons/MaterialCommunityIcons': '@expo/vector-icons/MaterialCommunityIcons',
+        },
+      },
     };
   },
 };
