@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react';
-import { PaperProvider } from 'react-native-paper';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import MaterialCommunityIcon from '../__mocks__/MaterialCommunityIcon';
 
 const preview: Preview = {
@@ -18,6 +18,7 @@ const preview: Preview = {
         settings={{
           icon: (props) => <MaterialCommunityIcon {...props} />,
         }}
+        theme={DefaultTheme}
       >
         <Story />
       </PaperProvider>
