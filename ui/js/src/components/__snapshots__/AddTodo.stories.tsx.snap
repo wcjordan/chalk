@@ -1,31 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Add Todo DefaultAddTodo smoke-test 1`] = `
-<div class="css-g5y9jx r-1kly57o r-13qz1uu">
-  <div class="css-g5y9jx"
-       style="background-color: rgb(231, 224, 236); border-top-left-radius: 4px; border-top-right-radius: 4px;"
-  >
-    <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-184en5c r-109y4c4"
-         data-testid="text-input-underline"
-         style="background-color: rgb(73, 69, 79); transform: scaleY(0.5);"
-    >
-    </div>
-    <div class="css-g5y9jx r-16y2uox r-1mdbw0j r-wk8lta"
-         style="min-height: 56px;"
-    >
-      <textarea placeholder="Add a new todo..."
-                autocapitalize="sentences"
-                autocomplete="on"
-                autocorrect="on"
-                dir="auto"
-                rows="3"
-                spellcheck="true"
-                virtualkeyboardpolicy="auto"
-                class="css-11aywtz r-6taxm2 r-16y2uox r-crgep1 r-1x2decy r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb"
-                data-testid="add-todo-input"
-                style="--placeholderTextColor: rgba(73, 69, 79, 1); letter-spacing: 0.15px; line-height: 19.2px; font-size: 16px; color: rgb(28, 27, 31); vertical-align: top; text-align: left; min-width: 65px; outline: none;"
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-1kly57o r-13qz1uu">
+      <div class="css-g5y9jx"
+           style="background-color: rgb(231, 224, 236); border-top-left-radius: 4px; border-top-right-radius: 4px;"
       >
-      </textarea>
+        <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-184en5c r-109y4c4"
+             data-testid="text-input-underline"
+             style="background-color: rgb(73, 69, 79); transform: scaleY(0.5);"
+        >
+        </div>
+        <div class="css-g5y9jx r-16y2uox r-1mdbw0j r-wk8lta"
+             style="min-height: 56px;"
+        >
+          <textarea placeholder="Add a new todo..."
+                    autocapitalize="sentences"
+                    autocomplete="on"
+                    autocorrect="on"
+                    dir="auto"
+                    rows="3"
+                    spellcheck="true"
+                    virtualkeyboardpolicy="auto"
+                    class="css-11aywtz r-6taxm2 r-16y2uox r-crgep1 r-1x2decy r-xd6kpl r-1m04atk r-1pyaxff r-tskmnb"
+                    data-testid="add-todo-input"
+                    style="--placeholderTextColor: rgba(73, 69, 79, 1); letter-spacing: 0.15px; line-height: 19.2px; font-size: 16px; color: rgb(28, 27, 31); vertical-align: top; text-align: left; min-width: 65px; outline: none;"
+          >
+          </textarea>
+        </div>
+      </div>
     </div>
   </div>
 </div>
