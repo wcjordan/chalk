@@ -2270,9 +2270,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-google-signin/google-signin@npm:13.2.0":
-  version: 13.2.0
-  resolution: "@react-native-google-signin/google-signin@npm:13.2.0"
+"@react-native-google-signin/google-signin@npm:^13.3.1":
+  version: 13.3.1
+  resolution: "@react-native-google-signin/google-signin@npm:13.3.1"
   peerDependencies:
     expo: ">=50.0.0"
     react: "*"
@@ -2283,7 +2283,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 10c0/c876a0989286e33f5244f45589ee1193419772b09e1b3fc8914f6fc4faca2fb860e28b1ef7bc9f6170823cb848b9dd98bf7b7496b44370de772c988cb08103a9
+  checksum: 10c0/39be6c3bb52be30a8b6c49376ea90c325c07f63c01938df9ba4b3d8966f69c7e1e8fe8ab000227939b899fce06efd3725f3fba56848cf9d25eb9507f8f994f8c
   languageName: node
   linkType: hard
 
@@ -2468,7 +2468,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^2.7.0":
+"@reduxjs/toolkit@npm:^2.9.0":
   version: 2.9.0
   resolution: "@reduxjs/toolkit@npm:2.9.0"
   dependencies:
@@ -4855,8 +4855,8 @@ __metadata:
     "@babel/plugin-proposal-export-namespace-from": "npm:^7.18.9"
     "@expo-google-fonts/roboto": "npm:^0.4.0"
     "@expo/metro-runtime": "npm:~5.0.4"
-    "@react-native-google-signin/google-signin": "npm:13.2.0"
-    "@reduxjs/toolkit": "npm:^2.7.0"
+    "@react-native-google-signin/google-signin": "npm:^13.3.1"
+    "@reduxjs/toolkit": "npm:^2.9.0"
     "@sentry/react-native": "npm:~6.14.0"
     "@storybook/addon-docs": "npm:~9.1.5"
     "@storybook/addon-links": "npm:~9.1.5"
@@ -4898,7 +4898,7 @@ __metadata:
     http-server: "npm:^14.1.1"
     husky: "npm:^9.1.7"
     jest: "npm:^29.7.0"
-    jest-environment-jsdom: "npm:29.7.0"
+    jest-environment-jsdom: "npm:^29.7.0"
     jest-expo: "npm:53.0.10"
     jest-junit: "npm:^16.0.0"
     js-cookie: "npm:^3.0.5"
@@ -4912,16 +4912,16 @@ __metadata:
     react-native: "npm:0.79.6"
     react-native-draggable-flatlist: "npm:4.0.3"
     react-native-gesture-handler: "npm:~2.24.0"
-    react-native-paper: "npm:~5.14.0"
+    react-native-paper: "npm:~5.14.5"
     react-native-reanimated: "npm:~3.17.5"
-    react-native-safe-area-context: "npm:5.4.0"
+    react-native-safe-area-context: "npm:~5.6.1"
     react-native-safe-area-view: "npm:^1.1.1"
     react-native-web: "npm:~0.21.1"
     react-redux: "npm:^9.2.0"
     react-test-renderer: "npm:^19.1.1"
     redux: "npm:^5.0.1"
     redux-thunk: "npm:^3.1.0"
-    rrweb: "npm:2.0.0-alpha.18"
+    rrweb: "npm:~2.0.0-alpha.18"
     storybook: "npm:~9.1.5"
     typescript: "npm:~5.9.2"
     vite: "npm:^7.1.5"
@@ -8765,7 +8765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-jsdom@npm:29.7.0, jest-environment-jsdom@npm:^29.2.1":
+"jest-environment-jsdom@npm:^29.2.1, jest-environment-jsdom@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest-environment-jsdom@npm:29.7.0"
   dependencies:
@@ -11537,7 +11537,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:~5.14.0":
+"react-native-paper@npm:~5.14.5":
   version: 5.14.5
   resolution: "react-native-paper@npm:5.14.5"
   dependencies:
@@ -11576,13 +11576,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:5.4.0":
-  version: 5.4.0
-  resolution: "react-native-safe-area-context@npm:5.4.0"
+"react-native-safe-area-context@npm:~5.6.1":
+  version: 5.6.1
+  resolution: "react-native-safe-area-context@npm:5.6.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10c0/729fef1f768d57b905f51882374aa93b209d54576b8a0cf328e0a349c8dc9705ae8f9032e572fd7a7c9e94b588105f44760c0bb15ab9911b7977073d6754b54d
+  checksum: 10c0/797ad7d749bd42cbec8e504d969de13e17ed48506c2fd5a639d05d78d88194c21d72b9dc4608e08a2e8edac23341802e7b4661875242dc3bdce3008cfda5bcbe
   languageName: node
   linkType: hard
 
@@ -12229,7 +12229,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rrweb@npm:2.0.0-alpha.18":
+"rrweb@npm:~2.0.0-alpha.18":
   version: 2.0.0-alpha.18
   resolution: "rrweb@npm:2.0.0-alpha.18"
   dependencies:
