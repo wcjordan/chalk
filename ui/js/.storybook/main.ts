@@ -44,6 +44,8 @@ const config: StorybookConfig = {
           // Aliasing them all to the one used suppressed some warnings in Storybook
           '@react-native-vector-icons/material-design-icons': '@expo/vector-icons/MaterialCommunityIcons',
           'react-native-vector-icons/MaterialCommunityIcons': '@expo/vector-icons/MaterialCommunityIcons',
+
+          'expo-constants': '../__mocks__/expo-constants.js',
         },
       },
     };
