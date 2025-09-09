@@ -62,7 +62,7 @@ def list_todo_descriptions(page, prefix):
 
 
 def assert_todo_descriptions(page, prefix, expected_descriptions):
-    expect(_todo_descriptions_locator(page, prefix)).toHaveText(expected_descriptions)
+    expect(_todo_descriptions_locator(page, prefix)).to_have_text(expected_descriptions)
 
 
 def wait_for_todo(page, description):
