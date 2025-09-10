@@ -1,6 +1,8 @@
 import math
 import time
 
+from playwright.sync_api import expect
+
 CHECKED_ICON_TEXT = '󰄲'
 DELETE_ICON_TEXT = '󰧧'
 LABELS_ICON_TEXT = '󰜢'
@@ -51,9 +53,16 @@ def find_todos(page, description, partial=False):
                         has=page.locator(text_pattern))
 
 
+def _todo_descriptions_locator(page, prefix):
+    return find_todos(page, prefix, partial=True).locator('[data-testid="description-text"]')
+
+
 def list_todo_descriptions(page, prefix):
-    return find_todos(page, prefix, partial=True).locator(
-        '[data-testid="description-text"]').all_text_contents()
+    return _todo_descriptions_locator(page, prefix).all_text_contents()
+
+
+def assert_todo_descriptions(page, prefix, expected_descriptions):
+    expect(_todo_descriptions_locator(page, prefix)).to_have_text(expected_descriptions)
 
 
 def wait_for_todo(page, description):

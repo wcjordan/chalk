@@ -22,7 +22,7 @@ run-test-container:
 		-v $(CURDIR)/js/.eslintrc:/workspace/js/.eslintrc \
 		-v $(CURDIR)/js/.storybook:/workspace/js/.storybook \
 		-v $(CURDIR)/js/assets:/workspace/js/assets \
-		-v $(CURDIR)/js/babel.config.js:/jworkspace/s/babel.config.js \
+		-v $(CURDIR)/js/babel.config.js:/workspace/js/babel.config.js \
 		-v $(CURDIR)/js/jest.config.js:/workspace/js/jest.config.js \
 		-v $(CURDIR)/js/src:/workspace/js/src \
 		-v $(CURDIR)/js/tsconfig.json:/workspace/js/tsconfig.json \

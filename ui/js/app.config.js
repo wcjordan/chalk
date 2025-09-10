@@ -25,7 +25,8 @@ export default {
   },
   assetBundlePatterns: ['**/*'],
   ios: {
-    supportsTablet: true,
+    "bundleIdentifier": "com.flipperkid.chalk",
+    "supportsTablet": true,
   },
   web: {
     favicon: './assets/favicon.png',
@@ -40,14 +41,16 @@ export default {
     },
   },
   plugins: [
-    '@react-native-google-signin/google-signin',
+    "@react-native-google-signin/google-signin",
     [
-      '@sentry/react-native/expo',
+      "@sentry/react-native/expo",
       {
         organization: 'flipperkid',
         project: 'chalk-react-native',
       },
     ],
-    'expo-font',
+    "expo-font",
+    "expo-build-properties",
+    "expo-web-browser"
   ],
 };

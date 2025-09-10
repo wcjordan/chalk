@@ -119,7 +119,7 @@ function handleListResponse(entries: Todo[], updatedTodos: Todo[]) {
   return processTodos(updatedTodos);
 }
 
-export default createSlice({
+export const todosApiSlice = createSlice({
   name: API_NAME,
   initialState,
   reducers: {},

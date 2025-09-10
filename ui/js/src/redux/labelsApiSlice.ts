@@ -26,7 +26,7 @@ export const listLabels = createAsyncThunk<Label[], void, { state: RootState }>(
   },
 );
 
-export default createSlice({
+export const labelsApiSlice = createSlice({
   name: API_NAME,
   initialState,
   reducers: {},

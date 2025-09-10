@@ -30,7 +30,7 @@ const App: React.FC = function () {
     (state) => state.notifications.notificationQueue,
   );
 
-  let content: JSX.Element | null = null;
+  let content: React.JSX.Element | null = null;
   if (!loggedIn) {
     content = <Login />;
   } else {

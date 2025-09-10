@@ -39,8 +39,7 @@ WORKDIR /workspace
 FROM base AS js_app_build
 
 # Install React app
-COPY js/.eslintrc js/.prettierrc js/app.config.js js/babel.config.js js/tsconfig.json js/App.tsx ./
-COPY js/.storybook/ ./.storybook/
+COPY js/.eslintrc js/.prettierrc js/app.config.js js/tsconfig.json js/App.tsx ./
 COPY js/assets/ ./assets/
 COPY js/src/ ./src/
 

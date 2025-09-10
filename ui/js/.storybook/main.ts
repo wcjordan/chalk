@@ -1,22 +1,55 @@
-import type { StorybookConfig } from '@storybook/react-webpack5';
+import type { StorybookConfig } from '@storybook/react-native-web-vite';
+
 const config: StorybookConfig = {
-  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+
   addons: [
-    '@storybook/addon-onboarding',
     '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
-    {
-      name: '@storybook/addon-react-native-web',
-    },
-    '@storybook/addon-webpack5-compiler-babel',
+    '@storybook/addon-docs'
   ],
   framework: {
-    name: '@storybook/react-webpack5',
-    options: {},
+    name: '@storybook/react-native-web-vite',
+    options: {
+      pluginReactOptions: {
+        babel: {
+          plugins: [
+            "@babel/plugin-proposal-export-namespace-from",
+            ["react-native-reanimated/plugin", { disableSourceMaps: true }],
+          ],
+        },
+      },
+    }
   },
-  docs: {
-    autodocs: true,
+  async viteFinal(config) {
+    return {
+      ...config,
+      optimizeDeps: {
+        force: true,
+        exclude: [
+          ...(config.optimizeDeps?.exclude ?? []),
+          'react-native-draggable-flatlist',
+        ],
+        include: [
+          ...(config.optimizeDeps?.include ?? []),
+          'react-native-draggable-flatlist > react-native-reanimated',
+          'hoist-non-react-statics',
+          'invariant',
+        ]
+      },
+      resolve: {
+        ...(config.resolve ?? {}),
+        alias: {
+          ...(config.resolve?.alias ?? {}),
+          // react-native-paper requires all 3 of these in a try catch.
+          // Aliasing them all to the one used suppressed some warnings in Storybook
+          '@react-native-vector-icons/material-design-icons': '@expo/vector-icons/MaterialCommunityIcons',
+          'react-native-vector-icons/MaterialCommunityIcons': '@expo/vector-icons/MaterialCommunityIcons',
+
+          'expo-constants': '../__mocks__/expo-constants.js',
+        },
+      },
+    };
   },
 };
+
 export default config;

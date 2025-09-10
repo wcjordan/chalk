@@ -1,50 +1,54 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Loading Page DefaultLoadingPage smoke-test 1`] = `
-<div role="progressbar"
-     class="css-g5y9jx r-1awozwy r-1777fci r-13awgt0 r-ywje51"
->
-  <div class="css-g5y9jx"
-       style="width: 48px; height: 48px; opacity: 1;"
-  >
-    <div class="css-g5y9jx r-1awozwy r-1p0dtai r-1777fci r-1d2f490 r-u8s1d r-zchlnj r-ipm5af">
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div role="progressbar"
+         class="css-g5y9jx r-1awozwy r-1777fci r-13awgt0 r-ywje51"
+    >
       <div class="css-g5y9jx"
-           style="width: 48px; height: 48px; transform: rotate(mocked_deg);"
+           style="width: 48px; height: 48px; opacity: 1;"
       >
-        <div class="css-g5y9jx"
-             style="width: 48px; height: 24px; overflow: hidden;"
-        >
+        <div class="css-g5y9jx r-1awozwy r-1p0dtai r-1777fci r-1d2f490 r-u8s1d r-zchlnj r-ipm5af">
           <div class="css-g5y9jx"
-               style="width: 48px; height: 48px; transform: translateY(0px) rotate(mocked_deg);"
+               style="width: 48px; height: 48px; transform: rotate(mocked_deg);"
           >
             <div class="css-g5y9jx"
                  style="width: 48px; height: 24px; overflow: hidden;"
             >
               <div class="css-g5y9jx"
-                   style="width: 48px; height: 48px; border-color: rgb(103, 80, 164); border-width: 4.8px; border-radius: 24px;"
+                   style="width: 48px; height: 48px; transform: translateY(0px) rotate(mocked_deg);"
               >
+                <div class="css-g5y9jx"
+                     style="width: 48px; height: 24px; overflow: hidden;"
+                >
+                  <div class="css-g5y9jx"
+                       style="width: 48px; height: 48px; border-color: rgb(103, 80, 164); border-width: 4.8px; border-radius: 24px;"
+                  >
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="css-g5y9jx r-1awozwy r-1p0dtai r-1777fci r-1d2f490 r-u8s1d r-zchlnj r-ipm5af">
-      <div class="css-g5y9jx"
-           style="width: 48px; height: 48px; transform: rotate(mocked_deg);"
-      >
-        <div class="css-g5y9jx"
-             style="width: 48px; height: 24px; overflow: hidden; top: 24px;"
-        >
+        <div class="css-g5y9jx r-1awozwy r-1p0dtai r-1777fci r-1d2f490 r-u8s1d r-zchlnj r-ipm5af">
           <div class="css-g5y9jx"
-               style="width: 48px; height: 48px; transform: translateY(-24px) rotate(mocked_deg);"
+               style="width: 48px; height: 48px; transform: rotate(mocked_deg);"
           >
             <div class="css-g5y9jx"
-                 style="width: 48px; height: 24px; overflow: hidden;"
+                 style="width: 48px; height: 24px; overflow: hidden; top: 24px;"
             >
               <div class="css-g5y9jx"
-                   style="width: 48px; height: 48px; border-color: rgb(103, 80, 164); border-width: 4.8px; border-radius: 24px;"
+                   style="width: 48px; height: 48px; transform: translateY(-24px) rotate(mocked_deg);"
               >
+                <div class="css-g5y9jx"
+                     style="width: 48px; height: 24px; overflow: hidden;"
+                >
+                  <div class="css-g5y9jx"
+                       style="width: 48px; height: 48px; border-color: rgb(103, 80, 164); border-width: 4.8px; border-radius: 24px;"
+                  >
+                  </div>
+                </div>
               </div>
             </div>
           </div>

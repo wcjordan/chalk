@@ -1,6 +1,6 @@
 import '../__mocks__/matchMediaMock';
 import { FILTER_STATUS } from './types';
-import workspaceSlice from './workspaceSlice';
+import { workspaceSlice } from './workspaceSlice';
 
 describe('workspace reducer', function () {
   it('should return the initial state', function () {

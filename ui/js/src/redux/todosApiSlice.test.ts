@@ -1,9 +1,10 @@
 import '../__mocks__/matchMediaMock';
 import fetchMock from 'fetch-mock-jest';
-import todosApiSlice, {
+import {
   createTodo,
   getTodosApi,
   listTodos,
+  todosApiSlice,
 } from './todosApiSlice';
 import { setupStore } from './store';
 
