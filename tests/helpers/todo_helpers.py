@@ -62,6 +62,7 @@ def list_todo_descriptions(page, prefix):
 
 
 def assert_todo_descriptions(page, prefix, expected_descriptions):
+    print("TODO prefix:", prefix)
     expect(_todo_descriptions_locator(page, prefix)).to_have_text(expected_descriptions)
 
 
