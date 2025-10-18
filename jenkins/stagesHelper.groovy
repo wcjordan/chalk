@@ -15,7 +15,8 @@ def shouldRunIntegrationTests(changeSet) {
     // Check if any of the changed files are not in the excluded directories
     def excludedDirs = ['.github', 'test_gen', 'docs']
     def integrationTestFiles = changeSet.findAll { filepath -> !excludedDirs.any { filepath.startsWith(it + '/') } }
-    def runIntegrationTests = integrationTestFiles.size() > 0
+    // def runIntegrationTests = integrationTestFiles.size() > 0
+    def runIntegrationTests = true // Temporarily always run integration tests
 
     if (!runIntegrationTests) {
         echo "Skipping integration tests for change set: ${changeSet}"
