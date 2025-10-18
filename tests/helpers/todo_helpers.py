@@ -62,12 +62,7 @@ def list_todo_descriptions(page, prefix):
 
 
 def assert_todo_descriptions(page, prefix, expected_descriptions):
-    locator = _todo_descriptions_locator(page, prefix)
-    print(locator)
-    for _ in range(10):
-        time.sleep(1)
-        print(locator.all_text_contents())
-    expect(locator).to_have_text(expected_descriptions)
+    expect(_todo_descriptions_locator(page, prefix)).to_have_text(expected_descriptions)
 
 
 def wait_for_todo(page, description):
