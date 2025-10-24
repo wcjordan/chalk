@@ -113,11 +113,15 @@ class UINode:
         parent: ID of the parent node, or None for root
     """
 
-    id: int
     tag: str
-    attributes: Dict[str, str]
-    text: str
-    parent: Optional[int]
+    id: Optional[int] = None
+    attributes: Optional[Dict[str, str]] = None
+    text: Optional[str] = None
+    parent: Optional[int] = None
+    aria_label: Optional[str] = None
+    data_testid: Optional[str] = None
+    dom_path: Optional[str] = None
+    role: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
@@ -127,6 +131,10 @@ class UINode:
             "attributes": self.attributes,
             "text": self.text,
             "parent": self.parent,
+            "aria_label": self.aria_label,
+            "data_testid": self.data_testid,
+            "dom_path": self.dom_path,
+            "role": self.role,
         }
 
 
