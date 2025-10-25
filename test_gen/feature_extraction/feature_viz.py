@@ -4,6 +4,21 @@ from .models import UserInteraction, feature_chunk_from_dict
 
 CHUNK_FILE = "data/output_features/0a93256e-c776-449f-9fea-4911466cf341_0a93256e-c776-449f-9fea-4911466cf341-chunk000.json"
 
+class bcolors:
+    BLUE = '\033[94m'
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    PINK = '\033[95m'
+    RED = '\033[91m'
+    YELLOW = '\033[93m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+def print_w_color(text: str, color_code: str):
+    """Print text with color."""
+    print(f"{color_code}{text}{bcolors.ENDC}")
 
 
 def _extract_input_value(interaction: UserInteraction) -> dict:
@@ -33,18 +48,13 @@ def extract_dom_node_name(dom_nodes: dict, target_id: str) -> str:
 def print_input_interaction(dom_nodes: dict, interaction: dict):
     """Print the input interaction information."""
     dom_node_name = extract_dom_node_name(dom_nodes, interaction.target_id)
-    print(f">   Typed into {dom_node_name}\n      \"{_extract_input_value(interaction)}\"")
+    print_w_color(f">   Typed into {dom_node_name}\n      \"{_extract_input_value(interaction)}\"", bcolors.CYAN)
 
 
 def print_click_interaction(dom_nodes: dict, interation: dict):
     """Print the click interaction information."""
     dom_node_name = extract_dom_node_name(dom_nodes, interation.target_id)
-    print(f">   Clicked on {dom_node_name}")
-
-
-def print_dom_node(dom_nodes, target_id):
-    """Print the DOM node information."""
-    print(f"      {extract_dom_node_name(dom_nodes, target_id)}")
+    print_w_color(f">   Clicked on {dom_node_name}", bcolors.GREEN)
 
 
 def print_interaction(dom_nodes, interaction):
@@ -57,8 +67,9 @@ def print_interaction(dom_nodes, interaction):
     elif interaction.action == "click":
         print_click_interaction(dom_nodes, interaction)
     else:
-        print(f">   {interaction}")
-        print_dom_node(dom_nodes, interaction.target_id)
+        print_w_color(f">   {interaction}", bcolors.RED)
+        print_w_color(f"      {extract_dom_node_name(dom_nodes, interaction.target_id)}", bcolors.RED)
+
 
 
 def main():
