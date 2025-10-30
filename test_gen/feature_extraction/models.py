@@ -2,8 +2,8 @@
 Data models for the Session Chunking & Feature Extraction module.
 
 This module defines the core data structures used throughout the feature extraction
-pipeline, including representations for DOM mutations, user interactions, timing
-delays, UI nodes, mouse clusters, scroll patterns, and the final feature chunk.
+pipeline, including representations for DOM mutations, user interactions, UI nodes, scroll patterns, and the final
+feature chunk.
 """
 
 from dataclasses import dataclass
@@ -71,33 +71,6 @@ class UserInteraction:
 
 
 @dataclass
-class EventDelay:
-    """
-    Captures timing information between two events.
-
-    Represents the temporal relationship between events, useful for detecting
-    reaction times, idle periods, and interaction patterns.
-
-    Attributes:
-        from_ts: Timestamp of the first event (milliseconds)
-        to_ts: Timestamp of the second event (milliseconds)
-        delta_ms: Time difference between events (milliseconds)
-    """
-
-    from_ts: int
-    to_ts: int
-    delta_ms: int
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
-            "from_ts": self.from_ts,
-            "to_ts": self.to_ts,
-            "delta_ms": self.delta_ms,
-        }
-
-
-@dataclass
 class UINode:
     """
     Represents a DOM node with its metadata and hierarchy information.
@@ -127,39 +100,6 @@ class UINode:
             "attributes": self.attributes,
             "text": self.text,
             "parent": self.parent,
-        }
-
-
-@dataclass
-class MouseCluster:
-    """
-    Represents a cluster of related mouse movement events.
-
-    Groups mouse movements that occur in close temporal and spatial proximity,
-    useful for understanding user intent and interaction patterns.
-
-    Attributes:
-        start_ts: Timestamp when the cluster began (milliseconds)
-        end_ts: Timestamp when the cluster ended (milliseconds)
-        points: List of mouse positions with timestamps [{"x": int, "y": int, "ts": int}]
-        duration_ms: Total duration of the cluster (milliseconds)
-        point_count: Number of mouse positions in the cluster
-    """
-
-    start_ts: int
-    end_ts: int
-    points: List[Dict[str, int]]
-    duration_ms: int
-    point_count: int
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
-            "start_ts": self.start_ts,
-            "end_ts": self.end_ts,
-            "points": self.points,
-            "duration_ms": self.duration_ms,
-            "point_count": self.point_count,
         }
 
 
@@ -260,12 +200,8 @@ def feature_chunk_from_dict(data: Dict[str, Any]) -> FeatureChunk:
         elif key == "interactions":
             # Other features are lists of objects
             features[key] = [UserInteraction(**item_data) for item_data in value]
-        elif key in ("inter_event_delays", "reaction_delays"):
-            features[key] = [EventDelay(**item_data) for item_data in value]
         elif key == "dom_mutations":
             features[key] = [DomMutation(**item_data) for item_data in value]
-        elif key == "mouse_clusters":
-            features[key] = [MouseCluster(**item_data) for item_data in value]
         elif key == "scroll_patterns":
             features[key] = [ScrollPattern(**item_data) for item_data in value]
         else:
@@ -286,9 +222,6 @@ def create_empty_features_obj() -> Dict[str, Union[List[Any], Dict[str, Any]]]:
     return {
         "dom_mutations": [],
         "interactions": [],
-        "inter_event_delays": [],
-        "reaction_delays": [],
         "ui_nodes": {},
-        "mouse_clusters": [],
         "scroll_patterns": [],
     }

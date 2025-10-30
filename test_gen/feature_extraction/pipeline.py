@@ -8,9 +8,9 @@ and assembles them into a comprehensive FeatureChunk for downstream analysis.
 
 The extraction pipeline processes chunks in the following order:
 1. Apply DOM mutations to maintain virtual DOM state
-2. Extract DOM mutations, user interactions, and timing delays
+2. Extract DOM mutations and user interactions
 3. Resolve UI metadata for extracted events
-4. Cluster mouse trajectories and detect scroll patterns
+4. Detect scroll patterns
 5. Assemble all features into a FeatureChunk
 
 Configuration:
@@ -32,11 +32,8 @@ from .dom_state import apply_mutations, init_dom_state
 from .extractors import (
     extract_dom_mutations,
     extract_user_interactions,
-    compute_inter_event_delays,
-    compute_reaction_delays,
 )
 from .metadata import resolve_node_metadata
-from .clustering import cluster_mouse_trajectories
 from .scroll_patterns import detect_scroll_patterns
 
 logger = logging.getLogger(__name__)
@@ -64,9 +61,7 @@ def extract_features(
         FeatureChunk containing the original chunk data plus extracted features:
         - dom_mutations: List of DOM changes (adds, removes, attribute/text changes)
         - interactions: List of user actions (clicks, inputs, scrolls)
-        - delays: List of timing relationships between events
         - ui_nodes: Dictionary of UI metadata for referenced nodes
-        - mouse_clusters: List of grouped mouse movement patterns
         - scroll_patterns: List of scroll events paired with subsequent mutations
 
     Note:
@@ -79,24 +74,18 @@ def extract_features(
     # Extract core features
     dom_mutations = extract_dom_mutations(chunk.events)
     interactions = extract_user_interactions(chunk.events)
-    inter_event_delays = compute_inter_event_delays(chunk.events)
-    reaction_delays = compute_reaction_delays(chunk.events)
 
     # Resolve UI metadata for referenced nodes
     ui_nodes = _resolve_ui_metadata(dom_mutations, interactions, dom_state)
 
     # Extract behavioral patterns
-    mouse_clusters = cluster_mouse_trajectories(chunk.events)
     scroll_patterns = detect_scroll_patterns(chunk.events)
 
     # Assemble all features into FeatureChunk
     features = {
         "dom_mutations": dom_mutations,
         "interactions": interactions,
-        "inter_event_delays": inter_event_delays,
-        "reaction_delays": reaction_delays,
         "ui_nodes": ui_nodes,
-        "mouse_clusters": mouse_clusters,
         "scroll_patterns": scroll_patterns,
     }
 
@@ -282,10 +271,7 @@ def extract_and_save_features(
         "total_features": {
             "dom_mutations": 0,
             "interactions": 0,
-            "inter_event_delays": 0,
-            "reaction_delays": 0,
             "ui_nodes": 0,
-            "mouse_clusters": 0,
             "scroll_patterns": 0,
         },
         "errors": [],

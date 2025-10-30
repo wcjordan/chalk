@@ -8,9 +8,7 @@ used in the feature extraction pipeline.
 from feature_extraction.models import (
     DomMutation,
     UserInteraction,
-    EventDelay,
     UINode,
-    MouseCluster,
     ScrollPattern,
     FeatureChunk,
     create_empty_features_obj,
@@ -44,15 +42,6 @@ def test_user_interaction_creation():
     assert interaction.timestamp == 23456
 
 
-def test_event_delay_creation():
-    """Test that EventDelay objects can be created with correct attributes."""
-    delay = EventDelay(from_ts=1000, to_ts=1500, delta_ms=500)
-
-    assert delay.from_ts == 1000
-    assert delay.to_ts == 1500
-    assert delay.delta_ms == 500
-
-
 def test_ui_node_creation():
     """Test that UINode objects can be created with correct attributes."""
     node = UINode(
@@ -75,28 +64,6 @@ def test_ui_node_root_creation():
     root_node = UINode(id=1, tag="html", attributes={}, text="", parent=None)
 
     assert root_node.parent is None
-
-
-def test_mouse_cluster_creation():
-    """Test that MouseCluster objects can be created with correct attributes."""
-    cluster = MouseCluster(
-        start_ts=5000,
-        end_ts=5500,
-        points=[
-            {"x": 10, "y": 20, "ts": 5000},
-            {"x": 15, "y": 25, "ts": 5100},
-            {"x": 20, "y": 30, "ts": 5200},
-        ],
-        duration_ms=500,
-        point_count=3,
-    )
-
-    assert cluster.start_ts == 5000
-    assert cluster.end_ts == 5500
-    assert len(cluster.points) == 3
-    assert cluster.points[0] == {"x": 10, "y": 20, "ts": 5000}
-    assert cluster.duration_ms == 500
-    assert cluster.point_count == 3
 
 
 def test_scroll_pattern_creation():
@@ -139,13 +106,7 @@ def test_feature_chunk_empty_features(empty_feature_chunk):
     assert len(features["dom_mutations"]) == 0
     assert isinstance(features["interactions"], list)
     assert len(features["interactions"]) == 0
-    assert isinstance(features["inter_event_delays"], list)
-    assert len(features["inter_event_delays"]) == 0
-    assert isinstance(features["reaction_delays"], list)
-    assert len(features["reaction_delays"]) == 0
     assert isinstance(features["ui_nodes"], dict)
     assert len(features["ui_nodes"]) == 0
-    assert isinstance(features["mouse_clusters"], list)
-    assert len(features["mouse_clusters"]) == 0
     assert isinstance(features["scroll_patterns"], list)
     assert len(features["scroll_patterns"]) == 0

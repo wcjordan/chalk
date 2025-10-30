@@ -2,11 +2,7 @@
 Event extractors for the Session Chunking & Feature Extraction module.
 
 This module contains functions to extract structured feature data from raw rrweb events,
-including DOM mutations, user interactions, and timing delays.
-
-Configuration:
-    Uses DEFAULT_MAX_REACTION_MS from config module for reaction delay computation.
-    All parameters can be overridden via function arguments.
+including DOM mutations, and user interactions.
 """
 
 from typing import List
@@ -23,8 +19,7 @@ from rrweb_util import (
     get_mouse_coordinates,
     get_tag_name,
 )
-from .models import DomMutation, UserInteraction, EventDelay
-from . import config
+from .models import DomMutation, UserInteraction
 
 
 def extract_dom_mutations(events: List[dict]) -> List[DomMutation]:
@@ -209,118 +204,6 @@ def _extract_click_interaction(event: dict, timestamp: int) -> UserInteraction:
             timestamp=timestamp,
         )
     return None
-
-
-def compute_inter_event_delays(events: List[dict]) -> List[EventDelay]:
-    """
-    For a list of rrweb events sorted by timestamp, return an EventDelay
-    record for each consecutive pair, capturing `from_ts`, `to_ts`, and `delta_ms`.
-
-    This function processes a chronologically ordered list of rrweb events and
-    computes the time difference between each consecutive pair of events. This is
-    useful for identifying idle periods, reaction times, and temporal patterns
-    in user behavior.
-
-    Args:
-        events: List of rrweb events sorted by timestamp
-
-    Returns:
-        List of EventDelay objects representing time gaps between consecutive events.
-        The list will have len(events) - 1 entries, preserving the original order.
-
-    Note:
-        Events are assumed to be sorted by timestamp. If events are not sorted,
-        the computed delays may not represent actual temporal relationships.
-    """
-    delays = []
-
-    for i in range(len(events) - 1):
-        current_event = events[i]
-        next_event = events[i + 1]
-
-        from_ts = get_event_timestamp(current_event)
-        to_ts = get_event_timestamp(next_event)
-        delta_ms = to_ts - from_ts
-
-        delay = EventDelay(from_ts=from_ts, to_ts=to_ts, delta_ms=delta_ms)
-        delays.append(delay)
-
-    return delays
-
-
-def compute_reaction_delays(
-    events: List[dict],
-    interaction_source: int = 2,  # click
-    mutation_source: int = 0,  # DOM mutation
-) -> List[EventDelay]:
-    """
-    For each user interaction event (source == interaction_source),
-    find the next mutation event (source == mutation_source) within
-    `max_reaction_ms` milliseconds and emit an EventDelay capturing
-    the interaction timestamp, mutation timestamp, and delta.
-
-    This function identifies reaction patterns where user interactions trigger
-    DOM mutations within a specified time window. This is useful for detecting
-    responsive UI behaviors, async operations, and user-triggered changes.
-
-    Args:
-        events: List of rrweb events to analyze
-        interaction_source: Source ID for interaction events (default: 2 for clicks)
-        mutation_source: Source ID for mutation events (default: 0 for DOM mutations)
-
-    Returns:
-        List of EventDelay objects representing interaction→mutation reaction times.
-        Each interaction matches at most one mutation within the time window.
-
-    Note:
-        Only IncrementalSnapshot events (type == 3) with the specified sources are
-        considered. Each interaction is paired with the first subsequent mutation
-        within the time window, and then the search continues from the next interaction.
-    """
-    delays = []
-
-    # Sort events by timestamp to ensure sequential processing
-    events.sort(key=get_event_timestamp)
-
-    # Separate interaction and mutation events
-    interaction_events = [
-        event
-        for event in events
-        if is_incremental_snapshot(event)
-        and get_event_data(event).get("source") == interaction_source
-    ]
-    mutation_events = [
-        event
-        for event in events
-        if is_incremental_snapshot(event)
-        and get_event_data(event).get("source") == mutation_source
-    ]
-
-    # Use a pointer to track the position in mutation events
-    mutation_index = 0
-    for interaction in interaction_events:
-        interaction_ts = get_event_timestamp(interaction)
-
-        # Find the next mutation event within the time window
-        while mutation_index < len(mutation_events):
-            mutation = mutation_events[mutation_index]
-            mutation_ts = get_event_timestamp(mutation)
-
-            if (
-                mutation_ts > interaction_ts
-                and mutation_ts - interaction_ts <= config.DEFAULT_MAX_REACTION_MS
-            ):
-                delta_ms = mutation_ts - interaction_ts
-                delay = EventDelay(
-                    from_ts=interaction_ts, to_ts=mutation_ts, delta_ms=delta_ms
-                )
-                delays.append(delay)
-                mutation_index += 1  # Move to the next mutation event
-                break  # Only match the first mutation for this interaction
-            if mutation_ts > interaction_ts:
-                break  # Stop if mutation is outside the time window
-            mutation_index += 1
-    return delays
 
 
 def _extract_input_interaction(event: dict, timestamp: int) -> UserInteraction:

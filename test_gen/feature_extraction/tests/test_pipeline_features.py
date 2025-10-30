@@ -143,23 +143,13 @@ def test_extract_features_returns_populated_feature_chunk(
     # Verify all feature categories are present
     assert "dom_mutations" in feature_chunk.features
     assert "interactions" in feature_chunk.features
-    assert "inter_event_delays" in feature_chunk.features
-    assert "reaction_delays" in feature_chunk.features
     assert "ui_nodes" in feature_chunk.features
-    assert "mouse_clusters" in feature_chunk.features
     assert "scroll_patterns" in feature_chunk.features
 
     # Verify feature lists are non-empty where expected
     assert len(feature_chunk.features["dom_mutations"]) > 0  # Should have 2 mutations
     assert len(feature_chunk.features["interactions"]) > 0  # Should have 3 interactions
-    assert (
-        len(feature_chunk.features["inter_event_delays"]) > 0
-    )  # Should have inter-event delays
-    assert (
-        len(feature_chunk.features["reaction_delays"]) > 0
-    )  # Should have reaction delays
     assert len(feature_chunk.features["ui_nodes"]) > 0  # Should have metadata for nodes
-    assert len(feature_chunk.features["mouse_clusters"]) > 0  # Should have 1 cluster
     assert len(feature_chunk.features["scroll_patterns"]) > 0  # Should have 1 pattern
 
 
@@ -226,22 +216,6 @@ def test_extract_features_user_interactions_correct(
     assert input_interaction.value["value"] == "user input"
 
 
-def test_extract_features_timing_delays_computed(
-    sample_chunk_with_interactions, initial_dom_state
-):
-    """Test that timing delays are computed correctly."""
-    feature_chunk = extract_features(sample_chunk_with_interactions, initial_dom_state)
-    delays = feature_chunk.features["inter_event_delays"]
-
-    # Should have inter-event delays (7 for 8 events) plus reaction delays
-    assert len(delays) >= 7
-
-    # Check that we have some reaction delays (click->mutation, scroll->mutation)
-    reaction_delays = feature_chunk.features["reaction_delays"]
-    assert len(reaction_delays) >= 1
-    assert reaction_delays[0].delta_ms == 200
-
-
 def test_extract_features_ui_metadata_resolved(
     sample_chunk_with_interactions, initial_dom_state
 ):
@@ -259,21 +233,6 @@ def test_extract_features_ui_metadata_resolved(
         assert button_metadata["aria_label"] == "Submit Form"
         assert button_metadata["data_testid"] == "submit-btn"
         assert "dom_path" in button_metadata
-
-
-def test_extract_features_mouse_clusters_created(
-    sample_chunk_with_interactions, initial_dom_state
-):
-    """Test that mouse trajectory clusters are created."""
-    feature_chunk = extract_features(sample_chunk_with_interactions, initial_dom_state)
-    mouse_clusters = feature_chunk.features["mouse_clusters"]
-
-    # Should have 1 cluster from the 2 mouse move events
-    assert len(mouse_clusters) == 1
-    cluster = mouse_clusters[0]
-    assert cluster.start_ts == 10100
-    assert cluster.end_ts == 10150
-    assert cluster.point_count == 2
 
 
 def test_extract_features_scroll_patterns_detected(
@@ -309,11 +268,6 @@ def test_extract_features_timestamps_and_ids_align(
     # Check that interaction timestamps are from original events
     for interaction in feature_chunk.features["interactions"]:
         assert interaction.timestamp in original_timestamps
-
-    # Check that delay timestamps reference original events
-    for delay in feature_chunk.features["inter_event_delays"]:
-        assert delay.from_ts in original_timestamps
-        assert delay.to_ts in original_timestamps
 
 
 def test_extract_features_idempotent_calls(
@@ -351,17 +305,8 @@ def test_extract_features_idempotent_calls(
     assert len(feature_chunk1.features["interactions"]) == len(
         feature_chunk2.features["interactions"]
     )
-    assert len(feature_chunk1.features["inter_event_delays"]) == len(
-        feature_chunk2.features["inter_event_delays"]
-    )
-    assert len(feature_chunk1.features["reaction_delays"]) == len(
-        feature_chunk2.features["reaction_delays"]
-    )
     assert len(feature_chunk1.features["ui_nodes"]) == len(
         feature_chunk2.features["ui_nodes"]
-    )
-    assert len(feature_chunk1.features["mouse_clusters"]) == len(
-        feature_chunk2.features["mouse_clusters"]
     )
     assert len(feature_chunk1.features["scroll_patterns"]) == len(
         feature_chunk2.features["scroll_patterns"]
@@ -386,10 +331,7 @@ def test_extract_features_handles_empty_chunk():
     assert feature_chunk.chunk_id == "empty-chunk"
     assert len(feature_chunk.features["dom_mutations"]) == 0
     assert len(feature_chunk.features["interactions"]) == 0
-    assert len(feature_chunk.features["inter_event_delays"]) == 0
-    assert len(feature_chunk.features["reaction_delays"]) == 0
     assert len(feature_chunk.features["ui_nodes"]) == 0
-    assert len(feature_chunk.features["mouse_clusters"]) == 0
     assert len(feature_chunk.features["scroll_patterns"]) == 0
 
 
@@ -471,12 +413,6 @@ def test_extract_features_handles_events_with_missing_fields():
                 "attributes": [{"attributes": {"class": "no-id"}}],
             },
         },
-        # Mouse move event missing coordinates
-        {
-            "type": 3,
-            "timestamp": 1400,
-            "data": {"source": 1},
-        },
         # Scroll event missing target ID
         {
             "type": 3,
@@ -505,12 +441,6 @@ def test_extract_features_handles_events_with_missing_fields():
 
     # Should extract no mutations (missing node ID)
     assert len(feature_chunk.features["dom_mutations"]) == 0
-
-    # Should handle mouse moves with missing coordinates
-    assert len(feature_chunk.features["mouse_clusters"]) == 1
-    cluster = feature_chunk.features["mouse_clusters"][0]
-    assert cluster.points[0]["x"] == 0  # Default coordinate
-    assert cluster.points[0]["y"] == 0  # Default coordinate
 
 
 def test_extract_features_with_complex_interaction_sequences(
@@ -608,25 +538,6 @@ def test_extract_features_with_complex_interaction_sequences(
     # Should extract all mutations
     assert len(feature_chunk.features["dom_mutations"]) == 3
 
-    # Should detect multiple reaction delays
-    reaction_delays = [
-        d
-        for d in feature_chunk.features["reaction_delays"]
-        if d.delta_ms == 50  # Click->mutation delays
-    ]
-    assert len(reaction_delays) >= 3
-
-    # Should cluster rapid mouse movements into one cluster
-    assert len(feature_chunk.features["mouse_clusters"]) == 1
-    cluster = feature_chunk.features["mouse_clusters"][0]
-    assert cluster.point_count == 4
-    assert cluster.duration_ms == 15  # 1215 - 1200
-
-    # Should have many inter-event delays due to rapid sequence
-    assert (
-        len(feature_chunk.features["inter_event_delays"]) >= 12
-    )  # At least one per event pair
-
 
 def test_extract_features_boundary_conditions():
     """Test pipeline behavior at configuration boundaries."""
@@ -644,30 +555,6 @@ def test_extract_features_boundary_conditions():
                 }
             },
         },
-        # Mouse moves over time threshold (100ms apart)
-        {"type": 3, "timestamp": 1100, "data": {"source": 1, "x": 0, "y": 0}},
-        {
-            "type": 3,
-            "timestamp": 1201,
-            "data": {"source": 1, "x": 10, "y": 10},
-        },  # Over 100ms later
-        {
-            "type": 3,
-            "timestamp": 1302,
-            "data": {"source": 1, "x": 20, "y": 20},
-        },  # Over another 100ms
-        # Mouse moves exactly at distance threshold (50px apart)
-        {"type": 3, "timestamp": 1400, "data": {"source": 1, "x": 0, "y": 0}},
-        {
-            "type": 3,
-            "timestamp": 1450,
-            "data": {"source": 1, "x": 30, "y": 40},
-        },  # Distance = 50px exactly
-        {
-            "type": 3,
-            "timestamp": 1500,
-            "data": {"source": 1, "x": 60, "y": 80},
-        },  # Another 50px
         # Scroll and mutation exactly at reaction threshold (2000ms)
         {
             "type": 3,
@@ -710,20 +597,10 @@ def test_extract_features_boundary_conditions():
 
     feature_chunk = extract_features(chunk, initial_dom_state)
 
-    # Mouse clustering at time boundary - should split at 100ms threshold
-    mouse_clusters = feature_chunk.features["mouse_clusters"]
-    assert len(mouse_clusters) >= 2  # Should split due to time threshold
-
     # Scroll pattern at exact reaction threshold - should be detected
     scroll_patterns = feature_chunk.features["scroll_patterns"]
     assert len(scroll_patterns) == 1
     assert scroll_patterns[0].delay_ms == 2000
-
-    # Reaction delay at exact threshold - should be detected
-    reaction_delays = [
-        d for d in feature_chunk.features["reaction_delays"] if d.delta_ms == 10000
-    ]
-    assert len(reaction_delays) == 1
 
     # Should extract all interactions and mutations
     assert len(feature_chunk.features["interactions"]) == 2  # 1 scroll + 1 click
@@ -831,22 +708,6 @@ def test_extract_features_large_event_volume():
     )  # 100 clicks + 50 scrolls + 50 inputs
     assert len(feature_chunk.features["dom_mutations"]) == 100  # 100 attribute changes
 
-    # Should have many mouse clusters due to volume
-    assert len(feature_chunk.features["mouse_clusters"]) >= 5
-
-    # Should have many delays due to volume
-    assert (
-        len(feature_chunk.features["inter_event_delays"]) >= 800
-    )  # Many inter-event delays
-
-    # Should have reaction delays for click->mutation pairs
-    reaction_delays = [
-        d
-        for d in feature_chunk.features["reaction_delays"]
-        if d.delta_ms == 100  # Click->mutation delay
-    ]
-    assert len(reaction_delays) >= 90  # Most clicks should have reactions
-
     # Should resolve UI metadata for referenced nodes
     assert len(feature_chunk.features["ui_nodes"]) >= 50  # Many nodes referenced
 
@@ -900,17 +761,8 @@ def test_full_pipeline_integration(snapshot):
         chunk_metadata["features"]["interaction_stats"] = interaction_types
 
         # Other feature counts
-        chunk_metadata["features"]["mouse_clusters"] = len(
-            chunk_data.features["mouse_clusters"]
-        )
         chunk_metadata["features"]["scroll_patterns"] = len(
             chunk_data.features["scroll_patterns"]
-        )
-        chunk_metadata["features"]["inter_event_delays"] = len(
-            chunk_data.features["inter_event_delays"]
-        )
-        chunk_metadata["features"]["reaction_delays"] = len(
-            chunk_data.features["reaction_delays"]
         )
         chunk_metadata["features"]["ui_nodes"] = len(chunk_data.features["ui_nodes"])
 

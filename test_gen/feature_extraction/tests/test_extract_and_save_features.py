@@ -209,13 +209,10 @@ def test_extract_and_save_features_counts_feature_statistics(temp_output_dir):
             "interactions": [
                 UserInteraction("click", 3, {}, 1200),
             ],
-            "inter_event_delays": [],
-            "reaction_delays": [],
             "ui_nodes": {
                 1: UINode(1, "div", {}, "", None),
                 2: UINode(2, "button", {}, "Click", 1),
             },
-            "mouse_clusters": [],
             "scroll_patterns": [],
         },
         metadata={},
@@ -234,9 +231,6 @@ def test_extract_and_save_features_counts_feature_statistics(temp_output_dir):
     assert stats["total_features"]["dom_mutations"] == 2
     assert stats["total_features"]["interactions"] == 1
     assert stats["total_features"]["ui_nodes"] == 2
-    assert stats["total_features"]["inter_event_delays"] == 0
-    assert stats["total_features"]["reaction_delays"] == 0
-    assert stats["total_features"]["mouse_clusters"] == 0
     assert stats["total_features"]["scroll_patterns"] == 0
 
 
