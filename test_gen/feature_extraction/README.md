@@ -8,9 +8,7 @@ The feature extraction pipeline processes chunks of rrweb events and extracts:
 
 - **DOM mutations**: Node additions, removals, attribute changes, and text modifications
 - **User interactions**: Clicks, inputs, scrolls with target elements and coordinates
-- **Timing delays**: Inter-event gaps and reaction times between interactions and mutations
 - **UI metadata**: Semantic attributes, DOM paths, and accessibility information
-- **Mouse clusters**: Grouped mouse movements based on temporal and spatial proximity
 - **Scroll patterns**: Scroll events paired with subsequent DOM mutations
 
 ## Key Functions
@@ -19,10 +17,7 @@ The feature extraction pipeline processes chunks of rrweb events and extracts:
 - `apply_mutations(node_by_id, mutation_events)`: Update virtual DOM with incremental changes
 - `extract_dom_mutations(events)`: Extract structured DOM change records
 - `extract_user_interactions(events)`: Extract click, input, and scroll interactions
-- `compute_inter_event_delays(events)`: Compute timing between consecutive events
-- `compute_reaction_delays(events)`: Detect interaction→mutation reaction patterns
 - `resolve_node_metadata(node_id, node_by_id)`: Get semantic UI context for nodes
-- `cluster_mouse_trajectories(events)`: Group related mouse movements
 - `detect_scroll_patterns(events)`: Find scroll events that trigger mutations
 - `extract_features(chunk, dom_state)`: Main pipeline function orchestrating all extractors
 - `extract_and_save_features(session_dir, output_dir)`: Extract features and save as JSON files
@@ -73,7 +68,6 @@ for chunk in chunks:
     print(f"{feature_chunk.chunk_id}:")
     print(f"  DOM mutations: {len(feature_chunk.features['dom_mutations'])}")
     print(f"  User interactions: {len(feature_chunk.features['interactions'])}")
-    print(f"  Mouse clusters: {len(feature_chunk.features['mouse_clusters'])}")
     print(f"  Scroll patterns: {len(feature_chunk.features['scroll_patterns'])}")
     
     # Access specific feature data
@@ -161,10 +155,6 @@ The module uses configurable thresholds that can be customized:
 ```python
 from feature_extraction import config
 
-# Default clustering thresholds
-config.DEFAULT_TIME_DELTA_MS = 100    # Mouse clustering time threshold
-config.DEFAULT_DIST_DELTA_PX = 50     # Mouse clustering distance threshold
-
 # Default reaction time windows
 config.DEFAULT_SCROLL_REACTION_MS = 2000   # Scroll→mutation window
 config.DEFAULT_MAX_REACTION_MS = 10000     # Interaction→mutation window
@@ -205,8 +195,6 @@ The `extract_features` function returns a `FeatureChunk` object, and `extract_an
                 "timestamp": 1234567892
             }
         ],
-        "inter_event_delays": [...],
-        "reaction_delays": [...],
         "ui_nodes": {
             42: {
                 "tag": "button",
@@ -217,7 +205,6 @@ The `extract_features` function returns a `FeatureChunk` object, and `extract_an
                 "dom_path": "html > body > form > button#submit"
             }
         },
-        "mouse_clusters": [...],
         "scroll_patterns": [...]
     },
     "metadata": {...},
@@ -250,7 +237,6 @@ pytest -v test_gen/feature_extraction/tests/
 ## Performance Considerations
 
 - **DOM State Management**: The virtual DOM is maintained in memory and updated incrementally. For large sessions, consider processing chunks in batches.
-- **Mouse Clustering**: Dense mouse movement streams may produce many small clusters. Adjust `DEFAULT_TIME_DELTA_MS` and `DEFAULT_DIST_DELTA_PX` for your use case.
 - **Memory Usage**: Feature extraction preserves all original event data plus extracted features. For memory-constrained environments, consider processing chunks individually.
 
 ## Troubleshooting

@@ -10,9 +10,7 @@ import json
 from feature_extraction.models import (
     DomMutation,
     UserInteraction,
-    EventDelay,
     UINode,
-    MouseCluster,
     ScrollPattern,
     FeatureChunk,
 )
@@ -53,19 +51,6 @@ def test_user_interaction_to_dict():
         "target_id": 456,
         "value": {"x": 100, "y": 200},
         "timestamp": 2000,
-    }
-
-
-def test_event_delay_to_dict():
-    """Test EventDelay serialization to dictionary."""
-    delay = EventDelay(from_ts=1000, to_ts=1500, delta_ms=500)
-
-    result = delay.to_dict()
-
-    assert result == {
-        "from_ts": 1000,
-        "to_ts": 1500,
-        "delta_ms": 500,
     }
 
 
@@ -111,35 +96,6 @@ def test_ui_node_to_dict_no_parent():
     }
 
 
-def test_mouse_cluster_to_dict():
-    """Test MouseCluster serialization to dictionary."""
-    cluster = MouseCluster(
-        start_ts=1000,
-        end_ts=1200,
-        points=[
-            {"x": 10, "y": 20, "ts": 1000},
-            {"x": 15, "y": 25, "ts": 1100},
-            {"x": 20, "y": 30, "ts": 1200},
-        ],
-        duration_ms=200,
-        point_count=3,
-    )
-
-    result = cluster.to_dict()
-
-    assert result == {
-        "start_ts": 1000,
-        "end_ts": 1200,
-        "points": [
-            {"x": 10, "y": 20, "ts": 1000},
-            {"x": 15, "y": 25, "ts": 1100},
-            {"x": 20, "y": 30, "ts": 1200},
-        ],
-        "duration_ms": 200,
-        "point_count": 3,
-    }
-
-
 def test_scroll_pattern_to_dict():
     """Test ScrollPattern serialization to dictionary."""
     pattern = ScrollPattern(
@@ -178,9 +134,7 @@ def test_feature_chunk_to_dict_complete():
     # Create sample features
     dom_mutation = DomMutation("add", 123, {"tag": "div"}, 1000)
     user_interaction = UserInteraction("click", 456, {"x": 100, "y": 200}, 2000)
-    event_delay = EventDelay(1000, 2000, 1000)
     ui_node = UINode(789, "button", {"class": "btn"}, "Click", 456)
-    mouse_cluster = MouseCluster(1000, 1100, [{"x": 10, "y": 20, "ts": 1050}], 100, 1)
     scroll_pattern = ScrollPattern(
         {"timestamp": 1000, "data": {"source": 3}},
         {"timestamp": 1200, "data": {"source": 0}},
@@ -195,10 +149,7 @@ def test_feature_chunk_to_dict_complete():
         features={
             "dom_mutations": [dom_mutation],
             "interactions": [user_interaction],
-            "inter_event_delays": [event_delay],
-            "reaction_delays": [event_delay],
             "ui_nodes": {789: ui_node},
-            "mouse_clusters": [mouse_cluster],
             "scroll_patterns": [scroll_pattern],
         },
         metadata={"session_id": "test-session"},
@@ -224,20 +175,10 @@ def test_feature_chunk_to_dict_complete():
     assert len(features["interactions"]) == 1
     assert features["interactions"][0] == user_interaction.to_dict()
 
-    # Check delays
-    assert len(features["inter_event_delays"]) == 1
-    assert features["inter_event_delays"][0] == event_delay.to_dict()
-    assert len(features["reaction_delays"]) == 1
-    assert features["reaction_delays"][0] == event_delay.to_dict()
-
     # Check UI nodes (converted to string keys)
     assert len(features["ui_nodes"]) == 1
     assert "789" in features["ui_nodes"]
     assert features["ui_nodes"]["789"] == ui_node.to_dict()
-
-    # Check mouse clusters
-    assert len(features["mouse_clusters"]) == 1
-    assert features["mouse_clusters"][0] == mouse_cluster.to_dict()
 
     # Check scroll patterns
     assert len(features["scroll_patterns"]) == 1
@@ -252,10 +193,7 @@ def test_feature_chunk_to_dict_empty_features(empty_feature_chunk):
     features = result["features"]
     assert features["dom_mutations"] == []
     assert features["interactions"] == []
-    assert features["inter_event_delays"] == []
-    assert features["reaction_delays"] == []
     assert features["ui_nodes"] == {}
-    assert features["mouse_clusters"] == []
     assert features["scroll_patterns"] == []
 
 
@@ -279,8 +217,6 @@ def test_feature_chunk_to_dict_with_plain_objects():
             "interactions": [
                 {"action": "click", "target_id": 2, "value": {}, "timestamp": 600}
             ],
-            "inter_event_delays": [],
-            "reaction_delays": [],
             "ui_nodes": {
                 "1": {
                     "id": 1,
@@ -290,7 +226,6 @@ def test_feature_chunk_to_dict_with_plain_objects():
                     "parent": None,
                 }
             },
-            "mouse_clusters": [],
             "scroll_patterns": [],
         },
         metadata={},
@@ -323,10 +258,7 @@ def test_feature_chunk_serialization_roundtrip():
         features={
             "dom_mutations": [DomMutation("text", 1, {"newText": "Hello"}, 1100)],
             "interactions": [UserInteraction("input", 2, {"value": "test"}, 1200)],
-            "inter_event_delays": [EventDelay(1000, 1100, 100)],
-            "reaction_delays": [],
             "ui_nodes": {3: UINode(3, "input", {"type": "text"}, "", 1)},
-            "mouse_clusters": [],
             "scroll_patterns": [],
         },
         metadata={"test": True, "count": 42},

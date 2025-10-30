@@ -129,57 +129,6 @@ def test_end_to_end_feature_extraction(initialize_dom_state, sample_session_path
             ), f"Should have no {feature_type}"
 
 
-def test_timing_accuracy(initialize_dom_state, sample_session_path):
-    """Test that timing delays are computed accurately."""
-    chunks = ingest_session("sample-session", sample_session_path)
-    first_chunk = chunks[0]
-
-    dom_state = initialize_dom_state(first_chunk)
-
-    feature_chunk = extract_features(first_chunk, dom_state)
-
-    # Check inter-event delays
-    inter_delays = feature_chunk.features["inter_event_delays"]
-    assert (
-        len(inter_delays) == len(first_chunk.events) - 1
-    ), "Should have delays for consecutive events"
-
-    # Check reaction delays
-    reaction_delays = feature_chunk.features["reaction_delays"]
-    assert len(reaction_delays) > 0, "Should have reaction delays"
-
-    # Verify reaction delay timing > 50ms
-    for delay in reaction_delays:
-        assert delay.delta_ms > 50
-
-
-def test_mouse_clustering_accuracy(initialize_dom_state, sample_session_path):
-    """Test that mouse clustering produces expected results."""
-    chunks = ingest_session("sample-session", sample_session_path)
-    first_chunk = chunks[0]
-
-    dom_state = initialize_dom_state(first_chunk)
-
-    feature_chunk = extract_features(first_chunk, dom_state)
-    mouse_clusters = feature_chunk.features["mouse_clusters"]
-
-    # Filtered by rrweb_ingest.filter.is_low_signal
-    assert len(mouse_clusters) == 0, "Should have 0 mouse clusters"
-
-    if len(mouse_clusters) > 0:
-        # Check first cluster (3 points over 100ms)
-        first_cluster = mouse_clusters[0]
-        assert first_cluster.point_count == 3
-        assert first_cluster.duration_ms == 100
-        assert len(first_cluster.points) == 3
-
-        # Verify point coordinates
-        assert first_cluster.points[0]["x"] == 100
-        assert first_cluster.points[0]["y"] == 150
-        assert first_cluster.points[2]["x"] == 140
-        assert first_cluster.points[2]["y"] == 170
-
-
 def test_scroll_pattern_detection(initialize_dom_state, sample_session_path):
     """Test that scroll patterns are correctly detected."""
     chunks = ingest_session("sample-session", sample_session_path)
