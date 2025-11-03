@@ -139,10 +139,6 @@ def clean_chunk(
         if is_low_signal(event):
             continue
 
-        # Apply custom filters
-        if any(custom_filter(event) for custom_filter in config.DEFAULT_CUSTOM_FILTERS):
-            continue
-
         # Create a signature for deduplication
         # Use type, source, timestamp, and target id if available
         event_type = event.get("type")
@@ -155,7 +151,8 @@ def clean_chunk(
 
         # Skip if we've seen this exact event before
         if signature in seen_signatures:
-            continue
+            raise ValueError("Duplicate event found")
+            # continue
 
         seen_signatures.add(signature)
         cleaned.append(event)

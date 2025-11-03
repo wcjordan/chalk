@@ -13,8 +13,6 @@ from .models import Chunk
 def normalize_chunk(
     raw_events: List[Dict[str, Any]],
     session_id: str,
-    chunk_index: int,
-    snapshot_before: dict,
 ) -> Chunk:
     """
     Builds a Chunk object from a list of cleaned events.
@@ -30,9 +28,6 @@ def normalize_chunk(
                    by timestamp.
         session_id: Identifier for the session this chunk belongs to. Used to
                    generate the chunk_id.
-        chunk_index: Zero-based index of this chunk within the session. Used to
-                    generate the chunk_id with zero-padding.
-        snapshot_before: Snapshot data with the initial DOM state before this chunk.
 
     Returns:
         Chunk object with populated fields:
@@ -52,7 +47,7 @@ def normalize_chunk(
         ...     {"type": 3, "timestamp": 1000, "data": {"source": 2}},
         ...     {"type": 3, "timestamp": 1500, "data": {"source": 3}},
         ... ]
-        >>> chunk = normalize_chunk(events, "session_abc", 0)
+        >>> chunk = normalize_chunk(events, "session_abc")
         >>> chunk.chunk_id
         'session_abc-chunk000'
         >>> chunk.start_time
@@ -69,9 +64,6 @@ def normalize_chunk(
     if not session_id:
         raise ValueError("session_id cannot be empty")
 
-    if chunk_index < 0:
-        raise ValueError("chunk_index must be non-negative")
-
     # Validate that all events have timestamps
     for i, event in enumerate(raw_events):
         if "timestamp" not in event:
@@ -82,9 +74,6 @@ def normalize_chunk(
     start_time = min(timestamps)
     end_time = max(timestamps)
 
-    # Generate chunk ID with zero-padded index
-    chunk_id = f"{session_id}-chunk{chunk_index:03d}"
-
     # Calculate metadata
     num_events = len(raw_events)
     duration_ms = end_time - start_time
@@ -92,13 +81,12 @@ def normalize_chunk(
     metadata = {
         "num_events": num_events,
         "duration_ms": duration_ms,
-        "snapshot_before": snapshot_before,
         "session_id": session_id,
     }
 
     # Create and return the Chunk object
     return Chunk(
-        chunk_id=chunk_id,
+        chunk_id=session_id,
         start_time=start_time,
         end_time=end_time,
         events=raw_events.copy(),  # Create a copy to avoid mutation

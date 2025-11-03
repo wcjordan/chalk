@@ -14,22 +14,6 @@ Usage Examples:
     from rrweb_ingest.config import MAX_GAP_MS
 """
 
-# Chunking Configuration
-# ======================
-
-# Maximum time gap in milliseconds between consecutive interactions
-# before starting a new chunk. Larger gaps typically indicate separate
-# user workflows or sessions.
-MAX_GAP_MS = 10_000
-
-# Maximum number of events per chunk before forcing a split.
-# Prevents chunks from becoming too large for efficient processing.
-MAX_EVENTS = 1000
-
-# Maximum duration in milliseconds for a single chunk.
-# Ensures chunks represent reasonable time windows for analysis.
-MAX_DURATION_MS = 30_000
-
 # Noise Filtering Configuration
 # =============================
 
@@ -54,13 +38,6 @@ FILTER_STYLE_ONLY_MUTATIONS = True
 # within the same chunk (incomplete inputs are often noise)
 FILTER_INCOMPLETE_INPUTS = False  # Not yet implemented
 
-# Extensibility Configuration
-# ===========================
-
-# Default custom filter functions (empty by default)
-# Users can add custom predicates here or pass them to functions
-DEFAULT_CUSTOM_FILTERS = []
-
 # Configuration Validation
 # ========================
 
@@ -72,15 +49,6 @@ def validate_config():
     Raises:
         ValueError: If any configuration value is invalid
     """
-    if MAX_GAP_MS <= 0:
-        raise ValueError("MAX_GAP_MS must be positive")
-
-    if MAX_EVENTS <= 0:
-        raise ValueError("MAX_EVENTS must be positive")
-
-    if MAX_DURATION_MS <= 0:
-        raise ValueError("MAX_DURATION_MS must be positive")
-
     if MICRO_SCROLL_THRESHOLD < 0:
         raise ValueError("MICRO_SCROLL_THRESHOLD must be non-negative")
 

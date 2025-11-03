@@ -19,7 +19,6 @@ from typing import Generator, List
 
 from rrweb_ingest.loader import load_events
 from rrweb_ingest.classifier import classify_events
-from rrweb_ingest.segmenter import segment_into_chunks
 from rrweb_ingest.filter import clean_chunk
 from rrweb_ingest.normalizer import normalize_chunk
 from rrweb_ingest.models import Chunk
@@ -75,32 +74,21 @@ def ingest_session(
     if not session_id:
         raise ValueError("session_id cannot be empty")
 
-    # Step 1: Load and validate events from JSON file
+    # Load and validate events from JSON file
     events = load_events(filepath)
 
-    # Step 2: Classify events into categories
-    snapshots, interactions, _ = classify_events(events)
+    # # Classify events into categories
+    # snapshots, interactions, _ = classify_events(events)
 
-    # Step 3: Segment interactions into raw chunks
-    raw_chunks = segment_into_chunks(interactions, snapshots)
+    # Filter noise and duplicates
+    cleaned_events = clean_chunk(events)
 
-    # Step 4 & 5: Clean and normalize each chunk
-    normalized_chunks = []
-    for chunk_index, raw_chunk in enumerate(raw_chunks):
-        # Filter noise and duplicates
-        cleaned_events = clean_chunk(raw_chunk["interactions"])
+    # Skip empty chunks after cleaning
+    if not cleaned_events:
+        return None
 
-        # Skip empty chunks after cleaning
-        if not cleaned_events:
-            continue
-
-        # Normalize into Chunk object
-        chunk = normalize_chunk(
-            cleaned_events, session_id, chunk_index, raw_chunk.get("snapshot_before")
-        )
-        normalized_chunks.append(chunk)
-
-    return normalized_chunks
+    # Normalize into Chunk object
+    return normalize_chunk(cleaned_events, session_id)
 
 
 def iterate_sessions(

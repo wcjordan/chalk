@@ -183,53 +183,6 @@ class TestIngestSession:
             expected_id = f"snapshot_test-chunk{i:03d}"
             assert chunk.chunk_id == expected_id
 
-    def test_ingest_session_max_gap_ms_parameter(self, create_session_file):
-        """Test that max_gap_ms parameter affects chunking behavior."""
-        events = [
-            {"type": 3, "timestamp": 1000, "data": {"source": 2, "id": 1}},
-            {"type": 3, "timestamp": 1100, "data": {"source": 2, "id": 2}},
-            {"type": 3, "timestamp": 8000, "data": {"source": 2, "id": 3}},  # 6.9s gap
-            {"type": 3, "timestamp": 8100, "data": {"source": 2, "id": 4}},
-        ]
-
-        temp_path = create_session_file(events)
-
-        # With large max_gap_ms, should stay in one chunk
-        with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 10_000):
-            result_large_gap = ingest_session("gap_test", temp_path)
-
-        # With small max_gap_ms, should split into multiple chunks
-        with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 5_000):
-            result_small_gap = ingest_session("gap_test", temp_path)
-
-        # Large gap should have fewer chunks than small gap
-        assert len(result_large_gap) <= len(result_small_gap)
-
-    def test_ingest_session_max_events_parameter(self, create_session_file):
-        """Test that max_events parameter affects chunking behavior."""
-        # Create 10 events close together in time
-        events = [
-            {"type": 3, "timestamp": 1000 + i * 10, "data": {"source": 2, "id": i}}
-            for i in range(10)
-        ]
-
-        temp_path = create_session_file(events)
-
-        # With large max_events, should stay in fewer chunks
-        with patch("rrweb_ingest.segmenter.config.MAX_EVENTS", 20):
-            result_large_max = ingest_session("events_test", temp_path)
-
-        # With small max_events, should split into more chunks
-        with patch("rrweb_ingest.segmenter.config.MAX_EVENTS", 3):
-            result_small_max = ingest_session("events_test", temp_path)
-
-        # Small max should create more chunks than large max
-        assert len(result_small_max) > len(result_large_max)
-
-        # Verify no chunk exceeds the max_events limit
-        for chunk in result_small_max:
-            assert chunk.metadata["num_events"] <= 3
-
     def test_ingest_session_micro_scroll_threshold_parameter(self, create_session_file):
         """Test that micro_scroll_threshold parameter affects filtering."""
         events = [
@@ -374,8 +327,7 @@ class TestIngestSession:
         ]
 
         temp_path = create_session_file(events)
-        with patch("rrweb_ingest.segmenter.config.MAX_GAP_MS", 5000):
-            result = ingest_session("complex_test", temp_path)
+        result = ingest_session("complex_test", temp_path)
 
         # Should create multiple chunks due to snapshot and time gap
         assert len(result) >= 3
@@ -414,10 +366,7 @@ class TestIngestSession:
             return event.get("data", {}).get("source") == 99
 
         temp_path = create_session_file(events)
-        with patch(
-            "rrweb_ingest.segmenter.config.DEFAULT_CUSTOM_FILTERS", [filter_source_99]
-        ):
-            result = ingest_session("custom_filter_test", temp_path)
+        result = ingest_session("custom_filter_test", temp_path)
 
         # Should have filtered out the custom source event
         assert len(result) == 1
