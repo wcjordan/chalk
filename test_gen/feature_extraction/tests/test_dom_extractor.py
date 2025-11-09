@@ -6,7 +6,7 @@ covering attribute changes, text modifications, node additions, and removals.
 """
 
 import pytest
-from feature_extraction.extractors import extract_dom_mutations
+from rrweb_util.dom_state.extractors import extract_dom_mutations
 from rrweb_util import EventType, IncrementalSource
 
 
