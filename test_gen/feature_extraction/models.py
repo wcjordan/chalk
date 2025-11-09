@@ -2,132 +2,13 @@
 Data models for the Session Chunking & Feature Extraction module.
 
 This module defines the core data structures used throughout the feature extraction
-pipeline, including representations for DOM mutations, user interactions, UI nodes, scroll patterns, and the final
-feature chunk.
+pipeline for the final feature chunk.
 """
 
 from dataclasses import dataclass
-from typing import List, Dict, Any, Optional, Union
-
-
-@dataclass
-class DomMutation:
-    """
-    Captures a DOM mutation event with its type, target, and timing.
-
-    Represents changes to the DOM structure including node additions/removals,
-    attribute changes, and text content modifications.
-
-    Attributes:
-        mutation_type: Type of mutation ("add", "remove", "attribute", "text")
-        target_id: ID of the DOM node that was mutated
-        details: Mutation-specific data (new attributes, text content, etc.)
-        timestamp: When the mutation occurred (milliseconds)
-    """
-
-    mutation_type: str
-    target_id: int
-    details: Dict[str, Any]
-    timestamp: int
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
-            "mutation_type": self.mutation_type,
-            "target_id": self.target_id,
-            "details": self.details,
-            "timestamp": self.timestamp,
-        }
-
-
-@dataclass
-class UserInteraction:
-    """
-    Captures a user interaction event with its action and context.
-
-    Represents direct user actions like clicks, input changes, and scrolling
-    with their associated DOM targets and values.
-
-    Attributes:
-        action: Type of interaction ("click", "input", "scroll")
-        target_id: ID of the DOM node that was interacted with
-        value: Input value, coordinates, or other action-specific data
-        timestamp: When the interaction occurred (milliseconds)
-    """
-
-    action: str
-    target_id: int
-    value: Any
-    timestamp: int
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
-            "action": self.action,
-            "target_id": self.target_id,
-            "value": self.value,
-            "timestamp": self.timestamp,
-        }
-
-
-@dataclass
-class UINode:
-    """
-    Represents a DOM node with its metadata and hierarchy information.
-
-    Captures the essential properties of a DOM element including its structure,
-    attributes, content, and position in the DOM tree.
-
-    Attributes:
-        id: Unique identifier for the DOM node
-        tag: HTML tag name (e.g., "button", "input", "div")
-        attributes: Dictionary of HTML attributes
-        text: Text content of the node
-        parent: ID of the parent node, or None for root
-    """
-
-    id: int
-    tag: str
-    attributes: Dict[str, str]
-    text: str
-    parent: Optional[int]
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
-            "id": self.id,
-            "tag": self.tag,
-            "attributes": self.attributes,
-            "text": self.text,
-            "parent": self.parent,
-        }
-
-
-@dataclass
-class ScrollPattern:
-    """
-    Represents a scroll event paired with a subsequent DOM mutation.
-
-    Captures scroll-triggered behaviors like lazy loading, infinite scroll,
-    or content updates that occur in response to scrolling.
-
-    Attributes:
-        scroll_event: The original scroll event data
-        mutation_event: The DOM mutation that followed the scroll
-        delay_ms: Time between scroll and mutation (milliseconds)
-    """
-
-    scroll_event: Dict[str, Any]
-    mutation_event: Dict[str, Any]
-    delay_ms: int
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
-            "scroll_event": self.scroll_event,
-            "mutation_event": self.mutation_event,
-            "delay_ms": self.delay_ms,
-        }
+from typing import List, Dict, Any, Union
+from rrweb_util.dom_state.models import DomMutation, UINode
+from rrweb_util.user_interaction.models import ScrollPattern, UserInteraction
 
 
 @dataclass

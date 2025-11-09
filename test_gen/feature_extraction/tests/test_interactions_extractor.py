@@ -8,7 +8,7 @@ covering click, input, and scroll interactions with proper field mapping.
 # pylint: disable=duplicate-code
 
 import pytest
-from feature_extraction.extractors import extract_user_interactions
+from rrweb_util.user_interaction.extractors import extract_user_interactions
 from rrweb_util import EventType, IncrementalSource
 
 
