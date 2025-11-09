@@ -27,12 +27,10 @@ from typing import Any, Dict, Generator, Tuple
 
 from rrweb_ingest.models import Chunk
 from rrweb_ingest.pipeline import iterate_sessions
+from rrweb_util.dom_state.extractors import extract_dom_mutations
+from rrweb_util.user_interaction.extractors import extract_user_interactions
 from .models import FeatureChunk, UINode
 from .dom_state import apply_mutations, init_dom_state
-from .extractors import (
-    extract_dom_mutations,
-    extract_user_interactions,
-)
 from .metadata import resolve_node_metadata
 from .scroll_patterns import detect_scroll_patterns
 
