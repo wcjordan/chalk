@@ -1,4 +1,4 @@
-Django==5.2.7
+Django==5.2.8
 djangorestframework==3.16.1
 django-simple-history==3.10.1
 google-auth-oauthlib==1.2.2
