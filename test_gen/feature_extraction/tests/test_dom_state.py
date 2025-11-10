@@ -7,9 +7,9 @@ application for maintaining evolving DOM state.
 """
 
 import pytest
-from feature_extraction.dom_state import init_dom_state, apply_mutations
 from feature_extraction.models import UINode
 from rrweb_util import EventType, IncrementalSource
+from rrweb_util.dom_state.dom_state_helpers import init_dom_state, apply_mutations
 
 
 @pytest.fixture(name="simple_full_snapshot")
