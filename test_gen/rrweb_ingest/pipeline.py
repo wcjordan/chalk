@@ -77,9 +77,15 @@ def ingest_session(
     # Load and validate events from JSON file
     events = load_events(filepath)
 
-    # # Classify events into categories
+    # TODO (jordan) Replace this w/ logic to extract user interactions or update DOM state
+    # - See classify_events for how to tell what to do based on the rrweb event type
+    # - See feature_extraction.pipeline.extract_features to merge things
     # snapshots, interactions, _ = classify_events(events)
 
+    # TODO (jordan)
+    # - Move is_low_signal up to filter things before any extraction takes place
+    # - Change low signal scroll events and event deduplication to take place after extraction and aggregation (feature_extraction)
+    # - Ideally deduplication is turned into richer aggregation
     # Filter noise and duplicates
     cleaned_events = clean_chunk(events)
 
@@ -87,6 +93,8 @@ def ingest_session(
     if not cleaned_events:
         return None
 
+    # TODO (jordan)
+    # - Normalizer should be combined w/ the metadata parts of feature extraction
     # Normalize into Chunk object
     return normalize_chunk(cleaned_events, session_id)
 
