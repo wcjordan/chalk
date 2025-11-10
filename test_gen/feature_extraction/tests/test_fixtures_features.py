@@ -12,7 +12,7 @@ import time
 import pytest
 
 from rrweb_ingest.pipeline import ingest_session
-from feature_extraction.dom_state import init_dom_state
+from rrweb_util.dom_state.dom_state_helpers import init_dom_state
 from feature_extraction.pipeline import extract_features
 from feature_extraction.models import create_empty_features_obj
 

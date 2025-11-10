@@ -11,8 +11,8 @@ from collections import defaultdict
 import json
 import pytest
 from rrweb_ingest.models import Chunk
+from rrweb_util.dom_state.dom_state_helpers import init_dom_state
 from feature_extraction.pipeline import extract_features, iterate_feature_extraction
-from feature_extraction.dom_state import init_dom_state
 from feature_extraction.models import UINode, create_empty_features_obj
 from feature_extraction.pipeline import extract_and_save_features
 
