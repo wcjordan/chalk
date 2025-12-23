@@ -29,6 +29,10 @@ run-test-container:
 		$(UI_IMAGE_BASE):local-latest \
 		$(TEST_CMD) TEST_ARGS="$(TEST_ARGS)"
 
+.PHONY: debug-js-dev-container
+debug-js-dev-container:
+	make run-test-container TEST_CMD="/bin/bash #" DOCKER_ARGS="-i -p 127.0.0.1:9009:9009"
+
 .PHONY: containerized-test
 containerized-test:
 	make run-test-container TEST_CMD="make test" TEST_ARGS="" DOCKER_ARGS=""

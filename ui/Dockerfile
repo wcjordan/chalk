@@ -32,7 +32,7 @@ COPY js/assets/ ./assets/
 COPY js/__mocks__/ ./__mocks__/
 COPY js/src/ ./src/
 
-RUN npx storybook build --test --quiet
+RUN STORYBOOK_TEST_ENV=true npx storybook build --test --quiet
 WORKDIR /workspace
 
 # Multistage - built app

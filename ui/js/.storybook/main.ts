@@ -14,7 +14,7 @@ const config: StorybookConfig = {
         babel: {
           plugins: [
             "@babel/plugin-proposal-export-namespace-from",
-            ["react-native-reanimated/plugin", { disableSourceMaps: true }],
+            ["react-native-worklets/plugin", { disableSourceMaps: true }],
           ],
         },
       },
