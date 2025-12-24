@@ -1,5 +1,7 @@
 const { getSentryExpoConfig } = require('@sentry/react-native/metro');
-const { wrapWithReanimatedMetroConfig } = require('react-native-reanimated/metro-config');
+const {
+  wrapWithReanimatedMetroConfig,
+} = require('react-native-reanimated/metro-config');
 
 const config = getSentryExpoConfig(__dirname);
 
