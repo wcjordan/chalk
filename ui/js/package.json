@@ -85,7 +85,7 @@
   "scripts": {
     "build": "npx expo export --platform web",
     "storybook": "storybook dev -p 9009 --ci",
-    "prepare": "cd ../../ && husky install ui/js/.husky"
+    "prepare": "husky"
   },
   "browserslist": [
     "last 1 chrome version"
