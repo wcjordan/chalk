@@ -56,7 +56,7 @@ const FallbackIcon = ({ name, color, size, ...rest }: IconProps) => {
       `- @expo/vector-icons\n` +
       `- @react-native-vector-icons/material-design-icons\n` +
       `- react-native-vector-icons\n\n` +
-      `You can also use another method to specify icon: https://callstack.github.io/react-native-paper/docs/guides/icons`
+      `You can also use another method to specify icon: https://callstack.github.io/react-native-paper/docs/guides/icons`,
   );
 
   return (

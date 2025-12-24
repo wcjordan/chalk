@@ -536,18 +536,22 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
             </div>
           </div>
           <div style="display: contents;">
-            <div class="css-g5y9jx r-13awgt0 r-bt1l66"
-                 style="user-select: none; touch-action: none;"
+            <div class="css-g5y9jx"
+                 id="6"
+                 style="flex: 1 1 0%; min-height: 20px; user-select: none; touch-action: none;"
             >
               <div class="css-g5y9jx r-150rngu r-eqz5dr r-16y2uox r-1wbh5a2 r-11yh6sk r-1rnoaur r-agouwx"
+                   id="7"
                    data-testid="todo-list"
                    style="user-select: none; touch-action: auto;"
               >
                 <div class="css-g5y9jx">
                   <div class="css-g5y9jx r-105ug2t"
+                       id="8"
                        style="z-index: 0; flex-direction: column; transform: translateY(0px);"
                   >
                     <div class="css-g5y9jx"
+                         id="9"
                          style="opacity: 1;"
                     >
                       <div class="css-g5y9jx r-qkc0q7 r-1euzoj3 r-17gur6a r-1loqt21 r-105ug2t"
@@ -984,9 +988,11 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                     </div>
                   </div>
                   <div class="css-g5y9jx r-105ug2t"
+                       id="10"
                        style="z-index: 0; flex-direction: column; transform: translateY(0px);"
                   >
                     <div class="css-g5y9jx"
+                         id="11"
                          style="opacity: 1;"
                     >
                       <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -2155,18 +2161,22 @@ exports[`App Layout ListTodosLayout smoke-test 1`] = `
             </div>
           </div>
           <div style="display: contents;">
-            <div class="css-g5y9jx r-13awgt0 r-bt1l66"
-                 style="user-select: none; touch-action: none;"
+            <div class="css-g5y9jx"
+                 id="0"
+                 style="flex: 1 1 0%; min-height: 20px; user-select: none; touch-action: none;"
             >
               <div class="css-g5y9jx r-150rngu r-eqz5dr r-16y2uox r-1wbh5a2 r-11yh6sk r-1rnoaur r-agouwx"
+                   id="1"
                    data-testid="todo-list"
                    style="user-select: none; touch-action: auto;"
               >
                 <div class="css-g5y9jx">
                   <div class="css-g5y9jx r-105ug2t"
+                       id="2"
                        style="z-index: 0; flex-direction: column; transform: translateY(0px);"
                   >
                     <div class="css-g5y9jx"
+                         id="3"
                          style="opacity: 1;"
                     >
                       <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -2603,9 +2613,11 @@ exports[`App Layout ListTodosLayout smoke-test 1`] = `
                     </div>
                   </div>
                   <div class="css-g5y9jx r-105ug2t"
+                       id="4"
                        style="z-index: 0; flex-direction: column; transform: translateY(0px);"
                   >
                     <div class="css-g5y9jx"
+                         id="5"
                          style="opacity: 1;"
                     >
                       <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -3317,18 +3329,22 @@ exports[`App Layout NotificationLayout smoke-test 1`] = `
             </div>
           </div>
           <div style="display: contents;">
-            <div class="css-g5y9jx r-13awgt0 r-bt1l66"
-                 style="user-select: none; touch-action: none;"
+            <div class="css-g5y9jx"
+                 id="12"
+                 style="flex: 1 1 0%; min-height: 20px; user-select: none; touch-action: none;"
             >
               <div class="css-g5y9jx r-150rngu r-eqz5dr r-16y2uox r-1wbh5a2 r-11yh6sk r-1rnoaur r-agouwx"
+                   id="13"
                    data-testid="todo-list"
                    style="user-select: none; touch-action: auto;"
               >
                 <div class="css-g5y9jx">
                   <div class="css-g5y9jx r-105ug2t"
+                       id="14"
                        style="z-index: 0; flex-direction: column; transform: translateY(0px);"
                   >
                     <div class="css-g5y9jx"
+                         id="15"
                          style="opacity: 1;"
                     >
                       <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -3765,9 +3781,11 @@ exports[`App Layout NotificationLayout smoke-test 1`] = `
                     </div>
                   </div>
                   <div class="css-g5y9jx r-105ug2t"
+                       id="16"
                        style="z-index: 0; flex-direction: column; transform: translateY(0px);"
                   >
                     <div class="css-g5y9jx"
+                         id="17"
                          style="opacity: 1;"
                     >
                       <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
