@@ -2566,8 +2566,8 @@ __metadata:
   linkType: hard
 
 "@react-native-google-signin/google-signin@npm:^16.1.0":
-  version: 16.1.0
-  resolution: "@react-native-google-signin/google-signin@npm:16.1.0"
+  version: 16.1.1
+  resolution: "@react-native-google-signin/google-signin@npm:16.1.1"
   peerDependencies:
     expo: ">=52.0.40"
     react: "*"
@@ -2575,7 +2575,7 @@ __metadata:
   peerDependenciesMeta:
     expo:
       optional: true
-  checksum: 10c0/e67d4c65bda38b727c18ee42233d5c7af3d09b0063a4fcc370ebd432cc7af272db769ee9792ed0ac4cecff589a000abef49f2101e9fa641b22fde39e477213f8
+  checksum: 10c0/47df34b4febbf188cfb28b512bb4974f54c6ed496734caee6c08b91126c79c8a75d8895310feb3f5100894f2cf1f2a680da61f4af65ccadd1c0064cef8b44e48
   languageName: node
   linkType: hard
 
@@ -3219,9 +3219,9 @@ __metadata:
   linkType: hard
 
 "@sinclair/typebox@npm:^0.34.0":
-  version: 0.34.41
-  resolution: "@sinclair/typebox@npm:0.34.41"
-  checksum: 10c0/0fb61fc2f90c25e30b19b0096eb8ab3ccef401d3e2acfce42168ff0ee877ba5981c8243fa6b1035ac756cde95316724e978b2837dd642d7e4e095de03a999c90
+  version: 0.34.45
+  resolution: "@sinclair/typebox@npm:0.34.45"
+  checksum: 10c0/05b8e0107f38f06632811156ebac86d2ab72c4f1876a440eeb9f0e02be1b245959552a7a5515f4d56a2a18c2dc147dcdb60ccabb43608cead87ab4359de89142
   languageName: node
   linkType: hard
 
@@ -5198,7 +5198,6 @@ __metadata:
     react-native-paper: "npm:~5.14.5"
     react-native-reanimated: "npm:~4.2.1"
     react-native-safe-area-context: "npm:~5.6.2"
-    react-native-safe-area-view: "npm:^1.1.1"
     react-native-web: "npm:~0.21.2"
     react-native-worklets: "npm:0.7.1"
     react-redux: "npm:^9.2.0"
@@ -8130,13 +8129,6 @@ __metadata:
   dependencies:
     hermes-estree: "npm:0.32.0"
   checksum: 10c0/5902d2c5d347c0629fba07a47eaad5569590ac69bc8bfb2e454e08d2dfbe1ebd989d88518dca2cba64061689b5eac5960ae6bd15a4a66600bbf377498a3234b7
-  languageName: node
-  linkType: hard
-
-"hoist-non-react-statics@npm:^2.3.1":
-  version: 2.5.5
-  resolution: "hoist-non-react-statics@npm:2.5.5"
-  checksum: 10c0/79c204446a61ad490cc9342b2deeedea5a17f03a5fc091f367b6c08f29387c8d5578634ebfb8733043422a5e1182b372893d63f8737ac4b75da3a2ec4a316162
   languageName: node
   linkType: hard
 
@@ -11861,19 +11853,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/3c8df21a1dbac83116b9c9bd5d20b7c1bb7649ecef44a111af6fb6b237241f5f4d692189eec30a69f5701b857249257da3621b9e17165460a2bb71faac7b92ae
-  languageName: node
-  linkType: hard
-
-"react-native-safe-area-view@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "react-native-safe-area-view@npm:1.1.1"
-  dependencies:
-    hoist-non-react-statics: "npm:^2.3.1"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-    react-native-safe-area-context: "*"
-  checksum: 10c0/016ab45b0105c63d5ca294a796631dac4af1546478b90b91208ee4ad6d57ff4b62b0f6604961e8f1b5d0cb8fd019e71f2f097f2a5319c09b08ea48e2ab26c640
   languageName: node
   linkType: hard
 

@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { FILTER_STATUS, Todo, TodoPatch } from './redux/types';
 import App from './App';
 import { setupStore } from './redux/store';
@@ -92,11 +91,7 @@ const wrapper = (component, stateOverrides = {}) => {
       return undefined;
     },
   );
-  return (
-    <SafeAreaProvider>
-      <Provider store={setupStore(initialState)}>{component}</Provider>
-    </SafeAreaProvider>
-  );
+  return <Provider store={setupStore(initialState)}>{component}</Provider>;
 };
 
 export default {
