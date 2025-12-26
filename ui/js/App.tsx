@@ -2,6 +2,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import color from 'color';
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as ReduxProvider } from 'react-redux';
 import * as Sentry from '@sentry/react-native';
 
@@ -40,7 +41,9 @@ const TopApp: React.FC = function () {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ReduxProvider store={setupStore()}>
         <PaperProvider theme={theme}>
-          <App />
+          <SafeAreaProvider>
+            <App />
+          </SafeAreaProvider>
         </PaperProvider>
       </ReduxProvider>
     </GestureHandlerRootView>
