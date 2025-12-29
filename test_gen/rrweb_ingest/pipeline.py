@@ -18,10 +18,13 @@ import os
 from typing import Generator, List
 
 from rrweb_ingest.loader import load_events
-from rrweb_ingest.classifier import classify_events
-from rrweb_ingest.filter import clean_chunk
+from rrweb_ingest.filter import is_low_signal
 from rrweb_ingest.normalizer import normalize_chunk
 from rrweb_ingest.models import Chunk
+from rrweb_util import EventType, is_dom_mutation_event
+from rrweb_util.dom_state.dom_state_helpers import apply_mutations, init_dom_state
+from rrweb_util.user_interaction.extractors import extract_user_interactions
+
 
 logger = logging.getLogger(__name__)
 
@@ -77,26 +80,39 @@ def ingest_session(
     # Load and validate events from JSON file
     events = load_events(filepath)
 
-    # TODO (jordan) Replace this w/ logic to extract user interactions or update DOM state
-    # - See classify_events for how to tell what to do based on the rrweb event type
-    # - See feature_extraction.pipeline.extract_features to merge things
-    # snapshots, interactions, _ = classify_events(events)
+    # Walk user interaction & DOM state changes to extract events we want to pass to rule matcher
+    # - If user interaction, extract that event and any relevant DOM details on the elements being interacted with
+    # - If DOM state change, update our concept of the DOMs current state
+    # At the end we should have some well fleshed out UI interactions
+    dom_state = None
+    user_interactions = []
+    for event in events:
+        event_type = event["type"]
 
-    # TODO (jordan)
-    # - Move is_low_signal up to filter things before any extraction takes place
-    # - Change low signal scroll events and event deduplication to take place after extraction and aggregation (feature_extraction)
-    # - Ideally deduplication is turned into richer aggregation
-    # Filter noise and duplicates
-    cleaned_events = clean_chunk(events)
+        if event_type == EventType.FULL_SNAPSHOT:
+            # FullSnapshot event - initialize DOM state
+            dom_state = init_dom_state(event)
+
+        elif event_type == EventType.INCREMENTAL_SNAPSHOT:
+            # IncrementalSnapshot event - apply mutations to DOM state
+            if dom_state is None:
+                raise ValueError("IncrementalSnapshot event encountered before FullSnapshot")
+
+            if is_dom_mutation_event(event):
+                apply_mutations(dom_state, [event])
+            else:
+                if is_low_signal(event):
+                    continue
+                user_interactions.extend(extract_user_interactions([event]))
 
     # Skip empty chunks after cleaning
-    if not cleaned_events:
+    if not user_interactions:
         return None
 
     # TODO (jordan)
     # - Normalizer should be combined w/ the metadata parts of feature extraction
     # Normalize into Chunk object
-    return normalize_chunk(cleaned_events, session_id)
+    return normalize_chunk(user_interactions, session_id)
 
 
 def iterate_sessions(

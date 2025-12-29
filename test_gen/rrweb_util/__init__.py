@@ -16,7 +16,6 @@ from .helpers import (
     get_event_data,
     get_target_id,
     get_mouse_coordinates,
-    get_scroll_delta,
     get_tag_name,
     extract_interaction_details,
 )
@@ -40,7 +39,6 @@ __all__ = [
     "get_event_data",
     "get_target_id",
     "get_mouse_coordinates",
-    "get_scroll_delta",
     "get_tag_name",
     "extract_interaction_details",
 ]

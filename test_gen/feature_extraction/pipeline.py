@@ -27,7 +27,6 @@ from typing import Any, Dict, Generator, Tuple
 
 from rrweb_ingest.models import Chunk
 from rrweb_ingest.pipeline import iterate_sessions
-from rrweb_util.dom_state.extractors import extract_dom_mutations
 from rrweb_util.dom_state.dom_state_helpers import apply_mutations, init_dom_state
 from rrweb_util.user_interaction.extractors import extract_user_interactions
 from .models import FeatureChunk, UINode
@@ -69,19 +68,16 @@ def extract_features(
     # Apply mutations from the chunk to update DOM state
     apply_mutations(dom_state, chunk.events)
 
-    # Extract core features
-    dom_mutations = extract_dom_mutations(chunk.events)
     interactions = extract_user_interactions(chunk.events)
 
     # Resolve UI metadata for referenced nodes
-    ui_nodes = _resolve_ui_metadata(dom_mutations, interactions, dom_state)
+    ui_nodes = _resolve_ui_metadata(interactions, dom_state)
 
     # Extract behavioral patterns
     scroll_patterns = detect_scroll_patterns(chunk.events)
 
     # Assemble all features into FeatureChunk
     features = {
-        "dom_mutations": dom_mutations,
         "interactions": interactions,
         "ui_nodes": ui_nodes,
         "scroll_patterns": scroll_patterns,
@@ -97,12 +93,12 @@ def extract_features(
     )
 
 
-def _resolve_ui_metadata(dom_mutations, interactions, dom_state):
+def _resolve_ui_metadata(interactions, dom_state):
     """Resolve UI metadata for all nodes referenced in mutations and interactions."""
     ui_nodes = {}
 
     # Collect unique node IDs from mutations and interactions
-    referenced_node_ids = _collect_referenced_node_ids(dom_mutations, interactions)
+    referenced_node_ids = _collect_referenced_node_ids(interactions)
 
     # Resolve metadata for each referenced node
     for node_id in referenced_node_ids:
@@ -119,11 +115,9 @@ def _resolve_ui_metadata(dom_mutations, interactions, dom_state):
     return ui_nodes
 
 
-def _collect_referenced_node_ids(dom_mutations, interactions):
-    """Collect unique node IDs referenced in mutations and interactions."""
+def _collect_referenced_node_ids(interactions):
+    """Collect unique node IDs referenced in interactions."""
     referenced_node_ids = set()
-    for mutation in dom_mutations:
-        referenced_node_ids.add(mutation.target_id)
     for interaction in interactions:
         referenced_node_ids.add(interaction.target_id)
     return referenced_node_ids

@@ -72,12 +72,6 @@ def get_mouse_coordinates(event: Dict[str, Any]) -> Tuple[int, int]:
     return data.get("x", 0), data.get("y", 0)
 
 
-def get_scroll_delta(event: Dict[str, Any]) -> Tuple[int, int]:
-    """Get x, y scroll deltas from scroll event."""
-    data = get_event_data(event)
-    return data.get("x", 0), data.get("y", 0)
-
-
 # DOM node helpers
 def get_tag_name(node_data: Dict[str, Any]) -> str:
     """Get the tag name for a given node data dictionary."""
