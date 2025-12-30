@@ -9,7 +9,7 @@ application for maintaining evolving DOM state.
 import pytest
 from feature_extraction.models import UINode
 from rrweb_util import EventType, IncrementalSource
-from rrweb_util.dom_state.dom_state_helpers import init_dom_state, apply_mutations
+from rrweb_util.dom_state.dom_state_helpers import init_dom_state, apply_mutation
 
 
 @pytest.fixture(name="simple_full_snapshot")
@@ -211,8 +211,8 @@ def test_init_dom_state_nodes_without_ids_ignored(create_full_snapshot_event):
     assert p_node.parent == 1
 
 
-def test_apply_mutations_add_node(simple_node_by_id):
-    """Test that apply_mutations correctly adds new nodes."""
+def test_apply_mutation_add_node(simple_node_by_id):
+    """Test that apply_mutation correctly adds new nodes."""
     # Create a mutation event that adds a new node
     mutation_events = [
         {
@@ -234,7 +234,7 @@ def test_apply_mutations_add_node(simple_node_by_id):
         }
     ]
 
-    apply_mutations(simple_node_by_id, mutation_events)
+    apply_mutation(simple_node_by_id, mutation_events)
 
     # Assert the new node was added
     assert 3 in simple_node_by_id
@@ -251,8 +251,8 @@ def test_apply_mutations_add_node(simple_node_by_id):
     assert simple_node_by_id[2].tag == "span"
 
 
-def test_apply_mutations_remove_node(rich_node_by_id):
-    """Test that apply_mutations correctly removes existing nodes."""
+def test_apply_mutation_remove_node(rich_node_by_id):
+    """Test that apply_mutation correctly removes existing nodes."""
     # Create a mutation event that removes a node
     initial_length = len(rich_node_by_id)
     mutation_events = [
@@ -265,7 +265,7 @@ def test_apply_mutations_remove_node(rich_node_by_id):
         }
     ]
 
-    apply_mutations(rich_node_by_id, mutation_events)
+    apply_mutation(rich_node_by_id, mutation_events)
 
     # Assert the node was not removed
     assert 2 in rich_node_by_id
@@ -308,10 +308,10 @@ def test_apply_mutations_remove_node(rich_node_by_id):
         ),
     ],
 )
-def test_apply_mutations_change_properties(
+def test_apply_mutation_change_properties(
     mutation_type, mutation_data, expected_changes
 ):
-    """Test that apply_mutations correctly updates node attributes and text."""
+    """Test that apply_mutation correctly updates node attributes and text."""
     # Setup different initial nodes based on mutation type
     if mutation_type == "attributes":
         node_by_id = {
@@ -342,14 +342,14 @@ def test_apply_mutations_change_properties(
         }
     ]
 
-    apply_mutations(node_by_id, mutation_events)
+    apply_mutation(node_by_id, mutation_events)
 
     # Assert expected changes
     updated_node = node_by_id[1]
     assert expected_changes(updated_node)
 
 
-def test_apply_mutations_ignore_invalid_node_ids(simple_node_by_id):
+def test_apply_mutation_ignore_invalid_node_ids(simple_node_by_id):
     """Test that mutations referencing nonexistent node IDs are safely ignored."""
     # Create mutation events that reference nonexistent nodes
     mutation_events = [
@@ -367,7 +367,7 @@ def test_apply_mutations_ignore_invalid_node_ids(simple_node_by_id):
     ]
 
     # This should not raise any errors
-    apply_mutations(simple_node_by_id, mutation_events)
+    apply_mutation(simple_node_by_id, mutation_events)
 
     # Assert original nodes are unchanged
     assert len(simple_node_by_id) == 2
@@ -375,8 +375,8 @@ def test_apply_mutations_ignore_invalid_node_ids(simple_node_by_id):
     assert simple_node_by_id[1].tag == "div"
 
 
-def test_apply_mutations_mixed_operations(simple_node_by_id):
-    """Test apply_mutations with multiple operation types in one event."""
+def test_apply_mutation_mixed_operations(simple_node_by_id):
+    """Test apply_mutation with multiple operation types in one event."""
     # Create a mutation event with multiple operations
     mutation_events = [
         {
@@ -400,7 +400,7 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
         }
     ]
 
-    apply_mutations(simple_node_by_id, mutation_events)
+    apply_mutation(simple_node_by_id, mutation_events)
 
     # Assert all operations were applied
     assert len(simple_node_by_id) == 3  # One added
@@ -456,12 +456,12 @@ def test_apply_mutations_mixed_operations(simple_node_by_id):
         ],
     ],
 )
-def test_apply_mutations_ignore_invalid_events(simple_node_by_id, mutation_events):
+def test_apply_mutation_ignore_invalid_events(simple_node_by_id, mutation_events):
     """Test that non-mutation events and empty mutation data are safely ignored."""
     original_length = len(simple_node_by_id)
     original_tag = simple_node_by_id[1].tag
 
-    apply_mutations(simple_node_by_id, mutation_events)
+    apply_mutation(simple_node_by_id, mutation_events)
 
     # Assert node_by_id is unchanged
     assert len(simple_node_by_id) == original_length

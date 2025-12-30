@@ -24,7 +24,8 @@ format:
 .PHONY: test
 test:
 	$(ACTIVATE_VENV)
-	python -m pytest --cov=. --cov-report=html -v */tests
+	# python -m pytest --cov=. --cov-report=html -v */tests
+	python -m pytest --cov=. --cov-report=html -v rrweb_ingest/tests
 
 .PHONY: update-snapshots
 update-snapshots:

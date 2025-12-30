@@ -13,7 +13,6 @@ from unittest.mock import patch
 import pytest
 from feature_extraction.pipeline import extract_and_save_features
 from feature_extraction.models import (
-    DomMutation,
     FeatureChunk,
     UserInteraction,
     UINode,
@@ -202,10 +201,6 @@ def test_extract_and_save_features_counts_feature_statistics(temp_output_dir):
         end_time=2000,
         events=[],
         features={
-            "dom_mutations": [
-                DomMutation("add", 1, {}, 1000),
-                DomMutation("remove", 2, {}, 1100),
-            ],
             "interactions": [
                 UserInteraction("click", 3, {}, 1200),
             ],

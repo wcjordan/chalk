@@ -8,31 +8,11 @@ and that the FeatureChunk serialization handles complex nested structures correc
 import json
 
 from feature_extraction.models import (
-    DomMutation,
     UserInteraction,
     UINode,
     ScrollPattern,
     FeatureChunk,
 )
-
-
-def test_dom_mutation_to_dict():
-    """Test DomMutation serialization to dictionary."""
-    mutation = DomMutation(
-        mutation_type="attribute",
-        target_id=123,
-        details={"class": "active", "id": "button1"},
-        timestamp=1000,
-    )
-
-    result = mutation.to_dict()
-
-    assert result == {
-        "mutation_type": "attribute",
-        "target_id": 123,
-        "details": {"class": "active", "id": "button1"},
-        "timestamp": 1000,
-    }
 
 
 def test_user_interaction_to_dict():
@@ -256,7 +236,6 @@ def test_feature_chunk_serialization_roundtrip():
         end_time=2000,
         events=[{"type": 3, "timestamp": 1500, "data": {"source": 2}}],
         features={
-            "dom_mutations": [DomMutation("text", 1, {"newText": "Hello"}, 1100)],
             "interactions": [UserInteraction("input", 2, {"value": "test"}, 1200)],
             "ui_nodes": {3: UINode(3, "input", {"type": "text"}, "", 1)},
             "scroll_patterns": [],

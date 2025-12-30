@@ -7,7 +7,7 @@ pipeline for the final feature chunk.
 
 from dataclasses import dataclass
 from typing import List, Dict, Any, Union
-from rrweb_util.dom_state.models import DomMutation, UINode
+from rrweb_util.dom_state.models import UINode
 from rrweb_util.user_interaction.models import ScrollPattern, UserInteraction
 
 
@@ -81,8 +81,6 @@ def feature_chunk_from_dict(data: Dict[str, Any]) -> FeatureChunk:
         elif key == "interactions":
             # Other features are lists of objects
             features[key] = [UserInteraction(**item_data) for item_data in value]
-        elif key == "dom_mutations":
-            features[key] = [DomMutation(**item_data) for item_data in value]
         elif key == "scroll_patterns":
             features[key] = [ScrollPattern(**item_data) for item_data in value]
         else:

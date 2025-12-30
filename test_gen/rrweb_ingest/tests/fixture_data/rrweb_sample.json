@@ -1,4 +1,8 @@
 {
+  "metadata":{
+    "environment": "test"
+  },
+  "session_guid": "sample",
   "rrweb_data": [
     {
       "type": 4,

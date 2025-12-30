@@ -1,0 +1,11 @@
+# serializer version: 1
+# name: TestIngestSession.test_ingest_basic_session[session_chunk]
+  dict({
+    'session_id': 'sample',
+    'user_interactions': list([
+      UserInteraction(action='click', target_id=6, value={'x': 200, 'y': 300}, timestamp=1640995202000),
+      UserInteraction(action='input', target_id=10, value={'value': 'user@example.com'}, timestamp=1640995204000),
+      UserInteraction(action='click', target_id=12, value={'x': 150, 'y': 200}, timestamp=1640995221000),
+    ]),
+  })
+# ---

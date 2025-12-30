@@ -25,19 +25,17 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Generator, Tuple
 
-from rrweb_ingest.models import Chunk
 from rrweb_ingest.pipeline import iterate_sessions
-from rrweb_util.dom_state.dom_state_helpers import apply_mutations, init_dom_state
+from rrweb_util.dom_state.dom_state_helpers import apply_mutation, init_dom_state
 from rrweb_util.user_interaction.extractors import extract_user_interactions
 from .models import FeatureChunk, UINode
 from .metadata import resolve_node_metadata
-from .scroll_patterns import detect_scroll_patterns
 
 logger = logging.getLogger(__name__)
 
 
 def extract_features(
-    chunk: Chunk,
+    chunk: Dict,
     dom_state: Dict[int, UINode],
 ) -> FeatureChunk:
     """
@@ -66,21 +64,17 @@ def extract_features(
         This maintains consistency between the virtual DOM and extracted features.
     """
     # Apply mutations from the chunk to update DOM state
-    apply_mutations(dom_state, chunk.events)
+    apply_mutation(dom_state, chunk.events)
 
     interactions = extract_user_interactions(chunk.events)
 
     # Resolve UI metadata for referenced nodes
     ui_nodes = _resolve_ui_metadata(interactions, dom_state)
 
-    # Extract behavioral patterns
-    scroll_patterns = detect_scroll_patterns(chunk.events)
-
     # Assemble all features into FeatureChunk
     features = {
         "interactions": interactions,
         "ui_nodes": ui_nodes,
-        "scroll_patterns": scroll_patterns,
     }
 
     return FeatureChunk(

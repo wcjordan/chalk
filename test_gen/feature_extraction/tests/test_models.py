@@ -6,28 +6,12 @@ used in the feature extraction pipeline.
 """
 
 from feature_extraction.models import (
-    DomMutation,
     UserInteraction,
     UINode,
     ScrollPattern,
     FeatureChunk,
     create_empty_features_obj,
 )
-
-
-def test_dom_mutation_creation():
-    """Test that DomMutation objects can be created with correct attributes."""
-    mutation = DomMutation(
-        mutation_type="attribute",
-        target_id=123,
-        details={"class": "active"},
-        timestamp=12345,
-    )
-
-    assert mutation.mutation_type == "attribute"
-    assert mutation.target_id == 123
-    assert mutation.details == {"class": "active"}
-    assert mutation.timestamp == 12345
 
 
 def test_user_interaction_creation():

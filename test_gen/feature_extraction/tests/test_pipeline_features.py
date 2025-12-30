@@ -10,7 +10,6 @@ from collections import defaultdict
 
 import json
 import pytest
-from rrweb_ingest.models import Chunk
 from rrweb_util.dom_state.dom_state_helpers import init_dom_state
 from feature_extraction.pipeline import extract_features, iterate_feature_extraction
 from feature_extraction.models import UINode, create_empty_features_obj
@@ -111,13 +110,10 @@ def fixture_sample_chunk_with_interactions():
         },
     ]
 
-    return Chunk(
-        chunk_id="test-session-chunk001",
-        start_time=10000,
-        end_time=10800,
-        events=events,
-        metadata={"num_events": len(events)},
-    )
+    return {
+        "session_id": "test-session-chunk001",
+        "user_interactions": events,
+    }
 
 
 @pytest.fixture(name="initial_dom_state")
@@ -315,13 +311,10 @@ def test_extract_features_idempotent_calls(
 
 def test_extract_features_handles_empty_chunk():
     """Test that extract_features handles chunks with minimal events gracefully."""
-    empty_chunk = Chunk(
-        chunk_id="empty-chunk",
-        start_time=1000,
-        end_time=2000,
-        events=[],
-        metadata={},
-    )
+    empty_chunk = {
+        "session_id": "empty-chunk",
+        "user_interactions": [],
+    }
 
     empty_dom_state = {}
 
@@ -338,11 +331,9 @@ def test_extract_features_handles_empty_chunk():
 def test_extract_features_handles_missing_nodes_gracefully():
     """Test that extract_features handles references to missing DOM nodes gracefully."""
     # Create a chunk with interactions referencing non-existent nodes
-    chunk_with_missing_nodes = Chunk(
-        chunk_id="missing-nodes-chunk",
-        start_time=1000,
-        end_time=2000,
-        events=[
+    chunk_with_missing_nodes = {
+        "session_id": "missing-nodes-chunk",
+        "user_interactions": [
             {
                 "type": 3,
                 "timestamp": 1100,
@@ -362,9 +353,7 @@ def test_extract_features_handles_missing_nodes_gracefully():
                 },  # Non-existent node
             },
         ],
-        metadata={},
-    )
-
+    }
     empty_dom_state = {}
 
     # Should not raise errors
@@ -421,13 +410,10 @@ def test_extract_features_handles_events_with_missing_fields():
         },
     ]
 
-    chunk = Chunk(
-        chunk_id="missing-fields-chunk",
-        start_time=1000,
-        end_time=1500,
-        events=events_with_missing_fields,
-        metadata={},
-    )
+    chunk = {
+        "session_id": "missing-fields-chunk",
+        "user_interactions": events_with_missing_fields,
+    }
 
     initial_dom_state = init_dom_state(events_with_missing_fields[0])
 
@@ -520,13 +506,10 @@ def test_extract_features_with_complex_interaction_sequences(
         {"type": 3, "timestamp": 1320, "data": {"source": 5, "id": 2, "text": "abc"}},
     ]
 
-    chunk = Chunk(
-        chunk_id="rapid-sequence-chunk",
-        start_time=1000,
-        end_time=1320,
-        events=rapid_events,
-        metadata={},
-    )
+    chunk = {
+        "session_id": "rapid-sequence-chunk",
+        "user_interactions": rapid_events,
+    }
 
     initial_dom_state = init_dom_state(rapid_events[0])
 
@@ -585,13 +568,10 @@ def test_extract_features_boundary_conditions():
         },
     ]
 
-    chunk = Chunk(
-        chunk_id="boundary-conditions-chunk",
-        start_time=1000,
-        end_time=15000,
-        events=boundary_events,
-        metadata={},
-    )
+    chunk = {
+        "session_id": "boundary-conditions-chunk",
+        "user_interactions": boundary_events,
+    }
 
     initial_dom_state = init_dom_state(boundary_events[0])
 
@@ -689,13 +669,10 @@ def test_extract_features_large_event_volume():
             }
         )
 
-    chunk = Chunk(
-        chunk_id="large-volume-chunk",
-        start_time=0,
-        end_time=17000,
-        events=large_events,
-        metadata={"num_events": len(large_events)},
-    )
+    chunk = {
+        "session_id": "large-volume-chunk",
+        "user_interactions": large_events,
+    }
 
     initial_dom_state = init_dom_state(large_events[0])
 
