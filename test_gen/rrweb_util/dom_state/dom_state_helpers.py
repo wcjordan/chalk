@@ -9,7 +9,7 @@ through mutation tracking.
 
 from typing import Dict, List
 
-from rrweb_util import is_full_snapshot, is_dom_mutation_event, get_tag_name
+from rrweb_util.helpers import is_full_snapshot, is_dom_mutation_event, get_tag_name
 from .models import UINode
 
 

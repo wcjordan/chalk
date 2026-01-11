@@ -6,11 +6,8 @@ rrweb chunks, including mousemove noise & scrolling. This helps focus downstream
 processing on meaningful user interactions.
 """
 
-from rrweb_util import (
-    IncrementalSource,
-    is_incremental_snapshot,
-    is_event_of_type,
-)
+from rrweb_util import IncrementalSource
+from rrweb_util.helpers import is_incremental_snapshot, is_event_of_type
 
 
 def is_low_signal(event: dict) -> bool:
