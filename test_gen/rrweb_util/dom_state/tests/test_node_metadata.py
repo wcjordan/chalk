@@ -6,7 +6,7 @@ semantic attributes, text content, and DOM path computation.
 """
 
 import pytest
-from feature_extraction.metadata import resolve_node_metadata
+from rrweb_util.dom_state.node_metadata import resolve_node_metadata
 from feature_extraction.models import UINode
 
 

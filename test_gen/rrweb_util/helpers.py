@@ -2,7 +2,7 @@
 Shared utility functions for rrweb event processing across all modules.
 """
 
-from typing import Optional, Dict, Any, Tuple
+from typing import List, Optional, Dict, Any, Tuple
 from .constants import EventType, IncrementalSource, NODE_TYPE_TO_TAG_MAP
 
 
@@ -25,19 +25,20 @@ def get_incremental_source(event: Dict[str, Any]) -> Optional[int]:
 
 
 # Specific event type checking
-def is_mouse_move_event(event: Dict[str, Any]) -> bool:
-    """Check if event is a mouse move."""
-    return get_incremental_source(event) == IncrementalSource.MOUSE_MOVE
+def is_event_of_type(event: Dict[str, Any], event_types: List[int]) -> bool:
+    """Check if event is of a specific type based on its source."""
+    source = get_incremental_source(event)
+    return source in event_types if source is not None else False
+
+
+def is_drag_event(event: Dict[str, Any]) -> bool:
+    """Check if event is a drag event."""
+    return get_incremental_source(event) == IncrementalSource.DRAG
 
 
 def is_mouse_interaction_event(event: Dict[str, Any]) -> bool:
     """Check if event is a mouse click/interaction."""
     return get_incremental_source(event) == IncrementalSource.MOUSE_INTERACTION
-
-
-def is_scroll_event(event: Dict[str, Any]) -> bool:
-    """Check if event is a scroll."""
-    return get_incremental_source(event) == IncrementalSource.SCROLL
 
 
 def is_input_event(event: Dict[str, Any]) -> bool:

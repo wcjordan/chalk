@@ -7,9 +7,9 @@ processing on meaningful user interactions.
 """
 
 from rrweb_util import (
+    IncrementalSource,
     is_incremental_snapshot,
-    is_mouse_move_event,
-    is_scroll_event,
+    is_event_of_type,
 )
 
 
@@ -41,5 +41,17 @@ def is_low_signal(event: dict) -> bool:
     if not is_incremental_snapshot(event):
         return False
 
-    # Drop mousemove events & scroll events
-    return is_mouse_move_event(event) or is_scroll_event(event)
+    # Drop mousemove events, scroll events, & other low-signal events
+    return is_event_of_type(event, [
+        IncrementalSource.MOUSE_MOVE,
+        IncrementalSource.SCROLL,
+        IncrementalSource.VIEWPORT_RESIZE,
+        IncrementalSource.TOUCH_MOVE,
+        IncrementalSource.MEDIA_INTERACTION,
+        IncrementalSource.STYLE_SHEET_RULE,
+        IncrementalSource.FONT,
+        IncrementalSource.LOG,
+        IncrementalSource.STYLE_DECLARATION,
+        IncrementalSource.ADOPTED_STYLE_SHEET,
+        IncrementalSource.CUSTOM_ELEMENT,
+    ])

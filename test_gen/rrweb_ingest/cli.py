@@ -12,7 +12,7 @@ import os
 import sys
 from pathlib import Path
 
-from .pipeline import extract_and_save_features
+from .pipeline import iterate_sessions
 
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO").upper())
 logger = logging.getLogger(__name__)
@@ -51,7 +51,7 @@ Examples:
     )
 
     parser.add_argument(
-        "--max-sessions",
+        "--max_sessions",
         type=int,
         help="Maximum number of sessions to process (default: process all)",
     )
@@ -97,41 +97,52 @@ def main():
     session_dir, output_dir = _validate_inputs(args)
 
     try:
+        # TODO update iterate_sessions to take a Path to a dir instead of a string
+        session_generator = iterate_sessions(str(session_dir), args.max_sessions)
+        for session in session_generator:
+            if session is not None:
+                logger.info("Processed session: %s", session["session_id"])
+                logger.info("Extracted %d user interactions", len(session["user_interactions"]))
+            else:
+                logger.info("Session yielded no user interactions and was skipped")
+
+        # TODO review extract_and_save_features add anything missing to iterate_sessions
         # Run the feature extraction
-        stats = extract_and_save_features(
-            session_dir=str(session_dir),
-            output_dir=str(output_dir),
-            max_sessions=args.max_sessions,
-        )
+        # stats = extract_and_save_features(
+        #     session_dir=str(session_dir),
+        #     output_dir=str(output_dir),
+        #     max_sessions=args.max_sessions,
+        # )
 
+        # TODO cleanup below and modify to work w/ iterate_sessions
         # Print final summary
-        logger.debug("\n%s", "=" * 50)
+        # logger.debug("\n%s", "=" * 50)
 
-        logger.info("Feature extraction completed successfully!")
-        logger.info("Sessions processed: %d", stats["sessions_processed"])
-        logger.info("Feature chunks saved: %d", stats["chunks_saved"])
+        # logger.info("Feature extraction completed successfully!")
+        # logger.info("Sessions processed: %d", stats["sessions_processed"])
+        # logger.info("Feature chunks saved: %d", stats["chunks_saved"])
 
-        # Print feature type counts if any were extracted
-        feature_counts = stats["total_features"]
-        total_feature_count = sum(count for count in feature_counts.values())
+        # # Print feature type counts if any were extracted
+        # feature_counts = stats["total_features"]
+        # total_feature_count = sum(count for count in feature_counts.values())
 
-        if total_feature_count > 0:
-            logger.info("Total features extracted: %d", total_feature_count)
-            logger.debug("Feature breakdown:")
-            for feature_type, count in feature_counts.items():
-                if count > 0:
-                    logger.debug("  %s: %d", feature_type, count)
+        # if total_feature_count > 0:
+        #     logger.info("Total features extracted: %d", total_feature_count)
+        #     logger.debug("Feature breakdown:")
+        #     for feature_type, count in feature_counts.items():
+        #         if count > 0:
+        #             logger.debug("  %s: %d", feature_type, count)
 
         # Print error summary
-        if stats["errors"]:
-            logger.warning("Errors encountered: %d", len(stats["errors"]))
-            logger.warning("Error details:")
-            for error in stats["errors"]:
-                logger.warning("  %s", error)
-        else:
-            logger.info("No errors encountered")
+        # if stats["errors"]:
+        #     logger.warning("Errors encountered: %d", len(stats["errors"]))
+        #     logger.warning("Error details:")
+        #     for error in stats["errors"]:
+        #         logger.warning("  %s", error)
+        # else:
+        #     logger.info("No errors encountered")
 
-        logger.info("Output files saved to: %s", output_dir)
+        # logger.info("Output files saved to: %s", output_dir)
 
     except KeyboardInterrupt:
         logger.warning("Feature extraction interrupted by user")

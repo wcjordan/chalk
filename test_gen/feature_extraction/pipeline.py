@@ -69,6 +69,7 @@ def extract_features(
     interactions = extract_user_interactions(chunk.events)
 
     # Resolve UI metadata for referenced nodes
+    # TODO extract and move this into rrweb_ingest
     ui_nodes = _resolve_ui_metadata(interactions, dom_state)
 
     # Assemble all features into FeatureChunk
@@ -132,45 +133,16 @@ def iterate_feature_extraction(
     """
     session_generator = iterate_sessions(session_dir, max_sessions=max_sessions)
     for session_chunks in session_generator:
-        dom = {}  # Start with empty DOM state
-        for curr_chunk in session_chunks:
-            has_snapshot_before = bool(curr_chunk.metadata.get("snapshot_before"))
-            chunk_metadata = {
-                "chunk_id": curr_chunk.chunk_id,
-                "start_time": curr_chunk.start_time,
-                "end_time": curr_chunk.end_time,
-                "session_id": curr_chunk.metadata["session_id"],
-                "num_events": len(curr_chunk.events),
-                "has_snapshot_before": has_snapshot_before,
-                "dom_initialized_from_snapshot": False,
-                "dom_state_nodes_before": len(dom),
-                "features": {},
-            }
-
-            # Initialize DOM state from FullSnapshot if available
-            # Otherwise use the DOM from the last chunk (after mutations)
-            if has_snapshot_before:
-                chunk_metadata["dom_initialized_from_snapshot"] = True
-                dom = init_dom_state(curr_chunk.metadata["snapshot_before"])
-            chunk_metadata["dom_state_nodes_after_init"] = len(dom)
-
-            # Extract features from the chunk
-            chunk_data = extract_features(curr_chunk, dom)
-
-            # Track DOM state evolution
-            chunk_metadata["dom_state_nodes_final"] = len(dom)
-
-            yield chunk_data, chunk_metadata
+        # TODO (jordan) This becomes logic in rrweb_ingest
+        # extract_features(curr_chunk, dom)
+        pass
 
 
-def _extract_and_save_session_features(
-    sessions_seen, stats, output_path, chunk_data, chunk_metadata
-):
+def _extract_and_save_session_features(stats, output_path, chunk_data, chunk_metadata):
     """
     Extract features from a single session and save to disk.
 
     Args:
-        sessions_seen: Set of session IDs that have been processed
         stats: Dictionary to update processing statistics
         output_path: Path to the output directory
         chunk_data: The FeatureChunk containing the extracted features
@@ -178,9 +150,6 @@ def _extract_and_save_session_features(
     """
     session_id = chunk_metadata["session_id"]
     chunk_id = chunk_data.chunk_id
-
-    # Track unique sessions
-    sessions_seen.add(session_id)
 
     # Generate output filename: {session_id}_{chunk_id}.json
     output_filename = f"{session_id}_{chunk_id}.json"
@@ -191,11 +160,6 @@ def _extract_and_save_session_features(
 
     # Add processing metadata
     chunk_dict["processing_metadata"] = {
-        "feature_extraction_timestamp": chunk_metadata.get("timestamp"),
-        "dom_initialized_from_snapshot": chunk_metadata.get(
-            "dom_initialized_from_snapshot", False
-        ),
-        "dom_state_nodes_final": chunk_metadata.get("dom_state_nodes_final", 0),
         "feature_extraction_version": "1.0",
     }
 
@@ -204,7 +168,7 @@ def _extract_and_save_session_features(
         json.dump(chunk_dict, f, indent=2, ensure_ascii=False)
 
     # Update statistics
-    stats["chunks_saved"] += 1
+    stats["sessions_processed"] += 1
     for feature_type, feature_list in chunk_data.features.items():
         if feature_type in stats["total_features"]:
             if isinstance(feature_list, dict):  # ui_nodes case
@@ -235,7 +199,6 @@ def extract_and_save_features(
     Returns:
         Dictionary containing processing statistics:
         - sessions_processed: Number of session files processed
-        - chunks_saved: Total number of feature chunks saved
         - total_features: Aggregate counts of each feature type
         - errors: List of any errors encountered during processing
 
@@ -253,18 +216,12 @@ def extract_and_save_features(
     # Initialize statistics tracking
     stats = {
         "sessions_processed": 0,
-        "chunks_saved": 0,
         "total_features": {
-            "dom_mutations": 0,
             "interactions": 0,
             "ui_nodes": 0,
-            "scroll_patterns": 0,
         },
         "errors": [],
     }
-
-    # Track unique sessions seen
-    sessions_seen = set()
 
     logger.debug("Processing sessions from: %s", session_path)
     logger.debug("Saving features to: %s", output_path)
@@ -274,15 +231,11 @@ def extract_and_save_features(
 
     for chunk_data, chunk_metadata in chunk_generator:
         _extract_and_save_session_features(
-            sessions_seen, stats, output_path, chunk_data, chunk_metadata
+            stats, output_path, chunk_data, chunk_metadata
         )
-
-    # Update session count from tracked sessions
-    stats["sessions_processed"] = len(sessions_seen)
 
     logger.debug("\nProcessing Summary:")
     logger.debug("  Sessions processed: %d", stats["sessions_processed"])
-    logger.debug("  Chunks saved: %d", stats["chunks_saved"])
     logger.debug("  Total features extracted:")
     for feature_type, count in stats["total_features"].items():
         if count > 0:

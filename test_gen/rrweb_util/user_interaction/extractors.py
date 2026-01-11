@@ -7,8 +7,9 @@ including user interactions and scroll patterns.
 
 from typing import List
 
-from rrweb_util import (
+from rrweb_util.helpers import (
     is_incremental_snapshot,
+    is_drag_event,
     is_mouse_interaction_event,
     is_input_event,
     get_event_timestamp,
@@ -60,8 +61,12 @@ def extract_user_interactions(event: dict) -> List[UserInteraction]:
         interaction = _extract_input_interaction(event, timestamp)
         if interaction:
             interactions.append(interaction)
+    elif is_drag_event(event):
+        # Drag event
+        # TODO: Implement drag interaction extraction
+        pass
     else:
-        raise ValueError("Unknown event type for interaction extraction")
+        raise ValueError(f"Unknown event type for interaction extraction: {event}")
 
     return interactions
 

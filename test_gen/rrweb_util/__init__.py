@@ -7,9 +7,8 @@ from .helpers import (
     is_full_snapshot,
     is_incremental_snapshot,
     get_incremental_source,
-    is_mouse_move_event,
+    is_event_of_type,
     is_mouse_interaction_event,
-    is_scroll_event,
     is_input_event,
     is_dom_mutation_event,
     get_event_timestamp,
@@ -20,6 +19,7 @@ from .helpers import (
     extract_interaction_details,
 )
 
+# TODO remove all helpers from here and import them from module.helpers instead
 __all__ = [
     # Constants
     "EventType",
@@ -30,9 +30,8 @@ __all__ = [
     "is_full_snapshot",
     "is_incremental_snapshot",
     "get_incremental_source",
-    "is_mouse_move_event",
+    "is_event_of_type",
     "is_mouse_interaction_event",
-    "is_scroll_event",
     "is_input_event",
     "is_dom_mutation_event",
     "get_event_timestamp",
