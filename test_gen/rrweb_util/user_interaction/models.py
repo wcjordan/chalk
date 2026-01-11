@@ -6,6 +6,8 @@ Designed to be built from rrweb data via extractors
 from dataclasses import dataclass
 from typing import Dict, Any
 
+from rrweb_util.dom_state.node_metadata import UINode
+
 
 @dataclass
 class UserInteraction:
@@ -18,12 +20,14 @@ class UserInteraction:
     Attributes:
         action: Type of interaction ("click", "input", "scroll")
         target_id: ID of the DOM node that was interacted with
+        target_node: Resolved UINode metadata for the target_id
         value: Input value, coordinates, or other action-specific data
         timestamp: When the interaction occurred (milliseconds)
     """
 
     action: str
     target_id: int
+    target_node: UINode
     value: Any
     timestamp: int
 
@@ -32,33 +36,7 @@ class UserInteraction:
         return {
             "action": self.action,
             "target_id": self.target_id,
+            "target_node": self.target_node.to_dict(),
             "value": self.value,
             "timestamp": self.timestamp,
-        }
-
-
-@dataclass
-class ScrollPattern:
-    """
-    Represents a scroll event paired with a subsequent DOM mutation.
-
-    Captures scroll-triggered behaviors like lazy loading, infinite scroll,
-    or content updates that occur in response to scrolling.
-
-    Attributes:
-        scroll_event: The original scroll event data
-        mutation_event: The DOM mutation that followed the scroll
-        delay_ms: Time between scroll and mutation (milliseconds)
-    """
-
-    scroll_event: Dict[str, Any]
-    mutation_event: Dict[str, Any]
-    delay_ms: int
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
-            "scroll_event": self.scroll_event,
-            "mutation_event": self.mutation_event,
-            "delay_ms": self.delay_ms,
         }

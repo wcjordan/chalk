@@ -87,7 +87,7 @@ def ingest_session(
             if is_dom_mutation_event(event):
                 apply_mutation(dom_state, event)
             elif not is_low_signal(event):
-                user_interactions.extend(extract_user_interactions(event))
+                user_interactions.extend(extract_user_interactions(dom_state, event))
 
     # Skip empty chunks after cleaning
     if not user_interactions:
