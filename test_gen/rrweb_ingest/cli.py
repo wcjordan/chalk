@@ -103,7 +103,9 @@ def main():
         for session in session_generator:
             if session is not None:
                 logger.info("Processed session: %s", session["session_id"])
-                logger.info("Extracted %d user interactions", len(session["user_interactions"]))
+                logger.info(
+                    "Extracted %d user interactions", len(session["user_interactions"])
+                )
                 logger.debug(pformat(session["user_interactions"]))
             else:
                 logger.info("Session yielded no user interactions and was skipped")

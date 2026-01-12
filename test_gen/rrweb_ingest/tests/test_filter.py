@@ -7,8 +7,6 @@ and removal of low-signal events from rrweb chunks.
 
 # pylint: disable=duplicate-code
 
-from unittest.mock import patch
-
 from rrweb_ingest.filter import is_low_signal
 from rrweb_util import EventType, IncrementalSource
 

@@ -5,7 +5,7 @@ Tests the configuration module exports and custom extensibility hooks
 like DOM path formatters and distance comparators using mock patches.
 """
 
-from feature_extraction import config
+from rrweb_util.dom_state import config
 
 
 def test_default_dom_path_formatter():

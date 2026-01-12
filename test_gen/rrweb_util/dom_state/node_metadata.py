@@ -16,8 +16,8 @@ Extensibility:
 """
 
 from typing import Dict, Any
+from rrweb_util.dom_state import config
 from .models import UINode
-from . import config
 
 
 def resolve_node_metadata(

@@ -7,9 +7,33 @@ application for maintaining evolving DOM state.
 """
 
 import pytest
-from feature_extraction.models import UINode
 from rrweb_util import EventType, IncrementalSource
 from rrweb_util.dom_state.dom_state_helpers import init_dom_state, apply_mutation
+from rrweb_util.dom_state.models import UINode
+
+
+@pytest.fixture(name="create_full_snapshot_event")
+def fixture_create_full_snapshot_event():
+    """Helper for creating a full snapshot data structure."""
+
+    def _create_full_snapshot(
+        node_id=1, timestamp=0, node_type="div", attributes=None, child_nodes=None
+    ):
+        """Create a full snapshot event with given parameters."""
+        return {
+            "type": 2,
+            "timestamp": timestamp,
+            "data": {
+                "node": {
+                    "id": node_id,
+                    "type": node_type,
+                    "attributes": attributes or {},
+                    "childNodes": child_nodes or [],
+                }
+            },
+        }
+
+    return _create_full_snapshot
 
 
 @pytest.fixture(name="simple_full_snapshot")
@@ -234,7 +258,8 @@ def test_apply_mutation_add_node(simple_node_by_id):
         }
     ]
 
-    apply_mutation(simple_node_by_id, mutation_events)
+    for event in mutation_events:
+        apply_mutation(simple_node_by_id, event)
 
     # Assert the new node was added
     assert 3 in simple_node_by_id
@@ -265,7 +290,8 @@ def test_apply_mutation_remove_node(rich_node_by_id):
         }
     ]
 
-    apply_mutation(rich_node_by_id, mutation_events)
+    for event in mutation_events:
+        apply_mutation(rich_node_by_id, event)
 
     # Assert the node was not removed
     assert 2 in rich_node_by_id
@@ -342,7 +368,8 @@ def test_apply_mutation_change_properties(
         }
     ]
 
-    apply_mutation(node_by_id, mutation_events)
+    for event in mutation_events:
+        apply_mutation(node_by_id, event)
 
     # Assert expected changes
     updated_node = node_by_id[1]
@@ -367,7 +394,8 @@ def test_apply_mutation_ignore_invalid_node_ids(simple_node_by_id):
     ]
 
     # This should not raise any errors
-    apply_mutation(simple_node_by_id, mutation_events)
+    for event in mutation_events:
+        apply_mutation(simple_node_by_id, event)
 
     # Assert original nodes are unchanged
     assert len(simple_node_by_id) == 2
@@ -400,7 +428,8 @@ def test_apply_mutation_mixed_operations(simple_node_by_id):
         }
     ]
 
-    apply_mutation(simple_node_by_id, mutation_events)
+    for event in mutation_events:
+        apply_mutation(simple_node_by_id, event)
 
     # Assert all operations were applied
     assert len(simple_node_by_id) == 3  # One added
@@ -461,7 +490,8 @@ def test_apply_mutation_ignore_invalid_events(simple_node_by_id, mutation_events
     original_length = len(simple_node_by_id)
     original_tag = simple_node_by_id[1].tag
 
-    apply_mutation(simple_node_by_id, mutation_events)
+    for event in mutation_events:
+        apply_mutation(simple_node_by_id, event)
 
     # Assert node_by_id is unchanged
     assert len(simple_node_by_id) == original_length

@@ -11,7 +11,6 @@ import tempfile
 import pytest
 
 from rrweb_ingest.pipeline import ingest_session
-from rrweb_util import EventType, IncrementalSource
 
 
 @pytest.fixture(name="create_session_file")

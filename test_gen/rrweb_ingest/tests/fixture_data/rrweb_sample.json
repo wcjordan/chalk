@@ -176,15 +176,6 @@
     {
       "type": 3,
       "data": {
-        "source": 5,
-        "id": 10,
-        "text": "user@example.com"
-      },
-      "timestamp": 1640995204000
-    },
-    {
-      "type": 3,
-      "data": {
         "source": 1,
         "positions": [
           {
@@ -233,6 +224,15 @@
         }
       },
       "timestamp": 1640995220000
+    },
+    {
+      "type": 3,
+      "data": {
+        "source": 5,
+        "id": 10,
+        "text": "user@example.com"
+      },
+      "timestamp": 1640995220500
     },
     {
       "type": 3,

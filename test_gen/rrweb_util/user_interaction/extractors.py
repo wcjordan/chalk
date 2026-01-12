@@ -73,7 +73,9 @@ def extract_user_interactions(dom_state: dict, event: dict) -> List[UserInteract
     return interactions
 
 
-def _extract_click_interaction(dom_state: dict, event: dict, timestamp: int) -> UserInteraction:
+def _extract_click_interaction(
+    dom_state: dict, event: dict, timestamp: int
+) -> UserInteraction:
     """Extract click interaction from mouse event data."""
     target_id = get_target_id(event)
     if target_id is not None:
@@ -89,7 +91,9 @@ def _extract_click_interaction(dom_state: dict, event: dict, timestamp: int) -> 
     return None
 
 
-def _extract_input_interaction(dom_state: dict, event: dict, timestamp: int) -> UserInteraction:
+def _extract_input_interaction(
+    dom_state: dict, event: dict, timestamp: int
+) -> UserInteraction:
     """Extract input interaction from input event data."""
     target_id = get_target_id(event)
     if target_id is not None:

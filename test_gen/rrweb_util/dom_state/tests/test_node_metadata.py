@@ -6,8 +6,8 @@ semantic attributes, text content, and DOM path computation.
 """
 
 import pytest
+from rrweb_util.dom_state.models import UINode
 from rrweb_util.dom_state.node_metadata import resolve_node_metadata
-from feature_extraction.models import UINode
 
 
 @pytest.fixture(name="simple_nested_nodes")
