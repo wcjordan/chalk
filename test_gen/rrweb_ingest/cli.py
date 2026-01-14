@@ -97,7 +97,6 @@ def main():
     session_dir, output_dir = _validate_inputs(args)
 
     try:
-        # TODO update iterate_sessions to take a Path to a dir instead of a string
         stats = process_sessions(session_dir, output_dir, args.max_sessions)
 
         # Print final summary
@@ -113,10 +112,10 @@ def main():
 
         if total_interaction_counts > 0:
             logger.info("Total interactions extracted: %d", total_interaction_counts)
-            logger.debug("Interactions breakdown:")
+            logger.info("Interactions breakdown:")
             for interaction_type, count in interaction_counts.items():
                 if count > 0:
-                    logger.debug("  %s: %d", interaction_type, count)
+                    logger.info("  %s: %d", interaction_type, count)
 
         logger.info("Output files saved to: %s", output_dir)
 

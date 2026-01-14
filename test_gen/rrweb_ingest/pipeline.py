@@ -7,7 +7,7 @@ It orchestrates the complete pipeline from raw JSON loading through user interac
 
 from collections import defaultdict
 import logging
-import os
+from pathlib import Path
 from pprint import pformat
 from typing import Generator, List, Optional
 
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 def ingest_session(
     session_id: str,
-    filepath: str,
+    filepath: Path,
 ) -> dict:
     """
     Load, filter, and extract user interactions from an rrweb session.
@@ -104,7 +104,7 @@ def ingest_session(
 
 
 def iterate_sessions(
-    session_dir: str, max_sessions: int = None
+    session_dir: Path, max_sessions: int = None
 ) -> Generator[List[Optional[dict]], None, None]:
     """
     Generator function to iterate through all rrweb session files in a directory and ingest them.
@@ -120,24 +120,23 @@ def iterate_sessions(
         Generator yielding processed sessions.
     """
     sessions_handled = 0
-    session_files = sorted([f for f in os.listdir(session_dir) if f.endswith(".json")])
+    session_files = sorted([f for f in session_dir.iterdir() if f.suffix == ".json"])
 
-    for filename in session_files:
+    for filepath in session_files:
         if max_sessions is not None and sessions_handled >= max_sessions:
             break
 
-        session_id = filename.split(".")[0]
-        filepath = os.path.join(session_dir, filename)
+
         try:
-            yield ingest_session(session_id, filepath)
+            yield ingest_session(filepath.stem, filepath)
             sessions_handled += 1
         except Exception as e:
-            logger.error("Error processing %s: %s", filename, e)
+            logger.error("Error processing %s: %s", filepath, e)
             raise
 
 
 def process_sessions(
-    session_dir: str, output_dir: str, max_sessions: int = None
+    session_dir: Path, output_dir: Path, max_sessions: int = None
 ) -> dict:
     """
     Process rrweb sessions from a directory and save extracted user interactions to output directory.
@@ -163,22 +162,21 @@ def process_sessions(
         "total_interactions": defaultdict(int),
     }
 
-    session_generator = iterate_sessions(str(session_dir), max_sessions)
+    session_generator = iterate_sessions(session_dir, max_sessions)
     for session in session_generator:
         stats["sessions_processed"] += 1
 
         if session is None:
-            logger.info("Session yielded no user interactions and was skipped")
+            logger.debug("Session yielded no user interactions and was skipped")
             continue
 
-        logger.info("Processed session: %s", session["session_id"])
-        logger.info("Extracted %d user interactions", len(session["user_interactions"]))
+        logger.debug("Processed session: %s", session["session_id"])
+        logger.debug("Extracted %d user interactions", len(session["user_interactions"]))
         logger.debug(pformat(session["user_interactions"]))
 
         # Update stats
         for interaction in session["user_interactions"]:
-            interaction_type = interaction["type"]
-            stats["total_interactions"][interaction_type] += 1
+            stats["total_interactions"][interaction.action] += 1
 
         # TODO save the session data to output_dir as JSON file
 
