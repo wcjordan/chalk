@@ -23,13 +23,9 @@ semantic representations of user interactions and system responses.
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, Generator, Tuple
+from typing import Any, Dict
 
-from rrweb_ingest.pipeline import iterate_sessions
-from rrweb_util.dom_state.dom_state_helpers import apply_mutation, init_dom_state
-from rrweb_util.user_interaction.extractors import extract_user_interactions
 from .models import FeatureChunk, UINode
-from .metadata import resolve_node_metadata
 
 logger = logging.getLogger(__name__)
 
@@ -63,79 +59,15 @@ def extract_features(
         The dom_state parameter is modified in place as mutations are applied.
         This maintains consistency between the virtual DOM and extracted features.
     """
-    # Apply mutations from the chunk to update DOM state
-    apply_mutation(dom_state, chunk.events)
-
-    interactions = extract_user_interactions(chunk.events)
-
-    # Resolve UI metadata for referenced nodes
-    # TODO extract and move this into rrweb_ingest
-    ui_nodes = _resolve_ui_metadata(interactions, dom_state)
-
-    # Assemble all features into FeatureChunk
-    features = {
-        "interactions": interactions,
-        "ui_nodes": ui_nodes,
-    }
 
     return FeatureChunk(
         chunk_id=chunk.chunk_id,
         start_time=chunk.start_time,
         end_time=chunk.end_time,
         events=chunk.events,
-        features=features,
+        features={},
         metadata=chunk.metadata,
     )
-
-
-def _resolve_ui_metadata(interactions, dom_state):
-    """Resolve UI metadata for all nodes referenced in mutations and interactions."""
-    ui_nodes = {}
-
-    # Collect unique node IDs from mutations and interactions
-    referenced_node_ids = _collect_referenced_node_ids(interactions)
-
-    # Resolve metadata for each referenced node
-    for node_id in referenced_node_ids:
-        try:
-            ui_nodes[node_id] = resolve_node_metadata(node_id, dom_state)
-        except KeyError:
-            # Node not found in DOM state - log and skip metadata resolution
-            logger.warning(
-                "Node ID %s not found in DOM state. Skipping metadata resolution.",
-                node_id,
-            )
-            continue
-
-    return ui_nodes
-
-
-def _collect_referenced_node_ids(interactions):
-    """Collect unique node IDs referenced in interactions."""
-    referenced_node_ids = set()
-    for interaction in interactions:
-        referenced_node_ids.add(interaction.target_id)
-    return referenced_node_ids
-
-
-def iterate_feature_extraction(
-    session_dir: str, max_sessions: int = None
-) -> Generator[Tuple[FeatureChunk, Dict[str, Any]], None, None]:
-    """
-    Generator function to iterate through all rrweb session files in a directory and extract features.
-
-    This function processes each session file, extracts features using the
-    extract_features function and yields the results.
-
-    Args:
-        session_dir: Directory containing rrweb JSON session files
-        max_sessions: Optional limit on number of sessions to process
-    """
-    session_generator = iterate_sessions(session_dir, max_sessions=max_sessions)
-    for session_chunks in session_generator:
-        # TODO (jordan) This becomes logic in rrweb_ingest
-        # extract_features(curr_chunk, dom)
-        pass
 
 
 def _extract_and_save_session_features(stats, output_path, chunk_data, chunk_metadata):
@@ -208,39 +140,12 @@ def extract_and_save_features(
         nested feature objects serialized as dictionaries.
     """
     output_path = Path(output_dir)
-    session_path = Path(session_dir)
 
     # Ensure output directory exists
     output_path.mkdir(parents=True, exist_ok=True)
-
-    # Initialize statistics tracking
-    stats = {
-        "sessions_processed": 0,
-        "total_features": {
-            "interactions": 0,
-            "ui_nodes": 0,
-        },
-        "errors": [],
-    }
-
-    logger.debug("Processing sessions from: %s", session_path)
-    logger.debug("Saving features to: %s", output_path)
 
     # Process each session using the existing feature extraction generator
     chunk_generator = iterate_feature_extraction(session_dir, max_sessions=max_sessions)
 
     for chunk_data, chunk_metadata in chunk_generator:
-        _extract_and_save_session_features(
-            stats, output_path, chunk_data, chunk_metadata
-        )
-
-    logger.debug("\nProcessing Summary:")
-    logger.debug("  Sessions processed: %d", stats["sessions_processed"])
-    logger.debug("  Total features extracted:")
-    for feature_type, count in stats["total_features"].items():
-        if count > 0:
-            logger.debug("    %s: %d", feature_type, count)
-    if stats["errors"]:
-        logger.warning("  Errors encountered: %d", len(stats["errors"]))
-
-    return stats
+        _extract_and_save_session_features({}, output_path, chunk_data, chunk_metadata)

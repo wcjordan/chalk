@@ -11,9 +11,8 @@ import logging
 import os
 import sys
 from pathlib import Path
-from pprint import pformat
 
-from .pipeline import iterate_sessions
+from .pipeline import process_sessions
 
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO").upper())
 logger = logging.getLogger(__name__)
@@ -99,54 +98,27 @@ def main():
 
     try:
         # TODO update iterate_sessions to take a Path to a dir instead of a string
-        session_generator = iterate_sessions(str(session_dir), args.max_sessions)
-        for session in session_generator:
-            if session is not None:
-                logger.info("Processed session: %s", session["session_id"])
-                logger.info(
-                    "Extracted %d user interactions", len(session["user_interactions"])
-                )
-                logger.debug(pformat(session["user_interactions"]))
-            else:
-                logger.info("Session yielded no user interactions and was skipped")
+        stats = process_sessions(session_dir, output_dir, args.max_sessions)
 
-        # TODO review extract_and_save_features add anything missing to iterate_sessions
-        # Run the feature extraction
-        # stats = extract_and_save_features(
-        #     session_dir=str(session_dir),
-        #     output_dir=str(output_dir),
-        #     max_sessions=args.max_sessions,
-        # )
-
-        # TODO cleanup below and modify to work w/ iterate_sessions
         # Print final summary
-        # logger.debug("\n%s", "=" * 50)
+        logger.debug("\n%s", "=" * 50)
 
-        # logger.info("Feature extraction completed successfully!")
-        # logger.info("Sessions processed: %d", stats["sessions_processed"])
-        # logger.info("Feature chunks saved: %d", stats["chunks_saved"])
+        logger.info("Feature extraction completed successfully!")
+        logger.info("Sessions processed: %d", stats["sessions_processed"])
+        logger.info("Sessions saved: %d", stats["sessions_saved"])
 
-        # # Print feature type counts if any were extracted
-        # feature_counts = stats["total_features"]
-        # total_feature_count = sum(count for count in feature_counts.values())
+        # Print feature type counts if any were extracted
+        interaction_counts = stats["total_interactions"]
+        total_interaction_counts = sum(count for count in interaction_counts.values())
 
-        # if total_feature_count > 0:
-        #     logger.info("Total features extracted: %d", total_feature_count)
-        #     logger.debug("Feature breakdown:")
-        #     for feature_type, count in feature_counts.items():
-        #         if count > 0:
-        #             logger.debug("  %s: %d", feature_type, count)
+        if total_interaction_counts > 0:
+            logger.info("Total interactions extracted: %d", total_interaction_counts)
+            logger.debug("Interactions breakdown:")
+            for interaction_type, count in interaction_counts.items():
+                if count > 0:
+                    logger.debug("  %s: %d", interaction_type, count)
 
-        # Print error summary
-        # if stats["errors"]:
-        #     logger.warning("Errors encountered: %d", len(stats["errors"]))
-        #     logger.warning("Error details:")
-        #     for error in stats["errors"]:
-        #         logger.warning("  %s", error)
-        # else:
-        #     logger.info("No errors encountered")
-
-        # logger.info("Output files saved to: %s", output_dir)
+        logger.info("Output files saved to: %s", output_dir)
 
     except KeyboardInterrupt:
         logger.warning("Feature extraction interrupted by user")

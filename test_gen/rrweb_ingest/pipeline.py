@@ -5,8 +5,10 @@ This module provides the main entry point for processing rrweb session recording
 It orchestrates the complete pipeline from raw JSON loading through user interaction extraction.
 """
 
+from collections import defaultdict
 import logging
 import os
+from pprint import pformat
 from typing import Generator, List, Optional
 
 from rrweb_ingest.loader import load_events
@@ -132,3 +134,52 @@ def iterate_sessions(
         except Exception as e:
             logger.error("Error processing %s: %s", filename, e)
             raise
+
+
+def process_sessions(
+    session_dir: str, output_dir: str, max_sessions: int = None
+) -> dict:
+    """
+    Process rrweb sessions from a directory and save extracted user interactions to output directory.
+
+    This function iterates through rrweb session files, processes them to extract user interactions,
+    and saves the results to the specified output directory.
+
+    Args:
+        session_dir: Directory containing rrweb session JSON files
+        output_dir: Directory where processed session data will be saved
+        max_sessions: Optional limit on number of sessions to process
+    Returns:
+        Dictionary containing processing statistics:
+        - sessions_processed: Number of session files processed
+        - sessions_saved: Number of session files successfully saved to output
+        - total_features: Aggregate counts of each feature type
+        - errors: List of any errors encountered during processing
+    """
+    # Initialize statistics tracking
+    stats = {
+        "sessions_processed": 0,
+        "sessions_saved": 0,
+        "total_interactions": defaultdict(int),
+    }
+
+    session_generator = iterate_sessions(str(session_dir), max_sessions)
+    for session in session_generator:
+        stats["sessions_processed"] += 1
+
+        if session is None:
+            logger.info("Session yielded no user interactions and was skipped")
+            continue
+
+        logger.info("Processed session: %s", session["session_id"])
+        logger.info("Extracted %d user interactions", len(session["user_interactions"]))
+        logger.debug(pformat(session["user_interactions"]))
+
+        # Update stats
+        for interaction in session["user_interactions"]:
+            interaction_type = interaction["type"]
+            stats["total_interactions"][interaction_type] += 1
+
+        # TODO save the session data to output_dir as JSON file
+
+    return stats
