@@ -5,13 +5,11 @@ This module implements the core matching logic to determine if a UserInteraction
 and UINode pair matches the conditions specified in a Rule.
 """
 
-import json
 import logging
-from dataclasses import asdict
-from pathlib import Path
-from typing import Dict, Any, Optional, List, Union
+from typing import Dict, Any, Optional, List
 
-from feature_extraction.models import UserInteraction, UINode
+from rrweb_util.user_interaction.models import UserInteraction
+from rrweb_util.dom_state.models import UINode
 
 from .models import Rule, DetectedAction
 from .variable_resolver import extract_variables
@@ -19,19 +17,19 @@ from .variable_resolver import extract_variables
 logger = logging.getLogger("test_gen.rule_engine")
 
 
-def rule_matches_event_node(rule: Rule, event: UserInteraction, node: UINode) -> bool:
+def rule_matches_event_node(rule: Rule, event: UserInteraction) -> bool:
     """
     Determine if a rule matches a specific event and node combination.
 
     Args:
         rule: The rule to evaluate
         event: The user interaction event to check
-        node: The UI node to check
 
     Returns:
         True if both the event matches rule.match.event and
         the node matches rule.match.node, False otherwise
     """
+    node = UINode.from_dict(event.target_node)
     node_id = getattr(node, "id", "unknown")
     logger.debug(
         "Evaluating rule '%s' against event.action='%s', node.tag='%s', node.id='%s'",
@@ -124,7 +122,7 @@ def _node_matches(match_node: Dict[str, Any], node: UINode) -> bool:
 
 
 def apply_rule_to_event_and_node(
-    rule: Rule, event: UserInteraction, node: UINode, event_index: int
+    rule: Rule, event: UserInteraction, event_index: int
 ) -> Optional[DetectedAction]:
     """
     Apply a rule to an event and node, returning a DetectedAction if matched.
@@ -132,16 +130,15 @@ def apply_rule_to_event_and_node(
     Args:
         rule: The rule to evaluate
         event: The user interaction event to check
-        node: The UI node to check
-        event_index: The index of the event in the chunk
+        event_index: The index of the event in the session
 
     Returns:
         DetectedAction if the rule matches, None otherwise
     """
-    if not rule_matches_event_node(rule, event, node):
+    if not rule_matches_event_node(rule, event):
         return None
 
-    variables = extract_variables(rule.variables, event, node)
+    variables = extract_variables(rule.variables, event)
 
     # Truncate large variable values for logging
     truncated_vars = {}
@@ -166,23 +163,23 @@ def apply_rule_to_event_and_node(
         confidence=rule.confidence,
         rule_id=rule.id,
         variables=variables,
-        target_element=node,
+        target_element=event.target_node,
         related_events=[event_index],
     )
 
 
-def detect_actions_in_chunk(
-    chunk: Dict[str, Any], rules: List[Rule]
+def detect_actions_in_session(
+    session: Dict[str, Any], rules: List[Rule]
 ) -> List[DetectedAction]:
     """
-    Detect actions in a full chunk by applying all rules to all UserInteractions.
+    Detect actions in a full session by applying all rules to all UserInteractions.
 
-    This function iterates through each UserInteraction in the chunk, finds the
+    This function iterates through each UserInteraction in the session, finds the
     corresponding UINode, and applies each rule to determine if any actions
     should be detected.
 
     Args:
-        chunk: A chunk dictionary containing features with user_interactions and ui_nodes
+        session: A session dictionary containing features with user_interactions and ui_nodes
         rules: List of rules to apply for action detection
 
     Returns:
@@ -190,76 +187,28 @@ def detect_actions_in_chunk(
     """
     detected_actions = []
 
-    # Get user interactions and ui nodes from the chunk
-    chunk_features = chunk.features
-    user_interactions = chunk_features.get("interactions", [])
-    node_map = chunk_features.get("ui_nodes", {})
+    # Get user interactions and ui nodes from the session
+    user_interactions = session.user_interactions
 
-    logger.debug("Processing %d interactions in chunk", len(user_interactions))
+    logger.debug("Processing %d interactions in session", len(user_interactions))
 
     # Iterate through each user interaction
-    for event_index, interaction in enumerate(user_interactions):
-        # Find the corresponding UINode using target_id
-        target_node = node_map.get(interaction.target_id)
-
-        # Skip if no corresponding node found
-        if target_node is None:
-            continue
-
+    for event_index, event in enumerate(user_interactions):
         # Apply each rule to this event-node pair
         for rule in rules:
-            detected_action = apply_rule_to_event_and_node(
-                rule, interaction, target_node, event_index
-            )
+            detected_action = apply_rule_to_event_and_node(rule, event, event_index)
 
             # If the rule matched, add to our results
             if detected_action is not None:
                 detected_actions.append(detected_action)
 
-    # Log chunk-level summary
+    # Log session-level summary
     unique_rules_matched = set(action.rule_id for action in detected_actions)
     logger.info(
-        "Chunk processing complete: %d rules evaluated, %d matches found, %d distinct rules matched",
+        "Session processing complete: %d rules evaluated, %d matches found, %d distinct rules matched",
         len(rules),
         len(detected_actions),
         len(unique_rules_matched),
     )
 
     return detected_actions
-
-
-def save_detected_actions(
-    actions: List[DetectedAction],
-    chunk_id: str,
-    output_dir: Union[str, Path] = "test_gen/data/action_mappings",
-) -> None:
-    """
-    Serialize detected actions to disk as JSON using chunk_id as filename.
-
-    Args:
-        actions: List of DetectedAction objects to serialize
-        chunk_id: ID to use for the filename
-        output_dir: Directory to save the file to
-
-    The function creates the output directory if it doesn't exist and saves
-    the actions as JSON to {output_dir}/{chunk_id}.json.
-    """
-    # Convert output_dir to Path object
-    output_path = Path(output_dir)
-
-    # Create the output directory if it doesn't exist
-    output_path.mkdir(parents=True, exist_ok=True)
-
-    # Convert DetectedAction objects to JSON-serializable dicts
-    serializable_actions = []
-    for action in actions:
-        action_dict = asdict(action)
-
-        serializable_actions.append(action_dict)
-
-    # Define the output file path
-    output_file = output_path / f"{chunk_id}.json"
-
-    # Write to JSON file
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(serializable_actions, f, indent=2, ensure_ascii=False)

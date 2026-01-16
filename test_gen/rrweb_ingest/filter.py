@@ -2,7 +2,7 @@
 Noise-Filtering Framework for rrweb session data.
 
 This module provides functionality to identify and remove low-signal events from
-rrweb chunks, including mousemove noise & scrolling. This helps focus downstream
+rrweb sessions, including mousemove noise & scrolling. This helps focus downstream
 processing on meaningful user interactions.
 """
 

@@ -32,13 +32,13 @@ def test_processed_session_to_dict_complete(basic_processed_session):
     assert "feature_extraction_version" in result["metadata"]
 
 
-def test_feature_chunk_to_dict_empty_features():
+def test_processed_session_to_dict_empty_features():
     """Test ProcessedSession serialization with no user interactions."""
     result = ProcessedSession(session_id="empty-session").to_dict()
     assert result["user_interactions"] == []
 
 
-def test_feature_chunk_serialization_roundtrip(basic_processed_session):
+def test_processed_session_serialization_roundtrip(basic_processed_session):
     """Test that serialization produces JSON-compatible output."""
     # Convert to dict and then to JSON string
     session_dict = basic_processed_session.to_dict()

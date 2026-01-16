@@ -36,7 +36,7 @@ def ingest_session(
     to produce a list of the user interactions from the session ready for rules matching.
 
     Args:
-        session_id: Unique identifier for this session, used in chunk IDs
+        session_id: Unique identifier for this session, used in session IDs
         filepath: Path to the rrweb JSON session file to process
 
     Returns:
@@ -93,7 +93,7 @@ def ingest_session(
             elif not is_low_signal(event):
                 user_interactions.extend(extract_user_interactions(dom_state, event))
 
-    # Skip empty chunks after cleaning
+    # Skip empty sessions after cleaning
     if not user_interactions:
         return None
 

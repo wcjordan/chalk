@@ -6,7 +6,7 @@ used in the rule-based action detection module.
 """
 
 from rule_engine.models import DetectedAction, Rule
-from feature_extraction.models import UINode
+from rrweb_util.dom_state.models import UINode
 
 
 def test_detected_action_creation():

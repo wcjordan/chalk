@@ -46,7 +46,7 @@ class TestIngestSession:
         processed_session = ingest_session(session_id, sample_data_path)
         processed_session_dict = processed_session.to_dict()
 
-        # Verify we got a list of Chunk objects
+        # Verify we got a list of ProcessedSession objects
         assert isinstance(
             processed_session, ProcessedSession
         ), "ingest_session should return a ProcessedSession"
@@ -59,16 +59,16 @@ class TestIngestSession:
             processed_session.session_id == "sample"
         ), f"Expected 'sample', got '{processed_session.session_id}'"
 
-        # Verify events list
+        # Verify user_interactions list
         assert isinstance(
             processed_session.user_interactions, list
-        ), "events should be a list"
+        ), "user_interactions should be a list"
         assert (
             len(processed_session.user_interactions) > 0
-        ), "chunk should contain events"
+        ), "session should contain user interactions"
 
-        # Verify the sample fixture contains all major event types.
-        # Collect all event sources from all chunks
+        # Verify the sample fixture contains all major action types.
+        # Collect all actions & target ids from all sessions
         target_ids_found = set()
         actions_found = set()
 
@@ -89,7 +89,7 @@ class TestIngestSession:
             len(found_targets) >= 3
         ), f"Should find at least 3 targets, found: {found_targets}"
 
-        # Test that event order & content is preserved
+        # Test that user_interactions order & content is preserved
         assert processed_session_dict == snapshot(name="processed_session_dict")
 
     def test_ingest_session_file_not_found(self):

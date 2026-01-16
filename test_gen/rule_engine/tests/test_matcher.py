@@ -5,19 +5,16 @@ This module tests the core matching logic that determines if UserInteraction
 and UINode pairs match Rule conditions.
 """
 
-import json
-import tempfile
-from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from rule_engine.matcher import (
     rule_matches_event_node,
     apply_rule_to_event_and_node,
-    detect_actions_in_chunk,
-    save_detected_actions,
+    detect_actions_in_session,
 )
 from rule_engine.models import Rule
-from feature_extraction.models import FeatureChunk, UserInteraction, UINode
+from rrweb_util.user_interaction.models import UserInteraction
+from rrweb_util.dom_state.models import UINode
 
 
 def create_test_rule(
@@ -45,11 +42,21 @@ def create_test_rule(
 
 
 def create_test_event(
-    action: str = "click", target_id: int = 1, value: Any = None, timestamp: int = 1000
+    action: str = "click",
+    target_id: int = 1,
+    target_node: Optional[UINode] = None,
+    value: Any = None,
+    timestamp: int = 1000,
 ) -> UserInteraction:
     """Helper function to create test user interactions."""
+    if target_node is None:
+        target_node = create_test_node(node_id=target_id)
     return UserInteraction(
-        action=action, target_id=target_id, value=value, timestamp=timestamp
+        action=action,
+        target_id=target_id,
+        target_node=target_node.to_dict(),
+        value=value,
+        timestamp=timestamp,
     )
 
 
@@ -67,37 +74,6 @@ def create_test_node(
     return UINode(id=node_id, tag=tag, attributes=attributes, text=text, parent=parent)
 
 
-def create_feature_chunk(
-    ui_nodes: list[UINode] = None, interactions: list[UserInteraction] = None
-) -> FeatureChunk:
-    """
-    Create a FeatureChunk for testing.
-
-    Args:
-        ui_nodes: List of UINode objects
-        interactions: List of UserInteraction objects
-
-    Returns:
-        A FeatureChunk object populated with the provided UI nodes and interactions.
-    """
-    if ui_nodes is None:
-        ui_nodes = []
-    if interactions is None:
-        interactions = []
-
-    return FeatureChunk(
-        chunk_id="test_chunk",
-        start_time=0,
-        end_time=1000,
-        events=[],
-        metadata={},
-        features={
-            "interactions": interactions,
-            "ui_nodes": {node.id: node for node in ui_nodes},
-        },
-    )
-
-
 class TestRuleMatchesEventNode:
     """Tests for rule_matches_event_node function."""
 
@@ -108,12 +84,12 @@ class TestRuleMatchesEventNode:
             match_node={"tag": "input", "attributes": {"type": "search"}},
         )
 
-        event = create_test_event(action="input")
         node = create_test_node(
             tag="input", attributes={"type": "search", "placeholder": "Search..."}
         )
+        event = create_test_event(action="input", target_node=node)
 
-        assert rule_matches_event_node(rule, event, node) is True
+        assert rule_matches_event_node(rule, event) is True
 
     def test_negative_case_action_mismatch(self):
         """Test that a rule doesn't match when event action doesn't match."""
@@ -121,10 +97,10 @@ class TestRuleMatchesEventNode:
             match_event={"action": "click"}, match_node={"tag": "button"}
         )
 
-        event = create_test_event(action="input")  # Different action
         node = create_test_node(tag="button")
+        event = create_test_event(action="input", target_node=node)  # Different action
 
-        assert rule_matches_event_node(rule, event, node) is False
+        assert rule_matches_event_node(rule, event) is False
 
     def test_negative_case_tag_mismatch(self):
         """Test that a rule doesn't match when node tag doesn't match."""
@@ -132,10 +108,10 @@ class TestRuleMatchesEventNode:
             match_event={"action": "click"}, match_node={"tag": "button"}
         )
 
-        event = create_test_event(action="click")
         node = create_test_node(tag="div")  # Different tag
+        event = create_test_event(action="click", target_node=node)
 
-        assert rule_matches_event_node(rule, event, node) is False
+        assert rule_matches_event_node(rule, event) is False
 
     def test_negative_case_missing_attribute(self):
         """Test that a rule doesn't match when required attribute is missing."""
@@ -144,13 +120,13 @@ class TestRuleMatchesEventNode:
             match_node={"tag": "input", "attributes": {"type": "submit"}},
         )
 
-        event = create_test_event(action="click")
         node = create_test_node(
             tag="input",
             attributes={"placeholder": "Enter text"},  # Missing 'type' attribute
         )
+        event = create_test_event(action="click", target_node=node)
 
-        assert rule_matches_event_node(rule, event, node) is False
+        assert rule_matches_event_node(rule, event) is False
 
     def test_negative_case_incorrect_attribute_value(self):
         """Test that a rule doesn't match when attribute value is incorrect."""
@@ -159,39 +135,39 @@ class TestRuleMatchesEventNode:
             match_node={"tag": "input", "attributes": {"type": "email"}},
         )
 
-        event = create_test_event(action="input")
         node = create_test_node(
             tag="input", attributes={"type": "text"}  # Wrong value for 'type'
         )
+        event = create_test_event(action="input", target_node=node)
 
-        assert rule_matches_event_node(rule, event, node) is False
+        assert rule_matches_event_node(rule, event) is False
 
     def test_empty_match_conditions(self):
         """Test that a rule with empty match conditions matches everything."""
         rule = create_test_rule(match_event={}, match_node={})
 
-        event = create_test_event(action="scroll")
         node = create_test_node(tag="div", attributes={"class": "container"})
+        event = create_test_event(action="scroll", target_node=node)
 
-        assert rule_matches_event_node(rule, event, node) is True
+        assert rule_matches_event_node(rule, event) is True
 
     def test_no_event_conditions(self):
         """Test matching when only node conditions are specified."""
         rule = create_test_rule(match_node={"tag": "button"})
 
-        event = create_test_event(action="click")
         node = create_test_node(tag="button")
+        event = create_test_event(action="click", target_node=node)
 
-        assert rule_matches_event_node(rule, event, node) is True
+        assert rule_matches_event_node(rule, event) is True
 
     def test_no_node_conditions(self):
         """Test matching when only event conditions are specified."""
         rule = create_test_rule(match_event={"action": "input"})
 
-        event = create_test_event(action="input")
         node = create_test_node(tag="input")
+        event = create_test_event(action="input", target_node=node)
 
-        assert rule_matches_event_node(rule, event, node) is True
+        assert rule_matches_event_node(rule, event) is True
 
     def test_multiple_attributes_match(self):
         """Test matching with multiple required attributes."""
@@ -203,7 +179,6 @@ class TestRuleMatchesEventNode:
             },
         )
 
-        event = create_test_event(action="click")
         node = create_test_node(
             tag="button",
             attributes={
@@ -212,8 +187,9 @@ class TestRuleMatchesEventNode:
                 "id": "submit-btn",  # Extra attribute should not affect matching
             },
         )
+        event = create_test_event(action="click", target_node=node)
 
-        assert rule_matches_event_node(rule, event, node) is True
+        assert rule_matches_event_node(rule, event) is True
 
     def test_multiple_attributes_partial_match(self):
         """Test that partial attribute matching fails."""
@@ -225,7 +201,6 @@ class TestRuleMatchesEventNode:
             },
         )
 
-        event = create_test_event(action="click")
         node = create_test_node(
             tag="button",
             attributes={
@@ -233,8 +208,9 @@ class TestRuleMatchesEventNode:
                 # Missing 'class' attribute
             },
         )
+        event = create_test_event(action="click", target_node=node)
 
-        assert rule_matches_event_node(rule, event, node) is False
+        assert rule_matches_event_node(rule, event) is False
 
     def test_complex_realistic_scenario(self):
         """Test a complex realistic search input scenario."""
@@ -248,13 +224,6 @@ class TestRuleMatchesEventNode:
             action_id="search_query",
         )
 
-        event = create_test_event(
-            action="input",
-            target_id=123,
-            value="machine learning",
-            timestamp=1642500000000,
-        )
-
         node = create_test_node(
             node_id=123,
             tag="input",
@@ -266,8 +235,15 @@ class TestRuleMatchesEventNode:
             },
             text="",
         )
+        event = create_test_event(
+            action="input",
+            target_id=123,
+            target_node=node,
+            value="machine learning",
+            timestamp=1642500000000,
+        )
 
-        assert rule_matches_event_node(rule, event, node) is True
+        assert rule_matches_event_node(rule, event) is True
 
 
 class TestApplyRuleToEventAndNode:
@@ -287,22 +263,22 @@ class TestApplyRuleToEventAndNode:
             "placeholder": "node.attributes.placeholder",
         }
 
-        event = create_test_event(
-            action="input",
-            target_id=123,
-            value="cats",
-            timestamp=1642500000000,
-        )
-
         node = create_test_node(
             node_id=123,
             tag="input",
             attributes={"type": "search", "placeholder": "Search..."},
             text="",
         )
+        event = create_test_event(
+            action="input",
+            target_id=123,
+            target_node=node,
+            value="cats",
+            timestamp=1642500000000,
+        )
 
         event_index = 5
-        result = apply_rule_to_event_and_node(rule, event, node, event_index)
+        result = apply_rule_to_event_and_node(rule, event, event_index)
 
         assert result is not None
         assert result.action_id == "search_query"
@@ -310,7 +286,7 @@ class TestApplyRuleToEventAndNode:
         assert result.confidence == 0.85
         assert result.rule_id == "search_rule"
         assert result.variables == {"search_term": "cats", "placeholder": "Search..."}
-        assert result.target_element == node
+        assert result.target_element == node.to_dict()
         assert result.related_events == [5]
 
     def test_failed_match_returns_none(self):
@@ -320,11 +296,11 @@ class TestApplyRuleToEventAndNode:
             match_node={"tag": "button"},
         )
 
-        event = create_test_event(action="input")  # Different action
         node = create_test_node(tag="button")
+        event = create_test_event(action="input", target_node=node)  # Different action
         event_index = 10
 
-        result = apply_rule_to_event_and_node(rule, event, node, event_index)
+        result = apply_rule_to_event_and_node(rule, event, event_index)
 
         assert result is None
 
@@ -339,15 +315,16 @@ class TestApplyRuleToEventAndNode:
         )
         rule.variables = {}
 
+        node = create_test_node(tag="button", text="Submit")
         event = create_test_event(
             action="click",
+            target_node=node,
             timestamp=1000000000,
         )
 
-        node = create_test_node(tag="button", text="Submit")
         event_index = 0
 
-        result = apply_rule_to_event_and_node(rule, event, node, event_index)
+        result = apply_rule_to_event_and_node(rule, event, event_index)
 
         assert result is not None
         assert result.action_id == "button_click"
@@ -355,7 +332,7 @@ class TestApplyRuleToEventAndNode:
         assert result.confidence == 0.9
         assert result.rule_id == "simple_click"
         assert not result.variables
-        assert result.target_element == node
+        assert result.target_element == node.to_dict()
         assert result.related_events == [0]
 
     def test_match_with_unresolvable_variables(self):
@@ -372,11 +349,11 @@ class TestApplyRuleToEventAndNode:
             "another_invalid": "node.missing.field",
         }
 
-        event = create_test_event(action="input", value="test_value")
         node = create_test_node(tag="input")
+        event = create_test_event(action="input", target_node=node, value="test_value")
         event_index = 3
 
-        result = apply_rule_to_event_and_node(rule, event, node, event_index)
+        result = apply_rule_to_event_and_node(rule, event, event_index)
 
         assert result is not None
         assert result.variables["valid_var"] == "test_value"
@@ -384,10 +361,10 @@ class TestApplyRuleToEventAndNode:
         assert result.variables["another_invalid"] is None
 
 
-class TestDetectActionsInChunk:
-    """Tests for detect_actions_in_chunk function."""
+class TestDetectActionsInSession:
+    """Tests for detect_actions_in_session function."""
 
-    def test_end_to_end_single_match(self):
+    def test_end_to_end_single_match(self, create_processed_session):
         """Test end-to-end detection with one matching rule and interaction."""
         # Create a search input rule
         search_rule = create_test_rule(
@@ -399,27 +376,27 @@ class TestDetectActionsInChunk:
         )
         search_rule.variables = {"search_term": "event.value"}
 
-        # Create mock chunk with one user interaction and corresponding UI node
-        interaction = create_test_event(
-            action="input",
-            target_id=123,
-            value="machine learning",
-            timestamp=1642500000000,
-        )
-
+        # Create mock session with one user interaction and corresponding UI node
         node = create_test_node(
             node_id=123,
             tag="input",
             attributes={"type": "search", "name": "query"},
             text="",
         )
+        interaction = create_test_event(
+            action="input",
+            target_id=123,
+            target_node=node,
+            value="machine learning",
+            timestamp=1642500000000,
+        )
 
-        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
+        session = create_processed_session(interactions=[interaction])
 
         rules = [search_rule]
 
         # Execute the function
-        result = detect_actions_in_chunk(chunk, rules)
+        result = detect_actions_in_session(session, rules)
 
         # Verify results
         assert len(result) == 1
@@ -429,10 +406,10 @@ class TestDetectActionsInChunk:
         assert detected_action.confidence == 0.9
         assert detected_action.timestamp == 1642500000000
         assert detected_action.variables == {"search_term": "machine learning"}
-        assert detected_action.target_element == node
+        assert detected_action.target_element == node.to_dict()
         assert detected_action.related_events == [0]
 
-    def test_end_to_end_multiple_interactions_and_rules(self):
+    def test_end_to_end_multiple_interactions_and_rules(self, create_processed_session):
         """Test end-to-end detection with multiple interactions and rules."""
         # Create multiple rules
         search_rule = create_test_rule(
@@ -454,19 +431,6 @@ class TestDetectActionsInChunk:
         button_rule.variables = {"button_text": "node.text"}
 
         # Create multiple interactions and nodes
-        search_interaction = create_test_event(
-            action="input",
-            target_id=100,
-            value="python tutorials",
-            timestamp=1000,
-        )
-
-        click_interaction = create_test_event(
-            action="click",
-            target_id=200,
-            timestamp=2000,
-        )
-
         search_node = create_test_node(
             node_id=100,
             tag="input",
@@ -481,15 +445,29 @@ class TestDetectActionsInChunk:
             text="Search",
         )
 
-        chunk = create_feature_chunk(
-            ui_nodes=[search_node, button_node],
+        search_interaction = create_test_event(
+            action="input",
+            target_id=100,
+            target_node=search_node,
+            value="python tutorials",
+            timestamp=1000,
+        )
+
+        click_interaction = create_test_event(
+            action="click",
+            target_id=200,
+            target_node=button_node,
+            timestamp=2000,
+        )
+
+        session = create_processed_session(
             interactions=[search_interaction, click_interaction],
         )
 
         rules = [search_rule, button_rule]
 
         # Execute the function
-        result = detect_actions_in_chunk(chunk, rules)
+        result = detect_actions_in_session(session, rules)
 
         # Verify results
         assert len(result) == 2
@@ -514,7 +492,7 @@ class TestDetectActionsInChunk:
         assert button_action.variables == {"button_text": "Search"}
         assert button_action.related_events == [1]
 
-    def test_no_matches_empty_result(self):
+    def test_no_matches_empty_result(self, create_processed_session):
         """Test that non-matching rules return empty result."""
         # Create a rule that won't match
         rule = create_test_rule(
@@ -525,28 +503,27 @@ class TestDetectActionsInChunk:
         )
 
         # Create interaction that won't match (click instead of hover)
-        interaction = create_test_event(
-            action="click",
-            target_id=123,
-        )
-
         node = create_test_node(
             node_id=123,
             tag="button",  # Different tag than rule expects
         )
 
-        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
+        interaction = create_test_event(
+            action="click",
+            target_id=123,
+            target_node=node,
+        )
 
-        rules = [rule]
+        session = create_processed_session(interactions=[interaction])
 
         # Execute the function
-        result = detect_actions_in_chunk(chunk, rules)
+        result = detect_actions_in_session(session, [rule])
 
         # Verify no matches
         assert len(result) == 0
 
-    def test_missing_target_node_skipped(self):
-        """Test that interactions with missing target nodes are skipped."""
+    def test_empty_session_empty_result(self, create_processed_session):
+        """Test that empty session returns empty result."""
         rule = create_test_rule(
             rule_id="test_rule",
             match_event={"action": "click"},
@@ -554,214 +531,27 @@ class TestDetectActionsInChunk:
             action_id="click_action",
         )
 
-        # Create interaction with target_id that doesn't exist in nodes
-        interaction = create_test_event(
-            action="click",
-            target_id=999,  # This ID won't be found in nodes
-        )
-
-        node = create_test_node(
-            node_id=123,  # Different ID
-            tag="button",
-        )
-
-        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
+        # Empty session
+        session = create_processed_session(interactions=[])
 
         rules = [rule]
 
         # Execute the function
-        result = detect_actions_in_chunk(chunk, rules)
-
-        # Verify no matches due to missing node
-        assert len(result) == 0
-
-    def test_empty_chunk_empty_result(self):
-        """Test that empty chunk returns empty result."""
-        rule = create_test_rule(
-            rule_id="test_rule",
-            match_event={"action": "click"},
-            match_node={"tag": "button"},
-            action_id="click_action",
-        )
-
-        # Empty chunk
-        chunk = create_feature_chunk()
-
-        rules = [rule]
-
-        # Execute the function
-        result = detect_actions_in_chunk(chunk, rules)
+        result = detect_actions_in_session(session, rules)
 
         # Verify empty result
         assert len(result) == 0
 
-    def test_empty_rules_empty_result(self):
+    def test_empty_rules_empty_result(self, create_processed_session):
         """Test that empty rules list returns empty result."""
         # Create valid interaction and node
-        interaction = create_test_event(action="click", target_id=123)
         node = create_test_node(node_id=123, tag="button")
+        interaction = create_test_event(action="click", target_id=123, target_node=node)
 
-        chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
+        session = create_processed_session(interactions=[interaction])
 
-        rules = []  # Empty rules list
-
-        # Execute the function
-        result = detect_actions_in_chunk(chunk, rules)
-
-        # Verify empty result
-        assert len(result) == 0
-
-    def test_partial_chunk_features_graceful_handling(self):
-        """Test handling of chunk with partial features."""
-        rule = create_test_rule(
-            rule_id="test_rule",
-            match_event={"action": "click"},
-            match_node={"tag": "button"},
-            action_id="click_action",
-        )
-
-        # Chunk with features but missing user_interactions
-        chunk = create_feature_chunk(
-            ui_nodes=[create_test_node(node_id=123, tag="button")],
-        )
-
-        rules = [rule]
-
-        # Execute the function
-        result = detect_actions_in_chunk(chunk, rules)
+        # Execute the function w/ empty rules
+        result = detect_actions_in_session(session, [])
 
         # Verify empty result
         assert len(result) == 0
-
-
-class TestSaveDetectedActions:
-    """Tests for save_detected_actions function."""
-
-    def test_save_actions_with_data(self):
-        """Test saving detected actions to JSON file."""
-        with tempfile.TemporaryDirectory() as temp_dir:
-            # Create test actions
-            rule = create_test_rule(
-                rule_id="test_rule_1", action_id="search_query", confidence=0.9
-            )
-            rule.variables = {"search_term": "event.value"}
-
-            event = create_test_event(
-                action="input",
-                target_id=123,
-                value="machine learning",
-                timestamp=1642500000000,
-            )
-
-            node = create_test_node(
-                node_id=123,
-                tag="input",
-                attributes={"type": "search", "placeholder": "Search..."},
-                text="",
-            )
-
-            # Create a detected action using apply_rule_to_event_and_node
-            detected_action = apply_rule_to_event_and_node(rule, event, node, 0)
-            actions = [detected_action]
-
-            chunk_id = "test_chunk_123"
-
-            # Save actions
-            save_detected_actions(actions, chunk_id, temp_dir)
-
-            # Verify file was created
-            expected_file = Path(temp_dir) / f"{chunk_id}.json"
-            assert expected_file.exists()
-
-            # Load and verify JSON content
-            with open(expected_file, "r", encoding="utf-8") as f:
-                saved_data = json.load(f)
-
-            assert len(saved_data) == 1
-            action_data = saved_data[0]
-
-            # Verify all DetectedAction fields are present
-            assert action_data["action_id"] == "search_query"
-            assert action_data["timestamp"] == 1642500000000
-            assert action_data["confidence"] == 0.9
-            assert action_data["rule_id"] == "test_rule_1"
-            assert action_data["variables"] == {"search_term": "machine learning"}
-            assert action_data["related_events"] == [0]
-
-            # Verify target_element (UINode) is properly serialized
-            assert action_data["target_element"] is not None
-            target_element = action_data["target_element"]
-            assert target_element["id"] == 123
-            assert target_element["tag"] == "input"
-            assert target_element["attributes"] == {
-                "type": "search",
-                "placeholder": "Search...",
-            }
-            assert target_element["text"] == ""
-            assert target_element["parent"] is None
-
-    def test_save_empty_actions_list(self):
-        """Test saving empty actions list creates valid empty JSON file."""
-        with tempfile.TemporaryDirectory() as temp_dir:
-            chunk_id = "empty_chunk_456"
-            actions = []
-
-            # Save empty actions
-            save_detected_actions(actions, chunk_id, temp_dir)
-
-            # Verify file was created
-            expected_file = Path(temp_dir) / f"{chunk_id}.json"
-            assert expected_file.exists()
-
-            # Load and verify JSON content is empty list
-            with open(expected_file, "r", encoding="utf-8") as f:
-                saved_data = json.load(f)
-
-            assert saved_data == []
-
-    def test_integration_detect_and_save_actions(self):
-        """Integration test: detect actions in chunk and save to file."""
-        with tempfile.TemporaryDirectory() as temp_dir:
-            # Create rule and chunk data
-            rule = create_test_rule(
-                rule_id="integration_rule",
-                match_event={"action": "input"},
-                match_node={"tag": "input", "attributes": {"type": "search"}},
-                action_id="search_query",
-                confidence=0.9,
-            )
-            rule.variables = {"search_term": "event.value"}
-
-            interaction = create_test_event(
-                action="input",
-                target_id=123,
-                value="integration test",
-                timestamp=1642500000000,
-            )
-
-            node = create_test_node(
-                node_id=123, tag="input", attributes={"type": "search", "name": "query"}
-            )
-
-            chunk = create_feature_chunk(ui_nodes=[node], interactions=[interaction])
-
-            # Detect actions
-            detected_actions = detect_actions_in_chunk(chunk, [rule])
-            assert len(detected_actions) == 1
-
-            # Save detected actions
-            chunk_id = "integration_test_chunk"
-            save_detected_actions(detected_actions, chunk_id, temp_dir)
-
-            # Verify saved file
-            expected_file = Path(temp_dir) / f"{chunk_id}.json"
-            assert expected_file.exists()
-
-            with open(expected_file, "r", encoding="utf-8") as f:
-                saved_data = json.load(f)
-
-            assert len(saved_data) == 1
-            action_data = saved_data[0]
-            assert action_data["action_id"] == "search_query"
-            assert action_data["variables"] == {"search_term": "integration test"}
-            assert action_data["rule_id"] == "integration_rule"

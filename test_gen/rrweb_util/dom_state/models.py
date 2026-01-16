@@ -38,3 +38,14 @@ class UINode:
             "text": self.text,
             "parent": self.parent,
         }
+
+    @staticmethod
+    def from_dict(data: Dict[str, Any]):
+        """Create a UINode instance from a dictionary."""
+        return UINode(
+            id=data["id"],
+            tag=data["tag"],
+            attributes=data["attributes"],
+            text=data["text"],
+            parent=data["parent"],
+        )

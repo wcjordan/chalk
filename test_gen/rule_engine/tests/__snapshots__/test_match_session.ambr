@@ -1,0 +1,51 @@
+# serializer version: 1
+# name: test_directory_processing[processed_session_dict]
+  list([
+    dict({
+      'action_id': 'submit_button_click',
+      'confidence': 0.9,
+      'related_events': list([
+        0,
+      ]),
+      'rule_id': 'test_rule',
+      'target_element': dict({
+        'attributes': dict({
+          'type': 'submit',
+        }),
+        'id': 11,
+        'parent': 'parent_id',
+        'tag': 'button',
+        'text': 'Submit',
+      }),
+      'timestamp': 1234567890,
+      'variables': dict({
+        'button_text': 'Submit',
+      }),
+    }),
+  ])
+# ---
+# name: test_single_file_processing[processed_session_dict]
+  list([
+    dict({
+      'action_id': 'submit_button_click',
+      'confidence': 0.9,
+      'related_events': list([
+        0,
+      ]),
+      'rule_id': 'test_rule',
+      'target_element': dict({
+        'attributes': dict({
+          'type': 'submit',
+        }),
+        'id': 11,
+        'parent': 'parent_id',
+        'tag': 'button',
+        'text': 'Submit',
+      }),
+      'timestamp': 1234567890,
+      'variables': dict({
+        'button_text': 'Submit',
+      }),
+    }),
+  ])
+# ---

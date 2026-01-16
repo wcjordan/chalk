@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 def _parse_arguments() -> argparse.Namespace:
     """
-    Parse command-line arguments for the feature extraction tool.
+    Parse command-line arguments for the session ingestion tool.
     """
     parser = argparse.ArgumentParser(
         description="Extract features from rrweb session files and save as JSON",
@@ -28,13 +28,13 @@ def _parse_arguments() -> argparse.Namespace:
         epilog="""
 Examples:
   # Extract features from all sessions in data/output_sessions
-  python -m feature_extraction.extract_features_cli
+  python -m rrweb_ingest
 
   # Extract features with custom input and output directories
-  python -m feature_extraction.extract_features_cli --session_dir data/my_sessions --output_dir data/my_features
+  python -m rrweb_ingest --session_dir data/my_sessions --output_dir data/my_features
 
   # Process only first 10 sessions with verbose debugging output
-  LOGLEVEL=DEBUG python -m feature_extraction.extract_features_cli --max-sessions 10
+  LOGLEVEL=DEBUG python -m rrweb_ingest --max_sessions 10
         """,
     )
 

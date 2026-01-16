@@ -2,7 +2,7 @@
 Unit tests for the noise filtering module.
 
 Tests the is_low_signal function to ensure proper identification
-and removal of low-signal events from rrweb chunks.
+and removal of low-signal events from rrweb sessions.
 """
 
 # pylint: disable=duplicate-code
