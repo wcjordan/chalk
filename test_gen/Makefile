@@ -31,4 +31,7 @@ test:
 .PHONY: update-snapshots
 update-snapshots:
 	$(ACTIVATE_VENV)
-	python -m pytest --snapshot-update */tests
+# 	python -m pytest --snapshot-update */tests
+	python -m pytest --snapshot-update rrweb_ingest/tests
+	python -m pytest --snapshot-update rrweb_util/dom_state/tests
+

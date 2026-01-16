@@ -10,6 +10,7 @@ import tempfile
 
 import pytest
 
+from rrweb_ingest.models import ProcessedSession
 from rrweb_ingest.pipeline import ingest_session
 
 
@@ -41,24 +42,28 @@ class TestIngestSession:
     def test_ingest_basic_session(self, snapshot, sample_data_path):
         """Test ingesting a basic session with mixed event types."""
         session_id = "sample"
-        session_chunk = ingest_session(session_id, sample_data_path)
+        processed_session = ingest_session(session_id, sample_data_path)
+        processed_session_dict = processed_session.to_dict()
 
         # Verify we got a list of Chunk objects
-        assert isinstance(session_chunk, dict), "ingest_session should return a dict"
-        assert "session_id" in session_chunk
-        assert "user_interactions" in session_chunk
+        assert isinstance(
+            processed_session, ProcessedSession
+        ), "ingest_session should return a ProcessedSession"
+
+        assert "session_id" in processed_session_dict
+        assert "user_interactions" in processed_session_dict
 
         # Verify session_id format
         assert (
-            session_chunk["session_id"] == "sample"
-        ), f"Expected 'sample', got '{session_chunk['session_id']}'"
+            processed_session.session_id == "sample"
+        ), f"Expected 'sample', got '{processed_session.session_id}'"
 
         # Verify events list
         assert isinstance(
-            session_chunk["user_interactions"], list
+            processed_session.user_interactions, list
         ), "events should be a list"
         assert (
-            len(session_chunk["user_interactions"]) > 0
+            len(processed_session.user_interactions) > 0
         ), "chunk should contain events"
 
         # Verify the sample fixture contains all major event types.
@@ -66,7 +71,7 @@ class TestIngestSession:
         target_ids_found = set()
         actions_found = set()
 
-        for event in session_chunk["user_interactions"]:
+        for event in processed_session.user_interactions:
             target_ids_found.add(event.target_id)
             actions_found.add(event.action)
 
@@ -84,7 +89,7 @@ class TestIngestSession:
         ), f"Should find at least 3 targets, found: {found_targets}"
 
         # Test that event order & content is preserved
-        assert session_chunk == snapshot(name="session_chunk")
+        assert processed_session_dict == snapshot(name="processed_session_dict")
 
     def test_ingest_session_file_not_found(self):
         """Test that FileNotFoundError is properly propagated."""

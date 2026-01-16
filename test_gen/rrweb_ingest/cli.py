@@ -66,6 +66,7 @@ def _validate_inputs(args):
     # Convert paths to Path objects and validate
     session_dir = Path(args.session_dir)
     output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     if not session_dir.exists():
         logger.error("Session directory does not exist: %s", session_dir)

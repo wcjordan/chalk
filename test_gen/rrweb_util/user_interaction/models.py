@@ -6,8 +6,6 @@ Designed to be built from rrweb data via extractors
 from dataclasses import dataclass
 from typing import Dict, Any
 
-from rrweb_util.dom_state.node_metadata import UINode
-
 
 @dataclass
 class UserInteraction:
@@ -27,7 +25,7 @@ class UserInteraction:
 
     action: str
     target_id: int
-    target_node: UINode
+    target_node: Dict[str, Any]
     value: Any
     timestamp: int
 
@@ -36,7 +34,7 @@ class UserInteraction:
         return {
             "action": self.action,
             "target_id": self.target_id,
-            "target_node": self.target_node.to_dict(),
+            "target_node": self.target_node,
             "value": self.value,
             "timestamp": self.timestamp,
         }

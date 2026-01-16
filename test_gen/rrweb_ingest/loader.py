@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import List
 
 
-def load_events(filepath: str|Path) -> List[dict]:
+def load_events(filepath: str | Path) -> List[dict]:
     """
     Load an rrweb session file, validate its structure, and return sorted events.
 

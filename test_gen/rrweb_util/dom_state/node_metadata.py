@@ -70,6 +70,7 @@ def resolve_node_metadata(
     # Compute DOM path
     dom_path = _compute_dom_path(node, node_by_id)
 
+    # TODO should this return the UINode directly and should this logic live in it's to_dict method?
     return {
         "tag": tag,
         "aria_label": aria_label,

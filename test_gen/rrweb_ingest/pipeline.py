@@ -6,6 +6,7 @@ It orchestrates the complete pipeline from raw JSON loading through user interac
 """
 
 from collections import defaultdict
+import json
 import logging
 from pathlib import Path
 from pprint import pformat
@@ -13,6 +14,7 @@ from typing import Generator, List, Optional
 
 from rrweb_ingest.loader import load_events
 from rrweb_ingest.filter import is_low_signal
+from rrweb_ingest.models import ProcessedSession
 from rrweb_util import EventType
 from rrweb_util.helpers import is_dom_mutation_event
 from rrweb_util.dom_state.dom_state_helpers import apply_mutation, init_dom_state
@@ -95,12 +97,12 @@ def ingest_session(
     if not user_interactions:
         return None
 
-    return {
+    return ProcessedSession(
+        session_id=session_id,
+        user_interactions=user_interactions,
         # TODO include the environment from the session metadata
         # "environment": session['metadata']['environment']
-        "user_interactions": user_interactions,
-        "session_id": session_id,
-    }
+    )
 
 
 def iterate_sessions(
@@ -125,7 +127,6 @@ def iterate_sessions(
     for filepath in session_files:
         if max_sessions is not None and sessions_handled >= max_sessions:
             break
-
 
         try:
             yield ingest_session(filepath.stem, filepath)
@@ -165,19 +166,24 @@ def process_sessions(
     session_generator = iterate_sessions(session_dir, max_sessions)
     for session in session_generator:
         stats["sessions_processed"] += 1
-
         if session is None:
             logger.debug("Session yielded no user interactions and was skipped")
             continue
 
-        logger.debug("Processed session: %s", session["session_id"])
-        logger.debug("Extracted %d user interactions", len(session["user_interactions"]))
-        logger.debug(pformat(session["user_interactions"]))
-
         # Update stats
-        for interaction in session["user_interactions"]:
+        for interaction in session.user_interactions:
             stats["total_interactions"][interaction.action] += 1
 
-        # TODO save the session data to output_dir as JSON file
+        # Convert dataclass to dict for logging and saving
+        session_dict = session.to_dict()
+        logger.debug("Processed session: %s", session.session_id)
+        logger.debug("Extracted %d user interactions", len(session.user_interactions))
+        logger.debug(pformat(session_dict["user_interactions"]))
+
+        # Save the session data to output_dir as JSON file
+        output_file_path = output_dir / f"{session.session_id}.json"
+        with open(output_file_path, "w", encoding="utf-8") as f:
+            json.dump(session_dict, f, indent=2, ensure_ascii=False)
+        stats["sessions_saved"] += 1
 
     return stats
