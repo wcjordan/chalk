@@ -3,8 +3,11 @@ Fixtures for rrweb_ingest tests
 """
 
 import os
-
 import pytest
+
+from rrweb_util.test_utils.fixtures import (  # noqa: F401  # pylint: disable=unused-import
+    basic_user_interaction,
+)
 
 
 @pytest.fixture

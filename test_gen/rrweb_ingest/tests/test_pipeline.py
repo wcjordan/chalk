@@ -6,12 +6,13 @@ components and correct handling of various session scenarios and error condition
 """
 
 import json
+from pathlib import Path
 import tempfile
 
 import pytest
 
 from rrweb_ingest.models import ProcessedSession
-from rrweb_ingest.pipeline import ingest_session
+from rrweb_ingest.pipeline import ingest_session, process_sessions
 
 
 @pytest.fixture(name="create_session_file")
@@ -131,3 +132,51 @@ class TestIngestSession:
 
         with pytest.raises(ValueError, match="missing required fields"):
             ingest_session("test", temp_path)
+
+    def test_process_sessions(self, tmp_path):
+        """
+        Integration test for process_sessions function.
+
+        Tests the complete flow from session files to saved feature JSON files,
+        verifying file creation, content accuracy, and statistics.
+        """
+
+        # Use a small subset of test sessions
+        test_session_dir = Path("rrweb_ingest/tests/test_sessions")
+        output_dir = tmp_path / "output_features"
+
+        stats = process_sessions(
+            test_session_dir,
+            output_dir,
+            max_sessions=2,  # Limit for faster testing
+        )
+
+        # Verify statistics make sense
+        assert stats["sessions_processed"] >= 0
+        assert stats["sessions_saved"] >= 0
+        assert isinstance(stats["total_interactions"], dict)
+
+        # Verify output directory was created
+        assert output_dir.exists()
+
+        # Verify JSON files were created
+        json_files = list(output_dir.glob("*.json"))
+        assert len(json_files) == stats["sessions_saved"]
+
+        # Verify at least one file has expected structure and loads as valid JSON
+        with open(json_files[1], "r", encoding="utf-8") as f:
+            session_data = json.load(f)
+
+        # Check required top-level fields
+        assert "session_id" in session_data
+        assert "user_interactions" in session_data
+        assert "metadata" in session_data
+
+        # Check user interactions structure
+        user_interactions = session_data["user_interactions"]
+        interaction_types_found = set(ui["action"] for ui in user_interactions)
+        assert "click" in interaction_types_found, "Should contain click interactions"
+        assert "input" in interaction_types_found, "Should contain input interactions"
+
+        # Check processing metadata
+        assert "feature_extraction_version" in session_data["metadata"]

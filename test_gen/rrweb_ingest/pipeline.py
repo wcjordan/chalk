@@ -156,6 +156,9 @@ def process_sessions(
         - total_features: Aggregate counts of each feature type
         - errors: List of any errors encountered during processing
     """
+    # Create output directory if it doesn't exist
+    output_dir.mkdir(parents=True, exist_ok=True)
+
     # Initialize statistics tracking
     stats = {
         "sessions_processed": 0,
@@ -182,6 +185,7 @@ def process_sessions(
 
         # Save the session data to output_dir as JSON file
         output_file_path = output_dir / f"{session.session_id}.json"
+        logger.debug("Saving processed session to %s", output_file_path)
         with open(output_file_path, "w", encoding="utf-8") as f:
             json.dump(session_dict, f, indent=2, ensure_ascii=False)
         stats["sessions_saved"] += 1

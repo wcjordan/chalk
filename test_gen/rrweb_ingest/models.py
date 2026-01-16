@@ -24,7 +24,7 @@ class ProcessedSession:
     """
 
     session_id: str
-    user_interactions: List[UserInteraction]
+    user_interactions: List[UserInteraction] = field(default_factory=list)
     metadata: Dict[str, Any] = field(
         default_factory=lambda: {
             "feature_extraction_version": FEATURE_EXTRACTION_VERSION
