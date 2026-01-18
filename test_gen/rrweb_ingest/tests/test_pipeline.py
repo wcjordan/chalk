@@ -148,7 +148,6 @@ class TestIngestSession:
         stats = process_sessions(
             test_session_dir,
             output_dir,
-            max_sessions=2,  # Limit for faster testing
         )
 
         # Verify statistics make sense
@@ -163,20 +162,23 @@ class TestIngestSession:
         json_files = list(output_dir.glob("*.json"))
         assert len(json_files) == stats["sessions_saved"]
 
-        # Verify at least one file has expected structure and loads as valid JSON
-        with open(json_files[1], "r", encoding="utf-8") as f:
-            session_data = json.load(f)
+        interaction_types_found = set()
+        for file in json_files:
+            # Verify at least one file has expected structure and loads as valid JSON
+            with open(file, "r", encoding="utf-8") as f:
+                session_data = json.load(f)
 
-        # Check required top-level fields
-        assert "session_id" in session_data
-        assert "user_interactions" in session_data
-        assert "metadata" in session_data
+            # Check required top-level fields
+            assert "session_id" in session_data
+            assert "user_interactions" in session_data
+            assert "metadata" in session_data
 
-        # Check user interactions structure
-        user_interactions = session_data["user_interactions"]
-        interaction_types_found = set(ui["action"] for ui in user_interactions)
+            # Check user interactions structure
+            user_interactions = session_data["user_interactions"]
+            interaction_types_found.update(ui["action"] for ui in user_interactions)
+
+            # Check processing metadata
+            assert "feature_extraction_version" in session_data["metadata"]
+
         assert "click" in interaction_types_found, "Should contain click interactions"
         assert "input" in interaction_types_found, "Should contain input interactions"
-
-        # Check processing metadata
-        assert "feature_extraction_version" in session_data["metadata"]
