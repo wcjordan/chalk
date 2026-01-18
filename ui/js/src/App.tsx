@@ -1,5 +1,6 @@
 import React from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, ViewStyle } from 'react-native';
+import { StatusBar, StyleSheet, ViewStyle } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import ErrorBar from './components/ErrorBar';
 import Login from './components/Login';
 import TodoList from './components/TodoList';

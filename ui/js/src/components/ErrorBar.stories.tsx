@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { setupStore } from '../redux/store';
 import ErrorBar from './ErrorBar';
@@ -15,11 +14,9 @@ const styles = StyleSheet.create({
   },
 });
 const wrapper = (component) => (
-  <SafeAreaProvider>
-    <Provider store={setupStore()}>
-      <View style={styles.wrapper}>{component}</View>
-    </Provider>
-  </SafeAreaProvider>
+  <Provider store={setupStore()}>
+    <View style={styles.wrapper}>{component}</View>
+  </Provider>
 );
 
 export default {
