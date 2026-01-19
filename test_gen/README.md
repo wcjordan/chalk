@@ -1,30 +1,38 @@
-# rrweb Feature Extraction - Input Ingestion & Preprocessing
+# rrweb Session Processing & Feature Extraction
 
 ## Overview
 
-The **rrweb Feature Extraction** module processes raw `rrweb` session recordings (JSON files ~200KB–2MB) and transforms them into clean, structured "chunks" ready for downstream feature extraction and behavior analysis.
+This repository provides a complete pipeline for processing raw `rrweb` session recordings (JSON files ~200KB–2MB) into structured feature data for test generation and behavior analysis.
 
-This module is responsible for:
+The pipeline is responsible for:
 
 1. **Loading & validating** rrweb JSON session files
-2. **Sorting & classifying** events into snapshots, interactions, and other categories
-3. **Segmenting** the interaction stream into meaningful chunks based on time gaps, size limits, and snapshot boundaries
-4. **Filtering out noise** (cursor-only moves, micro-scrolls, trivial mutations)
-5. **Normalizing** chunks into structured objects with metadata
+2. **Filtering out noise** (cursor-only moves, micro-scrolls, trivial mutations)
+3. **Extracting features** from user interactions and DOM mutations
+4. **Enriching events** with DOM node metadata and semantic context
+5. **Rule-based matching** to identify user actions and behaviors
 
-## Public Functions
+## Architecture
 
-### Core Pipeline Function
+The pipeline consists of three main modules:
 
-- **`ingest_session(session_id, filepath, **kwargs)`** - Main entry point that processes an entire rrweb session file and returns a list of normalized `Chunk` objects
+### 1. `rrweb_ingest`
+Processes raw rrweb session files and extracts structured features:
+- **`ingest_session(session_id, filepath)`** - Main entry point that loads, filters, and extracts features from an rrweb session
+- **`load_events(filepath)`** - Loads and validates rrweb JSON
+- **`filter_events(events)`** - Removes noise events (micro-scrolls, mousemoves, etc.)
+- **`extract_features(session)`** - Extracts user interactions and DOM mutations with enriched metadata
 
-### Individual Processing Functions
+### 2. `rrweb_util`
+Shared utilities for DOM state management and feature extraction:
+- **`rrweb_util.dom_state`** - DOM state tracking, node metadata extraction
+- **`rrweb_util.user_interaction`** - User interaction models and extractors
+- **`rrweb_util.helpers`** - Common helper functions
 
-- **`load_events(filepath)`** - Loads and validates rrweb JSON, returns sorted events
-- **`classify_events(events)`** - Separates events into snapshots, interactions, and others
-- **`segment_into_chunks(interactions, snapshots, **kwargs)`** - Groups interactions into logical chunks
-- **`clean_chunk(events, **kwargs)`** - Removes low-signal noise and duplicate events
-- **`normalize_chunk(raw_events, session_id, chunk_index)`** - Wraps cleaned events into structured `Chunk` objects
+### 3. `rule_engine`
+Rule-based matching to identify user actions from extracted features:
+- **`match_session(session_file, rules)`** - Matches rules against a session's features
+- **`load_rules(rules_dir)`** - Loads rule definitions from YAML files
 
 ## Installation
 
@@ -45,61 +53,78 @@ pip install -r requirements.txt
 ```python
 from rrweb_ingest import ingest_session
 
-# Process an rrweb session file
-chunks = ingest_session("session1", "path/to/sample.json")
+# Process an rrweb session file and extract features
+session = ingest_session("session1", "path/to/sample.json")
 
-# Print chunk summaries
-for chunk in chunks:
-    print(f"Chunk: {chunk.chunk_id}")
-    print(f"  Time: {chunk.start_time} - {chunk.end_time}")
-    print(f"  Duration: {chunk.metadata['duration_ms']}ms")
-    print(f"  Events: {chunk.metadata['num_events']}")
-    print()
+# Examine extracted features
+print(f"Session: {session.session_id}")
+print(f"  Duration: {session.duration_ms}ms")
+print(f"  User Interactions: {len(session.features['interactions'])}")
+print(f"  DOM Mutations: {len(session.features['dom_mutations'])}")
+
+# Access individual interactions with enriched metadata
+for interaction in session.features["interactions"]:
+    print(f"{interaction.action} on {interaction.node.tag} at {interaction.timestamp}")
+    print(f"  Text: {interaction.node.text_content}")
+    print(f"  Path: {interaction.node.dom_path}")
 ```
 
-## Configuration
+## Session Schema
 
-The ingestion process can be configured with various parameters:
-
-```python
-chunks = ingest_session(
-    "session1", 
-    "path/to/sample.json",
-    max_gap_ms=15000,           # Split chunks on gaps > 15s
-    max_events=500,             # Max 500 events per chunk
-    max_duration_ms=45000,      # Max 45s duration per chunk
-    micro_scroll_threshold=30   # Filter scrolls < 30px
-)
-```
-
-## Chunk Schema
-
-Each processed chunk follows this structure:
+Each processed session follows this structure:
 
 ```python
 @dataclass
-class Chunk:
-    chunk_id: str              # Format: "{session_id}-chunk{index:03d}"
-    start_time: int            # Timestamp of first event
-    end_time: int              # Timestamp of last event
-    events: List[dict]         # Filtered rrweb events
-    metadata: dict             # Additional info (num_events, duration_ms, etc.)
+class Session:
+    session_id: str                    # Unique session identifier
+    duration_ms: int                   # Total session duration
+    events: List[dict]                 # Filtered rrweb events
+    features: Dict[str, List]          # Extracted features:
+                                       #   - interactions: List[UserInteraction]
+                                       #   - dom_mutations: List[DomMutation]
+    metadata: dict                     # Additional session metadata
+```
+
+## Command Line Usage
+
+Extract features from all sessions in a directory:
+
+```bash
+# Process all sessions with default settings
+python -m rrweb_ingest
+
+# Specify custom input/output directories
+python -m rrweb_ingest --session_dir data/sessions --output_dir data/features
+
+# Process a limited number of sessions
+python -m rrweb_ingest --max_sessions 10
+
+# Show help
+python -m rrweb_ingest --help
 ```
 
 ## Testing
 
-Run the test suite:
+Run all tests:
+
+```bash
+make test
+```
+
+Run tests for specific modules:
 
 ```bash
 pytest rrweb_ingest/tests/
+pytest rrweb_util/tests/
+pytest rule_engine/tests/
 ```
 
-Run with coverage:
+Run with coverage report:
 
 ```bash
-pytest --cov=rrweb_ingest rrweb_ingest/tests/
+pytest --cov=. --cov-report=html
 ```
 
 ## Sample Data
 
-A sample rrweb session file is included at `rrweb_ingest/tests/fixtures/rrweb_sample.json` for testing and demonstration purposes.
+Sample rrweb session files are included in `rrweb_ingest/tests/fixture_data/` for testing and demonstration purposes.

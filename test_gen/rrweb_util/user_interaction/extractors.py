@@ -7,11 +7,12 @@ including user interactions and scroll patterns.
 
 from typing import List
 
-from rrweb_util import (
+from rrweb_util.dom_state.node_metadata import resolve_node_metadata
+from rrweb_util.helpers import (
     is_incremental_snapshot,
+    is_drag_event,
     is_mouse_interaction_event,
     is_input_event,
-    is_scroll_event,
     get_event_timestamp,
     get_event_data,
     get_target_id,
@@ -20,21 +21,21 @@ from rrweb_util import (
 from .models import UserInteraction
 
 
-def extract_user_interactions(events: List[dict]) -> List[UserInteraction]:
+def extract_user_interactions(dom_state: dict, event: dict) -> List[UserInteraction]:
     """
-    From a list of rrweb events, return structured UserInteraction records
-    for click, input, and scroll actions.
+    From a rrweb event, return structured UserInteraction records
+    for click and input actions.
 
-    This function processes rrweb events and extracts user interactions including
-    mouse clicks, input changes, and scroll events. Only events with type == 3
+    This function processes a rrweb event and extracts user interactions including
+    mouse clicks and input changes. Only events with type == 3
     (IncrementalSnapshot) are considered, and specific data.source values map to
     different interaction types:
     - source == 2: Mouse interactions (click, dblclick)
     - source == 5: Input events (text changes, checkboxes)
-    - source == 3: Scroll events
 
     Args:
-        events: List of rrweb events to process
+        dom_state: Current DOM state mapping node IDs to UINode metadata
+        event: A single rrweb event to process
 
     Returns:
         List of UserInteraction objects representing user actions, preserving
@@ -46,50 +47,57 @@ def extract_user_interactions(events: List[dict]) -> List[UserInteraction]:
     """
     interactions = []
 
-    for event in events:
-        # Only process IncrementalSnapshot events
-        if not is_incremental_snapshot(event):
-            continue
+    # Only process IncrementalSnapshot events
+    if not is_incremental_snapshot(event):
+        return []
 
-        timestamp = get_event_timestamp(event)
+    timestamp = get_event_timestamp(event)
 
-        if is_mouse_interaction_event(event):
-            # Mouse interactions (click, dblclick)
-            interaction = _extract_click_interaction(event, timestamp)
-            if interaction:
-                interactions.append(interaction)
-        elif is_input_event(event):
-            # Input events (text changes, checkboxes)
-            interaction = _extract_input_interaction(event, timestamp)
-            if interaction:
-                interactions.append(interaction)
-        elif is_scroll_event(event):
-            # Scroll events
-            interaction = _extract_scroll_interaction(event, timestamp)
-            if interaction:
-                interactions.append(interaction)
+    if is_mouse_interaction_event(event):
+        # Mouse interactions (click, dblclick)
+        interaction = _extract_click_interaction(dom_state, event, timestamp)
+        if interaction:
+            interactions.append(interaction)
+    elif is_input_event(event):
+        # Input events (text changes, checkboxes)
+        interaction = _extract_input_interaction(dom_state, event, timestamp)
+        if interaction:
+            interactions.append(interaction)
+    elif is_drag_event(event):
+        # Drag event
+        # TODO: Implement drag interaction extraction
+        pass
+    else:
+        raise ValueError(f"Unknown event type for interaction extraction: {event}")
 
     return interactions
 
 
-def _extract_click_interaction(event: dict, timestamp: int) -> UserInteraction:
+def _extract_click_interaction(
+    dom_state: dict, event: dict, timestamp: int
+) -> UserInteraction:
     """Extract click interaction from mouse event data."""
     target_id = get_target_id(event)
     if target_id is not None:
+        target_node = resolve_node_metadata(target_id, dom_state)
         x, y = get_mouse_coordinates(event)
         return UserInteraction(
             action="click",
             target_id=target_id,
+            target_node=target_node,
             value={"x": x, "y": y},
             timestamp=timestamp,
         )
     return None
 
 
-def _extract_input_interaction(event: dict, timestamp: int) -> UserInteraction:
+def _extract_input_interaction(
+    dom_state: dict, event: dict, timestamp: int
+) -> UserInteraction:
     """Extract input interaction from input event data."""
     target_id = get_target_id(event)
     if target_id is not None:
+        target_node = resolve_node_metadata(target_id, dom_state)
         data = get_event_data(event)
         # Input events can have either 'text' or 'isChecked' fields
         value = {}
@@ -101,23 +109,8 @@ def _extract_input_interaction(event: dict, timestamp: int) -> UserInteraction:
         return UserInteraction(
             action="input",
             target_id=target_id,
+            target_node=target_node,
             value=value,
-            timestamp=timestamp,
-        )
-    return None
-
-
-def _extract_scroll_interaction(event: dict, timestamp: int) -> UserInteraction:
-    """Extract scroll interaction from scroll event data."""
-    target_id = get_target_id(event)
-    if target_id is not None:
-        data = get_event_data(event)
-        x = data.get("x", 0)
-        y = data.get("y", 0)
-        return UserInteraction(
-            action="scroll",
-            target_id=target_id,
-            value={"x": x, "y": y},
             timestamp=timestamp,
         )
     return None

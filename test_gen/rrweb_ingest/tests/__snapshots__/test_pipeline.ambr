@@ -1,0 +1,61 @@
+# serializer version: 1
+# name: TestIngestSession.test_ingest_basic_session[processed_session_dict]
+  dict({
+    'metadata': dict({
+      'feature_extraction_version': '0.1',
+    }),
+    'session_id': 'sample',
+    'user_interactions': list([
+      dict({
+        'action': 'click',
+        'target_id': 6,
+        'target_node': dict({
+          'aria_label': 'Submit Form',
+          'data_testid': None,
+          'dom_path': 'placeholder > html > body > button#submit-btn',
+          'role': None,
+          'tag': 'button',
+          'text': None,
+        }),
+        'timestamp': 1640995202000,
+        'value': dict({
+          'x': 200,
+          'y': 300,
+        }),
+      }),
+      dict({
+        'action': 'input',
+        'target_id': 10,
+        'target_node': dict({
+          'aria_label': None,
+          'data_testid': None,
+          'dom_path': 'placeholder > html',
+          'role': None,
+          'tag': 'html',
+          'text': None,
+        }),
+        'timestamp': 1640995220500,
+        'value': dict({
+          'value': 'user@example.com',
+        }),
+      }),
+      dict({
+        'action': 'click',
+        'target_id': 12,
+        'target_node': dict({
+          'aria_label': None,
+          'data_testid': None,
+          'dom_path': 'placeholder > html > body > form#contact-form',
+          'role': None,
+          'tag': 'form',
+          'text': None,
+        }),
+        'timestamp': 1640995221000,
+        'value': dict({
+          'x': 150,
+          'y': 200,
+        }),
+      }),
+    ]),
+  })
+# ---

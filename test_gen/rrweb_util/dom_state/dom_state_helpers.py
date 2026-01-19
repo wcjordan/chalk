@@ -9,7 +9,7 @@ through mutation tracking.
 
 from typing import Dict, List
 
-from rrweb_util import is_full_snapshot, is_dom_mutation_event, get_tag_name
+from rrweb_util.helpers import is_full_snapshot, is_dom_mutation_event, get_tag_name
 from .models import UINode
 
 
@@ -68,9 +68,9 @@ def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
     return node_by_id
 
 
-def apply_mutations(node_by_id: Dict[int, UINode], mutation_events: List[dict]) -> None:
+def apply_mutation(node_by_id: Dict[int, UINode], event: dict) -> None:
     """
-    Applies a sequence of rrweb mutation events to update the in-memory DOM state in place.
+    Applies a rrweb mutation events to update the in-memory DOM state in place.
 
     This function processes mutation events (type == 3, source == 0) and updates
     the virtual DOM state by handling node additions, removals, attribute changes,
@@ -84,19 +84,18 @@ def apply_mutations(node_by_id: Dict[int, UINode], mutation_events: List[dict]) 
         This function modifies node_by_id in place. Mutation entries that reference
         nonexistent node IDs are safely ignored without raising errors.
     """
-    for event in mutation_events:
-        # Only process mutation events
-        if not is_dom_mutation_event(event):
-            continue
+    # Only process mutation events
+    if not is_dom_mutation_event(event):
+        return
 
-        data = event.get("data", {})
+    data = event.get("data", {})
 
-        # Handle different types of mutations
-        # Note we don't do anything for node removals since we want to be able to map interactions to nodes even if
-        # they're removed from the DOM
-        _apply_node_additions(node_by_id, data.get("adds", []))
-        _apply_attribute_changes(node_by_id, data.get("attributes", []))
-        _apply_text_changes(node_by_id, data.get("texts", []))
+    # Handle different types of mutations
+    # Note we don't do anything for node removals since we want to be able to map interactions to nodes even if
+    # they're removed from the DOM
+    _apply_node_additions(node_by_id, data.get("adds", []))
+    _apply_attribute_changes(node_by_id, data.get("attributes", []))
+    _apply_text_changes(node_by_id, data.get("texts", []))
 
 
 def _apply_node_additions(node_by_id: Dict[int, UINode], adds: List[dict]) -> None:

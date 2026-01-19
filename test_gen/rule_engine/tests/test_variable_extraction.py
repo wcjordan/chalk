@@ -5,18 +5,13 @@ Tests the extract_variables function with various scenarios including
 successful extractions, missing fields, error handling, and CSS-style queries.
 """
 
+import copy
 import pytest
 
-from rule_engine.variable_resolver import extract_variables
 from rule_engine.utils import query_node_text
-from feature_extraction.models import UserInteraction, UINode
-
-
-@pytest.fixture(name="mock_event")
-def fixture_mock_event():
-    """Set up test fixtures for each test method."""
-    # Mock UserInteraction with typical click event data
-    return UserInteraction(action="input", target_id=123, value="cats", timestamp=1000)
+from rule_engine.variable_resolver import extract_variables
+from rrweb_util.user_interaction.models import UserInteraction
+from rrweb_util.dom_state.models import UINode
 
 
 @pytest.fixture(name="mock_node")
@@ -36,31 +31,44 @@ def fixture_mock_node():
     )
 
 
-def test_extract_event_value(mock_event, mock_node):
+@pytest.fixture(name="mock_event")
+def fixture_mock_event(mock_node):
+    """Set up test fixtures for each test method."""
+    # Mock UserInteraction with typical input event data
+    return UserInteraction(
+        action="input",
+        target_id=123,
+        target_node=mock_node.to_dict(),
+        value="cats",
+        timestamp=1000,
+    )
+
+
+def test_extract_event_value(mock_event):
     """Test extraction of event.value."""
     variable_map = {"input_value": "event.value"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"input_value": "cats"}
 
 
-def test_extract_node_text(mock_event, mock_node):
+def test_extract_node_text(mock_event):
     """Test extraction of node.text."""
     variable_map = {"node_text": "node.text"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"node_text": "Search field"}
 
 
-def test_extract_node_attribute(mock_event, mock_node):
+def test_extract_node_attribute(mock_event):
     """Test extraction of node attributes."""
     variable_map = {"placeholder": "node.attributes.placeholder"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"placeholder": "Search..."}
 
 
-def test_extract_multiple_variables(mock_event, mock_node):
+def test_extract_multiple_variables(mock_event):
     """Test extraction of multiple variables in one call."""
     variable_map = {
         "input_value": "event.value",
@@ -68,7 +76,7 @@ def test_extract_multiple_variables(mock_event, mock_node):
         "node_text": "node.text",
         "field_type": "node.attributes.type",
     }
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     expected = {
         "input_value": "cats",
@@ -79,98 +87,98 @@ def test_extract_multiple_variables(mock_event, mock_node):
     assert result == expected
 
 
-def test_missing_attribute_returns_none(mock_event, mock_node):
+def test_missing_attribute_returns_none(mock_event):
     """Test that missing attributes return None."""
     variable_map = {"missing_attr": "node.attributes.nonexistent"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"missing_attr": None}
 
 
-def test_missing_event_field_returns_none(mock_event, mock_node):
+def test_missing_event_field_returns_none(mock_event):
     """Test that missing event fields return None."""
     variable_map = {"missing_field": "event.nonexistent"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"missing_field": None}
 
 
-def test_missing_node_field_returns_none(mock_event, mock_node):
+def test_missing_node_field_returns_none(mock_event):
     """Test that missing node fields return None."""
     variable_map = {"missing_field": "node.nonexistent"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"missing_field": None}
 
 
-def test_invalid_path_root_returns_none(mock_event, mock_node):
+def test_invalid_path_root_returns_none(mock_event):
     """Test that invalid path roots return None."""
     variable_map = {"invalid": "invalid_root.field"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"invalid": None}
 
 
-def test_deeply_nested_invalid_path_returns_none(mock_event, mock_node):
+def test_deeply_nested_invalid_path_returns_none(mock_event):
     """Test that deeply nested invalid paths return None."""
     variable_map = {"invalid": "node.foo.bar.baz"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"invalid": None}
 
 
-def test_single_part_path_returns_none(mock_event, mock_node):
+def test_single_part_path_returns_none(mock_event):
     """Test that single-part paths return None."""
     variable_map = {"invalid": "event"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"invalid": None}
 
 
-def test_empty_path_returns_none(mock_event, mock_node):
+def test_empty_path_returns_none(mock_event):
     """Test that empty paths return None."""
     variable_map = {"invalid": ""}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"invalid": None}
 
 
-def test_event_action_extraction(mock_event, mock_node):
+def test_event_action_extraction(mock_event):
     """Test extraction of event.action."""
     variable_map = {"action_type": "event.action"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"action_type": "input"}
 
 
-def test_event_timestamp_extraction(mock_event, mock_node):
+def test_event_timestamp_extraction(mock_event):
     """Test extraction of event.timestamp."""
     variable_map = {"event_time": "event.timestamp"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"event_time": 1000}
 
 
-def test_node_id_extraction(mock_event, mock_node):
+def test_node_id_extraction(mock_event):
     """Test extraction of node.id."""
     variable_map = {"node_id": "node.id"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"node_id": 123}
 
 
-def test_node_tag_extraction(mock_event, mock_node):
+def test_node_tag_extraction(mock_event):
     """Test extraction of node.tag."""
     variable_map = {"element_tag": "node.tag"}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"element_tag": "input"}
 
 
-def test_empty_variable_map(mock_event, mock_node):
+def test_empty_variable_map(mock_event):
     """Test that empty variable map returns empty result."""
     variable_map = {}
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert not result
 
@@ -178,38 +186,37 @@ def test_empty_variable_map(mock_event, mock_node):
 def test_node_with_empty_attributes(mock_event):
     """Test extraction from node with empty attributes."""
     empty_node = UINode(id=789, tag="div", attributes={}, text="", parent=None)
+    mock_event.target_node = empty_node.to_dict()
 
     variable_map = {"missing_attr": "node.attributes.placeholder"}
-    result = extract_variables(variable_map, mock_event, empty_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"missing_attr": None}
 
 
-def test_event_with_none_value(mock_node):
+def test_event_with_none_value(mock_event):
     """Test extraction from event with None value."""
-    none_event = UserInteraction(
-        action="click", target_id=456, value=None, timestamp=2000
-    )
+    none_interaction = copy.copy(mock_event)
+    none_interaction.value = None
 
     variable_map = {"event_value": "event.value"}
-    result = extract_variables(variable_map, none_event, mock_node)
+    result = extract_variables(variable_map, none_interaction)
 
     assert result == {"event_value": None}
 
 
-def test_event_with_complex_value(mock_node):
+def test_event_with_complex_value(mock_event):
     """Test extraction from event with complex value (dict/list)."""
-    complex_event = UserInteraction(
-        action="scroll", target_id=789, value={"x": 100, "y": 200}, timestamp=3000
-    )
+    complex_event = copy.copy(mock_event)
+    complex_event.value = {"x": 100, "y": 200}
 
-    variable_map = {"scroll_data": "event.value"}
-    result = extract_variables(variable_map, complex_event, mock_node)
+    variable_map = {"click_data": "event.value"}
+    result = extract_variables(variable_map, complex_event)
 
-    assert result == {"scroll_data": {"x": 100, "y": 200}}
+    assert result == {"click_data": {"x": 100, "y": 200}}
 
 
-def test_mixed_valid_and_invalid_paths(mock_event, mock_node):
+def test_mixed_valid_and_invalid_paths(mock_event):
     """Test extraction with mix of valid and invalid paths."""
     variable_map = {
         "valid_value": "event.value",
@@ -217,7 +224,7 @@ def test_mixed_valid_and_invalid_paths(mock_event, mock_node):
         "valid_placeholder": "node.attributes.placeholder",
         "invalid_attr": "node.attributes.missing",
     }
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     expected = {
         "valid_value": "cats",
@@ -323,16 +330,17 @@ def test_query_node_text_invalid_selector(mock_dom_tree):
 
 def test_extract_variables_with_node_query(mock_event, mock_dom_tree):
     """Test extract_variables with node.query().text expressions."""
-    all_nodes = mock_dom_tree["all_nodes"]
     # Use the form node as the root for this test
+    all_nodes = mock_dom_tree["all_nodes"]
     form_node = next(node for node in all_nodes if node.tag == "form")
+    mock_event.target_node = form_node.to_dict()
 
     variable_map = {
         "label_text": 'node.query("label").text',
         "regular_field": "node.tag",
     }
 
-    result = extract_variables(variable_map, mock_event, form_node, all_nodes)
+    result = extract_variables(variable_map, mock_event, all_nodes)
 
     expected = {"label_text": "Search:", "regular_field": "form"}
     assert result == expected
@@ -340,39 +348,38 @@ def test_extract_variables_with_node_query(mock_event, mock_dom_tree):
 
 def test_extract_variables_with_node_query_single_quotes(mock_event, mock_dom_tree):
     """Test extract_variables with node.query().text using single quotes."""
-    all_nodes = mock_dom_tree["all_nodes"]
     root = mock_dom_tree["root"]
+    mock_event.target_node = root.to_dict()
 
     variable_map = {"page_title": "node.query('span').text"}
 
-    result = extract_variables(variable_map, mock_event, root, all_nodes)
+    result = extract_variables(variable_map, mock_event, mock_dom_tree["all_nodes"])
 
     assert result == {"page_title": "Page Title"}
 
 
 def test_extract_variables_with_node_query_no_match(mock_event, mock_dom_tree):
     """Test extract_variables with node.query().text when no nodes match."""
-    all_nodes = mock_dom_tree["all_nodes"]
     root = mock_dom_tree["root"]
+    mock_event.target_node = root.to_dict()
 
     variable_map = {"missing": 'node.query("button").text'}
 
-    result = extract_variables(variable_map, mock_event, root, all_nodes)
-
+    result = extract_variables(variable_map, mock_event, mock_dom_tree["all_nodes"])
     assert result == {"missing": None}
 
 
 def test_extract_variables_with_node_query_complex_selector(mock_event, mock_dom_tree):
     """Test extract_variables with complex CSS selector."""
-    all_nodes = mock_dom_tree["all_nodes"]
     root = mock_dom_tree["root"]
+    mock_event.target_node = root.to_dict()
 
     variable_map = {
         "form_label": 'node.query("form > label").text',
         "header_title": 'node.query("div > span").text',
     }
 
-    result = extract_variables(variable_map, mock_event, root, all_nodes)
+    result = extract_variables(variable_map, mock_event, mock_dom_tree["all_nodes"])
 
     expected = {
         "form_label": "Search:",
@@ -381,28 +388,27 @@ def test_extract_variables_with_node_query_complex_selector(mock_event, mock_dom
     assert result == expected
 
 
-def test_extract_variables_node_query_without_all_nodes(mock_event, mock_node):
+def test_extract_variables_node_query_without_all_nodes(mock_event):
     """Test that node.query() expressions return None when all_nodes is not provided."""
     variable_map = {"child_text": 'node.query("span").text'}
 
     # Call without all_nodes parameter
-    result = extract_variables(variable_map, mock_event, mock_node)
+    result = extract_variables(variable_map, mock_event)
 
     assert result == {"child_text": None}
 
 
 def test_extract_variables_invalid_query_expression(mock_event, mock_dom_tree):
     """Test extract_variables with invalid node.query() expression."""
-    all_nodes = mock_dom_tree["all_nodes"]
     root = mock_dom_tree["root"]
-
+    mock_event.target_node = root.to_dict()
     variable_map = {
         "invalid1": "node.query('span')",  # Missing .text
         "invalid2": 'node.query("span").value',  # Wrong method
         "invalid3": 'node.find("span").text',  # Wrong method name
     }
 
-    result = extract_variables(variable_map, mock_event, root, all_nodes)
+    result = extract_variables(variable_map, mock_event, mock_dom_tree["all_nodes"])
 
     expected = {"invalid1": None, "invalid2": None, "invalid3": None}
     assert result == expected
@@ -410,8 +416,8 @@ def test_extract_variables_invalid_query_expression(mock_event, mock_dom_tree):
 
 def test_extract_variables_mixed_expressions(mock_event, mock_dom_tree):
     """Test extract_variables with mix of regular paths and node.query() expressions."""
-    all_nodes = mock_dom_tree["all_nodes"]
     root = mock_dom_tree["root"]
+    mock_event.target_node = root.to_dict()
 
     variable_map = {
         "event_action": "event.action",
@@ -420,8 +426,7 @@ def test_extract_variables_mixed_expressions(mock_event, mock_dom_tree):
         "missing_field": "event.nonexistent",
     }
 
-    result = extract_variables(variable_map, mock_event, root, all_nodes)
-
+    result = extract_variables(variable_map, mock_event, mock_dom_tree["all_nodes"])
     expected = {
         "event_action": "input",
         "node_tag": "div",

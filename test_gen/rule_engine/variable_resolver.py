@@ -8,8 +8,9 @@ events and UINode objects based on path expressions defined in rules.
 import logging
 import re
 from typing import Any, Dict, List, Optional
-from feature_extraction.models import UserInteraction, UINode
-from .utils import query_node_text
+from rrweb_util.user_interaction.models import UserInteraction
+from rrweb_util.dom_state.models import UINode
+from rule_engine.utils import query_node_text
 
 logger = logging.getLogger("test_gen.rule_engine")
 
@@ -17,7 +18,6 @@ logger = logging.getLogger("test_gen.rule_engine")
 def extract_variables(
     variable_map: Dict[str, str],
     event: UserInteraction,
-    node: UINode,
     all_nodes: List[UINode] = None,
 ) -> Dict[str, Any]:
     """
@@ -25,9 +25,8 @@ def extract_variables(
 
     Args:
         variable_map: Dictionary mapping variable names to source paths
-                     (e.g., {"input_value": "event.value", "placeholder": "node.attributes.placeholder"})
+                      (e.g., {"input_value": "event.value", "placeholder": "node.attributes.placeholder"})
         event: The matched UserInteraction object
-        node: The matched UINode object
         all_nodes: Optional list of all UINodes for CSS-style queries (required for node.query() expressions)
 
     Returns:
@@ -41,7 +40,7 @@ def extract_variables(
         ...     "node_text": "node.text",
         ...     "child_label": "node.query('div > span').text"
         ... }
-        >>> result = extract_variables(variable_map, event, node, all_nodes)
+        >>> result = extract_variables(variable_map, event, all_nodes)
         >>> # Returns: {
         ...     "input_value": "cats",
         ...     "placeholder": "Search...",
@@ -50,6 +49,7 @@ def extract_variables(
         ... }
     """
     result = {}
+    node = UINode.from_dict(event.target_node)
 
     for variable_name, path in variable_map.items():
         # Check if this is a node.query().text expression
