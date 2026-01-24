@@ -170,6 +170,7 @@ def _get_all_descendant_text(
         >>> _get_all_descendant_text(button_node, node_by_id)
         "Submit Now"
     """
+
     # Recursive function to collect text from node and descendants
     def collect_text(current_node: UINode) -> List[str]:
         texts = []

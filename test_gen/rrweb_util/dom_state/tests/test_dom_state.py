@@ -100,7 +100,9 @@ def fixture_simple_node_by_id():
     """Fixture providing a simple node_by_id dictionary for mutation testing."""
     return {
         1: UINode(id=1, tag="div", attributes={}, text="", parent=None, children=[2]),
-        2: UINode(id=2, tag="span", attributes={}, text="existing", parent=1, children=[]),
+        2: UINode(
+            id=2, tag="span", attributes={}, text="existing", parent=1, children=[]
+        ),
     }
 
 
@@ -108,8 +110,17 @@ def fixture_simple_node_by_id():
 def fixture_rich_node_by_id():
     """Fixture providing a richer node_by_id dictionary for complex mutation testing."""
     return {
-        1: UINode(id=1, tag="div", attributes={}, text="", parent=None, children=[2, 3]),
-        2: UINode(id=2, tag="span", attributes={"class": "old"}, text="old", parent=1, children=[]),
+        1: UINode(
+            id=1, tag="div", attributes={}, text="", parent=None, children=[2, 3]
+        ),
+        2: UINode(
+            id=2,
+            tag="span",
+            attributes={"class": "old"},
+            text="old",
+            parent=1,
+            children=[],
+        ),
         3: UINode(id=3, tag="p", attributes={}, text="to keep", parent=1, children=[]),
     }
 

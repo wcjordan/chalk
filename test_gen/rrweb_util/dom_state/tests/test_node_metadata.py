@@ -17,7 +17,12 @@ def fixture_simple_nested_nodes():
         1: UINode(id=1, tag="html", attributes={}, text="", parent=None, children=[2]),
         2: UINode(id=2, tag="body", attributes={}, text="", parent=1, children=[3]),
         3: UINode(
-            id=3, tag="div", attributes={"class": "container"}, text="", parent=2, children=[4]
+            id=3,
+            tag="div",
+            attributes={"class": "container"},
+            text="",
+            parent=2,
+            children=[4],
         ),
         4: UINode(
             id=4,
@@ -34,7 +39,9 @@ def fixture_simple_nested_nodes():
 def fixture_rich_attributes_nodes():
     """Fixture providing nodes with rich semantic attributes."""
     return {
-        1: UINode(id=1, tag="html", attributes={}, text="", parent=None, children=[2, 3, 4]),
+        1: UINode(
+            id=1, tag="html", attributes={}, text="", parent=None, children=[2, 3, 4]
+        ),
         2: UINode(
             id=2,
             tag="button",
@@ -75,8 +82,12 @@ def fixture_rich_attributes_nodes():
 def fixture_nodes_without_attributes():
     """Fixture providing nodes with minimal or no attributes."""
     return {
-        1: UINode(id=1, tag="div", attributes={}, text="", parent=None, children=[2, 3]),
-        2: UINode(id=2, tag="span", attributes={}, text="Some text", parent=1, children=[]),
+        1: UINode(
+            id=1, tag="div", attributes={}, text="", parent=None, children=[2, 3]
+        ),
+        2: UINode(
+            id=2, tag="span", attributes={}, text="Some text", parent=1, children=[]
+        ),
         3: UINode(id=3, tag="p", attributes={}, text="", parent=1, children=[]),
     }
 
@@ -273,8 +284,22 @@ def test_resolve_node_metadata_dom_path_no_identifiers():
 def test_resolve_node_metadata_empty_class_attribute():
     """Test that empty class attributes are handled gracefully."""
     node_by_id = {
-        1: UINode(id=1, tag="div", attributes={"class": ""}, text="", parent=None, children=[2]),
-        2: UINode(id=2, tag="span", attributes={"class": "   "}, text="", parent=1, children=[]),
+        1: UINode(
+            id=1,
+            tag="div",
+            attributes={"class": ""},
+            text="",
+            parent=None,
+            children=[2],
+        ),
+        2: UINode(
+            id=2,
+            tag="span",
+            attributes={"class": "   "},
+            text="",
+            parent=1,
+            children=[],
+        ),
     }
 
     # Empty class should not add class selector
@@ -304,8 +329,12 @@ def test_resolve_node_metadata_missing_parent_reference():
 def test_all_descendant_text_simple_button():
     """Test that all_descendant_text collects text from nested spans in a button."""
     node_by_id = {
-        1: UINode(id=1, tag="button", attributes={}, text="", parent=None, children=[2, 3]),
-        2: UINode(id=2, tag="span", attributes={}, text="Submit", parent=1, children=[]),
+        1: UINode(
+            id=1, tag="button", attributes={}, text="", parent=None, children=[2, 3]
+        ),
+        2: UINode(
+            id=2, tag="span", attributes={}, text="Submit", parent=1, children=[]
+        ),
         3: UINode(id=3, tag="span", attributes={}, text="Now", parent=1, children=[]),
     }
 
@@ -318,8 +347,17 @@ def test_all_descendant_text_simple_button():
 def test_all_descendant_text_with_node_own_text():
     """Test that all_descendant_text includes the node's own text."""
     node_by_id = {
-        1: UINode(id=1, tag="div", attributes={}, text="Parent text", parent=None, children=[2]),
-        2: UINode(id=2, tag="span", attributes={}, text="Child text", parent=1, children=[]),
+        1: UINode(
+            id=1,
+            tag="div",
+            attributes={},
+            text="Parent text",
+            parent=None,
+            children=[2],
+        ),
+        2: UINode(
+            id=2, tag="span", attributes={}, text="Child text", parent=1, children=[]
+        ),
     }
 
     metadata = resolve_node_metadata(1, node_by_id)
@@ -331,10 +369,18 @@ def test_all_descendant_text_with_node_own_text():
 def test_all_descendant_text_deeply_nested():
     """Test that all_descendant_text works with deeply nested structures."""
     node_by_id = {
-        1: UINode(id=1, tag="div", attributes={}, text="Level 1", parent=None, children=[2]),
-        2: UINode(id=2, tag="div", attributes={}, text="Level 2", parent=1, children=[3]),
-        3: UINode(id=3, tag="span", attributes={}, text="Level 3", parent=2, children=[4]),
-        4: UINode(id=4, tag="strong", attributes={}, text="Level 4", parent=3, children=[]),
+        1: UINode(
+            id=1, tag="div", attributes={}, text="Level 1", parent=None, children=[2]
+        ),
+        2: UINode(
+            id=2, tag="div", attributes={}, text="Level 2", parent=1, children=[3]
+        ),
+        3: UINode(
+            id=3, tag="span", attributes={}, text="Level 3", parent=2, children=[4]
+        ),
+        4: UINode(
+            id=4, tag="strong", attributes={}, text="Level 4", parent=3, children=[]
+        ),
     }
 
     metadata = resolve_node_metadata(1, node_by_id)
@@ -346,9 +392,13 @@ def test_all_descendant_text_deeply_nested():
 def test_all_descendant_text_no_text_returns_none():
     """Test that all_descendant_text returns None when no text exists."""
     node_by_id = {
-        1: UINode(id=1, tag="div", attributes={}, text="", parent=None, children=[2, 3]),
+        1: UINode(
+            id=1, tag="div", attributes={}, text="", parent=None, children=[2, 3]
+        ),
         2: UINode(id=2, tag="span", attributes={}, text="", parent=1, children=[]),
-        3: UINode(id=3, tag="span", attributes={}, text="   ", parent=1, children=[]),  # Whitespace
+        3: UINode(
+            id=3, tag="span", attributes={}, text="   ", parent=1, children=[]
+        ),  # Whitespace
     }
 
     metadata = resolve_node_metadata(1, node_by_id)
@@ -360,8 +410,17 @@ def test_all_descendant_text_no_text_returns_none():
 def test_all_descendant_text_normalizes_whitespace():
     """Test that all_descendant_text normalizes extra whitespace."""
     node_by_id = {
-        1: UINode(id=1, tag="div", attributes={}, text="  Text  A  ", parent=None, children=[2]),
-        2: UINode(id=2, tag="span", attributes={}, text="  Text   B  ", parent=1, children=[]),
+        1: UINode(
+            id=1,
+            tag="div",
+            attributes={},
+            text="  Text  A  ",
+            parent=None,
+            children=[2],
+        ),
+        2: UINode(
+            id=2, tag="span", attributes={}, text="  Text   B  ", parent=1, children=[]
+        ),
     }
 
     metadata = resolve_node_metadata(1, node_by_id)
@@ -374,7 +433,9 @@ def test_all_descendant_text_leaf_node():
     """Test that all_descendant_text works for leaf nodes without children."""
     node_by_id = {
         1: UINode(id=1, tag="div", attributes={}, text="", parent=None, children=[2]),
-        2: UINode(id=2, tag="span", attributes={}, text="Leaf text", parent=1, children=[]),
+        2: UINode(
+            id=2, tag="span", attributes={}, text="Leaf text", parent=1, children=[]
+        ),
     }
 
     metadata = resolve_node_metadata(2, node_by_id)
@@ -394,7 +455,9 @@ def test_nearest_ancestor_testid_direct_parent():
             parent=None,
             children=[2],
         ),
-        2: UINode(id=2, tag="button", attributes={}, text="Click me", parent=1, children=[]),
+        2: UINode(
+            id=2, tag="button", attributes={}, text="Click me", parent=1, children=[]
+        ),
     }
 
     metadata = resolve_node_metadata(2, node_by_id)
@@ -414,8 +477,17 @@ def test_nearest_ancestor_testid_grandparent():
             parent=None,
             children=[2],
         ),
-        2: UINode(id=2, tag="div", attributes={"class": "header"}, text="", parent=1, children=[3]),
-        3: UINode(id=3, tag="button", attributes={}, text="Edit", parent=2, children=[]),
+        2: UINode(
+            id=2,
+            tag="div",
+            attributes={"class": "header"},
+            text="",
+            parent=1,
+            children=[3],
+        ),
+        3: UINode(
+            id=3, tag="button", attributes={}, text="Edit", parent=2, children=[]
+        ),
     }
 
     metadata = resolve_node_metadata(3, node_by_id)
@@ -429,7 +501,9 @@ def test_nearest_ancestor_testid_no_ancestor_with_testid():
     node_by_id = {
         1: UINode(id=1, tag="div", attributes={}, text="", parent=None, children=[2]),
         2: UINode(id=2, tag="span", attributes={}, text="", parent=1, children=[3]),
-        3: UINode(id=3, tag="button", attributes={}, text="Click", parent=2, children=[]),
+        3: UINode(
+            id=3, tag="button", attributes={}, text="Click", parent=2, children=[]
+        ),
     }
 
     metadata = resolve_node_metadata(3, node_by_id)
@@ -477,7 +551,9 @@ def test_nearest_ancestor_testid_stops_at_first_match():
             parent=1,
             children=[3],
         ),
-        3: UINode(id=3, tag="button", attributes={}, text="Click", parent=2, children=[]),
+        3: UINode(
+            id=3, tag="button", attributes={}, text="Click", parent=2, children=[]
+        ),
     }
 
     metadata = resolve_node_metadata(3, node_by_id)
@@ -501,7 +577,14 @@ def test_nearest_ancestor_testid_with_complex_dom_path():
             children=[4],
         ),
         4: UINode(id=4, tag="section", attributes={}, text="", parent=3, children=[5]),
-        5: UINode(id=5, tag="button", attributes={"id": "submit"}, text="", parent=4, children=[]),
+        5: UINode(
+            id=5,
+            tag="button",
+            attributes={"id": "submit"},
+            text="",
+            parent=4,
+            children=[],
+        ),
     }
 
     metadata = resolve_node_metadata(5, node_by_id)
