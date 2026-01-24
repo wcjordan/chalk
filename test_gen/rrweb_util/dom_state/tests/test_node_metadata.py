@@ -293,9 +293,6 @@ def test_resolve_node_metadata_missing_parent_reference():
     assert metadata["tag"] == "span"
 
 
-# Tests for all_descendant_text functionality
-
-
 def test_all_descendant_text_simple_button():
     """Test that all_descendant_text collects text from nested spans in a button."""
     node_by_id = {
@@ -376,9 +373,6 @@ def test_all_descendant_text_leaf_node():
 
     # Leaf node should just return its own text
     assert metadata["all_descendant_text"] == "Leaf text"
-
-
-# Tests for nearest_ancestor_testid functionality
 
 
 def test_nearest_ancestor_testid_direct_parent():

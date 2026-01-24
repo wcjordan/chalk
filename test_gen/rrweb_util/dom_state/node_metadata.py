@@ -172,11 +172,11 @@ def _get_all_descendant_text(
     """
     # Build a map of parent_id -> list of children for efficient traversal
     children_by_parent: Dict[int, List[UINode]] = {}
-    for node_id, n in node_by_id.items():
-        if n.parent is not None:
-            if n.parent not in children_by_parent:
-                children_by_parent[n.parent] = []
-            children_by_parent[n.parent].append(n)
+    for _, curr_node in node_by_id.items():
+        if curr_node.parent is not None:
+            if curr_node.parent not in children_by_parent:
+                children_by_parent[curr_node.parent] = []
+            children_by_parent[curr_node.parent].append(curr_node)
 
     # Recursive function to collect text from node and descendants
     def collect_text(current_node: UINode) -> List[str]:
@@ -194,7 +194,6 @@ def _get_all_descendant_text(
         return texts
 
     all_texts = collect_text(node)
-
     if not all_texts:
         return None
 
