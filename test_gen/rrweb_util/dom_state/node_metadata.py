@@ -15,7 +15,7 @@ Extensibility:
     of path parts and return a formatted string.
 """
 
-from typing import Dict, Any
+from typing import Dict, Any, List, Optional, Tuple
 from rrweb_util.dom_state import config
 from .models import UINode
 
@@ -44,6 +44,9 @@ def resolve_node_metadata(
         - role: Value of role attribute or None
         - text: Text content of the node or None
         - dom_path: CSS-like selector path from root to node
+        - all_descendant_text: Concatenated text from all descendants (space-separated)
+        - nearest_ancestor_testid: data-testid of nearest ancestor with one, or None
+        - nearest_ancestor_testid_dom_path: DOM path to nearest ancestor with testid, or None
 
     Raises:
         KeyError: If the node_id is not found in node_by_id
@@ -52,6 +55,8 @@ def resolve_node_metadata(
         >>> metadata = resolve_node_metadata(42, node_by_id)
         >>> print(metadata['dom_path'])
         "html > body > div.container > button#submit"
+        >>> print(metadata['all_descendant_text'])
+        "Submit Now"
     """
     if node_id not in node_by_id:
         raise KeyError(f"Node ID {node_id} not found in node_by_id")
@@ -70,6 +75,14 @@ def resolve_node_metadata(
     # Compute DOM path
     dom_path = _compute_dom_path(node, node_by_id)
 
+    # Compute all descendant text
+    all_descendant_text = _get_all_descendant_text(node, node_by_id)
+
+    # Find nearest ancestor with data-testid
+    ancestor_testid, ancestor_dom_path = _find_nearest_ancestor_with_testid(
+        node, node_by_id
+    )
+
     # TODO should this return the UINode directly and should this logic live in its to_dict method?
     return {
         "tag": tag,
@@ -78,6 +91,9 @@ def resolve_node_metadata(
         "role": role,
         "text": text,
         "dom_path": dom_path,
+        "all_descendant_text": all_descendant_text,
+        "nearest_ancestor_testid": ancestor_testid,
+        "nearest_ancestor_testid_dom_path": ancestor_dom_path,
     }
 
 
@@ -124,3 +140,121 @@ def _compute_dom_path(node: UINode, node_by_id: Dict[int, UINode]) -> str:
             current_node = None
 
     return config.default_dom_path_formatter(path_parts)
+
+
+def _get_all_descendant_text(
+    node: UINode, node_by_id: Dict[int, UINode]
+) -> Optional[str]:
+    """
+    Collect and concatenate all text content from a node and its descendants.
+
+    Performs a depth-first traversal of the DOM tree starting from the given node,
+    collecting text content from the node itself and all its descendants. Text is
+    concatenated with spaces and stripped of extra whitespace.
+
+    Args:
+        node: The root UINode to collect text from
+        node_by_id: Dictionary mapping node IDs to UINode instances
+
+    Returns:
+        Concatenated text from node and all descendants (space-separated and stripped),
+        or None if no text content is found
+
+    Example:
+        For a button with nested spans:
+        <button id="123">
+            <span>Submit</span>
+            <span>Now</span>
+        </button>
+
+        >>> _get_all_descendant_text(button_node, node_by_id)
+        "Submit Now"
+    """
+    # Build a map of parent_id -> list of children for efficient traversal
+    children_by_parent: Dict[int, List[UINode]] = {}
+    for node_id, n in node_by_id.items():
+        if n.parent is not None:
+            if n.parent not in children_by_parent:
+                children_by_parent[n.parent] = []
+            children_by_parent[n.parent].append(n)
+
+    # Recursive function to collect text from node and descendants
+    def collect_text(current_node: UINode) -> List[str]:
+        texts = []
+
+        # Add current node's text if it exists
+        if current_node.text and current_node.text.strip():
+            texts.append(current_node.text.strip())
+
+        # Recursively collect text from children
+        children = children_by_parent.get(current_node.id, [])
+        for child in children:
+            texts.extend(collect_text(child))
+
+        return texts
+
+    all_texts = collect_text(node)
+
+    if not all_texts:
+        return None
+
+    # Join all text pieces with spaces and clean up extra whitespace
+    combined = " ".join(all_texts)
+    # Normalize whitespace (replace multiple spaces with single space)
+    normalized = " ".join(combined.split())
+
+    return normalized if normalized else None
+
+
+def _find_nearest_ancestor_with_testid(
+    node: UINode, node_by_id: Dict[int, UINode]
+) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Find the nearest ancestor node that has a data-testid attribute.
+
+    Walks up the DOM tree from the given node to find the first parent or ancestor
+    that has a data-testid attribute defined. This is useful for contextualizing
+    interactions on elements that don't have their own test IDs.
+
+    Args:
+        node: The UINode to start searching from
+        node_by_id: Dictionary mapping node IDs to UINode instances
+
+    Returns:
+        Tuple of (data-testid value, dom_path to ancestor) if found, or (None, None)
+        if no ancestor with data-testid exists
+
+    Example:
+        <div data-testid="user-profile">
+            <div class="header">
+                <button id="123">Edit</button>  <!-- clicking this button -->
+            </div>
+        </div>
+
+        >>> testid, path = _find_nearest_ancestor_with_testid(button_node, node_by_id)
+        >>> testid
+        "user-profile"
+        >>> path
+        "html > body > div[data-testid='user-profile']"
+    """
+    # Start from the parent (not the node itself, since we want ancestor)
+    if node.parent is None:
+        return None, None
+
+    current_node = node_by_id.get(node.parent)
+
+    # Walk up the tree until we find a data-testid or reach the root
+    while current_node is not None:
+        testid = current_node.attributes.get("data-testid")
+        if testid:
+            # Found an ancestor with data-testid
+            ancestor_dom_path = _compute_dom_path(current_node, node_by_id)
+            return testid, ancestor_dom_path
+
+        # Move to parent
+        if current_node.parent is not None:
+            current_node = node_by_id.get(current_node.parent)
+        else:
+            current_node = None
+
+    return None, None
