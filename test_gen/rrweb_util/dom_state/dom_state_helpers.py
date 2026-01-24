@@ -7,10 +7,37 @@ FullSnapshot events and maintains the evolving DOM based on incremental snapshot
 through mutation tracking.
 """
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from rrweb_util.helpers import is_full_snapshot, is_dom_mutation_event, get_tag_name
 from .models import UINode
+
+
+def _add_child_to_parent(
+    node_by_id: Dict[int, UINode],
+    node_id: int,
+    parent_id: Optional[int],
+    context: str,
+) -> None:
+    """
+    Add a child node ID to its parent's children list with validation.
+
+    Args:
+        node_by_id: Dictionary mapping node IDs to UINode instances
+        node_id: ID of the child node to add
+        parent_id: ID of the parent node (None for root nodes)
+        context: Context string for error messages (e.g., "FullSnapshot traversal")
+
+    Raises:
+        ValueError: If parent_id is not None and parent doesn't exist in node_by_id
+    """
+    if parent_id is not None:
+        if parent_id not in node_by_id:
+            raise ValueError(
+                f"Cannot add node {node_id}: parent {parent_id} does not exist. "
+                f"Context: {context}"
+            )
+        node_by_id[parent_id].children.append(node_id)
 
 
 def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
@@ -63,14 +90,12 @@ def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
         node_by_id[node_id] = ui_node
 
         # Update parent's children list
-        if parent_id is not None:
-            if parent_id not in node_by_id:
-                raise ValueError(
-                    f"Cannot add node {node_id}: parent {parent_id} does not exist. "
-                    "This should not happen during FullSnapshot traversal. "
-                    "Possible data corruption in FullSnapshot event."
-                )
-            node_by_id[parent_id].children.append(node_id)
+        _add_child_to_parent(
+            node_by_id,
+            node_id,
+            parent_id,
+            "FullSnapshot traversal - possible data corruption in FullSnapshot event",
+        )
 
         # Recursively process child nodes
         child_nodes = node_data.get("childNodes", [])
@@ -136,14 +161,12 @@ def _apply_node_additions(node_by_id: Dict[int, UINode], adds: List[dict]) -> No
             node_by_id[node_id] = ui_node
 
             # Update parent's children list - FAIL HARD if parent missing
-            if parent_id is not None:
-                if parent_id not in node_by_id:
-                    raise ValueError(
-                        f"Cannot add node {node_id}: parent {parent_id} does not exist. "
-                        f"Children must be added after their parents in mutation events. "
-                        f"Check rrweb event ordering."
-                    )
-                node_by_id[parent_id].children.append(node_id)
+            _add_child_to_parent(
+                node_by_id,
+                node_id,
+                parent_id,
+                "mutation event - children must be added after their parents, check rrweb event ordering",
+            )
 
 
 def _apply_attribute_changes(
