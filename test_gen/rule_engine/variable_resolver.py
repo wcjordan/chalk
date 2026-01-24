@@ -79,7 +79,8 @@ def _resolve_path(path: str, event: UserInteraction, node: UINode) -> Any:
     KeyError, or TypeError is encountered during resolution.
 
     Args:
-        path: Dotted path expression (e.g., "event.value", "node.text", "node.attributes.placeholder")
+        path: Dotted path expression (e.g., "event.value", "node.text", "node.attributes.placeholder",
+              "event.target_node.dom_path")
         event: The UserInteraction object
         node: The UINode object
 

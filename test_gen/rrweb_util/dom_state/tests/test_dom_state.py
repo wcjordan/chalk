@@ -99,8 +99,10 @@ def fixture_button_snapshot():
 def fixture_simple_node_by_id():
     """Fixture providing a simple node_by_id dictionary for mutation testing."""
     return {
-        1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
-        2: UINode(id=2, tag="span", attributes={}, text="existing", parent=1),
+        1: UINode(id=1, tag="div", attributes={}, text="", parent=None, children=[2]),
+        2: UINode(
+            id=2, tag="span", attributes={}, text="existing", parent=1, children=[]
+        ),
     }
 
 
@@ -108,9 +110,18 @@ def fixture_simple_node_by_id():
 def fixture_rich_node_by_id():
     """Fixture providing a richer node_by_id dictionary for complex mutation testing."""
     return {
-        1: UINode(id=1, tag="div", attributes={}, text="", parent=None),
-        2: UINode(id=2, tag="span", attributes={"class": "old"}, text="old", parent=1),
-        3: UINode(id=3, tag="p", attributes={}, text="to keep", parent=1),
+        1: UINode(
+            id=1, tag="div", attributes={}, text="", parent=None, children=[2, 3]
+        ),
+        2: UINode(
+            id=2,
+            tag="span",
+            attributes={"class": "old"},
+            text="old",
+            parent=1,
+            children=[],
+        ),
+        3: UINode(id=3, tag="p", attributes={}, text="to keep", parent=1, children=[]),
     }
 
 
@@ -347,6 +358,7 @@ def test_apply_mutation_change_properties(
                 attributes={"class": "btn", "disabled": "false"},
                 text="Submit",
                 parent=None,
+                children=[],
             ),
         }
     else:  # texts
@@ -357,6 +369,7 @@ def test_apply_mutation_change_properties(
                 attributes={},
                 text="Original text",
                 parent=None,
+                children=[],
             ),
         }
 
@@ -496,3 +509,141 @@ def test_apply_mutation_ignore_invalid_events(simple_node_by_id, mutation_events
     # Assert node_by_id is unchanged
     assert len(simple_node_by_id) == original_length
     assert simple_node_by_id[1].tag == original_tag
+
+
+def test_init_dom_state_builds_children_lists(simple_full_snapshot):
+    """Test that init_dom_state populates children lists bidirectionally."""
+    node_by_id = init_dom_state(simple_full_snapshot)
+
+    # Verify root node has children
+    root = node_by_id[1]
+    assert root.children == [2]
+
+    # Verify html node has children
+    html_node = node_by_id[2]
+    assert 3 in html_node.children
+    assert 4 in html_node.children
+
+    # Verify leaf nodes have empty children lists
+    body_node = node_by_id[3]
+    assert body_node.children == []
+
+    div_node = node_by_id[4]
+    assert div_node.children == []
+
+
+def test_init_dom_state_bidirectional_relationships(simple_full_snapshot):
+    """Test that parent-child relationships are bidirectional."""
+    node_by_id = init_dom_state(simple_full_snapshot)
+
+    # Test bidirectional relationship: root -> html
+    root = node_by_id[1]
+    html_node = node_by_id[2]
+    assert html_node.parent == root.id
+    assert html_node.id in root.children
+
+    # Test bidirectional relationship: html -> body
+    body_node = node_by_id[3]
+    assert body_node.parent == html_node.id
+    assert body_node.id in html_node.children
+
+    # Test bidirectional relationship: html -> div
+    div_node = node_by_id[4]
+    assert div_node.parent == html_node.id
+    assert div_node.id in html_node.children
+
+
+def test_apply_mutation_maintains_children_list(simple_node_by_id):
+    """Test that apply_mutation maintains parent's children list when adding nodes."""
+    # Create a mutation event that adds a new node
+    mutation_event = {
+        "type": EventType.INCREMENTAL_SNAPSHOT,
+        "data": {
+            "source": IncrementalSource.MUTATION,
+            "adds": [
+                {
+                    "parentId": 1,
+                    "node": {
+                        "id": 3,
+                        "tagName": "button",
+                        "attributes": {"class": "btn"},
+                        "textContent": "Click me",
+                    },
+                }
+            ],
+        },
+    }
+
+    apply_mutation(simple_node_by_id, mutation_event)
+
+    # Verify parent's children list includes new child
+    parent = simple_node_by_id[1]
+    assert 3 in parent.children
+    assert 2 in parent.children  # Existing child still there
+
+    # Verify new child's parent reference
+    new_child = simple_node_by_id[3]
+    assert new_child.parent == 1
+
+
+def test_apply_mutation_fails_with_missing_parent():
+    """Test that apply_mutation raises ValueError when parent doesn't exist."""
+    node_by_id = {
+        1: UINode(id=1, tag="div", attributes={}, text="", parent=None, children=[])
+    }
+
+    # Try to add child with non-existent parent
+    mutation_event = {
+        "type": EventType.INCREMENTAL_SNAPSHOT,
+        "data": {
+            "source": IncrementalSource.MUTATION,
+            "adds": [
+                {
+                    "parentId": 999,  # Non-existent parent
+                    "node": {
+                        "id": 2,
+                        "tagName": "span",
+                        "textContent": "orphan",
+                    },
+                }
+            ],
+        },
+    }
+
+    with pytest.raises(ValueError, match="parent 999 does not exist"):
+        apply_mutation(node_by_id, mutation_event)
+
+
+def test_uinode_children_serialization():
+    """Test that UINode.to_dict() and from_dict() handle children field."""
+    node = UINode(
+        id=1,
+        tag="div",
+        attributes={"class": "container"},
+        text="Hello",
+        parent=None,
+        children=[2, 3],
+    )
+
+    # Test to_dict includes children
+    data = node.to_dict()
+    assert data["children"] == [2, 3]
+
+    # Test from_dict restores children
+    restored = UINode.from_dict(data)
+    assert restored.children == [2, 3]
+
+
+def test_uinode_from_dict_backward_compatibility():
+    """Test that from_dict handles missing children field (backward compatibility)."""
+    # Old serialized data without children field
+    data = {
+        "id": 1,
+        "tag": "div",
+        "attributes": {},
+        "text": "",
+        "parent": None,
+    }
+
+    node = UINode.from_dict(data)
+    assert node.children == []  # Should default to empty list

@@ -18,7 +18,9 @@ class UserInteraction:
     Attributes:
         action: Type of interaction ("click", "input", "scroll")
         target_id: ID of the DOM node that was interacted with
-        target_node: Resolved UINode metadata for the target_id
+        target_node: Resolved UINode metadata for the target_id (includes pre-computed
+                     fields like dom_path, all_descendant_text, nearest_ancestor_testid,
+                     nearest_ancestor_testid_dom_path, text, aria_label, data_testid, role, tag)
         value: Input value, coordinates, or other action-specific data
         timestamp: When the interaction occurred (milliseconds)
     """
