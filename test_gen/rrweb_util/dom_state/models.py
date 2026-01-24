@@ -3,8 +3,8 @@ Data models for representing the DOM state, DOM mutations, & UI nodes
 Designed to be built from rrweb data via extractors
 """
 
-from dataclasses import dataclass
-from typing import Dict, Any, Optional
+from dataclasses import dataclass, field
+from typing import Dict, Any, Optional, List
 
 
 @dataclass
@@ -21,6 +21,7 @@ class UINode:
         attributes: Dictionary of HTML attributes
         text: Text content of the node
         parent: ID of the parent node, or None for root
+        children: List of child node IDs
     """
 
     id: int
@@ -28,6 +29,7 @@ class UINode:
     attributes: Dict[str, str]
     text: str
     parent: Optional[int]
+    children: List[int] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
@@ -37,6 +39,7 @@ class UINode:
             "attributes": self.attributes,
             "text": self.text,
             "parent": self.parent,
+            "children": self.children,
         }
 
     @staticmethod
@@ -48,4 +51,5 @@ class UINode:
             attributes=data["attributes"],
             text=data["text"],
             parent=data["parent"],
+            children=data.get("children", []),
         )

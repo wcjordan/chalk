@@ -52,10 +52,25 @@ def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
 
         # Create UINode instance
         ui_node = UINode(
-            id=node_id, tag=tag, attributes=attributes, text=text, parent=parent_id
+            id=node_id,
+            tag=tag,
+            attributes=attributes,
+            text=text,
+            parent=parent_id,
+            children=[],
         )
 
         node_by_id[node_id] = ui_node
+
+        # Update parent's children list
+        if parent_id is not None:
+            if parent_id not in node_by_id:
+                raise ValueError(
+                    f"Cannot add node {node_id}: parent {parent_id} does not exist. "
+                    "This should not happen during FullSnapshot traversal. "
+                    "Possible data corruption in FullSnapshot event."
+                )
+            node_by_id[parent_id].children.append(node_id)
 
         # Recursively process child nodes
         child_nodes = node_data.get("childNodes", [])
@@ -116,8 +131,19 @@ def _apply_node_additions(node_by_id: Dict[int, UINode], adds: List[dict]) -> No
                 attributes=attributes,
                 text=text,
                 parent=parent_id,
+                children=[],
             )
             node_by_id[node_id] = ui_node
+
+            # Update parent's children list - FAIL HARD if parent missing
+            if parent_id is not None:
+                if parent_id not in node_by_id:
+                    raise ValueError(
+                        f"Cannot add node {node_id}: parent {parent_id} does not exist. "
+                        f"Children must be added after their parents in mutation events. "
+                        f"Check rrweb event ordering."
+                    )
+                node_by_id[parent_id].children.append(node_id)
 
 
 def _apply_attribute_changes(

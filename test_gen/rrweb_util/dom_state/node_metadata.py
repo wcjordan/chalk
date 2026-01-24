@@ -170,14 +170,6 @@ def _get_all_descendant_text(
         >>> _get_all_descendant_text(button_node, node_by_id)
         "Submit Now"
     """
-    # Build a map of parent_id -> list of children for efficient traversal
-    children_by_parent: Dict[int, List[UINode]] = {}
-    for _, curr_node in node_by_id.items():
-        if curr_node.parent is not None:
-            if curr_node.parent not in children_by_parent:
-                children_by_parent[curr_node.parent] = []
-            children_by_parent[curr_node.parent].append(curr_node)
-
     # Recursive function to collect text from node and descendants
     def collect_text(current_node: UINode) -> List[str]:
         texts = []
@@ -186,10 +178,11 @@ def _get_all_descendant_text(
         if current_node.text and current_node.text.strip():
             texts.append(current_node.text.strip())
 
-        # Recursively collect text from children
-        children = children_by_parent.get(current_node.id, [])
-        for child in children:
-            texts.extend(collect_text(child))
+        # Recursively collect text from children using node.children
+        for child_id in current_node.children:
+            child_node = node_by_id.get(child_id)
+            if child_node is not None:  # Defensive - child should exist
+                texts.extend(collect_text(child_node))
 
         return texts
 
