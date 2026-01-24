@@ -1,8 +1,8 @@
 """
-Tests for UserInteraction enhanced getter methods.
+Tests for UserInteraction with pre-computed field access.
 
-Tests the convenience methods for accessing pre-computed DOM path
-and text content extraction values.
+Tests direct access to pre-computed DOM path and text content extraction
+values stored in target_node dict.
 """
 
 import pytest
@@ -31,59 +31,59 @@ def fixture_sample_interaction():
     )
 
 
-def test_get_dom_path(sample_interaction):
-    """Test that get_dom_path returns the correct value."""
+def test_access_dom_path(sample_interaction):
+    """Test direct access to dom_path field."""
     assert (
-        sample_interaction.get_dom_path()
+        sample_interaction.target_node["dom_path"]
         == "html > body > div.container > button#submit-btn"
     )
 
 
-def test_get_data_testid(sample_interaction):
-    """Test that get_data_testid returns the correct value."""
-    assert sample_interaction.get_data_testid() == "submit-btn"
+def test_access_data_testid(sample_interaction):
+    """Test direct access to data_testid field."""
+    assert sample_interaction.target_node["data_testid"] == "submit-btn"
 
 
-def test_get_nearest_ancestor_testid(sample_interaction):
-    """Test that get_nearest_ancestor_testid returns the correct value."""
-    assert sample_interaction.get_nearest_ancestor_testid() == "form-container"
+def test_access_nearest_ancestor_testid(sample_interaction):
+    """Test direct access to nearest_ancestor_testid field."""
+    assert sample_interaction.target_node["nearest_ancestor_testid"] == "form-container"
 
 
-def test_get_nearest_ancestor_testid_dom_path(sample_interaction):
-    """Test that get_nearest_ancestor_testid_dom_path returns the correct value."""
+def test_access_nearest_ancestor_testid_dom_path(sample_interaction):
+    """Test direct access to nearest_ancestor_testid_dom_path field."""
     assert (
-        sample_interaction.get_nearest_ancestor_testid_dom_path()
+        sample_interaction.target_node["nearest_ancestor_testid_dom_path"]
         == "html > body > div.container"
     )
 
 
-def test_get_element_text(sample_interaction):
-    """Test that get_element_text returns the direct text content."""
-    assert sample_interaction.get_element_text() == "Submit"
+def test_access_element_text(sample_interaction):
+    """Test direct access to text field."""
+    assert sample_interaction.target_node["text"] == "Submit"
 
 
-def test_get_all_descendant_text(sample_interaction):
-    """Test that get_all_descendant_text returns concatenated text."""
-    assert sample_interaction.get_all_descendant_text() == "Submit Now"
+def test_access_all_descendant_text(sample_interaction):
+    """Test direct access to all_descendant_text field."""
+    assert sample_interaction.target_node["all_descendant_text"] == "Submit Now"
 
 
-def test_get_aria_label(sample_interaction):
-    """Test that get_aria_label returns the aria-label value."""
-    assert sample_interaction.get_aria_label() == "Submit form"
+def test_access_aria_label(sample_interaction):
+    """Test direct access to aria_label field."""
+    assert sample_interaction.target_node["aria_label"] == "Submit form"
 
 
-def test_get_role(sample_interaction):
-    """Test that get_role returns the role value."""
-    assert sample_interaction.get_role() == "button"
+def test_access_role(sample_interaction):
+    """Test direct access to role field."""
+    assert sample_interaction.target_node["role"] == "button"
 
 
-def test_get_tag(sample_interaction):
-    """Test that get_tag returns the tag name."""
-    assert sample_interaction.get_tag() == "button"
+def test_access_tag(sample_interaction):
+    """Test direct access to tag field."""
+    assert sample_interaction.target_node["tag"] == "button"
 
 
-def test_missing_values_return_none():
-    """Test that missing values return None instead of raising errors."""
+def test_missing_values_use_get():
+    """Test that missing values can be accessed safely with .get()."""
     interaction = UserInteraction(
         action="click",
         target_id=456,
@@ -95,15 +95,15 @@ def test_missing_values_return_none():
         timestamp=2000000,
     )
 
-    assert interaction.get_dom_path() is None
-    assert interaction.get_data_testid() is None
-    assert interaction.get_nearest_ancestor_testid() is None
-    assert interaction.get_nearest_ancestor_testid_dom_path() is None
-    assert interaction.get_element_text() is None
-    assert interaction.get_all_descendant_text() is None
-    assert interaction.get_aria_label() is None
-    assert interaction.get_role() is None
-    assert interaction.get_tag() == "div"  # Only tag is present
+    assert interaction.target_node.get("dom_path") is None
+    assert interaction.target_node.get("data_testid") is None
+    assert interaction.target_node.get("nearest_ancestor_testid") is None
+    assert interaction.target_node.get("nearest_ancestor_testid_dom_path") is None
+    assert interaction.target_node.get("text") is None
+    assert interaction.target_node.get("all_descendant_text") is None
+    assert interaction.target_node.get("aria_label") is None
+    assert interaction.target_node.get("role") is None
+    assert interaction.target_node["tag"] == "div"  # Only tag is present
 
 
 def test_to_dict_includes_target_node():

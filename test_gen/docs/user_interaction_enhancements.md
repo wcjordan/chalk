@@ -40,7 +40,7 @@ When a `UserInteraction` is created, the following fields are automatically comp
 
 ## Accessing Values in Code
 
-The `UserInteraction` class provides convenient getter methods:
+Values are accessed directly from the `target_node` dictionary:
 
 ```python
 from rrweb_util.user_interaction.models import UserInteraction
@@ -49,17 +49,17 @@ from rrweb_util.user_interaction.models import UserInteraction
 interaction: UserInteraction = ...
 
 # DOM Path & Identification
-dom_path = interaction.get_dom_path()
-testid = interaction.get_data_testid()
-ancestor_testid = interaction.get_nearest_ancestor_testid()
-ancestor_path = interaction.get_nearest_ancestor_testid_dom_path()
+dom_path = interaction.target_node.get("dom_path")
+testid = interaction.target_node.get("data_testid")
+ancestor_testid = interaction.target_node.get("nearest_ancestor_testid")
+ancestor_path = interaction.target_node.get("nearest_ancestor_testid_dom_path")
 
 # Text Content
-element_text = interaction.get_element_text()
-full_text = interaction.get_all_descendant_text()
-aria = interaction.get_aria_label()
-role = interaction.get_role()
-tag = interaction.get_tag()
+element_text = interaction.target_node.get("text")
+full_text = interaction.target_node.get("all_descendant_text")
+aria = interaction.target_node.get("aria_label")
+role = interaction.target_node.get("role")
+tag = interaction.target_node["tag"]  # tag is always present
 ```
 
 ## Using in Rules Engine
@@ -84,10 +84,10 @@ confidence: 0.9
 action_id: "submit_form"
 ```
 
-### Method Call Access
+### Direct Field Access from target_node
 
 ```yaml
-# Example: Using getter methods
+# Example: Accessing pre-computed fields
 id: "input_search"
 match:
   event:
@@ -98,10 +98,10 @@ match:
       type: search
 variables:
   search_query: "event.value.value"
-  input_label: "event.get_aria_label()"
-  full_button_text: "event.get_all_descendant_text()"
-  element_path: "event.get_dom_path()"
-  nearest_testid: "event.get_nearest_ancestor_testid()"
+  input_label: "event.target_node.aria_label"
+  full_button_text: "event.target_node.all_descendant_text"
+  element_path: "event.target_node.dom_path"
+  nearest_testid: "event.target_node.nearest_ancestor_testid"
 confidence: 0.95
 action_id: "search_query_entered"
 ```
@@ -132,8 +132,8 @@ match:
     attributes:
       data-testid: checkout-btn
 variables:
-  full_label: "event.get_all_descendant_text()"  # Returns: "🛒 Proceed to Checkout"
-  testid: "event.get_data_testid()"               # Returns: "checkout-btn"
+  full_label: "event.target_node.all_descendant_text"  # Returns: "🛒 Proceed to Checkout"
+  testid: "event.target_node.data_testid"              # Returns: "checkout-btn"
 confidence: 1.0
 action_id: "proceed_to_checkout"
 ```
@@ -161,9 +161,9 @@ match:
   node:
     tag: button
 variables:
-  button_text: "event.get_all_descendant_text()"              # "Edit Profile"
-  context_area: "event.get_nearest_ancestor_testid()"        # "user-profile"
-  full_context_path: "event.get_nearest_ancestor_testid_dom_path()"
+  button_text: "event.target_node.all_descendant_text"              # "Edit Profile"
+  context_area: "event.target_node.nearest_ancestor_testid"        # "user-profile"
+  full_context_path: "event.target_node.nearest_ancestor_testid_dom_path"
 confidence: 0.85
 action_id: "edit_user_profile"
 ```
@@ -192,8 +192,8 @@ match:
       type: search
 variables:
   search_term: "event.value.value"
-  accessibility_label: "event.get_aria_label()"         # "Product search field"
-  container: "event.get_nearest_ancestor_testid()"      # "search-container"
+  accessibility_label: "event.target_node.aria_label"         # "Product search field"
+  container: "event.target_node.nearest_ancestor_testid"      # "search-container"
 confidence: 0.9
 action_id: "search_products"
 ```
@@ -243,19 +243,19 @@ def test_text_extraction():
         timestamp=1000,
     )
 
-    assert interaction.get_tag() == "button"
-    assert interaction.get_element_text() == "Submit"
-    assert interaction.get_all_descendant_text() == "Submit Now"
-    assert interaction.get_data_testid() == "submit-btn"
-    assert interaction.get_dom_path() == "html > body > button#submit-btn"
+    assert interaction.target_node["tag"] == "button"
+    assert interaction.target_node["text"] == "Submit"
+    assert interaction.target_node["all_descendant_text"] == "Submit Now"
+    assert interaction.target_node["data_testid"] == "submit-btn"
+    assert interaction.target_node["dom_path"] == "html > body > button#submit-btn"
 ```
 
 ## Future Enhancements
 
-Potential future additions:
+Potential future additions to pre-computed fields:
 
-1. **Attribute queries**: `get_attribute(name)` method
-2. **Element type helpers**: `is_button()`, `is_text_input()` methods
-3. **Sibling queries**: Find adjacent elements with specific properties
-4. **CSS class matching**: Query based on CSS classes
-5. **Parent chain access**: Get list of all parent elements up to root
+1. **Additional attributes**: Pre-compute commonly-used attributes (placeholder, type, name, etc.)
+2. **Element type categorization**: Pre-computed boolean flags like `is_button`, `is_text_input`
+3. **Sibling information**: References to adjacent elements
+4. **CSS class list**: Parsed array of CSS classes for easier matching
+5. **Parent chain**: Pre-computed list of all parent elements up to root

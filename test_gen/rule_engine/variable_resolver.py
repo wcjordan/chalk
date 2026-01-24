@@ -78,50 +78,15 @@ def _resolve_path(path: str, event: UserInteraction, node: UINode) -> Any:
     This function returns None if the path cannot be resolved, specifically if an AttributeError,
     KeyError, or TypeError is encountered during resolution.
 
-    Supports both property access (e.g., "event.value") and method calls (e.g., "event.get_dom_path()").
-
     Args:
-        path: Dotted path expression (e.g., "event.value", "node.text", "node.attributes.placeholder")
-              or method call (e.g., "event.get_all_descendant_text()")
+        path: Dotted path expression (e.g., "event.value", "node.text", "node.attributes.placeholder",
+              "event.target_node.dom_path")
         event: The UserInteraction object
         node: The UINode object
 
     Returns:
         The resolved value, or None if the path cannot be resolved.
     """
-    # Check if this is a method call (ends with "()")
-    method_call_pattern = r"^(event|node)\.(\w+)\(\)$"
-    method_match = re.match(method_call_pattern, path)
-
-    if method_match:
-        # Handle method call
-        root = method_match.group(1)
-        method_name = method_match.group(2)
-
-        root_obj = event if root == "event" else node
-
-        try:
-            if hasattr(root_obj, method_name):
-                method = getattr(root_obj, method_name)
-                if callable(method):
-                    return method()
-                else:
-                    logger.debug(
-                        "Path '%s' refers to non-callable attribute '%s'",
-                        path,
-                        method_name,
-                    )
-                    return None
-            else:
-                logger.debug(
-                    "Path '%s' method '%s' not found on %s", path, method_name, root
-                )
-                return None
-        except Exception as e:
-            logger.debug("Failed to call method '%s': %s", path, e)
-            return None
-
-    # Handle regular dotted path access
     path_parts = path.split(".")
 
     if len(path_parts) < 2:
