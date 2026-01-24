@@ -114,7 +114,7 @@ def test_to_dict_includes_target_node():
         target_node={
             "tag": "input",
             "text": "",
-            "all_descendant_text": None,
+            "all_descendant_text": "",
             "data_testid": "email-input",
             "dom_path": "html > body > form > input#email",
             "aria_label": "Email address",
@@ -132,7 +132,7 @@ def test_to_dict_includes_target_node():
     assert result["target_id"] == 789
     assert result["target_node"]["tag"] == "input"
     assert result["target_node"]["data_testid"] == "email-input"
-    assert result["target_node"]["all_descendant_text"] is None
+    assert result["target_node"]["all_descendant_text"] == ""
     assert result["target_node"]["nearest_ancestor_testid"] == "login-form"
     assert result["value"]["value"] == "test@example.com"
     assert result["timestamp"] == 3000000

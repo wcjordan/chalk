@@ -142,9 +142,7 @@ def _compute_dom_path(node: UINode, node_by_id: Dict[int, UINode]) -> str:
     return config.default_dom_path_formatter(path_parts)
 
 
-def _get_all_descendant_text(
-    node: UINode, node_by_id: Dict[int, UINode]
-) -> Optional[str]:
+def _get_all_descendant_text(node: UINode, node_by_id: Dict[int, UINode]) -> str:
     """
     Collect and concatenate all text content from a node and its descendants.
 
@@ -158,7 +156,7 @@ def _get_all_descendant_text(
 
     Returns:
         Concatenated text from node and all descendants (space-separated and stripped),
-        or None if no text content is found
+        or an empty string if no text content is found
 
     Example:
         For a button with nested spans:
@@ -189,14 +187,14 @@ def _get_all_descendant_text(
 
     all_texts = collect_text(node)
     if not all_texts:
-        return None
+        return ""
 
     # Join all text pieces with spaces and clean up extra whitespace
     combined = " ".join(all_texts)
     # Normalize whitespace (replace multiple spaces with single space)
     normalized = " ".join(combined.split())
 
-    return normalized if normalized else None
+    return normalized if normalized else ""
 
 
 def _find_nearest_ancestor_with_testid(
