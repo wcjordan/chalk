@@ -100,7 +100,7 @@ The app also includes a separate **test generation system** (`test_gen/`) for pr
    - `load_rules()` - Loads rule definitions from YAML files
 
 This system is separate from the main Chalk app with no shared dependencies.
-It processes session recordings for test generation research and is used to improve the repos integration tests.
+It processes session recordings for test generation research and is used to improve the repo's integration tests.
 
 ## Deployment & Infrastructure
 
