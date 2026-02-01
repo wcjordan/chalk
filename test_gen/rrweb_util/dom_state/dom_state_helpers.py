@@ -7,10 +7,37 @@ FullSnapshot events and maintains the evolving DOM based on incremental snapshot
 through mutation tracking.
 """
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 
-from rrweb_util import is_full_snapshot, is_dom_mutation_event, get_tag_name
+from rrweb_util.helpers import is_full_snapshot, is_dom_mutation_event, get_tag_name
 from .models import UINode
+
+
+def _add_child_to_parent(
+    node_by_id: Dict[int, UINode],
+    node_id: int,
+    parent_id: Optional[int],
+    context: str,
+) -> None:
+    """
+    Add a child node ID to its parent's children list with validation.
+
+    Args:
+        node_by_id: Dictionary mapping node IDs to UINode instances
+        node_id: ID of the child node to add
+        parent_id: ID of the parent node (None for root nodes)
+        context: Context string for error messages (e.g., "FullSnapshot traversal")
+
+    Raises:
+        ValueError: If parent_id is not None and parent doesn't exist in node_by_id
+    """
+    if parent_id is not None:
+        if parent_id not in node_by_id:
+            raise ValueError(
+                f"Cannot add node {node_id}: parent {parent_id} does not exist. "
+                f"Context: {context}"
+            )
+        node_by_id[parent_id].children.append(node_id)
 
 
 def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
@@ -52,10 +79,23 @@ def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
 
         # Create UINode instance
         ui_node = UINode(
-            id=node_id, tag=tag, attributes=attributes, text=text, parent=parent_id
+            id=node_id,
+            tag=tag,
+            attributes=attributes,
+            text=text,
+            parent=parent_id,
+            children=[],
         )
 
         node_by_id[node_id] = ui_node
+
+        # Update parent's children list
+        _add_child_to_parent(
+            node_by_id,
+            node_id,
+            parent_id,
+            "FullSnapshot traversal - possible data corruption in FullSnapshot event",
+        )
 
         # Recursively process child nodes
         child_nodes = node_data.get("childNodes", [])
@@ -68,9 +108,9 @@ def init_dom_state(full_snapshot_event: dict) -> Dict[int, UINode]:
     return node_by_id
 
 
-def apply_mutations(node_by_id: Dict[int, UINode], mutation_events: List[dict]) -> None:
+def apply_mutation(node_by_id: Dict[int, UINode], event: dict) -> None:
     """
-    Applies a sequence of rrweb mutation events to update the in-memory DOM state in place.
+    Applies a rrweb mutation events to update the in-memory DOM state in place.
 
     This function processes mutation events (type == 3, source == 0) and updates
     the virtual DOM state by handling node additions, removals, attribute changes,
@@ -84,19 +124,18 @@ def apply_mutations(node_by_id: Dict[int, UINode], mutation_events: List[dict]) 
         This function modifies node_by_id in place. Mutation entries that reference
         nonexistent node IDs are safely ignored without raising errors.
     """
-    for event in mutation_events:
-        # Only process mutation events
-        if not is_dom_mutation_event(event):
-            continue
+    # Only process mutation events
+    if not is_dom_mutation_event(event):
+        return
 
-        data = event.get("data", {})
+    data = event.get("data", {})
 
-        # Handle different types of mutations
-        # Note we don't do anything for node removals since we want to be able to map interactions to nodes even if
-        # they're removed from the DOM
-        _apply_node_additions(node_by_id, data.get("adds", []))
-        _apply_attribute_changes(node_by_id, data.get("attributes", []))
-        _apply_text_changes(node_by_id, data.get("texts", []))
+    # Handle different types of mutations
+    # Note we don't do anything for node removals since we want to be able to map interactions to nodes even if
+    # they're removed from the DOM
+    _apply_node_additions(node_by_id, data.get("adds", []))
+    _apply_attribute_changes(node_by_id, data.get("attributes", []))
+    _apply_text_changes(node_by_id, data.get("texts", []))
 
 
 def _apply_node_additions(node_by_id: Dict[int, UINode], adds: List[dict]) -> None:
@@ -117,8 +156,17 @@ def _apply_node_additions(node_by_id: Dict[int, UINode], adds: List[dict]) -> No
                 attributes=attributes,
                 text=text,
                 parent=parent_id,
+                children=[],
             )
             node_by_id[node_id] = ui_node
+
+            # Update parent's children list - FAIL HARD if parent missing
+            _add_child_to_parent(
+                node_by_id,
+                node_id,
+                parent_id,
+                "mutation event - children must be added after their parents, check rrweb event ordering",
+            )
 
 
 def _apply_attribute_changes(

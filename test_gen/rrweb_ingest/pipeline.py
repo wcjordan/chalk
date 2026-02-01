@@ -2,56 +2,46 @@
 End-to-End Ingest Pipeline for rrweb session data.
 
 This module provides the main entry point for processing rrweb session recordings.
-It orchestrates the complete pipeline from raw JSON loading through chunk normalization,
-integrating all preprocessing components into a single cohesive workflow.
-
-The pipeline performs the following steps:
-1. Load and validate raw rrweb JSON data
-2. Classify events into snapshots, interactions, and others
-3. Segment interactions into logical chunks based on boundaries and limits
-4. Filter out noise and duplicate events from each chunk
-5. Normalize chunks into standardized objects with metadata
+It orchestrates the complete pipeline from raw JSON loading through user interaction extraction.
 """
 
+from collections import defaultdict
+import json
 import logging
-import os
-from typing import Generator, List
+from pathlib import Path
+from pprint import pformat
+from typing import Generator, List, Optional
 
 from rrweb_ingest.loader import load_events
-from rrweb_ingest.classifier import classify_events
-from rrweb_ingest.segmenter import segment_into_chunks
-from rrweb_ingest.filter import clean_chunk
-from rrweb_ingest.normalizer import normalize_chunk
-from rrweb_ingest.models import Chunk
+from rrweb_ingest.filter import is_low_signal
+from rrweb_ingest.models import ProcessedSession
+from rrweb_util import EventType
+from rrweb_util.helpers import is_dom_mutation_event
+from rrweb_util.dom_state.dom_state_helpers import apply_mutation, init_dom_state
+from rrweb_util.user_interaction.extractors import extract_user_interactions
+
 
 logger = logging.getLogger(__name__)
 
 
 def ingest_session(
     session_id: str,
-    filepath: str,
-) -> List[Chunk]:
+    filepath: Path,
+) -> dict:
     """
-    Load, classify, segment, filter, and normalize an rrweb session into Chunks.
+    Load, filter, and extract user interactions from an rrweb session.
 
     This is the main entry point for processing rrweb session recordings. It takes
     a raw JSON file and transforms it through the complete preprocessing pipeline
-    to produce a list of normalized, cleaned chunks ready for feature extraction.
-
-    The pipeline integrates all preprocessing components:
-    1. Loads and validates the JSON session file
-    2. Classifies events by type (snapshots vs interactions vs others)
-    3. Segments interactions into chunks based on multiple criteria
-    4. Filters noise and duplicates from each chunk
-    5. Normalizes chunks with metadata and standardized identifiers
+    to produce a list of the user interactions from the session ready for rules matching.
 
     Args:
-        session_id: Unique identifier for this session, used in chunk IDs
+        session_id: Unique identifier for this session, used in session IDs
         filepath: Path to the rrweb JSON session file to process
 
     Returns:
-        List of normalized Chunk objects, each containing cleaned events and
-        metadata. Chunks are ordered by their temporal sequence in the session.
+        Dict w/ the session_id and user_interactions list.
+        User interactions are ordered by their original event timestamps.
 
     Raises:
         FileNotFoundError: If the specified filepath does not exist
@@ -60,78 +50,144 @@ def ingest_session(
         KeyError: If events are missing required fields
 
     Examples:
-        >>> chunks = ingest_session(
+        >>> session_data = ingest_session(
         ...     "user_session_123",
         ...     "/path/to/session.json",
         ... )
-        >>> len(chunks)
+        >>> session_data['session_id']
+        'user_session_123'
+        >>> len(session_data['user_interactions'])
         3
-        >>> chunks[0].chunk_id
-        'user_session_123-chunk000'
-        >>> chunks[0].metadata['num_events']
-        45
     """
     # Validate session_id
     if not session_id:
         raise ValueError("session_id cannot be empty")
 
-    # Step 1: Load and validate events from JSON file
+    # Load and validate events from JSON file
     events = load_events(filepath)
 
-    # Step 2: Classify events into categories
-    snapshots, interactions, _ = classify_events(events)
+    # Walk user interaction & DOM state changes to extract events we want to pass to rule matcher
+    # - If user interaction, extract that event and any relevant DOM details on the elements being interacted with
+    # - If DOM state change, update our concept of the DOMs current state
+    # At the end, return a list UI interactions in the session
+    dom_state = None
+    user_interactions = []
+    for event in events:
+        event_type = event["type"]
 
-    # Step 3: Segment interactions into raw chunks
-    raw_chunks = segment_into_chunks(interactions, snapshots)
+        if event_type == EventType.FULL_SNAPSHOT:
+            # FullSnapshot event - initialize DOM state
+            dom_state = init_dom_state(event)
 
-    # Step 4 & 5: Clean and normalize each chunk
-    normalized_chunks = []
-    for chunk_index, raw_chunk in enumerate(raw_chunks):
-        # Filter noise and duplicates
-        cleaned_events = clean_chunk(raw_chunk["interactions"])
+        elif event_type == EventType.INCREMENTAL_SNAPSHOT:
+            # IncrementalSnapshot event
+            # - apply mutations to DOM state
+            # - extract user interactions
+            if dom_state is None:
+                raise ValueError(
+                    "IncrementalSnapshot event encountered before FullSnapshot"
+                )
 
-        # Skip empty chunks after cleaning
-        if not cleaned_events:
-            continue
+            if is_dom_mutation_event(event):
+                apply_mutation(dom_state, event)
+            elif not is_low_signal(event):
+                user_interactions.extend(extract_user_interactions(dom_state, event))
 
-        # Normalize into Chunk object
-        chunk = normalize_chunk(
-            cleaned_events, session_id, chunk_index, raw_chunk.get("snapshot_before")
-        )
-        normalized_chunks.append(chunk)
+    # Skip empty sessions after cleaning
+    if not user_interactions:
+        return None
 
-    return normalized_chunks
+    return ProcessedSession(
+        session_id=session_id,
+        user_interactions=user_interactions,
+        # TODO include the environment from the session metadata
+        # "environment": session['metadata']['environment']
+    )
 
 
 def iterate_sessions(
-    session_dir: str, max_sessions: int = None
-) -> Generator[List[Chunk], None, None]:
+    session_dir: Path, max_sessions: int = None
+) -> Generator[List[Optional[dict]], None, None]:
     """
     Generator function to iterate through all rrweb session files in a directory and ingest them.
 
     This function scans the specified directory for rrweb JSON files, ingests
-    each session using the ingest_session function, and yields all
-    normalized chunks from all sessions.
+    each session using the ingest_session function, and yields user interactions processed from sessions.
 
     Args:
         session_dir: Directory containing rrweb session JSON files
         max_sessions: Optional limit on number of sessions to process
 
     Returns:
-        Generator yielding all normalized Chunk objects from processed sessions.
+        Generator yielding processed sessions.
     """
     sessions_handled = 0
-    session_files = sorted([f for f in os.listdir(session_dir) if f.endswith(".json")])
+    session_files = sorted([f for f in session_dir.iterdir() if f.suffix == ".json"])
 
-    for filename in session_files:
+    for filepath in session_files:
         if max_sessions is not None and sessions_handled >= max_sessions:
             break
 
-        session_id = filename.split(".")[0]
-        filepath = os.path.join(session_dir, filename)
         try:
-            yield ingest_session(session_id, filepath)
+            yield ingest_session(filepath.stem, filepath)
             sessions_handled += 1
         except Exception as e:
-            logger.error("Error processing %s: %s", filename, e)
+            logger.error("Error processing %s: %s", filepath, e)
             raise
+
+
+def process_sessions(
+    session_dir: Path, output_dir: Path, max_sessions: int = None
+) -> dict:
+    """
+    Process rrweb sessions from a directory and save extracted user interactions to output directory.
+
+    This function iterates through rrweb session files, processes them to extract user interactions,
+    and saves the results to the specified output directory.
+
+    Args:
+        session_dir: Directory containing rrweb session JSON files
+        output_dir: Directory where processed session data will be saved
+        max_sessions: Optional limit on number of sessions to process
+    Returns:
+        Dictionary containing processing statistics:
+        - sessions_processed: Number of session files processed
+        - sessions_saved: Number of session files successfully saved to output
+        - total_features: Aggregate counts of each feature type
+        - errors: List of any errors encountered during processing
+    """
+    # Create output directory if it doesn't exist
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Initialize statistics tracking
+    stats = {
+        "sessions_processed": 0,
+        "sessions_saved": 0,
+        "total_interactions": defaultdict(int),
+    }
+
+    session_generator = iterate_sessions(session_dir, max_sessions)
+    for session in session_generator:
+        stats["sessions_processed"] += 1
+        if session is None:
+            logger.debug("Session yielded no user interactions and was skipped")
+            continue
+
+        # Update stats
+        for interaction in session.user_interactions:
+            stats["total_interactions"][interaction.action] += 1
+
+        # Convert dataclass to dict for logging and saving
+        session_dict = session.to_dict()
+        logger.debug("Processed session: %s", session.session_id)
+        logger.debug("Extracted %d user interactions", len(session.user_interactions))
+        logger.debug(pformat(session_dict["user_interactions"]))
+
+        # Save the session data to output_dir as JSON file
+        output_file_path = output_dir / f"{session.session_id}.json"
+        logger.debug("Saving processed session to %s", output_file_path)
+        with open(output_file_path, "w", encoding="utf-8") as f:
+            json.dump(session_dict, f, indent=2, ensure_ascii=False)
+        stats["sessions_saved"] += 1
+
+    return stats

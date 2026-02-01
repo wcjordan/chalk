@@ -8,7 +8,7 @@ and the rules that identify them from event data.
 from dataclasses import dataclass
 from typing import Dict, Any, Optional, List
 
-from feature_extraction.models import UINode
+from rrweb_util.dom_state.models import UINode
 
 
 @dataclass
@@ -26,7 +26,7 @@ class DetectedAction:
         rule_id: ID of the rule that matched
         variables: Extracted values (e.g., input text)
         target_element: The UINode involved, if any
-        related_events: Indices of events in the chunk that contributed to the match
+        related_events: Indices of events in the session that contributed to the match
     """
 
     action_id: str
@@ -44,12 +44,12 @@ class Rule:
     Represents a rule parsed from YAML.
 
     Defines the conditions and extraction logic for detecting specific
-    user actions from event sequences.
+    user actions from feature sequences.
 
     Attributes:
         id: Unique identifier for the rule
         description: Optional human-readable description
-        match: Event and node match conditions
+        match: Feature match conditions
         confidence: Confidence value for detections using this rule
         variables: Variable extraction expressions
         action_id: The action type this rule detects

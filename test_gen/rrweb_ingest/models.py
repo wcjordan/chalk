@@ -1,54 +1,52 @@
 """
-Data models for rrweb session processing.
+Data models for the rrweb_ingest module.
 
-This module defines the core data structures used throughout the rrweb ingestion
-pipeline, including the Chunk model that represents a normalized segment of
-user interaction events.
+Defines the composite data structure of features we extract when processing an rrweb session
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Dict, Any
+from rrweb_util.user_interaction.models import UserInteraction
+
+FEATURE_EXTRACTION_VERSION = "0.1"
 
 
 @dataclass
-class Chunk:
+class ProcessedSession:
     """
-    Represents a normalized chunk of rrweb interaction events.
-
-    A chunk is a logical grouping of related user interaction events that occurred
-    within a specific time window. Chunks are created by segmenting the raw event
-    stream based on various criteria like FullSnapshot boundaries, time gaps,
-    and size limits.
+    Represents a fully processed rrweb session with extracted features.
+    Includes UserInteractions and the UINodes involved in those interactions.
 
     Attributes:
-        chunk_id: Unique identifier for the chunk in format "{session_id}-chunk{index:03d}"
-        start_time: Timestamp of the first event in the chunk (milliseconds since epoch)
-        end_time: Timestamp of the last event in the chunk (milliseconds since epoch)
-        events: List of cleaned rrweb event dictionaries in this chunk
-        metadata: Additional information about the chunk including:
-                 - num_events: Number of events in the chunk
-                 - duration_ms: Duration of the chunk in milliseconds (end_time - start_time)
+        session_id: Unique identifier for the session
+        user_interactions: User interactions extracted from the session
+        metadata: Additional metadata about the session extraction process (e.g. version info)
     """
 
-    chunk_id: str
-    start_time: int
-    end_time: int
-    events: List[Dict[str, Any]]
-    metadata: Dict[str, Any]
+    session_id: str
+    user_interactions: List[UserInteraction] = field(default_factory=list)
+    metadata: Dict[str, Any] = field(
+        default_factory=lambda: {
+            "feature_extraction_version": FEATURE_EXTRACTION_VERSION
+        }
+    )
 
-    def __post_init__(self):
-        """Validate chunk data after initialization."""
-        if not self.chunk_id:
-            raise ValueError("chunk_id cannot be empty")
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return {
+            "session_id": self.session_id,
+            "user_interactions": [
+                ui.to_dict() if hasattr(ui, "to_dict") else ui
+                for ui in self.user_interactions
+            ],
+            "metadata": self.metadata,
+        }
 
-        if self.start_time < 0:
-            raise ValueError("start_time must be non-negative")
 
-        if self.end_time < self.start_time:
-            raise ValueError("end_time must be >= start_time")
-
-        if not isinstance(self.events, list):
-            raise ValueError("events must be a list")
-
-        if not isinstance(self.metadata, dict):
-            raise ValueError("metadata must be a dictionary")
+def processed_session_from_dict(data: Dict[str, Any]) -> ProcessedSession:
+    """Create a ProcessedSession instance from a dictionary."""
+    return ProcessedSession(
+        session_id=data["session_id"],
+        user_interactions=[UserInteraction(**ui) for ui in data["user_interactions"]],
+        metadata=data["metadata"],
+    )

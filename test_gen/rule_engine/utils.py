@@ -6,7 +6,7 @@ node queries to support enhanced variable extraction.
 """
 
 from typing import List, Optional
-from feature_extraction.models import UINode
+from rrweb_util.dom_state.models import UINode
 
 
 def query_node_text(
