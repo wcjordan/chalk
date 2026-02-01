@@ -239,8 +239,8 @@ Verification instructions must be concrete and executable.
 2. **Test** - Write tests first (red)
 3. **Implement** - Minimal code to pass (green)
 4. **Verification** - Run and confirm tests and linting are passing
-4. **Refactor** - Clean up with tests passing
-5. **Commit** - With clear message linking to plan
+5. **Refactor** - Clean up with tests passing
+6. **Commit** - With clear message linking to plan
 
 During implementation:
 
