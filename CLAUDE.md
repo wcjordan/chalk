@@ -171,7 +171,7 @@ Prioritize
 ### Core Principles
 
 1. Prefer **small diffs** over large rewrites.
-2. **tests and linting** must pass after each implementation step.
+2. **Tests and linting** must pass after each implementation step.
 3. Learn from existing code.  Study and plan before implementing.
 4. Externalize plans, decisions, and state into files.
 5. Be pragmatic to keep changes small.  Adapt to the project's current state.
