@@ -7,17 +7,12 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {
-  Card,
-  Checkbox,
-  IconButton,
-  Text,
-  TextInput,
-} from 'react-native-paper';
+import { Card, Checkbox, IconButton, TextInput } from 'react-native-paper';
 import { setEditTodoId, setLabelTodoId, updateTodo } from '../redux/reducers';
 import { Todo } from '../redux/types';
 import { useAppDispatch } from '../hooks/hooks';
 import LabelChip from './LabelChip';
+import LinkifiedText from './LinkifiedText';
 
 interface Style {
   activeCard: ViewStyle & { cursor?: string };
@@ -181,13 +176,13 @@ const TodoItem: React.FC<Props> = memo(function (props: Props) {
     content = [
       <View key="description" style={styles.todoDescription}>
         <View style={styles.spacer} />
-        <Text
+        <LinkifiedText
           key="descriptionText"
           testID="description-text"
           style={styles.todoDescriptionText}
         >
           {todo.description}
-        </Text>
+        </LinkifiedText>
         <View style={styles.spacer} />
       </View>,
       <IconButton
