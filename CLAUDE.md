@@ -20,8 +20,7 @@ Prefer existing Make targets.
 
 Chalk app:
 - Unit tests + lint: `make test` (from `<PROJECT_ROOT>`)
-- Format server: `make format` (from `<PROJECT_ROOT>/server`)
-- Format UI: `make format` (from `<PROJECT_ROOT>/ui`)
+- Format ui & server code: `make format` (from `<PROJECT_ROOT>`)
 
 test_gen:
 - Tests: `make test` (from `<PROJECT_ROOT>/test_gen`)

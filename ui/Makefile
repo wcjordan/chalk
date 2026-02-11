@@ -92,6 +92,7 @@ update-snapshots:
 .PHONY: format
 format:
 	cd js; npx prettier --write "**/*.{ts,tsx,js,jsx,json,css,scss}" && npx eslint "**/*.{ts,tsx,js,jsx}"
+	echo "UI formatting complete.  Please review changes and commit."
 
 # Fix import ordering
 .PHONY: fix-imports

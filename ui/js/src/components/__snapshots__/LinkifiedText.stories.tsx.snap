@@ -1,0 +1,269 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LinkifiedText LinkAtEnd smoke-test 1`] = `
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-nsbfu8">
+      <div dir="auto"
+           class="css-146c3p1 r-fdjqy7"
+           data-testid="link-at-end"
+           style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+      >
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="link-at-end-text-0"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          For more info, visit
+        </span>
+        <span class="css-1jxf684 r-fdjqy7 r-190qh2h r-1ddef8g r-1loqt21"
+              data-testid="link-at-end-link-1"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; direction: ltr;"
+        >
+          https://example.com
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkifiedText LinkAtStart smoke-test 1`] = `
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-nsbfu8">
+      <div dir="auto"
+           class="css-146c3p1 r-fdjqy7"
+           data-testid="link-at-start"
+           style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+      >
+        <span class="css-1jxf684 r-fdjqy7 r-190qh2h r-1ddef8g r-1loqt21"
+              data-testid="link-at-start-link-0"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; direction: ltr;"
+        >
+          https://example.com
+        </span>
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="link-at-start-text-1"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          is a great site
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkifiedText LinkWithPath smoke-test 1`] = `
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-nsbfu8">
+      <div dir="auto"
+           class="css-146c3p1 r-fdjqy7"
+           data-testid="link-with-path"
+           style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+      >
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="link-with-path-text-0"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          Read the docs at
+        </span>
+        <span class="css-1jxf684 r-fdjqy7 r-190qh2h r-1ddef8g r-1loqt21"
+              data-testid="link-with-path-link-1"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; direction: ltr;"
+        >
+          https://example.com/docs/getting-started
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkifiedText LinkWithQuery smoke-test 1`] = `
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-nsbfu8">
+      <div dir="auto"
+           class="css-146c3p1 r-fdjqy7"
+           data-testid="link-with-query"
+           style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+      >
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="link-with-query-text-0"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          Search results:
+        </span>
+        <span class="css-1jxf684 r-fdjqy7 r-190qh2h r-1ddef8g r-1loqt21"
+              data-testid="link-with-query-link-1"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; direction: ltr;"
+        >
+          https://example.com/search?q=react+native&amp;page=1
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkifiedText MultilineWithLinks smoke-test 1`] = `
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-nsbfu8">
+      <div dir="auto"
+           class="css-146c3p1 r-fdjqy7"
+           data-testid="multiline-links"
+           style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+      >
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="multiline-links-text-0"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          First line with
+        </span>
+        <span class="css-1jxf684 r-fdjqy7 r-190qh2h r-1ddef8g r-1loqt21"
+              data-testid="multiline-links-link-1"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; direction: ltr;"
+        >
+          https://example.com
+        </span>
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="multiline-links-text-2"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          Second line with
+        </span>
+        <span class="css-1jxf684 r-fdjqy7 r-190qh2h r-1ddef8g r-1loqt21"
+              data-testid="multiline-links-link-3"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; direction: ltr;"
+        >
+          http://test.com
+        </span>
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="multiline-links-text-4"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          Third line is plain
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkifiedText MultipleLinks smoke-test 1`] = `
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-nsbfu8">
+      <div dir="auto"
+           class="css-146c3p1 r-fdjqy7"
+           data-testid="multiple-links"
+           style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+      >
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="multiple-links-text-0"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          Visit
+        </span>
+        <span class="css-1jxf684 r-fdjqy7 r-190qh2h r-1ddef8g r-1loqt21"
+              data-testid="multiple-links-link-1"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; direction: ltr;"
+        >
+          https://example.com
+        </span>
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="multiple-links-text-2"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          or
+        </span>
+        <span class="css-1jxf684 r-fdjqy7 r-190qh2h r-1ddef8g r-1loqt21"
+              data-testid="multiple-links-link-3"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; direction: ltr;"
+        >
+          http://test.com
+        </span>
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="multiple-links-text-4"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          for more information
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkifiedText OnlyLink smoke-test 1`] = `
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-nsbfu8">
+      <div dir="auto"
+           class="css-146c3p1 r-fdjqy7"
+           data-testid="only-link"
+           style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+      >
+        <span class="css-1jxf684 r-fdjqy7 r-190qh2h r-1ddef8g r-1loqt21"
+              data-testid="only-link-link-0"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; direction: ltr;"
+        >
+          https://example.com
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkifiedText PlainText smoke-test 1`] = `
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-nsbfu8">
+      <div dir="auto"
+           class="css-146c3p1 r-fdjqy7"
+           data-testid="plain-text"
+           style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+      >
+        This is plain text without any links
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkifiedText SingleLink smoke-test 1`] = `
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-nsbfu8">
+      <div dir="auto"
+           class="css-146c3p1 r-fdjqy7"
+           data-testid="single-link"
+           style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+      >
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="single-link-text-0"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          Check
+        </span>
+        <span class="css-1jxf684 r-fdjqy7 r-190qh2h r-1ddef8g r-1loqt21"
+              data-testid="single-link-link-1"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; direction: ltr;"
+        >
+          https://example.com
+        </span>
+        <span class="css-1jxf684 r-fdjqy7"
+              data-testid="single-link-text-2"
+              style="font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; letter-spacing: 0px; font-weight: 400; color: rgb(28, 27, 31); direction: ltr;"
+        >
+          for more info
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
