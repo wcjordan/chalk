@@ -72,8 +72,8 @@
 **Running unit tests and linting:**
 For the Chalk application
 - To run unit tests & lint, run `make test` from `<PROJECT_ROOT>`
-- To format the server code, run `make format` from `<PROJECT_ROOT>/server` 
-- To format the ui code, run `make format` from `<PROJECT_ROOT>/ui` 
+- To format the server code, run `make format` from `<PROJECT_ROOT>/server`
+- To format the ui code, run `make format` from `<PROJECT_ROOT>/ui`
 
 For the test_gen module
 - To run unit tests, run `make test` from `<PROJECT_ROOT>/test_gen`

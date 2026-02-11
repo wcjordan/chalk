@@ -10,7 +10,7 @@ Chalk is a full-stack todo app:
 
 No tight coupling to the rest of the project is allowed in the `test_gen` folder.
 
-If you need more detail on the project structure and architecture in `docs/GETTING_AROUND.md`
+If you need more detail on the project structure and architecture, see `docs/GETTING_AROUND.md`.
 
 ---
 
@@ -156,9 +156,9 @@ If issues are found:
 - Update the plan or status
 - Re-enter the implementation loop
 
---
+---
 
-## General Guidlines
+## General Guidelines
 
 - Do not silently change behavior without updating the plan.
 - Do not expand scope without noting it explicitly.
