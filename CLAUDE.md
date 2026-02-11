@@ -1,213 +1,169 @@
 # CLAUDE.md
 
-## Project Overview
+## Repo Map (entrypoints)
 
-Chalk is a full-stack todo application with three main components:
-1. **Django REST API** (`server/`) - PostgreSQL backend with Google OAuth authentication
-2. **React Native + Expo UI** (`ui/js/`) - Cross-platform mobile/web frontend using Redux Toolkit
-3. **Playwright E2E Tests** (`tests/`) - Integration tests running on BrowserStack
+Chalk is a full-stack todo app:
+- `server/` Django REST API (settings in `server/chalk/settings/`)
+- `ui/js/` React Native + Expo app (entry `ui/js/src/App.tsx`)
+- `tests/` Playwright E2E tests (BrowserStack via `tests/conftest.py`)
+- `test_gen/` System to generate tests from rrweb sessions (research project)
 
-The app also includes a separate **test generation system** (`test_gen/`) for processing rrweb session recordings into structured features for test generation.
+No tight coupling to the rest of the project is allowed in the `test_gen` folder.
 
-## Architecture
+If you need more detail on the project structure and architecture, see `docs/GETTING_AROUND.md`.
 
-### Backend (`server/chalk/`)
+---
 
-**Django app structure:**
-- `chalk/todos/` - Main app containing all todo logic
-  - `models.py` - Todo and Label models with django-simple-history for change tracking
-  - `views.py` - REST API viewsets for todos, labels, and work contexts
-  - `oauth.py` - Custom Google OAuth authentication backend
-  - `serializers.py` - DRF serializers
-  - `signals.py` - Django signals for model events
-  - `tests.py` - Unit tests
+## Verification commands
 
-**Settings:**
-- `chalk/settings/base.py` - Base Django configuration
-- `chalk/settings/production.py` - Production overrides
-- `chalk/settings/testing.py` - Test configuration
+Prefer existing Make targets.
 
-**Authentication:**
-- Uses custom `OAuthBackend` with Google OAuth
-- Session-based authentication for web, token-based for mobile
-- User permissions controlled via `PERMITTED_USERS` environment variable
+Chalk app:
+- Unit tests + lint: `make test` (from `<PROJECT_ROOT>`)
+- Format server: `make format` (from `<PROJECT_ROOT>/server`)
+- Format UI: `make format` (from `<PROJECT_ROOT>/ui`)
 
-**Database:**
-- PostgreSQL with django-simple-history for audit trails
-- Local dev uses a starter database restored from `db/starter_db/`
+test_gen:
+- Tests: `make test` (from `<PROJECT_ROOT>/test_gen`)
+- Lint: `make lint` (from `<PROJECT_ROOT>/test_gen`)
+- Format: `make format` (from `<PROJECT_ROOT>/test_gen`)
 
-### Frontend (`ui/js/src/`)
+### Autofixing test & linting issues
 
-**React Native + Expo architecture:**
-- `App.tsx` - Root component with provider setup
-- `components/` - React Native Paper components for UI
-- `redux/` - Redux Toolkit state management
-  - `store.ts` - Store configuration
-  - `reducers.ts` - Root reducer combining slices
-  - `todosApiSlice.ts` - RTK Query API for todos
-  - `labelsApiSlice.ts` - RTK Query API for labels
-  - `workspaceSlice.ts` - Client-side workspace state (filtering, UI settings)
-  - `shortcutSlice.ts` - Keyboard shortcut state
-  - `notificationsSlice.ts` - Toast notification state
-  - `fetchApi.ts` - Base API configuration with auth handling
-- `selectors.ts` - Memoized selectors for derived state
-- `hooks/` - Custom React hooks
+- Out of date UI snapshots: `make update-snapshots` (from `<PROJECT_ROOT>/ui`)
+- Import order in UI: `make fix-imports` (from `<PROJECT_ROOT>/ui`)
+- Out of date test_gen snapshots: `make update-snapshots` (from `<PROJECT_ROOT>/test_gen`)
 
-**Key patterns:**
-- Uses Redux Toolkit's `createAsyncThunk` for API calls
-- RTK Query for data fetching with automatic caching
-- React Native Paper for Material Design components
-- Expo for cross-platform native functionality
-- Storybook for component development and visual regression testing
+---
 
-**Build targets:**
-- Web: Expo web build
-- Android: EAS Build with separate dev/preview/production profiles
-- Testing: Containerized Jest + Storybook test runner
+## Agent workflow (Plan → Implement → Verify)
 
-### Integration Tests (`tests/`)
+Use a verification-driven iterative looping workflow
+Favor small testable steps, externalized state, and explicit verification.
 
-**Playwright test structure:**
-- `conftest.py` - Pytest fixtures including BrowserStack setup
-- `*_test.py` - Test files for specific features
-- `helpers/` - Shared test helper functions
-  - `todo_helpers.py` - Todo CRUD operations
-  - `label_helpers.py` - Label filtering operations
-
-**Running tests:**
-- Tests run against deployed environments (dev/CI/prod)
-- Use OAuth refresh token for authentication (set in `.env`)
-- BrowserStack credentials required for remote execution
-- Each test creates temporary todos with unique prefixes for cleanup
-
-### Test Generation System (`test_gen/`)
-
-**Three-module pipeline for processing rrweb session recordings:**
-
-1. **`rrweb_ingest/`** - Main ingestion pipeline
-   - `ingest_session(session_id, filepath)` - Entry point for processing
-   - `load_events()` - Loads and validates rrweb JSON
-   - `filter_events()` - Removes noise (micro-scrolls, mousemoves)
-   - `extract_features()` - Extracts user interactions and DOM mutations
-
-2. **`rrweb_util/`** - Shared utilities
-   - `dom_state/` - DOM state tracking and node metadata extraction
-   - `user_interaction/` - User interaction models and extractors
-   - `helpers/` - Common helper functions
-
-3. **`rule_engine/`** - Rule-based matching
-   - `match_session()` - Matches rules against session features
-   - `load_rules()` - Loads rule definitions from YAML files
-
-This system is separate from the main Chalk app with no shared dependencies.
-It processes session recordings for test generation research and is used to improve the repo's integration tests.
-
-## Deployment & Infrastructure
-
-**Local development:**
-- Uses Tilt to orchestrate Kubernetes development environment
-- Nginx proxy for routing (`dev_nginx.conf`)
-- Expo dev server for hot reloading mobile changes
-
-**Containerization:**
-- All components build as Docker images pushed to GCP Artifact Registry
-- Multi-stage builds with build caching
-- `Dockerfile` in each component directory
-
-**CI/CD:**
-- Jenkins-based continuous delivery (`Jenkinsfile`)
-- Separate base image build (`jenkins/Jenkinsfile.base`)
-- BrowserStack integration for E2E tests
-- Sentry integration for error tracking
-
-**Kubernetes:**
-- Helm charts in `helm/` directory
-- GCP workload identity for service account authentication
-- Separate deployments for prod/staging/dev/CI environments
-- CloudSQL PostgreSQL database
-
-## Code Style
-
-**Python:**
-- Format with `yapf` (server) or `black` (test_gen)
-- Lint with `flake8` and `pylint`
-- Style configs: `server/.style.yapf`, `test_gen/` uses black defaults
-
-**JavaScript/TypeScript:**
-- Format with Prettier
-- Lint with ESLint (includes import ordering)
-- TypeScript strict mode enabled
-- Use `make fix-imports` to auto-fix import order
-
-**Pre-commit hooks:**
-- Configured with Husky in `ui/js/`
-- Runs formatters on staged files before commit
-
-## Development Philosophy
-
-### Core Beliefs
-
-- **Incremental progress over big bangs** - Small changes that compile and pass tests
-- **Learning from existing code** - Study and plan before implementing
-- **Pragmatic over dogmatic** - Adapt to project reality
-- **Clear intent over clever code** - Be boring and obvious
+### Principles (keep in mind always)
+- Small diffs; avoid rewrites.
+- Use repo code + test output as truth.
+- Tests and linting must pass after each implementation step.
+- Don’t expand scope silently.
+- Be pragmatic to keep changes small.  Adapt to the project's current state.
+- Externalize state (plans, decisions, work in progress) into transient files (see below).
+- Long chat context can degrade quality. Reset context when appropriate (see below).
 
 ### Simplicity Means
 
 - Single responsibility per function/class
 - Avoid premature abstractions
+- Code should be clear in intent rather than clever.  Be boring and obvious.
 - No clever tricks - choose the boring solution
 - If you need to explain it, it's too complex
 
-## Process
+### Transient working files (authoritative)
+Store these in: `<PROJECT_ROOT>/docs/in_progress/`
 
-### 1. Planning & Staging
+1) `PLAN.md` — required for non-trivial work
+- For each stage: goal, constraints/non-goals, steps, exit criteria
 
-Break complex work into 3-5 stages. Document in `<PROJECT_ROOT>/IMPLEMENTATION_PLAN.md`:
+2) `VERIFY.md` — how to prove correctness
+- Exact commands (tests/lint/build)
+- Env assumptions
+- What success/failure looks like
 
-```markdown
-## Stage N: [Name]
-**Goal**: [Specific deliverable]
-**Success Criteria**: [Testable outcomes]
-**Tests**: [Specific test cases]
-**Status**: [Not Started|In Progress|Complete]
-```
-- Update status as you progress
-- Remove file when all stages are done
+3) `STATUS.md` — current state (≤10 bullets)
+- What’s done / next
+- Current failures/blockers
+- Key decisions
 
-### 2. Implementation Flow
+4) `NEED_HELP.md` — only when stuck (see rule below)
 
-1. **Understand** - Study existing patterns in codebase
-2. **Test** - Write test first (red)
-3. **Implement** - Minimal code to pass (green)
-4. **Check-in** - Stop and ask to confirm tests are passing
-4. **Refactor** - Clean up with tests passing
-5. **Commit** - With clear message linking to plan
+Delete these when the work is complete.
 
-### 3. When Stuck (Stop after 3 attempts per issue)
+---
 
-**CRITICAL**: Maximum 3 attempts per issue, then STOP.
+## Planning
 
-1. **Document what failed**:
-   - What you tried
-   - Specific error messages
-   - Why you think it failed
+For any non-trivial changes, break down the problem to subtasks and create a plan in `PLAN.md`.
+The plan should be concise and actionable (5 stages max).
+Add testable outcomes and specific test cases in `VERIFY.md` and status of subtasks to `STATUS.md`
 
-2. **Research alternatives**:
-   - Find 2-3 similar implementations
-   - Note different approaches used
+Plans are working documents. Revise as new information is discovered.
+Update the status of each stage as you progress
+Remove transient files when all stages are done
 
-3. **Question fundamentals**:
-   - Is this the right abstraction level?
-   - Can this be split into smaller problems?
-   - Is there a simpler approach entirely?
+---
 
-4. **Try different angle**:
-   - Different library/framework feature?
-   - Different architectural pattern?
-   - Remove abstraction instead of adding?
+## Implementation loop (repeat per stage)
 
-## Technical Standards
+1. Follow existing patterns (find 2–3 similar examples).
+2. Add new tests first when feasible; otherwise add coverage before finishing.
+3. Implement minimal change.
+4. Verify using `VERIFY.md` 
+5. Update `STATUS.md` with command + result.
+6. Cleanup once tests are passing.
+7. Commit with clear message describing the change.
+
+---
+
+## Stuck rule (hard stop)
+
+Maximum **3 attempts** per issue. If still blocked:
+- STOP and update `NEED_HELP.md` with:
+  - What you tried
+  - Exact errors/output
+  - 2–3 alternative approaches, libraries, abstractions, patterns, etc
+  - A simpler reframing / smaller subproblem
+
+---
+
+## Context resets
+
+Reset / restart from files at boundaries:
+- After creating or materially revising `PLAN.md`
+- After a vertical slice / stage completion
+- After thrash (repeated failures)
+- Before final review/polish
+
+After reset, treat only these as authoritative:
+- Repo contents
+- `PLAN.md`, `VERIFY.md`, `STATUS.md`, `NEED_HELP.md`
+- Current diffs + latest verification output
+
+---
+
+## Quality gates
+
+Definition of Done:
+- Tests + lint pass (per `VERIFY.md`)
+- Implementation matches `PLAN.md` exit criteria
+- No new TODOs without adding a plan stage to address them
+
+NEVER:
+- Bypass hooks with `--no-verify`
+- Disable tests instead of fixing them
+- Commit broken code
+
+ALWAYS:
+- Commit incrementally
+- Update `PLAN.md` / `STATUS.md` as you go
+- Prefer boring, readable code
+
+If verification fails:
+- Treat failures as data
+- Reassess the plan if needed
+- Avoid rationalizing or ignoring failing signals
+
+If issues are found:
+- Update the plan or status
+- Re-enter the implementation loop
+
+---
+
+## General Guidelines
+
+- Do not silently change behavior without updating the plan.
+- Do not expand scope without noting it explicitly.
+- Avoid speculative refactors unless justified in `PLAN.md`.
+- Prefer evidence (tests, code, output) over narrative explanation.
 
 ### Architecture Principles
 
@@ -217,8 +173,8 @@ Break complex work into 3-5 stages. Document in `<PROJECT_ROOT>/IMPLEMENTATION_P
 
 ### Code Quality
 
-- **Before committing**:
-  - Stop and ask for confirmation that tests are passing and code is linted
+- When committing:
+  - Tests should be passing and code should be linted
   - Self-review changes
   - Ensure commit message explains "why"
 
@@ -229,7 +185,7 @@ Break complex work into 3-5 stages. Document in `<PROJECT_ROOT>/IMPLEMENTATION_P
 - Handle errors at appropriate level
 - Never silently swallow exceptions
 
-## Decision Framework
+### Decision Framework
 
 When multiple valid approaches exist, choose based on:
 
@@ -239,52 +195,9 @@ When multiple valid approaches exist, choose based on:
 4. **Simplicity** - Is this the simplest solution that works?
 5. **Reversibility** - How hard to change later?
 
-## Project Integration
-
-### Learning the Codebase
-
-- Find 3 similar features/components
-- Identify common patterns and conventions
-- Use same libraries/utilities when possible
-- Follow existing test patterns
-
-### Tooling
-
-- Use project's existing build system
-- Use project's test framework
-- Use project's formatter/linter settings
-- Don't introduce new tools without strong justification
-- Stop and ask for tests and linting to be run whenever it would be beneficial
-
-## Quality Gates
-
-### Definition of Done
-
-- [ ] Tests written and passing
-- [ ] Code follows project conventions
-- [ ] No linter/formatter warnings
-- [ ] Commit messages are clear
-- [ ] Implementation matches plan
-- [ ] Stop and ask before introducing any new TODOs
-
 ### Test Guidelines
 
 - Test behavior, not implementation
-- Use snapshot testing instead of complex assertions
-- Clear test names describing scenario
+- Prefer snapshot testing to complex assertions
 - Use existing test utilities/helpers
 - Tests should be deterministic
-
-## Important Reminders
-
-**NEVER**:
-- Use `--no-verify` to bypass commit hooks
-- Disable tests instead of fixing them
-- Commit code that doesn't compile
-- Make assumptions - verify with existing code
-
-**ALWAYS**:
-- Commit working code incrementally
-- Update plan documentation as you go
-- Learn from existing implementations
-- Stop after 3 failed attempts and reassess
