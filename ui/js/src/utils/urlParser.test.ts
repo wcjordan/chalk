@@ -11,63 +11,9 @@ describe('parseTextWithUrls', () => {
     expect(result).toEqual([{ type: 'text', content: 'Just some plain text' }]);
   });
 
-  it('should detect a single HTTP URL', () => {
-    const result = parseTextWithUrls('Check http://example.com for info');
-    expect(result).toMatchSnapshot();
-  });
-
-  it('should detect a single HTTPS URL', () => {
-    const result = parseTextWithUrls('Check https://example.com for info');
-    expect(result).toMatchSnapshot();
-  });
-
-  it('should detect URL at the start of text', () => {
-    const result = parseTextWithUrls('https://example.com is the link');
-    expect(result).toMatchSnapshot();
-  });
-
-  it('should detect URL at the end of text', () => {
-    const result = parseTextWithUrls('Click here: https://example.com');
-    expect(result).toMatchSnapshot();
-  });
-
-  it('should detect multiple URLs', () => {
-    const result = parseTextWithUrls(
-      'Visit https://example.com or http://test.com for more',
-    );
-    expect(result).toMatchSnapshot();
-  });
-
-  it('should handle URLs with paths', () => {
-    const result = parseTextWithUrls('See https://example.com/path/to/page');
-    expect(result).toMatchSnapshot();
-  });
-
-  it('should handle URLs with query strings', () => {
-    const result = parseTextWithUrls(
-      'Check https://example.com/search?q=test&page=1',
-    );
-    expect(result).toMatchSnapshot();
-  });
-
-  it('should handle URLs with fragments', () => {
-    const result = parseTextWithUrls('Read https://example.com/docs#section-1');
-    expect(result).toMatchSnapshot();
-  });
-
-  it('should handle URLs with ports', () => {
-    const result = parseTextWithUrls('Connect to https://example.com:8080/api');
-    expect(result).toMatchSnapshot();
-  });
-
   it('should handle text with only a URL', () => {
     const result = parseTextWithUrls('https://example.com');
     expect(result).toEqual([{ type: 'url', content: 'https://example.com' }]);
-  });
-
-  it('should handle consecutive URLs separated by spaces', () => {
-    const result = parseTextWithUrls('https://first.com https://second.com');
-    expect(result).toMatchSnapshot();
   });
 
   it('should not match incomplete URLs', () => {
@@ -77,18 +23,45 @@ describe('parseTextWithUrls', () => {
     ]);
   });
 
-  it('should handle multiline text with URLs', () => {
-    const result = parseTextWithUrls(
+  test.each([
+    ['should detect a single HTTP URL', 'Check http://example.com for info'],
+    ['should detect a single HTTPS URL', 'Check https://example.com for info'],
+    [
+      'should detect URL at the start of text',
+      'https://example.com is the link',
+    ],
+    ['should detect URL at the end of text', 'Click here: https://example.com'],
+    [
+      'should detect multiple URLs',
+      'Visit https://example.com or http://test.com for more',
+    ],
+    ['should handle URLs with paths', 'See https://example.com/path/to/page'],
+    [
+      'should handle URLs with query strings',
+      'Check https://example.com/search?q=test&page=1',
+    ],
+    [
+      'should handle URLs with fragments',
+      'Read https://example.com/docs#section-1',
+    ],
+    [
+      'should handle URLs with ports',
+      'Connect to https://example.com:8080/api',
+    ],
+    [
+      'should handle consecutive URLs separated by spaces',
+      'https://first.com https://second.com',
+    ],
+    [
+      'should handle multiline text with URLs',
       'First line with https://example.com\nSecond line with http://test.com',
-    );
-    expect(result).toMatchSnapshot();
-  });
-
-  it('should handle URLs followed by punctuation', () => {
-    const result = parseTextWithUrls(
+    ],
+    [
+      'should handle URLs followed by punctuation',
       'Check https://example.com. Also see https://test.com!',
-    );
-    expect(result).toMatchSnapshot();
+    ],
+  ])('%s', (_, input) => {
+    expect(parseTextWithUrls(input)).toMatchSnapshot();
   });
 });
 
