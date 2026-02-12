@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
+import { selectActiveFilterLabels } from '../selectors';
 import { RootState } from './store';
 import { ApiState, MoveTodoOperation, NewTodo, Todo, TodoPatch } from './types';
 import {
@@ -27,10 +28,13 @@ const initialState: ApiState<Todo> = {
 export const createTodo = createAsyncThunk<Todo, string, { state: RootState }>(
   `${API_NAME}/create`,
   async (todoTitle: string, { getState }) => {
+    const state = getState();
+    const activeLabels = selectActiveFilterLabels(state);
+
     const newTodo = {
       created_at: Date.now(),
       description: todoTitle,
-      labels: [],
+      labels: activeLabels,
     };
     return create<Todo, NewTodo>(
       getTodosApi(),
