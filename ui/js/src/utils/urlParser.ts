@@ -43,7 +43,11 @@ export function parseTextWithUrls(text: string): TextSegment[] {
   const matches = text.matchAll(URL_REGEX);
 
   for (const match of matches) {
-    const url = match[0];
+    let url = match[0];
+    if (').!,?;'.includes(url[url.length - 1])) {
+      // If the URL ends with punctuation, we should exclude it from the URL
+      url = url.slice(0, -1);
+    }
     const startIndex = match.index!;
 
     // Add text before the URL (if any)
