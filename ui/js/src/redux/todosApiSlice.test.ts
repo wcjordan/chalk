@@ -22,11 +22,18 @@ describe('createTodo', function () {
       body: stubTodo,
     });
 
-    const store = setupStore();
+    const store = setupStore({
+      workspace: {
+        filterLabels: {},
+      },
+    });
     await store.dispatch(createTodo(stubDescription));
 
     // Verify todo is created and in the store
     expect(store.getState().todosApi.entries).toEqual([stubTodo]);
+
+    // Verify the POST request included empty labels since no filters are active
+    verifyRequestIncludesLabels([]);
 
     // Verify we make the server request
     expect(fetchMock).toBeDone();
@@ -55,33 +62,10 @@ describe('createTodo', function () {
     // Verify todo is created with labels
     expect(store.getState().todosApi.entries).toEqual([stubTodo]);
 
-    // Verify the POST request included labels
-    const lastCall = fetchMock.lastCall(getTodosApi());
-    const requestBody = JSON.parse(lastCall[1].body);
-    expect(requestBody.labels).toEqual(['work', 'urgent']);
+    // Verify the POST request included empty labels since no filters are active
+    verifyRequestIncludesLabels(['work', 'urgent']);
 
-    expect(fetchMock).toBeDone();
-  });
-
-  it('should create todo with empty labels when no active filters', async function () {
-    const stubDescription = 'test todo without labels';
-    const stubTodo = getStubTodo({ description: stubDescription, labels: [] });
-    fetchMock.postOnce(getTodosApi(), {
-      body: stubTodo,
-    });
-
-    const store = setupStore({
-      workspace: {
-        filterLabels: {},
-      },
-    });
-    await store.dispatch(createTodo(stubDescription));
-
-    // Verify the POST request included empty labels
-    const lastCall = fetchMock.lastCall(getTodosApi());
-    const requestBody = JSON.parse(lastCall[1].body);
-    expect(requestBody.labels).toEqual([]);
-
+    // Verify we make the server request
     expect(fetchMock).toBeDone();
   });
 
@@ -101,11 +85,10 @@ describe('createTodo', function () {
     });
     await store.dispatch(createTodo(stubDescription));
 
-    // Verify the POST request included empty labels
-    const lastCall = fetchMock.lastCall(getTodosApi());
-    const requestBody = JSON.parse(lastCall[1].body);
-    expect(requestBody.labels).toEqual([]);
+    // Verify the POST request included empty labels since no filters are active
+    verifyRequestIncludesLabels([]);
 
+    // Verify we make the server request
     expect(fetchMock).toBeDone();
   });
 
@@ -129,11 +112,10 @@ describe('createTodo', function () {
     });
     await store.dispatch(createTodo(stubDescription));
 
-    // Verify the POST request included only active labels
-    const lastCall = fetchMock.lastCall(getTodosApi());
-    const requestBody = JSON.parse(lastCall[1].body);
-    expect(requestBody.labels).toEqual(['work']);
+    // Verify the POST request included empty labels since no filters are active
+    verifyRequestIncludesLabels(['work']);
 
+    // Verify we make the server request
     expect(fetchMock).toBeDone();
   });
 });
@@ -458,6 +440,18 @@ function getStubTodo(todoPatch = {}) {
     },
     todoPatch,
   );
+}
+
+/**
+ * Check that the body of the last call to the todos API includes the expected labels.
+ * This is used to verify that when we create a todo, we include the correct labels based on the active filters.
+ *
+ * @param {string[]} expectedLabels - The labels that we expect to be included in the request body of the last call to the todos API.
+ */
+function verifyRequestIncludesLabels(expectedLabels) {
+  const lastCall = fetchMock.lastCall(getTodosApi());
+  const requestBody = JSON.parse(lastCall[1].body);
+  expect(requestBody.labels).toEqual(expectedLabels);
 }
 
 export {};
