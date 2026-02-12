@@ -92,16 +92,20 @@ exports[`parseTextWithUrls should handle URLs followed by punctuation 1`] = `
     "type": "text",
   },
   {
-    "content": "https://example.com.",
+    "content": "https://example.com",
     "type": "url",
   },
   {
-    "content": " Also see ",
+    "content": ". Also see ",
     "type": "text",
   },
   {
-    "content": "https://test.com!",
+    "content": "https://test.com",
     "type": "url",
+  },
+  {
+    "content": "!",
+    "type": "text",
   },
 ]
 `;
