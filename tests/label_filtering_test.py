@@ -1,8 +1,8 @@
 import pytest
 
-from helpers.label_helpers import (add_todo_w_labels, get_label_filter_status, toggle_label_filter,
-                                   toggle_label_filter_section)
-from helpers.todo_helpers import (list_todo_descriptions, wait_for_todo,
+from helpers.label_helpers import (add_todo_w_labels, clear_label_filters, get_label_filter_status,
+                                   get_todo_labels, toggle_label_filter, toggle_label_filter_section)
+from helpers.todo_helpers import (add_todo, find_todo, list_todo_descriptions, wait_for_todo,
                                   wait_for_todo_to_disappear)
 
 
@@ -62,3 +62,38 @@ def test_label_filtering(page, todo_prefix):
     todo_descriptions = list_todo_descriptions(page, todo_prefix)
     assert todo_descriptions == [todo_25min_low_desc, todo_25min_high_desc]
     assert get_label_filter_status(page, 'low-energy') == 'Disabled'
+
+
+@pytest.mark.parametrize('test_name', ['Label: Auto-Assign Filter Labels'])
+def test_create_todo_with_active_filters(page, todo_prefix):
+    """Test that new todos automatically get active filter labels."""
+    # Open label filter section
+    toggle_label_filter_section(page)
+
+    # Clear any existing filters first
+    clear_label_filters(page)
+
+    # Activate 'work' filter
+    toggle_label_filter(page, 'work')
+    assert get_label_filter_status(page, 'work') == 'Active'
+
+    # Create a new todo while 'work' filter is active
+    todo_desc = f'{todo_prefix} test todo with work label'
+    add_todo(page, todo_desc)
+
+    # Verify todo appears in the filtered list
+    wait_for_todo(page, todo_desc)
+    todo_descriptions = list_todo_descriptions(page, todo_prefix)
+    assert todo_desc in todo_descriptions
+
+    # Verify the todo has the 'work' label
+    todo_item = find_todo(page, todo_desc)
+    labels = get_todo_labels(todo_item)
+    assert 'work' in labels
+
+    # Clear filters and verify todo still has the label
+    clear_label_filters(page)
+    wait_for_todo(page, todo_desc)
+    todo_item = find_todo(page, todo_desc)
+    labels = get_todo_labels(todo_item)
+    assert 'work' in labels
