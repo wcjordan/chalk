@@ -27,6 +27,7 @@ test:
 .PHONY: format
 format:
 	docker run --rm -v $(PWD)/server:/usr/src/app $(SERVER_IMAGE):local-latest yapf -ri .
+	echo "Server formatting complete.  Please review changes and commit."
 
 # Make migrations for server
 .PHONY: create-migrations

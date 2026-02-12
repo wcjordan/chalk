@@ -1,0 +1,202 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parseTextWithUrls should detect URL at the end of text 1`] = `
+[
+  {
+    "content": "Click here: ",
+    "type": "text",
+  },
+  {
+    "content": "https://example.com",
+    "type": "url",
+  },
+]
+`;
+
+exports[`parseTextWithUrls should detect URL at the start of text 1`] = `
+[
+  {
+    "content": "https://example.com",
+    "type": "url",
+  },
+  {
+    "content": " is the link",
+    "type": "text",
+  },
+]
+`;
+
+exports[`parseTextWithUrls should detect a single HTTP URL 1`] = `
+[
+  {
+    "content": "Check ",
+    "type": "text",
+  },
+  {
+    "content": "http://example.com",
+    "type": "url",
+  },
+  {
+    "content": " for info",
+    "type": "text",
+  },
+]
+`;
+
+exports[`parseTextWithUrls should detect a single HTTPS URL 1`] = `
+[
+  {
+    "content": "Check ",
+    "type": "text",
+  },
+  {
+    "content": "https://example.com",
+    "type": "url",
+  },
+  {
+    "content": " for info",
+    "type": "text",
+  },
+]
+`;
+
+exports[`parseTextWithUrls should detect multiple URLs 1`] = `
+[
+  {
+    "content": "Visit ",
+    "type": "text",
+  },
+  {
+    "content": "https://example.com",
+    "type": "url",
+  },
+  {
+    "content": " or ",
+    "type": "text",
+  },
+  {
+    "content": "http://test.com",
+    "type": "url",
+  },
+  {
+    "content": " for more",
+    "type": "text",
+  },
+]
+`;
+
+exports[`parseTextWithUrls should handle URLs followed by punctuation 1`] = `
+[
+  {
+    "content": "Check ",
+    "type": "text",
+  },
+  {
+    "content": "https://example.com",
+    "type": "url",
+  },
+  {
+    "content": ". Also see ",
+    "type": "text",
+  },
+  {
+    "content": "https://test.com",
+    "type": "url",
+  },
+  {
+    "content": "!",
+    "type": "text",
+  },
+]
+`;
+
+exports[`parseTextWithUrls should handle URLs with fragments 1`] = `
+[
+  {
+    "content": "Read ",
+    "type": "text",
+  },
+  {
+    "content": "https://example.com/docs#section-1",
+    "type": "url",
+  },
+]
+`;
+
+exports[`parseTextWithUrls should handle URLs with paths 1`] = `
+[
+  {
+    "content": "See ",
+    "type": "text",
+  },
+  {
+    "content": "https://example.com/path/to/page",
+    "type": "url",
+  },
+]
+`;
+
+exports[`parseTextWithUrls should handle URLs with ports 1`] = `
+[
+  {
+    "content": "Connect to ",
+    "type": "text",
+  },
+  {
+    "content": "https://example.com:8080/api",
+    "type": "url",
+  },
+]
+`;
+
+exports[`parseTextWithUrls should handle URLs with query strings 1`] = `
+[
+  {
+    "content": "Check ",
+    "type": "text",
+  },
+  {
+    "content": "https://example.com/search?q=test&page=1",
+    "type": "url",
+  },
+]
+`;
+
+exports[`parseTextWithUrls should handle consecutive URLs separated by spaces 1`] = `
+[
+  {
+    "content": "https://first.com",
+    "type": "url",
+  },
+  {
+    "content": " ",
+    "type": "text",
+  },
+  {
+    "content": "https://second.com",
+    "type": "url",
+  },
+]
+`;
+
+exports[`parseTextWithUrls should handle multiline text with URLs 1`] = `
+[
+  {
+    "content": "First line with ",
+    "type": "text",
+  },
+  {
+    "content": "https://example.com",
+    "type": "url",
+  },
+  {
+    "content": "
+Second line with ",
+    "type": "text",
+  },
+  {
+    "content": "http://test.com",
+    "type": "url",
+  },
+]
+`;
