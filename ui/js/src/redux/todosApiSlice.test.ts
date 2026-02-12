@@ -7,6 +7,7 @@ import {
   todosApiSlice,
 } from './todosApiSlice';
 import { setupStore } from './store';
+import { FILTER_STATUS } from './types';
 
 // NOTE (jordan) updateTodo tested in reducers.test.ts
 describe('createTodo', function () {
@@ -28,6 +29,111 @@ describe('createTodo', function () {
     expect(store.getState().todosApi.entries).toEqual([stubTodo]);
 
     // Verify we make the server request
+    expect(fetchMock).toBeDone();
+  });
+
+  it('should create todo with active filter labels', async function () {
+    const stubDescription = 'test todo with labels';
+    const stubTodo = getStubTodo({
+      description: stubDescription,
+      labels: ['work', 'urgent'],
+    });
+    fetchMock.postOnce(getTodosApi(), {
+      body: stubTodo,
+    });
+
+    const store = setupStore({
+      workspace: {
+        filterLabels: {
+          work: FILTER_STATUS.Active,
+          urgent: FILTER_STATUS.Active,
+        },
+      },
+    });
+    await store.dispatch(createTodo(stubDescription));
+
+    // Verify todo is created with labels
+    expect(store.getState().todosApi.entries).toEqual([stubTodo]);
+
+    // Verify the POST request included labels
+    const lastCall = fetchMock.lastCall(getTodosApi());
+    const requestBody = JSON.parse(lastCall[1].body);
+    expect(requestBody.labels).toEqual(['work', 'urgent']);
+
+    expect(fetchMock).toBeDone();
+  });
+
+  it('should create todo with empty labels when no active filters', async function () {
+    const stubDescription = 'test todo without labels';
+    const stubTodo = getStubTodo({ description: stubDescription, labels: [] });
+    fetchMock.postOnce(getTodosApi(), {
+      body: stubTodo,
+    });
+
+    const store = setupStore({
+      workspace: {
+        filterLabels: {},
+      },
+    });
+    await store.dispatch(createTodo(stubDescription));
+
+    // Verify the POST request included empty labels
+    const lastCall = fetchMock.lastCall(getTodosApi());
+    const requestBody = JSON.parse(lastCall[1].body);
+    expect(requestBody.labels).toEqual([]);
+
+    expect(fetchMock).toBeDone();
+  });
+
+  it('should create todo with empty labels when only Unlabeled filter active', async function () {
+    const stubDescription = 'test unlabeled todo';
+    const stubTodo = getStubTodo({ description: stubDescription, labels: [] });
+    fetchMock.postOnce(getTodosApi(), {
+      body: stubTodo,
+    });
+
+    const store = setupStore({
+      workspace: {
+        filterLabels: {
+          Unlabeled: FILTER_STATUS.Active,
+        },
+      },
+    });
+    await store.dispatch(createTodo(stubDescription));
+
+    // Verify the POST request included empty labels
+    const lastCall = fetchMock.lastCall(getTodosApi());
+    const requestBody = JSON.parse(lastCall[1].body);
+    expect(requestBody.labels).toEqual([]);
+
+    expect(fetchMock).toBeDone();
+  });
+
+  it('should create todo with only active labels, excluding inverted', async function () {
+    const stubDescription = 'test todo with mixed filters';
+    const stubTodo = getStubTodo({
+      description: stubDescription,
+      labels: ['work'],
+    });
+    fetchMock.postOnce(getTodosApi(), {
+      body: stubTodo,
+    });
+
+    const store = setupStore({
+      workspace: {
+        filterLabels: {
+          work: FILTER_STATUS.Active,
+          backlog: FILTER_STATUS.Inverted,
+        },
+      },
+    });
+    await store.dispatch(createTodo(stubDescription));
+
+    // Verify the POST request included only active labels
+    const lastCall = fetchMock.lastCall(getTodosApi());
+    const requestBody = JSON.parse(lastCall[1].body);
+    expect(requestBody.labels).toEqual(['work']);
+
     expect(fetchMock).toBeDone();
   });
 });

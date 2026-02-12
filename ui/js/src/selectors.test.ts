@@ -1,4 +1,5 @@
 import {
+  selectActiveFilterLabels,
   selectActiveWorkContext,
   selectFilteredTodos,
   selectSelectedPickerLabels,
@@ -413,6 +414,90 @@ describe('selectShortcuttedTodoEntries', function () {
 
     const result = selectShortcuttedTodoEntries(state);
     expect(result).toStrictEqual([]);
+  });
+});
+
+describe('selectActiveFilterLabels', function () {
+  it('should return empty array when no filters are active', function () {
+    const state = {
+      workspace: {
+        filterLabels: {},
+      },
+    };
+
+    const result = selectActiveFilterLabels(state);
+    expect(result).toEqual([]);
+  });
+
+  it('should return single active label', function () {
+    const state = {
+      workspace: {
+        filterLabels: {
+          work: FILTER_STATUS.Active,
+        },
+      },
+    };
+
+    const result = selectActiveFilterLabels(state);
+    expect(result).toEqual(['work']);
+  });
+
+  it('should return multiple active labels', function () {
+    const state = {
+      workspace: {
+        filterLabels: {
+          work: FILTER_STATUS.Active,
+          urgent: FILTER_STATUS.Active,
+          '5 minutes': FILTER_STATUS.Active,
+        },
+      },
+    };
+
+    const result = selectActiveFilterLabels(state);
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should exclude Unlabeled filter', function () {
+    const state = {
+      workspace: {
+        filterLabels: {
+          Unlabeled: FILTER_STATUS.Active,
+        },
+      },
+    };
+
+    const result = selectActiveFilterLabels(state);
+    expect(result).toEqual([]);
+  });
+
+  it('should exclude inverted filters', function () {
+    const state = {
+      workspace: {
+        filterLabels: {
+          work: FILTER_STATUS.Active,
+          backlog: FILTER_STATUS.Inverted,
+        },
+      },
+    };
+
+    const result = selectActiveFilterLabels(state);
+    expect(result).toEqual(['work']);
+  });
+
+  it('should handle mix of active, inverted, and Unlabeled filters', function () {
+    const state = {
+      workspace: {
+        filterLabels: {
+          work: FILTER_STATUS.Active,
+          urgent: FILTER_STATUS.Active,
+          backlog: FILTER_STATUS.Inverted,
+          Unlabeled: FILTER_STATUS.Inverted,
+        },
+      },
+    };
+
+    const result = selectActiveFilterLabels(state);
+    expect(result).toMatchSnapshot();
   });
 });
 
