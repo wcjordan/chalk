@@ -1,5 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`selectActiveFilterLabels should handle mix of active, inverted, and Unlabeled filters 1`] = `
+[
+  "work",
+  "urgent",
+]
+`;
+
+exports[`selectActiveFilterLabels should return multiple active labels 1`] = `
+[
+  "work",
+  "urgent",
+  "5 minutes",
+]
+`;
+
 exports[`selectFilteredTodos should combine active and inverted filters to find items with one label and without another 1`] = `
 [
   {
