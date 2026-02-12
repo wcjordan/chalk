@@ -159,6 +159,18 @@ export const selectFilteredTodos = createSelector(
   },
 );
 
+export const selectActiveFilterLabels = createSelector(
+  [selectFilterLabels],
+  (filterLabels) => {
+    // Extract active filters excluding 'Unlabeled' (which is virtual)
+    return Object.keys(filterLabels).filter(
+      (labelKey) =>
+        labelKey !== 'Unlabeled' &&
+        filterLabels[labelKey] === FILTER_STATUS.Active,
+    );
+  },
+);
+
 export const selectSelectedPickerLabels = createSelector(
   [selectTodoApiEntries, selectLabelTodoId],
   (todoApiEntries, labelTodoId) => {
