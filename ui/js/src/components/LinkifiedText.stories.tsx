@@ -15,6 +15,18 @@ export default {
   component: LinkifiedText,
 };
 
+export const SingleLink: React.FC = () =>
+  wrapper(
+    <LinkifiedText testID="single-link">
+      Read the docs at https://example.com/docs/getting-started
+    </LinkifiedText>,
+  );
+
+export const OnlyLink: React.FC = () =>
+  wrapper(
+    <LinkifiedText testID="only-link">https://example.com</LinkifiedText>,
+  );
+
 export const PlainText: React.FC = () =>
   wrapper(
     <LinkifiedText testID="plain-text">
@@ -22,58 +34,18 @@ export const PlainText: React.FC = () =>
     </LinkifiedText>,
   );
 
-export const SingleLink: React.FC = () =>
-  wrapper(
-    <LinkifiedText testID="single-link">
-      Check https://example.com for more info
-    </LinkifiedText>,
-  );
-
 export const MultipleLinks: React.FC = () =>
   wrapper(
     <LinkifiedText testID="multiple-links">
-      Visit https://example.com or http://test.com for more information
-    </LinkifiedText>,
-  );
-
-export const LinkAtStart: React.FC = () =>
-  wrapper(
-    <LinkifiedText testID="link-at-start">
-      https://example.com is a great site
+      {
+        'Visit https://example.com or see search results:\nhttps://example.com/search?q=react+native&page=1 for more info'
+      }
     </LinkifiedText>,
   );
 
 export const LinkAtEnd: React.FC = () =>
   wrapper(
     <LinkifiedText testID="link-at-end">
-      For more info, visit https://example.com
+      For more info, visit https://example.com!
     </LinkifiedText>,
-  );
-
-export const LinkWithPath: React.FC = () =>
-  wrapper(
-    <LinkifiedText testID="link-with-path">
-      Read the docs at https://example.com/docs/getting-started
-    </LinkifiedText>,
-  );
-
-export const LinkWithQuery: React.FC = () =>
-  wrapper(
-    <LinkifiedText testID="link-with-query">
-      Search results: https://example.com/search?q=react+native&page=1
-    </LinkifiedText>,
-  );
-
-export const MultilineWithLinks: React.FC = () =>
-  wrapper(
-    <LinkifiedText testID="multiline-links">
-      {
-        'First line with https://example.com\nSecond line with http://test.com\nThird line is plain'
-      }
-    </LinkifiedText>,
-  );
-
-export const OnlyLink: React.FC = () =>
-  wrapper(
-    <LinkifiedText testID="only-link">https://example.com</LinkifiedText>,
   );
