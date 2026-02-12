@@ -48,9 +48,8 @@ def find_todo(page, description, partial=False):
 
 
 def find_todos(page, description, partial=False):
-    text_pattern = f'text={description}' if partial else f'text="{description}"'
-    return page.locator(f'[data-testid="todo-list"] > div > div',
-                        has=page.locator(text_pattern))
+    todos_locator = page.locator(f'[data-testid="todo-list"] > div > div')
+    return todos_locator.filter(has=page.get_by_text(description, exact=not partial))
 
 
 def _todo_descriptions_locator(page, prefix):
@@ -66,11 +65,11 @@ def assert_todo_descriptions(page, prefix, expected_descriptions):
 
 
 def wait_for_todo(page, description):
-    page.locator(f'text="{description}"').wait_for()
+    find_todos(page, description).wait_for()
 
 
 def wait_for_todo_to_disappear(page, description):
-    page.locator(f'text="{description}"').wait_for(state='detached')
+    find_todos(page, description).wait_for(state='detached')
 
 
 def drag_todo(page, todo_item, relative_todo_item):
