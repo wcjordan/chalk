@@ -58,6 +58,7 @@ const LinkifiedText: React.FC<LinkifiedTextProps> = ({
               style={styles.link}
               onPress={() => handleLinkPress(segment.content)}
               testID={`${testID}-link-${index}`}
+              accessibilityRole="link"
             >
               {segment.content}
             </Text>
