@@ -106,14 +106,6 @@ setup-continuous-delivery:
 superclean: stop
 	rm _env_id.txt
 
-.PHONY: aider
-aider:
-	env $$(grep 'ANTHROPIC_API_KEY' .env | xargs) bash -c 'aider --model sonnet --api-key anthropic=$$ANTHROPIC_API_KEY'
-
-.PHONY: update-repomix
-update-repomix:
-	repomix --ignore "ui/js/src/**/__snapshots__/**/*,db/starter_db/starter_db.sql"
-
 .PHONY: implement-step
 implement-step:
 	claude "/project:implement_step \"$$(python helpers/prompt/pull_prompt.py $(STEP_NUMBER))\""
