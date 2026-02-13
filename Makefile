@@ -75,6 +75,15 @@ format:
 	$(MAKE) -C ui format
 	$(MAKE) -C server format
 
+# Stops the dev env and deletes _env_id.txt
+.PHONY: superclean
+superclean: stop
+	rm _env_id.txt
+
+###
+# Deployment targets
+###
+
 .PHONY: deploy-mobile-app
 deploy-mobile-app:
 	if [ "$(ENVIRONMENT)" = "PROD" ]; then \
@@ -101,24 +110,24 @@ setup-continuous-delivery:
 			--set chalk_oauth_refresh_token=$$CHALK_OAUTH_REFRESH_TOKEN \
 			chalk-prod-cd continuous_delivery_setup'
 
-# Stops the dev env and deletes _env_id.txt
-.PHONY: superclean
-superclean: stop
-	rm _env_id.txt
+###
+# Worktree management for targets
+###
+WORKTREE_BRANCH ?= ""
 
 # Call with a branch name to work under in a new worktree.
 # Usage: make claude-worktree WORKTREE_BRANCH=branch_name
-WORKTREE_BRANCH ?= ""
 .PHONY: claude-worktree
 claude-worktree:
 	./helpers/create_worktree.sh $(WORKTREE_BRANCH)
-	(cd ~/git/chalk-worktrees/$(WORKTREE_BRANCH) && claude)
+	(cd $(HOME)/git/chalk-worktrees/$(WORKTREE_BRANCH) && claude)
 	echo "After pushing cleanup the worktree with: make remove-worktree WORKTREE_BRANCH=$(WORKTREE_BRANCH)"
 
 # Call with a branch name to delete a branch and worktree.
 # Usage: make remove-worktree WORKTREE_BRANCH=branch_name
-WORKTREE_BRANCH ?= ""
 .PHONY: remove-worktree
 remove-worktree:
-	@[ -d ~/git/chalk-worktrees/$(WORKTREE_BRANCH) ] && git worktree remove ~/git/chalk-worktrees/$(WORKTREE_BRANCH)
+	@if [ -d $(HOME)/git/chalk-worktrees/$(WORKTREE_BRANCH) ]; then \
+		git worktree remove $(HOME)/git/chalk-worktrees/$(WORKTREE_BRANCH); \
+	fi
 	git branch -D $(WORKTREE_BRANCH)
