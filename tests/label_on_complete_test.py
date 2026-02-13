@@ -51,6 +51,7 @@ def test_no_picker_for_labeled_todo(page, todo_prefix):
 
     # Verify label picker does NOT appear (optional check)
     label_picker = page.locator('[data-testid="label-picker"]')
+    assert not label_picker.is_visible()
     dismiss_add_label_modal(page, optional=True)
 
 
