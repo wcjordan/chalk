@@ -36,7 +36,8 @@ export const updateTodo =
       !wasAlreadyCompleted && // Wasn't already complete
       hasNoLabels; // Has no labels
 
-    const promises = [
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const promises: any[] = [
       dispatch(
         notificationsSlice.actions.addNotification(
           `Saving Todo: ${todoPatch.description}`,
