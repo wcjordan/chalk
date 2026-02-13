@@ -106,6 +106,19 @@ setup-continuous-delivery:
 superclean: stop
 	rm _env_id.txt
 
-.PHONY: implement-step
-implement-step:
-	claude "/project:implement_step \"$$(python helpers/prompt/pull_prompt.py $(STEP_NUMBER))\""
+# Call with a branch name to work under in a new worktree.
+# Usage: make claude-worktree WORKTREE_BRANCH=branch_name
+WORKTREE_BRANCH ?= ""
+.PHONY: claude-worktree
+claude-worktree:
+	./helpers/create_worktree.sh $(WORKTREE_BRANCH)
+	(cd ~/git/chalk-worktrees/$(WORKTREE_BRANCH) && claude)
+	echo "After pushing cleanup the worktree with: make remove-worktree WORKTREE_BRANCH=$(WORKTREE_BRANCH)"
+
+# Call with a branch name to delete a branch and worktree.
+# Usage: make remove-worktree WORKTREE_BRANCH=branch_name
+WORKTREE_BRANCH ?= ""
+.PHONY: remove-worktree
+remove-worktree:
+	@[ -d ~/git/chalk-worktrees/$(WORKTREE_BRANCH) ] && git worktree remove ~/git/chalk-worktrees/$(WORKTREE_BRANCH)
+	git branch -D $(WORKTREE_BRANCH)
