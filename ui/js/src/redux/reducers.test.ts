@@ -155,7 +155,7 @@ describe('updateTodo', function () {
     expect(store.getState().workspace.labelTodoId).toEqual(null);
   });
 
-  it('should NOT show label picker when completing already-completed todo', async function () {
+  it('should NOT show label picker when editing an already-completed todo', async function () {
     const stubTodo = {
       id: 1,
       description: 'already completed',
@@ -174,7 +174,13 @@ describe('updateTodo', function () {
         labelTodoId: null,
       },
     });
-    await store.dispatch(updateTodo({ id: 1, completed: true }));
+    await store.dispatch(
+      updateTodo({
+        id: 1,
+        description: 'it was already completed',
+        completed: true,
+      }),
+    );
 
     // Verify label picker is NOT shown
     expect(store.getState().workspace.labelTodoId).toEqual(null);
