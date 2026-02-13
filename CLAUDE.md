@@ -20,8 +20,7 @@ Prefer existing Make targets.
 
 Chalk app:
 - Unit tests + lint: `make test` (from `<PROJECT_ROOT>`)
-- Format server: `make format` (from `<PROJECT_ROOT>/server`)
-- Format UI: `make format` (from `<PROJECT_ROOT>/ui`)
+- Format ui & server code: `make format` (from `<PROJECT_ROOT>`)
 
 test_gen:
 - Tests: `make test` (from `<PROJECT_ROOT>/test_gen`)
@@ -76,6 +75,7 @@ Store these in: `<PROJECT_ROOT>/docs/in_progress/`
 
 4) `NEED_HELP.md` — only when stuck (see rule below)
 
+Commit changes to `docs/in_progress` after planning and after each step if revised.
 Delete these when the work is complete.
 
 ---
