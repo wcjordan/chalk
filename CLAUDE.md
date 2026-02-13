@@ -85,7 +85,7 @@ Delete these `docs/in_progress` files when all the work is complete.
 For any non-trivial changes, break down the problem to subtasks and create a plan in `PLAN.md`.
 The plan should be concise and actionable (5 stages max).
 Add testable outcomes and specific test cases in `VERIFY.md` and status of subtasks to `STATUS.md`
-Include instructions to commit work after the stage is complete for each stage of `PLAN.md`.
+Each stage in `PLAN.md` should include an instruction to commit the work after that stage is complete.
 
 Plans are working documents. Revise as new information is discovered.
 Update the status of each stage as you progress and commit progress.
