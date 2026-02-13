@@ -79,6 +79,106 @@ describe('updateTodo', function () {
     // Verify we make the server request
     expect(fetchMock).toBeDone();
   });
+
+  it('should show label picker when completing unlabeled todo', async function () {
+    const stubTodo = {
+      id: 1,
+      description: 'unlabeled todo',
+      completed: false,
+      labels: [],
+    };
+    fetchMock.patchOnce(`${getTodosApi()}${stubTodo.id}/`, {
+      body: { ...stubTodo, completed: true },
+    });
+
+    const store = setupStore({
+      todosApi: {
+        entries: [stubTodo],
+      },
+      workspace: {
+        labelTodoId: null,
+      },
+    });
+    await store.dispatch(updateTodo({ id: 1, completed: true }));
+
+    // Verify label picker is shown
+    expect(store.getState().workspace.labelTodoId).toEqual(1);
+  });
+
+  it('should NOT show label picker when completing labeled todo', async function () {
+    const stubTodo = {
+      id: 1,
+      description: 'labeled todo',
+      completed: false,
+      labels: ['work'],
+    };
+    fetchMock.patchOnce(`${getTodosApi()}${stubTodo.id}/`, {
+      body: { ...stubTodo, completed: true },
+    });
+
+    const store = setupStore({
+      todosApi: {
+        entries: [stubTodo],
+      },
+      workspace: {
+        labelTodoId: null,
+      },
+    });
+    await store.dispatch(updateTodo({ id: 1, completed: true }));
+
+    // Verify label picker is NOT shown
+    expect(store.getState().workspace.labelTodoId).toEqual(null);
+  });
+
+  it('should NOT show label picker when uncompleting todo', async function () {
+    const stubTodo = {
+      id: 1,
+      description: 'completed todo',
+      completed: true,
+      labels: [],
+    };
+    fetchMock.patchOnce(`${getTodosApi()}${stubTodo.id}/`, {
+      body: { ...stubTodo, completed: false },
+    });
+
+    const store = setupStore({
+      todosApi: {
+        entries: [stubTodo],
+      },
+      workspace: {
+        labelTodoId: null,
+      },
+    });
+    await store.dispatch(updateTodo({ id: 1, completed: false }));
+
+    // Verify label picker is NOT shown
+    expect(store.getState().workspace.labelTodoId).toEqual(null);
+  });
+
+  it('should NOT show label picker when completing already-completed todo', async function () {
+    const stubTodo = {
+      id: 1,
+      description: 'already completed',
+      completed: true,
+      labels: [],
+    };
+    fetchMock.patchOnce(`${getTodosApi()}${stubTodo.id}/`, {
+      body: stubTodo,
+    });
+
+    const store = setupStore({
+      todosApi: {
+        entries: [stubTodo],
+      },
+      workspace: {
+        labelTodoId: null,
+      },
+    });
+    await store.dispatch(updateTodo({ id: 1, completed: true }));
+
+    // Verify label picker is NOT shown
+    expect(store.getState().workspace.labelTodoId).toEqual(null);
+  });
 });
 
 describe('updateTodoLabels', function () {
