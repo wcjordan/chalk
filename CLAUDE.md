@@ -75,6 +75,7 @@ Store these in: `<PROJECT_ROOT>/docs/in_progress/`
 
 4) `NEED_HELP.md` — only when stuck (see rule below)
 
+Commit changes to `docs/in_progress` after planning and after each step if revised.
 Delete these when the work is complete.
 
 ---

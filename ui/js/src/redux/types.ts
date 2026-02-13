@@ -37,6 +37,7 @@ export interface NewTodo {
   completed?: boolean;
   created_at?: number;
   description?: string;
+  labels?: string[];
 }
 
 export interface ApiState<T> {

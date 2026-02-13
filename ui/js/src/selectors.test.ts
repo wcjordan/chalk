@@ -1,4 +1,5 @@
 import {
+  selectActiveFilterLabels,
   selectActiveWorkContext,
   selectFilteredTodos,
   selectSelectedPickerLabels,
@@ -413,6 +414,35 @@ describe('selectShortcuttedTodoEntries', function () {
 
     const result = selectShortcuttedTodoEntries(state);
     expect(result).toStrictEqual([]);
+  });
+});
+
+describe('selectActiveFilterLabels', function () {
+  it('should return empty array when no filters are active', function () {
+    const state = {
+      workspace: {
+        filterLabels: {},
+      },
+    };
+
+    const result = selectActiveFilterLabels(state);
+    expect(result).toEqual([]);
+  });
+
+  it('should return active filter labels while excluding inverted and Unlabeled filters', function () {
+    const state = {
+      workspace: {
+        filterLabels: {
+          work: FILTER_STATUS.Active,
+          urgent: FILTER_STATUS.Active,
+          backlog: FILTER_STATUS.Inverted,
+          Unlabeled: FILTER_STATUS.Active,
+        },
+      },
+    };
+
+    const result = selectActiveFilterLabels(state);
+    expect(result).toEqual(['work', 'urgent']);
   });
 });
 
