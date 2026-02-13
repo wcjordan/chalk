@@ -77,6 +77,10 @@ def test_create_todo_with_active_filters(page, todo_prefix):
     toggle_label_filter(page, 'work')
     assert get_label_filter_status(page, 'work') == 'Active'
 
+    toggle_label_filter(page, '5 minutes')
+    toggle_label_filter(page, '5 minutes')
+    assert get_label_filter_status(page, '5 minutes') == 'Inverted'
+
     # Create a new todo while 'work' filter is active
     todo_desc = f'{todo_prefix} test todo with work label'
     add_todo(page, todo_desc)
