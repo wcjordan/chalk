@@ -371,7 +371,7 @@ describe('todosApiSlice reducer', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [localTodo],
-          initialLoad: true,
+          initialLoad: false,
           loading: true,
         },
         {
@@ -401,7 +401,7 @@ describe('todosApiSlice reducer', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [localTodo],
-          initialLoad: true,
+          initialLoad: false,
           loading: true,
         },
         {
