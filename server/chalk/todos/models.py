@@ -39,6 +39,7 @@ def update_derived_fields(sender, instance, *args, **kwargs):
     """
     Before saving, update timestamps if necessary
     Also set the order rank if it is not set
+    Increment version for updates
     """
     if instance.completed and instance.completed_at is None:
         instance.completed_at = timezone.now()
@@ -48,6 +49,10 @@ def update_derived_fields(sender, instance, *args, **kwargs):
         instance.archived_at = timezone.now()
     if not instance.archived and instance.archived_at is not None:
         instance.archived_at = None
+
+    # Increment version on update (but not on create)
+    if instance.pk is not None:
+        instance.version = instance.version + 1
 
     if instance.order_rank is None:
         order_metadata = RankOrderMetadata.objects.first()

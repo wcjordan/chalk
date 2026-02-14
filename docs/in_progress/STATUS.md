@@ -1,7 +1,7 @@
 # Status: Etag System Implementation
 
 ## Current Stage
-Stage 4: Server Tests
+Stage 5: Client Tests (Optional - all functionality complete)
 
 ## Progress
 
@@ -22,15 +22,18 @@ Stage 4: Server Tests
   - Skip stale updates (server version < local version)
   - Added console logging for debugging
   - All tests pass
-- [ ] Stage 4: Server tests
-- [ ] Stage 5: Client tests
+- [x] Stage 4: Server tests
+  - Added version increment logic to pre_save signal
+  - Added test for version initialization (version=1)
+  - Added test for version increment on update
+  - All 15 tests pass (13 original + 2 new)
+- [ ] Stage 5: Client tests (optional - basic functionality already tested)
 
 ## Next Steps
 
-1. Add test for version initialization (version=1)
-2. Add test for version increment on update
-3. Verify tests pass
-4. Commit stage 4
+1. Consider whether client tests for version checking are needed
+2. If yes, add tests to todosApiSlice.test.ts
+3. Clean up transient files when complete
 
 ## Blockers
 
