@@ -1,7 +1,7 @@
 # Status: Etag System Implementation
 
 ## Current Stage
-Stage 3: Version-Aware Update Logic
+Stage 4: Server Tests
 
 ## Progress
 
@@ -17,18 +17,20 @@ Stage 3: Version-Aware Update Logic
   - Added version to Todo interface
   - Added version to TodoPatch interface
   - TypeScript compilation verified - all tests pass
-- [ ] Stage 3: Version-aware update logic
+- [x] Stage 3: Version-aware update logic
+  - Modified updateTodoInPlace() to check versions
+  - Skip stale updates (server version < local version)
+  - Added console logging for debugging
+  - All tests pass
 - [ ] Stage 4: Server tests
 - [ ] Stage 5: Client tests
 
 ## Next Steps
 
-1. Find updateTodoInPlace() function
-2. Add version checking logic
-3. Skip stale updates (server version < local version)
-4. Add console logging for debugging
-5. Verify with tests
-6. Commit stage 3
+1. Add test for version initialization (version=1)
+2. Add test for version increment on update
+3. Verify tests pass
+4. Commit stage 4
 
 ## Blockers
 
