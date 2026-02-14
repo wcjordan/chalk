@@ -68,6 +68,7 @@ def _stub_todo_matcher(description, labels):
         'created_at': AnyArg(),
         'labels': labels,
         'order_rank': AnyArg(),
+        'version': AnyArg(),
     }
 
 

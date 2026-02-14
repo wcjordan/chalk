@@ -23,6 +23,7 @@ class TodoModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
     order_rank = models.BigIntegerField(null=True)
+    version = models.IntegerField(default=1)
     history = HistoricalRecords()
 
     def __str__(self):
