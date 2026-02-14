@@ -21,7 +21,7 @@
     "expo-updates": "~29.0.15",
     "expo-web-browser": "~15.0.10",
     "js-cookie": "^3.0.5",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "promise": "^8.3.0",
     "prop-types": "^15.8.1",
     "react": "19.1.0",
