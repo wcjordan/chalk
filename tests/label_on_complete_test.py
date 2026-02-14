@@ -1,6 +1,6 @@
 import pytest
 
-from helpers.label_helpers import (add_labels, dismiss_add_label_modal,
+from helpers.label_helpers import (add_labels, clear_label_filters, dismiss_add_label_modal,
                                     get_todo_labels)
 from helpers.todo_helpers import (add_todo, complete_todo, find_todo,
                                    wait_for_todo)
@@ -8,6 +8,9 @@ from helpers.todo_helpers import (add_todo, complete_todo, find_todo,
 
 @pytest.mark.parametrize('test_name', ['Label: Auto Label Picker on Complete'])
 def test_auto_label_picker_on_complete(page, todo_prefix):
+    # Clear any existing filters first
+    clear_label_filters(page)
+
     # Add unlabeled todo
     todo_desc = f'{todo_prefix} unlabeled todo'
     add_todo(page, todo_desc)
@@ -37,6 +40,9 @@ def test_auto_label_picker_on_complete(page, todo_prefix):
 
 @pytest.mark.parametrize('test_name', ['Label: No Picker for Labeled Complete'])
 def test_no_picker_for_labeled_todo(page, todo_prefix):
+    # Clear any existing filters first
+    clear_label_filters(page)
+
     # Add todo with a label
     todo_desc = f'{todo_prefix} labeled todo'
     add_todo(page, todo_desc)
