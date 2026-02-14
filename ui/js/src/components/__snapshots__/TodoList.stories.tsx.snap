@@ -199,7 +199,7 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
         <div class="css-g5y9jx r-16y2uox">
         </div>
         <div dir="auto"
-             class="css-146c3p1 r-1pyaxff"
+             class="css-146c3p1 r-fupfwf"
         >
           <div class="css-g5y9jx r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
                data-testid="icon-button-container"
@@ -2070,7 +2070,7 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
         <div class="css-g5y9jx r-16y2uox">
         </div>
         <div dir="auto"
-             class="css-146c3p1 r-1pyaxff"
+             class="css-146c3p1 r-fupfwf"
         >
           <div class="css-g5y9jx r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
                data-testid="icon-button-container"
@@ -4335,7 +4335,7 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
         <div class="css-g5y9jx r-16y2uox">
         </div>
         <div dir="auto"
-             class="css-146c3p1 r-1pyaxff"
+             class="css-146c3p1 r-fupfwf"
         >
           <div class="css-g5y9jx r-xoduu5 r-1udh08x r-crgep1 r-105ug2t"
                data-testid="icon-button-container"
