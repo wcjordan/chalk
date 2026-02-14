@@ -4,6 +4,7 @@ from helpers.todo_helpers import (CHECKED_ICON_TEXT, DELETE_ICON_TEXT,
                                   LABELS_ICON_TEXT, add_todo, complete_todo,
                                   find_todo, list_todo_descriptions,
                                   wait_for_todo)
+from helpers.label_helpers import dismiss_add_label_modal
 
 
 @pytest.mark.parametrize('test_name', ['Todo: Checkmark Persistence'])
@@ -25,6 +26,9 @@ def test_todos_checkmark_persistence(page, todo_prefix):
 
     # Check off the 1st todo
     complete_todo(first_todo)
+
+    # Dismiss without adding a label
+    dismiss_add_label_modal(page)
 
     # Show completed todos, then
     # Wait for and verify that checkbox appears checked

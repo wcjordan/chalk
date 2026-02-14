@@ -25,8 +25,19 @@ type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
 export const updateTodo =
   (todoPatch: TodoPatch): AppThunk =>
-  (dispatch) => {
-    return Promise.all([
+  (dispatch, getState) => {
+    // Check if we should auto-show label picker
+    const todo = getState().todosApi.entries.find((t) => t.id === todoPatch.id);
+    const wasAlreadyCompleted = todo?.completed === true;
+    const hasNoLabels = (todo?.labels?.length ?? 0) === 0;
+
+    const shouldShowLabelPicker =
+      todoPatch.completed === true && // Marking as complete
+      !wasAlreadyCompleted && // Wasn't already complete
+      hasNoLabels; // Has no labels
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const promises: any[] = [
       dispatch(
         notificationsSlice.actions.addNotification(
           `Saving Todo: ${todoPatch.description}`,
@@ -35,7 +46,16 @@ export const updateTodo =
       dispatch(workspaceSlice.actions.setEditTodoId(null)),
       dispatch(shortcutSlice.actions.addEditTodoOperation(todoPatch)),
       dispatch(updateTodoApi(todoPatch)),
-    ]);
+    ];
+
+    // Show label picker for unlabeled completed todos
+    if (shouldShowLabelPicker) {
+      promises.push(
+        dispatch(workspaceSlice.actions.setLabelTodoId(todoPatch.id)),
+      );
+    }
+
+    return Promise.all(promises);
   };
 
 export const updateTodoLabels =
