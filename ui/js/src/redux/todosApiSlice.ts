@@ -92,7 +92,7 @@ function updateTodoInPlace(existingEntry: Todo, updatedTodo: Todo) {
   // Skip stale updates: if the server version is older than our local version,
   // this update doesn't include recent changes, so we should ignore it
   if (updatedTodo.version < currEntry.version) {
-    console.log(
+    console.debug(
       `Skipping stale update for todo ${updatedTodo.id}: ` +
         `server version ${updatedTodo.version} < local version ${currEntry.version}`,
     );
