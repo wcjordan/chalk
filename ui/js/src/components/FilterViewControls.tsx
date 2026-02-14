@@ -17,7 +17,7 @@ const styles = StyleSheet.create<Style>({
     margin: 0,
   },
   toggles: {
-    paddingRight: 8,
+    paddingRight: 9,
   },
 });
 
