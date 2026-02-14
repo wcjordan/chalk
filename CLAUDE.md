@@ -75,8 +75,8 @@ Store these in: `<PROJECT_ROOT>/docs/in_progress/`
 
 4) `NEED_HELP.md` — only when stuck (see rule below)
 
-Commit changes to `docs/in_progress` after planning and after each step if revised.
-Delete these when the work is complete.
+Commit changes to `docs/in_progress` after planning is complete.
+Delete these files when all the work is complete.
 
 ---
 
@@ -85,9 +85,10 @@ Delete these when the work is complete.
 For any non-trivial changes, break down the problem to subtasks and create a plan in `PLAN.md`.
 The plan should be concise and actionable (5 stages max).
 Add testable outcomes and specific test cases in `VERIFY.md` and status of subtasks to `STATUS.md`
+Each stage in `PLAN.md` should include an instruction to commit the work after that stage is complete.
 
 Plans are working documents. Revise as new information is discovered.
-Update the status of each stage as you progress
+Update the status of each stage as you progress and commit progress.
 Remove transient files when all stages are done
 
 ---
