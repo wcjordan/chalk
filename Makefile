@@ -115,6 +115,7 @@ setup-continuous-delivery:
 ###
 WORKTREE_BRANCH ?= ""
 
+# Creates a worktree for Claude to work in and starts claude there.
 # Call with a branch name to work under in a new worktree.
 # Usage: make claude-worktree WORKTREE_BRANCH=branch_name
 .PHONY: claude-worktree
@@ -122,6 +123,14 @@ claude-worktree:
 	./helpers/create_worktree.sh $(WORKTREE_BRANCH)
 	(cd $(HOME)/git/chalk-worktrees/$(WORKTREE_BRANCH) && claude)
 	echo "After pushing cleanup the worktree with: make remove-worktree WORKTREE_BRANCH=$(WORKTREE_BRANCH)"
+
+# Checks a worktree branch out after detaching the worktree's HEAD.
+# Call with a branch name to work under in a new worktree.
+# Usage: make absorb-worktree WORKTREE_BRANCH=branch_name
+.PHONY: absorb-worktree
+absorb-worktree:
+	(cd $(HOME)/git/chalk-worktrees/$(WORKTREE_BRANCH) && git switch --detach)
+	git checkout $(WORKTREE_BRANCH)
 
 # Call with a branch name to delete a branch and worktree.
 # Usage: make remove-worktree WORKTREE_BRANCH=branch_name
