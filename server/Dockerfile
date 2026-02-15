@@ -6,10 +6,11 @@ WORKDIR /usr/src/app
 ENV PYTHONUNBUFFERED=1
 
 # Install system packages.  We need postgresql-client for database backups
-RUN wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | gpg --dearmor | tee /usr/share/keyrings/postgresql.gpg && \
-    echo deb [arch=amd64,arm64,ppc64el signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main | tee /etc/apt/sources.list.d/postgresql.list && \
-    apt-get -yqq update && \
-    apt-get -yqq install postgresql-client-18 && \
+RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
+    curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/postgresql.gpg > /dev/null && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+    apt-get update && \
+    apt-get install -y postgresql-client-18 && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Django app by copying files to container
