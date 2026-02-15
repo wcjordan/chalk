@@ -125,7 +125,7 @@ claude-worktree:
 	echo "After pushing cleanup the worktree with: make remove-worktree WORKTREE_BRANCH=$(WORKTREE_BRANCH)"
 
 # Checks a worktree branch out after detaching the worktree's HEAD.
-# Call with a branch name to work under in a new worktree.
+# Call with a branch name to checkout in the primary repo
 # Usage: make absorb-worktree WORKTREE_BRANCH=branch_name
 .PHONY: absorb-worktree
 absorb-worktree:
