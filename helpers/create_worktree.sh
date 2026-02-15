@@ -9,7 +9,14 @@ fi
 
 WORKTREE_DIR=~/git/chalk-worktrees
 mkdir -p "$WORKTREE_DIR"
+
+# Git setup for the worktree
 git worktree add -b "$BRANCH_NAME" "$WORKTREE_DIR/$BRANCH_NAME" origin/main
+(cd "$WORKTREE_DIR/$BRANCH_NAME" && git branch --unset-upstream)
+
+# Setup env
+cp .env "$WORKTREE_DIR/$BRANCH_NAME/.env"
+(cd "$WORKTREE_DIR/$BRANCH_NAME/test_gen" && make init)
 
 # Install JS dependencies so that the husky pre-commit hooks work in the worktree
 (cd "$WORKTREE_DIR/$BRANCH_NAME/ui/js" && yarn install --immutable)
