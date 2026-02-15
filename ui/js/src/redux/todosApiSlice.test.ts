@@ -356,6 +356,66 @@ describe('todosApiSlice reducer', function () {
         loading: false,
       });
     });
+
+    it('should preserve local changes when server has stale version', function () {
+      const localTodo = getStubTodo({
+        id: 1,
+        description: 'local changes',
+        version: 3,
+      });
+      const staleTodo = getStubTodo({
+        id: 1,
+        description: 'old server state',
+        version: 2,
+      });
+      const result = todosApiSlice.reducer(
+        {
+          entries: [localTodo],
+          initialLoad: false,
+          loading: true,
+        },
+        {
+          type: 'todosApi/list/fulfilled',
+          payload: [staleTodo],
+        },
+      );
+      // Local todo should be preserved (stale update skipped)
+      expect(result).toEqual({
+        entries: [localTodo],
+        initialLoad: false,
+        loading: false,
+      });
+    });
+
+    it('should apply server updates when version is fresh', function () {
+      const localTodo = getStubTodo({
+        id: 1,
+        description: 'local state',
+        version: 2,
+      });
+      const freshTodo = getStubTodo({
+        id: 1,
+        description: 'new server state',
+        version: 3,
+      });
+      const result = todosApiSlice.reducer(
+        {
+          entries: [localTodo],
+          initialLoad: false,
+          loading: true,
+        },
+        {
+          type: 'todosApi/list/fulfilled',
+          payload: [freshTodo],
+        },
+      );
+      // Todo should be updated with fresh server data
+      expect(result).toEqual({
+        entries: [freshTodo],
+        initialLoad: false,
+        loading: false,
+      });
+    });
   });
 
   describe('todosApi/update/fulfilled', function () {
@@ -428,6 +488,66 @@ describe('todosApiSlice reducer', function () {
         loading: false,
       });
     });
+
+    it('should skip stale updates (server version < local version)', function () {
+      const localTodo = getStubTodo({
+        id: 1,
+        description: 'local changes',
+        version: 3,
+      });
+      const staleUpdate = getStubTodo({
+        id: 1,
+        description: 'old server state',
+        version: 2,
+      });
+      const result = todosApiSlice.reducer(
+        {
+          entries: [localTodo],
+          initialLoad: false,
+          loading: false,
+        },
+        {
+          type: 'todosApi/update/fulfilled',
+          payload: staleUpdate,
+        },
+      );
+      // Local todo should remain unchanged (stale update skipped)
+      expect(result).toEqual({
+        entries: [localTodo],
+        initialLoad: false,
+        loading: false,
+      });
+    });
+
+    it('should apply fresh updates (server version >= local version)', function () {
+      const localTodo = getStubTodo({
+        id: 1,
+        description: 'local state',
+        version: 2,
+      });
+      const freshUpdate = getStubTodo({
+        id: 1,
+        description: 'new server state',
+        version: 3,
+      });
+      const result = todosApiSlice.reducer(
+        {
+          entries: [localTodo],
+          initialLoad: false,
+          loading: false,
+        },
+        {
+          type: 'todosApi/update/fulfilled',
+          payload: freshUpdate,
+        },
+      );
+      // Todo should be updated with fresh server data
+      expect(result).toEqual({
+        entries: [freshUpdate],
+        initialLoad: false,
+        loading: false,
+      });
+    });
   });
 });
 
@@ -437,6 +557,7 @@ function getStubTodo(todoPatch = {}) {
       id: 1,
       description: 'stub todo',
       completed: false,
+      version: 1,
     },
     todoPatch,
   );

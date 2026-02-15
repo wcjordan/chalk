@@ -68,6 +68,7 @@ def _stub_todo_matcher(description, labels):
         'created_at': AnyArg(),
         'labels': labels,
         'order_rank': AnyArg(),
+        'version': AnyArg(),
     }
 
 
@@ -286,6 +287,41 @@ class SignalsTests(TestCase):
         self.assertIsNotNone(metadata.last_rebalance_duration,
                              "last_rebalance_duration should be set")
         self.assertEqual(metadata.max_rank, last_rank)
+
+    def test_version_initialization(self):
+        """
+        Test that new todos are created with version=1
+        """
+        todo = TodoModel.objects.create(description="Test todo")
+        self.assertEqual(todo.version, 1, "New todo should have version=1")
+
+    def test_version_increment_on_update(self):
+        """
+        Test that version increments when a todo is updated
+        """
+        # Create a todo
+        todo = TodoModel.objects.create(description="Test todo")
+        initial_version = todo.version
+        self.assertEqual(initial_version, 1,
+                         "New todo should start at version=1")
+
+        # Update the todo
+        todo.description = "Updated description"
+        todo.save()
+
+        # Verify version was incremented
+        todo.refresh_from_db()
+        self.assertEqual(todo.version, initial_version + 1,
+                         "Version should increment after update")
+
+        # Update again
+        todo.completed = True
+        todo.save()
+
+        # Verify version incremented again
+        todo.refresh_from_db()
+        self.assertEqual(todo.version, initial_version + 2,
+                         "Version should increment after each update")
 
 
 class ServiceTests(TestCase):

@@ -47,4 +47,5 @@ class TodoSerializer(serializers.ModelSerializer):
             'id',
             'labels',
             'order_rank',
+            'version',
         ]
