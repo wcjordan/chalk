@@ -48,6 +48,7 @@ test: build
 	docker pull $(SERVER_IMAGE):local-latest
 	DOMAIN=localhost docker run --env-file .env --env DOMAIN --rm -t $(SERVER_IMAGE):local-latest make test
 	$(MAKE) -C ui containerized-test
+	$(MAKE) -C tests lint
 
 # Run integration tests
 # Requires dev env to be running (make start)
