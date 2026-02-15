@@ -350,7 +350,7 @@ pipeline {
                                             until [ ! -z \$page_ready ] && [ \$page_ready -ne 0 ]
                                             do
                                                 sleep 15
-                                                page_ready=\$(pytest -vv page_load.py --server_domain chalk-ci.${env.ROOT_DOMAIN} || true)
+                                                pytest -vv page_load.py --server_domain chalk-ci.${env.ROOT_DOMAIN} && page_ready=$? || true
                                             done
                                         """
 
