@@ -347,7 +347,7 @@ pipeline {
                                         sh 'pip install "playwright==1.52.0" "pytest==9.0.2"'
 
                                         sh """
-                                            until [ ! -z \$page_ready ] && [ \$page_ready -ne 0 ]
+                                            until [ ! -z \$page_ready ] && [ \$page_ready -eq 0 ]
                                             do
                                                 sleep 15
                                                 pytest -vv page_load.py --server_domain chalk-ci.${env.ROOT_DOMAIN} && page_ready=\$? || true
