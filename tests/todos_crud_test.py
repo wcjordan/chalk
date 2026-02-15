@@ -1,14 +1,20 @@
 import pytest
 
-from helpers.todo_helpers import (add_todo, delete_todo, edit_todo, find_todo,
-                                  find_todos, wait_for_todo,
-                                  wait_for_todo_to_disappear)
+from helpers.todo_helpers import (
+    add_todo,
+    delete_todo,
+    edit_todo,
+    find_todo,
+    find_todos,
+    wait_for_todo,
+    wait_for_todo_to_disappear,
+)
 
 
-@pytest.mark.parametrize('test_name', ['Todo: Create, Update, Delete'])
+@pytest.mark.parametrize("test_name", ["Todo: Create, Update, Delete"])
 def test_todos_crud(page, todo_prefix):
     # Add todo
-    todo_description = f'{todo_prefix} test todo'
+    todo_description = f"{todo_prefix} test todo"
     add_todo(page, todo_description)
 
     # Find todo & verify
@@ -16,7 +22,7 @@ def test_todos_crud(page, todo_prefix):
     created_todo = find_todo(page, todo_description)
 
     # Edit todo
-    updated_todo_description = f'{todo_prefix} test todo updated'
+    updated_todo_description = f"{todo_prefix} test todo updated"
     edit_todo(page, created_todo, updated_todo_description)
 
     # Verify

@@ -1,17 +1,23 @@
 import pytest
 
-from helpers.label_helpers import (toggle_label_filter, toggle_label_filter_section)
-from helpers.todo_helpers import (add_todo, cancel_edit, edit_todo, find_todo,
-                                  find_todos, wait_for_todo,
-                                  wait_for_todo_to_disappear)
+from helpers.label_helpers import toggle_label_filter, toggle_label_filter_section
+from helpers.todo_helpers import (
+    add_todo,
+    cancel_edit,
+    edit_todo,
+    find_todo,
+    find_todos,
+    wait_for_todo,
+    wait_for_todo_to_disappear,
+)
 
 
-@pytest.mark.parametrize('test_name', ['Todo: Don\'t Filter During Edit'])
+@pytest.mark.parametrize("test_name", ["Todo: Don't Filter During Edit"])
 def test_dont_filter_edit(page, todo_prefix):
     # Add todos
-    todo1_description = f'{todo_prefix} todo to edit'
+    todo1_description = f"{todo_prefix} todo to edit"
     add_todo(page, todo1_description)
-    todo2_description = f'{todo_prefix} todo to filter'
+    todo2_description = f"{todo_prefix} todo to filter"
     add_todo(page, todo2_description)
 
     # Wait for todos to appear
@@ -20,12 +26,12 @@ def test_dont_filter_edit(page, todo_prefix):
     todo_to_edit = find_todo(page, todo1_description)
 
     # Edit the todo
-    edit_description = f'{todo_prefix} edited description'
+    edit_description = f"{todo_prefix} edited description"
     edit_todo(page, todo_to_edit, edit_description, submit=False)
 
     # Add filter
     toggle_label_filter_section(page)
-    toggle_label_filter(page, 'home')
+    toggle_label_filter(page, "home")
 
     # Wait for the filter to apply
     wait_for_todo_to_disappear(page, todo2_description)

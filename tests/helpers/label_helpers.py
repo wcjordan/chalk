@@ -1,4 +1,4 @@
-from helpers.todo_helpers import (add_todo, find_todo, wait_for_todo)
+from helpers.todo_helpers import add_todo, find_todo, wait_for_todo
 
 
 def add_labels(page, todo_item, labels, dismiss_picker=True, open_picker=True):
@@ -39,13 +39,17 @@ def clear_label_filters(page):
         toggle_label_filter_section(page)
 
     # Click all active chips in the label filter
-    active_chips = page.locator('[data-testid="label-filter"] [data-testid="chip-active"]')
+    active_chips = page.locator(
+        '[data-testid="label-filter"] [data-testid="chip-active"]'
+    )
     chip_elements = active_chips.element_handles()
     for chip in chip_elements:
         chip.click()
 
     # Click all inverted chips in the label filter
-    inverted_chips = page.locator('[data-testid="label-filter"] [data-testid="chip-inverted"]')
+    inverted_chips = page.locator(
+        '[data-testid="label-filter"] [data-testid="chip-inverted"]'
+    )
     chip_elements = inverted_chips.element_handles()
     for chip in chip_elements:
         chip.click()
@@ -61,8 +65,8 @@ def dismiss_add_label_modal(page, optional=False):
     if modals_count or not optional:
         assert modals_count == 1
         # Click offset from modal center to avoid dialog
-        modals.click(position={'x': 0, 'y': 0})
-        modals.wait_for(state='detached')
+        modals.click(position={"x": 0, "y": 0})
+        modals.wait_for(state="detached")
 
 
 def toggle_label_filter(page, label):
@@ -71,12 +75,14 @@ def toggle_label_filter(page, label):
 
 
 def get_label_filter_status(page, label):
-    chip = page.locator('[data-testid="label-filter"] div').filter(has=page.locator(f':text-is("{label}")'))
+    chip = page.locator('[data-testid="label-filter"] div').filter(
+        has=page.locator(f':text-is("{label}")')
+    )
     if chip.locator('[data-testid="chip-active"]').is_visible():
-        return 'Active'
+        return "Active"
     if chip.locator('[data-testid="chip-inverted"]').is_visible():
-        return 'Inverted'
-    return 'Disabled'
+        return "Inverted"
+    return "Disabled"
 
 
 def toggle_label_filter_section(page):

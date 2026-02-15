@@ -1,10 +1,10 @@
 import json
 import logging
 import os
-import pytest
 import random
 import urllib.parse
 
+import pytest
 from playwright.sync_api import sync_playwright
 
 from helpers.label_helpers import clear_label_filters, dismiss_add_label_modal
@@ -31,13 +31,13 @@ def pytest_generate_tests(metafunc):
     # This is called for every test. Only get/set command line arguments
     # if the argument is specified in the list of test "fixturenames".
     server_domain = metafunc.config.option.server_domain
-    if 'server_domain' in metafunc.fixturenames and server_domain is not None:
+    if "server_domain" in metafunc.fixturenames and server_domain is not None:
         metafunc.parametrize("server_domain", [server_domain])
 
 
 @pytest.fixture
 def todo_prefix():
-    return 'Temp Test Prefix {} -'.format(random.randrange(10000))
+    return f"Temp Test Prefix {random.randrange(10000)} -"
 
 
 @pytest.fixture(scope="session")
@@ -48,37 +48,40 @@ def playwright():
 
 
 @pytest.fixture
-def page(request, playwright, todo_prefix, test_name, server_domain, record_xml_attribute):
+def page(
+    request, playwright, todo_prefix, test_name, server_domain, record_xml_attribute
+):
     username = os.getenv("BROWSERSTACK_USERNAME")
     access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
     refresh_token = os.getenv("CHALK_OAUTH_REFRESH_TOKEN")
-    build_name = os.getenv("BROWSERSTACK_BUILD_NAME", 'Local')
+    build_name = os.getenv("BROWSERSTACK_BUILD_NAME", "Local")
 
     classname = f"playwright_e2e_tests.{request.node.path.stem}"
-    record_xml_attribute('classname', classname)
+    record_xml_attribute("classname", classname)
 
     desired_cap = {
-        'project': 'Chalk',
-        'name': test_name,
-        'build': build_name,
-
-        'browser': 'chrome',
-        'browser_version': 'latest',
-
-        'os_version': 'Monterey',
-        'resolution': '1920x1080',
-        'os': 'OS X',
-
-        'browserstack.username': username,
-        'browserstack.accessKey': access_key,
-        'browserstack.playwrightVersion': '1.latest',
+        "project": "Chalk",
+        "name": test_name,
+        "build": build_name,
+        "browser": "chrome",
+        "browser_version": "latest",
+        "os_version": "Monterey",
+        "resolution": "1920x1080",
+        "os": "OS X",
+        "browserstack.username": username,
+        "browserstack.accessKey": access_key,
+        "browserstack.playwrightVersion": "1.latest",
     }
 
     browser = None
     connect_exception = None
     for _ in range(3):
         try:
-            browser = playwright.chromium.connect(f'wss://cdp.browserstack.com/playwright?caps={urllib.parse.quote(json.dumps(desired_cap, separators=(",", ":")))}')
+            caps_json = json.dumps(desired_cap, separators=(",", ":"))
+            caps_encoded = urllib.parse.quote(caps_json)
+            browser = playwright.chromium.connect(
+                f"wss://cdp.browserstack.com/playwright?caps={caps_encoded}"
+            )
             break
         except Exception as ex:
             connect_exception = ex
@@ -88,38 +91,47 @@ def page(request, playwright, todo_prefix, test_name, server_domain, record_xml_
     page = browser.new_page()
     try:
         # Load page
-        page.goto(f'https://{server_domain}/')
+        page.goto(f"https://{server_domain}/")
         if "accounts.google.com" in page.url:
-            page.goto(f'https://{server_domain}/api/todos/auth_callback/?ci_refresh=true&code={refresh_token}')
+            page.goto(
+                f"https://{server_domain}/api/todos/auth_callback/?ci_refresh=true&code={refresh_token}"
+            )
 
-        if not "chalk" in page.title():
+        if "chalk" not in page.title():
             raise Exception("Unable to load page.")
 
         yield page
 
-        if hasattr(request.node, 'rep_setup') and request.node.rep_setup.failed:
-            set_session_status(page, 'failed', "Test setup failed.")
-        elif hasattr(request.node, 'rep_call') and request.node.rep_call.failed:
-            set_session_status(page, 'failed', "Executing test failed.")
-        elif hasattr(request.node, 'rep_teardown') and request.node.rep_teardown.failed:
-            set_session_status(page, 'failed', "Test teardown failed.")
+        if hasattr(request.node, "rep_setup") and request.node.rep_setup.failed:
+            set_session_status(page, "failed", "Test setup failed.")
+        elif hasattr(request.node, "rep_call") and request.node.rep_call.failed:
+            set_session_status(page, "failed", "Executing test failed.")
+        elif hasattr(request.node, "rep_teardown") and request.node.rep_teardown.failed:
+            set_session_status(page, "failed", "Test teardown failed.")
         else:
-            set_session_status(page, 'passed',
-                               "Test completed all steps without issue.")
+            set_session_status(
+                page, "passed", "Test completed all steps without issue."
+            )
 
     except Exception:
-        logging.exception('Failed to execute test')
-        set_session_status(page, 'failed', "An exception occurred while setting up the driver and loading the page.")
+        logging.exception("Failed to execute test")
+        set_session_status(
+            page,
+            "failed",
+            "An exception occurred while setting up the driver and loading the page.",
+        )
 
     finally:
         try:
             dismiss_add_label_modal(page, optional=True)
             clear_label_filters(page)
 
-            cancel_edit_buttons = page.locator('[data-testid="cancel-edit"]').element_handles()
+            cancel_edit_buttons = page.locator(
+                '[data-testid="cancel-edit"]'
+            ).element_handles()
             for cancel_edit_btn in cancel_edit_buttons:
                 cancel_edit_btn.click()
-            page.locator('[data-testid="cancel-edit"]').wait_for(state='detached')
+            page.locator('[data-testid="cancel-edit"]').wait_for(state="detached")
 
             todos_to_delete = find_todos(page, todo_prefix, partial=True)
             todo_count = todos_to_delete.count()
@@ -128,11 +140,14 @@ def page(request, playwright, todo_prefix, test_name, server_domain, record_xml_
                 todo = todos_to_delete.nth(todo_idx)
                 delete_todo(todo)
         except Exception:
-            logging.exception('Failed to cleanup test')
+            logging.exception("Failed to cleanup test")
 
         browser.close()
 
 
 def set_session_status(page, status, reason):
-    command = f'browserstack_executor: {{"action": "setSessionStatus", "arguments": {{"status": "{status}", "reason": "{reason}"}}}}'
+    command = (
+        f'browserstack_executor: {{"action": "setSessionStatus", '
+        f'"arguments": {{"status": "{status}", "reason": "{reason}"}}}}'
+    )
     page.evaluate("() => {}", command)

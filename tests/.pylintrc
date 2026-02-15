@@ -6,4 +6,16 @@ max-line-length=120
 
 [MESSAGES CONTROL]
 # Disable specific warnings
-disable=W0511
+# W0511: TODOs
+# C0114: Missing module docstrings (tests don't need module docs)
+# C0116: Missing function docstrings (test functions are self-documenting)
+# W0613: Unused arguments (pytest fixtures may not be used directly)
+# R0913: Too many arguments (common in pytest fixtures)
+# R0917: Too many positional arguments (common in pytest fixtures)
+# R0914: Too many local variables (test setup often has many variables)
+# R0912: Too many branches (tests often have many conditional paths)
+# R0915: Too many statements (tests can be lengthy)
+# W0621: Redefining name from outer scope (pytest fixtures pattern)
+# W0718: Catching too general exception (acceptable in test fixtures)
+# W0719: Raising too general exception (acceptable in test fixtures)
+disable=W0511,C0114,C0116,W0613,R0913,R0917,R0914,R0912,R0915,W0621,W0718,W0719
