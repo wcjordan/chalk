@@ -1,18 +1,19 @@
 # Status: Add Linting and Formatting to Playwright Tests
 
 ## Current Stage
-Stage 3: Integrate with root Makefile
+Stage 4: Verify full workflow
 
 ## Progress
 - [x] Stage 1: Setup configuration and dependencies ✅
 - [x] Stage 2: Run formatters and fix basic linting issues ✅
-- [ ] Stage 3: Integrate with root Makefile
+- [x] Stage 3: Integrate with root Makefile ✅
 - [ ] Stage 4: Verify full workflow
 - [ ] Stage 5: Cleanup
 
 ## Next Steps
-1. Update root Makefile to include tests in format target
-2. Document linting workflow for tests
+1. Verify make format from root works
+2. Verify make lint from tests/ works
+3. Ensure no behavioral regressions
 
 ## Blockers
 None

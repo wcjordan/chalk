@@ -74,6 +74,7 @@ stop:
 format:
 	$(MAKE) -C ui format
 	$(MAKE) -C server format
+	$(MAKE) -C tests format
 
 # Stops the dev env and deletes _env_id.txt
 .PHONY: superclean
