@@ -345,6 +345,15 @@ pipeline {
                                 ]) {
                                     dir('tests') {
                                         sh 'pip install "playwright==1.52.0" "pytest==9.0.2"'
+
+                                        sh """
+                                            until [ ! -z \$page_ready ] && [ \$page_ready -ne 0 ]
+                                            do
+                                                sleep 15
+                                                page_ready=\$(pytest -vv page_load.py --server_domain chalk-ci.${env.ROOT_DOMAIN} || true)
+                                            done
+                                        """
+
                                         sh "pytest . --server_domain chalk-ci.${env.ROOT_DOMAIN} --junitxml=playwright_results.xml || true"
 
                                         junit testResults: 'playwright_results.xml'
