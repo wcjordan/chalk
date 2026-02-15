@@ -1,20 +1,19 @@
 # Status: Add Linting and Formatting to Playwright Tests
 
 ## Current Stage
-Stage 1: Setup configuration and dependencies
+Stage 2: Run formatters and fix basic linting issues
 
 ## Progress
-- [ ] Stage 1: Setup configuration and dependencies
+- [x] Stage 1: Setup configuration and dependencies ✅
 - [ ] Stage 2: Run formatters and fix basic linting issues
 - [ ] Stage 3: Integrate with root Makefile
 - [ ] Stage 4: Verify full workflow
 - [ ] Stage 5: Cleanup
 
 ## Next Steps
-1. Create `tests/dev-requirements.txt`
-2. Copy configuration files from test_gen
-3. Create `tests/Makefile`
-4. Run `make init` to setup environment
+1. Run `make format` to apply black formatting
+2. Run `make lint` to identify linting issues
+3. Fix any critical linting issues
 
 ## Blockers
 None
