@@ -88,6 +88,17 @@ function processTodos(todos: Todo[]) {
 function updateTodoInPlace(existingEntry: Todo, updatedTodo: Todo) {
   // Extract the unproxied Immer value to compare against
   const currEntry = current(existingEntry);
+
+  // Skip stale updates: if the server version is older than our local version,
+  // this update doesn't include recent changes, so we should ignore it
+  if (updatedTodo.version < currEntry.version) {
+    console.debug(
+      `Skipping stale update for todo ${updatedTodo.id}: ` +
+        `server version ${updatedTodo.version} < local version ${currEntry.version}`,
+    );
+    return;
+  }
+
   const todoKeys = Object.keys(updatedTodo) as (keyof Todo)[];
   for (const key of todoKeys) {
     if (!_.isEqual(currEntry[key], updatedTodo[key])) {

@@ -4,6 +4,7 @@ Django ORM models for Todos
 import math
 
 from django.db import models
+from django.db.models import F
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -23,6 +24,7 @@ class TodoModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
     order_rank = models.BigIntegerField(null=True)
+    version = models.IntegerField(default=1)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -38,6 +40,7 @@ def update_derived_fields(sender, instance, *args, **kwargs):
     """
     Before saving, update timestamps if necessary
     Also set the order rank if it is not set
+    Increment version for updates
     """
     if instance.completed and instance.completed_at is None:
         instance.completed_at = timezone.now()
@@ -47,6 +50,10 @@ def update_derived_fields(sender, instance, *args, **kwargs):
         instance.archived_at = timezone.now()
     if not instance.archived and instance.archived_at is not None:
         instance.archived_at = None
+
+    # Increment version on update (but not on create)
+    if instance.pk is not None:
+        instance.version = F('version') + 1
 
     if instance.order_rank is None:
         order_metadata = RankOrderMetadata.objects.first()
