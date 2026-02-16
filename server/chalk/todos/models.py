@@ -90,6 +90,7 @@ class LabelModel(models.Model):
     """
     name = models.TextField(
         validators=[validate_label_name],
+        unique=True,
         help_text=('Label name (max 50 characters, '
                    'alphanumeric + spaces + common punctuation)'))
     todo_set = models.ManyToManyField(TodoModel, related_name="labels")

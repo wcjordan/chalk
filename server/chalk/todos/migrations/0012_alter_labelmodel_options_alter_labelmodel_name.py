@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
             model_name='labelmodel',
             name='name',
             field=models.TextField(
+                unique=True,
                 help_text=
                 'Label name (max 50 characters, alphanumeric + spaces + common punctuation)',
                 validators=[chalk.todos.models.validate_label_name]),
