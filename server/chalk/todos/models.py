@@ -73,6 +73,9 @@ def validate_label_name(value):
     if not value or not value.strip():
         raise ValidationError('Label name cannot be empty or whitespace only.')
 
+    if len(value) > 50:
+        raise ValidationError('Label name cannot exceed 50 characters.')
+
     # Allow alphanumeric, spaces, and common punctuation
     pattern = r'^[a-zA-Z0-9\s\-_.,!?()\[\]]+$'
     if not re.match(pattern, value):

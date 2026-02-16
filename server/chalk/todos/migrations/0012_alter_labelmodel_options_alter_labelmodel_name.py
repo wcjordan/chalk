@@ -11,17 +11,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='labelmodel',
-            options={'ordering': ['name']},
-        ),
         migrations.AlterField(
             model_name='labelmodel',
             name='name',
-            field=models.CharField(
+            field=models.TextField(
                 help_text=
                 'Label name (max 50 characters, alphanumeric + spaces + common punctuation)',
-                max_length=50,
                 validators=[chalk.todos.models.validate_label_name]),
         ),
     ]
