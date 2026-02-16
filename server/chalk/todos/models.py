@@ -71,16 +71,14 @@ def validate_label_name(value):
     and common punctuation.
     """
     if not value or not value.strip():
-        raise ValidationError(
-            'Label name cannot be empty or whitespace only.')
+        raise ValidationError('Label name cannot be empty or whitespace only.')
 
     # Allow alphanumeric, spaces, and common punctuation
     pattern = r'^[a-zA-Z0-9\s\-_.,!?()\[\]]+$'
     if not re.match(pattern, value):
         raise ValidationError(
             'Label name can only contain letters, numbers, spaces, '
-            'and common punctuation (- _ . , ! ? ( ) [ ]).'
-        )
+            'and common punctuation (- _ . , ! ? ( ) [ ]).')
 
 
 class LabelModel(models.Model):
@@ -90,11 +88,8 @@ class LabelModel(models.Model):
     name = models.CharField(
         max_length=50,
         validators=[validate_label_name],
-        help_text=(
-            'Label name (max 50 characters, '
-            'alphanumeric + spaces + common punctuation)'
-        )
-    )
+        help_text=('Label name (max 50 characters, '
+                   'alphanumeric + spaces + common punctuation)'))
     todo_set = models.ManyToManyField(TodoModel, related_name="labels")
 
     def __str__(self):
@@ -113,9 +108,8 @@ class LabelModel(models.Model):
 
         # Check for empty after stripping
         if not self.name:
-            raise ValidationError({
-                'name': 'Label name cannot be empty or whitespace only.'
-            })
+            raise ValidationError(
+                {'name': 'Label name cannot be empty or whitespace only.'})
 
         # Check for case-insensitive duplicates
         existing = LabelModel.objects.filter(name__iexact=self.name)
@@ -123,10 +117,8 @@ class LabelModel(models.Model):
             existing = existing.exclude(pk=self.pk)
         if existing.exists():
             raise ValidationError({
-                'name': (
-                    f'A label with name "{self.name}" '
-                    f'already exists (case-insensitive).'
-                )
+                'name': (f'A label with name "{self.name}" '
+                         f'already exists (case-insensitive).')
             })
 
     class Meta:

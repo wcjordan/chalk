@@ -18,6 +18,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='labelmodel',
             name='name',
-            field=models.CharField(help_text='Label name (max 50 characters, alphanumeric + spaces + common punctuation)', max_length=50, validators=[chalk.todos.models.validate_label_name]),
+            field=models.CharField(
+                help_text=
+                'Label name (max 50 characters, alphanumeric + spaces + common punctuation)',
+                max_length=50,
+                validators=[chalk.todos.models.validate_label_name]),
         ),
     ]
