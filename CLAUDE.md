@@ -90,7 +90,11 @@ Each stage in `PLAN.md` should include an instruction to commit the work after t
 
 Plans are working documents. Revise as new information is discovered.
 Update the status of each stage as you progress and commit progress.
-Remove transient files when all stages are done
+Remove transient files when all stages are done.
+
+When finalizing planning, ask me clarifying questions about anything ambiguous.
+Ask me questions one at a time.  Questions should clarify the plan and build on my previous answers.
+Revise the plan based on my answers.  Clarify all ambiguity before starting on the implementation steps.
 
 ---
 
