@@ -621,12 +621,13 @@ class LabelModelValidationTests(TestCase):
         label_empty = LabelModel(name='')
         with self.assertRaises(ValidationError) as context:
             label_empty.full_clean()
-        self.assertIn('empty', str(context.exception).lower())
+        self.assertIn('cannot be blank', str(context.exception).lower())
 
         label_whitespace = LabelModel(name='   ')
         with self.assertRaises(ValidationError) as context:
             label_whitespace.full_clean()
-        self.assertIn('empty', str(context.exception).lower())
+        self.assertIn('cannot be empty or whitespace only',
+                      str(context.exception).lower())
 
     def test_label_name_whitespace_stripped(self):
         """Test that whitespace is stripped from label names"""
