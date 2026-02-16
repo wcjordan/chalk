@@ -2,7 +2,10 @@
 Django ORM models for Todos
 """
 import math
+import re
 
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import F
 from django.db.models.signals import pre_save
@@ -62,15 +65,63 @@ def update_derived_fields(sender, instance, *args, **kwargs):
                                    RANK_ORDER_DEFAULT_STEP)
 
 
+def validate_label_name(value):
+    """
+    Validator for label names.
+    Ensures name contains only alphanumeric characters, spaces, and common punctuation.
+    """
+    if not value or not value.strip():
+        raise ValidationError('Label name cannot be empty or whitespace only.')
+
+    # Allow alphanumeric, spaces, and common punctuation: - _ . , ! ? ( ) [ ]
+    pattern = r'^[a-zA-Z0-9\s\-_.,!?()\[\]]+$'
+    if not re.match(pattern, value):
+        raise ValidationError(
+            'Label name can only contain letters, numbers, spaces, '
+            'and common punctuation (- _ . , ! ? ( ) [ ]).'
+        )
+
+
 class LabelModel(models.Model):
     """
     A label for todos
     """
-    name = models.TextField()
+    name = models.CharField(
+        max_length=50,
+        validators=[validate_label_name],
+        help_text='Label name (max 50 characters, alphanumeric + spaces + common punctuation)'
+    )
     todo_set = models.ManyToManyField(TodoModel, related_name="labels")
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        """
+        Validate the model before saving.
+        Strips whitespace and checks for case-insensitive duplicates.
+        """
+        super().clean()
+
+        # Strip whitespace
+        if self.name:
+            self.name = self.name.strip()
+
+        # Check for empty after stripping
+        if not self.name:
+            raise ValidationError({'name': 'Label name cannot be empty or whitespace only.'})
+
+        # Check for case-insensitive duplicates
+        existing = LabelModel.objects.filter(name__iexact=self.name)
+        if self.pk:
+            existing = existing.exclude(pk=self.pk)
+        if existing.exists():
+            raise ValidationError({'name': f'A label with name "{self.name}" already exists (case-insensitive).'})
+
+    class Meta:
+        # Note: We use clean() for case-insensitive uniqueness instead of a DB constraint
+        # because Django's unique constraint is case-sensitive by default
+        ordering = ['name']
 
 
 class RankOrderMetadata(models.Model):
