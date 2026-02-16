@@ -47,9 +47,14 @@ def playwright():
     pw.stop()
 
 
+@pytest.fixture(name="base_url")
+def fixture_base_url(server_domain):
+    return f"https://{server_domain}"
+
+
 @pytest.fixture
 def page(
-    request, playwright, todo_prefix, test_name, server_domain, record_xml_attribute
+    request, playwright, todo_prefix, test_name, base_url, record_xml_attribute
 ):
     username = os.getenv("BROWSERSTACK_USERNAME")
     access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
@@ -91,10 +96,10 @@ def page(
     page = browser.new_page()
     try:
         # Load page
-        page.goto(f"https://{server_domain}/")
+        page.goto(f"{base_url}/")
         if "accounts.google.com" in page.url:
             page.goto(
-                f"https://{server_domain}/api/todos/auth_callback/?ci_refresh=true&code={refresh_token}"
+                f"{base_url}/api/todos/auth_callback/?ci_refresh=true&code={refresh_token}"
             )
 
         if "chalk" not in page.title():

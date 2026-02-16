@@ -23,3 +23,14 @@ format:
 	set -e
 	$(ACTIVATE_VENV)
 	black .
+
+# Run integration tests
+# Requires dev env to be running (make start)
+# make integration-test TEST_TO_RUN=label_filtering_test.py
+TEST_TO_RUN ?= ""
+.PHONY: integration-test
+integration-test:
+	set -e
+	$(ACTIVATE_VENV)
+	env $$(grep -v '^#' ../.env | xargs) sh -c ' \
+		pytest -vv $(TEST_TO_RUN) --server_domain chalk-dev.$$ROOT_DOMAIN'
