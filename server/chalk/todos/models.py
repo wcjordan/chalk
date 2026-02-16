@@ -93,7 +93,12 @@ class LabelModel(models.Model):
         unique=True,
         help_text=('Label name (max 50 characters, '
                    'alphanumeric + spaces + common punctuation)'))
-    todo_set = models.ManyToManyField(TodoModel, related_name="labels")
+    todo_set = models.ManyToManyField(
+        TodoModel,
+        related_name="labels",
+        blank=True,
+        editable=False,
+    )
 
     def __str__(self):
         return self.name

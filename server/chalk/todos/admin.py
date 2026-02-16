@@ -1,7 +1,9 @@
 """
 Django admin config for Todos
 """
+from django import forms
 from django.contrib import admin
+from django.db import models as django_models
 from simple_history.admin import SimpleHistoryAdmin
 
 from chalk.todos import models
@@ -17,6 +19,12 @@ class LabelAdmin(admin.ModelAdmin):
     search_fields = ['name']
     ordering = ['name']
     readonly_fields = ['id', 'todo_count']
+
+    formfield_overrides = {
+        django_models.TextField: {
+            'widget': forms.TextInput(attrs={'size': '50', 'maxlength': '50'})
+        },
+    }
 
     def todo_count(self, obj):
         """
