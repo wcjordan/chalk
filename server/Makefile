@@ -17,6 +17,12 @@ PARENT_DIR = $(dir $(PWD))
 # Test w/ PyTest & lint Django app
 .PHONY: test
 test:
+	docker pull $(SERVER_IMAGE):local-latest
+	DOMAIN=localhost docker run --env-file .env --env DOMAIN --rm -t $(SERVER_IMAGE):local-latest make test-inner
+
+
+.PHONY: test-inner
+test-inner:
 	flake8 .
 	PYTHONPATH=$(PWD) pylint -j 0 --load-plugins pylint_django chalk
 

@@ -109,7 +109,7 @@ pipeline {
                                         JENKINS_WORKSPACE=$(pwd)
                                         cp ui/Makefile /workspace/
                                         cd /workspace
-                                        make test
+                                        make test-inner
 
                                         cd $JENKINS_WORKSPACE
                                         cp /workspace/js/junit.xml .
@@ -218,7 +218,7 @@ pipeline {
                                 container('jenkins-worker-python') {
                                     dir('server') {
                                         sh 'pip install --no-cache-dir -r dev-requirements.txt'
-                                        sh 'env $(grep -v "^#" ../.env_default | xargs) DOMAIN=localhost SECRET_KEY=testkey make test'
+                                        sh 'env $(grep -v "^#" ../.env_default | xargs) DOMAIN=localhost SECRET_KEY=testkey make test-inner'
                                     }
                                 }
                             }

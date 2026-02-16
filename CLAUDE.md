@@ -18,8 +18,6 @@ If you need more detail on the project structure and architecture, see `docs/GET
 
 Prefer existing Make targets.
 
-**IMPORTANT:** Always run `make test` and `make format` from `<PROJECT_ROOT>`, NOT from subdirectories like `server/`. These commands run in Docker containers and will fail if run from subdirectories outside a dev container.
-
 Chalk app:
 - Unit tests + lint: `make test` (from `<PROJECT_ROOT>` - runs tests for both server and UI in containers)
 - Format ui, server, & tests code: `make format` (from `<PROJECT_ROOT>`)
