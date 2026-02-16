@@ -29,12 +29,19 @@ class LabelAdmin(admin.ModelAdmin):
         },
     }
 
+    def get_queryset(self, request):
+        """
+        Override get_queryset to annotate each LabelModel with the count of associated todos.
+        """
+        return super(LabelAdmin, self).get_queryset(request).annotate(
+            todo_count=django_models.Count("todo_set", distinct=True))
+
     @admin.display(description='Todo Count')
     def todo_count(self, obj):
         """
         Display the count of todos associated with this label.
         """
-        return obj.todo_set.count()
+        return obj.todo_count
 
 
 admin.site.register(models.TodoModel, SimpleHistoryAdmin)
