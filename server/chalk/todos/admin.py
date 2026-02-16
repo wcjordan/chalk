@@ -18,7 +18,7 @@ class LabelAdmin(admin.ModelAdmin):
     list_display = ['name', 'id', 'todo_count']
     search_fields = ['name']
     ordering = ['name']
-    readonly_fields = ['id', 'todo_count']
+    readonly_fields = ['id']
 
     formfield_overrides = {
         django_models.TextField: {
@@ -29,13 +29,12 @@ class LabelAdmin(admin.ModelAdmin):
         },
     }
 
+    @admin.display(description='Todo Count')
     def todo_count(self, obj):
         """
         Display the count of todos associated with this label.
         """
         return obj.todo_set.count()
-
-    todo_count.short_description = 'Todo Count'
 
 
 admin.site.register(models.TodoModel, SimpleHistoryAdmin)
