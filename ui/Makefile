@@ -91,7 +91,7 @@ update-snapshots:
 # was cd js; npx lint-staged
 .PHONY: format
 format:
-	cd js; npx prettier --write "**/*.{ts,tsx,js,jsx,json,css,scss}" && npx eslint "**/*.{ts,tsx,js,jsx}"
+	cd js; npx prettier --log-level warn --write "**/*.{ts,tsx,js,jsx,json,css,scss}" && npx eslint "**/*.{ts,tsx,js,jsx}"
 	echo "UI formatting complete.  Please review changes and commit."
 
 # Fix import ordering
