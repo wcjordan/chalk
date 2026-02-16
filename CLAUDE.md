@@ -22,7 +22,7 @@ Prefer existing Make targets.
 
 Chalk app:
 - Unit tests + lint: `make test` (from `<PROJECT_ROOT>` - runs tests for both server and UI in containers)
-- Format ui & server code: `make format` (from `<PROJECT_ROOT>`)
+- Format ui, server, & tests code: `make format` (from `<PROJECT_ROOT>`)
 - Create Django migrations: `(cd server && make create-migrations)` (from `<PROJECT_ROOT>` - runs Django in container)
 
 test_gen:

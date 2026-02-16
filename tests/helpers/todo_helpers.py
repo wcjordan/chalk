@@ -3,17 +3,17 @@ import time
 
 from playwright.sync_api import expect
 
-CHECKED_ICON_TEXT = '󰄲'
-DELETE_ICON_TEXT = '󰧧'
-LABELS_ICON_TEXT = '󰜢'
-UNCHECKED_ICON_TEXT = '󰄱'
-WARNING_ICON_TEXT = '󰀪'
+CHECKED_ICON_TEXT = "󰄲"
+DELETE_ICON_TEXT = "󰧧"
+LABELS_ICON_TEXT = "󰜢"
+UNCHECKED_ICON_TEXT = "󰄱"
+WARNING_ICON_TEXT = "󰀪"
 
 
 def add_todo(page, description):
     add_input = page.locator('[data-testid="add-todo-input"]')
     add_input.fill(description)
-    add_input.press('Enter')
+    add_input.press("Enter")
 
 
 def cancel_edit(page, todo):
@@ -33,12 +33,12 @@ def delete_todo(todo_item):
 
 def edit_todo(page, todo_item, new_description, submit=True):
     todo_item.click()
-    todo_input = todo_item.locator('textarea')
+    todo_input = todo_item.locator("textarea")
     todo_input.click()
     todo_input.fill(new_description)
     if submit:
         # Need to re-find todo since locator was on the old description
-        find_todo(page, new_description).locator('textarea').press('Enter')
+        find_todo(page, new_description).locator("textarea").press("Enter")
 
 
 def find_todo(page, description, partial=False):
@@ -48,12 +48,14 @@ def find_todo(page, description, partial=False):
 
 
 def find_todos(page, description, partial=False):
-    todos_locator = page.locator(f'[data-testid="todo-list"] > div > div')
+    todos_locator = page.locator('[data-testid="todo-list"] > div > div')
     return todos_locator.filter(has=page.get_by_text(description, exact=not partial))
 
 
 def _todo_descriptions_locator(page, prefix):
-    return find_todos(page, prefix, partial=True).locator('[data-testid="description-text"]')
+    return find_todos(page, prefix, partial=True).locator(
+        '[data-testid="description-text"]'
+    )
 
 
 def list_todo_descriptions(page, prefix):
@@ -69,7 +71,7 @@ def wait_for_todo(page, description):
 
 
 def wait_for_todo_to_disappear(page, description):
-    find_todos(page, description).wait_for(state='detached')
+    find_todos(page, description).wait_for(state="detached")
 
 
 def drag_todo(page, todo_item, relative_todo_item):
@@ -87,11 +89,15 @@ def drag_todo(page, todo_item, relative_todo_item):
     # For some reason the Pan Gesture Handler only reacts to the N-1 steps
     # so we use 10 steps and overshoot the target to land as close as possible to the actual target y
     target_box = relative_todo_item.bounding_box()
-    target_y = target_box['y'] + target_box['height'] / 2
-    start_y = start_box['y'] + start_box['height'] / 2
+    target_y = target_box["y"] + target_box["height"] / 2
+    start_y = start_box["y"] + start_box["height"] / 2
     direction = 1 if target_y > start_y else -1
-    overshoot_y = (target_y - start_y) * 1 / 9 + direction * target_box['height'] / 3
-    page.mouse.move(target_box['x'], math.floor(target_box['y'] + target_box['height'] / 2 + overshoot_y), steps=10)
+    overshoot_y = (target_y - start_y) * 1 / 9 + direction * target_box["height"] / 3
+    page.mouse.move(
+        target_box["x"],
+        math.floor(target_box["y"] + target_box["height"] / 2 + overshoot_y),
+        steps=10,
+    )
 
     # Drop
     page.mouse.up()
