@@ -48,6 +48,7 @@ test: build
 	docker pull $(SERVER_IMAGE):local-latest
 	DOMAIN=localhost docker run --env-file .env --env DOMAIN --rm -t $(SERVER_IMAGE):local-latest make test
 	$(MAKE) -C ui containerized-test
+	$(MAKE) -C tests lint
 
 # Run integration tests
 # Requires dev env to be running (make start)
@@ -74,6 +75,7 @@ stop:
 format:
 	$(MAKE) -C ui format
 	$(MAKE) -C server format
+	$(MAKE) -C tests format
 
 # Stops the dev env and deletes _env_id.txt
 .PHONY: superclean

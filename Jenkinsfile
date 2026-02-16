@@ -344,7 +344,7 @@ pipeline {
                                     string(credentialsId: 'chalk-prod-cd-oauth-refresh-token', variable: 'CHALK_OAUTH_REFRESH_TOKEN'),
                                 ]) {
                                     dir('tests') {
-                                        sh 'pip install "playwright==1.52.0" "pytest==9.0.2"'
+                                        sh 'pip install -r requirements.txt'
 
                                         sh """
                                             until [ ! -z \$page_ready ] && [ \$page_ready -eq 0 ]
