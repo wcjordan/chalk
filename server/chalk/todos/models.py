@@ -108,16 +108,12 @@ class LabelModel(models.Model):
         Validate the model before saving.
         Strips whitespace and checks for case-insensitive duplicates.
         """
-        super().clean()
-
         # Strip whitespace
         if self.name:
             self.name = self.name.strip()
 
-        # Check for empty after stripping
-        if not self.name:
-            raise ValidationError(
-                {'name': 'Label name cannot be empty or whitespace only.'})
+        # Run default model validation (field validators, unique checks, etc.)
+        super().clean()
 
         # Check for case-insensitive duplicates
         existing = LabelModel.objects.filter(name__iexact=self.name)
