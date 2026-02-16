@@ -88,8 +88,7 @@ class LabelModel(models.Model):
     """
     A label for todos
     """
-    name = models.CharField(
-        max_length=50,
+    name = models.TextField(
         validators=[validate_label_name],
         help_text=('Label name (max 50 characters, '
                    'alphanumeric + spaces + common punctuation)'))
@@ -123,12 +122,6 @@ class LabelModel(models.Model):
                 'name': (f'A label with name "{self.name}" '
                          f'already exists (case-insensitive).')
             })
-
-    class Meta:
-        # Note: We use clean() for case-insensitive uniqueness
-        # instead of a DB constraint because Django's unique
-        # constraint is case-sensitive by default
-        ordering = ['name']
 
 
 class RankOrderMetadata(models.Model):
