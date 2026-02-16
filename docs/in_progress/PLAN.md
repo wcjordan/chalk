@@ -17,24 +17,29 @@ Add the ability to create custom labels via Django admin UI. Custom labels will 
 - **Out of scope**: Migrating existing hardcoded labels to database (keep them hardcoded for now)
 - **Architectural decision needed**: Validation rules (duplicates, naming constraints)
 
-## Open Questions (to clarify before implementation)
-1. **Duplicate names**: Should the system prevent creating labels with duplicate names?
-2. **Label fields**: Should labels have additional fields (color, icon, display order, description)?
-3. **Name constraints**: Should there be validation on label names (max length, allowed characters, required field)?
-4. **Admin display**: Should the admin interface show associated todos for each label?
-5. **Case sensitivity**: Are labels case-sensitive? (e.g., "Work" vs "work")
-6. **Empty/whitespace names**: Should empty or whitespace-only names be prevented?
+## Clarified Requirements
+1. **Duplicate names**: ✓ Enforce unique names (case-insensitive)
+2. **Label fields**: ✓ Keep simple - just name and id
+3. **Name constraints**: ✓ Strict validation - max 50 chars, alphanumeric + spaces + common punctuation
+4. **Admin display**: ✓ Show count of associated todos (not inline list)
+5. **Case sensitivity**: ✓ Case-insensitive uniqueness
+6. **Empty/whitespace names**: ✓ Prevent via validation
 
 ## Stages
 
-### Stage 1: Register LabelModel in Django Admin (BLOCKED on clarifications)
-**Goal**: Make LabelModel editable in Django admin UI
+### Stage 1: Update Model and Register in Django Admin
+**Goal**: Add validation to LabelModel and make it editable in Django admin UI
 
 **Steps**:
-1. Update `server/chalk/todos/admin.py` to register `LabelModel`
-2. Configure admin display to show label name and ID
-3. Add inline display for associated todos (if desired - see question #4)
-4. Add field validation based on answers to questions above
+1. Update `LabelModel` in `server/chalk/todos/models.py`:
+   - Change `name` from TextField to CharField with max_length=50
+   - Add unique constraint (case-insensitive)
+   - Add validation for allowed characters
+2. Create migration for model changes
+3. Update `server/chalk/todos/admin.py` to register `LabelModel`:
+   - Configure admin display to show label name, ID, and todo count
+   - Add custom admin methods for todo count display
+4. Test validation rules work correctly
 
 **Exit Criteria**:
 - Navigate to Django admin and see Labels section

@@ -1,7 +1,7 @@
 # Status: Custom Labels Implementation
 
 ## Current Status
-Planning phase - awaiting clarification on open questions
+Planning phase complete - all questions answered, ready to begin implementation
 
 ## Completed
 - [x] Codebase exploration
@@ -15,19 +15,21 @@ Planning phase - awaiting clarification on open questions
 2. Update plan based on answers
 3. Begin Stage 1 implementation
 
-## Open Questions (Awaiting Answers)
-1. **Duplicate names**: Should the system prevent creating labels with duplicate names?
-2. **Label fields**: Should labels have additional fields (color, icon, display order, description)?
-3. **Name constraints**: Should there be validation on label names (max length, allowed characters, required field)?
-4. **Admin display**: Should the admin interface show associated todos for each label?
-5. **Case sensitivity**: Are labels case-sensitive? (e.g., "Work" vs "work")
-6. **Empty/whitespace names**: Should empty or whitespace-only names be prevented?
+## Answered Questions
+1. **Duplicate names**: ✓ ENFORCE UNIQUE - Prevent duplicate label names
+2. **Label fields**: ✓ KEEP SIMPLE - Just name and id (no color, icon, etc. for now)
+3. **Name constraints**: ✓ STRICT VALIDATION - Prevent empty names, max 50 chars, alphanumeric + spaces + common punctuation
+4. **Admin display**: ✓ SHOW TODO COUNT - Display count of associated todos (no inline list)
+5. **Case sensitivity**: ✓ CASE-INSENSITIVE - Prevent duplicates ignoring case (e.g., "Work" and "work" are duplicates)
 
 ## Blockers
-Waiting for user input on open questions before proceeding with implementation
+None - ready to proceed with Stage 1
 
 ## Key Decisions
-None yet - pending clarification phase
+- Label names must be unique case-insensitively (enforced at model level)
+- Keep label model simple: only name and id fields (extensible later)
+- Strict name validation: max 50 chars, alphanumeric + spaces + common punctuation, no empty/whitespace-only
+- Admin displays todo count for each label (not full inline list)
 
 ## Notes
 - Existing label system is already well-structured
