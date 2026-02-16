@@ -49,15 +49,6 @@ test: build
 	$(MAKE) -C ui test
 	$(MAKE) -C tests lint
 
-# Run integration tests
-# Requires dev env to be running (make start)
-# make integration-test TEST_TO_RUN=label_filtering_test.py
-TEST_TO_RUN ?= ""
-.PHONY: integration-test
-integration-test:
-	cd tests; env $$(grep -v '^#' ../.env | xargs) sh -c ' \
-		pytest -vv $(TEST_TO_RUN) --server_domain chalk-dev.$$ROOT_DOMAIN'
-
 # Start environment for development
 # Note, you need to manually navigate to <host>:19000/debugger-ui/ to get Expo to work on mobile
 .PHONY: start

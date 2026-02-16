@@ -53,9 +53,7 @@ def fixture_base_url(server_domain):
 
 
 @pytest.fixture
-def page(
-    request, playwright, todo_prefix, test_name, base_url, record_xml_attribute
-):
+def page(request, playwright, todo_prefix, test_name, base_url, record_xml_attribute):
     username = os.getenv("BROWSERSTACK_USERNAME")
     access_key = os.getenv("BROWSERSTACK_ACCESS_KEY")
     refresh_token = os.getenv("CHALK_OAUTH_REFRESH_TOKEN")
