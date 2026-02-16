@@ -29,6 +29,10 @@ class LabelStringField(serializers.StringRelatedField):
         return LabelModel.objects.get(name=data)
 
     def validate(self, data):
+        """
+        Validate the label data to ensure it meets the model's constraints
+        (see clean method in LabelModel).
+        """
         instance = LabelModel(**data)
         try:
             instance.clean()
