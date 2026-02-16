@@ -582,15 +582,12 @@ class LabelModelValidationTests(TestCase):
     """
 
     def test_create_valid_label(self):
-        """Test that a valid label can be created"""
-        label = LabelModel(name='Valid Label 123')
-        label.full_clean()  # Should not raise
-        label.save()
-        self.assertEqual(label.name, 'Valid Label 123')
-
-    def test_label_with_punctuation(self):
-        """Test that labels with allowed punctuation can be created"""
+        """
+        Test that a valid label can be created
+        Includes letters, numbers, spaces, and allowed punctuation
+        """
         valid_names = [
+            'Valid Label 123'
             'Label-with-dashes',
             'Label_with_underscores',
             'Label.with.dots',
@@ -603,35 +600,32 @@ class LabelModelValidationTests(TestCase):
                 label = LabelModel(name=name)
                 label.full_clean()  # Should not raise
                 label.save()
+                self.assertEqual(label.name, name)
                 label.delete()  # Clean up
 
     def test_label_max_length(self):
         """Test that labels longer than 50 characters are rejected"""
         long_name = 'a' * 51
-        label = LabelModel(name=long_name)
+        label_too_long = LabelModel(name=long_name)
         with self.assertRaises(ValidationError) as context:
-            label.full_clean()
+            label_too_long.full_clean()
         self.assertIn('50', str(context.exception))
 
-    def test_label_at_max_length(self):
-        """Test that labels exactly 50 characters are accepted"""
         max_name = 'a' * 50
-        label = LabelModel(name=max_name)
-        label.full_clean()  # Should not raise
-        label.save()
+        label_max_len = LabelModel(name=max_name)
+        label_max_len.full_clean()  # Should not raise
+        label_max_len.save()
 
     def test_empty_label_name(self):
         """Test that empty label names are rejected"""
-        label = LabelModel(name='')
+        label_empty = LabelModel(name='')
         with self.assertRaises(ValidationError) as context:
-            label.full_clean()
+            label_empty.full_clean()
         self.assertIn('empty', str(context.exception).lower())
 
-    def test_whitespace_only_label_name(self):
-        """Test that whitespace-only label names are rejected"""
-        label = LabelModel(name='   ')
+        label_whitespace = LabelModel(name='   ')
         with self.assertRaises(ValidationError) as context:
-            label.full_clean()
+            label_whitespace.full_clean()
         self.assertIn('empty', str(context.exception).lower())
 
     def test_label_name_whitespace_stripped(self):
@@ -676,22 +670,28 @@ class LabelModelValidationTests(TestCase):
         label1.full_clean()
         label1.save()
 
-        # Try to create duplicate with different case
-        label2 = LabelModel(name='testlabel')
+        # Try to create duplicate with exact name match
+        label_dupe = LabelModel(name='TestLabel')
         with self.assertRaises(ValidationError) as context:
-            label2.full_clean()
+            label_dupe.full_clean()
+        self.assertIn('already exists', str(context.exception).lower())
+
+        # Try to create duplicate with different case
+        label_lower = LabelModel(name='testlabel')
+        with self.assertRaises(ValidationError) as context:
+            label_lower.full_clean()
         self.assertIn('already exists', str(context.exception).lower())
 
         # Try uppercase
-        label3 = LabelModel(name='TESTLABEL')
+        label_upper = LabelModel(name='TESTLABEL')
         with self.assertRaises(ValidationError) as context:
-            label3.full_clean()
+            label_upper.full_clean()
         self.assertIn('already exists', str(context.exception).lower())
 
         # Try mixed case
-        label4 = LabelModel(name='TeStLaBeL')
+        label_mixed = LabelModel(name='TeStLaBeL')
         with self.assertRaises(ValidationError) as context:
-            label4.full_clean()
+            label_mixed.full_clean()
         self.assertIn('already exists', str(context.exception).lower())
 
     def test_case_insensitive_uniqueness_on_update(self):
@@ -701,26 +701,6 @@ class LabelModelValidationTests(TestCase):
         label.save()
 
         # Update the same label (should not raise uniqueness error)
-        label.name = 'TestLabel Updated'
+        label.name = 'testLabel'
         label.full_clean()  # Should not raise
         label.save()
-
-        # Update to a different case of itself (before update)
-        label2 = LabelModel(name='Another')
-        label2.full_clean()
-        label2.save()
-
-        label2.name = 'another'  # Same name, different case
-        label2.full_clean()  # Should not raise (same label)
-        label2.save()
-
-    def test_duplicate_exact_name(self):
-        """Test that exact duplicate names are rejected"""
-        label1 = LabelModel(name='Duplicate')
-        label1.full_clean()
-        label1.save()
-
-        label2 = LabelModel(name='Duplicate')
-        with self.assertRaises(ValidationError) as context:
-            label2.full_clean()
-        self.assertIn('already exists', str(context.exception).lower())
