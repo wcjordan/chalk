@@ -22,7 +22,10 @@ class LabelAdmin(admin.ModelAdmin):
 
     formfield_overrides = {
         django_models.TextField: {
-            'widget': forms.TextInput(attrs={'size': '50', 'maxlength': '50'})
+            'widget': forms.TextInput(attrs={
+                'size': '50',
+                'maxlength': '50'
+            })
         },
     }
 
