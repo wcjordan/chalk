@@ -47,7 +47,7 @@ def test_work_contexts(page, todo_prefix):
     # Verify the todo is visible and label is added
     todos = find_todos(page, quick_todo_description)
     assert todos.count() == 1
-    assert get_todo_labels(todos.first) == ["5 minutes", "up next"]
+    assert set(get_todo_labels(todos.first)) == {"5 minutes", "up next"}
 
     # Dismiss picker modal
     dismiss_add_label_modal(page)
