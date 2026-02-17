@@ -5,6 +5,9 @@ kind: SQLDatabase
 metadata:
   name: {{ $fullName }}
 spec:
+  {{- if eq .Values.environment "PROD" }}
+  deletionPolicy: "ABANDON"
+  {{- end }}
   instanceRef:
     external: {{ include "..dbInstanceName" . }}
 
