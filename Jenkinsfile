@@ -427,7 +427,7 @@ pipeline {
                                     mkdir helm/secrets;
                                     cp \$OAUTH_WEB_SECRET helm/secrets/oauth_web_client_secret.json
                                     helm upgrade --install \
-                                        --namespace default \
+                                        --namespace prod \
                                         --set domain=chalk.${env.ROOT_DOMAIN} \
                                         --set environment=PROD \
                                         --set gcpProject=${env.GCP_PROJECT} \
@@ -441,7 +441,7 @@ pipeline {
                                     until [ ! -z \$ready_replicas ] && [ \$ready_replicas -ge 1 ]
                                     do
                                         sleep 15
-                                        ready_replicas=\$(kubectl --namespace default get deployments chalk-prod-server -o jsonpath='{.status.readyReplicas}')
+                                        ready_replicas=\$(kubectl --namespace prod get deployments chalk-prod-server -o jsonpath='{.status.readyReplicas}')
                                     done
 
                                     until [ ! -z \$todos_ready ] && [ \$todos_ready -eq 200 ]
