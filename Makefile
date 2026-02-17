@@ -1,5 +1,6 @@
 #!make
 ENVIRONMENT ?= PROD
+LOWER_ENVIRONMENT = `echo $(ENVIRONMENT) | tr A-Z a-z`
 ifeq ($(ENVIRONMENT),STAGING)
   PROD_ENV_FILE = .staging.env
 else
@@ -93,6 +94,7 @@ setup-continuous-delivery:
 		$$(grep '^CHALK_OAUTH_REFRESH_TOKEN' .env | xargs) \
 		sh -c ' \
 		helm upgrade --install \
+			--namespace $(LOWER_ENVIRONMENT) \
 			--set environment=$(ENVIRONMENT) \
 			--set permittedUsers=$$PERMITTED_USERS \
 			--set sentry_dsn=$$SENTRY_DSN \
