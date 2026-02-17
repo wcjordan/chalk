@@ -4,10 +4,11 @@ apiVersion: sql.cnrm.cloud.google.com/v1beta1
 kind: SQLDatabase
 metadata:
   name: {{ $fullName }}
-spec:
   {{- if eq .Values.environment "PROD" }}
-  deletionPolicy: "ABANDON"
+  annotations:
+    cnrm.cloud.google.com/deletion-policy: abandon
   {{- end }}
+spec:
   instanceRef:
     external: {{ include "..dbInstanceName" . }}
 
