@@ -19,8 +19,9 @@ If you need more detail on the project structure and architecture, see `docs/GET
 Prefer existing Make targets.
 
 Chalk app:
-- Unit tests + lint: `make test` (from `<PROJECT_ROOT>`)
-- Format ui, server & tests code: `make format` (from `<PROJECT_ROOT>`)
+- Unit tests + lint: `make test` (from `<PROJECT_ROOT>` - runs tests for both server and UI in containers)
+- Format ui, server, & tests code: `make format` (from `<PROJECT_ROOT>`)
+- Create Django migrations: `(cd server && make create-migrations)` (from `<PROJECT_ROOT>` - runs Django in container)
 
 test_gen:
 - Tests: `make test` (from `<PROJECT_ROOT>/test_gen`)
@@ -89,7 +90,11 @@ Each stage in `PLAN.md` should include an instruction to commit the work after t
 
 Plans are working documents. Revise as new information is discovered.
 Update the status of each stage as you progress and commit progress.
-Remove transient files when all stages are done
+Remove transient files when all stages are done.
+
+When finalizing planning, ask me clarifying questions about anything ambiguous.
+Ask me questions one at a time.  Questions should clarify the plan and build on my previous answers.
+Revise the plan based on my answers.  Clarify all ambiguity before starting on the implementation steps.
 
 ---
 

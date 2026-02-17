@@ -2,7 +2,9 @@
 Django ORM models for Todos
 """
 import math
+import re
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F
 from django.db.models.signals import pre_save
@@ -62,15 +64,66 @@ def update_derived_fields(sender, instance, *args, **kwargs):
                                    RANK_ORDER_DEFAULT_STEP)
 
 
+def validate_label_name(value):
+    """
+    Validator for label names.
+    Ensures name contains only alphanumeric characters, spaces,
+    and common punctuation.
+    """
+    if not value or not value.strip():
+        raise ValidationError('Label name cannot be empty or whitespace only.')
+
+    if len(value) > 50:
+        raise ValidationError('Label name cannot exceed 50 characters.')
+
+    # Allow alphanumeric, spaces, and common punctuation
+    pattern = r'^[a-zA-Z0-9\s\-_.,!?()\[\]]+$'
+    if not re.match(pattern, value):
+        raise ValidationError(
+            'Label name can only contain letters, numbers, spaces, '
+            'and common punctuation (- _ . , ! ? ( ) [ ]).')
+
+
 class LabelModel(models.Model):
     """
     A label for todos
     """
-    name = models.TextField()
-    todo_set = models.ManyToManyField(TodoModel, related_name="labels")
+    name = models.TextField(
+        validators=[validate_label_name],
+        unique=True,
+        help_text=('Label name (max 50 characters, '
+                   'alphanumeric + spaces + common punctuation)'))
+    todo_set = models.ManyToManyField(
+        TodoModel,
+        related_name="labels",
+        blank=True,
+        editable=False,
+    )
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        """
+        Validate the model before saving.
+        Strips whitespace and checks for case-insensitive duplicates.
+        """
+        # Strip whitespace
+        if self.name:
+            self.name = self.name.strip()
+
+        # Run default model validation (field validators, unique checks, etc.)
+        super().clean()
+
+        # Check for case-insensitive duplicates
+        existing = LabelModel.objects.filter(name__iexact=self.name)
+        if self.pk:
+            existing = existing.exclude(pk=self.pk)
+        if existing.exists():
+            raise ValidationError({
+                'name': (f'A label with name "{self.name}" '
+                         f'already exists (case-insensitive).')
+            })
 
 
 class RankOrderMetadata(models.Model):

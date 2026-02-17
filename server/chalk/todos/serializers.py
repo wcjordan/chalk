@@ -1,6 +1,7 @@
 """
 Django Rest Framework serializers for todos
 """
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from chalk.todos.models import LabelModel, TodoModel
@@ -26,6 +27,18 @@ class LabelStringField(serializers.StringRelatedField):
 
     def to_internal_value(self, data):
         return LabelModel.objects.get(name=data)
+
+    def validate(self, data):
+        """
+        Validate the label data to ensure it meets the model's constraints
+        (see clean method in LabelModel).
+        """
+        instance = LabelModel(**data)
+        try:
+            instance.clean()
+        # Note that this raises Django's ValidationError Exception
+        except ValidationError as e:
+            raise serializers.ValidationError(e.args[0])
 
 
 class TodoSerializer(serializers.ModelSerializer):

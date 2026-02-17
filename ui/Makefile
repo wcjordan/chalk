@@ -33,14 +33,14 @@ run-test-container:
 debug-js-dev-container:
 	make run-test-container TEST_CMD="/bin/bash #" DOCKER_ARGS="-i -p 127.0.0.1:9009:9009"
 
-.PHONY: containerized-test
-containerized-test:
-	make run-test-container TEST_CMD="make test" TEST_ARGS="" DOCKER_ARGS=""
+.PHONY: test
+test:
+	make run-test-container TEST_CMD="make test-inner" TEST_ARGS="" DOCKER_ARGS=""
 	make test-storybook
 
 # Targets to be run instide the test container
-.PHONY: test
-test:
+.PHONY: test-inner
+test-inner:
 	# Lint
 	cd js; yarn eslint --max-warnings=0 --ext='js,jsx,ts,tsx' .
 	# Typecheck
@@ -91,7 +91,7 @@ update-snapshots:
 # was cd js; npx lint-staged
 .PHONY: format
 format:
-	cd js; npx prettier --write "**/*.{ts,tsx,js,jsx,json,css,scss}" && npx eslint "**/*.{ts,tsx,js,jsx}"
+	cd js; npx prettier --log-level warn --write "**/*.{ts,tsx,js,jsx,json,css,scss}" && npx eslint "**/*.{ts,tsx,js,jsx}"
 	echo "UI formatting complete.  Please review changes and commit."
 
 # Fix import ordering
