@@ -86,8 +86,14 @@ export const moveTodo = createAsyncThunk<
  * Filter out archived todos.
  * Also sort completed todos to appear at the bottom.
  */
-function processTodos(todos: Todo[]) {
-  const unarchived = _.filter(todos, (todo) => !todo.archived);
+function processTodos(todos: Todo[], pendingArchives?: Set<number>): Todo[] {
+  if (!pendingArchives) {
+    pendingArchives = new Set();
+  }
+  const unarchived = _.filter(
+    todos,
+    (todo) => !todo.archived && !pendingArchives.has(todo.id),
+  );
   const completed = _.filter(unarchived, (todo) => todo.completed);
   const incomplete = _.filter(unarchived, (todo) => !todo.completed);
   return incomplete.concat(completed);
@@ -138,11 +144,6 @@ function handleListResponse(
   const entryMap = _.keyBy(entries, (entry: Todo) => entry.id);
   const serverIds = new Set(updatedTodos.map((t) => t.id));
 
-  // Filter out todos that the user has locally archived
-  updatedTodos = updatedTodos.filter(
-    (todo) => !pendingArchives.includes(todo.id) || todo.archived,
-  );
-
   for (const [index, updatedTodo] of updatedTodos.entries()) {
     const existingEntry = entryMap[updatedTodo.id];
     if (existingEntry) {
@@ -152,13 +153,16 @@ function handleListResponse(
   }
 
   // Preserve locally-created todos not yet in the server response
-  for (const entry of entries) {
-    if (pendingCreates.includes(entry.id) && !serverIds.has(entry.id)) {
-      updatedTodos.push(entry);
+  for (const pendingId of pendingCreates) {
+    if (!serverIds.has(pendingId)) {
+      const pendingEntry = entryMap[pendingId];
+      if (pendingEntry) {
+        updatedTodos.push(pendingEntry);
+      }
     }
   }
 
-  return processTodos(updatedTodos);
+  return processTodos(updatedTodos, new Set(pendingArchives));
 }
 
 /**

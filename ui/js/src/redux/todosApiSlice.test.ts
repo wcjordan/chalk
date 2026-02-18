@@ -540,7 +540,7 @@ describe('todosApiSlice reducer', function () {
       });
     });
 
-    it('should clear pendingArchives when server catches up', function () {
+    it("should clear pendingArchives when server response doesn't include the todo", function () {
       const result = todosApiSlice.reducer(
         {
           entries: [],
