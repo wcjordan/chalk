@@ -160,6 +160,8 @@ describe('todosApiSlice reducer', function () {
     entries: [],
     initialLoad: true,
     loading: false,
+    pendingCreates: [],
+    pendingArchives: [],
   };
 
   it('should return the initial state', function () {
@@ -167,7 +169,7 @@ describe('todosApiSlice reducer', function () {
   });
 
   describe('todosApi/create/fulfilled', function () {
-    it('should add new todo to entries', function () {
+    it('should add new todo to entries and track as pending create', function () {
       const result = todosApiSlice.reducer(initialState, {
         type: 'todosApi/create/fulfilled',
         payload: getStubTodo(),
@@ -176,6 +178,8 @@ describe('todosApiSlice reducer', function () {
         entries: [getStubTodo()],
         initialLoad: true,
         loading: false,
+        pendingCreates: [1],
+        pendingArchives: [],
       });
     });
 
@@ -188,6 +192,8 @@ describe('todosApiSlice reducer', function () {
           ],
           initialLoad: false,
           loading: false,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/create/fulfilled',
@@ -202,6 +208,8 @@ describe('todosApiSlice reducer', function () {
         ],
         initialLoad: false,
         loading: false,
+        pendingCreates: [3],
+        pendingArchives: [],
       });
     });
 
@@ -211,6 +219,8 @@ describe('todosApiSlice reducer', function () {
           entries: [],
           initialLoad: false,
           loading: false,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/create/fulfilled',
@@ -221,6 +231,8 @@ describe('todosApiSlice reducer', function () {
         entries: [],
         initialLoad: false,
         loading: false,
+        pendingCreates: [1],
+        pendingArchives: [],
       });
     });
   });
@@ -234,6 +246,8 @@ describe('todosApiSlice reducer', function () {
         entries: [],
         initialLoad: true,
         loading: true,
+        pendingCreates: [],
+        pendingArchives: [],
       });
     });
   });
@@ -255,6 +269,8 @@ describe('todosApiSlice reducer', function () {
           entries: [],
           initialLoad: true,
           loading: true,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           error: { message: 'test error' },
@@ -265,6 +281,8 @@ describe('todosApiSlice reducer', function () {
         entries: [],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
       });
       expect(console.warn).toHaveBeenCalledWith(
         'Loading Todo failed. test error',
@@ -279,6 +297,8 @@ describe('todosApiSlice reducer', function () {
           entries: [],
           initialLoad: true,
           loading: true,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/list/fulfilled',
@@ -289,6 +309,8 @@ describe('todosApiSlice reducer', function () {
         entries: [],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
       });
     });
 
@@ -298,6 +320,8 @@ describe('todosApiSlice reducer', function () {
           entries: [getStubTodo({ id: 1, description: 'overwritten' })],
           initialLoad: true,
           loading: true,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/list/fulfilled',
@@ -308,6 +332,8 @@ describe('todosApiSlice reducer', function () {
         entries: [getStubTodo({ id: 2 }), getStubTodo({ id: 3 })],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
       });
     });
 
@@ -317,6 +343,8 @@ describe('todosApiSlice reducer', function () {
           entries: [],
           initialLoad: true,
           loading: true,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/list/fulfilled',
@@ -335,6 +363,8 @@ describe('todosApiSlice reducer', function () {
         ],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
       });
     });
 
@@ -344,6 +374,8 @@ describe('todosApiSlice reducer', function () {
           entries: [],
           initialLoad: true,
           loading: true,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/list/fulfilled',
@@ -354,6 +386,8 @@ describe('todosApiSlice reducer', function () {
         entries: [],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
       });
     });
 
@@ -373,6 +407,8 @@ describe('todosApiSlice reducer', function () {
           entries: [localTodo],
           initialLoad: false,
           loading: true,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/list/fulfilled',
@@ -384,6 +420,8 @@ describe('todosApiSlice reducer', function () {
         entries: [localTodo],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
       });
     });
 
@@ -403,6 +441,8 @@ describe('todosApiSlice reducer', function () {
           entries: [localTodo],
           initialLoad: false,
           loading: true,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/list/fulfilled',
@@ -414,6 +454,144 @@ describe('todosApiSlice reducer', function () {
         entries: [freshTodo],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
+      });
+    });
+
+    it('should preserve locally-created todo when stale list response does not include it', function () {
+      const localTodo = getStubTodo({ id: 99, description: 'new local todo' });
+      const serverTodo = getStubTodo({ id: 1, description: 'server todo' });
+      const result = todosApiSlice.reducer(
+        {
+          entries: [serverTodo, localTodo],
+          initialLoad: false,
+          loading: true,
+          pendingCreates: [99],
+          pendingArchives: [],
+        },
+        {
+          type: 'todosApi/list/fulfilled',
+          payload: [serverTodo],
+        },
+      );
+      // Locally-created todo should be preserved
+      expect(result).toEqual({
+        entries: [serverTodo, localTodo],
+        initialLoad: false,
+        loading: false,
+        pendingCreates: [99],
+        pendingArchives: [],
+      });
+    });
+
+    it('should clear pendingCreates when server list includes the todo', function () {
+      const localTodo = getStubTodo({ id: 99, description: 'new local todo' });
+      const result = todosApiSlice.reducer(
+        {
+          entries: [localTodo],
+          initialLoad: false,
+          loading: true,
+          pendingCreates: [99],
+          pendingArchives: [],
+        },
+        {
+          type: 'todosApi/list/fulfilled',
+          payload: [localTodo],
+        },
+      );
+      // pendingCreates should be cleared since server now includes the todo
+      expect(result).toEqual({
+        entries: [localTodo],
+        initialLoad: false,
+        loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
+      });
+    });
+
+    it('should suppress archived todo from stale list response', function () {
+      const staleTodo = getStubTodo({
+        id: 1,
+        description: 'archived todo',
+        archived: false,
+        version: 1,
+      });
+      const result = todosApiSlice.reducer(
+        {
+          entries: [],
+          initialLoad: false,
+          loading: true,
+          pendingCreates: [],
+          pendingArchives: [1],
+        },
+        {
+          type: 'todosApi/list/fulfilled',
+          payload: [staleTodo],
+        },
+      );
+      // Archived todo should not reappear
+      expect(result).toEqual({
+        entries: [],
+        initialLoad: false,
+        loading: false,
+        pendingCreates: [],
+        pendingArchives: [1],
+      });
+    });
+
+    it('should clear pendingArchives when server catches up', function () {
+      const result = todosApiSlice.reducer(
+        {
+          entries: [],
+          initialLoad: false,
+          loading: true,
+          pendingCreates: [],
+          pendingArchives: [1],
+        },
+        {
+          type: 'todosApi/list/fulfilled',
+          // Server no longer includes the todo (it was archived server-side)
+          payload: [],
+        },
+      );
+      // pendingArchives should be cleared since server has caught up
+      expect(result).toEqual({
+        entries: [],
+        initialLoad: false,
+        loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
+      });
+    });
+
+    it('should clear pendingArchives when server shows todo as archived', function () {
+      const archivedTodo = getStubTodo({
+        id: 1,
+        description: 'archived todo',
+        archived: true,
+        version: 2,
+      });
+      const result = todosApiSlice.reducer(
+        {
+          entries: [],
+          initialLoad: false,
+          loading: true,
+          pendingCreates: [],
+          pendingArchives: [1],
+        },
+        {
+          type: 'todosApi/list/fulfilled',
+          payload: [archivedTodo],
+        },
+      );
+      // pendingArchives should be cleared and archived todo filtered out
+      expect(result).toEqual({
+        entries: [],
+        initialLoad: false,
+        loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
       });
     });
   });
@@ -429,6 +607,8 @@ describe('todosApiSlice reducer', function () {
           entries: [getStubTodo({ id: 1 }), getStubTodo({ id: 2 })],
           initialLoad: false,
           loading: false,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/update/fulfilled',
@@ -439,6 +619,8 @@ describe('todosApiSlice reducer', function () {
         entries: [updatedTodo, getStubTodo({ id: 2 })],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
       });
     });
 
@@ -453,6 +635,8 @@ describe('todosApiSlice reducer', function () {
           ],
           initialLoad: false,
           loading: false,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/update/fulfilled',
@@ -467,15 +651,19 @@ describe('todosApiSlice reducer', function () {
         ],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
       });
     });
 
-    it('should filter out archived todos', function () {
+    it('should filter out archived todos and track as pending archive', function () {
       const result = todosApiSlice.reducer(
         {
           entries: [getStubTodo()],
           initialLoad: false,
           loading: false,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/update/fulfilled',
@@ -486,6 +674,8 @@ describe('todosApiSlice reducer', function () {
         entries: [],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [1],
       });
     });
 
@@ -505,6 +695,8 @@ describe('todosApiSlice reducer', function () {
           entries: [localTodo],
           initialLoad: false,
           loading: false,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/update/fulfilled',
@@ -516,6 +708,8 @@ describe('todosApiSlice reducer', function () {
         entries: [localTodo],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
       });
     });
 
@@ -535,6 +729,8 @@ describe('todosApiSlice reducer', function () {
           entries: [localTodo],
           initialLoad: false,
           loading: false,
+          pendingCreates: [],
+          pendingArchives: [],
         },
         {
           type: 'todosApi/update/fulfilled',
@@ -546,6 +742,8 @@ describe('todosApiSlice reducer', function () {
         entries: [freshUpdate],
         initialLoad: false,
         loading: false,
+        pendingCreates: [],
+        pendingArchives: [],
       });
     });
   });
