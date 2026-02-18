@@ -2,7 +2,13 @@ import _ from 'lodash';
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import { selectActiveFilterLabels } from '../selectors';
 import { RootState } from './store';
-import { ApiState, MoveTodoOperation, NewTodo, Todo, TodoPatch } from './types';
+import {
+  MoveTodoOperation,
+  NewTodo,
+  Todo,
+  TodoPatch,
+  TodosApiState,
+} from './types';
 import {
   create,
   getCsrfToken,
@@ -19,10 +25,12 @@ export function getTodosApi(): string {
   return `${getWsRoot()}api/todos/todos/`;
 }
 
-const initialState: ApiState<Todo> = {
+const initialState: TodosApiState = {
   entries: [],
   loading: false,
   initialLoad: true,
+  pendingCreates: [],
+  pendingArchives: [],
 };
 
 export const createTodo = createAsyncThunk<Todo, string, { state: RootState }>(
@@ -78,8 +86,14 @@ export const moveTodo = createAsyncThunk<
  * Filter out archived todos.
  * Also sort completed todos to appear at the bottom.
  */
-function processTodos(todos: Todo[]) {
-  const unarchived = _.filter(todos, (todo) => !todo.archived);
+function processTodos(todos: Todo[], pendingArchives?: Set<number>): Todo[] {
+  if (!pendingArchives) {
+    pendingArchives = new Set();
+  }
+  const unarchived = _.filter(
+    todos,
+    (todo) => !todo.archived && !pendingArchives.has(todo.id),
+  );
   const completed = _.filter(unarchived, (todo) => todo.completed);
   const incomplete = _.filter(unarchived, (todo) => !todo.completed);
   return incomplete.concat(completed);
@@ -121,8 +135,15 @@ function updateTodoFromResponse(entries: Todo[], updatedTodo: Todo) {
   return entries;
 }
 
-function handleListResponse(entries: Todo[], updatedTodos: Todo[]) {
+function handleListResponse(
+  entries: Todo[],
+  updatedTodos: Todo[],
+  pendingCreates: number[],
+  pendingArchives: number[],
+) {
   const entryMap = _.keyBy(entries, (entry: Todo) => entry.id);
+  const serverIds = new Set(updatedTodos.map((t) => t.id));
+
   for (const [index, updatedTodo] of updatedTodos.entries()) {
     const existingEntry = entryMap[updatedTodo.id];
     if (existingEntry) {
@@ -131,7 +152,42 @@ function handleListResponse(entries: Todo[], updatedTodos: Todo[]) {
     }
   }
 
-  return processTodos(updatedTodos);
+  // Preserve locally-created todos not yet in the server response
+  for (const pendingId of pendingCreates) {
+    if (!serverIds.has(pendingId)) {
+      const pendingEntry = entryMap[pendingId];
+      if (pendingEntry) {
+        updatedTodos.push(pendingEntry);
+      }
+    }
+  }
+
+  return processTodos(updatedTodos, new Set(pendingArchives));
+}
+
+/**
+ * Remove IDs from pendingCreates that now appear in the server response,
+ * and remove IDs from pendingArchives that the server has caught up with
+ * (either absent from response or present with archived: true).
+ */
+function cleanupPendingState(
+  pendingCreates: number[],
+  pendingArchives: number[],
+  serverTodos: Todo[],
+) {
+  const serverMap = _.keyBy(serverTodos, (t) => t.id);
+
+  const newPendingCreates = pendingCreates.filter((id) => !serverMap[id]);
+  const newPendingArchives = pendingArchives.filter((id) => {
+    const serverTodo = serverMap[id];
+    // Keep pending if server still shows it as non-archived
+    return serverTodo && !serverTodo.archived;
+  });
+
+  return {
+    pendingCreates: newPendingCreates,
+    pendingArchives: newPendingArchives,
+  };
 }
 
 export const todosApiSlice = createSlice({
@@ -144,6 +200,7 @@ export const todosApiSlice = createSlice({
       .addCase(createTodo.fulfilled, (state, action) => {
         state.entries.push(action.payload);
         state.entries = processTodos(state.entries);
+        state.pendingCreates.push(action.payload.id);
       })
       .addCase(createTodo.rejected, (_, action) => {
         console.warn(`Creating Todo failed. ${action.error.message}`);
@@ -155,10 +212,20 @@ export const todosApiSlice = createSlice({
       .addCase(listTodos.fulfilled, (state, action) => {
         state.initialLoad = false;
         state.loading = false;
+        const serverTodos = Array.from(action.payload);
         state.entries = handleListResponse(
           state.entries,
-          Array.from(action.payload),
+          serverTodos,
+          state.pendingCreates,
+          state.pendingArchives,
         );
+        const cleaned = cleanupPendingState(
+          state.pendingCreates,
+          state.pendingArchives,
+          action.payload,
+        );
+        state.pendingCreates = cleaned.pendingCreates;
+        state.pendingArchives = cleaned.pendingArchives;
       })
       .addCase(listTodos.rejected, (state, action) => {
         state.initialLoad = false;
@@ -168,6 +235,9 @@ export const todosApiSlice = createSlice({
       // update todo
       .addCase(updateTodo.fulfilled, (state, action) => {
         state.entries = updateTodoFromResponse(state.entries, action.payload);
+        if (action.payload.archived) {
+          state.pendingArchives.push(action.payload.id);
+        }
       })
       .addCase(updateTodo.rejected, (_, action) => {
         console.warn(`Updating Todo failed. ${action.error.message}`);
