@@ -2,7 +2,13 @@ import _ from 'lodash';
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import { selectActiveFilterLabels } from '../selectors';
 import { RootState } from './store';
-import { ApiState, MoveTodoOperation, NewTodo, Todo, TodoPatch } from './types';
+import {
+  MoveTodoOperation,
+  NewTodo,
+  Todo,
+  TodoPatch,
+  TodosApiState,
+} from './types';
 import {
   create,
   getCsrfToken,
@@ -19,10 +25,12 @@ export function getTodosApi(): string {
   return `${getWsRoot()}api/todos/todos/`;
 }
 
-const initialState: ApiState<Todo> = {
+const initialState: TodosApiState = {
   entries: [],
   loading: false,
   initialLoad: true,
+  pendingCreates: [],
+  pendingArchives: [],
 };
 
 export const createTodo = createAsyncThunk<Todo, string, { state: RootState }>(
