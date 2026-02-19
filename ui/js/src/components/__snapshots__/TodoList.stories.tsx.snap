@@ -264,21 +264,17 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
       </div>
       <div style="display: contents;">
         <div class="css-g5y9jx"
-             id="0"
              style="flex: 1 1 0%; min-height: 20px; user-select: none; touch-action: none;"
         >
           <div class="css-g5y9jx r-150rngu r-eqz5dr r-16y2uox r-1wbh5a2 r-11yh6sk r-1rnoaur r-agouwx"
-               id="1"
                data-testid="todo-list"
                style="user-select: none; touch-action: auto;"
           >
             <div class="css-g5y9jx">
               <div class="css-g5y9jx r-105ug2t"
-                   id="2"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="3"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -540,11 +536,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                 </div>
               </div>
               <div class="css-g5y9jx r-105ug2t"
-                   id="4"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="5"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -806,11 +800,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                 </div>
               </div>
               <div class="css-g5y9jx r-105ug2t"
-                   id="6"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="7"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -1065,11 +1057,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                 </div>
               </div>
               <div class="css-g5y9jx r-105ug2t"
-                   id="8"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="9"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -1331,11 +1321,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                 </div>
               </div>
               <div class="css-g5y9jx r-105ug2t"
-                   id="10"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="11"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -1597,11 +1585,9 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                 </div>
               </div>
               <div class="css-g5y9jx r-105ug2t"
-                   id="12"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="13"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -2135,21 +2121,17 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
       </div>
       <div style="display: contents;">
         <div class="css-g5y9jx"
-             id="14"
              style="flex: 1 1 0%; min-height: 20px; user-select: none; touch-action: none;"
         >
           <div class="css-g5y9jx r-150rngu r-eqz5dr r-16y2uox r-1wbh5a2 r-11yh6sk r-1rnoaur r-agouwx"
-               id="15"
                data-testid="todo-list"
                style="user-select: none; touch-action: auto;"
           >
             <div class="css-g5y9jx">
               <div class="css-g5y9jx r-105ug2t"
-                   id="16"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="17"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -2411,11 +2393,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                 </div>
               </div>
               <div class="css-g5y9jx r-105ug2t"
-                   id="18"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="19"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -2677,11 +2657,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                 </div>
               </div>
               <div class="css-g5y9jx r-105ug2t"
-                   id="20"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="21"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-qkc0q7 r-1euzoj3 r-17gur6a r-1loqt21 r-105ug2t"
@@ -2943,11 +2921,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                 </div>
               </div>
               <div class="css-g5y9jx r-105ug2t"
-                   id="22"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="23"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -3209,11 +3185,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                 </div>
               </div>
               <div class="css-g5y9jx r-105ug2t"
-                   id="24"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="25"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -3475,11 +3449,9 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                 </div>
               </div>
               <div class="css-g5y9jx r-105ug2t"
-                   id="26"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="27"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
@@ -4400,21 +4372,17 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
       </div>
       <div style="display: contents;">
         <div class="css-g5y9jx"
-             id="28"
              style="flex: 1 1 0%; min-height: 20px; user-select: none; touch-action: none;"
         >
           <div class="css-g5y9jx r-150rngu r-eqz5dr r-16y2uox r-1wbh5a2 r-11yh6sk r-1rnoaur r-agouwx"
-               id="29"
                data-testid="todo-list"
                style="user-select: none; touch-action: auto;"
           >
             <div class="css-g5y9jx">
               <div class="css-g5y9jx r-105ug2t"
-                   id="30"
                    style="z-index: 0; flex-direction: column; transform: translateY(0px);"
               >
                 <div class="css-g5y9jx"
-                     id="31"
                      style="opacity: 1;"
                 >
                   <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
