@@ -43,7 +43,7 @@ def edit_todo(page, todo_item, new_description, submit=True):
 
 def find_todo(page, description, partial=False):
     todos = find_todos(page, description, partial)
-    expect(page.locator(todos)).to_have_count(1, timeout=10000)
+    expect(todos).to_have_count(1, timeout=10000)
     return todos.first
 
 
