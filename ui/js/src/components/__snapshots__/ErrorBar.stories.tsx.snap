@@ -9,7 +9,7 @@ exports[`Error Bar DefaultErrorBar smoke-test 1`] = `
       >
         <div aria-live="polite"
              class="css-g5y9jx r-18u37iz r-1wtj0ep r-hwh8t1 r-1pl7oy7 r-12vffkv"
-             data-testid="surface"
+             data-testid="message-bar"
              style="box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px; background-color: rgb(49, 48, 51); border-radius: 4px; opacity: 1; transform: scale(1);"
         >
           <div dir="auto"
@@ -43,7 +43,7 @@ exports[`Error Bar PermanentErrorBar smoke-test 1`] = `
       >
         <div aria-live="polite"
              class="css-g5y9jx r-18u37iz r-1wtj0ep r-hwh8t1 r-1pl7oy7 r-12vffkv"
-             data-testid="surface"
+             data-testid="message-bar"
              style="box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px; background-color: rgb(49, 48, 51); border-radius: 4px; opacity: 1; transform: scale(1);"
         >
           <div dir="auto"

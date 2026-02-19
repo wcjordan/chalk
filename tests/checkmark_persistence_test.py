@@ -1,3 +1,4 @@
+from playwright.sync_api import expect
 import pytest
 
 from helpers.todo_helpers import (
@@ -40,9 +41,13 @@ def test_todos_checkmark_persistence(page, todo_prefix):
     # Wait for and verify that checkbox appears checked
     show_completed_btn = page.locator('[data-testid="show-completed-todos"]')
     show_completed_btn.click()
+
+    # Wait for todo to be marked as completed and message bar to disappear
+    page.locator('[data-testid="message-bar"]').wait_for()
+    page.locator('[data-testid="message-bar"]').wait_for(state="detached")
+
     checked_selector = (
-        f'div:has([data-testid="complete-todo"]):has-text("{CHECKED_ICON_TEXT}") '
-        f'+ div:has-text("{todo1_description}")'
+        f'[data-testid="card"]:has-text("{CHECKED_ICON_TEXT}{todo1_description}")'
     )
     page.locator(checked_selector).wait_for()
 
