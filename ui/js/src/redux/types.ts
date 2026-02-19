@@ -48,6 +48,11 @@ export interface ApiState<T> {
   loading: boolean;
 }
 
+export interface TodosApiState extends ApiState<Todo> {
+  pendingCreates: number[];
+  pendingArchives: number[];
+}
+
 export interface FilterState {
   [index: string]: FILTER_STATUS;
 }
