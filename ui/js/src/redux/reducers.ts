@@ -40,7 +40,7 @@ export const updateTodo =
     const promises: any[] = [
       dispatch(
         notificationsSlice.actions.addNotification(
-          `Saving Todo: ${todoPatch.description}`,
+          `Saving Todo: ${todoPatch.description ?? todo?.description}`,
         ),
       ),
       dispatch(workspaceSlice.actions.setEditTodoId(null)),
