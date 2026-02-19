@@ -46,7 +46,9 @@ def test_todos_checkmark_persistence(page, todo_prefix):
     page.locator('[data-testid="message-bar"]').wait_for()
     page.locator('[data-testid="message-bar"]').wait_for(state="detached")
 
-    checked_selector = f'[data-testid="card"]:has-text("{CHECKED_ICON_TEXT}{todo1_description}")'
+    checked_selector = (
+        f'[data-testid="card"]:has-text("{CHECKED_ICON_TEXT}{todo1_description}")'
+    )
     page.locator(checked_selector).wait_for()
 
     first_todo = find_todo(page, todo1_description)

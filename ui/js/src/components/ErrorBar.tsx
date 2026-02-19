@@ -26,6 +26,7 @@ const ErrorBar: React.FC<Props> = function (props: Props) {
           onSurface: '#FAA0A0',
         },
       }}
+      testID="message-bar"
       visible={visible}
     >
       {text}
