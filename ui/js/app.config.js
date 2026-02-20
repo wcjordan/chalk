@@ -43,7 +43,7 @@ export default {
   plugins: [
     '@react-native-google-signin/google-signin',
     [
-      '@sentry/react-native/expo',
+      '@sentry/react-native',
       {
         organization: 'flipperkid',
         project: 'chalk-react-native',

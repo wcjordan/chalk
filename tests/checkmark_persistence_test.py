@@ -1,4 +1,3 @@
-from playwright.sync_api import expect
 import pytest
 
 from helpers.todo_helpers import (
