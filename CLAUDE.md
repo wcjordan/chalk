@@ -62,7 +62,7 @@ Favor small testable steps, externalized state, and explicit verification.
 ### Transient working files (authoritative)
 Store these in: `<PROJECT_ROOT>/docs/in_progress/`
 
-Use native plan mode (`EnterPlanMode`) for planning — no PLAN.md or VERIFY.md files needed.
+Use native plan mode (`EnterPlanMode`) for planning.
 
 1) `STATUS.md` — current state (≤10 bullets)
 - What's done / next
@@ -80,7 +80,7 @@ Delete these files when all the work is complete.
 
 For any non-trivial changes, use `EnterPlanMode` to break down the problem into subtasks.
 The plan should be concise and actionable (5 stages max).
-Each stage should include an instruction to commit the work after that stage is complete.
+Each stage should have explicit testable outcomes and specific test cases that prove correctness, plus an instruction to commit after completion.
 
 Plans are working documents. Revise as new information is discovered.
 Update `STATUS.md` as you progress and commit progress.
