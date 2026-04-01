@@ -45,10 +45,11 @@ Favor small testable steps, externalized state, and explicit verification.
 - Small diffs; avoid rewrites.
 - Use repo code + test output as truth.
 - Tests and linting must pass after each implementation step.
-- Don’t expand scope silently.
+- Don't expand scope silently.
 - Be pragmatic to keep changes small.  Adapt to the project's current state.
 - Externalize state (plans, decisions, work in progress) into transient files (see below).
 - Long chat context can degrade quality. Reset context when appropriate (see below).
+- Use `TaskCreate` / `TaskUpdate` to track in-conversation steps and mark progress.
 
 ### Simplicity Means
 
@@ -61,20 +62,14 @@ Favor small testable steps, externalized state, and explicit verification.
 ### Transient working files (authoritative)
 Store these in: `<PROJECT_ROOT>/docs/in_progress/`
 
-1) `PLAN.md` — required for non-trivial work
-- For each stage: goal, constraints/non-goals, steps, exit criteria
+Use native plan mode (`EnterPlanMode`) for planning.
 
-2) `VERIFY.md` — how to prove correctness
-- Exact commands (tests/lint/build)
-- Env assumptions
-- What success/failure looks like
-
-3) `STATUS.md` — current state (≤10 bullets)
-- What’s done / next
+1) `STATUS.md` — current state (≤10 bullets)
+- What's done / next
 - Current failures/blockers
 - Key decisions
 
-4) `NEED_HELP.md` — only when stuck (see rule below)
+2) `NEED_HELP.md` — only when stuck (see rule below)
 
 Commit changes to `docs/in_progress` after planning is complete.
 Delete these files when all the work is complete.
@@ -83,18 +78,30 @@ Delete these files when all the work is complete.
 
 ## Planning
 
-For any non-trivial changes, break down the problem to subtasks and create a plan in `PLAN.md`.
+For any non-trivial changes, use `EnterPlanMode` to break down the problem into subtasks.
 The plan should be concise and actionable (5 stages max).
-Add testable outcomes and specific test cases in `VERIFY.md` and status of subtasks to `STATUS.md`
-Each stage in `PLAN.md` should include an instruction to commit the work after that stage is complete.
+Each stage should have explicit testable outcomes and specific test cases that prove correctness, plus an instruction to commit after completion.
 
 Plans are working documents. Revise as new information is discovered.
-Update the status of each stage as you progress and commit progress.
-Remove transient files when all stages are done.
+Update `STATUS.md` as you progress and commit progress.
 
 When finalizing planning, ask me clarifying questions about anything ambiguous.
 Ask me questions one at a time.  Questions should clarify the plan and build on my previous answers.
 Revise the plan based on my answers.  Clarify all ambiguity before starting on the implementation steps.
+
+---
+
+## Git Worktrees
+
+Use `EnterWorktree` for all non-trivial work so changes are isolated until ready to merge.
+When spawning subagents, pass `isolation: "worktree"` so each agent gets its own copy.
+
+The `WorktreeCreate` hook (`.claude/hooks/setup-new-worktree.sh`) runs automatically on
+`EnterWorktree` and handles:
+- Copying `.env` (gitignored)
+- Running `test_gen/make init`
+- Running `yarn install --immutable` in `ui/js/`
+- Copying `.claude/settings.local.json` (gitignored)
 
 ---
 
@@ -103,7 +110,7 @@ Revise the plan based on my answers.  Clarify all ambiguity before starting on t
 1. Follow existing patterns (find 2–3 similar examples).
 2. Add new tests first when feasible; otherwise add coverage before finishing.
 3. Implement minimal change.
-4. Verify using `VERIFY.md` 
+4. Run `make test` to verify.
 5. Update `STATUS.md` with command + result.
 6. Cleanup once tests are passing.
 7. Commit with clear message describing the change.
@@ -124,14 +131,14 @@ Maximum **3 attempts** per issue. If still blocked:
 ## Context resets
 
 Reset / restart from files at boundaries:
-- After creating or materially revising `PLAN.md`
+- After creating or materially revising the plan
 - After a vertical slice / stage completion
 - After thrash (repeated failures)
 - Before final review/polish
 
 After reset, treat only these as authoritative:
 - Repo contents
-- `PLAN.md`, `VERIFY.md`, `STATUS.md`, `NEED_HELP.md`
+- Native plan (plan mode), `STATUS.md`, `NEED_HELP.md`
 - Current diffs + latest verification output
 
 ---
@@ -139,8 +146,8 @@ After reset, treat only these as authoritative:
 ## Quality gates
 
 Definition of Done:
-- Tests + lint pass (per `VERIFY.md`)
-- Implementation matches `PLAN.md` exit criteria
+- Tests + lint pass (`make test`)
+- Implementation matches plan exit criteria
 - No new TODOs without adding a plan stage to address them
 
 NEVER:
@@ -150,7 +157,7 @@ NEVER:
 
 ALWAYS:
 - Commit incrementally
-- Update `PLAN.md` / `STATUS.md` as you go
+- Update the plan / `STATUS.md` as you go
 - Prefer boring, readable code
 
 If verification fails:
@@ -168,7 +175,7 @@ If issues are found:
 
 - Do not silently change behavior without updating the plan.
 - Do not expand scope without noting it explicitly.
-- Avoid speculative refactors unless justified in `PLAN.md`.
+- Avoid speculative refactors unless justified in the plan.
 - Prefer evidence (tests, code, output) over narrative explanation.
 
 ### Architecture Principles
