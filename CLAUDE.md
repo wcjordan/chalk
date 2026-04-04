@@ -93,8 +93,9 @@ Revise the plan based on my answers.  Clarify all ambiguity before starting on t
 
 ## Git Worktrees
 
-Use `EnterWorktree` for all non-trivial work so changes are isolated until ready to merge.
-When spawning subagents, pass `isolation: "worktree"` so each agent gets its own copy.
+**Use the `EnterWorktree` tool for all non-trivial work.** Each task should run in an isolated git worktree to keep changes contained and reviewable. Worktrees are created at `.claude/worktrees/<name>`.
+
+When spawning subagents via the Agent tool, pass `isolation: "worktree"` to give each subagent its own isolated repo copy. The worktree is automatically cleaned up if the subagent makes no changes.
 
 The `WorktreeCreate` hook (`.claude/hooks/setup-new-worktree.sh`) runs automatically on
 `EnterWorktree` and handles:
