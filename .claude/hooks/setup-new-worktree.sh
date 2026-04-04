@@ -3,12 +3,28 @@
 set -euo pipefail
 
 INPUT=$(cat)
-WORKTREE=$(echo "$INPUT" | python3 -c "import json,sys; print(json.load(sys.stdin)['worktree_path'])")
+# The WorktreeCreate payload has no path field; derive the path from the worktree name.
+# Worktrees are always created at $CLAUDE_PROJECT_DIR/.claude/worktrees/<name>.
+NAME=$(echo "$INPUT" | python3 -c "import json,sys; print(json.load(sys.stdin)['name'])")
 
-if [ -z "$WORKTREE" ]; then
-  echo "setup-new-worktree: could not read worktree_path from hook input" >&2
+if [ -z "$NAME" ]; then
+  echo "setup-new-worktree: could not read name from hook input" >&2
   exit 1
 fi
+
+WORKTREE="${CLAUDE_PROJECT_DIR}/.claude/worktrees/${NAME}"
+
+if [ -d "$WORKTREE" ]; then
+  echo "setup-new-worktree: worktree already exists at $WORKTREE" >&2
+  exit 1
+fi
+
+# Remove the worktree dir on failure so we don't leave partial state.
+trap 'rm -rf "$WORKTREE"' ERR
+
+# Create the git worktree on a new branch.
+mkdir -p "${CLAUDE_PROJECT_DIR}/.claude/worktrees"
+git -C "$CLAUDE_PROJECT_DIR" worktree add "$WORKTREE" -b "$NAME" HEAD >&2
 
 # Copy gitignored .env so the worktree can run make targets
 if [ -f "${CLAUDE_PROJECT_DIR}/.env" ]; then
@@ -34,3 +50,6 @@ if [ -f "${CLAUDE_PROJECT_DIR}/.claude/settings.local.json" ]; then
   cp "${CLAUDE_PROJECT_DIR}/.claude/settings.local.json" "${WORKTREE}/.claude/settings.local.json"
   echo "Copied settings.local.json to ${WORKTREE}/.claude/"
 fi
+
+# Output the worktree path on stdout — the tool uses this as the handoff signal.
+echo "$WORKTREE"
