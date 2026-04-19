@@ -3,7 +3,7 @@
 # These are used for development or linting
 black==26.3.1
 flake8==7.3.0
-pylint==4.0.4
+pylint==4.0.5
 pytest==9.0.3
-pytest-cov==7.0.0
+pytest-cov==7.1.0
 syrupy==5.1.0
