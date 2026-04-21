@@ -582,9 +582,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                                          role="img"
                                          tabindex="-1"
                                          class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                                         style="color: rgb(73, 69, 79); font-size: 24px;"
+                                         style="font-size: 24px; color: rgb(73, 69, 79); transform: scaleX(1); line-height: 24px; font-family: material-community; font-weight: normal; font-style: normal;"
                                     >
-                                      □
+                                      󰄱
                                     </div>
                                     <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
                                       <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
@@ -1021,9 +1021,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                                          role="img"
                                          tabindex="-1"
                                          class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                                         style="color: rgb(73, 69, 79); font-size: 24px;"
+                                         style="font-size: 24px; color: rgb(73, 69, 79); transform: scaleX(1); line-height: 24px; font-family: material-community; font-weight: normal; font-style: normal;"
                                     >
-                                      □
+                                      󰄱
                                     </div>
                                     <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
                                       <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
@@ -1471,9 +1471,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1504,9 +1504,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1537,9 +1537,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1570,9 +1570,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1603,9 +1603,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1636,9 +1636,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1669,9 +1669,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1702,9 +1702,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1735,9 +1735,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1768,9 +1768,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1801,9 +1801,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1834,9 +1834,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -1867,9 +1867,9 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
                            role="img"
                            tabindex="-1"
                            class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                           style="color: rgb(29, 25, 43); font-size: 18px;"
+                           style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
                       >
-                        □
+                        󰄬
                       </div>
                     </div>
                     <div dir="auto"
@@ -2201,9 +2201,9 @@ exports[`App Layout ListTodosLayout smoke-test 1`] = `
                                          role="img"
                                          tabindex="-1"
                                          class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                                         style="color: rgb(73, 69, 79); font-size: 24px;"
+                                         style="font-size: 24px; color: rgb(73, 69, 79); transform: scaleX(1); line-height: 24px; font-family: material-community; font-weight: normal; font-style: normal;"
                                     >
-                                      □
+                                      󰄱
                                     </div>
                                     <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
                                       <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
@@ -2640,9 +2640,9 @@ exports[`App Layout ListTodosLayout smoke-test 1`] = `
                                          role="img"
                                          tabindex="-1"
                                          class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                                         style="color: rgb(73, 69, 79); font-size: 24px;"
+                                         style="font-size: 24px; color: rgb(73, 69, 79); transform: scaleX(1); line-height: 24px; font-family: material-community; font-weight: normal; font-style: normal;"
                                     >
-                                      □
+                                      󰄱
                                     </div>
                                     <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
                                       <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
@@ -3363,9 +3363,9 @@ exports[`App Layout NotificationLayout smoke-test 1`] = `
                                          role="img"
                                          tabindex="-1"
                                          class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                                         style="color: rgb(73, 69, 79); font-size: 24px;"
+                                         style="font-size: 24px; color: rgb(73, 69, 79); transform: scaleX(1); line-height: 24px; font-family: material-community; font-weight: normal; font-style: normal;"
                                     >
-                                      □
+                                      󰄱
                                     </div>
                                     <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
                                       <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
@@ -3802,9 +3802,9 @@ exports[`App Layout NotificationLayout smoke-test 1`] = `
                                          role="img"
                                          tabindex="-1"
                                          class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                                         style="color: rgb(73, 69, 79); font-size: 24px;"
+                                         style="font-size: 24px; color: rgb(73, 69, 79); transform: scaleX(1); line-height: 24px; font-family: material-community; font-weight: normal; font-style: normal;"
                                     >
-                                      □
+                                      󰄱
                                     </div>
                                     <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
                                       <div class="css-g5y9jx r-1pexk7n r-1mcorv5"

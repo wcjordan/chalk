@@ -3,6 +3,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   reporters: ['default', 'jest-junit'],
   setupFiles: [
+    './src/jestSetup.js',
     './node_modules/@react-native-google-signin/google-signin/jest/build/jest/setup.js',
   ],
   testPathIgnorePatterns: [

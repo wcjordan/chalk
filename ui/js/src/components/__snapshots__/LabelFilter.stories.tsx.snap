@@ -25,9 +25,9 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
                    role="img"
                    tabindex="-1"
                    class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                   style="color: rgb(29, 25, 43); font-size: 18px;"
+                   style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
               >
-                □
+                󰄬
               </div>
             </div>
             <div dir="auto"
@@ -104,9 +104,9 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
                    role="img"
                    tabindex="-1"
                    class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                   style="color: rgb(29, 25, 43); font-size: 18px;"
+                   style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
               >
-                □
+                󰄬
               </div>
             </div>
             <div dir="auto"
@@ -137,9 +137,9 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
                    role="img"
                    tabindex="-1"
                    class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                   style="color: rgb(29, 25, 43); font-size: 18px;"
+                   style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
               >
-                □
+                󰄬
               </div>
             </div>
             <div dir="auto"
@@ -193,9 +193,9 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
                    role="img"
                    tabindex="-1"
                    class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                   style="color: rgb(29, 25, 43); font-size: 18px;"
+                   style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
               >
-                □
+                󰄬
               </div>
             </div>
             <div dir="auto"
@@ -295,9 +295,9 @@ exports[`Label Filter DefaultLabelFilter smoke-test 1`] = `
                    role="img"
                    tabindex="-1"
                    class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                   style="color: rgb(29, 25, 43); font-size: 18px;"
+                   style="font-size: 18px; color: rgb(29, 25, 43); transform: scaleX(1); line-height: 18px; font-family: material-community; font-weight: normal; font-style: normal;"
               >
-                □
+                󰄬
               </div>
             </div>
             <div dir="auto"
