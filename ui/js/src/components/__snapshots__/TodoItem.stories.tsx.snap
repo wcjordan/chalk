@@ -34,9 +34,9 @@ exports[`Todo Item CheckedTodo smoke-test 1`] = `
                          role="img"
                          tabindex="-1"
                          class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                         style="color: rgb(103, 80, 164); font-size: 24px;"
+                         style="font-size: 24px; color: rgb(103, 80, 164); transform: scaleX(1); line-height: 24px; font-family: material-community; font-weight: normal; font-style: normal;"
                     >
-                      □
+                      󰄲
                     </div>
                     <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
                       <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
@@ -222,9 +222,9 @@ exports[`Todo Item DefaultTodo smoke-test 1`] = `
                          role="img"
                          tabindex="-1"
                          class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                         style="color: rgb(73, 69, 79); font-size: 24px;"
+                         style="font-size: 24px; color: rgb(73, 69, 79); transform: scaleX(1); line-height: 24px; font-family: material-community; font-weight: normal; font-style: normal;"
                     >
-                      □
+                      󰄱
                     </div>
                     <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
                       <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
@@ -410,9 +410,9 @@ exports[`Todo Item EditingTodo smoke-test 1`] = `
                          role="img"
                          tabindex="-1"
                          class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                         style="color: rgb(73, 69, 79); font-size: 24px;"
+                         style="font-size: 24px; color: rgb(73, 69, 79); transform: scaleX(1); line-height: 24px; font-family: material-community; font-weight: normal; font-style: normal;"
                     >
-                      □
+                      󰄱
                     </div>
                     <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
                       <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
@@ -591,9 +591,9 @@ exports[`Todo Item NoLabelsTodo smoke-test 1`] = `
                          role="img"
                          tabindex="-1"
                          class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                         style="color: rgb(73, 69, 79); font-size: 24px;"
+                         style="font-size: 24px; color: rgb(73, 69, 79); transform: scaleX(1); line-height: 24px; font-family: material-community; font-weight: normal; font-style: normal;"
                     >
-                      □
+                      󰄱
                     </div>
                     <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
                       <div class="css-g5y9jx r-1pexk7n r-1mcorv5"
@@ -700,9 +700,9 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
                          role="img"
                          tabindex="-1"
                          class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
-                         style="color: rgb(73, 69, 79); font-size: 24px;"
+                         style="font-size: 24px; color: rgb(73, 69, 79); transform: scaleX(1); line-height: 24px; font-family: material-community; font-weight: normal; font-style: normal;"
                     >
-                      □
+                      󰄱
                     </div>
                     <div class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-1awozwy r-1777fci">
                       <div class="css-g5y9jx r-1pexk7n r-1mcorv5"

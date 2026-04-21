@@ -24,7 +24,7 @@ def get_authorization_url(host):
     Create an authorization URL to redirect a user to for OAuth login
     """
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE, scopes=SCOPES)
+        CLIENT_SECRETS_FILE, scopes=SCOPES, autogenerate_code_verifier=False)
     flow.redirect_uri = _get_redirect_uri(host)
 
     # NOTE using offline access to get a refresh token
@@ -112,7 +112,8 @@ def _get_email_from_session(session):
 
 def _get_authorized_session(token, state, host):
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE, scopes=SCOPES, state=state)
+        CLIENT_SECRETS_FILE, scopes=SCOPES, state=state,
+        autogenerate_code_verifier=False)
     flow.redirect_uri = _get_redirect_uri(host)
 
     flow.fetch_token(code=token)
