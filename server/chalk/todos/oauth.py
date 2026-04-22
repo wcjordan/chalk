@@ -21,18 +21,20 @@ logger = logging.getLogger(__name__)
 
 def get_authorization_url(host):
     """
-    Create an authorization URL to redirect a user to for OAuth login
+    Create an authorization URL to redirect a user to for OAuth login.
+    Returns (url, state, code_verifier) — the caller must persist code_verifier
+    keyed by state so it can be supplied to fetch_token in the callback.
     """
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE, scopes=SCOPES, autogenerate_code_verifier=False)
+        CLIENT_SECRETS_FILE, scopes=SCOPES)
     flow.redirect_uri = _get_redirect_uri(host)
 
     # NOTE using offline access to get a refresh token
     # is needed for integration test auth workflows.
     # It's printed below in _get_authorized_session
-    # authorization_url, _ = flow.authorization_url(access_type='offline')
-    authorization_url, _ = flow.authorization_url()
-    return authorization_url
+    # authorization_url, state = flow.authorization_url(access_type='offline')
+    authorization_url, state = flow.authorization_url()
+    return authorization_url, state, flow.code_verifier
 
 
 class OAuthBackend(BaseBackend):
@@ -47,7 +49,8 @@ class OAuthBackend(BaseBackend):
 
         if 'state' in request.GET:
             session = _get_authorized_session(token, request.GET['state'],
-                                              request.get_host())
+                                              request.get_host(),
+                                              kwargs.get('pkce_verifier'))
         elif 'ci_refresh' in request.GET:
             client_secrets_obj = _get_clients_secret_obj()
             session = AuthorizedSession(
@@ -110,10 +113,10 @@ def _get_email_from_session(session):
     return profile_info['email']
 
 
-def _get_authorized_session(token, state, host):
+def _get_authorized_session(token, state, host, code_verifier=None):
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         CLIENT_SECRETS_FILE, scopes=SCOPES, state=state,
-        autogenerate_code_verifier=False)
+        autogenerate_code_verifier=False, code_verifier=code_verifier)
     flow.redirect_uri = _get_redirect_uri(host)
 
     flow.fetch_token(code=token)

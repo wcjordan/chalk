@@ -31,7 +31,9 @@ def auth(request):
     """
     API endpoint that redirects a user to Google for login
     """
-    return redirect(get_authorization_url(request.get_host()))
+    url, state, code_verifier = get_authorization_url(request.get_host())
+    request.session[f'pkce_{state}'] = code_verifier
+    return redirect(url)
 
 
 @api_view(['GET'])
@@ -39,7 +41,12 @@ def auth_callback(request):
     """
     API endpoint that handles the Google OAuth callback to log the user in
     """
-    user = authenticate(request, token=request.GET['code'])
+    state = request.GET.get('state')
+    pkce_verifier = None
+    if state:
+        pkce_verifier = request.session.pop(f'pkce_{state}', None)
+    user = authenticate(request, token=request.GET['code'],
+                        pkce_verifier=pkce_verifier)
     if user is not None:
         login(request, user)
 
