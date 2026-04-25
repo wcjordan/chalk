@@ -19,7 +19,7 @@ run-test-container:
 		$(DOCKER_ARGS) \
 		-v $(CURDIR)/Makefile:/workspace/Makefile \
 		-v $(CURDIR)/js/__mocks__:/workspace/js/__mocks__ \
-		-v $(CURDIR)/js/.eslintrc:/workspace/js/.eslintrc \
+		-v $(CURDIR)/js/eslint.config.mjs:/workspace/js/eslint.config.mjs \
 		-v $(CURDIR)/js/.storybook:/workspace/js/.storybook \
 		-v $(CURDIR)/js/assets:/workspace/js/assets \
 		-v $(CURDIR)/js/babel.config.js:/workspace/js/babel.config.js \
@@ -42,7 +42,7 @@ test:
 .PHONY: test-inner
 test-inner:
 	# Lint
-	cd js; yarn eslint --max-warnings=0 --ext='js,jsx,ts,tsx' .
+	cd js; yarn eslint --max-warnings=0 .
 	# Typecheck
 	cd js; yarn tsc
 	# Unit tests
