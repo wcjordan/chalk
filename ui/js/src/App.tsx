@@ -31,12 +31,7 @@ const App: React.FC = function () {
     (state) => state.notifications.notificationQueue,
   );
 
-  let content: React.JSX.Element | null = null;
-  if (!loggedIn) {
-    content = <Login />;
-  } else {
-    content = <TodoList />;
-  }
+  const content = !loggedIn ? <Login /> : <TodoList />;
 
   const notificationText =
     notificationQueue.length > 0 ? notificationQueue[0] : null;

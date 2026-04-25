@@ -1,7 +1,7 @@
 import type { TestRunnerConfig } from '@storybook/test-runner';
 
 const config: TestRunnerConfig = {
-  async postVisit(page, context) {
+  async postVisit(page, _context) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const elementLocator = await page.locator('#storybook-root');
     const innerHTML = await elementLocator.innerHTML();
