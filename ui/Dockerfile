@@ -23,7 +23,7 @@ RUN corepack enable && yarn install --immutable && yarn cache clean
 
 # Multistage - test container
 FROM base AS js_test_env
-RUN npx playwright install && npx playwright install-deps
+RUN npx playwright install --with-deps
 
 # Build storybook for testing
 COPY js/eslint.config.mjs js/babel.config.js js/jest.config.js js/tsconfig.json js/App.tsx ./

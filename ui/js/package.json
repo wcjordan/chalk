@@ -48,7 +48,7 @@
     "@storybook/addon-links": "~9.1.20",
     "@storybook/builder-vite": "^9.1.20",
     "@storybook/react-native-web-vite": "^9.1.20",
-    "@storybook/test-runner": "^0.23.0",
+    "@storybook/test-runner": "^0.24.4",
     "@storybook/testing-library": "^0.2.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
