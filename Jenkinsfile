@@ -1,3 +1,4 @@
+@Library('jenkins-shared-library') _
 def GAR_HOST = 'us-east4-docker.pkg.dev'
 def GAR_REPO = "${GAR_HOST}/${env.GCP_PROJECT}/default-gar"
 
@@ -236,7 +237,7 @@ pipeline {
                         spec:
                           containers:
                           - name: jenkins-helm
-                            image: ${GAR_REPO}/gcloud-helm:latest
+                            image: ${GAR_REPO}/jenkins-helm:latest
                             command:
                             - cat
                             tty: true
@@ -386,7 +387,7 @@ pipeline {
                         spec:
                           containers:
                           - name: jenkins-helm
-                            image: ${GAR_REPO}/gcloud-helm:latest
+                            image: ${GAR_REPO}/jenkins-helm:latest
                             command:
                             - cat
                             tty: true
