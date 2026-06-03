@@ -189,21 +189,14 @@ pipeline {
                                 timeout(time: 10, unit: 'MINUTES')
                             }
                             steps {
-                                container('dind') {
-                                    script {
-                                        def dockerHelper = load "jenkins/dockerHelper.groovy"
-                                        dockerHelper.login(GAR_HOST)
-                                    }
-                                    sh """
-                                        export PATH="/root/google-cloud-sdk/bin:\$PATH"
-                                        docker buildx create --driver docker-container --name chalk-default --use
-                                        docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-server-cache:ci_server,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-server-cache:ci_server \
-                                            -t ${GAR_REPO}/chalk-server:${SANITIZED_BUILD_TAG} \
-                                            server
-                                    """
-                                }
+                                buildAndPushImage(
+                                    garHost: GAR_HOST,
+                                    cacheRef: "${GAR_REPO}/chalk-server-cache:ci_server",
+                                    dockerfile: 'server/Dockerfile',
+                                    imageTag: "${GAR_REPO}/chalk-server:${SANITIZED_BUILD_TAG}",
+                                    builderName: 'chalk-default',
+                                    context: 'server'
+                                )
                             }
                         }
                         stage('Test Server') {
