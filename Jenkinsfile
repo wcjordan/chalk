@@ -49,33 +49,28 @@ pipeline {
                                 SENTRY_DSN = credentials('chalk-prod-cd-sentry-dsn')
                             }
                             steps {
-                                container('dind') {
-                                    script {
-                                        def dockerHelper = load "jenkins/dockerHelper.groovy"
-                                        dockerHelper.login(GAR_HOST)
-                                    }
-                                    sh """
-                                        export PATH="/root/google-cloud-sdk/bin:\$PATH"
-                                        docker buildx create --driver docker-container --name chalk-default --use
-                                        docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test \
-                                            --build-arg sentryDsn=\$SENTRY_DSN \
-                                            -t ${GAR_REPO}/chalk-ui:${SANITIZED_BUILD_TAG} \
-                                            --target js_app_prod \
-                                            ui
-
-                                        docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test \
-                                            --build-arg sentryDsn=\$SENTRY_DSN \
-                                            -t ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG} \
-                                            --target js_test_env \
-                                            ui
-                                    """
-                                }
+                                buildAndPushImage(
+                                    garHost: GAR_HOST,
+                                    cacheRef: "${GAR_REPO}/chalk-ui-cache:ci_app",
+                                    additionalCacheFrom: ["${GAR_REPO}/chalk-ui-cache:ci_test"],
+                                    dockerfile: 'ui/Dockerfile',
+                                    imageTag: "${GAR_REPO}/chalk-ui:${SANITIZED_BUILD_TAG}",
+                                    target: 'js_app_prod',
+                                    extraBuildArgs: "--build-arg sentryDsn=\$SENTRY_DSN",
+                                    builderName: 'chalk-default',
+                                    context: 'ui'
+                                )
+                                buildAndPushImage(
+                                    garHost: GAR_HOST,
+                                    cacheRef: "${GAR_REPO}/chalk-ui-cache:ci_test",
+                                    additionalCacheFrom: ["${GAR_REPO}/chalk-ui-cache:ci_app"],
+                                    dockerfile: 'ui/Dockerfile',
+                                    imageTag: "${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}",
+                                    target: 'js_test_env',
+                                    extraBuildArgs: "--build-arg sentryDsn=\$SENTRY_DSN",
+                                    builderName: 'chalk-default',
+                                    context: 'ui'
+                                )
                             }
                         }
                         stage('Test UI') {
