@@ -1,3 +1,4 @@
+@Library('jenkins-shared-library') _
 def GAR_HOST = 'us-east4-docker.pkg.dev'
 def GAR_REPO = "${GAR_HOST}/${env.GCP_PROJECT}/default-gar"
 
@@ -48,33 +49,28 @@ pipeline {
                                 SENTRY_DSN = credentials('chalk-prod-cd-sentry-dsn')
                             }
                             steps {
-                                container('dind') {
-                                    script {
-                                        def dockerHelper = load "jenkins/dockerHelper.groovy"
-                                        dockerHelper.login(GAR_HOST)
-                                    }
-                                    sh """
-                                        export PATH="/root/google-cloud-sdk/bin:\$PATH"
-                                        docker buildx create --driver docker-container --name chalk-default --use
-                                        docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test \
-                                            --build-arg sentryDsn=\$SENTRY_DSN \
-                                            -t ${GAR_REPO}/chalk-ui:${SANITIZED_BUILD_TAG} \
-                                            --target js_app_prod \
-                                            ui
-
-                                        docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_app \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-ui-cache:ci_test \
-                                            --build-arg sentryDsn=\$SENTRY_DSN \
-                                            -t ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG} \
-                                            --target js_test_env \
-                                            ui
-                                    """
-                                }
+                                buildAndPushImage(
+                                    garHost: GAR_HOST,
+                                    cacheRef: "${GAR_REPO}/chalk-ui-cache:ci_app",
+                                    additionalCacheFrom: ["${GAR_REPO}/chalk-ui-cache:ci_test"],
+                                    dockerfile: 'ui/Dockerfile',
+                                    imageTag: "${GAR_REPO}/chalk-ui:${SANITIZED_BUILD_TAG}",
+                                    target: 'js_app_prod',
+                                    extraBuildArgs: "--build-arg sentryDsn=\$SENTRY_DSN",
+                                    builderName: 'chalk-default',
+                                    context: 'ui'
+                                )
+                                buildAndPushImage(
+                                    garHost: GAR_HOST,
+                                    cacheRef: "${GAR_REPO}/chalk-ui-cache:ci_test",
+                                    additionalCacheFrom: ["${GAR_REPO}/chalk-ui-cache:ci_app"],
+                                    dockerfile: 'ui/Dockerfile',
+                                    imageTag: "${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}",
+                                    target: 'js_test_env',
+                                    extraBuildArgs: "--build-arg sentryDsn=\$SENTRY_DSN",
+                                    builderName: 'chalk-default',
+                                    context: 'ui'
+                                )
                             }
                         }
                         stage('Test UI') {
@@ -188,21 +184,14 @@ pipeline {
                                 timeout(time: 10, unit: 'MINUTES')
                             }
                             steps {
-                                container('dind') {
-                                    script {
-                                        def dockerHelper = load "jenkins/dockerHelper.groovy"
-                                        dockerHelper.login(GAR_HOST)
-                                    }
-                                    sh """
-                                        export PATH="/root/google-cloud-sdk/bin:\$PATH"
-                                        docker buildx create --driver docker-container --name chalk-default --use
-                                        docker buildx build --push \
-                                            --cache-to type=registry,ref=${GAR_REPO}/chalk-server-cache:ci_server,mode=max \
-                                            --cache-from type=registry,ref=${GAR_REPO}/chalk-server-cache:ci_server \
-                                            -t ${GAR_REPO}/chalk-server:${SANITIZED_BUILD_TAG} \
-                                            server
-                                    """
-                                }
+                                buildAndPushImage(
+                                    garHost: GAR_HOST,
+                                    cacheRef: "${GAR_REPO}/chalk-server-cache:ci_server",
+                                    dockerfile: 'server/Dockerfile',
+                                    imageTag: "${GAR_REPO}/chalk-server:${SANITIZED_BUILD_TAG}",
+                                    builderName: 'chalk-default',
+                                    context: 'server'
+                                )
                             }
                         }
                         stage('Test Server') {
@@ -236,7 +225,7 @@ pipeline {
                         spec:
                           containers:
                           - name: jenkins-helm
-                            image: ${GAR_REPO}/gcloud-helm:latest
+                            image: ${GAR_REPO}/jenkins-helm:latest
                             command:
                             - cat
                             tty: true
@@ -386,7 +375,7 @@ pipeline {
                         spec:
                           containers:
                           - name: jenkins-helm
-                            image: ${GAR_REPO}/gcloud-helm:latest
+                            image: ${GAR_REPO}/jenkins-helm:latest
                             command:
                             - cat
                             tty: true
