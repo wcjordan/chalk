@@ -233,6 +233,35 @@ describe('updateTodoLabels', function () {
     expect(fetchMock).toBeDone();
   });
 
+  it('should queue a label notification with todo description', async function () {
+    const todoId = 1;
+    const newLabels = ['new', 'labels'];
+    fetchMock.patchOnce(`${getTodosApi()}${todoId}/`, {
+      body: { id: todoId, labels: newLabels },
+    });
+
+    const store = setupStore({
+      todosApi: {
+        entries: [
+          {
+            id: todoId,
+            description: 'test todo',
+            labels: [],
+          },
+        ],
+      },
+      workspace: {
+        labelTodoId: todoId,
+      },
+    });
+    await store.dispatch(updateTodoLabels(newLabels));
+
+    expect(store.getState().notifications.notificationQueue[0]).toEqual({
+      text: 'Labeling Todo: test todo',
+      type: 'label',
+    });
+  });
+
   it('should error if no Todo is being labeled', async function () {
     expect.assertions(1);
 

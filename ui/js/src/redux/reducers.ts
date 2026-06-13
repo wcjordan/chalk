@@ -67,6 +67,14 @@ export const updateTodoLabels =
       throw new Error('Unable to edit a todo w/ null ID');
     }
 
+    const todo = getState().todosApi.entries.find((t) => t.id === todoId);
+    dispatch(
+      notificationsSlice.actions.addNotification({
+        text: `Labeling Todo: ${todo?.description}`,
+        type: 'label',
+      }),
+    );
+
     return dispatch(
       updateTodoApi({
         id: todoId,
