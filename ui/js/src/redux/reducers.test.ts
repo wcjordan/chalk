@@ -49,9 +49,10 @@ describe('updateTodo', function () {
 
     // Verify we show a notification
     expect(store.getState().notifications.notificationQueue.length).toEqual(1);
-    expect(store.getState().notifications.notificationQueue[0]).toEqual(
-      'Saving Todo: test todo',
-    );
+    expect(store.getState().notifications.notificationQueue[0]).toEqual({
+      text: 'Saving Todo: test todo',
+      type: 'default',
+    });
 
     // Verify we stop editing the todo
     expect(store.getState().workspace.editTodoId).toEqual(null);
@@ -232,6 +233,35 @@ describe('updateTodoLabels', function () {
     expect(fetchMock).toBeDone();
   });
 
+  it('should queue a label notification with todo description', async function () {
+    const todoId = 1;
+    const newLabels = ['new', 'labels'];
+    fetchMock.patchOnce(`${getTodosApi()}${todoId}/`, {
+      body: { id: todoId, labels: newLabels },
+    });
+
+    const store = setupStore({
+      todosApi: {
+        entries: [
+          {
+            id: todoId,
+            description: 'test todo',
+            labels: [],
+          },
+        ],
+      },
+      workspace: {
+        labelTodoId: todoId,
+      },
+    });
+    await store.dispatch(updateTodoLabels(newLabels));
+
+    expect(store.getState().notifications.notificationQueue[0]).toEqual({
+      text: 'Labeling Todo: test todo',
+      type: 'label',
+    });
+  });
+
   it('should error if no Todo is being labeled', async function () {
     expect.assertions(1);
 
@@ -348,9 +378,10 @@ describe('moveTodo', function () {
 
     // Verify we show a notification
     expect(store.getState().notifications.notificationQueue.length).toEqual(1);
-    expect(store.getState().notifications.notificationQueue[0]).toEqual(
-      'Reordering Todo: moving todo',
-    );
+    expect(store.getState().notifications.notificationQueue[0]).toEqual({
+      text: 'Reordering Todo: moving todo',
+      type: 'default',
+    });
 
     // Verify we create a shortcut operation for the move
     expect(store.getState().shortcuts.operations.length).toEqual(1);

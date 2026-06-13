@@ -117,6 +117,6 @@ export const LabelPickerLayout: React.FC = () =>
 export const NotificationLayout: React.FC = () =>
   wrapper(<App />, {
     notifications: {
-      notificationQueue: ['Error logging in...'],
+      notificationQueue: [{ text: 'Error logging in...', type: 'default' }],
     },
   });

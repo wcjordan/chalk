@@ -33,8 +33,10 @@ const App: React.FC = function () {
 
   const content = !loggedIn ? <Login /> : <TodoList />;
 
-  const notificationText =
+  const currentNotification =
     notificationQueue.length > 0 ? notificationQueue[0] : null;
+  const notificationText = currentNotification?.text ?? null;
+  const notificationType = currentNotification?.type ?? undefined;
   return (
     <SafeAreaView style={styles.root}>
       <StatusBar
@@ -43,7 +45,11 @@ const App: React.FC = function () {
         barStyle={'light-content'}
       />
       {content}
-      <ErrorBar key={notificationText} text={notificationText} />
+      <ErrorBar
+        key={notificationText}
+        text={notificationText}
+        notificationType={notificationType}
+      />
     </SafeAreaView>
   );
 };
