@@ -30,3 +30,6 @@ export const HiddenErrorBar: React.FC = () => wrapper(<ErrorBar text={null} />);
 
 export const PermanentErrorBar: React.FC = () =>
   wrapper(<ErrorBar text="Permanent snacks!" permanent={true} />);
+
+export const LabelErrorBar: React.FC = () =>
+  wrapper(<ErrorBar text="Labeling Todo: buy groceries" notificationType="label" />);

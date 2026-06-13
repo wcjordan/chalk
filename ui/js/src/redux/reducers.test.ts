@@ -49,9 +49,10 @@ describe('updateTodo', function () {
 
     // Verify we show a notification
     expect(store.getState().notifications.notificationQueue.length).toEqual(1);
-    expect(store.getState().notifications.notificationQueue[0]).toEqual(
-      'Saving Todo: test todo',
-    );
+    expect(store.getState().notifications.notificationQueue[0]).toEqual({
+      text: 'Saving Todo: test todo',
+      type: 'default',
+    });
 
     // Verify we stop editing the todo
     expect(store.getState().workspace.editTodoId).toEqual(null);
@@ -348,9 +349,10 @@ describe('moveTodo', function () {
 
     // Verify we show a notification
     expect(store.getState().notifications.notificationQueue.length).toEqual(1);
-    expect(store.getState().notifications.notificationQueue[0]).toEqual(
-      'Reordering Todo: moving todo',
-    );
+    expect(store.getState().notifications.notificationQueue[0]).toEqual({
+      text: 'Reordering Todo: moving todo',
+      type: 'default',
+    });
 
     // Verify we create a shortcut operation for the move
     expect(store.getState().shortcuts.operations.length).toEqual(1);
