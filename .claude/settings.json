@@ -3,13 +3,13 @@
     "WorktreeCreate": [
       {
         "matcher": "",
-        "hooks": [{ "type": "command", "command": ".claude/hooks/setup-new-worktree.sh" }]
+        "hooks": [{ "type": "command", "command": "$(git rev-parse --show-toplevel)/.claude/hooks/setup-new-worktree.sh" }]
       }
     ],
     "Stop": [
       {
         "matcher": "",
-        "hooks": [{ "type": "command", "command": ".claude/hooks/stop-verify.sh", "timeout": 300 }]
+        "hooks": [{ "type": "command", "command": "$(git rev-parse --show-toplevel)/.claude/hooks/stop-verify.sh", "timeout": 300 }]
       }
     ],
     "PreToolUse": [
