@@ -39,9 +39,10 @@ export const updateTodo =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const promises: any[] = [
       dispatch(
-        notificationsSlice.actions.addNotification(
-          `Saving Todo: ${todoPatch.description ?? todo?.description}`,
-        ),
+        notificationsSlice.actions.addNotification({
+          text: `Saving Todo: ${todoPatch.description ?? todo?.description}`,
+          type: 'default',
+        }),
       ),
       dispatch(workspaceSlice.actions.setEditTodoId(null)),
       dispatch(shortcutSlice.actions.addEditTodoOperation(todoPatch)),
@@ -82,9 +83,10 @@ export const moveTodo =
     );
     return Promise.all([
       dispatch(
-        notificationsSlice.actions.addNotification(
-          `Reordering Todo: ${todo?.description}`,
-        ),
+        notificationsSlice.actions.addNotification({
+          text: `Reordering Todo: ${todo?.description}`,
+          type: 'default',
+        }),
       ),
       dispatch(shortcutSlice.actions.addMoveTodoOperation(operation)),
       dispatch(moveTodoApi(operation)),
@@ -116,15 +118,16 @@ export const completeAuthentication =
       if (response.status !== 200) {
         const responseText = await response.text();
         const message = `Login failed with status: ${response.status} ${response.statusText}\n${responseText}`;
-        dispatch(notificationsSlice.actions.addNotification(message));
+        dispatch(notificationsSlice.actions.addNotification({ text: message, type: 'default' }));
         throw new Error(message);
       }
 
       if (!csrfToken) {
         dispatch(
-          notificationsSlice.actions.addNotification(
-            'Unexpectedly missing CSRFToken.  Please refresh and login again.',
-          ),
+          notificationsSlice.actions.addNotification({
+            text: 'Unexpectedly missing CSRFToken.  Please refresh and login again.',
+            type: 'default',
+          }),
         );
         throw new Error(
           `CSRFToken missing from set-cookie header\n${response.headers.get(
@@ -141,9 +144,10 @@ export const completeAuthentication =
       );
     } catch (ex) {
       dispatch(
-        notificationsSlice.actions.addNotification(
-          'Login failed with a network error.  Please refresh and login again.',
-        ),
+        notificationsSlice.actions.addNotification({
+          text: 'Login failed with a network error.  Please refresh and login again.',
+          type: 'default',
+        }),
       );
       throw ex;
     }
@@ -170,9 +174,10 @@ export const recordSessionEvents =
       // Only notify in development to avoid user-facing errors
       if (getEnvFlags().ENVIRONMENT === 'DEV') {
         dispatch(
-          notificationsSlice.actions.addNotification(
-            'Failed to record session data',
-          ),
+          notificationsSlice.actions.addNotification({
+            text: 'Failed to record session data',
+            type: 'default',
+          }),
         );
       }
     }

@@ -2,9 +2,13 @@ import React, { useCallback, useState } from 'react';
 import { Snackbar } from 'react-native-paper';
 import { dismissNotification } from '../redux/reducers';
 import { useAppDispatch } from '../hooks/hooks';
+import { NotificationType } from '../redux/types';
+
+const THEME_DEFAULT = { colors: { surface: '#444', onSurface: '#FAA0A0' } };
+const THEME_LABEL = { colors: { surface: '#FFFDE7', onSurface: '#5D4037' } };
 
 const ErrorBar: React.FC<Props> = function (props: Props) {
-  const { permanent, text } = props;
+  const { notificationType, permanent, text } = props;
   const [visible, setVisible] = useState(text != null);
 
   const dispatch = useAppDispatch();
@@ -17,15 +21,12 @@ const ErrorBar: React.FC<Props> = function (props: Props) {
     dispatch(dismissNotification());
   }, [text]);
 
+  const theme = notificationType === 'label' ? THEME_LABEL : THEME_DEFAULT;
+
   return (
     <Snackbar
       onDismiss={dismissCb}
-      theme={{
-        colors: {
-          surface: '#444',
-          onSurface: '#FAA0A0',
-        },
-      }}
+      theme={theme}
       testID="message-bar"
       visible={visible}
     >
@@ -35,6 +36,7 @@ const ErrorBar: React.FC<Props> = function (props: Props) {
 };
 
 type Props = {
+  notificationType?: NotificationType;
   permanent?: boolean;
   text: string | null;
 };

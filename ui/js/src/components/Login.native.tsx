@@ -46,7 +46,7 @@ const Login: React.FC = function () {
         const message =
           'Login Error: ID token unexpectedly not found after login';
         console.error(message);
-        dispatch(addNotification(message));
+        dispatch(addNotification({ text: message, type: 'default' }));
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -61,7 +61,7 @@ const Login: React.FC = function () {
 
       console.error(message);
       console.error(error);
-      dispatch(addNotification(message));
+      dispatch(addNotification({ text: message, type: 'default' }));
       setInProgress(false);
     }
   }, [setInProgress]);

@@ -8,8 +8,15 @@ export interface Label {
   name: string;
 }
 
+export type NotificationType = 'default' | 'label';
+
+export interface Notification {
+  text: string;
+  type: NotificationType;
+}
+
 export interface NotificationsState {
-  notificationQueue: string[];
+  notificationQueue: Notification[];
 }
 
 export interface Todo {
