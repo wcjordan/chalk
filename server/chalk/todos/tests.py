@@ -473,7 +473,8 @@ class ServiceTests(TestCase):
 
     def test_snoozed_until_in_serializer(self):
         """
-        Test that snoozed_until is included in todo API responses as None by default.
+        Test that snoozed_until is included in todo API responses as None by
+        default.
         """
         todo = self._create_todo({
             'description': _generate_random_string(),
@@ -484,8 +485,8 @@ class ServiceTests(TestCase):
 
     def test_snoozed_until_patch_roundtrip(self):
         """
-        Test that PATCH to snoozed_until with a future datetime persists correctly
-        and PATCH with null clears it.
+        Test that PATCH to snoozed_until with a future datetime persists
+        correctly and PATCH with null clears it.
         """
         todo = self._create_todo({
             'description': _generate_random_string(),
