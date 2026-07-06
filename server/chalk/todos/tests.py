@@ -9,6 +9,7 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.utils.dateparse import parse_datetime
 
 from chalk.todos.consts import RANK_ORDER_DEFAULT_STEP, RANK_ORDER_INITIAL_STEP
 from chalk.todos.models import LabelModel, RankOrderMetadata, TodoModel
@@ -496,7 +497,8 @@ class ServiceTests(TestCase):
         # Set snoozed_until to a future datetime
         future_dt = '2099-01-01T07:00:00Z'
         updated = self._update_todo(todo['id'], {'snoozed_until': future_dt})
-        assert updated['snoozed_until'] == future_dt
+        assert parse_datetime(updated['snoozed_until']) == parse_datetime(
+            future_dt)
 
         # Clear snoozed_until with null
         cleared = self._update_todo(todo['id'], {'snoozed_until': None})
