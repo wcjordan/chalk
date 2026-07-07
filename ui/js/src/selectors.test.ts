@@ -29,6 +29,7 @@ function selectFilteredTodosHelper(activeLabels, invertedLabels, todos) {
   return {
     workspace: {
       filterLabels,
+      snoozedOnly: false,
     },
     shortcuts: {
       operations: [],
@@ -185,6 +186,46 @@ describe('selectFilteredTodos', function () {
     const result = selectFilteredTodos(state);
     expect(result).toMatchSnapshot();
   });
+
+  it('should filter out todos with snoozed_until set to a future time', function () {
+    const futureDate = new Date(Date.now() + 86400000).toISOString();
+    const state = selectFilteredTodosHelper(['Unlabeled'], [], {});
+    state.todosApi.entries = [
+      { id: 1, description: 'normal todo', labels: [], snoozed_until: null },
+      { id: 2, description: 'snoozed todo', labels: [], snoozed_until: futureDate },
+    ];
+
+    const result = selectFilteredTodos(state);
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should include todos with snoozed_until set to a past time', function () {
+    const pastDate = new Date(Date.now() - 86400000).toISOString();
+    const state = selectFilteredTodosHelper(['Unlabeled'], [], {});
+    state.todosApi.entries = [
+      { id: 1, description: 'expired snooze todo', labels: [], snoozed_until: pastDate },
+    ];
+
+    const result = selectFilteredTodos(state);
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should return only currently-snoozed todos sorted by snoozed_until when snoozedOnly is true', function () {
+    const sooner = new Date(Date.now() + 86400000).toISOString();
+    const later = new Date(Date.now() + 2 * 86400000).toISOString();
+    const past = new Date(Date.now() - 86400000).toISOString();
+    const state = selectFilteredTodosHelper([], [], {});
+    state.workspace.snoozedOnly = true;
+    state.todosApi.entries = [
+      { id: 1, description: 'later snoozed', labels: [], snoozed_until: later },
+      { id: 2, description: 'normal todo', labels: [], snoozed_until: null },
+      { id: 3, description: 'sooner snoozed', labels: [], snoozed_until: sooner },
+      { id: 4, description: 'expired snooze', labels: [], snoozed_until: past },
+    ];
+
+    const result = selectFilteredTodos(state);
+    expect(result.map((t) => t.description)).toEqual(['sooner snoozed', 'later snoozed']);
+  });
 });
 
 describe('selectSelectedPickerLabels', function () {
@@ -261,6 +302,18 @@ describe('selectSelectedPickerLabels', function () {
 });
 
 describe('selectActiveWorkContext', function () {
+  it('should return snoozed when snoozedOnly is true', function () {
+    const state = {
+      workspace: {
+        filterLabels: {},
+        snoozedOnly: true,
+      },
+    };
+
+    const result = selectActiveWorkContext(state);
+    expect(result).toEqual('snoozed');
+  });
+
   it('should return a work context if labels match', function () {
     const state = {
       workspace: {
@@ -269,6 +322,7 @@ describe('selectActiveWorkContext', function () {
           backlog: FILTER_STATUS.Inverted,
           vague: FILTER_STATUS.Active,
         },
+        snoozedOnly: false,
       },
     };
 
@@ -285,6 +339,7 @@ describe('selectActiveWorkContext', function () {
           vague: FILTER_STATUS.Active,
           Home: FILTER_STATUS.Active,
         },
+        snoozedOnly: false,
       },
     };
 
@@ -299,6 +354,7 @@ describe('selectActiveWorkContext', function () {
           Chalk: FILTER_STATUS.Active,
           backlog: FILTER_STATUS.Inverted,
         },
+        snoozedOnly: false,
       },
     };
 

@@ -26,8 +26,9 @@ export interface Todo {
   created_at: number;
   description: string;
   labels: string[];
+  snoozed_until?: string | null;
   version: number;
-  [key: string]: boolean | number | string | string[]; // Index signature to allow updates in todosApiSlice#updateTodosFromResponse
+  [key: string]: boolean | number | string | string[] | null | undefined; // Index signature to allow updates in todosApiSlice#updateTodosFromResponse
 }
 
 export interface TodoPatch {
@@ -37,6 +38,7 @@ export interface TodoPatch {
   created_at?: number;
   description?: string;
   labels?: string[];
+  snoozed_until?: string | null;
   version?: number;
 }
 
@@ -79,6 +81,8 @@ export interface WorkspaceState {
   loggedIn: boolean;
   showCompletedTodos: boolean;
   showLabelFilter: boolean;
+  snoozedOnly: boolean;
+  snoozeTodoId: number | null;
 }
 
 export interface MoveTodoOperation {
