@@ -40,7 +40,7 @@
     "rrweb": "2.0.0-alpha.20"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
+    "@babel/core": "^8.0.0",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@eslint/compat": "^2.0.5",
     "@eslint/js": "^10.0.1",
