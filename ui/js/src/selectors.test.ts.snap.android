@@ -109,7 +109,7 @@ exports[`selectFilteredTodos should include todos with snoozed_until set to a pa
     "description": "expired snooze todo",
     "id": 1,
     "labels": [],
-    "snoozed_until": "2026-07-08T00:06:47.166Z",
+    "snoozed_until": "2025-12-31T00:00:00.000Z",
   },
 ]
 `;

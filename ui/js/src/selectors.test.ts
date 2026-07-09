@@ -188,29 +188,44 @@ describe('selectFilteredTodos', function () {
   });
 
   it('should filter out todos with snoozed_until set to a future time', function () {
+    jest.useFakeTimers().setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
     const futureDate = new Date(Date.now() + 86400000).toISOString();
     const state = selectFilteredTodosHelper(['Unlabeled'], [], {});
     state.todosApi.entries = [
       { id: 1, description: 'normal todo', labels: [], snoozed_until: null },
-      { id: 2, description: 'snoozed todo', labels: [], snoozed_until: futureDate },
+      {
+        id: 2,
+        description: 'snoozed todo',
+        labels: [],
+        snoozed_until: futureDate,
+      },
     ];
 
     const result = selectFilteredTodos(state);
     expect(result).toMatchSnapshot();
+    jest.useRealTimers();
   });
 
   it('should include todos with snoozed_until set to a past time', function () {
+    jest.useFakeTimers().setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
     const pastDate = new Date(Date.now() - 86400000).toISOString();
     const state = selectFilteredTodosHelper(['Unlabeled'], [], {});
     state.todosApi.entries = [
-      { id: 1, description: 'expired snooze todo', labels: [], snoozed_until: pastDate },
+      {
+        id: 1,
+        description: 'expired snooze todo',
+        labels: [],
+        snoozed_until: pastDate,
+      },
     ];
 
     const result = selectFilteredTodos(state);
     expect(result).toMatchSnapshot();
+    jest.useRealTimers();
   });
 
   it('should return only currently-snoozed todos sorted by snoozed_until when snoozedOnly is true', function () {
+    jest.useFakeTimers().setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
     const sooner = new Date(Date.now() + 86400000).toISOString();
     const later = new Date(Date.now() + 2 * 86400000).toISOString();
     const past = new Date(Date.now() - 86400000).toISOString();
@@ -219,12 +234,21 @@ describe('selectFilteredTodos', function () {
     state.todosApi.entries = [
       { id: 1, description: 'later snoozed', labels: [], snoozed_until: later },
       { id: 2, description: 'normal todo', labels: [], snoozed_until: null },
-      { id: 3, description: 'sooner snoozed', labels: [], snoozed_until: sooner },
+      {
+        id: 3,
+        description: 'sooner snoozed',
+        labels: [],
+        snoozed_until: sooner,
+      },
       { id: 4, description: 'expired snooze', labels: [], snoozed_until: past },
     ];
 
     const result = selectFilteredTodos(state);
-    expect(result.map((t) => t.description)).toEqual(['sooner snoozed', 'later snoozed']);
+    expect(result.map((t) => t.description)).toEqual([
+      'sooner snoozed',
+      'later snoozed',
+    ]);
+    jest.useRealTimers();
   });
 });
 
