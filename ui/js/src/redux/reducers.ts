@@ -196,6 +196,8 @@ export const dismissNotification =
   notificationsSlice.actions.dismissNotification;
 export const setEditTodoId = workspaceSlice.actions.setEditTodoId;
 export const setLabelTodoId = workspaceSlice.actions.setLabelTodoId;
+export const setSnoozedOnly = workspaceSlice.actions.setSnoozedOnly;
+export const setSnoozeTodoId = workspaceSlice.actions.setSnoozeTodoId;
 export const setWorkContext = workspaceSlice.actions.setWorkContext;
 export const setFilters = workspaceSlice.actions.setFilters;
 export const toggleLabel = workspaceSlice.actions.toggleLabel;

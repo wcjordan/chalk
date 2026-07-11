@@ -72,6 +72,8 @@ const initialState: WorkspaceState = {
   loggedIn: Platform.OS === 'web',
   showCompletedTodos: false,
   showLabelFilter: false,
+  snoozedOnly: false,
+  snoozeTodoId: null,
 };
 export const workspaceSlice = createSlice({
   name: 'workspace',
@@ -137,6 +139,15 @@ export const workspaceSlice = createSlice({
     },
     toggleShowLabelFilter: (state) => {
       state.showLabelFilter = !state.showLabelFilter;
+    },
+    setSnoozedOnly: (state, action) => {
+      state.snoozedOnly = action.payload;
+      if (action.payload) {
+        state.filterLabels = {};
+      }
+    },
+    setSnoozeTodoId: (state, action) => {
+      state.snoozeTodoId = action.payload;
     },
   },
 });

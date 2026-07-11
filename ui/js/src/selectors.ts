@@ -15,6 +15,7 @@ const selectShortcutOperations = (state: RootState) =>
   state.shortcuts.operations;
 const selectShowCompletedTodos = (state: RootState) =>
   state.workspace.showCompletedTodos;
+const selectSnoozedOnly = (state: RootState) => state.workspace.snoozedOnly;
 const selectTodoApiEntries = (state: RootState) => state.todosApi.entries;
 const selectLabelApiEntries = (state: RootState) => state.labelsApi.entries;
 
@@ -107,6 +108,7 @@ export const selectFilteredTodos = createSelector(
     selectFilterLabels,
     selectLabelTodoId,
     selectShowCompletedTodos,
+    selectSnoozedOnly,
   ],
   (
     todoApiEntries,
@@ -114,7 +116,22 @@ export const selectFilteredTodos = createSelector(
     filterLabels,
     labelTodoId,
     showCompletedTodos,
+    snoozedOnly,
   ) => {
+    if (snoozedOnly) {
+      const now = new Date();
+      return todoApiEntries
+        .filter(
+          (todo) =>
+            todo.snoozed_until && new Date(todo.snoozed_until) > now,
+        )
+        .sort((a, b) => {
+          const aTime = new Date(a.snoozed_until as string).getTime();
+          const bTime = new Date(b.snoozed_until as string).getTime();
+          return aTime - bTime;
+        });
+    }
+
     // TODO (jordan) optimize w/ set intersection?
     const labeledFlag = filterLabels['Unlabeled'] === FILTER_STATUS.Inverted;
     const unlabeledFlag = filterLabels['Unlabeled'] === FILTER_STATUS.Active;
@@ -145,17 +162,26 @@ export const selectFilteredTodos = createSelector(
       preserveIds.push(editTodoId);
     }
 
-    return todoApiEntries.filter((todo) =>
-      performFilter(
-        labeledFlag,
-        unlabeledFlag,
-        activeFilters,
-        invertedFilters,
-        showCompletedTodos,
-        preserveIds,
-        todo,
-      ),
-    );
+    const now = new Date();
+    return todoApiEntries
+      .filter((todo) => {
+        if (
+          !preserveIds.includes(todo.id) &&
+          todo.snoozed_until &&
+          new Date(todo.snoozed_until) > now
+        ) {
+          return false;
+        }
+        return performFilter(
+          labeledFlag,
+          unlabeledFlag,
+          activeFilters,
+          invertedFilters,
+          showCompletedTodos,
+          preserveIds,
+          todo,
+        );
+      });
   },
 );
 
@@ -190,8 +216,11 @@ export const selectSelectedPickerLabels = createSelector(
 );
 
 export const selectActiveWorkContext = createSelector(
-  [selectFilterLabels],
-  (filterLabels) => {
+  [selectFilterLabels, selectSnoozedOnly],
+  (filterLabels, snoozedOnly) => {
+    if (snoozedOnly) {
+      return 'snoozed';
+    }
     return Object.keys(workContexts).find((workContext) => {
       const labels = workContexts[workContext].labels;
       const labelKeys = Object.keys(labels);

@@ -14,6 +14,8 @@ describe('workspace reducer', function () {
       loggedIn: false,
       showCompletedTodos: false,
       showLabelFilter: false,
+      snoozedOnly: false,
+      snoozeTodoId: null,
     });
   });
 
@@ -181,6 +183,65 @@ describe('workspace reducer', function () {
           Chalk: FILTER_STATUS.Active,
         },
       });
+    });
+  });
+  describe('workspace/setSnoozedOnly', function () {
+    it('should enable snoozed-only mode and clear filterLabels', function () {
+      const result = workspaceSlice.reducer(
+        {
+          snoozedOnly: false,
+          filterLabels: { Unlabeled: FILTER_STATUS.Active },
+        },
+        {
+          type: 'workspace/setSnoozedOnly',
+          payload: true,
+        },
+      );
+      expect(result).toEqual({
+        snoozedOnly: true,
+        filterLabels: {},
+      });
+    });
+
+    it('should disable snoozed-only mode without changing filterLabels', function () {
+      const result = workspaceSlice.reducer(
+        {
+          snoozedOnly: true,
+          filterLabels: {},
+        },
+        {
+          type: 'workspace/setSnoozedOnly',
+          payload: false,
+        },
+      );
+      expect(result).toEqual({
+        snoozedOnly: false,
+        filterLabels: {},
+      });
+    });
+  });
+
+  describe('workspace/setSnoozeTodoId', function () {
+    it('should set the snooze todo id', function () {
+      const result = workspaceSlice.reducer(
+        { snoozeTodoId: null },
+        {
+          type: 'workspace/setSnoozeTodoId',
+          payload: 42,
+        },
+      );
+      expect(result).toEqual({ snoozeTodoId: 42 });
+    });
+
+    it('should clear the snooze todo id', function () {
+      const result = workspaceSlice.reducer(
+        { snoozeTodoId: 42 },
+        {
+          type: 'workspace/setSnoozeTodoId',
+          payload: null,
+        },
+      );
+      expect(result).toEqual({ snoozeTodoId: null });
     });
   });
 });
