@@ -41,6 +41,12 @@ if [ -d "${WORKTREE}/test_gen" ]; then
   echo "Initialized test_gen in ${WORKTREE}/test_gen/"
 fi
 
+# Initialize tests/ (Playwright E2E) venv so `make -C tests lint`/`make test` work
+if [ -d "${WORKTREE}/tests" ]; then
+  (cd "${WORKTREE}/tests" && make init)
+  echo "Initialized tests/ venv in ${WORKTREE}/tests/"
+fi
+
 # Install JS dependencies so husky pre-commit hooks work in the worktree
 if [ -d "${WORKTREE}/ui/js" ]; then
   (cd "${WORKTREE}/ui/js" && yarn install --immutable)
