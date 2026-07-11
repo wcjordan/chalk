@@ -93,6 +93,7 @@ export const workspaceSlice = createSlice({
       const workContext = workContexts[action.payload];
       if (workContext) {
         state.filterLabels = Object.assign({}, workContext.labels);
+        state.snoozedOnly = false;
       }
     },
     setFilters: (state, action) => {

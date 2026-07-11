@@ -8,7 +8,12 @@ import {
   ViewStyle,
 } from 'react-native';
 import { Card, Checkbox, IconButton, TextInput } from 'react-native-paper';
-import { setEditTodoId, setLabelTodoId, updateTodo } from '../redux/reducers';
+import {
+  setEditTodoId,
+  setLabelTodoId,
+  setSnoozeTodoId,
+  updateTodo,
+} from '../redux/reducers';
 import { Todo } from '../redux/types';
 import { useAppDispatch } from '../hooks/hooks';
 import LabelChip from './LabelChip';
@@ -129,6 +134,14 @@ const TodoItem: React.FC<Props> = memo(function (props: Props) {
     [todo.id],
   );
 
+  const snoozeTodo = useCallback(
+    (event: GestureResponderEvent) => {
+      event.stopPropagation();
+      dispatch(setSnoozeTodoId(todo.id));
+    },
+    [todo.id],
+  );
+
   const beginEdit = useCallback(() => {
     if (editing) {
       return;
@@ -193,6 +206,15 @@ const TodoItem: React.FC<Props> = memo(function (props: Props) {
         size={20}
         style={styles.iconButton}
         testID="label-todo"
+      />,
+      <IconButton
+        iconColor="#a3d5ffff"
+        icon="alarm-plus"
+        key="snooze"
+        onPress={snoozeTodo}
+        size={20}
+        style={styles.iconButton}
+        testID="snooze-todo"
       />,
       <IconButton
         iconColor="#f44336"
