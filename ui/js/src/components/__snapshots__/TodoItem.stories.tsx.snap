@@ -81,6 +81,26 @@ exports[`Todo Item CheckedTodo smoke-test 1`] = `
                 </button>
               </div>
               <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                   data-testid="snooze-todo-container"
+                   style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+              >
+                <button role="button"
+                        tabindex="0"
+                        class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                        data-testid="snooze-todo"
+                        type="button"
+                >
+                  <div dir="auto"
+                       role="img"
+                       tabindex="-1"
+                       class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                       style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                  >
+                    󰀤
+                  </div>
+                </button>
+              </div>
+              <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                    data-testid="delete-todo-container"
                    style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
               >
@@ -265,6 +285,26 @@ exports[`Todo Item DefaultTodo smoke-test 1`] = `
                        style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                   >
                     󰜢
+                  </div>
+                </button>
+              </div>
+              <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                   data-testid="snooze-todo-container"
+                   style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+              >
+                <button role="button"
+                        tabindex="0"
+                        class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                        data-testid="snooze-todo"
+                        type="button"
+                >
+                  <div dir="auto"
+                       role="img"
+                       tabindex="-1"
+                       class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                       style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                  >
+                    󰀤
                   </div>
                 </button>
               </div>
@@ -638,6 +678,26 @@ exports[`Todo Item NoLabelsTodo smoke-test 1`] = `
                 </button>
               </div>
               <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                   data-testid="snooze-todo-container"
+                   style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+              >
+                <button role="button"
+                        tabindex="0"
+                        class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                        data-testid="snooze-todo"
+                        type="button"
+                >
+                  <div dir="auto"
+                       role="img"
+                       tabindex="-1"
+                       class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                       style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                  >
+                    󰀤
+                  </div>
+                </button>
+              </div>
+              <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                    data-testid="delete-todo-container"
                    style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
               >
@@ -743,6 +803,26 @@ exports[`Todo Item WrappedLabelsTodo smoke-test 1`] = `
                        style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                   >
                     󰜢
+                  </div>
+                </button>
+              </div>
+              <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                   data-testid="snooze-todo-container"
+                   style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+              >
+                <button role="button"
+                        tabindex="0"
+                        class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                        data-testid="snooze-todo"
+                        type="button"
+                >
+                  <div dir="auto"
+                       role="img"
+                       tabindex="-1"
+                       class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                       style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                  >
+                    󰀤
                   </div>
                 </button>
               </div>

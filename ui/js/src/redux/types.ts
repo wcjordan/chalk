@@ -81,7 +81,6 @@ export interface WorkspaceState {
   loggedIn: boolean;
   showCompletedTodos: boolean;
   showLabelFilter: boolean;
-  snoozedOnly: boolean;
   snoozeTodoId: number | null;
 }
 

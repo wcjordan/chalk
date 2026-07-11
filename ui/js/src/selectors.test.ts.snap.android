@@ -79,7 +79,7 @@ exports[`selectFilteredTodos should filter out todos which have any inverted fil
 ]
 `;
 
-exports[`selectFilteredTodos should filter out todos with snoozed_until set to a future time 1`] = `
+exports[`selectFilteredTodos should filter out todos with snoozed_until set to a future time when snoozed is inverted 1`] = `
 [
   {
     "description": "normal todo",
@@ -103,7 +103,7 @@ exports[`selectFilteredTodos should filter todos missing any labels even when un
 ]
 `;
 
-exports[`selectFilteredTodos should include todos with snoozed_until set to a past time 1`] = `
+exports[`selectFilteredTodos should include todos with snoozed_until set to a past time when snoozed is inverted 1`] = `
 [
   {
     "description": "expired snooze todo",

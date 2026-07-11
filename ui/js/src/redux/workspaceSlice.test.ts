@@ -1,6 +1,6 @@
 import '../__mocks__/matchMediaMock';
 import { FILTER_STATUS } from './types';
-import { workspaceSlice } from './workspaceSlice';
+import { workContexts, workspaceSlice } from './workspaceSlice';
 
 describe('workspace reducer', function () {
   it('should return the initial state', function () {
@@ -9,12 +9,12 @@ describe('workspace reducer', function () {
       editTodoId: null,
       filterLabels: {
         Unlabeled: FILTER_STATUS.Active,
+        snoozed: FILTER_STATUS.Inverted,
       },
       labelTodoId: null,
       loggedIn: false,
       showCompletedTodos: false,
       showLabelFilter: false,
-      snoozedOnly: false,
       snoozeTodoId: null,
     });
   });
@@ -162,6 +162,7 @@ describe('workspace reducer', function () {
       expect(result).toEqual({
         filterLabels: {
           Unlabeled: FILTER_STATUS.Active,
+          snoozed: FILTER_STATUS.Inverted,
         },
       });
     });
@@ -185,38 +186,34 @@ describe('workspace reducer', function () {
       });
     });
   });
-  describe('workspace/setSnoozedOnly', function () {
-    it('should enable snoozed-only mode and clear filterLabels', function () {
-      const result = workspaceSlice.reducer(
-        {
-          snoozedOnly: false,
-          filterLabels: { Unlabeled: FILTER_STATUS.Active },
+  describe('workContexts', function () {
+    it('should define a virtual Snoozed work context', function () {
+      expect(workContexts.snoozed).toEqual({
+        displayName: 'Snoozed',
+        labels: {
+          snoozed: FILTER_STATUS.Active,
         },
-        {
-          type: 'workspace/setSnoozedOnly',
-          payload: true,
-        },
-      );
-      expect(result).toEqual({
-        snoozedOnly: true,
-        filterLabels: {},
       });
     });
 
-    it('should disable snoozed-only mode without changing filterLabels', function () {
-      const result = workspaceSlice.reducer(
-        {
-          snoozedOnly: true,
-          filterLabels: {},
+    it('should invert both backlog and snoozed by default for non-Inbox contexts', function () {
+      expect(workContexts.urgent).toEqual({
+        displayName: 'Urgent',
+        labels: {
+          urgent: FILTER_STATUS.Active,
+          backlog: FILTER_STATUS.Inverted,
+          snoozed: FILTER_STATUS.Inverted,
         },
-        {
-          type: 'workspace/setSnoozedOnly',
-          payload: false,
+      });
+    });
+
+    it('should keep Inbox backlog-inclusive while still excluding snoozed todos', function () {
+      expect(workContexts.inbox).toEqual({
+        displayName: 'Inbox',
+        labels: {
+          Unlabeled: FILTER_STATUS.Active,
+          snoozed: FILTER_STATUS.Inverted,
         },
-      );
-      expect(result).toEqual({
-        snoozedOnly: false,
-        filterLabels: {},
       });
     });
   });

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { FILTER_STATUS } from '../redux/types';
-import { setSnoozedOnly, setWorkContext } from '../redux/reducers';
+import { setWorkContext } from '../redux/reducers';
 import { useAppDispatch } from '../hooks/hooks';
 import { workContexts } from '../redux/workspaceSlice';
 import LabelChip from './LabelChip';
@@ -32,10 +32,6 @@ const WorkContextFilter: React.FC<Props> = function (props: Props) {
     dispatch(setWorkContext(workContext));
   }, []);
 
-  const setSnoozedOnlyCb = useCallback((_label: string) => {
-    dispatch(setSnoozedOnly(true));
-  }, []);
-
   const chips = Object.keys(workContexts).map((workContext) => (
     <LabelChip
       display={workContexts[workContext].displayName}
@@ -50,12 +46,6 @@ const WorkContextFilter: React.FC<Props> = function (props: Props) {
   return (
     <View style={styles.filterView} testID="work-context-filter">
       {chips}
-      <LabelChip
-        key="snoozed"
-        label="Snoozed"
-        onPress={setSnoozedOnlyCb}
-        status={activeWorkContext === 'snoozed' ? FILTER_STATUS.Active : undefined}
-      />
       <View style={styles.spacer} />
       <FilterViewControls
         isFiltered={isFiltered}

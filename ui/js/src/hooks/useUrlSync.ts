@@ -59,7 +59,7 @@ export function useUrlSync() {
     // Note this assumes that the Inbox is the default state and should be updated if that ever changes
     if (
       _.isEqual(activeLabels, ['Unlabeled']) &&
-      invertedLabels.length === 0 &&
+      _.isEqual(invertedLabels, ['snoozed']) &&
       !showCompletedTodos
     ) {
       window.history.replaceState({}, '', window.location.pathname);
