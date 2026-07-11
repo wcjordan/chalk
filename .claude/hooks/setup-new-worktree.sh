@@ -26,11 +26,14 @@ trap 'rm -rf "$WORKTREE"' ERR
 mkdir -p "${CLAUDE_PROJECT_DIR}/.claude/worktrees"
 git -C "$CLAUDE_PROJECT_DIR" worktree add "$WORKTREE" -b "$NAME" HEAD >&2
 
-# Copy gitignored .env so the worktree can run make targets
-if [ -f "${CLAUDE_PROJECT_DIR}/.env" ]; then
-  cp "${CLAUDE_PROJECT_DIR}/.env" "${WORKTREE}/.env"
-  echo "Copied .env to ${WORKTREE}/"
-fi
+# Copy gitignored *.env files (.env, .prod.env, .staging.env, ...) so the
+# worktree can run make targets — the root Makefile requires .prod.env to
+# even parse, so missing it breaks `make test` entirely.
+for envfile in "${CLAUDE_PROJECT_DIR}"/*.env; do
+  [ -f "$envfile" ] || continue
+  cp "$envfile" "${WORKTREE}/$(basename "$envfile")"
+  echo "Copied $(basename "$envfile") to ${WORKTREE}/"
+done
 
 # Initialize test_gen dependencies
 if [ -d "${WORKTREE}/test_gen" ]; then
