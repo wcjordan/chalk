@@ -6,7 +6,7 @@ from playwright.sync_api import expect
 CHECKED_ICON_TEXT = "󰄲"
 DELETE_ICON_TEXT = "󰧧"
 LABELS_ICON_TEXT = "󰜢"
-SNOOZE_ICON_TEXT = "󰀤"
+SNOOZE_ICON_TEXT = "󰀠"
 UNCHECKED_ICON_TEXT = "󰄱"
 WARNING_ICON_TEXT = "󰀪"
 

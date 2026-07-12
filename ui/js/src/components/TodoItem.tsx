@@ -209,7 +209,7 @@ const TodoItem: React.FC<Props> = memo(function (props: Props) {
       />,
       <IconButton
         iconColor="#a3d5ffff"
-        icon="alarm-plus"
+        icon="alarm"
         key="snooze"
         onPress={snoozeTodo}
         size={20}

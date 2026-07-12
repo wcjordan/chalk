@@ -393,7 +393,7 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -677,7 +677,7 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -1218,7 +1218,7 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -1502,7 +1502,7 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -1786,7 +1786,7 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -2493,7 +2493,7 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -2777,7 +2777,7 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -3061,7 +3061,7 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -3345,7 +3345,7 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -3629,7 +3629,7 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -3913,7 +3913,7 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -5007,7 +5007,7 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                                      class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
-                                  󰀤
+                                  󰀠
                                 </div>
                               </button>
                             </div>
