@@ -1,9 +1,9 @@
 -r requirements.txt
 
 # These are used for development or linting
-black==26.3.1
+black==26.5.1
 flake8==7.3.0
-pylint==4.0.5
-pytest==9.0.3
+pylint==4.0.6
+pytest==9.1.1
 pytest-cov==7.1.0
-syrupy==5.1.0
+syrupy==5.5.3
