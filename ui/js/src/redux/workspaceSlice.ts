@@ -10,54 +10,64 @@ import {
 
 // TODO (jordan) Improve to support or'd label groups
 // Will be useful for adding Chalk + vague to Chalk Planning
+
+// Backlogged and snoozed todos are hidden from work contexts by default;
+// merge this in for any context that shouldn't override that default.
+const withDefaultInversions = (labels: FilterState): FilterState => ({
+  backlog: FILTER_STATUS.Inverted,
+  snoozed: FILTER_STATUS.Inverted,
+  ...labels,
+});
+
 export const workContexts: { [key: string]: WorkContext } = {
   inbox: {
     displayName: 'Inbox',
     labels: {
       Unlabeled: FILTER_STATUS.Active,
+      snoozed: FILTER_STATUS.Inverted,
     },
   },
   urgent: {
     displayName: 'Urgent',
-    labels: {
+    labels: withDefaultInversions({
       urgent: FILTER_STATUS.Active,
-      backlog: FILTER_STATUS.Inverted,
-    },
+    }),
   },
   quickFixes: {
     displayName: 'Quick Fixes',
-    labels: {
+    labels: withDefaultInversions({
       '5 minutes': FILTER_STATUS.Active,
-      backlog: FILTER_STATUS.Inverted,
-    },
+    }),
   },
   upNext: {
     displayName: 'Up Next',
-    labels: {
-      backlog: FILTER_STATUS.Inverted,
+    labels: withDefaultInversions({
       'up next': FILTER_STATUS.Active,
-    },
+    }),
   },
   work: {
     displayName: 'Work',
-    labels: {
-      backlog: FILTER_STATUS.Inverted,
+    labels: withDefaultInversions({
       work: FILTER_STATUS.Active,
-    },
+    }),
   },
   shopping: {
     displayName: 'Shopping',
-    labels: {
-      backlog: FILTER_STATUS.Inverted,
+    labels: withDefaultInversions({
       Shopping: FILTER_STATUS.Active,
-    },
+    }),
   },
   chalkPlanning: {
     displayName: 'Chalk Planning',
-    labels: {
+    labels: withDefaultInversions({
       Chalk: FILTER_STATUS.Active,
-      backlog: FILTER_STATUS.Inverted,
       vague: FILTER_STATUS.Active,
+    }),
+  },
+  snoozed: {
+    displayName: 'Snoozed',
+    labels: {
+      snoozed: FILTER_STATUS.Active,
     },
   },
 };
@@ -67,12 +77,12 @@ const initialState: WorkspaceState = {
   editTodoId: null,
   filterLabels: {
     Unlabeled: FILTER_STATUS.Active,
+    snoozed: FILTER_STATUS.Inverted,
   },
   labelTodoId: null,
   loggedIn: Platform.OS === 'web',
   showCompletedTodos: false,
   showLabelFilter: false,
-  snoozedOnly: false,
   snoozeTodoId: null,
 };
 export const workspaceSlice = createSlice({
@@ -139,12 +149,6 @@ export const workspaceSlice = createSlice({
     },
     toggleShowLabelFilter: (state) => {
       state.showLabelFilter = !state.showLabelFilter;
-    },
-    setSnoozedOnly: (state, action) => {
-      state.snoozedOnly = action.payload;
-      if (action.payload) {
-        state.filterLabels = {};
-      }
     },
     setSnoozeTodoId: (state, action) => {
       state.snoozeTodoId = action.payload;

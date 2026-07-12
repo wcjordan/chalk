@@ -12,6 +12,7 @@ interface Style {
 }
 
 const UNLABELED = 'Unlabeled';
+const SNOOZED = 'snoozed';
 const styles = StyleSheet.create<Style>({
   labelFilterView: {
     flexDirection: 'row',
@@ -53,6 +54,13 @@ const LabelFilter: React.FC = function () {
         label={UNLABELED}
         onPress={filterByLabelCb}
         status={selectedLabels[UNLABELED]}
+      />
+      <LabelChip
+        display="Snoozed"
+        key={SNOOZED}
+        label={SNOOZED}
+        onPress={filterByLabelCb}
+        status={selectedLabels[SNOOZED]}
       />
       <View style={styles.spacer} />
       <FilterViewControls

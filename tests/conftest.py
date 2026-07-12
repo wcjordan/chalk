@@ -8,7 +8,7 @@ import pytest
 from playwright.sync_api import sync_playwright
 
 from helpers.label_helpers import clear_label_filters, dismiss_add_label_modal
-from helpers.todo_helpers import delete_todo, find_todos
+from helpers.todo_helpers import UNCHECKED_ICON_TEXT, delete_todo, find_todos
 
 
 # Add details of failures so we can report to browserstack in the driver fixture
@@ -128,6 +128,11 @@ def page(request, playwright, todo_prefix, test_name, base_url, record_xml_attri
         try:
             dismiss_add_label_modal(page, optional=True)
             clear_label_filters(page)
+
+            # Ensure completed test todos are visible too, so they get cleaned up below
+            show_completed_btn = page.locator('[data-testid="show-completed-todos"]')
+            if show_completed_btn.inner_text() == UNCHECKED_ICON_TEXT:
+                show_completed_btn.click()
 
             cancel_edit_buttons = page.locator(
                 '[data-testid="cancel-edit"]'
