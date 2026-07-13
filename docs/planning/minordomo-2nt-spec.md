@@ -6,56 +6,67 @@ When offline, the user should see an indication of their connectivity status. To
 
 The app currently uses Redux Toolkit with `createAsyncThunk` and polls every 10 seconds. All failed API calls are silently swallowed with `console.warn` only. There is no network detection, no offline UI, and no retry logic.
 
----
-
-## Stage 1: Offline Detection & Offline Banner
-
-### Description
-
-Add network connectivity detection using `@react-native-community/netinfo`. Create a Redux slice to track online/offline state. Show a persistent offline banner in the UI when the network is unavailable. Pause the 10-second polling interval while offline and resume (with an immediate refresh) when connectivity is restored.
-
-### Acceptance Criteria
-- `@react-native-community/netinfo` is added to `ui/js/package.json` dependencies
-- A `networkSlice` exists in `ui/js/src/redux/networkSlice.ts` with `isOnline: boolean` state and a `setOnlineStatus` action
-- A `NetworkStatusListener` component (or hook) subscribes to `NetInfo.addEventListener` and dispatches `setOnlineStatus` on change
-- An offline banner (e.g. "You are offline" strip above the todo list) renders when `isOnline` is false
-- The 10-second polling in `useDataLoader` is paused when offline; on reconnect it fires an immediate `listTodos()` before resuming the interval
-- Existing unit tests pass; new unit tests cover: (a) `networkSlice` actions, (b) banner appears/disappears when `isOnline` changes, (c) polling pauses/resumes correctly
+**Network detection approach (no new packages):**
+- Web: `window.addEventListener('online'/'offline')` + seed from `navigator.onLine`
+- Native: two consecutive `listTodos.rejected` actions flip `isOnline` to `false`; any `listTodos.fulfilled` resets it to `true`
 
 ---
 
-## Stage 2: User Notifications for Failed Mutations
+## Stage 1: Network Status Detection and Redux Slice
 
 ### Description
 
-Convert the silent `console.warn` failures in all todo mutation thunks into visible user notifications. Extend the notification system to support an `'error'` type so the `ErrorBar` can render failed-save messages distinctly from progress messages. Each rejected thunk (`createTodo`, `updateTodo`, `moveTodo`) should dispatch an error notification with a clear message.
+Add a `networkSlice` to Redux (`ui/js/src/redux/networkSlice.ts`) that tracks `isOnline: boolean`, defaulting to `true`. Create a platform-split `useNetworkMonitor` hook:
+
+- `ui/js/src/hooks/useNetworkMonitor.web.ts`: subscribes to `window` `online` / `offline` events and seeds from `navigator.onLine`.
+- `ui/js/src/hooks/useNetworkMonitor.ts` (native fallback): seeds `isOnline: true`, then the slice itself tracks consecutive `listTodos` failures (two rejections = offline, any fulfillment = online) via `extraReducers` in `networkSlice`.
+
+Wire the web hook into `App.tsx`. The native path updates automatically via `extraReducers` reacting to `listTodos` actions — no hook wiring needed.
+
+Add `networkSlice.reducer` to `rootReducerConfig` in `reducers.ts`.
 
 ### Acceptance Criteria
-- `notificationsSlice` notification type includes `'error'` in addition to `'default'` and `'label'`
-- `ErrorBar` renders error notifications with a visually distinct style (e.g. different background color or icon)
-- `createTodo.rejected`, `updateTodo.rejected`, and `moveTodo.rejected` handlers dispatch an error notification (e.g. "Failed to save todo. Will retry when online.") instead of only `console.warn`
-- `listTodos.rejected` does NOT show an error notification (polling failures should be silent to avoid noise)
-- Existing unit tests pass; new unit tests cover each rejected mutation case showing an error notification in state
+- `networkSlice` initialises `isOnline` to `true` and exposes a `setOnlineStatus(boolean)` action.
+- On web, the `useNetworkMonitor` hook dispatches `setOnlineStatus(false/true)` when browser fires `offline`/`online` events; `App.tsx` calls this hook.
+- On native, `networkSlice.extraReducers` increments a `consecutiveFailures` counter on `listTodos.rejected`; at ≥2 failures it sets `isOnline: false`. Any `listTodos.fulfilled` resets `consecutiveFailures` to 0 and sets `isOnline: true`.
+- `make test` passes; unit tests cover: `setOnlineStatus` action, failure counter logic in `extraReducers`.
 
 ---
 
-## Stage 3: Pending Mutation Queue & Retry on Reconnect
+## Stage 2: Offline UI Indicator and Polling Pause
 
 ### Description
 
-Create a `pendingMutationsSlice` that stores failed mutation operations (create, update, move) in a queue. When a mutation thunk is rejected due to a network error, add the operation to this queue instead of discarding it. When the network comes back online (detected via Stage 1's `setOnlineStatus`), automatically dispatch a retry thunk that processes all queued operations in order and then refreshes the todo list.
+Show a persistent "You are offline" banner while `isOnline` is `false`. Use the existing `ErrorBar` component (with `permanent={true}`) rendered above the normal notification queue in `App.tsx`. When `isOnline` is `true`, the offline banner is hidden and normal notifications resume.
 
-Design notes:
-- Store the minimal operation payload (type + arguments) needed to re-dispatch the thunk
-- Retry each operation sequentially to preserve ordering; remove from queue on success
-- If a retry fails again, leave it in the queue for the next reconnect cycle
-- Move operations use relative positioning (before/after another todo ID); retry them as-is since the referenced todo likely still exists within the same session
+Also update `useDataLoader` to pause the 10-second poll interval while offline and restart it immediately when connectivity returns.
 
 ### Acceptance Criteria
-- `pendingMutationsSlice` exists with a queue of `{ type: 'create' | 'update' | 'move', payload: ... }` entries
-- `createTodo.rejected`, `updateTodo.rejected`, `moveTodo.rejected` handlers enqueue the failed operation
-- A `retryPendingMutations` thunk exists that processes the queue sequentially
-- `retryPendingMutations` is dispatched automatically when `setOnlineStatus(true)` fires (in the NetworkStatusListener / store middleware or in the listener component)
-- Successfully retried operations are removed from the queue; failed retries remain
-- After processing the queue, `listTodos()` is dispatched to reconcile server state
-- Existing unit tests pass; new unit tests cover: (a) operations enqueued on rejection, (b) queue cleared after successful retry, (c) failed retry leaves operation in queue
+- When `network.isOnline === false`, `App.tsx` renders `<ErrorBar permanent text="You are offline" />` regardless of any notification queue entries.
+- When `network.isOnline === true`, the offline banner is not rendered.
+- `useDataLoader` clears the interval while offline and re-establishes it (dispatching `listTodos()` immediately) when `isOnline` transitions back to `true`.
+- `make test` passes; snapshot and unit tests cover: offline banner visible when `isOnline=false`, absent when `isOnline=true`; polling pauses/resumes.
+
+---
+
+## Stage 3: Pending Mutation Queue and Retry on Reconnect
+
+### Description
+
+Add an `offlineQueueSlice` (`ui/js/src/redux/offlineQueueSlice.ts`) that holds a list of failed operations: `{ type: 'create' | 'update' | 'move', payload: string | TodoPatch | MoveTodoOperation }`.
+
+Update the mutation thunks in `reducers.ts` (`updateTodo`, `moveTodo`) and the `createTodo` rejected handler in `todosApiSlice.ts` to enqueue the failed operation when `network.isOnline === false`.
+
+Add a `flushOfflineQueue` thunk in `reducers.ts` that drains the queue sequentially: dispatches each queued operation via the normal thunks (`createTodo` / `updateTodo` / `moveTodo`), removes entries on success, leaves them on failure. After draining, dispatches `listTodos()` to reconcile. On full success dispatches a `"Changes synced"` notification.
+
+Trigger `flushOfflineQueue` automatically when `setOnlineStatus(true)` is dispatched — wire this in `App.tsx` via a `useEffect` watching `network.isOnline`, or in a dedicated listener hook.
+
+This is in-memory only; the queue does not survive app restarts.
+
+### Acceptance Criteria
+- `offlineQueueSlice` exists with `enqueue` and `dequeue` (by index) actions.
+- When `createTodo`, `updateTodo`, or `moveTodo` is rejected and `network.isOnline === false`, the failed operation is added to the queue.
+- `flushOfflineQueue` processes operations in FIFO order; successful operations are removed from the queue.
+- Operations that fail during the flush remain in the queue; a "Some changes could not be synced" notification is shown.
+- When `network.isOnline` transitions to `true`, `flushOfflineQueue` is dispatched automatically.
+- `make test` passes; unit tests cover: enqueue on rejection when offline, flush ordering, notifications on success/failure.
