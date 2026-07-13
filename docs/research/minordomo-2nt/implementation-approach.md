@@ -1,82 +1,64 @@
 # Offline Support: Implementation Approach Notes
 
-## Proposed Architecture
+## Confirmed Decisions (from GH issue #336 owner)
+
+- **Persistent storage required**: The queue must survive app restarts. Owner explicitly confirmed in comments.
+- See `docs/planning/minordomo-2nt-spec.md` for the complete 4-stage plan.
+
+## Architecture
 
 ### Network State Detection
 
-**Chosen approach:** Infer offline status from `listTodosApi.rejected` in a new `networkSlice`
-using `extraReducers`. When `listTodosApi.fulfilled`, set `isOffline: false`.
+**Web:** `window` `online`/`offline` events + seed from `navigator.onLine` via `useNetworkMonitor.web.ts` hook.
 
-**Concern:** A single failed poll (500, DNS blip) would flip the banner incorrectly.
-**Mitigation options:**
-- Distinguish `TypeError` (fetch network error) from HTTP error responses
-- Require N consecutive failures before flipping
-- Web: use `navigator.onLine` + `online`/`offline` events as primary signal (since `Platform.OS` is already used in fetchApi.ts)
+**Native:** `networkSlice.extraReducers` reacts to `listTodosApi` actions:
+- `fulfilled` → `isOnline: true`, reset failure counter
+- `rejected` with `TypeError` (network error, not HTTP error) → increment `consecutiveNetworkFailures`; ≥2 sets `isOnline: false`
+- rejected with non-TypeError → no change (500s, 404s don't flip offline status)
+
+**Why keep polling while offline:** The 10s poll is the only reconnection signal on native. Pausing it would require a separate mechanism to detect coming back online. Web has browser events, but keeping the poll going on web too is simpler and keeps data fresh on reconnect.
+
+### Offline Banner
+
+Use a separate `<OfflineBanner>` component (not `ErrorBar`/Snackbar) rendered in `App.tsx`. The `ErrorBar` Snackbar is for the transient notification queue — mixing a permanent offline indicator into the same Snackbar would block notifications from rendering while offline.
 
 ### Offline Queue
 
-**Location:** `networkSlice` (new Redux slice), fields:
-- `isOffline: boolean`
-- `pendingOfflineOps: OfflineOperation[]`
-
-**OfflineOperation type (discriminated union):**
+`offlineQueueSlice` with `pendingOps: OfflineOperation[]`:
 ```ts
 type OfflineOperation =
+  | { type: 'create'; payload: { description: string; labels: string[] } }
   | { type: 'update'; payload: TodoPatch }
   | { type: 'move'; payload: MoveTodoOperation }
-  | { type: 'create'; payload: NewTodo & { tempId: number } }
 ```
 
-### Queuing mutations
+### Queuing Mutations
 
-When `updateTodo.rejected` / `moveTodo.rejected` and `isOffline`:
-- Add op to `pendingOfflineOps` in networkSlice
-- The `shortcutSlice` already holds optimistic state visually; nothing extra needed for UI
+Modify `updateTodo`/`moveTodo` thunks in `reducers.ts` to check the rejected result and dispatch `enqueueOp` when offline. For `createTodo`, same pattern (moved from `todosApiSlice.ts` rejected handler).
 
-When `createTodo.rejected` and `isOffline`:
-- Generate temp negative ID (e.g., `-Date.now()`)
-- Add todo to entries optimistically (with temp ID)
-- Queue `{ type: 'create', payload: { ...newTodo, tempId } }`
-- `pendingCreates` currently assumes server IDs; will need adjustment for temp IDs
+### Flush Ordering (CRITICAL)
 
-### Reconnect flush ordering (CRITICAL)
+`flushOfflineQueue` → sequential op dispatch → `listTodosApi()` for reconciliation.
 
-Correct sequence when coming back online:
-1. Flush offline queue first (each op updates entries via its `.fulfilled`)
-2. THEN do a fresh `listTodos` to reconcile state with server
+**Wrong order:** calling `listTodosApi` first clears shortcutSlice ops before queued mutations land. User briefly sees pre-edit state.
 
-**Wrong order:** `listTodosApi.fulfilled` clears shortcutSlice ops via
-`clearOperationsUpThroughGeneration` BEFORE queued mutations land — user sees
-pre-edit state briefly.
+Flush is triggered from `App.tsx` `useEffect` on `network.isOnline` → `true`. Works for both web (set by browser event) and native (set by `extraReducers` on `listTodos.fulfilled`).
 
-**Implementation:** In `listTodos` thunk (reducers.ts), capture `wasOffline` before
-dispatching `listTodosApi`. If `wasOffline && !isOffline` after success, call
-`flushOfflineQueue()` first, then do another `listTodosApi` to reconcile.
+### Persistence (Stage 4)
 
-### Persistence Question (OPEN)
+Two nested `persistReducer` configurations:
+- `offlineQueue`: full persistence (only has `pendingOps`)
+- `todosApi`: blacklist `['loading', 'initialLoad']`; persist `entries`/`pendingCreates`/`pendingArchives`
 
-The issue says "stored locally" — this is ambiguous:
-- **In-memory only** (3 stages): queue in Redux, lost on app restart/tab close
-- **Persistent** (4 stages): requires `redux-persist` + `AsyncStorage`/`localStorage`
+`isOnline` is NOT persisted — always starts `true`.
 
-No persistence infrastructure exists in this codebase. This answer significantly
-changes the plan scope. **Must clarify with user.**
+Platform-split storage:
+- Web: `redux-persist/lib/storage` (localStorage)
+- Native: `@react-native-async-storage/async-storage`
 
-## Stage Draft (pending persistence answer)
+Test bypass: `process.env.NODE_ENV === 'test'` skips `persistReducer` entirely, so existing test files don't need changes.
 
-**Stage 1:** Network slice + offline detection + offline banner UI
-- `networkSlice.ts` with `isOffline`, `pendingOfflineOps`
-- `extraReducers` listening to `listTodosApi` actions
-- Permanent banner in `App.tsx` when offline
+### Packages Required (Stage 4)
 
-**Stage 2:** Queue update/move mutations; flush on reconnect
-- Wrap `updateTodo`/`moveTodo` thunks to enqueue on rejection when offline
-- `flushOfflineQueue` thunk with correct ordering (flush → then reconcile)
-
-**Stage 3:** Queue create mutations with temp-ID optimistic UI
-- Temp negative ID generation
-- Adjust `pendingCreates`/`handleListResponse`/`cleanupPendingState` for temp IDs
-- On flush: POST create → swap temp ID for real ID in entries
-
-**Stage 4 (if persistence required):** Add `redux-persist` integration
-- Persist `networkSlice.pendingOfflineOps` to `AsyncStorage` (native) / `localStorage` (web)
+- `redux-persist`
+- `@react-native-async-storage/async-storage`
