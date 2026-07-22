@@ -88,14 +88,14 @@ type OfflineOperation =
 Add `offlineQueue: offlineQueueSlice.reducer` to `rootReducerConfig`.
 
 **Queuing mutations:**
-Modify the `updateTodo` and `moveTodo` thunks in `reducers.ts` to enqueue on rejection when offline:
+Modify the `updateTodo` and `moveTodo` thunks in `reducers.ts` to enqueue on rejection whenever the failure is a network error — regardless of the current `network.isOnline` flag. This is deliberate: native offline detection requires 2 consecutive network failures before `isOnline` flips to `false` (see Stage 1), so gating on `isOnline` would drop the first failed mutation. HTTP errors (non-`TypeError` rejections, e.g. 4xx/5xx) are NOT enqueued, since retrying them would fail identically.
 ```ts
 const result = await dispatch(updateTodoApi(todoPatch));
-if (updateTodoApi.rejected.match(result) && !getState().network.isOnline) {
+if (updateTodoApi.rejected.match(result) && result.error.name === 'TypeError') {
   dispatch(offlineQueueSlice.actions.enqueueOp({ type: 'update', payload: todoPatch }));
 }
 ```
-Do the same for `moveTodoApi`. For `createTodo`, catch the rejected result in `reducers.ts` (not in `todosApiSlice.ts` which currently only logs) and enqueue with `{ type: 'create', payload: { description, labels } }`.
+Do the same for `moveTodoApi`. For `createTodo`, catch the rejected result in `reducers.ts` (not in `todosApiSlice.ts` which currently only logs) and, on a `TypeError` rejection, enqueue with `{ type: 'create', payload: { description, labels } }`.
 
 **Flush thunk:**
 Add `flushOfflineQueue` thunk in `reducers.ts`. It reads `pendingOps`, clears the queue, then runs each op sequentially via the normal thunks (`createTodo`, `updateTodoApi`, `moveTodoApi`). On completion, dispatches `listTodosApi()` to reconcile. Dispatches a `"Changes synced"` notification on full success, or `"Some changes could not be synced"` if any op fails (and re-enqueues failed ops).
@@ -107,13 +107,14 @@ Note: Stage 3 queue is in-memory only (no persistence yet — Stage 4 adds persi
 
 ### Acceptance Criteria
 - `offlineQueueSlice` `enqueueOp` appends to `pendingOps`; `dequeueOpByIndex` removes by index.
-- When `updateTodoApi`, `moveTodoApi` is rejected and `network.isOnline === false`, the operation is enqueued.
-- When `createTodo` (the thunk in `reducers.ts`) fails and `network.isOnline === false`, a `create` op is enqueued.
+- When `updateTodoApi` or `moveTodoApi` is rejected with a `TypeError` (network error), the operation is enqueued — regardless of the current `network.isOnline` value (covers the case where the failure occurs before `isOnline` has flipped to `false`).
+- When `updateTodoApi` or `moveTodoApi` is rejected with a non-`TypeError` (HTTP error), the operation is NOT enqueued.
+- When `createTodo` (the thunk in `reducers.ts`) fails with a `TypeError`, a `create` op is enqueued regardless of `network.isOnline`; a non-`TypeError` failure is not enqueued.
 - `flushOfflineQueue` processes ops in FIFO order; successful ops are removed; failed ops are re-enqueued.
 - After flush, `listTodosApi` is called for reconciliation.
 - Appropriate success/failure notifications are shown.
 - When `network.isOnline` transitions to `true`, `flushOfflineQueue` is dispatched.
-- `make test` passes; unit tests cover: enqueue on rejection when offline, flush ordering, notification on success/failure, flush triggered on `isOnline` transition.
+- `make test` passes; unit tests cover: enqueue on network-error rejection regardless of `isOnline` state, no enqueue on HTTP-error rejection, flush ordering, notification on success/failure, flush triggered on `isOnline` transition.
 
 ---
 
