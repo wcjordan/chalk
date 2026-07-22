@@ -75,6 +75,14 @@ def wait_for_todo_to_disappear(page, description):
     find_todos(page, description).wait_for(state="detached")
 
 
+def snooze_todo(page, todo_item, preset):
+    snooze_button = todo_item.locator('[data-testid="snooze-todo"]')
+    snooze_button.click()
+    preset_chip = page.locator(f'[data-testid="snooze-menu"] :text-is("{preset}")')
+    preset_chip.click()
+    page.locator('[data-testid="snooze-menu"]').wait_for(state="detached")
+
+
 def drag_todo(page, todo_item, relative_todo_item):
     if isinstance(todo_item, str):
         todo_item = find_todo(page, todo_item)
