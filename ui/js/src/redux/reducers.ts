@@ -8,6 +8,7 @@ import {
   recordSessionData,
 } from './fetchApi';
 import { labelsApiSlice, listLabels } from './labelsApiSlice';
+import networkSlice from './networkSlice';
 import notificationsSlice from './notificationsSlice';
 import shortcutSlice from './shortcutSlice';
 import { RootState } from './store';
@@ -206,6 +207,7 @@ export const toggleShowLabelFilter =
 export { createTodo, listLabels };
 export const rootReducerConfig = {
   labelsApi: labelsApiSlice.reducer,
+  network: networkSlice.reducer,
   notifications: notificationsSlice.reducer,
   shortcuts: shortcutSlice.reducer,
   todosApi: todosApiSlice.reducer,
