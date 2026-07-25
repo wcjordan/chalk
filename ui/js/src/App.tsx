@@ -5,6 +5,7 @@ import ErrorBar from './components/ErrorBar';
 import Login from './components/Login';
 import TodoList from './components/TodoList';
 import { useAppSelector } from './hooks/hooks';
+import { useNetworkMonitor } from './hooks/useNetworkMonitor';
 
 interface Style {
   root: ViewStyle;
@@ -26,6 +27,7 @@ const styles = StyleSheet.create<Style>({
 });
 
 const App: React.FC = function () {
+  useNetworkMonitor();
   const loggedIn = useAppSelector((state) => state.workspace.loggedIn);
   const notificationQueue = useAppSelector(
     (state) => state.notifications.notificationQueue,
