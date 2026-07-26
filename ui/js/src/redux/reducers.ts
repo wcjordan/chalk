@@ -126,7 +126,12 @@ export const completeAuthentication =
       if (response.status !== 200) {
         const responseText = await response.text();
         const message = `Login failed with status: ${response.status} ${response.statusText}\n${responseText}`;
-        dispatch(notificationsSlice.actions.addNotification({ text: message, type: 'default' }));
+        dispatch(
+          notificationsSlice.actions.addNotification({
+            text: message,
+            type: 'default',
+          }),
+        );
         throw new Error(message);
       }
 
@@ -196,6 +201,7 @@ export const dismissNotification =
   notificationsSlice.actions.dismissNotification;
 export const setEditTodoId = workspaceSlice.actions.setEditTodoId;
 export const setLabelTodoId = workspaceSlice.actions.setLabelTodoId;
+export const setSnoozeTodoId = workspaceSlice.actions.setSnoozeTodoId;
 export const setWorkContext = workspaceSlice.actions.setWorkContext;
 export const setFilters = workspaceSlice.actions.setFilters;
 export const toggleLabel = workspaceSlice.actions.toggleLabel;
