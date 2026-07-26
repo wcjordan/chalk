@@ -28,7 +28,7 @@ else
     backup_downloaded=0
     for i in {1..5}; do
         if [[ $USE_STARTER_DATA == "true" ]]; then
-            gsutil cp "gs://default-323301-db-backups/Cloud_SQL_Export_2023-07-26 (21:01:32).sql" ./backup_to_restore.sql && \
+            gcloud storage cp "gs://default-323301-db-backups/Cloud_SQL_Export_2023-07-26 (21:01:32).sql" ./backup_to_restore.sql && \
             backup_downloaded=1 && break || \
             echo "Unable to download backup, retrying in 3 seconds" && sleep 3
         else
