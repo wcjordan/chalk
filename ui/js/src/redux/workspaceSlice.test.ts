@@ -1,6 +1,6 @@
 import '../__mocks__/matchMediaMock';
 import { FILTER_STATUS } from './types';
-import { workspaceSlice } from './workspaceSlice';
+import { workContexts, workspaceSlice } from './workspaceSlice';
 
 describe('workspace reducer', function () {
   it('should return the initial state', function () {
@@ -9,11 +9,13 @@ describe('workspace reducer', function () {
       editTodoId: null,
       filterLabels: {
         Unlabeled: FILTER_STATUS.Active,
+        snoozed: FILTER_STATUS.Inverted,
       },
       labelTodoId: null,
       loggedIn: false,
       showCompletedTodos: false,
       showLabelFilter: false,
+      snoozeTodoId: null,
     });
   });
 
@@ -160,6 +162,7 @@ describe('workspace reducer', function () {
       expect(result).toEqual({
         filterLabels: {
           Unlabeled: FILTER_STATUS.Active,
+          snoozed: FILTER_STATUS.Inverted,
         },
       });
     });
@@ -181,6 +184,61 @@ describe('workspace reducer', function () {
           Chalk: FILTER_STATUS.Active,
         },
       });
+    });
+  });
+  describe('workContexts', function () {
+    it('should define a virtual Snoozed work context', function () {
+      expect(workContexts.snoozed).toEqual({
+        displayName: 'Snoozed',
+        labels: {
+          snoozed: FILTER_STATUS.Active,
+        },
+      });
+    });
+
+    it('should invert both backlog and snoozed by default for non-Inbox contexts', function () {
+      expect(workContexts.urgent).toEqual({
+        displayName: 'Urgent',
+        labels: {
+          urgent: FILTER_STATUS.Active,
+          backlog: FILTER_STATUS.Inverted,
+          snoozed: FILTER_STATUS.Inverted,
+        },
+      });
+    });
+
+    it('should keep Inbox backlog-inclusive while still excluding snoozed todos', function () {
+      expect(workContexts.inbox).toEqual({
+        displayName: 'Inbox',
+        labels: {
+          Unlabeled: FILTER_STATUS.Active,
+          snoozed: FILTER_STATUS.Inverted,
+        },
+      });
+    });
+  });
+
+  describe('workspace/setSnoozeTodoId', function () {
+    it('should set the snooze todo id', function () {
+      const result = workspaceSlice.reducer(
+        { snoozeTodoId: null },
+        {
+          type: 'workspace/setSnoozeTodoId',
+          payload: 42,
+        },
+      );
+      expect(result).toEqual({ snoozeTodoId: 42 });
+    });
+
+    it('should clear the snooze todo id', function () {
+      const result = workspaceSlice.reducer(
+        { snoozeTodoId: 42 },
+        {
+          type: 'workspace/setSnoozeTodoId',
+          payload: null,
+        },
+      );
+      expect(result).toEqual({ snoozeTodoId: null });
     });
   });
 });

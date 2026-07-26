@@ -18,22 +18,25 @@ def test_url_updates_with_filters(page, todo_prefix):
     toggle_label_filter_section(page)
 
     # Add a filter and verify URL updates
+    # (Inbox's default `snoozed` inversion persists in the URL as real label
+    # filters are added, since it's a virtual label with no chip of its own)
     toggle_label_filter(page, "work")
-    assert page.url == f"{base_url}?labels=work"
+    assert page.url == f"{base_url}?labels=work&inverted=snoozed"
 
     # Add another filter and verify URL updates
     toggle_label_filter(page, "5 minutes")
-    assert page.url == f"{base_url}?labels=5+minutes%2Cwork"
+    assert page.url == f"{base_url}?labels=5+minutes%2Cwork&inverted=snoozed"
 
     # Toggle a filter to inverted and verify URL updates
     toggle_label_filter(page, "work")
-    assert page.url == f"{base_url}?labels=5+minutes&inverted=work"
+    assert page.url == f"{base_url}?labels=5+minutes&inverted=snoozed%2Cwork"
 
-    # Remove all filters and verify URL returns to base
+    # Remove all real label filters and verify URL returns to just the
+    # default snoozed inversion
     toggle_label_filter(page, "work")
     toggle_label_filter(page, "5 minutes")
     toggle_label_filter(page, "5 minutes")
-    assert page.url == base_url
+    assert page.url == f"{base_url}?inverted=snoozed"
 
 
 @pytest.mark.parametrize("test_name", ["Label: Load Filters From URL"])

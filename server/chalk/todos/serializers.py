@@ -60,5 +60,6 @@ class TodoSerializer(serializers.ModelSerializer):
             'id',
             'labels',
             'order_rank',
+            'snoozed_until',
             'version',
         ]

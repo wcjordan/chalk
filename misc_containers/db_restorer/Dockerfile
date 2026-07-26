@@ -11,7 +11,7 @@ RUN wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | gpg --dear
     apt-get -yqq install postgresql-client-18 && \
     rm -rf /var/lib/apt/lists/*
 
-# Install gsutil for Google Cloud Storage
+# Install gcloud CLI (provides `gcloud storage` for Google Cloud Storage)
 RUN wget -q https://packages.cloud.google.com/apt/doc/apt-key.gpg -O - | gpg --dearmor | tee /usr/share/keyrings/cloud.google.gpg && \
     echo deb [arch=amd64,arm64,ppc64el signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main | tee /etc/apt/sources.list.d/google-cloud-sdk.list && \
     apt-get -yqq update && \

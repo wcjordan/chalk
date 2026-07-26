@@ -196,6 +196,29 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
             </div>
           </button>
         </div>
+        <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+             data-testid="chip-container"
+             style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+        >
+          <button role="button"
+                  tabindex="0"
+                  class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                  data-testid="chip"
+                  type="button"
+                  style="border-radius: 8px;"
+          >
+            <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                 style="padding-right: 0px;"
+            >
+              <div dir="auto"
+                   class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                   style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+              >
+                Snoozed
+              </div>
+            </div>
+          </button>
+        </div>
         <div class="css-g5y9jx r-16y2uox">
         </div>
         <div dir="auto"
@@ -351,6 +374,26 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
                                   󰜢
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -615,6 +658,26 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
                                   󰜢
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -1140,6 +1203,26 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </button>
                             </div>
                             <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                                  data-testid="delete-todo-container"
                                  style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
                             >
@@ -1400,6 +1483,26 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
                                   󰜢
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -1668,6 +1771,26 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                               </button>
                             </div>
                             <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                                  data-testid="delete-todo-container"
                                  style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
                             >
@@ -1848,6 +1971,126 @@ exports[`Todo List DefaultTodoList smoke-test 1`] = `
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div aria-live="polite"
+         class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-105ug2t"
+         data-testid="modal"
+    >
+      <button aria-label="Close modal"
+              role="button"
+              tabindex="0"
+              class="css-g5y9jx r-1loqt21 r-1otgn73 r-13awgt0"
+              data-testid="modal-backdrop"
+              type="button"
+              style="background-color: rgba(50, 47, 55, 0.4); opacity: 1;"
+      >
+      </button>
+      <div class="css-g5y9jx r-1p0dtai r-1777fci r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-12vffkv"
+           data-testid="modal-wrapper"
+           style="margin-top: 0px; margin-bottom: 0px;"
+      >
+        <div class="css-g5y9jx r-1niwhzg r-1777fci r-1jj8364 r-lchren r-6e0ovw r-105ug2t"
+             data-testid="modal-surface"
+             style="box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 3px; opacity: 1;"
+        >
+          <div class="css-g5y9jx r-hr69ez r-18u37iz r-1w6e6rj"
+               data-testid="snooze-menu"
+          >
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    Tomorrow
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    This Saturday
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    Next Week
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    Next Month
+                  </div>
+                </div>
+              </button>
             </div>
           </div>
         </div>
@@ -2053,6 +2296,29 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
             </div>
           </button>
         </div>
+        <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+             data-testid="chip-container"
+             style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+        >
+          <button role="button"
+                  tabindex="0"
+                  class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                  data-testid="chip"
+                  type="button"
+                  style="border-radius: 8px;"
+          >
+            <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                 style="padding-right: 0px;"
+            >
+              <div dir="auto"
+                   class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                   style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+              >
+                Snoozed
+              </div>
+            </div>
+          </button>
+        </div>
         <div class="css-g5y9jx r-16y2uox">
         </div>
         <div dir="auto"
@@ -2208,6 +2474,26 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
                                   󰜢
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -2476,6 +2762,26 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </button>
                             </div>
                             <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                                  data-testid="delete-todo-container"
                                  style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
                             >
@@ -2736,6 +3042,26 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
                                   󰜢
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -3004,6 +3330,26 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </button>
                             </div>
                             <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                                  data-testid="delete-todo-container"
                                  style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
                             >
@@ -3268,6 +3614,26 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                               </button>
                             </div>
                             <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
                                  data-testid="delete-todo-container"
                                  style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
                             >
@@ -3528,6 +3894,26 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
                                   󰜢
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -4104,6 +4490,126 @@ exports[`Todo List LabelPickerOverlay smoke-test 1`] = `
         </div>
       </div>
     </div>
+    <div aria-live="polite"
+         class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-105ug2t"
+         data-testid="modal"
+    >
+      <button aria-label="Close modal"
+              role="button"
+              tabindex="0"
+              class="css-g5y9jx r-1loqt21 r-1otgn73 r-13awgt0"
+              data-testid="modal-backdrop"
+              type="button"
+              style="background-color: rgba(50, 47, 55, 0.4); opacity: 1;"
+      >
+      </button>
+      <div class="css-g5y9jx r-1p0dtai r-1777fci r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-12vffkv"
+           data-testid="modal-wrapper"
+           style="margin-top: 0px; margin-bottom: 0px;"
+      >
+        <div class="css-g5y9jx r-1niwhzg r-1777fci r-1jj8364 r-lchren r-6e0ovw r-105ug2t"
+             data-testid="modal-surface"
+             style="box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 3px; opacity: 1;"
+        >
+          <div class="css-g5y9jx r-hr69ez r-18u37iz r-1w6e6rj"
+               data-testid="snooze-menu"
+          >
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    Tomorrow
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    This Saturday
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    Next Week
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    Next Month
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
@@ -4304,6 +4810,29 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
             </div>
           </button>
         </div>
+        <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+             data-testid="chip-container"
+             style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+        >
+          <button role="button"
+                  tabindex="0"
+                  class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                  data-testid="chip"
+                  type="button"
+                  style="border-radius: 8px;"
+          >
+            <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                 style="padding-right: 0px;"
+            >
+              <div dir="auto"
+                   class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                   style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+              >
+                Snoozed
+              </div>
+            </div>
+          </button>
+        </div>
         <div class="css-g5y9jx r-16y2uox">
         </div>
         <div dir="auto"
@@ -4459,6 +4988,26 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
                                      style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
                                 >
                                   󰜢
+                                </div>
+                              </button>
+                            </div>
+                            <div class="css-g5y9jx r-1udh08x r-crgep1 r-105ug2t"
+                                 data-testid="snooze-todo-container"
+                                 style="background-color: rgba(0, 0, 0, 0); width: 36px; height: 36px; border-width: 0px; border-radius: 18px; border-color: rgb(121, 116, 126);"
+                            >
+                              <button role="button"
+                                      tabindex="0"
+                                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-1awozwy r-16y2uox r-1777fci"
+                                      data-testid="snooze-todo"
+                                      type="button"
+                              >
+                                <div dir="auto"
+                                     role="img"
+                                     tabindex="-1"
+                                     class="css-146c3p1 r-1niwhzg r-lrvibr r-633pao"
+                                     style="font-size: 20px; color: rgb(163, 213, 255); transform: scaleX(1); line-height: 20px; font-family: material-community; font-weight: normal; font-style: normal;"
+                                >
+                                  󰀠
                                 </div>
                               </button>
                             </div>
@@ -4700,6 +5249,126 @@ exports[`Todo List LoadingIndicator smoke-test 1`] = `
         </div>
       </div>
       <div class="css-g5y9jx r-16y2uox">
+      </div>
+    </div>
+    <div aria-live="polite"
+         class="css-g5y9jx r-1p0dtai r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-105ug2t"
+         data-testid="modal"
+    >
+      <button aria-label="Close modal"
+              role="button"
+              tabindex="0"
+              class="css-g5y9jx r-1loqt21 r-1otgn73 r-13awgt0"
+              data-testid="modal-backdrop"
+              type="button"
+              style="background-color: rgba(50, 47, 55, 0.4); opacity: 1;"
+      >
+      </button>
+      <div class="css-g5y9jx r-1p0dtai r-1777fci r-1d2f490 r-u8s1d r-zchlnj r-ipm5af r-12vffkv"
+           data-testid="modal-wrapper"
+           style="margin-top: 0px; margin-bottom: 0px;"
+      >
+        <div class="css-g5y9jx r-1niwhzg r-1777fci r-1jj8364 r-lchren r-6e0ovw r-105ug2t"
+             data-testid="modal-surface"
+             style="box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 3px; opacity: 1;"
+        >
+          <div class="css-g5y9jx r-hr69ez r-18u37iz r-1w6e6rj"
+               data-testid="snooze-menu"
+          >
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    Tomorrow
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    This Saturday
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    Next Week
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div class="css-g5y9jx r-1phboty r-18u37iz r-rs99b7 r-78d8zt r-1bq2mok r-105ug2t"
+                 data-testid="chip-container"
+                 style="border-color: rgba(0, 0, 0, 0); border-radius: 8px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;"
+            >
+              <button role="button"
+                      tabindex="0"
+                      class="css-g5y9jx r-1otgn73 r-1loqt21 r-bnwqim r-ctqt5z r-1udh08x r-13qz1uu"
+                      data-testid="chip"
+                      type="button"
+                      style="border-radius: 8px;"
+              >
+                <div class="css-g5y9jx r-1awozwy r-18u37iz r-bnwqim r-gy4na3"
+                     style="padding-right: 0px;"
+                >
+                  <div dir="auto"
+                       class="css-146c3p1 r-dnmrzs r-1udh08x r-1udbk01 r-3s2u2q r-1iln25a r-fdjqy7 r-ws14 r-9iso6 r-1x2decy r-15zivkp r-1jkjb r-1kb76zh r-14gqq1x r-lrvibr"
+                       style="direction: ltr; color: rgb(29, 25, 43); letter-spacing: 0.1px; font-weight: 500; line-height: 20px; font-size: 14px;"
+                  >
+                    Next Month
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
