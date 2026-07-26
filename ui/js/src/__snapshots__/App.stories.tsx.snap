@@ -6,6 +6,16 @@ exports[`App Layout DefaultLayout smoke-test 1`] = `
     <div class="css-g5y9jx r-173lkiy r-1pi2tsx r-13qz1uu"
          style="padding: 0px;"
     >
+      <div class="css-g5y9jx r-1awozwy r-vps9rn r-11f147o r-3pj75a"
+           data-testid="offline-banner"
+           style="display: none;"
+      >
+        <div dir="auto"
+             class="css-146c3p1 r-jwli3a r-vw2c0b"
+        >
+          You are offline
+        </div>
+      </div>
       <div class="css-g5y9jx r-1pi2tsx r-f8sm7e r-1skwq7n r-1knelpx">
         <div class="css-g5y9jx r-1kly57o r-13qz1uu">
           <div class="css-g5y9jx"
@@ -420,6 +430,16 @@ exports[`App Layout LabelPickerLayout smoke-test 1`] = `
     <div class="css-g5y9jx r-173lkiy r-1pi2tsx r-13qz1uu"
          style="padding: 0px;"
     >
+      <div class="css-g5y9jx r-1awozwy r-vps9rn r-11f147o r-3pj75a"
+           data-testid="offline-banner"
+           style="display: none;"
+      >
+        <div dir="auto"
+             class="css-146c3p1 r-jwli3a r-vw2c0b"
+        >
+          You are offline
+        </div>
+      </div>
       <div class="css-g5y9jx r-1pi2tsx r-f8sm7e r-1skwq7n r-1knelpx">
         <div class="css-g5y9jx r-1kly57o r-13qz1uu">
           <div class="css-g5y9jx"
@@ -2222,6 +2242,16 @@ exports[`App Layout ListTodosLayout smoke-test 1`] = `
     <div class="css-g5y9jx r-173lkiy r-1pi2tsx r-13qz1uu"
          style="padding: 0px;"
     >
+      <div class="css-g5y9jx r-1awozwy r-vps9rn r-11f147o r-3pj75a"
+           data-testid="offline-banner"
+           style="display: none;"
+      >
+        <div dir="auto"
+             class="css-146c3p1 r-jwli3a r-vw2c0b"
+        >
+          You are offline
+        </div>
+      </div>
       <div class="css-g5y9jx r-1pi2tsx r-f8sm7e r-1skwq7n r-1knelpx">
         <div class="css-g5y9jx r-1kly57o r-13qz1uu">
           <div class="css-g5y9jx"
@@ -3567,6 +3597,16 @@ exports[`App Layout NotificationLayout smoke-test 1`] = `
     <div class="css-g5y9jx r-173lkiy r-1pi2tsx r-13qz1uu"
          style="padding: 0px;"
     >
+      <div class="css-g5y9jx r-1awozwy r-vps9rn r-11f147o r-3pj75a"
+           data-testid="offline-banner"
+           style="display: none;"
+      >
+        <div dir="auto"
+             class="css-146c3p1 r-jwli3a r-vw2c0b"
+        >
+          You are offline
+        </div>
+      </div>
       <div class="css-g5y9jx r-1pi2tsx r-f8sm7e r-1skwq7n r-1knelpx">
         <div class="css-g5y9jx r-1kly57o r-13qz1uu">
           <div class="css-g5y9jx"
