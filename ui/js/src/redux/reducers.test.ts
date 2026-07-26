@@ -404,7 +404,9 @@ describe('createTodo', function () {
   });
 
   it('should enqueue a create op when API rejected with TypeError', async function () {
-    fetchMock.postOnce(getTodosApi(), { throws: new TypeError('Network error') });
+    fetchMock.postOnce(getTodosApi(), {
+      throws: new TypeError('Network error'),
+    });
 
     const store = setupStore();
     await store.dispatch(createTodo('new todo'));
@@ -478,7 +480,11 @@ describe('moveTodo offline enqueue', function () {
   });
 
   it('should enqueue move op on TypeError rejection even when isOnline is true', async function () {
-    const moveOperation = { position: 'after' as const, relative_id: 2, todo_id: 1 };
+    const moveOperation = {
+      position: 'after' as const,
+      relative_id: 2,
+      todo_id: 1,
+    };
     fetchMock.postOnce(`${getTodosApi()}1/reorder/`, {
       throws: new TypeError('Network error'),
     });
@@ -497,7 +503,11 @@ describe('moveTodo offline enqueue', function () {
   });
 
   it('should NOT enqueue move op on non-TypeError rejection', async function () {
-    const moveOperation = { position: 'after' as const, relative_id: 2, todo_id: 1 };
+    const moveOperation = {
+      position: 'after' as const,
+      relative_id: 2,
+      todo_id: 1,
+    };
     fetchMock.postOnce(`${getTodosApi()}1/reorder/`, { status: 500 });
 
     const store = setupStore({
@@ -524,15 +534,21 @@ describe('flushOfflineQueue', function () {
   });
 
   it('should process update ops and show success notification', async function () {
-    fetchMock.patchOnce(`${getTodosApi()}1/`, { body: { id: 1, description: 'updated' } });
+    fetchMock.patchOnce(`${getTodosApi()}1/`, {
+      body: { id: 1, description: 'updated' },
+    });
     fetchMock.getOnce(getTodosApi(), { body: [] });
 
     const store = setupStore({
       offlineQueue: {
-        pendingOps: [{ type: 'update', payload: { id: 1, description: 'updated' } }],
+        pendingOps: [
+          { type: 'update', payload: { id: 1, description: 'updated' } },
+        ],
       },
       todosApi: {
         entries: [{ id: 1, description: 'old' }],
+        pendingCreates: [],
+        pendingArchives: [],
       },
     });
     await store.dispatch(flushOfflineQueue());
@@ -544,13 +560,22 @@ describe('flushOfflineQueue', function () {
   });
 
   it('should re-enqueue failed ops and show failure notification', async function () {
-    fetchMock.patchOnce(`${getTodosApi()}1/`, { throws: new TypeError('Network error') });
+    fetchMock.patchOnce(`${getTodosApi()}1/`, {
+      throws: new TypeError('Network error'),
+    });
     fetchMock.getOnce(getTodosApi(), { body: [] });
 
-    const failedOp = { type: 'update' as const, payload: { id: 1, description: 'updated' } };
+    const failedOp = {
+      type: 'update' as const,
+      payload: { id: 1, description: 'updated' },
+    };
     const store = setupStore({
       offlineQueue: { pendingOps: [failedOp] },
-      todosApi: { entries: [{ id: 1, description: 'old' }] },
+      todosApi: {
+        entries: [{ id: 1, description: 'old' }],
+        pendingCreates: [],
+        pendingArchives: [],
+      },
     });
     await store.dispatch(flushOfflineQueue());
 
@@ -586,6 +611,8 @@ describe('flushOfflineQueue', function () {
           { id: 1, description: 'a' },
           { id: 2, description: 'b' },
         ],
+        pendingCreates: [],
+        pendingArchives: [],
       },
     });
     await store.dispatch(flushOfflineQueue());
@@ -594,14 +621,20 @@ describe('flushOfflineQueue', function () {
   });
 
   it('should call listTodos after flush', async function () {
-    fetchMock.patchOnce(`${getTodosApi()}1/`, { body: { id: 1, description: 'ok' } });
+    fetchMock.patchOnce(`${getTodosApi()}1/`, {
+      body: { id: 1, description: 'ok' },
+    });
     fetchMock.getOnce(getTodosApi(), { body: [{ id: 1, description: 'ok' }] });
 
     const store = setupStore({
       offlineQueue: {
         pendingOps: [{ type: 'update', payload: { id: 1, description: 'ok' } }],
       },
-      todosApi: { entries: [{ id: 1, description: 'old' }] },
+      todosApi: {
+        entries: [{ id: 1, description: 'old' }],
+        pendingCreates: [],
+        pendingArchives: [],
+      },
     });
     await store.dispatch(flushOfflineQueue());
 
