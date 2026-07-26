@@ -178,10 +178,7 @@ const TodoList: React.FC = memo(function () {
         selectedLabels={selectedPickerLabels}
         visible={labelTodoId !== null}
       />
-      <SnoozeMenu
-        snoozeTodoId={snoozeTodoId}
-        visible={snoozeTodoId !== null}
-      />
+      <SnoozeMenu snoozeTodoId={snoozeTodoId} visible={snoozeTodoId !== null} />
     </React.Fragment>
   );
 });

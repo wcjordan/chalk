@@ -26,7 +26,7 @@ const styles = StyleSheet.create<Style>({
 function getNextWeekday(dayOfWeek: number): Date {
   const now = new Date();
   const dow = now.getDay();
-  const daysToAdd = ((dayOfWeek - dow + 7) % 7) || 7;
+  const daysToAdd = (dayOfWeek - dow + 7) % 7 || 7;
   return new Date(
     now.getFullYear(),
     now.getMonth(),
@@ -55,12 +55,25 @@ const SNOOZE_OPTIONS: { [key: string]: () => string | null } = {
   'Next Week': () => getNextWeekday(1).toISOString(),
   'Next Month': () => {
     const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth() + 1, 1, 7, 0, 0, 0).toISOString();
+    return new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      1,
+      7,
+      0,
+      0,
+      0,
+    ).toISOString();
   },
   'Remove snooze': () => null,
 };
 
-const SNOOZE_OPTION_LABELS = ['Tomorrow', 'This Saturday', 'Next Week', 'Next Month'];
+const SNOOZE_OPTION_LABELS = [
+  'Tomorrow',
+  'This Saturday',
+  'Next Week',
+  'Next Month',
+];
 
 const SnoozeMenu: React.FC<Props> = function (props: Props) {
   const { snoozeTodoId, visible } = props;
