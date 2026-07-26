@@ -4,6 +4,7 @@ from helpers.todo_helpers import (
     CHECKED_ICON_TEXT,
     DELETE_ICON_TEXT,
     LABELS_ICON_TEXT,
+    SNOOZE_ICON_TEXT,
     add_todo,
     complete_todo,
     find_todo,
@@ -53,9 +54,7 @@ def test_todos_checkmark_persistence(page, todo_prefix):
     first_todo = find_todo(page, todo1_description)
     first_todo_checkmark = first_todo.locator(f'text="{CHECKED_ICON_TEXT}"')
     assert first_todo_checkmark.count() == 1
-    expected_text = (
-        f"{CHECKED_ICON_TEXT}{todo1_description}{LABELS_ICON_TEXT}{DELETE_ICON_TEXT}"
-    )
+    expected_text = f"{CHECKED_ICON_TEXT}{todo1_description}{LABELS_ICON_TEXT}{SNOOZE_ICON_TEXT}{DELETE_ICON_TEXT}"
     assert first_todo.text_content() == expected_text
 
     # Verify that the 2nd todo appears before 1st todo once the 1st is completed

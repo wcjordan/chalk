@@ -8,6 +8,10 @@ import {
 } from './redux/types';
 import { workContexts } from './redux/workspaceSlice';
 
+// Virtual labels are computed from todo data rather than real Label rows
+// (see 'Unlabeled' === todo.labels.length === 0, 'snoozed' === todo.snoozed_until > now)
+const VIRTUAL_LABELS = ['Unlabeled', 'snoozed'];
+
 const selectEditTodoId = (state: RootState) => state.workspace.editTodoId;
 const selectFilterLabels = (state: RootState) => state.workspace.filterLabels;
 const selectLabelTodoId = (state: RootState) => state.workspace.labelTodoId;
@@ -75,10 +79,13 @@ export const selectShortcuttedTodoEntries = createSelector(
 const performFilter = (
   labeledFlag: boolean,
   unlabeledFlag: boolean,
+  snoozedFlag: boolean,
+  unsnoozedFlag: boolean,
   activeFilters: string[],
   invertedFilters: string[],
   showCompletedTodos: boolean,
   preserveIds: number[],
+  now: Date,
   todo: Todo,
 ) => {
   if (preserveIds.includes(todo.id)) {
@@ -86,6 +93,14 @@ const performFilter = (
   }
 
   if (!showCompletedTodos && todo.completed) {
+    return false;
+  }
+
+  const isSnoozed = !!todo.snoozed_until && new Date(todo.snoozed_until) > now;
+  if (snoozedFlag && !isSnoozed) {
+    return false;
+  }
+  if (unsnoozedFlag && isSnoozed) {
     return false;
   }
 
@@ -118,17 +133,18 @@ export const selectFilteredTodos = createSelector(
     // TODO (jordan) optimize w/ set intersection?
     const labeledFlag = filterLabels['Unlabeled'] === FILTER_STATUS.Inverted;
     const unlabeledFlag = filterLabels['Unlabeled'] === FILTER_STATUS.Active;
+    const snoozedFlag = filterLabels['snoozed'] === FILTER_STATUS.Active;
+    const unsnoozedFlag = filterLabels['snoozed'] === FILTER_STATUS.Inverted;
 
-    // Filter down to active filters excluding 'Unlabeled'
+    // Filter down to active/inverted filters excluding virtual labels
     const activeFilters = Object.keys(filterLabels).filter(
       (labelKey) =>
-        labelKey !== 'Unlabeled' &&
+        !VIRTUAL_LABELS.includes(labelKey) &&
         filterLabels[labelKey] === FILTER_STATUS.Active,
     );
-    // Filter down to inverted filters excluding 'Unlabeled'
     const invertedFilters = Object.keys(filterLabels).filter(
       (labelKey) =>
-        labelKey !== 'Unlabeled' &&
+        !VIRTUAL_LABELS.includes(labelKey) &&
         filterLabels[labelKey] === FILTER_STATUS.Inverted,
     );
 
@@ -145,27 +161,42 @@ export const selectFilteredTodos = createSelector(
       preserveIds.push(editTodoId);
     }
 
-    return todoApiEntries.filter((todo) =>
+    const now = new Date();
+    const filteredTodos = todoApiEntries.filter((todo) =>
       performFilter(
         labeledFlag,
         unlabeledFlag,
+        snoozedFlag,
+        unsnoozedFlag,
         activeFilters,
         invertedFilters,
         showCompletedTodos,
         preserveIds,
+        now,
         todo,
       ),
     );
+
+    // In the Snoozed view, show what's expiring soonest first
+    if (snoozedFlag) {
+      return filteredTodos.sort((a, b) => {
+        const aTime = new Date(a.snoozed_until as string).getTime();
+        const bTime = new Date(b.snoozed_until as string).getTime();
+        return aTime - bTime;
+      });
+    }
+
+    return filteredTodos;
   },
 );
 
 export const selectActiveFilterLabels = createSelector(
   [selectFilterLabels],
   (filterLabels) => {
-    // Extract active filters excluding 'Unlabeled' (which is virtual)
+    // Extract active filters excluding virtual labels
     return Object.keys(filterLabels).filter(
       (labelKey) =>
-        labelKey !== 'Unlabeled' &&
+        !VIRTUAL_LABELS.includes(labelKey) &&
         filterLabels[labelKey] === FILTER_STATUS.Active,
     );
   },

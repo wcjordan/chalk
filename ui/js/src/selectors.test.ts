@@ -185,6 +185,99 @@ describe('selectFilteredTodos', function () {
     const result = selectFilteredTodos(state);
     expect(result).toMatchSnapshot();
   });
+
+  it('should filter out todos with snoozed_until set to a future time when snoozed is inverted', function () {
+    jest.useFakeTimers().setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
+    const futureDate = new Date(Date.now() + 86400000).toISOString();
+    const state = selectFilteredTodosHelper(['Unlabeled'], ['snoozed'], {});
+    state.todosApi.entries = [
+      { id: 1, description: 'normal todo', labels: [], snoozed_until: null },
+      {
+        id: 2,
+        description: 'snoozed todo',
+        labels: [],
+        snoozed_until: futureDate,
+      },
+    ];
+
+    const result = selectFilteredTodos(state);
+    expect(result).toMatchSnapshot();
+    jest.useRealTimers();
+  });
+
+  it('should include todos with snoozed_until set to a past time when snoozed is inverted', function () {
+    jest.useFakeTimers().setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
+    const pastDate = new Date(Date.now() - 86400000).toISOString();
+    const state = selectFilteredTodosHelper(['Unlabeled'], ['snoozed'], {});
+    state.todosApi.entries = [
+      {
+        id: 1,
+        description: 'expired snooze todo',
+        labels: [],
+        snoozed_until: pastDate,
+      },
+    ];
+
+    const result = selectFilteredTodos(state);
+    expect(result).toMatchSnapshot();
+    jest.useRealTimers();
+  });
+
+  it('should return only currently-snoozed todos sorted by snoozed_until when the snoozed filter is active', function () {
+    jest.useFakeTimers().setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
+    const sooner = new Date(Date.now() + 86400000).toISOString();
+    const later = new Date(Date.now() + 2 * 86400000).toISOString();
+    const past = new Date(Date.now() - 86400000).toISOString();
+    const state = selectFilteredTodosHelper(['snoozed'], [], {});
+    state.todosApi.entries = [
+      { id: 1, description: 'later snoozed', labels: [], snoozed_until: later },
+      { id: 2, description: 'normal todo', labels: [], snoozed_until: null },
+      {
+        id: 3,
+        description: 'sooner snoozed',
+        labels: [],
+        snoozed_until: sooner,
+      },
+      { id: 4, description: 'expired snooze', labels: [], snoozed_until: past },
+    ];
+
+    const result = selectFilteredTodos(state);
+    expect(result.map((t) => t.description)).toEqual([
+      'sooner snoozed',
+      'later snoozed',
+    ]);
+    jest.useRealTimers();
+  });
+
+  it('should combine the snoozed filter with a real label filter', function () {
+    jest.useFakeTimers().setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
+    const futureDate = new Date(Date.now() + 86400000).toISOString();
+    const state = selectFilteredTodosHelper(['snoozed', 'urgent'], [], {});
+    state.todosApi.entries = [
+      {
+        id: 1,
+        description: 'snoozed and urgent',
+        labels: ['urgent'],
+        snoozed_until: futureDate,
+      },
+      {
+        id: 2,
+        description: 'snoozed but not urgent',
+        labels: [],
+        snoozed_until: futureDate,
+      },
+      {
+        id: 3,
+        description: 'urgent but not snoozed',
+        labels: ['urgent'],
+        snoozed_until: null,
+      },
+    ];
+
+    const result = selectFilteredTodos(state);
+    expect(result.map((t) => t.description)).toEqual(['snoozed and urgent']);
+    jest.useRealTimers();
+  });
 });
 
 describe('selectSelectedPickerLabels', function () {
@@ -261,12 +354,26 @@ describe('selectSelectedPickerLabels', function () {
 });
 
 describe('selectActiveWorkContext', function () {
+  it('should return snoozed when the snoozed filter is active', function () {
+    const state = {
+      workspace: {
+        filterLabels: {
+          snoozed: FILTER_STATUS.Active,
+        },
+      },
+    };
+
+    const result = selectActiveWorkContext(state);
+    expect(result).toEqual('snoozed');
+  });
+
   it('should return a work context if labels match', function () {
     const state = {
       workspace: {
         filterLabels: {
           Chalk: FILTER_STATUS.Active,
           backlog: FILTER_STATUS.Inverted,
+          snoozed: FILTER_STATUS.Inverted,
           vague: FILTER_STATUS.Active,
         },
       },
@@ -282,6 +389,7 @@ describe('selectActiveWorkContext', function () {
         filterLabels: {
           Chalk: FILTER_STATUS.Active,
           backlog: FILTER_STATUS.Inverted,
+          snoozed: FILTER_STATUS.Inverted,
           vague: FILTER_STATUS.Active,
           Home: FILTER_STATUS.Active,
         },
@@ -298,6 +406,7 @@ describe('selectActiveWorkContext', function () {
         filterLabels: {
           Chalk: FILTER_STATUS.Active,
           backlog: FILTER_STATUS.Inverted,
+          snoozed: FILTER_STATUS.Inverted,
         },
       },
     };
@@ -429,7 +538,7 @@ describe('selectActiveFilterLabels', function () {
     expect(result).toEqual([]);
   });
 
-  it('should return active filter labels while excluding inverted and Unlabeled filters', function () {
+  it('should return active filter labels while excluding inverted and virtual filters', function () {
     const state = {
       workspace: {
         filterLabels: {
@@ -437,6 +546,7 @@ describe('selectActiveFilterLabels', function () {
           urgent: FILTER_STATUS.Active,
           backlog: FILTER_STATUS.Inverted,
           Unlabeled: FILTER_STATUS.Active,
+          snoozed: FILTER_STATUS.Active,
         },
       },
     };

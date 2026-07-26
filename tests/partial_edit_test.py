@@ -3,6 +3,7 @@ import pytest
 from helpers.todo_helpers import (
     DELETE_ICON_TEXT,
     LABELS_ICON_TEXT,
+    SNOOZE_ICON_TEXT,
     UNCHECKED_ICON_TEXT,
     WARNING_ICON_TEXT,
     add_todo,
@@ -46,7 +47,10 @@ def test_todos_partial_edit(page, todo_prefix):
     assert warning_icon.count() == 1
 
     # Verify that 1st todo text is todo1_description
-    expected_text = f"{UNCHECKED_ICON_TEXT}{todo1_description}{LABELS_ICON_TEXT}{DELETE_ICON_TEXT}{WARNING_ICON_TEXT}"
+    expected_text = (
+        f"{UNCHECKED_ICON_TEXT}{todo1_description}{LABELS_ICON_TEXT}"
+        f"{SNOOZE_ICON_TEXT}{DELETE_ICON_TEXT}{WARNING_ICON_TEXT}"
+    )
     assert first_todo.text_content() == expected_text
 
     # Return to editing the first todo
@@ -68,9 +72,7 @@ def test_todos_partial_edit(page, todo_prefix):
 
     # Verify that the original description is still there and the warning icon is gone
     first_todo = find_todo(page, todo1_description)
-    expected_text = (
-        f"{UNCHECKED_ICON_TEXT}{todo1_description}{LABELS_ICON_TEXT}{DELETE_ICON_TEXT}"
-    )
+    expected_text = f"{UNCHECKED_ICON_TEXT}{todo1_description}{LABELS_ICON_TEXT}{SNOOZE_ICON_TEXT}{DELETE_ICON_TEXT}"
     assert first_todo.text_content() == expected_text
     warning_icons = first_todo.locator(f'text="{WARNING_ICON_TEXT}"]')
     assert warning_icons.count() == 0

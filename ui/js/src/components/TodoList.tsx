@@ -20,6 +20,7 @@ import AddTodo from './AddTodo';
 import LabelFilter from './LabelFilter';
 import LabelPicker from './LabelPicker';
 import LoadingPage from './LoadingPage';
+import SnoozeMenu from './SnoozeMenu';
 import TodoItem from './TodoItem';
 import WorkContextFilter from './WorkContextFilter';
 
@@ -66,6 +67,7 @@ const TodoList: React.FC = memo(function () {
     labelTodoId,
     showCompletedTodos,
     showLabelFilter,
+    snoozeTodoId,
   } = useAppSelector((state) => state.workspace);
   const activeWorkContext = useAppSelector(selectActiveWorkContext);
   const isLoading = useAppSelector(selectIsLoading);
@@ -176,6 +178,7 @@ const TodoList: React.FC = memo(function () {
         selectedLabels={selectedPickerLabels}
         visible={labelTodoId !== null}
       />
+      <SnoozeMenu snoozeTodoId={snoozeTodoId} visible={snoozeTodoId !== null} />
     </React.Fragment>
   );
 });

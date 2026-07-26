@@ -92,6 +92,29 @@ describe('createTodo', function () {
     expect(fetchMock).toBeDone();
   });
 
+  it('should create todo with empty labels when the Snoozed work context is active', async function () {
+    const stubDescription = 'test snoozed context todo';
+    const stubTodo = getStubTodo({ description: stubDescription, labels: [] });
+    fetchMock.postOnce(getTodosApi(), {
+      body: stubTodo,
+    });
+
+    const store = setupStore({
+      workspace: {
+        filterLabels: {
+          snoozed: FILTER_STATUS.Active,
+        },
+      },
+    });
+    await store.dispatch(createTodo(stubDescription));
+
+    // Verify the POST request did not attach a literal "snoozed" label
+    verifyRequestIncludesLabels([]);
+
+    // Verify we make the server request
+    expect(fetchMock).toBeDone();
+  });
+
   it('should create todo with only active labels, excluding inverted', async function () {
     const stubDescription = 'test todo with mixed filters';
     const stubTodo = getStubTodo({
