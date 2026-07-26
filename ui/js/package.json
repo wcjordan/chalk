@@ -5,6 +5,7 @@
   "dependencies": {
     "@expo-google-fonts/roboto": "^0.4.3",
     "@expo/metro-runtime": "~55.0.11",
+    "@react-native-async-storage/async-storage": "^3.1.1",
     "@react-native-google-signin/google-signin": "^16.1.2",
     "@reduxjs/toolkit": "^2.11.2",
     "@sentry/react-native": "~8.9.2",
@@ -36,6 +37,7 @@
     "react-native-worklets": "0.8.1",
     "react-redux": "^9.2.0",
     "redux": "^5.0.1",
+    "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
     "rrweb": "2.0.0-alpha.20"
   },

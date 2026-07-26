@@ -4,10 +4,11 @@ import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as ReduxProvider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import * as Sentry from '@sentry/react-native';
 
 import App from './src/App';
-import { setupStore } from './src/redux/store';
+import { createPersistor, setupStore } from './src/redux/store';
 import { getEnvFlags } from './src/helpers';
 
 const envFlags = getEnvFlags();
@@ -36,15 +37,20 @@ const theme = {
   },
 };
 
+const store = setupStore();
+const persistor = createPersistor(store);
+
 const TopApp: React.FC = function () {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ReduxProvider store={setupStore()}>
-        <PaperProvider theme={theme}>
-          <SafeAreaProvider>
-            <App />
-          </SafeAreaProvider>
-        </PaperProvider>
+      <ReduxProvider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <PaperProvider theme={theme}>
+            <SafeAreaProvider>
+              <App />
+            </SafeAreaProvider>
+          </PaperProvider>
+        </PersistGate>
       </ReduxProvider>
     </GestureHandlerRootView>
   );
