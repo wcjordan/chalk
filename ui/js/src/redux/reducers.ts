@@ -2,6 +2,7 @@ import { ThunkAction } from 'redux-thunk';
 import { Action } from '@reduxjs/toolkit';
 
 import { getEnvFlags } from '../helpers';
+import { selectActiveFilterLabels } from '../selectors';
 import {
   completeAuthCallback,
   getCsrfToken,
@@ -10,23 +11,24 @@ import {
 import { labelsApiSlice, listLabels } from './labelsApiSlice';
 import networkSlice from './networkSlice';
 import notificationsSlice from './notificationsSlice';
+import offlineQueueSlice from './offlineQueueSlice';
 import shortcutSlice from './shortcutSlice';
 import { RootState } from './store';
 import {
-  createTodo,
+  createTodo as createTodoApi,
   listTodos as listTodosApi,
   moveTodo as moveTodoApi,
   todosApiSlice,
   updateTodo as updateTodoApi,
 } from './todosApiSlice';
-import { MoveTodoOperation, TodoPatch } from './types';
+import { MoveTodoOperation, OfflineOperation, TodoPatch } from './types';
 import { workspaceSlice } from './workspaceSlice';
 
 type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
 export const updateTodo =
   (todoPatch: TodoPatch): AppThunk =>
-  (dispatch, getState) => {
+  async (dispatch, getState) => {
     // Check if we should auto-show label picker
     const todo = getState().todosApi.entries.find((t) => t.id === todoPatch.id);
     const wasAlreadyCompleted = todo?.completed === true;
@@ -37,27 +39,26 @@ export const updateTodo =
       !wasAlreadyCompleted && // Wasn't already complete
       hasNoLabels; // Has no labels
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const promises: any[] = [
-      dispatch(
-        notificationsSlice.actions.addNotification({
-          text: `Saving Todo: ${todoPatch.description ?? todo?.description}`,
-          type: 'default',
-        }),
-      ),
-      dispatch(workspaceSlice.actions.setEditTodoId(null)),
-      dispatch(shortcutSlice.actions.addEditTodoOperation(todoPatch)),
-      dispatch(updateTodoApi(todoPatch)),
-    ];
+    dispatch(
+      notificationsSlice.actions.addNotification({
+        text: `Saving Todo: ${todoPatch.description ?? todo?.description}`,
+        type: 'default',
+      }),
+    );
+    dispatch(workspaceSlice.actions.setEditTodoId(null));
+    dispatch(shortcutSlice.actions.addEditTodoOperation(todoPatch));
 
     // Show label picker for unlabeled completed todos
     if (shouldShowLabelPicker) {
-      promises.push(
-        dispatch(workspaceSlice.actions.setLabelTodoId(todoPatch.id)),
-      );
+      dispatch(workspaceSlice.actions.setLabelTodoId(todoPatch.id));
     }
 
-    return Promise.all(promises);
+    const result = await dispatch(updateTodoApi(todoPatch));
+    if (updateTodoApi.rejected.match(result) && result.error.name === 'TypeError') {
+      dispatch(
+        offlineQueueSlice.actions.enqueueOp({ type: 'update', payload: todoPatch }),
+      );
+    }
   };
 
 export const updateTodoLabels =
@@ -86,20 +87,24 @@ export const updateTodoLabels =
 
 export const moveTodo =
   (operation: MoveTodoOperation): AppThunk =>
-  (dispatch, getState) => {
+  async (dispatch, getState) => {
     const todo = getState().todosApi.entries.find(
       (todo) => todo.id === operation.todo_id,
     );
-    return Promise.all([
+    dispatch(
+      notificationsSlice.actions.addNotification({
+        text: `Reordering Todo: ${todo?.description}`,
+        type: 'default',
+      }),
+    );
+    dispatch(shortcutSlice.actions.addMoveTodoOperation(operation));
+
+    const result = await dispatch(moveTodoApi(operation));
+    if (moveTodoApi.rejected.match(result) && result.error.name === 'TypeError') {
       dispatch(
-        notificationsSlice.actions.addNotification({
-          text: `Reordering Todo: ${todo?.description}`,
-          type: 'default',
-        }),
-      ),
-      dispatch(shortcutSlice.actions.addMoveTodoOperation(operation)),
-      dispatch(moveTodoApi(operation)),
-    ]);
+        offlineQueueSlice.actions.enqueueOp({ type: 'move', payload: operation }),
+      );
+    }
   };
 
 export const listTodos = (): AppThunk => async (dispatch, getState) => {
@@ -197,6 +202,73 @@ export const recordSessionEvents =
     }
   };
 
+export const createTodo =
+  (todoTitle: string): AppThunk =>
+  async (dispatch, getState) => {
+    const activeLabels = selectActiveFilterLabels(getState());
+    const result = await dispatch(createTodoApi(todoTitle));
+    if (createTodoApi.rejected.match(result) && result.error.name === 'TypeError') {
+      dispatch(
+        offlineQueueSlice.actions.enqueueOp({
+          type: 'create',
+          payload: { description: todoTitle, labels: activeLabels },
+        }),
+      );
+    }
+  };
+
+export const flushOfflineQueue = (): AppThunk => async (dispatch, getState) => {
+  const pendingOps = getState().offlineQueue.pendingOps;
+  if (pendingOps.length === 0) {
+    return;
+  }
+
+  dispatch(offlineQueueSlice.actions.clearQueue());
+
+  const failedOps: OfflineOperation[] = [];
+  for (const op of pendingOps) {
+    let result;
+    if (op.type === 'create') {
+      result = await dispatch(createTodoApi(op.payload.description));
+      if (createTodoApi.rejected.match(result)) {
+        failedOps.push(op);
+      }
+    } else if (op.type === 'update') {
+      result = await dispatch(updateTodoApi(op.payload));
+      if (updateTodoApi.rejected.match(result)) {
+        failedOps.push(op);
+      }
+    } else if (op.type === 'move') {
+      result = await dispatch(moveTodoApi(op.payload));
+      if (moveTodoApi.rejected.match(result)) {
+        failedOps.push(op);
+      }
+    }
+  }
+
+  for (const op of failedOps) {
+    dispatch(offlineQueueSlice.actions.enqueueOp(op));
+  }
+
+  await dispatch(listTodosApi());
+
+  if (failedOps.length === 0) {
+    dispatch(
+      notificationsSlice.actions.addNotification({
+        text: 'Changes synced',
+        type: 'default',
+      }),
+    );
+  } else {
+    dispatch(
+      notificationsSlice.actions.addNotification({
+        text: 'Some changes could not be synced',
+        type: 'default',
+      }),
+    );
+  }
+};
+
 export const addNotification = notificationsSlice.actions.addNotification;
 export const dismissNotification =
   notificationsSlice.actions.dismissNotification;
@@ -210,11 +282,12 @@ export const toggleShowCompletedTodos =
   workspaceSlice.actions.toggleShowCompletedTodos;
 export const toggleShowLabelFilter =
   workspaceSlice.actions.toggleShowLabelFilter;
-export { createTodo, listLabels };
+export { listLabels };
 export const rootReducerConfig = {
   labelsApi: labelsApiSlice.reducer,
   network: networkSlice.reducer,
   notifications: notificationsSlice.reducer,
+  offlineQueue: offlineQueueSlice.reducer,
   shortcuts: shortcutSlice.reducer,
   todosApi: todosApiSlice.reducer,
   workspace: workspaceSlice.reducer,

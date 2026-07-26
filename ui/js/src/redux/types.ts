@@ -100,3 +100,8 @@ export interface ShortcutState {
   operations: ShortcutOperation[];
   latestGeneration: number;
 }
+
+export type OfflineOperation =
+  | { type: 'create'; payload: { description: string; labels: string[] } }
+  | { type: 'update'; payload: TodoPatch }
+  | { type: 'move'; payload: MoveTodoOperation };
