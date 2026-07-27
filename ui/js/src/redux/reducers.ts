@@ -1,5 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
-import { Action } from '@reduxjs/toolkit';
+import { Action, Reducer } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
 
 import { getEnvFlags } from '../helpers';
 import { selectActiveFilterLabels } from '../selectors';
@@ -283,12 +284,34 @@ export const toggleShowCompletedTodos =
 export const toggleShowLabelFilter =
   workspaceSlice.actions.toggleShowLabelFilter;
 export { listLabels };
+
+function makePersistReducer<S, A extends Action>(
+  key: string,
+  reducer: Reducer<S, A>,
+  blacklist: string[] = [],
+): Reducer<S, A> {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const storage = require('./persistStorage').default;
+  // persistReducer returns a compatible reducer type
+  return persistReducer({ key, storage, blacklist }, reducer) as unknown as Reducer<S, A>;
+}
+
+const offlineQueueReducer =
+  process.env.NODE_ENV !== 'test'
+    ? makePersistReducer('offlineQueue', offlineQueueSlice.reducer)
+    : offlineQueueSlice.reducer;
+
+const todosApiReducer =
+  process.env.NODE_ENV !== 'test'
+    ? makePersistReducer('todosApi', todosApiSlice.reducer, ['loading', 'initialLoad'])
+    : todosApiSlice.reducer;
+
 export const rootReducerConfig = {
   labelsApi: labelsApiSlice.reducer,
   network: networkSlice.reducer,
   notifications: notificationsSlice.reducer,
-  offlineQueue: offlineQueueSlice.reducer,
+  offlineQueue: offlineQueueReducer,
   shortcuts: shortcutSlice.reducer,
-  todosApi: todosApiSlice.reducer,
+  todosApi: todosApiReducer,
   workspace: workspaceSlice.reducer,
 };
