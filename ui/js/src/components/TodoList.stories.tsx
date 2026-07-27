@@ -75,6 +75,7 @@ const defaultState = {
       mobile: FILTER_STATUS.Active,
     },
     labelTodoId: null,
+    snoozeTodoId: null,
   },
 };
 
@@ -112,5 +113,13 @@ export const LoadingIndicator: React.FC = () =>
     todosApi: {
       initialLoad: true,
       entries: [stubTodo({ id: 1, description: 'New todo' })],
+    },
+  });
+
+export const SnoozeMenuOverlay: React.FC = () =>
+  wrapper(<TodoList />, {
+    workspace: {
+      editTodoId: null,
+      snoozeTodoId: 3,
     },
   });
