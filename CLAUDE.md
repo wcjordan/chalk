@@ -185,6 +185,16 @@ If issues are found:
 - **Explicit over implicit** - Clear data flow and dependencies
 - **Test-driven when possible** - Never disable tests, fix them
 
+### Offline Support Architecture
+
+Key non-obvious decisions baked into the offline implementation:
+
+- **Polling continues while offline** — the 10s poll in `useDataLoader` is intentionally not paused. On native, `listTodos.fulfilled` is the only reconnection signal (no browser events). Pausing the poll would require a separate mechanism to detect coming back online.
+- **OfflineBanner is separate from ErrorBar** — `ErrorBar` is a transient notification Snackbar. An always-visible offline indicator mixed into the Snackbar queue would block notifications from rendering. `OfflineBanner` is a non-dismissible bar rendered above `ErrorBar` in `App.tsx`.
+- **Flush ordering is critical** — `flushOfflineQueue` must dispatch all queued ops to completion before calling `listTodosApi`. Calling `listTodosApi` first clears `shortcutSlice` optimistic updates before queued mutations land, briefly showing stale state.
+- **`redux-persist` bypassed in tests** — `persistReducer` is skipped when `process.env.NODE_ENV === 'test'` to avoid async storage engine issues. This avoids touching existing test files.
+- **Native offline detection uses failure counting** — `networkSlice.extraReducers` increments `consecutiveNetworkFailures` on `listTodos.rejected` with `TypeError` (network error); ≥2 consecutive failures sets `isOnline: false`. HTTP errors (non-TypeErrors) do not affect the counter.
+
 ### Code Quality
 
 - When committing:
