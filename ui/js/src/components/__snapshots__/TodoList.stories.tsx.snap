@@ -5883,7 +5883,7 @@ exports[`Todo List SnoozeMenuOverlay smoke-test 1`] = `
                 <div class="css-g5y9jx"
                      style="opacity: 1;"
                 >
-                  <div class="css-g5y9jx r-qkc0q7 r-1euzoj3 r-17gur6a r-1loqt21 r-105ug2t"
+                  <div class="css-g5y9jx r-ai505k r-17gur6a r-1loqt21 r-105ug2t"
                        data-testid="card-container"
                        style="background-color: rgb(255, 251, 254);"
                   >
