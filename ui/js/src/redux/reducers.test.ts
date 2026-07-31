@@ -682,4 +682,50 @@ describe('flushOfflineQueue', function () {
   });
 });
 
+describe('flushOfflineQueue with navigator.locks', function () {
+  const originalLocks: unknown = (navigator as unknown as { locks?: unknown })
+    .locks;
+
+  afterEach(function () {
+    fetchMock.restore();
+    Object.defineProperty(navigator, 'locks', {
+      value: originalLocks,
+      configurable: true,
+    });
+  });
+
+  it('should serialize the flush via navigator.locks.request when available', async function () {
+    const request = jest.fn((_name: string, callback: () => Promise<void>) =>
+      callback(),
+    );
+    Object.defineProperty(navigator, 'locks', {
+      value: { request },
+      configurable: true,
+    });
+
+    fetchMock.patchOnce(`${getTodosApi()}1/`, {
+      body: { id: 1, description: 'ok' },
+    });
+    fetchMock.getOnce(getTodosApi(), { body: [] });
+
+    const store = setupStore({
+      offlineQueue: {
+        pendingOps: [{ type: 'update', payload: { id: 1, description: 'ok' } }],
+      },
+      todosApi: {
+        entries: [{ id: 1, description: 'old' }],
+        pendingCreates: [],
+        pendingArchives: [],
+      },
+    });
+    await store.dispatch(flushOfflineQueue());
+
+    expect(request).toHaveBeenCalledWith(
+      'chalk-offline-queue-flush',
+      expect.any(Function),
+    );
+    expect(store.getState().offlineQueue.pendingOps).toEqual([]);
+  });
+});
+
 export {};

@@ -7,6 +7,7 @@ import OfflineBanner from './components/OfflineBanner';
 import TodoList from './components/TodoList';
 import { useAppDispatch, useAppSelector } from './hooks/hooks';
 import { useNetworkMonitor } from './hooks/useNetworkMonitor';
+import { useOfflineQueueSync } from './hooks/useOfflineQueueSync';
 import { flushOfflineQueue } from './redux/reducers';
 
 interface Style {
@@ -30,6 +31,7 @@ const styles = StyleSheet.create<Style>({
 
 const App: React.FC = function () {
   useNetworkMonitor();
+  useOfflineQueueSync();
   const dispatch = useAppDispatch();
   const loggedIn = useAppSelector((state) => state.workspace.loggedIn);
   const isOnline = useAppSelector((state) => state.network.isOnline);
