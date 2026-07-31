@@ -27,6 +27,10 @@ import { workspaceSlice } from './workspaceSlice';
 
 type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
+// Negative, monotonically-decrementing IDs for optimistic create placeholders,
+// distinguishing them from real (positive) server-assigned todo IDs.
+let nextTempTodoId = -1;
+
 export const updateTodo =
   (todoPatch: TodoPatch): AppThunk =>
   async (dispatch, getState) => {
@@ -55,9 +59,15 @@ export const updateTodo =
     }
 
     const result = await dispatch(updateTodoApi(todoPatch));
-    if (updateTodoApi.rejected.match(result) && result.error.name === 'TypeError') {
+    if (
+      updateTodoApi.rejected.match(result) &&
+      result.error.name === 'TypeError'
+    ) {
       dispatch(
-        offlineQueueSlice.actions.enqueueOp({ type: 'update', payload: todoPatch }),
+        offlineQueueSlice.actions.enqueueOp({
+          type: 'update',
+          payload: todoPatch,
+        }),
       );
     }
   };
@@ -101,9 +111,15 @@ export const moveTodo =
     dispatch(shortcutSlice.actions.addMoveTodoOperation(operation));
 
     const result = await dispatch(moveTodoApi(operation));
-    if (moveTodoApi.rejected.match(result) && result.error.name === 'TypeError') {
+    if (
+      moveTodoApi.rejected.match(result) &&
+      result.error.name === 'TypeError'
+    ) {
       dispatch(
-        offlineQueueSlice.actions.enqueueOp({ type: 'move', payload: operation }),
+        offlineQueueSlice.actions.enqueueOp({
+          type: 'move',
+          payload: operation,
+        }),
       );
     }
   };
@@ -207,8 +223,18 @@ export const createTodo =
   (todoTitle: string): AppThunk =>
   async (dispatch, getState) => {
     const activeLabels = selectActiveFilterLabels(getState());
+    dispatch(
+      shortcutSlice.actions.addCreateTodoOperation({
+        tempId: nextTempTodoId--,
+        description: todoTitle,
+        labels: activeLabels,
+      }),
+    );
     const result = await dispatch(createTodoApi(todoTitle));
-    if (createTodoApi.rejected.match(result) && result.error.name === 'TypeError') {
+    if (
+      createTodoApi.rejected.match(result) &&
+      result.error.name === 'TypeError'
+    ) {
       dispatch(
         offlineQueueSlice.actions.enqueueOp({
           type: 'create',
@@ -293,7 +319,10 @@ function makePersistReducer<S, A extends Action>(
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const storage = require('./persistStorage').default;
   // persistReducer returns a compatible reducer type
-  return persistReducer({ key, storage, blacklist }, reducer) as unknown as Reducer<S, A>;
+  return persistReducer(
+    { key, storage, blacklist },
+    reducer,
+  ) as unknown as Reducer<S, A>;
 }
 
 const offlineQueueReducer =
@@ -303,7 +332,10 @@ const offlineQueueReducer =
 
 const todosApiReducer =
   process.env.NODE_ENV !== 'test'
-    ? makePersistReducer('todosApi', todosApiSlice.reducer, ['loading', 'initialLoad'])
+    ? makePersistReducer('todosApi', todosApiSlice.reducer, [
+        'loading',
+        'initialLoad',
+      ])
     : todosApiSlice.reducer;
 
 export const rootReducerConfig = {

@@ -416,6 +416,46 @@ describe('createTodo', function () {
     ]);
   });
 
+  it('should optimistically show the todo immediately, even when offline', async function () {
+    fetchMock.postOnce(getTodosApi(), {
+      throws: new TypeError('Network error'),
+    });
+
+    const store = setupStore();
+    await store.dispatch(createTodo('new todo'));
+
+    expect(store.getState().shortcuts.operations).toEqual([
+      {
+        type: 'CREATE_TODO',
+        payload: expect.objectContaining({
+          description: 'new todo',
+          labels: [],
+        }),
+        generation: expect.any(Number),
+      },
+    ]);
+  });
+
+  it('should optimistically show the todo immediately when online too', async function () {
+    fetchMock.postOnce(getTodosApi(), {
+      body: { id: 99, description: 'new todo', labels: [] },
+    });
+
+    const store = setupStore();
+    await store.dispatch(createTodo('new todo'));
+
+    expect(store.getState().shortcuts.operations).toEqual([
+      {
+        type: 'CREATE_TODO',
+        payload: expect.objectContaining({
+          description: 'new todo',
+          labels: [],
+        }),
+        generation: expect.any(Number),
+      },
+    ]);
+  });
+
   it('should NOT enqueue when API rejected with non-TypeError (HTTP error)', async function () {
     fetchMock.postOnce(getTodosApi(), { status: 500 });
 

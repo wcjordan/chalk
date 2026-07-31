@@ -25,6 +25,13 @@ export default createSlice({
         generation: state.latestGeneration,
       });
     },
+    addCreateTodoOperation: (state, action) => {
+      state.operations.push({
+        type: 'CREATE_TODO',
+        payload: action.payload,
+        generation: state.latestGeneration,
+      });
+    },
     incrementGenerations: (state) => {
       state.latestGeneration = state.latestGeneration + 1;
     },
