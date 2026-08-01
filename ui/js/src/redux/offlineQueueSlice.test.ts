@@ -38,7 +38,7 @@ describe('offlineQueueSlice reducer', function () {
     it('should append a create op', function () {
       const op: OfflineOperation = {
         type: 'create',
-        payload: { description: 'new todo', labels: ['work'] },
+        payload: { tempId: -1, description: 'new todo', labels: ['work'] },
       };
       const state = offlineQueueSlice.reducer(
         { pendingOps: [] },

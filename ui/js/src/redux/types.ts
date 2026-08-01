@@ -108,6 +108,6 @@ export interface ShortcutState {
 }
 
 export type OfflineOperation =
-  | { type: 'create'; payload: { description: string; labels: string[] } }
+  | { type: 'create'; payload: CreateTodoOperation }
   | { type: 'update'; payload: TodoPatch }
   | { type: 'move'; payload: MoveTodoOperation };

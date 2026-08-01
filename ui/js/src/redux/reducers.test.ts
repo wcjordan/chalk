@@ -412,11 +412,17 @@ describe('createTodo', function () {
     await store.dispatch(createTodo('new todo'));
 
     expect(store.getState().offlineQueue.pendingOps).toEqual([
-      { type: 'create', payload: { description: 'new todo', labels: [] } },
+      {
+        type: 'create',
+        payload: expect.objectContaining({
+          description: 'new todo',
+          labels: [],
+        }),
+      },
     ]);
   });
 
-  it('should optimistically show the todo immediately, even when offline', async function () {
+  it('should optimistically show the todo immediately, and keep showing it while queued offline', async function () {
     fetchMock.postOnce(getTodosApi(), {
       throws: new TypeError('Network error'),
     });
@@ -436,14 +442,15 @@ describe('createTodo', function () {
     ]);
   });
 
-  it('should optimistically show the todo immediately when online too', async function () {
+  it('should optimistically show the todo immediately, then clear the placeholder once the real todo is created', async function () {
     fetchMock.postOnce(getTodosApi(), {
       body: { id: 99, description: 'new todo', labels: [] },
     });
 
     const store = setupStore();
-    await store.dispatch(createTodo('new todo'));
+    const dispatchPromise = store.dispatch(createTodo('new todo'));
 
+    // Placeholder is visible synchronously, before the API call resolves
     expect(store.getState().shortcuts.operations).toEqual([
       {
         type: 'CREATE_TODO',
@@ -454,6 +461,21 @@ describe('createTodo', function () {
         generation: expect.any(Number),
       },
     ]);
+
+    await dispatchPromise;
+
+    // Once the real todo exists in todosApi.entries, the placeholder must be
+    // gone too, otherwise both would render as separate, duplicate todos.
+    expect(store.getState().shortcuts.operations).toEqual([]);
+  });
+
+  it('should clear the placeholder when the create permanently fails (non-TypeError)', async function () {
+    fetchMock.postOnce(getTodosApi(), { status: 500 });
+
+    const store = setupStore();
+    await store.dispatch(createTodo('new todo'));
+
+    expect(store.getState().shortcuts.operations).toEqual([]);
   });
 
   it('should NOT enqueue when API rejected with non-TypeError (HTTP error)', async function () {
@@ -571,6 +593,39 @@ describe('flushOfflineQueue', function () {
     await store.dispatch(flushOfflineQueue());
 
     expect(store.getState().notifications.notificationQueue).toEqual([]);
+  });
+
+  it('should clear the CREATE_TODO placeholder once a queued create is flushed successfully', async function () {
+    fetchMock.postOnce(getTodosApi(), {
+      body: { id: 99, description: 'new todo', labels: [] },
+    });
+    fetchMock.getOnce(getTodosApi(), {
+      body: [{ id: 99, description: 'new todo', labels: [] }],
+    });
+
+    const store = setupStore({
+      offlineQueue: {
+        pendingOps: [
+          {
+            type: 'create',
+            payload: { tempId: -1, description: 'new todo', labels: [] },
+          },
+        ],
+      },
+      shortcuts: {
+        operations: [
+          {
+            type: 'CREATE_TODO',
+            payload: { tempId: -1, description: 'new todo', labels: [] },
+            generation: 0,
+          },
+        ],
+        latestGeneration: 0,
+      },
+    });
+    await store.dispatch(flushOfflineQueue());
+
+    expect(store.getState().shortcuts.operations).toEqual([]);
   });
 
   it('should process update ops and show success notification', async function () {

@@ -223,9 +223,10 @@ export const createTodo =
   (todoTitle: string): AppThunk =>
   async (dispatch, getState) => {
     const activeLabels = selectActiveFilterLabels(getState());
+    const tempId = nextTempTodoId--;
     dispatch(
       shortcutSlice.actions.addCreateTodoOperation({
-        tempId: nextTempTodoId--,
+        tempId,
         description: todoTitle,
         labels: activeLabels,
       }),
@@ -238,9 +239,13 @@ export const createTodo =
       dispatch(
         offlineQueueSlice.actions.enqueueOp({
           type: 'create',
-          payload: { description: todoTitle, labels: activeLabels },
+          payload: { tempId, description: todoTitle, labels: activeLabels },
         }),
       );
+    } else {
+      // Either the real todo now exists in todosApi.entries, or the create
+      // permanently failed — either way the placeholder is no longer needed.
+      dispatch(shortcutSlice.actions.removeCreateTodoOperation(tempId));
     }
   };
 
@@ -263,6 +268,10 @@ export const flushOfflineQueue = (): AppThunk => async (dispatch, getState) => {
         result = await dispatch(createTodoApi(op.payload.description));
         if (createTodoApi.rejected.match(result)) {
           failedOps.push(op);
+        } else {
+          dispatch(
+            shortcutSlice.actions.removeCreateTodoOperation(op.payload.tempId),
+          );
         }
       } else if (op.type === 'update') {
         result = await dispatch(updateTodoApi(op.payload));
