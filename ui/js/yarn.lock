@@ -2776,6 +2776,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-async-storage/async-storage@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@react-native-async-storage/async-storage@npm:3.1.1"
+  dependencies:
+    idb: "npm:8.0.3"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/20d34973b0a4d1acc133556c52daa59b9826f676abdc351f12c70feb4d557b66e279d1c880662bbfe037b7d79bf64fdee759a5217781c47cd20fd8ba0e0e1b24
+  languageName: node
+  linkType: hard
+
 "@react-native-google-signin/google-signin@npm:^16.1.2":
   version: 16.1.2
   resolution: "@react-native-google-signin/google-signin@npm:16.1.2"
@@ -5620,6 +5632,7 @@ __metadata:
     "@eslint/js": "npm:^10.0.1"
     "@expo-google-fonts/roboto": "npm:^0.4.3"
     "@expo/metro-runtime": "npm:~55.0.11"
+    "@react-native-async-storage/async-storage": "npm:^3.1.1"
     "@react-native-google-signin/google-signin": "npm:^16.1.2"
     "@reduxjs/toolkit": "npm:^2.11.2"
     "@sentry/react-native": "npm:~8.9.2"
@@ -5686,6 +5699,7 @@ __metadata:
     react-redux: "npm:^9.2.0"
     react-test-renderer: "npm:^19.2.5"
     redux: "npm:^5.0.1"
+    redux-persist: "npm:^6.0.0"
     redux-thunk: "npm:^3.1.0"
     rrweb: "npm:2.0.0-alpha.20"
     storybook: "npm:~9.1.20"
@@ -8689,6 +8703,13 @@ __metadata:
   dependencies:
     safer-buffer: "npm:>= 2.1.2 < 3.0.0"
   checksum: 10c0/98102bc66b33fcf5ac044099d1257ba0b7ad5e3ccd3221f34dd508ab4070edff183276221684e1e0555b145fce0850c9f7d2b60a9fcac50fbb4ea0d6e845a3b1
+  languageName: node
+  linkType: hard
+
+"idb@npm:8.0.3":
+  version: 8.0.3
+  resolution: "idb@npm:8.0.3"
+  checksum: 10c0/421cd9a3281b7564528857031cc33fd9e95753f8191e483054cb25d1ceea7303a0d1462f4f69f5b41606f0f066156999e067478abf2460dfcf9cab80dae2a2b2
   languageName: node
   linkType: hard
 
@@ -12679,6 +12700,15 @@ __metadata:
     indent-string: "npm:^4.0.0"
     strip-indent: "npm:^3.0.0"
   checksum: 10c0/d64a6b5c0b50eb3ddce3ab770f866658a2b9998c678f797919ceb1b586bab9259b311407280bd80b804e2a7c7539b19238ae6a2a20c843f1a7fcff21d48c2eae
+  languageName: node
+  linkType: hard
+
+"redux-persist@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "redux-persist@npm:6.0.0"
+  peerDependencies:
+    redux: ">4.0.0"
+  checksum: 10c0/8242d265ab8d28bbc95cf2dc2a05b869eb67aa309b1ed08163c926f3af56dd8eb1ea62118286083461b8ef2024d3b349fd264e5a62a70eb2e74d068c832d5bf2
   languageName: node
   linkType: hard
 

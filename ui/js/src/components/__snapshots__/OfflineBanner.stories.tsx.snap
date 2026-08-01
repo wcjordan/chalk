@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Offline Banner HiddenOfflineBanner smoke-test 1`] = `
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-18u37iz r-1w6e6rj r-1pi2tsx">
+      <div class="css-g5y9jx r-1awozwy r-vps9rn r-11f147o r-3pj75a"
+           data-testid="offline-banner"
+           style="display: none;"
+      >
+        <div dir="auto"
+             class="css-146c3p1 r-jwli3a r-vw2c0b"
+        >
+          You are offline
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Offline Banner VisibleOfflineBanner smoke-test 1`] = `
+<div class="css-g5y9jx r-13awgt0">
+  <div class="css-g5y9jx r-13awgt0 r-12vffkv">
+    <div class="css-g5y9jx r-18u37iz r-1w6e6rj r-1pi2tsx">
+      <div class="css-g5y9jx r-1awozwy r-vps9rn r-11f147o r-3pj75a"
+           data-testid="offline-banner"
+           style="display: flex;"
+      >
+        <div dir="auto"
+             class="css-146c3p1 r-jwli3a r-vw2c0b"
+        >
+          You are offline
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

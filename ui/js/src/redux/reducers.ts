@@ -1,31 +1,39 @@
 import { ThunkAction } from 'redux-thunk';
-import { Action } from '@reduxjs/toolkit';
+import { Action, Reducer } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
 
 import { getEnvFlags } from '../helpers';
+import { selectActiveFilterLabels } from '../selectors';
 import {
   completeAuthCallback,
   getCsrfToken,
   recordSessionData,
 } from './fetchApi';
 import { labelsApiSlice, listLabels } from './labelsApiSlice';
+import networkSlice from './networkSlice';
 import notificationsSlice from './notificationsSlice';
+import offlineQueueSlice from './offlineQueueSlice';
 import shortcutSlice from './shortcutSlice';
 import { RootState } from './store';
 import {
-  createTodo,
+  createTodo as createTodoApi,
   listTodos as listTodosApi,
   moveTodo as moveTodoApi,
   todosApiSlice,
   updateTodo as updateTodoApi,
 } from './todosApiSlice';
-import { MoveTodoOperation, TodoPatch } from './types';
+import { MoveTodoOperation, OfflineOperation, TodoPatch } from './types';
 import { workspaceSlice } from './workspaceSlice';
 
 type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
+// Negative, monotonically-decrementing IDs for optimistic create placeholders,
+// distinguishing them from real (positive) server-assigned todo IDs.
+let nextTempTodoId = -1;
+
 export const updateTodo =
   (todoPatch: TodoPatch): AppThunk =>
-  (dispatch, getState) => {
+  async (dispatch, getState) => {
     // Check if we should auto-show label picker
     const todo = getState().todosApi.entries.find((t) => t.id === todoPatch.id);
     const wasAlreadyCompleted = todo?.completed === true;
@@ -36,27 +44,32 @@ export const updateTodo =
       !wasAlreadyCompleted && // Wasn't already complete
       hasNoLabels; // Has no labels
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const promises: any[] = [
-      dispatch(
-        notificationsSlice.actions.addNotification({
-          text: `Saving Todo: ${todoPatch.description ?? todo?.description}`,
-          type: 'default',
-        }),
-      ),
-      dispatch(workspaceSlice.actions.setEditTodoId(null)),
-      dispatch(shortcutSlice.actions.addEditTodoOperation(todoPatch)),
-      dispatch(updateTodoApi(todoPatch)),
-    ];
+    dispatch(
+      notificationsSlice.actions.addNotification({
+        text: `Saving Todo: ${todoPatch.description ?? todo?.description}`,
+        type: 'default',
+      }),
+    );
+    dispatch(workspaceSlice.actions.setEditTodoId(null));
+    dispatch(shortcutSlice.actions.addEditTodoOperation(todoPatch));
 
     // Show label picker for unlabeled completed todos
     if (shouldShowLabelPicker) {
-      promises.push(
-        dispatch(workspaceSlice.actions.setLabelTodoId(todoPatch.id)),
-      );
+      dispatch(workspaceSlice.actions.setLabelTodoId(todoPatch.id));
     }
 
-    return Promise.all(promises);
+    const result = await dispatch(updateTodoApi(todoPatch));
+    if (
+      updateTodoApi.rejected.match(result) &&
+      result.error.name === 'TypeError'
+    ) {
+      dispatch(
+        offlineQueueSlice.actions.enqueueOp({
+          type: 'update',
+          payload: todoPatch,
+        }),
+      );
+    }
   };
 
 export const updateTodoLabels =
@@ -85,31 +98,50 @@ export const updateTodoLabels =
 
 export const moveTodo =
   (operation: MoveTodoOperation): AppThunk =>
-  (dispatch, getState) => {
+  async (dispatch, getState) => {
     const todo = getState().todosApi.entries.find(
       (todo) => todo.id === operation.todo_id,
     );
-    return Promise.all([
+    dispatch(
+      notificationsSlice.actions.addNotification({
+        text: `Reordering Todo: ${todo?.description}`,
+        type: 'default',
+      }),
+    );
+    dispatch(shortcutSlice.actions.addMoveTodoOperation(operation));
+
+    const result = await dispatch(moveTodoApi(operation));
+    if (
+      moveTodoApi.rejected.match(result) &&
+      result.error.name === 'TypeError'
+    ) {
       dispatch(
-        notificationsSlice.actions.addNotification({
-          text: `Reordering Todo: ${todo?.description}`,
-          type: 'default',
+        offlineQueueSlice.actions.enqueueOp({
+          type: 'move',
+          payload: operation,
         }),
-      ),
-      dispatch(shortcutSlice.actions.addMoveTodoOperation(operation)),
-      dispatch(moveTodoApi(operation)),
-    ]);
+      );
+    }
   };
 
 export const listTodos = (): AppThunk => async (dispatch, getState) => {
   const latestGeneration = getState().shortcuts.latestGeneration;
-  await Promise.all([
+  const [, listResult] = await Promise.all([
     dispatch(shortcutSlice.actions.incrementGenerations()),
     dispatch(listTodosApi()),
   ]);
-  return dispatch(
-    shortcutSlice.actions.clearOperationsUpThroughGeneration(latestGeneration),
-  );
+  // Only clear optimistic shortcut ops once we've confirmed the server
+  // reflects them. If listTodosApi failed (e.g. offline), todosApi.entries
+  // is left untouched, so clearing the shortcuts here would make optimistic
+  // updates (like an offline-created todo) disappear with nothing to
+  // replace them.
+  if (listTodosApi.fulfilled.match(listResult)) {
+    dispatch(
+      shortcutSlice.actions.clearOperationsUpThroughGeneration(
+        latestGeneration,
+      ),
+    );
+  }
 };
 
 // Used to exchange login token for session cookie in mobile login flow
@@ -196,6 +228,105 @@ export const recordSessionEvents =
     }
   };
 
+export const createTodo =
+  (todoTitle: string): AppThunk =>
+  async (dispatch, getState) => {
+    const activeLabels = selectActiveFilterLabels(getState());
+    const tempId = nextTempTodoId--;
+    dispatch(
+      shortcutSlice.actions.addCreateTodoOperation({
+        tempId,
+        description: todoTitle,
+        labels: activeLabels,
+      }),
+    );
+    const result = await dispatch(createTodoApi(todoTitle));
+    if (
+      createTodoApi.rejected.match(result) &&
+      result.error.name === 'TypeError'
+    ) {
+      dispatch(
+        offlineQueueSlice.actions.enqueueOp({
+          type: 'create',
+          payload: { tempId, description: todoTitle, labels: activeLabels },
+        }),
+      );
+    } else {
+      // Either the real todo now exists in todosApi.entries, or the create
+      // permanently failed — either way the placeholder is no longer needed.
+      dispatch(shortcutSlice.actions.removeCreateTodoOperation(tempId));
+    }
+  };
+
+export const flushOfflineQueue = (): AppThunk => async (dispatch, getState) => {
+  const doFlush = async () => {
+    // Re-read pendingOps now that the lock (if any) is held: another tab may
+    // have already flushed and synced this tab's queue down to empty via
+    // useOfflineQueueSync while we were waiting.
+    const pendingOps = getState().offlineQueue.pendingOps;
+    if (pendingOps.length === 0) {
+      return;
+    }
+
+    dispatch(offlineQueueSlice.actions.clearQueue());
+
+    const failedOps: OfflineOperation[] = [];
+    for (const op of pendingOps) {
+      let result;
+      if (op.type === 'create') {
+        result = await dispatch(createTodoApi(op.payload.description));
+        if (createTodoApi.rejected.match(result)) {
+          failedOps.push(op);
+        } else {
+          dispatch(
+            shortcutSlice.actions.removeCreateTodoOperation(op.payload.tempId),
+          );
+        }
+      } else if (op.type === 'update') {
+        result = await dispatch(updateTodoApi(op.payload));
+        if (updateTodoApi.rejected.match(result)) {
+          failedOps.push(op);
+        }
+      } else if (op.type === 'move') {
+        result = await dispatch(moveTodoApi(op.payload));
+        if (moveTodoApi.rejected.match(result)) {
+          failedOps.push(op);
+        }
+      }
+    }
+
+    for (const op of failedOps) {
+      dispatch(offlineQueueSlice.actions.enqueueOp(op));
+    }
+
+    await dispatch(listTodosApi());
+
+    if (failedOps.length === 0) {
+      dispatch(
+        notificationsSlice.actions.addNotification({
+          text: 'Changes synced',
+          type: 'default',
+        }),
+      );
+    } else {
+      dispatch(
+        notificationsSlice.actions.addNotification({
+          text: 'Some changes could not be synced',
+          type: 'default',
+        }),
+      );
+    }
+  };
+
+  // Web only: multiple browser tabs share the same persisted queue, so
+  // serialize flushes across tabs to avoid sending the same op twice.
+  if (typeof navigator !== 'undefined' && 'locks' in navigator) {
+    await navigator.locks.request('chalk-offline-queue-flush', doFlush);
+  } else {
+    await doFlush();
+  }
+};
+
 export const addNotification = notificationsSlice.actions.addNotification;
 export const dismissNotification =
   notificationsSlice.actions.dismissNotification;
@@ -209,11 +340,41 @@ export const toggleShowCompletedTodos =
   workspaceSlice.actions.toggleShowCompletedTodos;
 export const toggleShowLabelFilter =
   workspaceSlice.actions.toggleShowLabelFilter;
-export { createTodo, listLabels };
+export { listLabels };
+
+function makePersistReducer<S, A extends Action>(
+  key: string,
+  reducer: Reducer<S, A>,
+  blacklist: string[] = [],
+): Reducer<S, A> {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const storage = require('./persistStorage').default;
+  // persistReducer returns a compatible reducer type
+  return persistReducer(
+    { key, storage, blacklist },
+    reducer,
+  ) as unknown as Reducer<S, A>;
+}
+
+const offlineQueueReducer =
+  process.env.NODE_ENV !== 'test'
+    ? makePersistReducer('offlineQueue', offlineQueueSlice.reducer)
+    : offlineQueueSlice.reducer;
+
+const todosApiReducer =
+  process.env.NODE_ENV !== 'test'
+    ? makePersistReducer('todosApi', todosApiSlice.reducer, [
+        'loading',
+        'initialLoad',
+      ])
+    : todosApiSlice.reducer;
+
 export const rootReducerConfig = {
   labelsApi: labelsApiSlice.reducer,
+  network: networkSlice.reducer,
   notifications: notificationsSlice.reducer,
+  offlineQueue: offlineQueueReducer,
   shortcuts: shortcutSlice.reducer,
-  todosApi: todosApiSlice.reducer,
+  todosApi: todosApiReducer,
   workspace: workspaceSlice.reducer,
 };

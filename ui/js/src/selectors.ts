@@ -1,6 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from './redux/store';
 import {
+  CreateTodoOperation,
   FILTER_STATUS,
   MoveTodoOperation,
   Todo,
@@ -68,6 +69,27 @@ export const selectShortcuttedTodoEntries = createSelector(
           relativeIdx++;
         }
         shortcuttedTodoEntries.splice(relativeIdx, 0, todo);
+      } else if (op.type === 'CREATE_TODO') {
+        const createOp = op.payload as CreateTodoOperation;
+        const placeholderTodo: Todo = {
+          id: createOp.tempId,
+          archived: false,
+          completed: false,
+          created_at: Date.now(),
+          description: createOp.description,
+          labels: createOp.labels,
+          version: 0,
+        };
+
+        // Keep completed todos at the bottom, matching processTodos in todosApiSlice
+        const firstCompletedIdx = shortcuttedTodoEntries.findIndex(
+          (todo) => todo.completed,
+        );
+        if (firstCompletedIdx === -1) {
+          shortcuttedTodoEntries.push(placeholderTodo);
+        } else {
+          shortcuttedTodoEntries.splice(firstCompletedIdx, 0, placeholderTodo);
+        }
       } else {
         throw new Error(`Unexpected shortcut operation type: ${op.type}`);
       }

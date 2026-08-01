@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ErrorBar from './components/ErrorBar';
 import Login from './components/Login';
+import OfflineBanner from './components/OfflineBanner';
 import TodoList from './components/TodoList';
-import { useAppSelector } from './hooks/hooks';
+import { useAppDispatch, useAppSelector } from './hooks/hooks';
+import { useNetworkMonitor } from './hooks/useNetworkMonitor';
+import { useOfflineQueueSync } from './hooks/useOfflineQueueSync';
+import { flushOfflineQueue } from './redux/reducers';
 
 interface Style {
   root: ViewStyle;
@@ -26,7 +30,18 @@ const styles = StyleSheet.create<Style>({
 });
 
 const App: React.FC = function () {
+  useNetworkMonitor();
+  useOfflineQueueSync();
+  const dispatch = useAppDispatch();
   const loggedIn = useAppSelector((state) => state.workspace.loggedIn);
+  const isOnline = useAppSelector((state) => state.network.isOnline);
+
+  useEffect(() => {
+    if (isOnline) {
+      dispatch(flushOfflineQueue());
+    }
+  }, [isOnline, dispatch]);
+
   const notificationQueue = useAppSelector(
     (state) => state.notifications.notificationQueue,
   );
@@ -44,6 +59,7 @@ const App: React.FC = function () {
         backgroundColor={BG_COLOR}
         barStyle={'light-content'}
       />
+      <OfflineBanner visible={!isOnline} />
       {content}
       <ErrorBar
         key={notificationText}

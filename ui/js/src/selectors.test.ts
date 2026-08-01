@@ -524,6 +524,71 @@ describe('selectShortcuttedTodoEntries', function () {
     const result = selectShortcuttedTodoEntries(state);
     expect(result).toStrictEqual([]);
   });
+
+  it('should optimistically show newly created todos before any completed todos', function () {
+    const state = {
+      shortcuts: {
+        operations: [
+          {
+            type: 'CREATE_TODO',
+            payload: {
+              tempId: -1,
+              description: 'New Todo',
+              labels: ['work'],
+            },
+          },
+        ],
+      },
+      todosApi: {
+        entries: [
+          todoEntries[0],
+          { ...todoEntries[1], completed: true },
+          todoEntries[2],
+        ],
+      },
+    };
+
+    const result = selectShortcuttedTodoEntries(state);
+    expect(result).toEqual([
+      todoEntries[0],
+      expect.objectContaining({
+        id: -1,
+        archived: false,
+        completed: false,
+        description: 'New Todo',
+        labels: ['work'],
+        version: 0,
+      }),
+      { ...todoEntries[1], completed: true },
+      todoEntries[2],
+    ]);
+  });
+
+  it('should optimistically append a newly created todo when no todos are completed', function () {
+    const state = {
+      shortcuts: {
+        operations: [
+          {
+            type: 'CREATE_TODO',
+            payload: {
+              tempId: -1,
+              description: 'New Todo',
+              labels: [],
+            },
+          },
+        ],
+      },
+      todosApi: {
+        entries: todoEntries,
+      },
+    };
+
+    const result = selectShortcuttedTodoEntries(state);
+    expect(result).toEqual([
+      ...todoEntries,
+      expect.objectContaining({ id: -1, description: 'New Todo' }),
+    ]);
+  });
 });
 
 describe('selectActiveFilterLabels', function () {
