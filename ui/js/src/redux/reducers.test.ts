@@ -345,6 +345,33 @@ describe('listTodos', function () {
     // Verify we made the server request
     expect(fetchMock).toBeDone();
   });
+
+  it('should not clear shortcut operations when the request fails', async function () {
+    fetchMock.getOnce(`${getTodosApi()}`, {
+      throws: new TypeError('Failed to fetch'),
+    });
+
+    const store = setupStore({
+      shortcuts: {
+        latestGeneration: 0,
+        operations: [
+          {
+            type: 'CREATE_TODO',
+            payload: { tempId: -1, description: 'offline todo', labels: [] },
+            generation: 0,
+          },
+        ],
+      },
+    });
+    await store.dispatch(listTodos());
+
+    // Generation still increments even on failure
+    expect(store.getState().shortcuts.latestGeneration).toEqual(1);
+
+    // The optimistic op is preserved since the fetch that would confirm it
+    // (and replace it with the real todo) never succeeded
+    expect(store.getState().shortcuts.operations.length).toEqual(1);
+  });
 });
 
 describe('moveTodo', function () {

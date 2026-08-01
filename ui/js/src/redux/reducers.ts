@@ -126,13 +126,22 @@ export const moveTodo =
 
 export const listTodos = (): AppThunk => async (dispatch, getState) => {
   const latestGeneration = getState().shortcuts.latestGeneration;
-  await Promise.all([
+  const [, listResult] = await Promise.all([
     dispatch(shortcutSlice.actions.incrementGenerations()),
     dispatch(listTodosApi()),
   ]);
-  return dispatch(
-    shortcutSlice.actions.clearOperationsUpThroughGeneration(latestGeneration),
-  );
+  // Only clear optimistic shortcut ops once we've confirmed the server
+  // reflects them. If listTodosApi failed (e.g. offline), todosApi.entries
+  // is left untouched, so clearing the shortcuts here would make optimistic
+  // updates (like an offline-created todo) disappear with nothing to
+  // replace them.
+  if (listTodosApi.fulfilled.match(listResult)) {
+    dispatch(
+      shortcutSlice.actions.clearOperationsUpThroughGeneration(
+        latestGeneration,
+      ),
+    );
+  }
 };
 
 // Used to exchange login token for session cookie in mobile login flow
