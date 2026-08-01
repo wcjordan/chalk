@@ -22,6 +22,11 @@ const offlineQueueSlice = createSlice({
     clearQueue: (state) => {
       state.pendingOps = [];
     },
+    // Resyncs this tab's queue with another tab's persisted write, e.g. after
+    // that tab flushed the queue while this tab held a stale in-memory copy.
+    replaceQueue: (state, action: PayloadAction<OfflineOperation[]>) => {
+      state.pendingOps = action.payload;
+    },
   },
 });
 

@@ -412,8 +412,70 @@ describe('createTodo', function () {
     await store.dispatch(createTodo('new todo'));
 
     expect(store.getState().offlineQueue.pendingOps).toEqual([
-      { type: 'create', payload: { description: 'new todo', labels: [] } },
+      {
+        type: 'create',
+        payload: expect.objectContaining({
+          description: 'new todo',
+          labels: [],
+        }),
+      },
     ]);
+  });
+
+  it('should optimistically show the todo immediately, and keep showing it while queued offline', async function () {
+    fetchMock.postOnce(getTodosApi(), {
+      throws: new TypeError('Network error'),
+    });
+
+    const store = setupStore();
+    await store.dispatch(createTodo('new todo'));
+
+    expect(store.getState().shortcuts.operations).toEqual([
+      {
+        type: 'CREATE_TODO',
+        payload: expect.objectContaining({
+          description: 'new todo',
+          labels: [],
+        }),
+        generation: expect.any(Number),
+      },
+    ]);
+  });
+
+  it('should optimistically show the todo immediately, then clear the placeholder once the real todo is created', async function () {
+    fetchMock.postOnce(getTodosApi(), {
+      body: { id: 99, description: 'new todo', labels: [] },
+    });
+
+    const store = setupStore();
+    const dispatchPromise = store.dispatch(createTodo('new todo'));
+
+    // Placeholder is visible synchronously, before the API call resolves
+    expect(store.getState().shortcuts.operations).toEqual([
+      {
+        type: 'CREATE_TODO',
+        payload: expect.objectContaining({
+          description: 'new todo',
+          labels: [],
+        }),
+        generation: expect.any(Number),
+      },
+    ]);
+
+    await dispatchPromise;
+
+    // Once the real todo exists in todosApi.entries, the placeholder must be
+    // gone too, otherwise both would render as separate, duplicate todos.
+    expect(store.getState().shortcuts.operations).toEqual([]);
+  });
+
+  it('should clear the placeholder when the create permanently fails (non-TypeError)', async function () {
+    fetchMock.postOnce(getTodosApi(), { status: 500 });
+
+    const store = setupStore();
+    await store.dispatch(createTodo('new todo'));
+
+    expect(store.getState().shortcuts.operations).toEqual([]);
   });
 
   it('should NOT enqueue when API rejected with non-TypeError (HTTP error)', async function () {
@@ -533,6 +595,39 @@ describe('flushOfflineQueue', function () {
     expect(store.getState().notifications.notificationQueue).toEqual([]);
   });
 
+  it('should clear the CREATE_TODO placeholder once a queued create is flushed successfully', async function () {
+    fetchMock.postOnce(getTodosApi(), {
+      body: { id: 99, description: 'new todo', labels: [] },
+    });
+    fetchMock.getOnce(getTodosApi(), {
+      body: [{ id: 99, description: 'new todo', labels: [] }],
+    });
+
+    const store = setupStore({
+      offlineQueue: {
+        pendingOps: [
+          {
+            type: 'create',
+            payload: { tempId: -1, description: 'new todo', labels: [] },
+          },
+        ],
+      },
+      shortcuts: {
+        operations: [
+          {
+            type: 'CREATE_TODO',
+            payload: { tempId: -1, description: 'new todo', labels: [] },
+            generation: 0,
+          },
+        ],
+        latestGeneration: 0,
+      },
+    });
+    await store.dispatch(flushOfflineQueue());
+
+    expect(store.getState().shortcuts.operations).toEqual([]);
+  });
+
   it('should process update ops and show success notification', async function () {
     fetchMock.patchOnce(`${getTodosApi()}1/`, {
       body: { id: 1, description: 'updated' },
@@ -639,6 +734,52 @@ describe('flushOfflineQueue', function () {
     await store.dispatch(flushOfflineQueue());
 
     expect(fetchMock).toBeDone();
+  });
+});
+
+describe('flushOfflineQueue with navigator.locks', function () {
+  const originalLocks: unknown = (navigator as unknown as { locks?: unknown })
+    .locks;
+
+  afterEach(function () {
+    fetchMock.restore();
+    Object.defineProperty(navigator, 'locks', {
+      value: originalLocks,
+      configurable: true,
+    });
+  });
+
+  it('should serialize the flush via navigator.locks.request when available', async function () {
+    const request = jest.fn((_name: string, callback: () => Promise<void>) =>
+      callback(),
+    );
+    Object.defineProperty(navigator, 'locks', {
+      value: { request },
+      configurable: true,
+    });
+
+    fetchMock.patchOnce(`${getTodosApi()}1/`, {
+      body: { id: 1, description: 'ok' },
+    });
+    fetchMock.getOnce(getTodosApi(), { body: [] });
+
+    const store = setupStore({
+      offlineQueue: {
+        pendingOps: [{ type: 'update', payload: { id: 1, description: 'ok' } }],
+      },
+      todosApi: {
+        entries: [{ id: 1, description: 'old' }],
+        pendingCreates: [],
+        pendingArchives: [],
+      },
+    });
+    await store.dispatch(flushOfflineQueue());
+
+    expect(request).toHaveBeenCalledWith(
+      'chalk-offline-queue-flush',
+      expect.any(Function),
+    );
+    expect(store.getState().offlineQueue.pendingOps).toEqual([]);
   });
 });
 

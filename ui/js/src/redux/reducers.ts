@@ -27,6 +27,10 @@ import { workspaceSlice } from './workspaceSlice';
 
 type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
+// Negative, monotonically-decrementing IDs for optimistic create placeholders,
+// distinguishing them from real (positive) server-assigned todo IDs.
+let nextTempTodoId = -1;
+
 export const updateTodo =
   (todoPatch: TodoPatch): AppThunk =>
   async (dispatch, getState) => {
@@ -55,9 +59,15 @@ export const updateTodo =
     }
 
     const result = await dispatch(updateTodoApi(todoPatch));
-    if (updateTodoApi.rejected.match(result) && result.error.name === 'TypeError') {
+    if (
+      updateTodoApi.rejected.match(result) &&
+      result.error.name === 'TypeError'
+    ) {
       dispatch(
-        offlineQueueSlice.actions.enqueueOp({ type: 'update', payload: todoPatch }),
+        offlineQueueSlice.actions.enqueueOp({
+          type: 'update',
+          payload: todoPatch,
+        }),
       );
     }
   };
@@ -101,9 +111,15 @@ export const moveTodo =
     dispatch(shortcutSlice.actions.addMoveTodoOperation(operation));
 
     const result = await dispatch(moveTodoApi(operation));
-    if (moveTodoApi.rejected.match(result) && result.error.name === 'TypeError') {
+    if (
+      moveTodoApi.rejected.match(result) &&
+      result.error.name === 'TypeError'
+    ) {
       dispatch(
-        offlineQueueSlice.actions.enqueueOp({ type: 'move', payload: operation }),
+        offlineQueueSlice.actions.enqueueOp({
+          type: 'move',
+          payload: operation,
+        }),
       );
     }
   };
@@ -207,66 +223,98 @@ export const createTodo =
   (todoTitle: string): AppThunk =>
   async (dispatch, getState) => {
     const activeLabels = selectActiveFilterLabels(getState());
+    const tempId = nextTempTodoId--;
+    dispatch(
+      shortcutSlice.actions.addCreateTodoOperation({
+        tempId,
+        description: todoTitle,
+        labels: activeLabels,
+      }),
+    );
     const result = await dispatch(createTodoApi(todoTitle));
-    if (createTodoApi.rejected.match(result) && result.error.name === 'TypeError') {
+    if (
+      createTodoApi.rejected.match(result) &&
+      result.error.name === 'TypeError'
+    ) {
       dispatch(
         offlineQueueSlice.actions.enqueueOp({
           type: 'create',
-          payload: { description: todoTitle, labels: activeLabels },
+          payload: { tempId, description: todoTitle, labels: activeLabels },
+        }),
+      );
+    } else {
+      // Either the real todo now exists in todosApi.entries, or the create
+      // permanently failed — either way the placeholder is no longer needed.
+      dispatch(shortcutSlice.actions.removeCreateTodoOperation(tempId));
+    }
+  };
+
+export const flushOfflineQueue = (): AppThunk => async (dispatch, getState) => {
+  const doFlush = async () => {
+    // Re-read pendingOps now that the lock (if any) is held: another tab may
+    // have already flushed and synced this tab's queue down to empty via
+    // useOfflineQueueSync while we were waiting.
+    const pendingOps = getState().offlineQueue.pendingOps;
+    if (pendingOps.length === 0) {
+      return;
+    }
+
+    dispatch(offlineQueueSlice.actions.clearQueue());
+
+    const failedOps: OfflineOperation[] = [];
+    for (const op of pendingOps) {
+      let result;
+      if (op.type === 'create') {
+        result = await dispatch(createTodoApi(op.payload.description));
+        if (createTodoApi.rejected.match(result)) {
+          failedOps.push(op);
+        } else {
+          dispatch(
+            shortcutSlice.actions.removeCreateTodoOperation(op.payload.tempId),
+          );
+        }
+      } else if (op.type === 'update') {
+        result = await dispatch(updateTodoApi(op.payload));
+        if (updateTodoApi.rejected.match(result)) {
+          failedOps.push(op);
+        }
+      } else if (op.type === 'move') {
+        result = await dispatch(moveTodoApi(op.payload));
+        if (moveTodoApi.rejected.match(result)) {
+          failedOps.push(op);
+        }
+      }
+    }
+
+    for (const op of failedOps) {
+      dispatch(offlineQueueSlice.actions.enqueueOp(op));
+    }
+
+    await dispatch(listTodosApi());
+
+    if (failedOps.length === 0) {
+      dispatch(
+        notificationsSlice.actions.addNotification({
+          text: 'Changes synced',
+          type: 'default',
+        }),
+      );
+    } else {
+      dispatch(
+        notificationsSlice.actions.addNotification({
+          text: 'Some changes could not be synced',
+          type: 'default',
         }),
       );
     }
   };
 
-export const flushOfflineQueue = (): AppThunk => async (dispatch, getState) => {
-  const pendingOps = getState().offlineQueue.pendingOps;
-  if (pendingOps.length === 0) {
-    return;
-  }
-
-  dispatch(offlineQueueSlice.actions.clearQueue());
-
-  const failedOps: OfflineOperation[] = [];
-  for (const op of pendingOps) {
-    let result;
-    if (op.type === 'create') {
-      result = await dispatch(createTodoApi(op.payload.description));
-      if (createTodoApi.rejected.match(result)) {
-        failedOps.push(op);
-      }
-    } else if (op.type === 'update') {
-      result = await dispatch(updateTodoApi(op.payload));
-      if (updateTodoApi.rejected.match(result)) {
-        failedOps.push(op);
-      }
-    } else if (op.type === 'move') {
-      result = await dispatch(moveTodoApi(op.payload));
-      if (moveTodoApi.rejected.match(result)) {
-        failedOps.push(op);
-      }
-    }
-  }
-
-  for (const op of failedOps) {
-    dispatch(offlineQueueSlice.actions.enqueueOp(op));
-  }
-
-  await dispatch(listTodosApi());
-
-  if (failedOps.length === 0) {
-    dispatch(
-      notificationsSlice.actions.addNotification({
-        text: 'Changes synced',
-        type: 'default',
-      }),
-    );
+  // Web only: multiple browser tabs share the same persisted queue, so
+  // serialize flushes across tabs to avoid sending the same op twice.
+  if (typeof navigator !== 'undefined' && 'locks' in navigator) {
+    await navigator.locks.request('chalk-offline-queue-flush', doFlush);
   } else {
-    dispatch(
-      notificationsSlice.actions.addNotification({
-        text: 'Some changes could not be synced',
-        type: 'default',
-      }),
-    );
+    await doFlush();
   }
 };
 
@@ -293,7 +341,10 @@ function makePersistReducer<S, A extends Action>(
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const storage = require('./persistStorage').default;
   // persistReducer returns a compatible reducer type
-  return persistReducer({ key, storage, blacklist }, reducer) as unknown as Reducer<S, A>;
+  return persistReducer(
+    { key, storage, blacklist },
+    reducer,
+  ) as unknown as Reducer<S, A>;
 }
 
 const offlineQueueReducer =
@@ -303,7 +354,10 @@ const offlineQueueReducer =
 
 const todosApiReducer =
   process.env.NODE_ENV !== 'test'
-    ? makePersistReducer('todosApi', todosApiSlice.reducer, ['loading', 'initialLoad'])
+    ? makePersistReducer('todosApi', todosApiSlice.reducer, [
+        'loading',
+        'initialLoad',
+      ])
     : todosApiSlice.reducer;
 
 export const rootReducerConfig = {

@@ -90,9 +90,15 @@ export interface MoveTodoOperation {
   todo_id: number;
 }
 
+export interface CreateTodoOperation {
+  tempId: number;
+  description: string;
+  labels: string[];
+}
+
 export interface ShortcutOperation {
-  type: 'EDIT_TODO' | 'MOVE_TODO';
-  payload: TodoPatch | MoveTodoOperation;
+  type: 'EDIT_TODO' | 'MOVE_TODO' | 'CREATE_TODO';
+  payload: TodoPatch | MoveTodoOperation | CreateTodoOperation;
   generation: number;
 }
 
@@ -102,6 +108,6 @@ export interface ShortcutState {
 }
 
 export type OfflineOperation =
-  | { type: 'create'; payload: { description: string; labels: string[] } }
+  | { type: 'create'; payload: CreateTodoOperation }
   | { type: 'update'; payload: TodoPatch }
   | { type: 'move'; payload: MoveTodoOperation };
