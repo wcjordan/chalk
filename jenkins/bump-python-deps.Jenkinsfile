@@ -33,9 +33,9 @@ pipeline {
                 timeout(time: 30, unit: 'MINUTES')
             }
             steps {
-                checkout scm
                 container('bumper') {
                     sh '''
+                        cd "$WORKSPACE"
                         bash jenkins/bump-python-deps.sh
                     '''
                 }
