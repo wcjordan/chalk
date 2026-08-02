@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+pip install --quiet pur
+
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+    | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+apt-get update -qq && apt-get install -y -qq gh
+
+export GH_TOKEN="${GH_APP_PSW}"
+gh auth setup-git
+
+git config user.email "jenkins@minordomo"
+git config user.name "Jenkins"
+
 BRANCH="chore/bump-python-deps-$(date +%Y%m%d)"
 git checkout -b "$BRANCH"
 
