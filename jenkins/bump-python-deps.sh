@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -x
 
-echo "DEBUG: pwd=$(pwd)"
-echo "DEBUG: WORKSPACE=${WORKSPACE:-unset}"
-ls -la
-git rev-parse --is-inside-work-tree || echo "DEBUG: not inside a git work tree"
-git status || echo "DEBUG: git status failed"
+git config --global --add safe.directory "$(pwd)"
 
 pip install --quiet pur
 
