@@ -1,8 +1,8 @@
 Django==6.1.1
-djangorestframework==3.18.0
+djangorestframework==3.18.1
 django-simple-history==3.13.0
 google-auth-oauthlib==1.4.1
-google-cloud-storage==3.13.1
+google-cloud-storage==3.14.1
 gunicorn==26.2.0
-psycopg2-binary==2.9.12
+psycopg2-binary==2.9.13
 requests==2.34.2
