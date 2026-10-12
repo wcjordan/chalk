@@ -1,8 +1,8 @@
 -r requirements.txt
 
 # These are used for development or linting
-flake8==7.3.0
-pylint==4.0.8
+flake8==7.4.1
+pylint==4.1.2
 pylint-django==2.8.0
 pytest==9.1.1
 yapf==0.43.0
