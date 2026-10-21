@@ -1,2 +1,2 @@
-google-cloud-storage==3.16.0
+google-cloud-storage==3.17.1
 PyYAML==6.0.3
