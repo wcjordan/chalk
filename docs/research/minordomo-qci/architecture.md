@@ -42,6 +42,7 @@ Build cache is stored in GAR:
 
 `/.github/workflows/ci.yml` — only covers `test_gen` module:
 - Sets up Python 3.11, installs `test_gen/dev-requirements.txt`, runs `python -m pytest -v */tests`
+- **Must not be changed** — the existing `test_rrweb_ingest` job should keep working
 
 ## Test Commands (can run natively without Docker)
 
@@ -84,10 +85,44 @@ npx test-storybook --no-index-json --url http://127.0.0.1:9009
 
 ## Other Jenkins Jobs in chalk repo
 - `jenkins/bump-python-deps.Jenkinsfile` — weekly cron (on main) bumps Python deps, opens PR via GitHub App
+  - **Out of scope for this epic** — no GH Actions migration needed here
 
-## Key Questions for Spec
+## Proposed Migration Architecture
 
-1. **Scope**: Unit tests only (server + UI + storybook)? Or also integration tests (GKE + BrowserStack)? Or also CD (deploy to prod on main)?
-2. **GCP Auth**: Workload Identity Federation (WIF) or SA key stored as GH secret?
-3. **Existing Jenkinsfile**: Keep alongside GH Actions initially, or remove as part of this epic?
-4. **bump-python-deps**: In scope to migrate to GH Actions scheduled workflow?
+### Target state
+- GH Actions handles: unit tests (server + UI + storybook) natively (no Docker needed)
+- Jenkins handles: Build Docker images → Integration Tests → CD
+
+### GCP auth (WIF)
+WIF is out of scope for this epic because GH Actions unit tests run natively — no Docker builds, no GAR push. WIF setup is deferred to a future epic if Docker builds move to GH Actions.
+
+### Jenkins handoff mechanism
+1. GH Actions unit test workflow runs on push/PR
+2. On success, calls Jenkins REST API to trigger the integration+CD pipeline:
+   - Multibranch URL: `$JENKINS_URL/job/chalk/job/<url-encoded-branch>/buildWithParameters?SKIP_UNIT_TESTS=true`
+   - Secrets needed in GH repo: `JENKINS_URL`, `JENKINS_USERNAME`, `JENKINS_API_KEY`
+3. Jenkins `Jenkinsfile` gains a `SKIP_UNIT_TESTS` boolean parameter
+   - When `true`: Build stages still run (Docker images needed for integration tests), Test stages are skipped
+4. GitHub → Jenkins webhook must be disabled (manual admin step)
+
+### Dual-trigger window
+During transition (before webhook is disabled), every push triggers Jenkins twice:
+- Once by webhook (with unit tests)
+- Once by GH Actions after unit tests pass (with SKIP_UNIT_TESTS=true)
+
+The PR description should call out that disabling the webhook is required before or immediately after merge.
+
+### Branch protection checks
+After migration, required checks will change:
+- Old: Jenkins "ci/chalk" style checks
+- New: GH Actions job names (e.g., "test-server", "test-ui", "test-storybook")
+Branch protection rules must be updated (manual admin step).
+
+## Key Questions — RESOLVED
+
+1. **Scope**: (b) Full handoff — GH Actions unit tests → trigger Jenkins for integration+CD ✓
+2. **GCP Auth**: WIF — but not needed for this epic (unit tests are native) ✓
+3. **Jenkins handoff**: curl Jenkins REST API, `SKIP_UNIT_TESTS=true` parameter ✓
+4. **Jenkins accessible**: Yes, public URL ✓
+5. **GH Checks**: Jenkins already posts them, must continue ✓
+6. **bump-python-deps**: Out of scope ✓
