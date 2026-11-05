@@ -22,7 +22,7 @@ git checkout -b "$BRANCH"
 
 (cd server && pur -r requirements.txt && pur -r dev-requirements.txt)
 (cd test_gen && pur -r requirements.txt && pur -r dev-requirements.txt)
-(cd tests && pur --skip playwright -r requirements.txt)
+(cd tests && pur --skip playwright -r requirements.txt && pur -r dev-requirements.txt)
 
 if git diff --quiet; then
     echo "No Python dependency updates found."
@@ -34,7 +34,8 @@ git add \
     server/dev-requirements.txt \
     test_gen/requirements.txt \
     test_gen/dev-requirements.txt \
-    tests/requirements.txt
+    tests/requirements.txt \
+    tests/dev-requirements.txt
 
 git commit -m "chore: bump Python dependencies"
 git push origin "$BRANCH"
