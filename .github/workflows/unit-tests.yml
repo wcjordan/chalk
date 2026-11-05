@@ -92,3 +92,28 @@ jobs:
         npx http-server -p 9009 storybook-static &
         npx wait-on http://127.0.0.1:9009
         npx test-storybook --no-index-json --url http://127.0.0.1:9009
+
+  # Manual admin steps required after this workflow goes live:
+  # 1. Disable the GitHub → Jenkins webhook so pushes to main don't trigger Jenkins twice
+  #    (until disabled, every push will trigger Jenkins once via webhook and once via this job)
+  # 2. Update branch protection required checks from Jenkins check names to GH Actions job
+  #    names: test-server, test-ui, test-storybook
+  trigger-jenkins:
+    needs: [test-server, test-ui, test-storybook]
+    runs-on: ubuntu-latest
+    # Only trigger Jenkins on push events (CD pipeline); skip for bots lacking secrets access
+    if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
+
+    steps:
+    - name: Trigger Jenkins build
+      env:
+        JENKINS_URL: ${{ secrets.JENKINS_URL }}
+        JENKINS_USERNAME: ${{ secrets.JENKINS_USERNAME }}
+        JENKINS_API_KEY: ${{ secrets.JENKINS_API_KEY }}
+      run: |
+        BRANCH="${{ github.ref_name }}"
+        ENCODED_BRANCH="${BRANCH//\//%2F}"
+        curl --fail --silent --show-error -X POST \
+          --user "${JENKINS_USERNAME}:${JENKINS_API_KEY}" \
+          --data-urlencode "SKIP_UNIT_TESTS=true" \
+          "${JENKINS_URL}/job/chalk/job/${ENCODED_BRANCH}/buildWithParameters"
