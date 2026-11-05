@@ -115,10 +115,14 @@ It processes session recordings for test generation research and is used to impr
 - `Dockerfile` in each component directory
 
 **CI/CD:**
-- Jenkins-based continuous delivery (`Jenkinsfile`)
+- Hybrid CI: GitHub Actions runs unit tests natively; Jenkins handles Docker builds, integration tests, and CD
+- Unit test workflow: `.github/workflows/unit-tests.yml` — runs `test-server`, `test-ui`, `test-storybook` jobs on push/PR to `main`
+- After unit tests pass, GH Actions triggers Jenkins (`$JENKINS_URL/job/chalk/job/<branch>/buildWithParameters`) with `SKIP_UNIT_TESTS=true`
+- Jenkins `Jenkinsfile` accepts `SKIP_UNIT_TESTS` boolean parameter: when true, Test stages are skipped but Build stages (and integration tests/CD) still run
 - Separate base image build (`jenkins/Jenkinsfile.base`)
 - BrowserStack integration for E2E tests
 - Sentry integration for error tracking
+- **Pending manual admin steps (required for full migration):** disable the GitHub→Jenkins webhook on the chalk repo (until disabled, every push triggers Jenkins twice); update branch protection required-check names from Jenkins check names to GH Actions job names (`test-server`, `test-ui`, `test-storybook`); create GH Actions secrets `JENKINS_URL`, `JENKINS_USERNAME`, `JENKINS_API_KEY` on the chalk repo
 
 **Kubernetes:**
 - Helm charts in `helm/` directory
