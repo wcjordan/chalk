@@ -84,6 +84,9 @@ jobs:
     - name: Install dependencies
       run: yarn install --immutable
 
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps chromium
+
     - name: Build storybook
       run: STORYBOOK_TEST_ENV=true npx storybook build --test --quiet
 
