@@ -14,6 +14,9 @@ pipeline {
         timestamps()
         disableConcurrentBuilds()
     }
+    parameters {
+        booleanParam(name: 'SKIP_UNIT_TESTS', defaultValue: false, description: 'Skip unit tests (set true when GH Actions already ran them)')
+    }
     stages {
         stage('Init') {
             agent {
@@ -74,6 +77,10 @@ pipeline {
                             }
                         }
                         stage('Test UI') {
+                            when {
+                                expression { !params.SKIP_UNIT_TESTS }
+                                beforeAgent true
+                            }
                             agent {
                                 kubernetes {
                                     yaml """
@@ -115,6 +122,10 @@ pipeline {
                             }
                         }
                         stage('Test UI Storybook') {
+                            when {
+                                expression { !params.SKIP_UNIT_TESTS }
+                                beforeAgent true
+                            }
                             agent {
                                 kubernetes {
                                     yaml """
@@ -195,6 +206,10 @@ pipeline {
                             }
                         }
                         stage('Test Server') {
+                            when {
+                                expression { !params.SKIP_UNIT_TESTS }
+                                beforeAgent true
+                            }
                             agent {
                                 kubernetes {
                                     yamlFile 'jenkins/jenkins-worker-python.yml'
