@@ -4,9 +4,6 @@ permissions:
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   test-server:
@@ -101,15 +98,15 @@ jobs:
         npx test-storybook --no-index-json --url http://127.0.0.1:9009
 
   # Manual admin steps required after this workflow goes live:
-  # 1. Disable the GitHub → Jenkins webhook so pushes to main don't trigger Jenkins twice
+  # 1. Disable the GitHub → Jenkins webhook so pushes don't trigger Jenkins twice
   #    (until disabled, every push will trigger Jenkins once via webhook and once via this job)
   # 2. Update branch protection required checks from Jenkins check names to GH Actions job
   #    names: test-server, test-ui, test-storybook
   trigger-jenkins:
     needs: [test-server, test-ui, test-storybook]
     runs-on: ubuntu-latest
-    # Only trigger Jenkins on push events (CD pipeline); skip for bots lacking secrets access
-    if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
+    # Skip for bots lacking secrets access
+    if: github.actor != 'dependabot[bot]'
 
     steps:
     - name: Trigger Jenkins build
