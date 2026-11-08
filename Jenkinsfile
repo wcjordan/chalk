@@ -14,9 +14,6 @@ pipeline {
         timestamps()
         disableConcurrentBuilds()
     }
-    parameters {
-        booleanParam(name: 'SKIP_UNIT_TESTS', defaultValue: false, description: 'Skip unit tests (set true when GH Actions already ran them)')
-    }
     stages {
         stage('Init') {
             agent {
@@ -63,122 +60,6 @@ pipeline {
                                     builderName: 'chalk-default',
                                     context: 'ui'
                                 )
-                                buildAndPushImage(
-                                    garHost: GAR_HOST,
-                                    cacheRef: "${GAR_REPO}/chalk-ui-cache:ci_test",
-                                    additionalCacheFrom: ["${GAR_REPO}/chalk-ui-cache:ci_app"],
-                                    dockerfile: 'ui/Dockerfile',
-                                    imageTag: "${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}",
-                                    target: 'js_test_env',
-                                    extraBuildArgs: "--build-arg sentryDsn=\$SENTRY_DSN",
-                                    builderName: 'chalk-default',
-                                    context: 'ui'
-                                )
-                            }
-                        }
-                        stage('Test UI') {
-                            when {
-                                expression { !params.SKIP_UNIT_TESTS }
-                                beforeAgent true
-                            }
-                            agent {
-                                kubernetes {
-                                    yaml """
-                                        apiVersion: v1
-                                        kind: Pod
-                                        spec:
-                                          containers:
-                                          - name: jenkins-worker-ui
-                                            image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
-                                            command:
-                                            - cat
-                                            tty: true
-                                            resources:
-                                              requests:
-                                                cpu: "600m"
-                                                memory: "3Gi"
-                                              limits:
-                                                cpu: "1000m"
-                                                memory: "3Gi"
-                                    """
-                                }
-                            }
-                            options {
-                                timeout(time: 10, unit: 'MINUTES')
-                            }
-                            steps {
-                                container('jenkins-worker-ui') {
-                                    sh '''
-                                        JENKINS_WORKSPACE=$(pwd)
-                                        cp ui/Makefile /workspace/
-                                        cd /workspace
-                                        make test-inner
-
-                                        cd $JENKINS_WORKSPACE
-                                        cp /workspace/js/junit.xml .
-                                    '''
-                                    junit testResults: 'junit.xml'
-                                }
-                            }
-                        }
-                        stage('Test UI Storybook') {
-                            when {
-                                expression { !params.SKIP_UNIT_TESTS }
-                                beforeAgent true
-                            }
-                            agent {
-                                kubernetes {
-                                    yaml """
-                                        apiVersion: v1
-                                        kind: Pod
-                                        spec:
-                                          containers:
-                                          - name: jenkins-worker-storybook
-                                            image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
-                                            command: ["/bin/sh", "-c"]
-                                            args:
-                                            - cd js && npx http-server -p 9009 /workspace/js/storybook-static
-                                            tty: true
-                                            ports:
-                                            - containerPort: 9009
-                                            resources:
-                                              requests:
-                                                cpu: "200m"
-                                                memory: "500Mi"
-                                              limits:
-                                                cpu: "500m"
-                                                memory: "500Mi"
-                                          - name: jenkins-worker-storybook-snapshots
-                                            image: ${GAR_REPO}/chalk-ui-base:${SANITIZED_BUILD_TAG}
-                                            command:
-                                            - cat
-                                            tty: true
-                                            resources:
-                                              requests:
-                                                cpu: "400m"
-                                                memory: "2Gi"
-                                              limits:
-                                                cpu: "1000m"
-                                                memory: "2Gi"
-                                    """
-                                }
-                            }
-                            options {
-                                timeout(time: 10, unit: 'MINUTES')
-                            }
-                            steps {
-                                container('jenkins-worker-storybook-snapshots') {
-                                    sh '''
-                                        JENKINS_WORKSPACE=$(pwd)
-                                        cp ui/Makefile /workspace/
-                                        cd /workspace
-                                        make test-storybook-inner TEST_ARGS="--junit --url http://127.0.0.1:9009"
-
-                                        cd $JENKINS_WORKSPACE
-                                        cp /workspace/js/junit.xml .
-                                    '''
-                                    junit testResults: 'junit.xml'
-                                }
                             }
                         }
                     }
@@ -203,28 +84,6 @@ pipeline {
                                     builderName: 'chalk-default',
                                     context: 'server'
                                 )
-                            }
-                        }
-                        stage('Test Server') {
-                            when {
-                                expression { !params.SKIP_UNIT_TESTS }
-                                beforeAgent true
-                            }
-                            agent {
-                                kubernetes {
-                                    yamlFile 'jenkins/jenkins-worker-python.yml'
-                                }
-                            }
-                            options {
-                                timeout(time: 10, unit: 'MINUTES')
-                            }
-                            steps {
-                                container('jenkins-worker-python') {
-                                    dir('server') {
-                                        sh 'pip install --no-cache-dir -r dev-requirements.txt'
-                                        sh 'env $(grep -v "^#" ../.env_default | xargs) DOMAIN=localhost SECRET_KEY=testkey make test-inner'
-                                    }
-                                }
                             }
                         }
                     }
