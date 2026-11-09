@@ -2,5 +2,5 @@
 
 # These are used for development or linting
 black==26.10.1
-flake8==7.3.0
-pylint==4.0.9
+flake8==7.5.0
+pylint==4.1.3
