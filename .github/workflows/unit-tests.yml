@@ -119,5 +119,4 @@ jobs:
         ENCODED_BRANCH="${BRANCH//\//%2F}"
         curl --fail --silent --show-error -X POST \
           --user "${JENKINS_USERNAME}:${JENKINS_API_KEY}" \
-          --data-urlencode "SKIP_UNIT_TESTS=true" \
-          "${JENKINS_URL}/job/chalk/job/${ENCODED_BRANCH}/buildWithParameters"
+          "${JENKINS_URL}/job/chalk/job/${ENCODED_BRANCH}/build"
