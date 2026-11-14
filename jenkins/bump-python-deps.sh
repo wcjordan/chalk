@@ -22,7 +22,7 @@ git checkout -b "$BRANCH"
 
 (cd server && pur -r requirements.txt && pur -r dev-requirements.txt)
 (cd test_gen && pur -r requirements.txt && pur -r dev-requirements.txt)
-(cd tests && pur --skip playwright -r requirements.txt && pur -r dev-requirements.txt)
+(cd tests && pur --skip playwright -r requirements.txt && pur --skip playwright -r dev-requirements.txt)
 
 if git diff --quiet; then
     echo "No Python dependency updates found."
